@@ -5,235 +5,100 @@ short_title: "VL 12"
 
 # Generative Adversarial Networks
 
-:::{warning} Rohfassung
-Dieses Kapitel ist eine automatische Transkription der Folien von VL 12 aus dem WiSe 2025/26
-(`from_2025/slides/Einführung in Deep Learning 2025_26 VL 12_ GANs.pdf`), Folie für Folie in der Originalreihenfolge.
-Formeln und Abbildungen sind dabei größtenteils verloren gegangen; der Text ist noch nicht überarbeitet.
+:::{note} Stand
+Erste Prosafassung (aus den Folien von VL 12, WiSe 2025/26). Abbildungen fehlen noch, siehe die `TODO`-Kommentare.
 :::
 
-## GANs - Historie
+## Historie
 
-<!-- Folie 2 -->
+### NeurIPS 2014
 
-## Historie: NeurIPS 2014
+Goodfellow et al., *Generative Adversarial Nets*: „We propose a new framework for estimating generative models via adversarial nets, in which we simultaneously train two models: a generative model $G$ that captures the data distribution, and a discriminative model $D$ that estimates the probability that a sample came from the training data rather than $G$. The training procedure for $G$ is to maximize the probability of $D$ making a mistake. This framework corresponds to a minimax two-player game. In the space of arbitrary functions $G$ and $D$, a unique solution exists, with $G$ recovering the training data distribution and $D$ equal to $1/2$ everywhere. In the case where $G$ and $D$ are defined by multilayer perceptrons, the entire system can be trained with backpropagation.“
 
-<!-- Folie 3 -->
-We propose a new framework for estimating generative models via adversarial
-nets, in which we simultaneously train two models: a generative model G that
-captures the data distribution, and a discriminative model D that estimates the
-probability that a sample came from the training data rather than G. The training
-procedure for G is to maximize the probability of D making a mistake. This
-framework corresponds to a minimax two-player game. In the space of arbitrary
-functions G and D, a unique solution exists, with G recovering the training data
-distribution and D equal to 1/2 everywhere. In the case where G and D are defined
-by multilayer perceptrons, the entire system can be trained with backpropagation.
-There is no need for any Markov chains or unrolled approximate inference
-networks during either training or generation of samples. Experiments
-demonstrate the potential of the framework through qualitative and quantitatively
-evaluation of the generated samples.
+Der letzte Satz ist der Punkt: Kein Markov-Chain-Sampling, keine Variationsrechnung wie beim VAE – nur zwei Netze und Backpropagation.
 
-## Historie: LeCun 2016
+### LeCun 2016
 
-<!-- Folie 4 -->
-There are many interesting recent development in deep learning,
-probably too many for me to describe them all here. But there are
-a few ideas that caught my attention enough for me to get
-personally involved in research projects.
-The most important one, in my opinion, is adversarial training
-(also called GAN for Generative Adversarial Networks). This is an
-idea that was originally proposed by Ian Goodfellow when he was
-a student with Yoshua Bengio at the University of Montreal (he
-since moved to Google Brain and recently to OpenAI).
-This, and the variations that are now being proposed is the most
-interesting idea in the last 10 years in ML, in my opinion.
+Yann LeCun, auf Quora: „There are many interesting recent developments in deep learning […] The most important one, in my opinion, is adversarial training (also called GAN for Generative Adversarial Networks). This is an idea that was originally proposed by Ian Goodfellow when he was a student with Yoshua Bengio at the University of Montreal […] This, and the variations that are now being proposed is the most interesting idea in the last 10 years in ML, in my opinion.“
 
 ## GANs technisch
 
-<!-- Folie 5 -->
+### Aufbau
 
-<!-- Folie 6 -->
-Aufbau
-Quelle:
-www.kdnuggets.com/2017/01/generative-adver
-sarial-networks-hot-topic-machine-learning.html
+Zwei Netze: Der **Generator** $G$ bekommt einen zufälligen latenten Vektor $z \sim \mathcal{N}(0, I)$ (das *Rauschen*) und erzeugt daraus ein Sample $G(z)$, z.B. ein Bild. Der **Diskriminator** $D$ bekommt ein Bild – entweder ein echtes $x$ aus dem Trainingsdatensatz oder ein generiertes $G(z)$ – und gibt eine Wahrscheinlichkeit $D(x) \in (0, 1)$ aus, dass das Bild echt ist. Man beachte: Der Generator bekommt *nie* echte Bilder als Input; er sieht die Daten nur indirekt, über den Gradienten des Diskriminators.
 
-## Erinnerung
+<!-- TODO Abbildung: GAN-Aufbau (kdnuggets 2017 oder eigenes Diagramm: z → G → fake, real/fake → D → echt?) -->
 
-<!-- Folie 7 -->
-Samples generieren
-Der Generator generiert Samples aus einer Verteilung.
-Diese Verteilung ist, was im (Pre)training gelernt wird,
-indem die Samples aus dem Trainingsdatensatz
-als latente Vektoren repräsentiert werden.
-Generatives Modell = Verteilung lernen
+### Erinnerung: Samples generieren
 
-## GAN-Training
+Der Generator generiert Samples aus einer Verteilung. Diese Verteilung ist, was im (Pre-)Training gelernt wird, indem die Samples aus dem Trainingsdatensatz als latente Vektoren repräsentiert werden. Generatives Modell = Verteilung lernen (Kapitel 1). Beim VAE haben wir dafür den latenten Raum explizit auf eine Normalverteilung gezwungen; beim GAN sagt uns der Diskriminator, ob die generierte Verteilung schon von der echten zu unterscheiden ist.
 
-<!-- Folie 8 -->
-Generator
-Nach einem Pretraining des Generators, um die Verteilung der
-Trainings-Samples zu lernen, wird der Generator zusammen mit dem
-Diskriminator trainiert (Finetuning).
-Dazu bekommt der Generator eine Penalty in der Loss-Funktion für das
-Generieren von Bildern, die der Diskriminator als generiert erkennt.
+### GAN-Training
 
-<!-- Folie 9 -->
-Diskriminator
-Nach einem Pretraining des Generators, um die Verteilung der
-Trainings-Samples zu lernen, wird der Generator zusammen mit dem
-Diskriminator trainiert (Finetuning).
-Dazu bekommt der Diskriminator eine Penalty in der Loss-Funktion für
-die Fehlklassifikation eines Eingabebildes,
-also sowohl für falsch positive (“echt” behauptet, war aber generiert)
-als auch falsch negative (“generiert” behauptet, war aber echt).
+Das *Minimax-Spiel* aus dem Abstract als Formel:
 
-## GAN-Modelle
+$$
+\min_G \max_D \; V(D, G) = \mathbb{E}_{x \sim p_{\text{data}}}\bigl[\log D(x)\bigr] + \mathbb{E}_{z \sim \mathcal{N}(0, I)}\bigl[\log\bigl(1 - D(G(z))\bigr)\bigr].
+$$
 
-<!-- Folie 10 -->
-Diskriminator
-Der Diskriminator kann ein einfaches Multilayer Perzeptron sein,
-d.h. mehrere lineare Layer und zuletzt ein einzelnes Neuron zur
-Klassifikation “ist das echt?” in 0 oder 1.
-Alternativ kann der Diskriminator auch aus 2 Komponenten bestehen,
-Wobei zunächst ein vortrainierter Encoder das Bild in latente Vektoren
-umrechnet, die dann an einen Klassifikator weitergegeben werden.
-Dabei kann z.B. ein CNN zur Extraktion von Features sinnvoll sein.
+Das ist die binäre Kreuzentropie des Diskriminators mit Label 1 für echt und 0 für generiert. $D$ will sie maximieren (gut klassifizieren), $G$ will sie minimieren ($D$ täuschen). In der Praxis werden beide abwechselnd mit Gradientenabstieg trainiert:
 
-<!-- Folie 11 -->
-Generator
-Der Generator kann ein einfaches Multilayer Perzeptron sein,
-etwa der Decoder eines Autoencoders,
-sodass es einen latenten Raum gibt, aus dem man sampeln kann.
-Dabei kann z.B. ein CNN zur Extraktion von Features im Encoder
-sinnvoll sein (‘deep convolutional GAN’, DCGAN).
+**Diskriminator**: Er bekommt eine Penalty in der Loss-Funktion für die Fehlklassifikation eines Eingabebildes, also sowohl für falsch positive („echt“ behauptet, war aber generiert) als auch falsch negative („generiert“ behauptet, war aber echt). Ein Schritt: ein Batch echter Bilder mit Label 1, ein Batch generierter Bilder mit Label 0, BCE-Loss, `backward`, `step` – nur die Parameter von $D$.
 
-## Ausprobieren: GAN Lab
+**Generator**: Nach einem optionalen Pretraining (z.B. als Decoder eines Autoencoders, um die Verteilung der Trainings-Samples grob zu lernen) wird der Generator zusammen mit dem Diskriminator trainiert (Finetuning). Dazu bekommt der Generator eine Penalty in der Loss-Funktion für das Generieren von Bildern, die der Diskriminator als generiert erkennt: ein Batch $G(z)$, durch $D$ schicken, BCE-Loss *mit Label 1* (der Generator will, dass $D$ „echt“ sagt), `backward`, `step` – nur die Parameter von $G$. Der Gradient fließt dabei durch $D$ hindurch bis in $G$, das ist Backpropagation durch zwei Netze.
 
-<!-- Folie 12 -->
-2019, Georgia Tech & Google Brain
-poloclub.github.io/ganlab/
+Im Gleichgewicht, wenn $G$ die Datenverteilung exakt trifft, kann $D$ nicht besser als raten: $D \equiv \tfrac12$.
+
+### GAN-Modelle
+
+Der **Diskriminator** kann ein einfaches Multilayer Perceptron sein, d.h. mehrere lineare Layer und zuletzt ein einzelnes Neuron zur Klassifikation „ist das echt?“ in 0 oder 1 – also logistische Regression auf Features. Alternativ kann der Diskriminator auch aus 2 Komponenten bestehen, wobei zunächst ein vortrainierter Encoder das Bild in latente Vektoren umrechnet, die dann an einen Klassifikator weitergegeben werden. Dabei kann z.B. ein CNN zur Extraktion von Features sinnvoll sein.
+
+Der **Generator** kann ein einfaches Multilayer Perceptron sein, etwa der Decoder eines Autoencoders, sodass es einen latenten Raum gibt, aus dem man sampeln kann. Mit Faltungen (genauer: *transponierten* Faltungen, die die Auflösung erhöhen) im Generator und einem CNN im Diskriminator heißt das **DCGAN** (deep convolutional GAN, Radford et al. 2015).
+
+### Ausprobieren: GAN Lab
+
+[poloclub.github.io/ganlab](https://poloclub.github.io/ganlab/) (2019, Georgia Tech & Google Brain): ein GAN auf 2D-Punktwolken im Browser, mit Visualisierung der Generator-Verteilung, des Diskriminator-Gradientenfelds und der Loss-Kurven. Man sieht dort live, wie die generierte Verteilung zur echten wandert – und wie Mode Collapse aussieht.
 
 ## Varianten von GANs
 
-<!-- Folie 13 -->
+### Conditional GANs
 
-## Varianten
+Generator und Diskriminator bekommen Zusatzinformationen, z.B. Klassenlabels: Der Generator generiert $G(z, y)$ bedingt auf ein gegebenes Klassenlabel $y$, der Diskriminator entscheidet $D(x, y)$ bedingt zum Klassenlabel. So bekommt man einen Generator, dem man sagen kann, *welche* Ziffer er zeichnen soll (die vierte MNIST-Task aus Kapitel 7). Geht auch mit anderen Zusatzinformationen, z.B. Text kodiert als Vektor von Wort-Embeddings – das ist der Weg zu Text-zu-Bild-Modellen.
 
-<!-- Folie 14 -->
-Conditional GANs
-Generator und Diskriminator bekommen Zusatzinformationen,
-z.B. Klassenlabels
-Der Generator generiert bedingt auf ein gegebenes Klassenlabel,
-Der Diskriminator entscheidet bedingt zum Klassenlabel.
-Geht auch mit anderen Zusatzinformationen,
-z.B. Text kodiert als Vektor von Wort-Embeddings.
+### Wasserstein GANs – wozu?
 
-<!-- Folie 15 -->
-Wasserstein GANs -- Wozu?
 Probleme mit klassischen GANs bei der Bildgenerierung:
-◼ Mode Collapse - der Generator produziert nur (noch) stereotype
-Bilder ohne große Variation.
-(Kollabieren der Verteilung auf die Moden, also Konzentration der
-Wahrscheinlichkeitsmasse auf einige wenige Punkte).
-◼ Vanishing Gradients - wenn der Diskriminator zu schnell gut wird,
-geht der Lernprozess nicht weiter für den Generator.
-◼ Instabilität im Training - Die Loss-Funktion des Generators
-entspricht nicht unbedingt der Qualität der Bilder.
 
-<!-- Folie 16 -->
-Wasserstein GANs -- Was?
-Andere Loss-Funktion: Wasserstein-Distanz,
-auch “Earth Mover’s Distance”,
-wie viel Wahrscheinlichkeitsmasse bewegt werden muss,
-um aus einer Verteilung eine andere zu machen
-(analog Levenshtein-Distanz als Editierabstand).
-Die Verteilungen sind zum einen die echten Bilder,
-zum Anderen die generierten Bilder (je ein Batch).
+* **Mode Collapse** – der Generator produziert nur (noch) stereotype Bilder ohne große Variation. Die Verteilung kollabiert auf die Moden, also die Wahrscheinlichkeitsmasse konzentriert sich auf einige wenige Punkte, die $D$ gerade nicht erkennt.
+* **Vanishing Gradients** – wenn der Diskriminator zu schnell gut wird, ist $D(G(z)) \approx 0$ überall, $\log(1 - D(G(z)))$ ist flach, und der Lernprozess geht für den Generator nicht weiter.
+* **Instabilität im Training** – die Loss-Funktion des Generators entspricht nicht unbedingt der Qualität der Bilder; man kann am Loss nicht ablesen, ob es besser wird.
 
-<!-- Folie 17 -->
-Wasserstein GANs -- Was?
-Andere Loss-Funktion: Wasserstein-Distanz,
-auch “Earth Mover’s Distance”,
-wie viel Wahrscheinlichkeitsmasse bewegt werden muss,
-um aus einer Verteilung eine andere zu machen
-(analog Levenshtein-Distanz als Editierabstand).
-Kritiker statt Diskriminator: Werte zwischen 0 und 1.
-Beides führt zu glatteren Loss-Landschaften,
-damit zu effektiverem Gradientenabstieg.
+### Wasserstein GANs – was?
 
-<!-- Folie 18 -->
-Wasserstein GANs -- Was?
-Andere Loss-Funktion: Wasserstein-Distanz
-Kritiker statt Diskriminator: Werte zwischen 0 und 1.
-Der Kritiker schätzt die Wasserstein-Distanz zwischen den realen
-Bildern und den gegebenen Bildern.
-Wenn der Kritiker alle Bilder für echt hält, schätzt er 0,
-ansonsten gibt es ein Signal, welches für Training genutzt werden kann.
+Andere Loss-Funktion: die **Wasserstein-Distanz**, auch „Earth Mover's Distance“ – wie viel Wahrscheinlichkeitsmasse (mal Weglänge) bewegt werden muss, um aus einer Verteilung eine andere zu machen (analog zur Levenshtein-Distanz als Editierabstand für Strings). Die Verteilungen sind zum einen die echten Bilder, zum anderen die generierten Bilder (je ein Batch). Der Vorteil gegenüber der KL-Divergenz bzw. der Kreuzentropie: Die Wasserstein-Distanz ist auch dann endlich und hat einen nützlichen Gradienten, wenn sich die beiden Verteilungen gar nicht überlappen.
 
-<!-- Folie 19 -->
-Wasserstein GANs -- Wie?
-Die Details (warum es funktioniert) sind mathematisch nicht trivial.
-Ein Tutorial von Lilian Weng:
-lilianweng.github.io/posts/2017-08-20-gan
+**Kritiker** statt Diskriminator: Statt einer Wahrscheinlichkeit in $(0, 1)$ gibt der Kritiker eine reelle Zahl aus und schätzt damit die Wasserstein-Distanz zwischen den realen Bildern und den gegebenen Bildern. Wenn der Kritiker alle Bilder für echt hält, schätzt er $0$, ansonsten gibt es ein Signal, welches für das Training genutzt werden kann. Beides führt zu glatteren Loss-Landschaften und damit zu effektiverem Gradientenabstieg, und der Kritiker-Loss korreliert tatsächlich mit der Bildqualität.
+
+Wie? Die Details (warum es funktioniert: Kantorovich-Rubinstein-Dualität, Lipschitz-Beschränkung des Kritikers durch Weight Clipping oder Gradient Penalty) sind mathematisch nicht trivial. Ein Tutorial von Lilian Weng: [lilianweng.github.io/posts/2017-08-20-gan](https://lilianweng.github.io/posts/2017-08-20-gan).
 
 ## Konkrete Modelle
 
-<!-- Folie 20 -->
-Cycle GANs
-Unpaired Image-to-Image Translation using Cycle-Consistent Adversarial Networks
-Jun-Yan Zhu, Taesung Park, Phillip Isola, Alexei A. Efros (ICCV 2017)
-Image-to-image translation is a class of vision and graphics problems where the goal is to learn the
-mapping between an input image and an output image using a training set of aligned image pairs.
-However, for many tasks, paired training data will not be available. We present an approach for
-learning to translate an image from a source domain X to a target domain Y in the absence of paired
-examples. Our goal is to learn a mapping G:X→Y such that the distribution of images from G(X) is
-indistinguishable from the distribution Y using an adversarial loss. Because this mapping is highly
-under-constrained, we couple it with an inverse mapping F:Y→X and introduce a cycle consistency
-loss to push F(G(X))≈X (and vice versa). Qualitative results are presented on several tasks where
-paired training data does not exist, including collection style transfer, object transfiguration, season
-transfer, photo enhancement, etc. Quantitative comparisons against several prior methods
-demonstrate the superiority of our approach.
+### CycleGAN
 
-<!-- Folie 21 -->
-Cycle GANs
+Zhu, Park, Isola, Efros (ICCV 2017), *Unpaired Image-to-Image Translation using Cycle-Consistent Adversarial Networks*: Image-to-image translation lernt die Abbildung von einem Eingabebild auf ein Ausgabebild – normalerweise aus einem Trainingsdatensatz *gepaarter* Bilder. Für viele Tasks gibt es aber keine Paare (Foto ↔ Monet-Gemälde, Pferd ↔ Zebra, Sommer ↔ Winter). CycleGAN lernt eine Abbildung $G \colon X \to Y$, sodass die Verteilung von $G(X)$ von $Y$ nicht unterscheidbar ist (adversarial loss) – und weil das allein hochgradig unterbestimmt ist, gleichzeitig die inverse Abbildung $F \colon Y \to X$ mit einem **Cycle-Consistency-Loss** $F(G(x)) \approx x$ (und umgekehrt). Ein Pferd, das zum Zebra und zurück wird, muss wieder dasselbe Pferd sein.
 
-<!-- Folie 22 -->
-StyleGANs
-A Style-Based Generator Architecture for Generative Adversarial Networks
-Tero Karras, Samuli Laine, Timo Aila - NVIDIA (CVPR 2019)
-We propose an alternative generator architecture for generative adversarial networks, borrowing from
-style transfer literature. The new architecture leads to an automatically learned, unsupervised
-separation of high-level attributes (e.g., pose and identity when trained on human faces) and
-stochastic variation in the generated images (e.g., freckles, hair), and it enables intuitive,
-scale-specific control of the synthesis. The new generator improves the state-of-the-art in terms of
-traditional distribution quality metrics, leads to demonstrably better interpolation properties, and also
-better disentangles the latent factors of variation. To quantify interpolation quality and
-disentanglement, we propose two new, automated methods that are applicable to any generator
-architecture. Finally, we introduce a new, highly varied and high-quality dataset of human faces.
+<!-- TODO Abbildung: CycleGAN-Beispiele (Folie 21) -->
 
-<!-- Folie 23 -->
-StyleGANs
-Quelle:
-github.com/NVlabs/stylegan
+### StyleGAN
 
-<!-- Folie 24 -->
-StyleGAN2
-thispersondoesnotexist.com
+Karras, Laine, Aila – NVIDIA (CVPR 2019), *A Style-Based Generator Architecture for Generative Adversarial Networks*: eine alternative Generator-Architektur, die sich an der Style-Transfer-Literatur orientiert. Der latente Vektor $z$ wird zuerst durch ein MLP in einen Zwischenraum $w$ abgebildet und dann *auf jeder Auflösungsstufe* des Generators als „Stil“ eingespeist. Das führt zu einer automatisch gelernten, unsupervised Trennung von High-Level-Attributen (z.B. Pose und Identität bei Gesichtern) und stochastischer Variation (z.B. Sommersprossen, Haare), und erlaubt intuitive, skalenspezifische Kontrolle der Synthese. Dazu ein neuer Datensatz von Gesichtern (FFHQ). StyleGAN2 ist hinter [thispersondoesnotexist.com](https://thispersondoesnotexist.com).
 
-## Viele konkrete Modelle
+<!-- TODO Abbildung: StyleGAN-Gesichter (github.com/NVlabs/stylegan) -->
 
-<!-- Folie 25 -->
-The GAN Zoo
-Quelle:
-github.com/hindupuravinash/the-gan-zoo
+### Viele konkrete Modelle
+
+*The GAN Zoo*, [github.com/hindupuravinash/the-gan-zoo](https://github.com/hindupuravinash/the-gan-zoo): eine Liste von mehreren hundert benannten GAN-Varianten. Seit ca. 2021 haben Diffusionsmodelle die GANs bei der Bildgenerierung weitgehend abgelöst, aber das adversarielle Prinzip lebt weiter – z.B. als Loss-Term beim Training von VAE-Decodern für Stable Diffusion.
 
 ## Selbst GANs basteln
 
-<!-- Folie 26 -->
-
-## Selbst machen
-
-<!-- Folie 27 -->
-Tutorial time!
-pytorch.org/tutorials/beginner/dcgan_faces_tutorial.html
-DCGAN = deep convolutional GAN
+Tutorial time: [pytorch.org/tutorials/beginner/dcgan_faces_tutorial.html](https://pytorch.org/tutorials/beginner/dcgan_faces_tutorial.html), das offizielle DCGAN-Tutorial auf dem CelebA-Gesichterdatensatz. Die Trainingsschleife dort ist genau die oben beschriebene: erst $D$ mit echten und generierten Bildern, dann $G$ mit Label „echt“, abwechselnd pro Batch.
