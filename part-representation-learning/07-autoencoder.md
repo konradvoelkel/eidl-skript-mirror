@@ -5,563 +5,220 @@ short_title: "VL 07"
 
 # Handgemachte Netze und Autoencoder
 
-:::{warning} Rohfassung
-Dieses Kapitel ist eine automatische Transkription der Folien von VL 07 aus dem WiSe 2025/26
-(`from_2025/slides/Einführung in Deep Learning 2025_26 VL 07_ Autoencoder.pdf`), Folie für Folie in der Originalreihenfolge.
-Formeln und Abbildungen sind dabei größtenteils verloren gegangen; der Text ist noch nicht überarbeitet.
+:::{note} Stand
+Erste Prosafassung (aus den Folien von VL 07, WiSe 2025/26). Abbildungen fehlen noch, siehe die `TODO`-Kommentare.
 :::
-
-## Handgemachte Netze
-
-<!-- Folie 2 -->
 
 ## Das Geheimnis um Deep Learning lüften
 
-<!-- Folie 3 -->
-Warum (wie genau) funktioniert Deep Learning so gut?
-Zutaten (bisher):
-◼
-◼
-◼
-Das einzelne Neuron = Skalarprodukt + Aktivierungsfunktion
-Gradientenabstieg: lernen in Richtung der Ableitung einer Loss-Funktion
-Backpropagation: clever Ableitung berechnen für tiefe Netze
+Warum – und wie genau – funktioniert Deep Learning so gut? Die Zutaten, die wir bisher haben:
 
-<!-- Folie 4 -->
-Warum (wie genau) funktioniert Deep Learning so gut?
-Zutaten:
-◼
-◼
-◼
-◼
-◼
-◼
-Das einzelne Neuron = Skalarprodukt + Aktivierungsfunktion
-Gradientenabstieg: lernen in Richtung der Ableitung einer Loss-Funktion
-Backpropagation: clever Ableitung berechnen für tiefe Netze
-Sinnvolle Loss-Funktionen festlegen:
-← Heute!
-Regression mit MSE und (binäre) Klassifikation mit (B)CE, BCE vs NLL, DKL
-Architekturen neben einfachen MLPs wie z.B. Autoencoder
-← Heute!
-Damit auch Representation Learning, Transfer Learning
-Regularisierung und Tricks gegen verschwindende Gradienten
-← Heute!
+* Das einzelne Neuron = Skalarprodukt + Aktivierungsfunktion.
+* Gradientenabstieg: Lernen in Richtung der Ableitung einer Loss-Funktion.
+* Backpropagation: clever die Ableitung berechnen für tiefe Netze.
 
-<!-- Folie 5 -->
-Warum (wie genau) funktioniert Deep Learning so gut?
-Zutaten:
-◼
-◼
-◼
-◼
-◼
-◼
-◼
-◼
-Das einzelne Neuron = Skalarprodukt + Aktivierungsfunktion
-Gradientenabstieg: lernen in Richtung der Ableitung einer Loss-Funktion
-Backpropagation: clever Ableitung berechnen für tiefe Netze
-Sinnvolle Loss-Funktionen festlegen:
-← Heute!
-Regression mit MSE und (binäre) Klassifikation mit (B)CE, BCE vs NLL, DKL
-Architekturen neben einfachen MLPs wie z.B. Autoencoder
-← Heute!
-Damit auch Representation Learning, Transfer Learning
-Regularisierung und Tricks gegen verschwindende Gradienten
-← Heute!
-Hyperparameter wählen/optimieren,
-alles hängt von den Daten ab…
-Elementare Funktionen sind leicht approximierbar
-← jetzt kurz
+Was noch fehlt, und was wir in diesem und den nächsten Kapiteln angehen:
+
+* Sinnvolle Loss-Funktionen festlegen: Regression mit MSE, (binäre) Klassifikation mit (B)CE; BCE vs. NLL vs. $D_{KL}$. *(heute)*
+* Architekturen neben einfachen MLPs, wie z.B. Autoencoder – und damit auch Representation Learning und Transfer Learning. *(heute)*
+* Regularisierung und Tricks gegen verschwindende Gradienten. *(heute)*
+* Hyperparameter wählen und optimieren; alles hängt von den Daten ab …
+* Und ganz grundsätzlich: Elementare Funktionen sind leicht approximierbar. *(jetzt kurz)*
 
 ## Parameter von Hand wählen
 
-<!-- Folie 6 -->
-Easy mode: Boolesche Variablen
-x,y ∊ {0, 1} = {FALSE, TRUE}
-f : ℝ2 → ℝ,
-f(x,y) := x OR y
-Also f(0,0)=0, f(1,0)=1, f(0,1)=1, f(1,1)=1
-Welches neuronale Netz berechnet als Inferenz/Forward die Funktion f?
+Bevor wir Netze trainieren, überzeugen wir uns davon, dass die gesuchten Gewichte überhaupt *existieren*: Wir bauen kleine Netze von Hand. Das Notebook dazu ist `nn-by-hand.ipynb`.
 
-<!-- Folie 7 -->
-Easy mode: Boolesche Variablen
-x,y ∊ {0, 1} = {FALSE, TRUE}
-f : ℝ2 → ℝ,
-f(x,y) := x OR y
-Also f(0,0)=0, f(1,0)=1, f(0,1)=1, f(1,1)=1
-Welches neuronale Netz berechnet als Inferenz/Forward die Funktion f?
-Idee: schreibe die Funktion f als
-Verkettung von gewichteten Summen (=Skalarprodukte)
-und Aktivierungsfunktionen (z.B. [x > 0] oder ReLU(x):=max(0,x))
+### Easy mode: Boolesche Variablen
 
-<!-- Folie 8 -->
-Easy mode: Boolesche Variablen
-x,y ∊ {0, 1} = {FALSE, TRUE}
-f : ℝ2 → ℝ,
-f(x,y) := x OR y
-Also f(0,0)=0, f(1,0)=1, f(0,1)=1, f(1,1)=1
-Welches neuronale Netz berechnet als Inferenz/Forward die Funktion f?
-Idee: schreibe die Funktion f als
-Verkettung von gewichteten Summen (=Skalarprodukte)
-und Aktivierungsfunktionen (z.B. [x > 0] oder ReLU(x):=max(0,x))
-Idee: interpoliere OR, d.h. Entscheide, was z.B. f(0.5, 0) sein soll.
-Idee: extrapoliere OR, d.h. Entscheide, was z.B. f(-1, 2) sein soll.
+Seien $x, y \in \{0, 1\} = \{\text{FALSE}, \text{TRUE}\}$ und $f \colon \mathbb{R}^2 \to \mathbb{R}$, $f(x, y) := x \text{ OR } y$, also $f(0,0) = 0$, $f(1,0) = 1$, $f(0,1) = 1$, $f(1,1) = 1$. Welches neuronale Netz berechnet als Inferenz die Funktion $f$?
 
-<!-- Folie 9 -->
-Easiest mode: eindimensional
-x ∊ ℝ mit der Interpretation (x ≤ 0)=FALSE, (x ≥ 1)=TRUE
-n : ℝ → ℝ,n(x) := NOT x
-Also n(0)=1, n(1)=0, allgemeiner n(x) ≤ 0 falls x ≥ 1
-Welches neuronale Netz berechnet als Inferenz/Forward die Funktion n?
+Idee: Schreibe $f$ als Verkettung von gewichteten Summen (= Skalarprodukten) und Aktivierungsfunktionen (z.B. $[x > 0]$ oder $\operatorname{ReLU}(x) := \max(0, x)$). Dabei müssen wir OR *interpolieren* – entscheiden, was z.B. $f(0{,}5, 0)$ sein soll – und *extrapolieren* – entscheiden, was z.B. $f(-1, 2)$ sein soll. Denn ein neuronales Netz ist auf ganz $\mathbb{R}^2$ definiert, nicht nur auf den vier Ecken.
 
-<!-- Folie 10 -->
-Easiest mode: eindimensional
-x ∊ ℝ mit der Interpretation (x ≤ 0)=FALSE, (x ≥ 1)=TRUE
-n : ℝ → ℝ,n(x) := NOT x
-Also n(0)=1, n(1)=0, allgemeiner n(x) ≤ 0 falls x ≥ 1
-Welches neuronale Netz berechnet als Inferenz/Forward die Funktion n?
+### Easiest mode: eindimensional
+
+Sei $x \in \mathbb{R}$ mit der Interpretation $(x \le 0) = \text{FALSE}$, $(x \ge 1) = \text{TRUE}$, und $n \colon \mathbb{R} \to \mathbb{R}$, $n(x) := \text{NOT } x$. Also $n(0) = 1$, $n(1) = 0$, allgemeiner $n(x) \le 0$ falls $x \ge 1$. Die Funktion
+
+$$
 n(x) = 1 - x
-erfüllt die Eigenschaft, NOT zu inter/extrapolieren.
-Neuronales Netz: 1 Neuron, Gewicht w = -1, Bias b = +1, Aktivierungsfunktion id.
+$$
 
-<!-- Folie 11 -->
-Zurück zu OR
-x,y ∊ ℝ mit der Interpretation (x ≤ 0)=FALSE, (x ≥ 1)=TRUE
-f : ℝ2 → ℝ,
-f(x,y) := x OR y
-Also f(0,0)=0, f(1,0)=1, f(0,1)=1, f(1,1)=1
-Welches neuronale Netz berechnet als Inferenz/Forward die Funktion f?
-Ansatz: f(x,y) = x+y
-leider f(1,1)=2 ≠ 1
+erfüllt die Eigenschaft, NOT zu inter- und extrapolieren. Als neuronales Netz: 1 Neuron, Gewicht $w = -1$, Bias $b = +1$, Aktivierungsfunktion $\operatorname{id}$.
 
-<!-- Folie 12 -->
-Zurück zu OR
-x,y ∊ ℝ mit der Interpretation (x ≤ 0)=FALSE, (x ≥ 1)=TRUE
-f : ℝ2 → ℝ,
-f(x,y) := x OR y
-Also f(0,0)=0, f(1,0)=1, f(0,1)=1, f(1,1)=1
-Welches neuronale Netz berechnet als Inferenz/Forward die Funktion f?
-Ansatz: f(x,y) = [x+y > 0]
-Ein Neuron, Gewichtsvektor (1, 1), kein Bias (bzw. Bias b=0),
-Aktivierungsfunktion ist [x > 0] mit Werten in 0,1
+### Zurück zu OR
 
-## x,y ∊ ℝ mit der Interpretation
+Ansatz: $f(x, y) = x + y$. Leider ist $f(1, 1) = 2 \neq 1$. Besser: $f(x, y) = [x + y > 0]$ – ein Neuron mit Gewichtsvektor $(1, 1)$, Bias $b = 0$ und Aktivierungsfunktion $[\,\cdot > 0]$ mit Werten in $\{0, 1\}$. Dafür ändern wir die Interpretation leicht zu $(x \le 0) = \text{F}$, $(x > 0) = \text{T}$. Softere Varianten sind $f(x, y) := x + y$ oder $\sigma(x + y)$; und noch besser, weil es Negatives sauber abschneidet:
 
-<!-- Folie 13 -->
-(x ≤ 0)=F=FALSE,
-(x > 0)=T=TRUE
+$$
+f(x, y) := \operatorname{ReLU}(x) + \operatorname{ReLU}(y).
+$$
 
-## Parameter von Hand wählen
+<!-- TODO Abbildung: Heatmap von ReLU(x)+ReLU(y) auf [-1,2]^2 mit den vier Booleschen Ecken markiert (Folie 13) -->
 
-<!-- Folie 14 -->
-Zurück zu OR
-x,y ∊ ℝ mit der Interpretation (x ≤ 0)=FALSE, (x > 0)=TRUE
-f : ℝ2 → ℝ,
-f(x,y) := x OR y
-Also f(0,0)=0, f(1,0)=1, f(0,1)=1, f(1,1)=1
-Welches neuronale Netz berechnet als Inferenz/Forward die Funktion f?
-Ansatz: f(x,y) = [x+y > 0]
-Ein Neuron, Gewichtsvektor (1, 1), kein Bias (bzw. Bias b=0),
-Aktivierungsfunktion ist [x > 0] mit Werten in 0,1
-oder die softere Variante f(x,y) := x+y oder 𝜎(x+y)
-Besser: f(x,y) := ReLU(x) + ReLU(y)
+### Komplizierteres aus Einfachem: NOR
 
-<!-- Folie 15 -->
-Komplizierteres aus Einfachem:
-x,y ∊ ℝ mit der Interpretation (x ≤ 0)=F=FALSE, (x > 0)=T=TRUE
-g : ℝ2 → ℝ,
-g(x,y) := x NOR y
-g(F,F)=T, g(F,T)=F, g(T,F)=F, g(T,T)=F
-Welches neuronale Netz berechnet als Inferenz/Forward die Funktion g?
+Sei $g(x, y) := x \text{ NOR } y$, also $g(\text{F}, \text{F}) = \text{T}$ und sonst $\text{F}$. NOR = NOT OR, also $g(x, y) = n(f(x, y))$ für ein $f$, welches OR implementiert. Mit $f(x, y) := \operatorname{ReLU}(x) + \operatorname{ReLU}(y)$ und $n(x) := 1 - x$:
 
-## x,y ∊ ℝ mit der Interpretation
+$$
+g(x, y) := 1 - \bigl(\operatorname{ReLU}(x) + \operatorname{ReLU}(y)\bigr).
+$$
 
-<!-- Folie 16 -->
-(x ≤ 0)=F=FALSE,
-(x > 0)=T=TRUE
+Als Netz: erste Schicht mit Gewichten $(1, 1)$, Bias $0$ und ReLU (zwei Neuronen, eines pro Eingabe – oder eines mit Gewichtsvektor $(1,1)$, wenn man die ReLU vor die Summe zieht), zweite Schicht mit Gewicht $-1$, Bias $1$ und $\operatorname{id}$.
 
-## Parameter von Hand wählen
+### Weiter so? XOR
 
-<!-- Folie 17 -->
-Komplizierteres aus Einfachem:
-x,y ∊ ℝ mit der Interpretation (x ≤ 0)=F=FALSE, (x > 0)=T=TRUE
-g : ℝ2 → ℝ,
-g(x,y) := x NOR y
-g(F,F)=T, g(F,T)=F, g(T,F)=F, g(T,T)=F
-Welches neuronale Netz berechnet als Inferenz/Forward die Funktion g?
-NOR = NOT OR, also g(x,y) = n(f(x,y)) für ein f, welches OR implementiert, z.B.
-f(x,y) := ReLU(x) + ReLU(y) und n(x) := 1 - x
-⇒ g(x,y) := 1 - (ReLU(x) + ReLU(y)),
-also:
-erste Schicht Gewicht (1, 1), Bias 0 und ReLU,
-zweite Schicht Gewicht -1, Bias 1 und id.
+Sei $f(x, y) := x \text{ XOR } y$. Die „Region“ XOR in der Ebene, also die Punkte $(x, y)$ mit $\text{XOR}(x, y) > 0$, ist der Schnitt von $\text{NAND}(x, y) > 0$ mit $\text{OR}(x, y) > 0$:
 
-## x,y ∊ ℝ mit der Interpretation
+$$
+\text{XOR}(x, y) = \text{AND}\bigl(\text{NAND}(x, y),\ \text{OR}(x, y)\bigr).
+$$
 
-<!-- Folie 18 -->
-(x ≤ 0)=F=FALSE,
-(x > 0)=T=TRUE
+Setzt man das mit den obigen Bausteinen zusammen, so müsste es mit 4 Hidden Layers zu je 4 Neuronen klappen. Gradientenabstieg mit Backpropagation findet allerdings auch Approximationen mit 3 Hidden Layers – und mit 2 Hidden Layers (siehe die Bilder `krude-xor-approximation.png` aus dem TensorFlow Playground).
 
-<!-- Folie 19 -->
-(x ≤ 0)=F=FALSE,
-(x > 0)=T=TRUE
+<!-- TODO Abbildungen: XOR-Region; Playground-Lösungen mit 3 bzw. 2 Hidden Layers (from_2025/slides/krude-xor-approximation*.png) -->
 
-## Parameter von Hand wählen
+### Take-Home Message
 
-<!-- Folie 20 -->
-Weiter so?
-x,y ∊ ℝ mit der Interpretation (x ≤ 0)=F=FALSE, (x > 0)=T=TRUE
-f : ℝ2 → ℝ,
-f(x,y) := x XOR y
-Welches neuronale Netz berechnet als Inferenz/Forward die Funktion f?
+Boolesche Funktionen lassen sich mit neuronalen Netzen darstellen bzw. approximieren, d.h. es gibt Gewichte, sodass die resultierende Funktion tut, was sie soll. Also kann auch Optimierung diese idealen Gewichte finden. Aus elementaren Funktionen lassen sich komplexe verknüpfen; neuronale Netze können aber auch „Abkürzungen“ nehmen und Platz verschwenden (überflüssige Neuronen).
 
-## x,y ∊ ℝ mit der Interpretation
+### Arithmetik
 
-<!-- Folie 21 -->
-(x ≤ 0)=F=FALSE,
-(x > 0)=T=TRUE
+Wie können wir z.B. $f(x, y) := x^3 + x y^2 - 3y$ mit einem neuronalen Netz berechnen oder approximieren? Einfachere Probleme, die wir dafür zuerst lösen müssen: $f(x, y) := xy$ und $f(x) := x^2$.
 
-## Parameter von Hand wählen
+**Auf $[-3, +3]$ approximieren wir $x^2$** mit einer stückweise linearen Funktion an ganzzahligen Stützstellen. Die Interpolation durch die Punkte $(k, k^2)$ für $k = -3, \dots, 3$ hat auf $[k, k+1]$ die Steigung $2k + 1$, also an jeder inneren Stützstelle einen Knick, bei dem die Steigung um $2$ wächst – und jeder Knick ist eine ReLU:
 
-<!-- Folie 22 -->
-Weiter so?
-x,y ∊ ℝ mit der Interpretation (x ≤ 0)=F=FALSE, (x > 0)=T=TRUE
-f : ℝ2 → ℝ,
-f(x,y) := x XOR y
-Welches neuronale Netz berechnet als Inferenz/Forward die Funktion f?
-Die “Region” XOR in der Ebene, also die Punkte (x,y) mit XOR(x,y) > 0
-ist der Schnitt von NAND(x,y) > 0 mit OR(x,y) > 0
-XOR(x,y) = AND( NAND(x,y), OR(x,y) )
-⇒ Mit 4 Hidden Layer zu je 4 Neuronen müsste es klappen
+$$
+Q(x) = 9 - 5\,\operatorname{ReLU}(x + 3) + \sum_{k=-2}^{2} 2\,\operatorname{ReLU}(x - k).
+$$
 
-## Gradientenabstieg/Backprop findet auch diese Approximation mit 3 Hidden Layer:
+Probe: $Q(0) = 9 - 15 + 2(2 + 1) = 0$ und $Q(3) = 9 - 30 + 2(5 + 4 + 3 + 2 + 1) = 9$. Das ist ein Netz mit einer versteckten Schicht aus 6 ReLU-Neuronen (Gewicht $1$, Bias $-k$ für $k = -3, \dots, 2$) und einer linearen Ausgabeschicht mit Gewichten $(-5, 2, 2, 2, 2, 2)$ und Bias $9$. Die Symmetrie $x^2 = (-x)^2$ haben wir dabei ignoriert – geht das besser? Mit $|x|$ als erster Schicht halbiert sich die Anzahl der Knicke.
 
-<!-- Folie 23 -->
+<!-- TODO Abbildung: x² und stückweise lineare Interpolation an ganzzahligen Stützstellen (Folien 28–30) -->
 
-## Gradientenabstieg/Backprop findet auch diese Approximation mit 2 Hidden Layer:
+**Wenn $x^2$ gut approximiert werden kann, dann auch $xy$** über die Polarisationsidentität:
 
-<!-- Folie 24 -->
+$$
+\frac{(x + y)^2 - (x - y)^2}{4} = \frac{x^2 + 2xy + y^2 - x^2 + 2xy - y^2}{4} = xy .
+$$
 
-## Take-Home Message
+Damit setzen wir für eine Approximation $Q$ der Quadratfunktion
 
-<!-- Folie 25 -->
-Wir haben gesehen:
-Boolesche Funktionen lassen sich mit neuronalen Netzen darstellen/approximieren,
-D.h. es gibt Gewichte sodass die resultierende Funktion tut, was sie soll.
-Also kann auch Optimierung diese idealen Gewichte finden.
-Aus elementaren Funktionen lassen sich komplexe verknüpfen,
-neuronale Netze können aber auch “Abkürzungen” nehmen,
-und Platz verschwenden (überflüssige Neuronen).
+$$
+\operatorname{MUL}(x, y) := \tfrac14 Q(x + y) - \tfrac14 Q(x - y),
+$$
 
-## Parameter von Hand wählen
+und $x + y$ sowie $x - y$ sind lineare Schichten. Mit MUL und Addition bekommen wir alle Polynome, und damit (Weierstraß) alle stetigen Funktionen auf beschränkten Bereichen.
 
-<!-- Folie 26 -->
-Arithmetik
-Wie können wir z.B.
-mit einem neuronalen Netz berechnen / approximieren?
+### Take-Home Message
 
-<!-- Folie 27 -->
-Arithmetik
-Wie können wir z.B.
-mit einem neuronalen Netz berechnen / approximieren?
-Einfachere Probleme, die wir nicht lösen können:
-
-## Auf [-3, +3] approximieren wir x²
-
-<!-- Folie 28 -->
-mit einer stückweise linearen Funktion
-an ganzzahligen Stützstellen
-
-<!-- Folie 29 -->
-mit einer stückweise linearen Funktion
-an ganzzahligen Stützstellen
-(Symmetrie ignoriert - geht das besser?)
-
-<!-- Folie 30 -->
-mit einer stückweise linearen Funktion
-an ganzzahligen Stützstellen
-
-## Parameter von Hand wählen
-
-<!-- Folie 31 -->
-Arithmetik
-Wenn x2 gut approximiert werden kann, dann auch xy über die
-Polarisationsidentität:
-
-<!-- Folie 32 -->
-Arithmetik
-Wenn x2 gut approximiert werden kann, dann auch xy über die
-Polarisationsidentität:
-Damit setzen wir für eine Approximation Q der Quadratfunktion:
-
-## Take-Home Message
-
-<!-- Folie 33 -->
-Wir haben gesehen:
-Funktionen lassen sich mit neuronalen Netzen darstellen/approximieren.
-
-<!-- Folie 34 -->
-Wir haben gesehen:
-Funktionen lassen sich mit neuronalen Netzen darstellen/approximieren.
-Mit LUT und Interpolation sind beliebig gute Näherungen auf beschränkten
-Definitionsbereichen möglich → so rechnet auch die GPU z.B. Sinus aus.
-Außerhalb der Stützstellen wird die Approximation beliebig schlecht
-⇒ Neuronale Netze interpolieren gut, extrapolieren schlecht.
-
-## Zeit für eine Pause?
-
-<!-- Folie 35 -->
+Funktionen lassen sich mit neuronalen Netzen darstellen bzw. approximieren. Mit einer Lookup-Table (LUT) und Interpolation sind beliebig gute Näherungen auf *beschränkten* Definitionsbereichen möglich – so rechnet auch die GPU z.B. den Sinus aus. Außerhalb der Stützstellen wird die Approximation beliebig schlecht: **Neuronale Netze interpolieren gut, extrapolieren schlecht.**
 
 ## Autoencoder
 
-<!-- Folie 36 -->
+### Das Autoencoder-Layout
 
-<!-- Folie 37 -->
-Wie letztes Mal bereits …
-Das Autoencoder-Layout
-Regression,
-Input: Vektor x der Länge D
-Encoder: reduziert in mehreren Schichten
-von Dimension D auf Dimension L
-Decoder: erhöht in mehreren Schichten von
-Dimension L auf Dimension D
-Input/Output im “Datenraum”
-(bei Bildern: “Pixelraum”, pixel space)
-Flaschenhals-Hidden Layer, Dimension L
-“Latenter Raum”, latent space
-(Grafik mit NN-SVG erstellt)
+Wie letztes Mal bereits: Ein Autoencoder ist eine Regression mit Input $x$, einem Vektor der Länge $D$. Der **Encoder** reduziert in mehreren Schichten von Dimension $D$ auf Dimension $L$, der **Decoder** erhöht in mehreren Schichten von Dimension $L$ zurück auf Dimension $D$. Input und Output liegen im „Datenraum“ (bei Bildern: „Pixelraum“, pixel space); die Flaschenhals-Schicht der Dimension $L$ ist der **latente Raum** (latent space).
 
-## Anwendungsbeispiel
+<!-- TODO Abbildung: Autoencoder-Layout, mit NN-SVG erstellt (Folie 37) -->
 
-<!-- Folie 38 -->
-MNIST
-28x28 Graustufen-Bilder
-handgeschriebener Ziffern 0-9 (mit Label)
+### Anwendungsbeispiel: MNIST
 
-<!-- Folie 39 -->
-MNIST
-28x28 Graustufen-Bilder
-handgeschriebener Ziffern 0-9
-Mögliche Tasks:
-◼
-◼
-◼
-◼
-Unsupervised Kompression der Bilder
-Unsupervised neue Bilder generieren
-Supervised Klassifikation
-Supervised neue Bilder mit
-vorgegebener Ziffer generieren
+MNIST besteht aus $28 \times 28$ Graustufen-Bildern handgeschriebener Ziffern 0–9, mit Label; 60 000 Trainings- und 10 000 Testbilder. Mögliche Tasks:
 
-<!-- Folie 40 -->
-MNIST
-28x28 Graustufen-Bilder
-handgeschriebener Ziffern 0-9
-Mögliche Tasks:
-◼
-◼
-◼
-◼
-Unsupervised Kompression der Bilder
-Unsupervised neue Bilder generieren
-Supervised Klassifikation
-Supervised neue Bilder mit
-vorgegebener Ziffer generieren
-Kompression:
-Autoencoder = Encoder + Decoder,
-Encoder ist der Kompressor
-Neue Bilder generieren:
-Verteilung der Punkte im latenten Raum
-modellieren, sampeln, dekodieren.
+* Unsupervised: Kompression der Bilder. Autoencoder = Encoder + Decoder, der Encoder ist der Kompressor.
+* Unsupervised: neue Bilder generieren. Die Verteilung der Punkte im latenten Raum modellieren, sampeln, dekodieren – dazu mehr im nächsten Kapitel (VAE).
+* Supervised: Klassifikation.
+* Supervised: neue Bilder mit vorgegebener Ziffer generieren.
 
-<!-- Folie 41 -->
-MNIST
-28x28 Graustufen-Bilder
-handgeschriebener Ziffern 0-9
-Mögliche Tasks:
-◼
-Unsupervised Kompression der Bilder
-◼
-Supervised Klassifikation
-Heute:
-◼
-◼
-Accuracy erhöhen
-Overfitten vermeiden
+Heute: Kompression und Klassifikation, mit den Zielen *Accuracy erhöhen* und *Overfitten vermeiden*. Variationsmöglichkeiten dafür gibt es an drei Stellen: die Daten modifizieren (putzen?), die Modellarchitektur (tiefer?), und die Trainings-Hyperparameter (wie genau wird gelernt?).
 
-<!-- Folie 42 -->
-MNIST
-28x28 Graustufen-Bilder
-handgeschriebener Ziffern 0-9
-Variationsmöglichkeiten:
-◼
-◼
-◼
-Daten modifizieren (putzen?)
-Modellarchitektur (tiefer?)
-Trainings-Hyperparameter
-(wie genau wird gelernt?)
-Heute:
-◼
-◼
-Accuracy erhöhen
-Overfitten vermeiden
+### Code-Beispiel: Modell-Architektur
 
-## Code-Beispiel, Modell-Architektur
+Ein Autoencoder in PyTorch ist ein `nn.Module` mit zwei `nn.Sequential`-Blöcken. Schematisch:
 
-<!-- Folie 43 -->
-Visualisierung mit Netron und
-torch.save(model, 'model.pth')
+```python
+class Autoencoder(nn.Module):
+    def __init__(self, latent_dim=12):
+        super().__init__()
+        self.encoder = nn.Sequential(
+            nn.Linear(IMAGESIZE**2, 256), nn.ReLU(True),
+            nn.Linear(256, 64), nn.ReLU(True),
+            nn.Linear(64, latent_dim),
+        )
+        self.decoder = nn.Sequential(
+            nn.Linear(latent_dim, 64), nn.ReLU(True),
+            nn.Linear(64, 256), nn.ReLU(True),
+            nn.Linear(256, IMAGESIZE**2), nn.Sigmoid(),
+        )
 
-## Code-Beispiel, Training
+    def forward(self, x):
+        latent = self.encoder(x)
+        return latent, self.decoder(latent)
+```
 
-<!-- Folie 44 -->
+Das Sigmoid am Ende des Decoders sorgt dafür, dass die Ausgabe wie Pixelwerte in $[0, 1]$ liegt. Die Architektur lässt sich mit [Netron](https://netron.app) visualisieren, nachdem man das Modell mit `torch.save(model, 'model.pth')` gespeichert hat.
 
-## Tricks zur Verbesserung des Trainings
+### Code-Beispiel: Training
 
-<!-- Folie 45 -->
+```python
+IMAGESIZE = 28
+transform_mnist = transforms.Compose([
+    transforms.ToTensor(),
+    transforms.Lambda(lambda x: x.view(-1)),   # 28x28 -> 784
+])
+mnist_data = datasets.MNIST(root='./data', train=True, download=True,
+                            transform=transform_mnist)
+data_loader = DataLoader(dataset=mnist_data, batch_size=512,
+                         num_workers=8, shuffle=True)
 
-## Tricks beim Training
+model = Autoencoder(latent_dim=12).to(device)
+reconstruction_criterion = nn.MSELoss()
+optimizer = optim.SGD(model.parameters(), lr=1e-2)
 
-<!-- Folie 46 -->
-◼
-Mehr Epochen trainieren!
+for epoch in range(15):
+    for img, labels in data_loader:
+        img = img.to(device)
+        latent, reconstructed = model(img)
+        reconstruction_loss = reconstruction_criterion(reconstructed, img)
+        loss = reconstruction_loss
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+```
 
-<!-- Folie 47 -->
-◼
-Mehr Epochen trainieren!
-◼
-◼
-Lernrate anpassen - statt lr=1e3 mal mit lr=1e2 probieren!
-Die Gewichte können zu groß werden, dann kann man eine L2-Regularisierung
-nutzen, den Weight Decay (als Parameter für den Optimierer, wie die Lernrate).
-weight_decay=1e-5
+Neu gegenüber Kapitel 4 sind `Dataset` und `DataLoader`: Der Datensatz liefert einzelne Samples (hier mit einer `transform`, die das Bild in einen Vektor der Länge 784 verwandelt), der Loader fasst sie zu zufällig gemischten Mini-Batches zusammen. Die Trainingsschleife selbst ist dieselbe wie immer, nur dass das Label das Bild selbst ist.
 
-<!-- Folie 48 -->
-◼
-Mehr Epochen trainieren!
-◼
-◼
-Lernrate anpassen - statt lr=1e3 mal mit lr=1e2 probieren!
-Die Gewichte können zu groß werden, dann kann man eine L2-Regularisierung
-nutzen, den Weight Decay (als Parameter für den Optimierer, wie die Lernrate).
-weight_decay=1e-5
-SGD kann sehr langsam sein. Es gibt eine ganze Reihe von Tricks wie z.B. eine
-adaptive Lernrate und cleveres Mitteln über mehrere Batches hinweg, die in Adam
-implementiert sind.
-◼
+### Tricks beim Training
 
-<!-- Folie 49 -->
-◼
-Mehr Epochen trainieren!
-◼
-◼
-Lernrate anpassen - statt lr=1e3 mal mit lr=1e2 probieren!
-Die Gewichte können zu groß werden, dann kann man eine L2-Regularisierung
-nutzen, den Weight Decay (als Parameter für den Optimierer, wie die Lernrate).
-weight_decay=1e-5
-SGD kann sehr langsam sein. Es gibt eine ganze Reihe von Tricks wie z.B. eine
-adaptive Lernrate und cleveres Mitteln über mehrere Batches hinweg, die in Adam
-implementiert sind.
-Oft ist I/O oder die CPU ein Bottleneck beim Laden der Daten.
-Im Konstruktor des DataLoaders mit anderen batch_sizes experimentieren
-(im Zweifel mehr, bis Out of Memory).
-Mehrere CPU-Kerne zum Laden der Daten nutzen:
-num_workers=8
-◼
-◼
-◼
+* **Mehr Epochen trainieren!**
+* **Lernrate anpassen** – statt `lr=1e-3` mal mit `lr=1e-2` probieren.
+* Die Gewichte können zu groß werden, dann kann man eine **L2-Regularisierung** nutzen, den *Weight Decay* (als Parameter für den Optimierer, wie die Lernrate): `weight_decay=1e-5`. Das addiert $\lambda \|W\|^2$ zum Loss und zieht die Gewichte bei jedem Schritt ein wenig Richtung null.
+* SGD kann sehr langsam sein. Es gibt eine ganze Reihe von Tricks wie z.B. eine adaptive Lernrate und cleveres Mitteln über mehrere Batches hinweg, die in **Adam** implementiert sind: `optim.Adam(model.parameters(), lr=1e-3)`. Dazu mehr in VL 15.
+* Oft ist I/O oder die CPU ein Bottleneck beim Laden der Daten. Im Konstruktor des `DataLoader` mit anderen `batch_size`s experimentieren (im Zweifel mehr, bis Out of Memory), und mehrere CPU-Kerne zum Laden der Daten nutzen: `num_workers=8`.
 
 ## Label Autoencoder
 
-<!-- Folie 50 -->
+### Supervised: Klassifikator
 
-## Label Klassifikator
+Ein „klassischer“ Klassifikator-Ansatz auf Basis des Autoencoders: Encoder vom Autoencoder, dann ein linearer Layer auf 10 Dimensionen, dann Softmax. Zur „harten“ Klassifikation noch ein $\operatorname{argmax}$ dahinter hängen.
 
-<!-- Folie 51 -->
-Supervised: Klassifikator
-Ein “klassischer” Klassifikator-Ansatz:
-Encoder vom Autoencoder
-Linearer Layer auf 10 Dimensionen
-Softmax
-Zur “harten” Klassifikation noch ein argmax
-dahinter hängen.
+Loss-Funktion: **Negative Log-Likelihood** = Kreuzentropie $\mathrel{\hat=}$ Kullback-Leibler-Divergenz zwischen echten Labels und Vorhersage (Blatt 5). Das ist der *classification loss*, im Gegensatz zum *reconstruction loss*. In PyTorch: `nn.CrossEntropyLoss()`, das Softmax und NLL in einem Schritt (numerisch stabiler) berechnet und direkt auf die Logits angewendet wird.
 
-<!-- Folie 52 -->
-Supervised: Klassifikator
-Ein “klassischer” Klassifikator-Ansatz:
-Encoder vom Autoencoder
-Linearer Layer auf 10 Dimensionen
-Softmax
-Zur “harten” Klassifikation noch ein argmax
-dahinter hängen.
-Loss-Funktion:
-Negative log likelihood
-= Kreuzentropie
-≘ Kullback-Leibler-Divergenz
-zwischen echten Labels
-und Vorhersage
-“classification loss”
-(Im Gegensatz zum “reconstruction loss”)
+### Label Autoencoder
 
-## Label Autoencoder
+Warum nicht beides? Encoder vom Autoencoder, darauf ein linearer Layer auf 10 Dimensionen mit Softmax – und *daneben* der Decoder vom Autoencoder. Input ist ein Bild, Output sind Rekonstruktion und Label-Vorhersage, und die Loss-Funktion ist
 
-<!-- Folie 53 -->
-Supervised: Klassifikator
-Encoder vom Autoencoder
-Linearer Layer auf 10 Dimensionen
-Softmax
-Daneben Decoder vom Autoencoder
-Loss-Funktion:
-reconstruction_loss
-+
-classification_loss
-Input: Bild
-Output: Rekonstruktion, Label-Vorhersage
+$$
+L = \text{reconstruction\_loss} + \text{classification\_loss}.
+$$
 
-## Tricks zur Erhöhung der Accuracy
+Der Encoder muss jetzt einen latenten Raum finden, der *beides* kann: das Bild rekonstruieren und die Ziffer erkennen. Die Rekonstruktion wirkt dabei wie eine Regularisierung des Klassifikators – der latente Raum darf nichts Wichtiges wegwerfen.
 
-<!-- Folie 55 -->
+<!-- TODO Abbildung: Label-Autoencoder-Architektur (Folie 54) -->
 
-## Tricks bei der Modellarchitektur
+### Tricks bei der Modellarchitektur
 
-<!-- Folie 56 -->
-◼
-Mehr Layer!
-
-<!-- Folie 57 -->
-◼
-Mehr Layer!
-◼
-Dem Problem sterbender Neuronen entgegen wirken mit anderen
-Aktivierungsfunktionen als ReLU, z.B. dem Swish (in Pytorch SiLU).
-
-<!-- Folie 58 -->
-◼
-Mehr Layer!
-◼
-Dem Problem sterbender Neuronen entgegen wirken mit anderen
-Aktivierungsfunktionen als ReLU, z.B. dem Swish (in Pytorch SiLU).
-◼
-Dropout-Layer:
-Zufällig ein paar Einträge des eingehenden Vektors auf 0 setzen.
-Verhindert zu starke Konzentration auf einige wenige Neuronen.
-
-<!-- Folie 59 -->
-◼
-Mehr Layer!
-◼
-Dem Problem sterbender Neuronen entgegen wirken mit anderen
-Aktivierungsfunktionen als ReLU, z.B. dem Swish (in Pytorch SiLU).
-◼
-Dropout-Layer:
-Zufällig ein paar Einträge des eingehenden Vektors auf 0 setzen.
-Verhindert zu starke Konzentration auf einige wenige Neuronen.
-◼
-Batch Normalization Layer:
-Nach jedem Batch den Output des vorigen Layers auf eine Normalverteilung
-normieren. Die Transformation (Skalierung und Translation) auf eine andere
-Normalverteilung als Standard sind erlernbare Gewichte dieses Layers.
-→ theoretisch etwas kompliziert (wieso es nützt), praktisch sehr nützlich
+* **Mehr Layer!**
+* Dem Problem sterbender Neuronen entgegenwirken mit anderen Aktivierungsfunktionen als ReLU, z.B. dem **Swish** (in PyTorch `nn.SiLU`).
+* **Dropout-Layer**: Zufällig ein paar Einträge des eingehenden Vektors auf $0$ setzen (`nn.Dropout(0.3)` setzt 30 % auf null, nur während des Trainings). Verhindert zu starke Konzentration auf einige wenige Neuronen und wirkt gegen Overfitting.
+* **Batch-Normalization-Layer** (`nn.BatchNorm1d`): Nach jedem Batch den Output des vorigen Layers auf eine Normalverteilung normieren, d.h. Mittelwert abziehen und durch die Standardabweichung teilen, beides über den Batch berechnet. Die Transformation (Skalierung und Translation) auf eine andere Normalverteilung als die Standardnormalverteilung sind erlernbare Gewichte dieses Layers. Theoretisch etwas kompliziert (wieso es nützt), praktisch sehr nützlich.
