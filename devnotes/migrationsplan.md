@@ -53,3 +53,29 @@ Entwürfe für 2026 (englisch, amsart): `exam2026-eidl-exam-1.tex`, `exam2026-ei
 - Lehrbuchbezug: Prince, *Understanding Deep Learning* (Kapitel pro Thema referenzieren), Deisenroth et al. für Mathe-Grundlagen.
 - Notebooks (`notebooks/`) laufen noch nicht im Build (`jupyter: true` ohne Kernel-Setup); Datensätze (MNIST) nicht im Repo.
 - Englische Übungsblätter (`sheetNN.tex`) sind nicht konvertiert; bei Bedarf gleicher Weg über pandoc.
+
+## Google-Slides-Quellen (Drive-Ordner `1blU81WO_aaZRyH02UFrwk4AamOyWT-sv`)
+
+Die Drive-Textexporte sind schlechter als `pdftotext` (Mathe-Symbole als Mojibake, Formeln sind Bilder und fehlen ganz,
+keine Notizen) – die Transkription in den Kapiteln basiert daher auf den PDFs. Links zum Nachschlagen:
+
+| VL 2025/26 | Google Slides |
+|---|---|
+| 1 Überblick, Perzeptron | https://docs.google.com/presentation/d/1EMOQ_P6TWf3eksBuEAv5l7z-1ul8VWU1Q4CpORdW3eg |
+| 2 Perzeptron, Vortrainierte Modelle | https://docs.google.com/presentation/d/1V0-Acn_TwPNy_6bThHWX_lkIkZ750XqIiT_gbCChShA |
+| 3 PyTorch Basics, Tensoren | https://docs.google.com/presentation/d/16u4n4JTcAE98KwneaoQ2z2M1C93laxtwZDrXCdxMYzg |
+| 4 Logistische Regression | https://docs.google.com/presentation/d/1nrnlpvMElMnvgAeg2O3JIdFrvPQ8LADlXmmXKrXPom0 |
+| 5 SGD | https://docs.google.com/presentation/d/1psfkmt_W95qPiGZcu5-5zBp6WRZBTSQzsPWI1zGrlLo |
+| 6 Backprop | https://docs.google.com/presentation/d/1HBOY-MczMD2-a4jeBXXWtjTCxxk-Vla7H_TnoheaV1c |
+| 7 Autoencoder | https://docs.google.com/presentation/d/1QbSPcKxY9bJiMIhtvYRSm2OuI2nvUydTj1VLvJfeW6o |
+| 8 Latent Space und VAE | https://docs.google.com/presentation/d/1M9DZqUgNPWyu3RbnhMedtnebT2eATjLNoKxJsBrPZyY |
+| 9 Representation Learning | https://docs.google.com/presentation/d/14pO2CKBvnK8m_7yz7dvDZ0z0QHQH0UUVn9cYYZ8lKmM |
+| 10 Convolution (CNN) | https://docs.google.com/presentation/d/1CcntCr6ylo_dlewNQc3-UBpk3--pNpP2aKCoupQBl2g |
+| 11 LLMs benutzen | https://docs.google.com/presentation/d/1uMJKcqCZoxKZhYLMY6lGtu0tX820mIdOpGetN5zdMPU |
+| 12 GANs | https://docs.google.com/presentation/d/1IQ5WJb15ZLUZgmHJsKY7bd0Odpf_uePO3oUKwwyKxUM |
+| 13 Latent Spaces und Anwendungen | https://docs.google.com/presentation/d/1zrs-bgHQGRvMHfNi_DWm642VVjwHLNbIwHeZ6ibLzw0 |
+| 14 Destillation | https://docs.google.com/presentation/d/1gJFnzR3GaPkEWp98jj6idrNHZ4prxU6mdtlarvdTjWw |
+| 15 Märchenstunde | https://docs.google.com/presentation/d/1tu3Mp6eaooEZ1nBJJhXSbQ8s4ZhJrDk9mcFj0BcEa2k |
+
+Ältere Iterationen im selben Ordner: 2024/25 VL 1–12 (u.a. „VL 12: Transformer", 2025 in VL 9/11 aufgegangen)
+und 2023/24 VL 1–13 (u.a. „VL 13: Finale"); einige davon wurden noch im Dez. 2025 bearbeitet.
