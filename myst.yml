@@ -96,6 +96,8 @@ project:
 
 
 site:
+  domains:
+    - "eidl-skript-131e30.pages.cs.uni-duesseldorf.de"
   template: book-theme
   options:
     favicon: favicon.ico
