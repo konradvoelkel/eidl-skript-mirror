@@ -51,6 +51,8 @@ Entwürfe für 2026 (englisch, amsart): `exam2026-eidl-exam-1.tex`, `exam2026-ei
 
 ## Offene Punkte / Ideen
 
+→ Konsolidiert in `TODO.md`; hier nur noch die ursprünglichen Notizen.
+
 - Im Vorstellungsdeck 2026 ist die geplante Reihenfolge leicht anders als 2025: Logistische Regression und SGD/Backprop
   *vor* PyTorch. Entscheiden, ob Kapitel 03 (PyTorch) nach hinten wandert.
 - VL 08 war 2025 mit 85 Folien überladen (AE-Varianten + VAE + word2vec + NLP); ggf. word2vec/NLP in Kapitel 09 verschieben.
