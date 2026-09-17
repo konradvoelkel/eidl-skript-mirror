@@ -1,25 +1,44 @@
 stages:
+  - image
   - build
   - deploy
 
 variables:
-  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
   BASE_URL: "" # "/$CI_PROJECT_NAME"
   HOST: "127.0.0.1"
 
-cache:
-  paths:
-    - .cache/pip
+# Builds the CI image from the Dockerfile and pushes it to the project's
+# container registry. Runs automatically when the Dockerfile changes on the
+# default branch; can also be started manually from the pipeline view.
+build-image:
+  stage: image
+  image:
+    name: gcr.io/kaniko-project/executor:v1.23.2-debug
+    entrypoint: [""]
+  script:
+    - mkdir -p /kaniko/.docker
+    - echo "{\"auths\":{\"${CI_REGISTRY}\":{\"auth\":\"$(printf '%s:%s' "${CI_REGISTRY_USER}" "${CI_REGISTRY_PASSWORD}" | base64 | tr -d '\n')\"}}}" > /kaniko/.docker/config.json
+    - /kaniko/executor
+      --context "${CI_PROJECT_DIR}"
+      --dockerfile "${CI_PROJECT_DIR}/Dockerfile"
+      --destination "${CI_REGISTRY_IMAGE}:latest"
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      changes:
+        - Dockerfile
+    - when: manual
+      allow_failure: true
 
 myst-build:
   stage: build
   image: $CI_REGISTRY_IMAGE:latest
+  needs:
+    - job: build-image
+      optional: true
   script:
-    - python -V
     - node -v
-    - npm -v
+    - myst --version
     - myst build --html
-    
   artifacts:
     paths:
       - _build/html
@@ -27,9 +46,10 @@ myst-build:
 pages:
   stage: deploy
   image: busybox:latest
+  needs:
+    - myst-build
   script:
     - mv _build/html public
-    - cp _site/google*.html public/
   artifacts:
     paths:
       - public
