@@ -5,807 +5,269 @@ short_title: "VL 06"
 
 # Backpropagation
 
-:::{warning} Rohfassung
-Dieses Kapitel ist eine automatische Transkription der Folien von VL 06 aus dem WiSe 2025/26
-(`from_2025/slides/Einführung in Deep Learning 2025_26 VL 06_ Backprop.pdf`), Folie für Folie in der Originalreihenfolge.
-Formeln und Abbildungen sind dabei größtenteils verloren gegangen; der Text ist noch nicht überarbeitet.
+:::{note} Stand
+Erste Prosafassung (aus den Folien von VL 06, WiSe 2025/26). Abbildungen fehlen noch, siehe die `TODO`-Kommentare.
 :::
 
 ## Ziel für heute
 
-<!-- Folie 2 -->
-Ziel: Verstehen können, was dort geschieht:
-TensorFlow Playground
-https://playground.tensorflow.org
-Übungsaufgabe:
-Setzen Sie
-Gewichte von Hand
-mit 2 Hidden Layer
-zu je 2 Neuronen,
-um das XOR
-Problem zu lösen
+Verstehen können, was im [TensorFlow Playground](https://playground.tensorflow.org) geschieht. Als Aufwärmübung: Setzen Sie dort die Gewichte von Hand, mit 2 Hidden Layers zu je 2 Neuronen, um das XOR-Problem zu lösen. Das geht (Kapitel 1), aber es ist mühsam – und genau das Mühsame soll der Gradientenabstieg übernehmen. Dafür brauchen wir den Gradienten der Loss-Funktion nach *allen* Gewichten aller Schichten.
 
-## Training mehrerer Schichten:
+## Training mehrerer Schichten: Motivation
 
-<!-- Folie 3 -->
-Backpropagation (Motivation)
+### Beispielsetup 1
 
-## Backpropagation
+Eingabedaten sind eindimensional, ein einzelnes Neuron mit Aktivierungsfunktion $\sigma$ produziert eine Ausgabe, die stecken wir in ein zweites Neuron mit Aktivierungsfunktion $\operatorname{id}$. Also:
 
-<!-- Folie 4 -->
-Beispielsetup 1
-Eingabedaten sind eindimensional,
-ein einzelnes Neuron mit Aktivierungsfunktion 𝜎 produziert Ausgabe,
-die stecken wir in ein zweites Neuron mit Aktivierungsfunktion id.
-x
-werst
-𝜎
-wzweit
-ypred
+$$
+y_{\text{pred}} = \bigl\langle w_{\text{zweit}},\, \sigma(\langle w_{\text{erst}}, x \rangle) \bigr\rangle .
+$$
 
-<!-- Folie 5 -->
-Beispielsetup 1
-Eingabedaten sind eindimensional,
-ein einzelnes Neuron mit Aktivierungsfunktion 𝜎 produziert Ausgabe,
-die stecken wir in ein zweites Neuron mit Aktivierungsfunktion id.
-Also: ypred = 〈wzweit, 𝜎(〈werst, x〉)〉
-x
-werst
-𝜎
-wzweit
-ypred
+<!-- TODO Abbildung: x → [w_erst] → σ → [w_zweit] → y_pred -->
 
-<!-- Folie 6 -->
-Beispielsetup 1
-Eingabedaten sind eindimensional,
-ein einzelnes Neuron mit Aktivierungsfunktion 𝜎 produziert Ausgabe,
-die stecken wir in ein zweites Neuron mit Aktivierungsfunktion id.
-Also: ypred = 〈wzweit, 𝜎(〈werst, x〉)〉
-x
-werst
-𝜎
-wzweit
-ypred
-Wir planen eine Regression mit x,y ∊ ℝ, daher nehmen wir den MSE Loss:
-L(x,y; w) = MSE(y,ypred) = Σi=1..N (yi-ypred,i)2
+Wir planen eine Regression mit $x, y \in \mathbb{R}$, daher nehmen wir den MSE-Loss:
 
-<!-- Folie 7 -->
-Beispielsetup 1
-Eingabedaten sind eindimensional,
-ein einzelnes Neuron mit Aktivierungsfunktion 𝜎 produziert Ausgabe,
-die stecken wir in ein zweites Neuron mit Aktivierungsfunktion id.
-Also: ypred = 〈wzweit, 𝜎(〈werst, x〉)〉
-x
-werst
-𝜎
-wzweit
-ypred
-Wir planen eine Regression mit x,y ∊ ℝ, daher nehmen wir den MSE Loss:
-L(x,y; w) = MSE(y,ypred) = Σi=1..N (yi-ypred,i)2 → L’(w) = Σi=1..N 2(yi-ypred,i)(-d/dw ypred,i)
+$$
+L(x, y; W) = \operatorname{MSE}(y, y_{\text{pred}}) = \sum_{i=1}^N (y_i - y_{\text{pred}, i})^2
+\quad\Longrightarrow\quad
+L'(W) = \sum_{i=1}^N 2\,(y_i - y_{\text{pred}, i}) \left( -\frac{\partial}{\partial W} y_{\text{pred}, i} \right).
+$$
 
-<!-- Folie 8 -->
-Beispielsetup 1
-Eingabedaten sind eindimensional,
-ein einzelnes Neuron mit Aktivierungsfunktion 𝜎 produziert Ausgabe,
-die stecken wir in ein zweites Neuron mit Aktivierungsfunktion id.
-Also: ypred = 〈wzweit, 𝜎(〈werst, x〉)〉
-x
-werst
-𝜎
-wzweit
-ypred
-ypred’ = ?
-Wir planen eine Regression mit x,y ∊ ℝ, daher nehmen wir den MSE Loss:
-L(x,y; w) = MSE(y,ypred) = Σi=1..N (yi-ypred,i)2 → L’(w) = Σi=1..N 2(yi-ypred,i)(-d/dw ypred,i)
+Die Frage ist also nur: Was ist $\frac{\partial}{\partial W} y_{\text{pred}}$, die Ableitung der Netzausgabe nach den Gewichten?
 
-## Backpropagation preparation
+### Vorbereitung
 
-<!-- Folie 9 -->
-Beispielsetup 1
-Nehmen wir W = (werst, wzweit), können wir ypred als Funktion von W auffassen:
-ypred(W) = 〈wzweit, 𝜎(〈werst, x〉)〉
-Ableitung nach W wie zuvor berechnet in Komponenten.
-Was ist die Ableitung von 𝜎(f(w)) nach w?
-Was ist die Ableitung von 〈w, f(x)〉 nach w oder x?
+Nehmen wir $W = (w_{\text{erst}}, w_{\text{zweit}})$, so können wir $y_{\text{pred}}$ als Funktion von $W$ auffassen, $y_{\text{pred}}(W) = \langle w_{\text{zweit}}, \sigma(\langle w_{\text{erst}}, x \rangle) \rangle$, und die Ableitung nach $W$ wie zuvor in Komponenten berechnen. Dafür brauchen wir zwei Bausteine:
 
-<!-- Folie 10 -->
-Beispielsetup 1
-Nehmen wir W = (werst, wzweit), können wir ypred als Funktion von W auffassen:
-ypred(W) = 〈wzweit, 𝜎(〈werst, x〉)〉
-Ableitung nach W wie zuvor berechnet in Komponenten.
-d/dwerst ypred(W) =
-Was ist die Ableitung von 𝜎(f(w)) nach w?
-Kettenregel: d/dw 𝜎(f(w)) =
-Was ist die Ableitung von 〈w, f(x)〉 nach w oder x?
-d/dw 〈w,x〉 = ? und d/dw 〈v, f(w)〉 = ?
+* Was ist die Ableitung von $\sigma(f(w))$ nach $w$? Kettenregel: $\frac{d}{dw} \sigma(f(w)) = \sigma'(f(w)) \, f'(w)$.
+* Was ist die Ableitung von $\langle w, x \rangle$ nach $w$, und von $\langle v, f(w) \rangle$ nach $w$? Es ist $\frac{d}{dw} \langle w, x \rangle = x$ und $\frac{d}{dw} \langle v, f(w) \rangle = \langle v, f'(w) \rangle$.
 
-<!-- Folie 11 -->
-Beispielsetup 1
-Nehmen wir W = (werst, wzweit), können wir ypred als Funktion von W auffassen:
-ypred(W) = 〈wzweit, 𝜎(〈werst, x〉)〉
-Ableitung nach W wie zuvor berechnet in Komponenten.
-d/dwerst ypred(W) =
-Was ist die Ableitung von 𝜎(f(w)) nach w?
-Kettenregel: d/dw 𝜎(f(w)) = 𝜎’(f(w)) f’(w)
-Was ist die Ableitung von 〈w, f(x)〉 nach w oder x?
-d/dw 〈w,x〉 = x und d/dw 〈v, f(w)〉 = 〈v, f’(w)〉
+Damit:
 
-<!-- Folie 12 -->
-Beispielsetup 1
-Nehmen wir W = (werst, wzweit), können wir ypred als Funktion von W auffassen:
-ypred(W) = 〈wzweit, 𝜎(〈werst, x〉)〉
-Ableitung nach W wie zuvor berechnet in Komponenten.
-d/dwerst ypred(W) = 〈 wzweit, 𝜎’(〈werst, x〉)x 〉
-d/dwzweit ypred(W) = 𝜎(〈werst, x〉)
-Kettenregel: d/dw 𝜎(f(w)) = 𝜎’(f(w)) f’(w)
-d/dw 〈w,x〉 = x und d/dw 〈v, f(w)〉 = 〈v, f’(w)〉
+$$
+\frac{\partial}{\partial w_{\text{erst}}} y_{\text{pred}}(W) = \bigl\langle w_{\text{zweit}},\, \sigma'(\langle w_{\text{erst}}, x \rangle)\, x \bigr\rangle,
+\qquad
+\frac{\partial}{\partial w_{\text{zweit}}} y_{\text{pred}}(W) = \sigma(\langle w_{\text{erst}}, x \rangle).
+$$
 
-## Backpropagation
+### Die Update-Regeln
 
-<!-- Folie 13 -->
-Beispielsetup 1
-ypred = 〈wzweit, 𝜎(〈werst, x〉)〉
-x
-werst
-𝜎
-wzweit
-ypred
-L(x,y; w) = MSE(y,ypred) = Σi=1..N (yi-ypred,i)2
-L’(w) = Σi=1..N 2(yi-ypred,i)(-d/dw ypred,i)
-d/dwerst ypred(W) = 〈 wzweit, 𝜎’(〈werst, x〉)x 〉
-d/dwzweit ypred(W) = 𝜎(〈werst, x〉)
-wzweit, neu = wzweit, alt - ρ Σi=1..N 2(yi-ypred,i)(-𝜎(〈werst,alt, x〉))
+Eingesetzt in $L'$ und in die Gradientenabstiegs-Regel $W_{\text{neu}} = W_{\text{alt}} - \rho L'(W_{\text{alt}})$:
 
-<!-- Folie 14 -->
-Beispielsetup 1
-ypred = 〈wzweit, 𝜎(〈werst, x〉)〉
-x
-werst
-𝜎
-ypred
-wzweit
-L(x,y; w) = MSE(y,ypred) = Σi=1..N (yi-ypred,i)2
-L’(w) = Σi=1..N 2(yi-ypred,i)(-d/dw ypred,i)
-d/dwerst ypred(W) = 〈 wzweit, 𝜎’(〈werst, x〉)x 〉
-d/dwzweit ypred(W) = 𝜎(〈werst, x〉)
-wzweit, neu = wzweit, alt + ρ Σi=1..N 2(yi-〈wzweit,alt, 𝜎(〈werst,alt, x〉)〉)(𝜎(〈werst,alt,
-x〉))
+$$
+w_{\text{zweit,neu}} = w_{\text{zweit,alt}} + \rho \sum_{i=1}^N 2\,\Bigl(y_i - \bigl\langle w_{\text{zweit,alt}}, \sigma(\langle w_{\text{erst,alt}}, x_i \rangle) \bigr\rangle\Bigr)\, \sigma(\langle w_{\text{erst,alt}}, x_i \rangle),
+$$
 
-<!-- Folie 15 -->
-Beispielsetup 1
-ypred = 〈wzweit, 𝜎(〈werst, x〉)〉
-x
-werst
-𝜎
-wzweit
-ypred
-L(x,y; w) = MSE(y,ypred) = Σi=1..N (yi-ypred,i)2
-L’(w) = Σi=1..N 2(yi-ypred,i)(-d/dw ypred,i)
-d/dwerst ypred(W) = 〈 wzweit, 𝜎’(〈werst, x〉)x 〉
-d/dwzweit ypred(W) = 𝜎(〈werst, x〉)
-werst, neu = werst, alt + ρ Σi=1..N 2(yi-〈wzweit,alt, 𝜎(〈werst,alt, x〉)〉)(〈 wzweit,alt, 𝜎’(〈werst,alt,
-x〉)x 〉)
+$$
+w_{\text{erst,neu}} = w_{\text{erst,alt}} + \rho \sum_{i=1}^N 2\,\Bigl(y_i - \bigl\langle w_{\text{zweit,alt}}, \sigma(\langle w_{\text{erst,alt}}, x_i \rangle) \bigr\rangle\Bigr)\, \bigl\langle w_{\text{zweit,alt}}, \sigma'(\langle w_{\text{erst,alt}}, x_i \rangle)\, x_i \bigr\rangle .
+$$
 
-<!-- Folie 16 -->
-Beispielsetup 2
-Eingabedaten sind zweidimensional,
-ein einzelnes Neuron mit Aktivierungsfunktion 𝜎 produziert Ausgabe,
-die stecken wir in ein zweites Neuron mit Aktivierungsfunktion id.
-Also: ypred = 〈wzweit, 𝜎(〈werst, x〉)〉
-Jetzt neu: werst ∊ ℝ2
-x1
-werst
-𝜎
-wzweit
-ypred
-x2
+Das funktioniert, aber es ist unübersichtlich – und man sieht schon, dass Teilausdrücke mehrfach vorkommen: der Residuenterm $y_i - y_{\text{pred},i}$ und die Aktivierung $\sigma(\langle w_{\text{erst}}, x_i \rangle)$ der ersten Schicht tauchen in beiden Regeln auf.
 
-<!-- Folie 17 -->
-Beispielsetup 3
-Eingabedaten sind zweidimensional,
-zwei Neuronen mit Aktivierungsfunktion 𝜎 produzieren Ausgabe,
-die stecken wir in ein drittes Neuron mit Aktivierungsfunktion id.
-Also: ypred = 〈w, (𝜎〈u, x〉, 𝜎〈v, x〉)〉
-x1
-u
-𝜎
-w
-Jetzt neu: u,v,w ∊ ℝ2
-x2
-v
-ypred
-𝜎
+### Beispielsetups 2 und 3: mehr Dimensionen, mehr Neuronen
 
-## Layer
+*Setup 2*: Eingabedaten sind zweidimensional, sonst wie oben. Jetzt neu: $w_{\text{erst}} \in \mathbb{R}^2$. An den Formeln ändert sich nichts, die Skalarprodukte sind nur länger.
 
-<!-- Folie 18 -->
-Mehrere Neuronen, die parallel verarbeitet
-werden, bilden eine Schicht (Layer).
-Mehrmals Lineare Regression
-= Multilineare Regression
-= “Linear Layer”
-= 1 Matrix, Zeilen sind Gewichtsvektoren
+*Setup 3*: Eingabedaten sind zweidimensional, *zwei* Neuronen mit Aktivierungsfunktion $\sigma$ und Gewichten $u, v \in \mathbb{R}^2$ produzieren Ausgaben, die stecken wir in ein drittes Neuron mit Aktivierungsfunktion $\operatorname{id}$ und Gewichten $w \in \mathbb{R}^2$:
 
-## Backpropagation
+$$
+y_{\text{pred}} = \bigl\langle w,\, (\sigma\langle u, x \rangle,\ \sigma\langle v, x \rangle) \bigr\rangle .
+$$
 
-<!-- Folie 19 -->
-Beispielsetup 3
-Eingabedaten sind zweidimensional,
-zwei Neuronen mit Aktivierungsfunktion 𝜎 produzieren Ausgabe,
-die stecken wir in ein drittes Neuron mit Aktivierungsfunktion id.
-Also: ypred = 〈w, (𝜎〈u, x〉, 𝜎〈v, x〉)〉
-= 〈w, 𝜎Ax〉
-x1
-u
-𝜎
-w
-x2
-v
-ypred
-𝜎
-(Schreibe u,v als Zeilen in eine Matrix A
-und benutze 𝜎 auf Vektoren komponentenweise.)
+### Layer
 
-<!-- Folie 20 -->
-Beispielsetup 3
-ypred = 〈w, (𝜎〈u, x〉, 𝜎〈v, x〉)〉
-= 〈w, 𝜎Ax〉 = wT𝜎Ax (Schreibe u,v als Zeilen in eine Matrix A und benutze 𝜎 auf Vektoren
-komponentenweise.)
-u1 = A11 also
-d/du1 = d/dA11
-x1
-u
-𝜎
-w
-d/dA ypred
-T
-= d/dA w 𝜎Ax
-=?
-x2
-v
-ypred
-𝜎
+Mehrere Neuronen, die parallel verarbeitet werden, bilden eine **Schicht** (Layer). Mehrmals lineare Regression ist *multilineare Regression* ist ein **Linear Layer** ist eine Matrix, deren Zeilen die Gewichtsvektoren sind. Schreiben wir also $u, v$ als Zeilen in eine Matrix $A \in \mathbb{R}^{2 \times 2}$ und benutzen $\sigma$ auf Vektoren komponentenweise, so ist
 
-<!-- Folie 21 -->
-Beispielsetup 3
-ypred = 〈w, (𝜎〈u, x〉, 𝜎〈v, x〉)〉
-= 〈w, 𝜎Ax〉 = wT𝜎Ax (Schreibe u,v als Zeilen in eine Matrix A und benutze 𝜎 auf Vektoren
-komponentenweise.)
-u1 = A11 also
-d/du1 = d/dA11
-x1
-u
-𝜎
-w
-d/dA ypred
-T
-= d/dA w 𝜎Ax
-= wT d/dA 𝜎Ax
-= wT 𝜎’(Ax) x
-x2
-v
-ypred
-𝜎
+$$
+y_{\text{pred}} = \langle w, \sigma(Ax) \rangle = w^T \sigma(Ax).
+$$
 
-<!-- Folie 22 -->
-Beispielsetup 3
-ypred = 〈w, (𝜎〈u, x〉, 𝜎〈v, x〉)〉
-= 〈w, 𝜎Ax〉 = wT𝜎Ax (Schreibe u,v als Zeilen in eine Matrix A und benutze 𝜎 auf Vektoren
-komponentenweise.)
-u1 = A11 also
-d/du1 = d/dA11
-x1
-u
-𝜎
-w
-d/dA ypred
-d/dw ypred
-T
-= d/dA w 𝜎Ax
-= wT d/dA 𝜎Ax
-= wT 𝜎’(Ax) x
-= d/dw wT𝜎Ax = 𝜎Ax
-x2
-v
-ypred
-𝜎
+Die Ableitung nach einem einzelnen Gewicht $u_1 = A_{11}$ ist $\frac{\partial}{\partial u_1} = \frac{\partial}{\partial A_{11}}$, und für die ganze Matrix:
 
-<!-- Folie 23 -->
-Beispielsetup 3
-ypred = wT𝜎Ax
-d/dA ypred = wT 𝜎’(Ax) x
-d/dw ypred = d/dw wT𝜎Ax = 𝜎Ax
-x1
-u
-𝜎
-w
-x2
-v
-ypred
-𝜎
-Idee: berechne für ypred gleichzeitig Daten für den Gradienten.
-Kettenregel: d/dw f(g(x)) = f’(g(x)) g’(x)
-mit g(x) = 𝜎Ax und f(x) = wTx
-Also zuerst g(w) und g’(w) berechnen vom ersten Layer,
-dann damit den nächsten Layer (usw.) bis zum letzten.
+$$
+\frac{\partial}{\partial A} y_{\text{pred}} = \frac{\partial}{\partial A} w^T \sigma(Ax) = w^T \frac{\partial}{\partial A} \sigma(Ax) = w^T \sigma'(Ax)\, x,
+\qquad
+\frac{\partial}{\partial w} y_{\text{pred}} = \frac{\partial}{\partial w} w^T \sigma(Ax) = \sigma(Ax).
+$$
 
-## Training mehrerer Schichten:
+(Wobei bei $w^T \sigma'(Ax)\, x$ die Dimensionen passend zu lesen sind: $\sigma'(Ax)$ ist eine Diagonalmatrix, und das Ergebnis ist eine $2 \times 2$-Matrix, deren Eintrag $(j, k)$ gleich $w_j \sigma'((Ax)_j) x_k$ ist.)
 
-<!-- Folie 24 -->
-Backpropagation (Konkret)
+**Idee:** Berechne für $y_{\text{pred}}$ gleichzeitig die Daten für den Gradienten. Nach der Kettenregel $\frac{d}{dx} f(g(x)) = f'(g(x))\, g'(x)$ mit $g(x) = \sigma(Ax)$ und $f(z) = w^T z$ berechnen wir zuerst $g$ und $g'$ vom ersten Layer, dann damit den nächsten Layer, usw. bis zum letzten. Die Zwischenergebnisse der Vorwärtsrechnung sind genau das, was die Rückwärtsrechnung braucht.
 
-## Backpropagation
+## Backpropagation konkret
 
-<!-- Folie 25 -->
-Beispiel 4
-f(x) = b3 + W3tanh(b2 + W2tanh(b1 + W1x))
-z1 = x
-z2 = tanh(b1 + W1z1)
-z3 = tanh(b2 + W2z2)
-ypred =
-b3 + W3z3
-(input layer)
-(2nd layer)
-(3rd layer)
-(output layer)
-r
-E
-(residual)
-(squared error)
-= ypred - y
-= ½ r Tr
+### Beispiel 4: ein Netz mit drei Schichten
 
-<!-- Folie 26 -->
-Beispiel 4: forward computation
-backwards differentiation
-f(x) = b3 + W3tanh(b2 + W2tanh(b1 + W1x))
-dE = d ½ rTr = ½ d rTr = rT dr = rT dypred
-z1 = x
-z2 = tanh(b1 + W1z1)
-z3 = tanh(b2 + W2z2)
-ypred =
-b3 + W3z3
-(input layer)
-(2nd layer)
-(3rd layer)
-(output layer)
-r
-E
-(residual)
-(squared error)
-= ypred - y
-= ½ r Tr
+Wir betrachten
 
-<!-- Folie 27 -->
-Beispiel 4: forward computation
-backwards differentiation
-f(x) = b3 + W3tanh(b2 + W2tanh(b1 + W1x))
-dE = d ½ rTr = ½ d rTr = rT dr = rT dypred
-z1 = x
-z2 = tanh(b1 + W1z1)
-z3 = tanh(b2 + W2z2)
-ypred =
-b3 + W3z3
-(input layer)
-(2nd layer)
-(3rd layer)
-(output layer)
-r
-E
-(residual)
-(squared error)
-= ypred - y
-= ½ r Tr
-dypred = d( b3 + W3z3 ) = db3 + dW3z3
-So ∇b3E = r
+$$
+f(x) = b_3 + W_3 \tanh\bigl(b_2 + W_2 \tanh(b_1 + W_1 x)\bigr)
+$$
 
-<!-- Folie 28 -->
-Beispiel 4: forward computation
-backwards differentiation
-f(x) = b3 + W3tanh(b2 + W2tanh(b1 + W1x))
-dE = d ½ rTr = ½ d rTr = rT dr = rT dypred
-z1 = x
-z2 = tanh(b1 + W1z1)
-z3 = tanh(b2 + W2z2)
-ypred =
-b3 + W3z3
-(input layer)
-(2nd layer)
-(3rd layer)
-(output layer)
-r
-E
-(residual)
-(squared error)
-= ypred - y
-= ½ r Tr
-dypred = d( b3 + W3z3 ) = db3 + dW3z3
-So ∇b3E = r
-und ∇W3E = rz3T
-(trace cyclic permutation trick)
+und schreiben die Vorwärtsrechnung (*forward computation*) schichtweise auf:
 
-<!-- Folie 29 -->
-Beispiel 4: forward computation
-backwards differentiation
-f(x) = b3 + W3tanh(b2 + W2tanh(b1 + W1x))
-dE = d ½ rTr = ½ d rTr = rT dr = rT dypred
-dypred = d( b3 + W3z3 ) = db3 + dW3z3
-∇b3E = r, ∇W3E = rz3T
-z1 = x
-z2 = tanh(b1 + W1z1)
-z3 = tanh(b2 + W2z2)
-ypred =
-b3 + W3z3
-(input layer)
-(2nd layer)
-(3rd layer)
-(output layer)
-r
-E
-(residual)
-(squared error)
-= ypred - y
-= ½ r Tr
-Next layer:
-kann b3 und W3 als Konstanten sehen,
-dE = rT dW3z3 + irrelevant terms
-Mit der Kettenregel gilt
-d/dz tanh(f(z)) = (1-tanh(f(z))2)f’(z)
+$$
+\begin{aligned}
+z_1 &= x && \text{(input layer)} \\
+z_2 &= \tanh(b_1 + W_1 z_1) && \text{(2nd layer)} \\
+z_3 &= \tanh(b_2 + W_2 z_2) && \text{(3rd layer)} \\
+y_{\text{pred}} &= b_3 + W_3 z_3 && \text{(output layer)} \\
+r &= y_{\text{pred}} - y && \text{(residual)} \\
+E &= \tfrac12\, r^T r && \text{(squared error)}
+\end{aligned}
+$$
 
-<!-- Folie 30 -->
-Beispiel 4: forward computation
-backwards differentiation
-f(x) = b3 + W3tanh(b2 + W2tanh(b1 + W1x))
-dE = d ½ rTr = ½ d rTr = rT dr = rT dypred
-dypred = d( b3 + W3z3 ) = db3 + dW3z3
-∇b3E = r, ∇W3E = rz3T
-z1 = x
-z2 = tanh(b1 + W1z1)
-z3 = tanh(b2 + W2z2)
-ypred =
-b3 + W3z3
-(input layer)
-(2nd layer)
-(3rd layer)
-(output layer)
-r
-E
-(residual)
-(squared error)
-= ypred - y
-= ½ r Tr
-Mit der Kettenregel gilt
-d/dz tanh(f(z)) = (1-tanh(f(z))2)f’(z)
-Next layer:
-kann b3 und W3 als Konstanten sehen,
-dE = rT dW3z3 + irrelevant terms
-dz3 = dtanh(b2+W2z2) = (1-z32)(db2+dW2z2)
-so ∇b2E = (1-z32)W3Tr
+Der Faktor $\tfrac12$ ist reine Bequemlichkeit, er kürzt sich gleich gegen die $2$ aus der Ableitung des Quadrats.
 
-<!-- Folie 31 -->
-Beispiel 4: forward computation
-backwards differentiation
-f(x) = b3 + W3tanh(b2 + W2tanh(b1 + W1x))
-dE = d ½ rTr = ½ d rTr = rT dr = rT dypred
-dypred = d( b3 + W3z3 ) = db3 + dW3z3
-z1 = x
-z2 = tanh(b1 + W1z1)
-z3 = tanh(b2 + W2z2)
-ypred =
-b3 + W3z3
-r
-E
-= ypred - y
-= ½ r Tr
-(input layer)
-(2nd layer)
-(3rd layer)
-(output layer)
-(residual)
-(squared error)
-Mit der Kettenregel gilt
-d/dz tanh(f(z)) = (1-tanh(f(z))2)f’(z)
-∇b3E = r,
-∇b2E = (1-z32)W3Tr,
-∇W3E = rz3T
-∇W2E = ∇b2E z2T
-∇b1E = (1-z22)W2Tr∇b2E, ∇W1E = ∇b1E z1T
-nutze Zwischenschritte zi aus forward um
-vollen Gradienten effizient zu berechnen
-→ gradient descent
+### Rückwärts differenzieren
 
-## Matrix-Differenzialkalkül
+Wir verwenden die Notation der Differentiale: $dE$ ist die lineare Änderung von $E$ bei einer infinitesimalen Änderung der Parameter, und $\nabla_b E$ bezeichnet den Gradienten von $E$ nach $b$ (mit der Konvention $dE = \langle \nabla_b E, db \rangle$). Wir arbeiten uns von hinten nach vorn (*backwards differentiation*).
 
-<!-- Folie 32 -->
-Literaturtips
-(Achtung: das ist nicht notwendig für diese Veranstaltung, das ist weiterführend)
-◼
-◼
-◼
-◼
-◼
-Thomas P. Minka. Old and new matrix algebra useful for statistics, December 2000.
-Notes.
-The Matrix Cookbook
-Matrix derivatives cheat sheet
-Loss functions for classification - Wikipedia
-Michael Nielsen’s Buchkapitel zu Backpropagation (sehr mathematisch)
-http://neuralnetworksanddeeplearning.com/chap2.html
+**Output layer.** Es ist
 
-## Aktivierungsfunktionen und
+$$
+dE = d\bigl(\tfrac12 r^T r\bigr) = \tfrac12 \, d(r^T r) = r^T\, dr = r^T\, dy_{\text{pred}},
+$$
 
-<!-- Folie 33 -->
-weitere Layer
+denn $y$ ist konstant. Weiter ist $dy_{\text{pred}} = d(b_3 + W_3 z_3) = db_3 + dW_3\, z_3 + W_3\, dz_3$. Für die Ableitung nach $b_3$ betrachten wir nur den ersten Term: $dE = r^T db_3$, also
 
-## Aktivierungsfunktionen
+$$
+\nabla_{b_3} E = r .
+$$
 
-<!-- Folie 34 -->
-Ein Neuron “forward”: 𝜏〈w, x〉
-Perzeptron: 𝜏 = sign
-Logistische Regression: 𝜏 = 𝜎
-𝜏 beliebig, aber differenzierbar!
+Für die Ableitung nach $W_3$: $dE = r^T dW_3\, z_3 = \operatorname{tr}(r^T dW_3\, z_3) = \operatorname{tr}(z_3 r^T dW_3)$ – der Trick ist, dass die Spur zyklisch vertauscht werden darf – also
 
-<!-- Folie 35 -->
-Ein Neuron “forward”: 𝜏〈w, x〉
-Perzeptron: 𝜏 = sign
-Logistische Regression: 𝜏 = 𝜎
-𝜏 beliebig, aber differenzierbar!
-Neues Ziel:
-neuronales Netz soll Funktion
-lernen (Regression);
-Modell von der Funktion:
-Stückweise linear.
-Welches 𝜏 ist geeignet?
+$$
+\nabla_{W_3} E = r\, z_3^T .
+$$
 
-<!-- Folie 36 -->
-Ein Neuron “forward”: 𝜏〈w, x〉
-NEU:
-Perzeptron: 𝜏 = sign
-Logistische Regression: 𝜏 = 𝜎
-ReLU = Rectified Linear Unit
-ReLU(y) := max(0, y)
-“ReLU Neuron”
-𝜏 beliebig, aber differenzierbar!
-Ableitung?
+Das ist ein *äußeres Produkt*: Der Gradient nach der Gewichtsmatrix ist Residuum mal Eingabe der Schicht, transponiert – so wie beim einzelnen Neuron der Gradient nach $w$ gleich Fehler mal $x$ war.
 
-<!-- Folie 37 -->
-Ableitung von max(0, y) nach y:
-Für y > 0 ist max(0, y) = y,
-also Ableitung dy/dy = 1.
-ReLU = Rectified Linear Unit
-ReLU(y) := max(0, y)
-“ReLU Neuron”
-Für y < 0 ist max(0, y) = 0,
-Also Ableitung 0.
-Für y = 0 ist die Ableitung nicht definiert.
+**Nächste Schicht.** Jetzt können wir $b_3$ und $W_3$ als Konstanten sehen: $dE = r^T W_3\, dz_3 + \text{irrelevante Terme}$. Mit der Kettenregel gilt $\frac{d}{dz} \tanh(f(z)) = (1 - \tanh(f(z))^2)\, f'(z)$, also
 
-<!-- Folie 38 -->
-Ableitung von max(0, y) nach y:
-Für y > 0 ist max(0, y) = y,
-also Ableitung dy/dy = 1.
-ReLU = Rectified Linear Unit
-ReLU(y) := max(0, y)
-“ReLU Neuron”
-Für y < 0 ist max(0, y) = 0,
-Also Ableitung 0.
-Für y = 0 definieren wir die Ableitung als 0, das spart Rechnungen.
+$$
+dz_3 = d \tanh(b_2 + W_2 z_2) = (1 - z_3^2) \odot (db_2 + dW_2\, z_2 + W_2\, dz_2),
+$$
 
-<!-- Folie 39 -->
-Wieso ist ReLU geeignet?
-Ziel:
-neuronales Netz soll Funktion
-lernen (Regression);
-Modell von der Funktion:
-Stückweise linear.
-ReLU = Rectified Linear Unit
-ReLU(y) := max(0, y)
+wobei $z_3^2$ und $\odot$ komponentenweise zu lesen sind. Für $b_2$: $dE = r^T W_3 \operatorname{diag}(1 - z_3^2)\, db_2$, also
 
-<!-- Folie 40 -->
-Wieso ist ReLU geeignet?
-Lineare Abbildung + ReLU
-ist die
-Projektion auf einen Halbraum,
-denn ReLU ist genau
-Projektion auf einen Halbraum.
-(Halbraum = eine Seite einer Hyperebene)
-Ziel:
-neuronales Netz soll Funktion
-lernen (Regression);
-Modell von der Funktion:
-Stückweise linear.
-ReLU = Rectified Linear Unit
-ReLU(y) := max(0, y)
-← Beispiel an der Tafel!
+$$
+\nabla_{b_2} E = (1 - z_3^2) \odot W_3^T r,
+\qquad
+\nabla_{W_2} E = (\nabla_{b_2} E)\, z_2^T .
+$$
 
-## Layer
+**Und noch eine Schicht.** Nach demselben Muster:
 
-<!-- Folie 41 -->
-Mehrere Neuronen, die parallel verarbeitet
-werden, bilden eine Schicht (Layer).
-Mehrmals Lineare Regression
-= Multilineare Regression
-= Linear Layer
-= 1 Matrix, Zeilen sind Gewichtsvektoren
-ReLU Layer
-= Schicht, in der jedes Neuron die
-Aktivierungsfunktion ReLU nutzt
-= Linear Layer + ReLU
+$$
+\nabla_{b_1} E = (1 - z_2^2) \odot W_2^T (\nabla_{b_2} E),
+\qquad
+\nabla_{W_1} E = (\nabla_{b_1} E)\, z_1^T .
+$$
 
-## Aktivierungsfunktionen
+### Das Muster
 
-<!-- Folie 42 -->
-Problem bei ReLU:
-Sterbende Neuronen.
-Dann “fließt” keine Information mehr durch
-das Neuron während der Backpropagation,
-wenn ein Neuron immer 0 liefert, weil die
-Eingabe immer negativ ist.
+Zusammengefasst, mit $\delta_k := \nabla_{b_k} E$ als „Fehlersignal“ der Schicht $k$:
 
-<!-- Folie 43 -->
-Problem bei ReLU:
-Sterbende Neuronen.
-Lösung 1:
-Statt 𝜏 = max(0, y) verwende
-𝜏 = f(y)[y < 0] +g(y)[y ≥ 0] mit passenden f,g
-Dann “fließt” keine Information mehr durch
-das Neuron während der Backpropagation,
-wenn ein Neuron immer 0 liefert, weil die
-Eingabe immer negativ ist.
+$$
+\delta_3 = r, \qquad
+\delta_2 = (1 - z_3^2) \odot W_3^T \delta_3, \qquad
+\delta_1 = (1 - z_2^2) \odot W_2^T \delta_2,
+\qquad
+\nabla_{W_k} E = \delta_k\, z_k^T .
+$$
 
-<!-- Folie 44 -->
-Problem bei ReLU:
-Sterbende Neuronen.
-Dann “fließt” keine Information mehr durch
-das Neuron während der Backpropagation,
-wenn ein Neuron immer 0 liefert, weil die
-Eingabe immer negativ ist.
-Lösung 1:
-Statt 𝜏 = max(0, y) verwende
-𝜏 = f(y)[y < 0] +g(y)[y ≥ 0] mit passenden f,g
-z.B. f(y) := α(ey-1) und g(y) := y
-Dann heißt 𝜏 auch ELU
-(Exponential Linear Unit)
+Das Fehlersignal wird von Schicht zu Schicht *rückwärts propagiert*: mit der transponierten Gewichtsmatrix multipliziert und mit der Ableitung der Aktivierungsfunktion gewichtet. Man nutzt die Zwischenschritte $z_k$ aus der Vorwärtsrechnung, um den vollen Gradienten effizient zu berechnen – ein Vorwärtsdurchlauf, ein Rückwärtsdurchlauf, fertig. Der Aufwand ist etwa das Doppelte einer Inferenz, unabhängig von der Anzahl der Parameter. Das ist **Backpropagation**, und danach kommt Gradientenabstieg.
 
-<!-- Folie 45 -->
-Problem bei ReLU:
-Sterbende Neuronen.
-Dann “fließt” keine Information mehr durch
-das Neuron während der Backpropagation,
-wenn ein Neuron immer 0 liefert, weil die
-Eingabe immer negativ ist.
-Lösung 2:
-Statt 𝜏 = max(0, y) verwende
-𝜏 sodass für y →-∞ gilt: 𝜏(y) → 0
-und für y → +∞ gilt: 𝜏(y) → +∞
-z.B. 𝜏(y) := y*𝜎(y) “Swish”
-oder 𝜏(y) := y*Φ(y) “GELU”
-(Gaussian error linear unit)
-Welche Aktivierungsfunktionen wurden
-genutzt? (→Internet Archive)
-paperswithcode.com/methods/category/activation-functions
+Genau das tut `loss.backward()` in PyTorch: Beim Vorwärtsrechnen merkt sich jeder Tensor mit `requires_grad`, aus welcher Operation er entstanden ist (der *Berechnungsgraph*), und `backward` läuft diesen Graphen rückwärts ab und schreibt die Gradienten in die `.grad`-Attribute der Parameter. `optimizer.step()` macht dann $W \leftarrow W - \rho \nabla_W E$.
+
+### Matrix-Differentialkalkül: Literaturtipps
+
+Achtung: Das ist nicht notwendig für diese Veranstaltung, das ist weiterführend.
+
+* Thomas P. Minka, *Old and new matrix algebra useful for statistics*, Notes, 2000.
+* *The Matrix Cookbook* (Petersen & Pedersen).
+* *Matrix derivatives cheat sheet*.
+* Wikipedia: *Loss functions for classification*.
+* Michael Nielsens Buchkapitel zu Backpropagation (sehr mathematisch): [neuralnetworksanddeeplearning.com/chap2.html](http://neuralnetworksanddeeplearning.com/chap2.html).
+
+## Aktivierungsfunktionen und weitere Layer
+
+Ein Neuron „forward“ ist $\tau\langle w, x \rangle$. Beim Perzeptron ist $\tau = \operatorname{sign}$, bei der logistischen Regression $\tau = \sigma$. Allgemein ist $\tau$ beliebig – aber differenzierbar, sonst funktioniert Backpropagation nicht.
+
+### Neues Ziel: Funktionen lernen
+
+Bisher war das Ziel Klassifikation. Neues Ziel: Das neuronale Netz soll eine Funktion lernen (Regression), und unser Modell von der Funktion ist *stückweise linear*. Welches $\tau$ ist dafür geeignet?
+
+:::{prf:definition} ReLU
+Die *Rectified Linear Unit* ist
+
+$$
+\operatorname{ReLU}(y) := \max(0, y).
+$$
+
+Ein Neuron mit $\tau = \operatorname{ReLU}$ heißt ReLU-Neuron.
+:::
+
+**Ableitung** von $\max(0, y)$ nach $y$: Für $y > 0$ ist $\max(0, y) = y$, also ist die Ableitung $1$. Für $y < 0$ ist $\max(0, y) = 0$, also ist die Ableitung $0$. Für $y = 0$ ist die Ableitung nicht definiert – wir *definieren* sie als $0$, das spart Rechnungen. (Dass das erlaubt ist, ist genau der Inhalt von Blatt 3: schwache Ableitungen dürfen an einzelnen Punkten beliebig sein.)
+
+**Wieso ist ReLU geeignet?** Lineare Abbildung + ReLU ist die Projektion auf einen Halbraum, denn ReLU ist genau die Projektion von $\mathbb{R}$ auf $[0, \infty)$, und ein Halbraum ist eine Seite einer Hyperebene. Ein ReLU-Neuron $\max(0, \langle w, x \rangle + b)$ ist also null auf der einen Seite der Hyperebene $\langle w, x \rangle + b = 0$ und linear ansteigend auf der anderen. Summiert man mehrere solche „Knickfunktionen“ mit Gewichten, bekommt man stückweise lineare Funktionen, deren Knickstellen auf den Hyperebenen liegen – und mit genug Neuronen kann man damit jede stetige Funktion beliebig gut approximieren. Beispiel an der Tafel; im nächsten Kapitel bauen wir so von Hand $x^2$.
+
+<!-- TODO Abbildung: ReLU-Graph; Summe von drei ReLUs als stückweise lineare Funktion -->
+
+### Layer, nochmal
+
+Mehrere Neuronen, die parallel verarbeitet werden, bilden eine Schicht. Ein **Linear Layer** ist eine Matrix (Zeilen = Gewichtsvektoren) plus Bias. Ein **ReLU Layer** ist eine Schicht, in der jedes Neuron die Aktivierungsfunktion ReLU nutzt, also Linear Layer + komponentenweises ReLU. In PyTorch: `nn.Sequential(nn.Linear(n, m), nn.ReLU())`.
+
+### Problem bei ReLU: sterbende Neuronen
+
+Wenn ein Neuron immer $0$ liefert, weil die Eingabe immer negativ ist, „fließt“ keine Information mehr durch das Neuron während der Backpropagation – die Ableitung ist $0$, also ist $\delta$ für dieses Neuron $0$, also ändern sich seine Gewichte nie wieder. Das Neuron ist tot. Zwei Lösungen:
+
+**Lösung 1**: Statt $\tau = \max(0, y)$ verwende $\tau(y) = f(y)[y < 0] + g(y)[y \ge 0]$ mit passenden $f, g$, sodass auch für $y < 0$ die Ableitung nicht null ist. Mit $f(y) := \alpha(e^y - 1)$ und $g(y) := y$ heißt $\tau$ **ELU** (Exponential Linear Unit); mit $f(y) := 0{,}01\,y$ heißt es Leaky ReLU.
+
+**Lösung 2**: Statt $\max(0, y)$ verwende ein glattes $\tau$, sodass für $y \to -\infty$ gilt $\tau(y) \to 0$ und für $y \to +\infty$ gilt $\tau(y) \to +\infty$, aber ohne harten Knick:
+
+$$
+\tau(y) := y\,\sigma(y) \quad \text{(Swish, auch SiLU)}, \qquad
+\tau(y) := y\,\Phi(y) \quad \text{(GELU, Gaussian Error Linear Unit)},
+$$
+
+wobei $\Phi$ die Verteilungsfunktion der Standardnormalverteilung ist. Beide sind im negativen Bereich nicht strikt null, sondern haben eine kleine Delle unter der Achse, und die Ableitung verschwindet nur asymptotisch. GELU ist heute die Standardwahl in Transformern.
+
+Welche Aktivierungsfunktionen in der Praxis genutzt wurden, listete [paperswithcode.com/methods/category/activation-functions](https://paperswithcode.com/methods/category/activation-functions) (inzwischen nur noch im Internet Archive).
+
+<!-- TODO Abbildung: ReLU, ELU, Swish, GELU im Vergleich (Folie 46) -->
 
 ## Autoencoder
 
-<!-- Folie 47 -->
+### Im Kontrast zu unserem bisherigen Vorgehen
 
-## Autoencoder schematisch
+Bisher haben wir ein Neuron oder ein neuronales Netz zur Klassifikation oder Regression verwendet: Eine nicht bekannte Funktion $f$, für die wir manche Werte kennen (Label $y = f(x)$ für Trainingsdaten $(x, y)$), wollen wir mit dem Modell „schätzen“. Was, wenn wir keine Label haben?
 
-<!-- Folie 48 -->
-Grafik von Michaela Massi,
-2019 (CC-BY-SA 4.0 International)
+### Herleitung zur abstrakten Idee
 
-## Autoencoder
+Ohne Label müssen wir den Output des neuronalen Netzes anders bewerten. Wie Erfolg messen? Welches Ziel ist im Training noch sinnvoll?
 
-<!-- Folie 49 -->
-Im Kontrast zu unserem bisherigen Vorgehen
-Bisher: ein Neuron oder ein neuronales
-Netz zur Klassifikation/Regression, also:
-Eine nicht bekannte Funktion f,
-für die wir manche Werte kennen
-( Label y=f(x) für Trainingsdaten (x,y) )
-wollen wir “schätzen” mit dem Modell.
+Ein mögliches Ziel: **Transformation der Eingabe in ein anderes Koordinatensystem** (Feature Extraction). Das kann man rückgängig machen – und messen, wie gut das klappt. Abstrakt: $f$ ist nicht bekannt, aber $g \circ f$ ist bekannt, nämlich $g(f(x)) = x$. Hier heißt $f$ **Encoder** und $g$ **Decoder**, und $g \circ f$ soll die Identität sein.
 
-<!-- Folie 50 -->
-Im Kontrast zu unserem bisherigen Vorgehen
-Bisher: ein Neuron oder ein neuronales
-Netz zur Klassifikation/Regression, also:
-Eine nicht bekannte Funktion f,
-für die wir manche Werte kennen
-( Label y=f(x) für Trainingsdaten (x,y) )
-wollen wir “schätzen” mit dem Modell.
-Was, wenn wir
-keine Label haben?
+Das allein wäre trivial ($f = g = \operatorname{id}$). Interessant wird es mit einer Einschränkung: **Dimensionsreduktion**. Versuche, die Dimensionalität zu reduzieren ohne Informationsverlust – transformiere die Eingabe in ein *kleineres* Koordinatensystem, sodass man es trotzdem rückgängig machen kann. Der Encoder $f \colon \mathbb{R}^n \to \mathbb{R}^k$ mit $k \ll n$ muss dann lernen, was an den Daten wesentlich ist.
 
-<!-- Folie 51 -->
-Herleitung zur abstrakten Idee
-Ohne Label müssen wir den Output des
-neuronalen Netzes anders bewerten.
-Was, wenn wir
-keine Label haben?
-→ Wie Erfolg messen?
-→ Welches Ziel ist im
-Training noch sinnvoll?
+### Loss-Funktion
 
-<!-- Folie 52 -->
-Herleitung zur abstrakten Idee
-Mögliches Ziel:
-Ohne Label müssen wir den Output des
-neuronalen Netzes anders bewerten.
-→ Wie Erfolg messen?
-→ Welches Ziel ist im
-Training noch sinnvoll?
-Transformation der
-Eingabe in ein anderes
-Koordinatensystem
-(Feature Extraction)
+Trainingsziel: Output so ähnlich wie möglich zum Input (**Rekonstruktion**). Vergleiche Input mit Output, z.B. über die mittlere quadratische Abweichung der Pixelwerte:
 
-<!-- Folie 53 -->
-Herleitung zur abstrakten Idee
-Mögliches Ziel:
-Ohne Label müssen wir den Output des
-neuronalen Netzes anders bewerten.
-→ Wie Erfolg messen?
-→ Welches Ziel ist im
-Training noch sinnvoll?
-Transformation der
-Eingabe in ein anderes
-Koordinatensystem
-(Feature Extraction)
-→ kann man rückgängig
-machen, messen, wie gut.
+$$
+L(x; f, g) = \frac1N \sum_{i=1}^N \bigl\| x_i - g(f(x_i)) \bigr\|^2 .
+$$
 
-<!-- Folie 54 -->
-Herleitung zur abstrakten Idee
-Abstrakt:
-f ist nicht bekannt,
-aber g◦f ist bekannt
-d.h. g(f(x)) = x
-hier: f = Encoder,
-g = Decoder
-→
-g◦f = Identität
+Der Autoencoder ist also ein neuronales Netz mit einem „Flaschenhals“ in der Mitte, trainiert mit MSE zwischen Ein- und Ausgabe – und die Label sind die Eingaben selbst. Man nennt das auch *self-supervised*.
 
-<!-- Folie 55 -->
-Dimensionsreduktion
-Ziel:
-Idee:
-Versuche, Dimensionalität
-zu reduzieren ohne
-Informationsverlust.
-Transformation der
-Eingabe in ein kleineres
-Koordinatensystem
-(Feature Extraction)
-→ kann man rückgängig
-machen, messen, wie gut.
+<!-- TODO Abbildung: Autoencoder schematisch (Michaela Massi 2019, CC-BY-SA 4.0) -->
 
-## Loss-Funktion:
+Im Vergleich zur Dimensionsreduktion mit PCA: Ist der Autoencoder linear (keine Aktivierungsfunktionen), so findet er denselben Unterraum wie PCA. Mit Nichtlinearitäten kann er gekrümmte Strukturen in den Daten erfassen, die PCA verfehlt, und rekonstruiert z.B. Bilder bei gleicher Dimension des Flaschenhalses deutlich besser.
 
-<!-- Folie 56 -->
-Vergleiche Input mit Output,
-mittlere quadratische
-Abweichung der Pixelwerte
-Trainingsziel:
-Output so ähnlich wie möglich
-zum Input (Rekonstruktion).
-Autoencoder schematisch
-Grafik von Michaela Massi,
-2019 (CC-BY-SA 4.0 International)
+<!-- TODO Abbildung: Rekonstruktion Autoencoder vs. PCA (Michaela Massi 2019) -->
 
-## Rekonstruktion mit einem Autoencoder im
+## Tipps zum Übungsblatt
 
-<!-- Folie 57 -->
-Vergleich zu Dimensionsreduktion mit PCA
-Grafik von Michaela Massi,
-2019 (CC-BY-SA 4.0 International)
-
-## Zum neuen Übungsblatt
-
-<!-- Folie 58 -->
-Tipps für Blatt 6
-Benutzen Sie zur Formulierung der Fragen sowie zur Beantwortung
-keine generative KI -- sonst lernen Sie genau das nicht: wie man
-anhand der offiziellen Dokumentation prüfen kann, ob die KI-Antwort
-korrekt ist.
-Ziel ist nicht die “richtige Lösung” sondern der Erwerb der Kompetenz,
-Deep Learning Quelltexte kritisch zu lesen
+Auf Blatt 6 lesen Sie einen Autoencoder-Quelltext und formulieren Fragen dazu. Benutzen Sie zur Formulierung der Fragen sowie zur Beantwortung *keine* generative KI – sonst lernen Sie genau das nicht: wie man anhand der offiziellen Dokumentation prüfen kann, ob die KI-Antwort korrekt ist. Ziel ist nicht die „richtige Lösung“, sondern der Erwerb der Kompetenz, Deep-Learning-Quelltexte kritisch zu lesen.

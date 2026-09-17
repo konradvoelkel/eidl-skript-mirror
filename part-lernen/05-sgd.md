@@ -5,422 +5,199 @@ short_title: "VL 05"
 
 # Stochastischer Gradientenabstieg
 
-:::{warning} Rohfassung
-Dieses Kapitel ist eine automatische Transkription der Folien von VL 05 aus dem WiSe 2025/26
-(`from_2025/slides/Einführung in Deep Learning 2025_26 VL 05_ SGD.pdf`), Folie für Folie in der Originalreihenfolge.
-Formeln und Abbildungen sind dabei größtenteils verloren gegangen; der Text ist noch nicht überarbeitet.
+:::{note} Stand
+Erste Prosafassung (aus den Folien von VL 05, WiSe 2025/26). Abbildungen fehlen noch, siehe die `TODO`-Kommentare.
 :::
 
-## Training eines einzelnen Neurons:
+## Training eines einzelnen Neurons: Was bisher geschah
 
-<!-- Folie 2 -->
-Gradientenabstieg
+Wir haben zwei Modelle für ein einzelnes Neuron gesehen, mit gleicher Struktur, aber sehr unterschiedlich beschriebenem Training:
 
-## Training eines einzelnen Neurons
+| | Perzeptron | Logistische Regression |
+|---|---|---|
+| Inferenz | $[\langle w, x \rangle > 0] \in \{0, 1\}$ | $\sigma(\langle w, x \rangle) \in (0, 1)$ |
+| Aktivierungsfunktion | „sign“ (Vorzeichen) | $\sigma$ (logistische Sigmoidfunktion) |
+| Training | Update-Regel $w_{\text{neu}} = w_{\text{alt}} + \rho\,(y_{\text{true}} - f(x))\,x$ | naiv: finde $w$, sodass der MSE der linearen Regression minimal wird |
 
-<!-- Folie 3 -->
-Was bisher geschah
-Perzeptron
-[〈w,v〉 > 0] = “sign”(〈w,v〉) ∊ {0, 1}
-Aktivierungsfunktion:
-“sign” (Vorzeichen)
-Training: Update-Regel:
-wneu= walt + ρ(ytrue - “sign”(〈w,v〉))x
+Beim Perzeptron kann jedes einzelne neue Paar $(x, y)$ zum Weiterlernen benutzt werden; bei der logistischen Regression wird ein Fehler minimiert. Zwei Fragen drängen sich auf: Wie lernt man bei der logistischen Regression aus einem *einzelnen* neuen Paar $(x, y)$ etwas dazu? Und wird beim Perzeptron eigentlich auch etwas maximiert oder minimiert?
 
-<!-- Folie 4 -->
-Was bisher geschah
-Perzeptron
-[〈w,v〉 > 0] = “sign”(〈w,v〉) ∊ {0, 1}
-Aktivierungsfunktion:
-“sign” (Vorzeichen)
-Training: Update-Regel:
-wneu= walt + ρ(ytrue - “sign”(〈w,v〉))x
-Logistische Regression
-𝜎(〈w,v〉)
-Aktivierungsfunktion:
-𝜎 (Logistische Sigmoidfunktion)
-Training (naiv): finde w sodass MSE von
-linearer Regression minimal.
+### Neue, einheitliche Perspektive
 
-<!-- Folie 5 -->
-Was bisher geschah
-Perzeptron
-[〈w,v〉 > 0] = “sign”(〈w,v〉) ∊ {0, 1}
-Aktivierungsfunktion:
-“sign” (Vorzeichen)
-Training: Update-Regel:
-wneu= walt + ρ(ytrue - “sign”(〈w,v〉))x
-Logistische Regression
-𝜎(〈w,v〉)
-Aktivierungsfunktion:
-𝜎 (Logistische Sigmoidfunktion)
-Training (naiv): finde w sodass MSE von
-linearer Regression minimal.
-Jedes einzelne neue Paar (x,y) kann zum
-weiterlernen benutzt werden.
-Fehler wird minimiert.
-Wie aus einem einzelnen neuen Paar (x,y)
-etwas dazu lernen?
-Wird beim Lernen etwas
-maximiert/minimiert?
+Die Antwort auf beide Fragen: Jedes Training ist die Minimierung eines **Fehlerterms**, der **Loss-Funktion** $L(x, y; w)$, und die Update-Regel folgt aus der Loss-Funktion. Für die logistische Regression ist der passende Fehlerterm die **binäre Kreuzentropie** (binary cross entropy, BCE):
 
-<!-- Folie 6 -->
-Neue, einheitliche Perspektive
-Perzeptron
-Logistische Regression
-Aktivierungsfunktion:
-sign (Vorzeichen +1 oder -1)
-Training: Update-Regel:
-wneu= walt + ρ(ytrue - sign(〈w,x〉))x
-Aktivierungsfunktion:
-𝜎 (Logistische Sigmoidfunktion)
-Training: Update-Regel:
-wneu= walt + ρ( ?? ytrue ?? w ?? x ?? )
-Fehlerterm (=Loss-Funktion):
-Kandidat Perceptron Hinge Loss:
-LHinge(x,y; w) = Σi=1..N max(0, -yisign〈w,xi〉)
-Fehlerterm (=Loss-Funktion):
-Binary cross entropy loss:
-LBCE(x,y; w) = - 1/N Σi=1..N yi log pi
-pi = P(xi in Klasse 1) = e〈w,xi〉/ (1 + e〈w,xi〉)
+$$
+L_{\text{BCE}}(x, y; w) = -\frac1N \sum_{i=1}^N \Bigl( y_i \log p_i + (1 - y_i) \log(1 - p_i) \Bigr),
+\qquad
+p_i = P(x_i \text{ in Klasse } 1) = \sigma(\langle w, x_i \rangle) = \frac{e^{\langle w, x_i \rangle}}{1 + e^{\langle w, x_i \rangle}} .
+$$
+
+Für das Perzeptron (mit Labels $y_i \in \{-1, +1\}$ statt $\{0, 1\}$, das macht die Formeln kürzer) ist ein Kandidat der **Perceptron Loss**
+
+$$
+L_{\text{Perc}}(x, y; w) = \sum_{i=1}^N \max\bigl(0,\, -y_i \operatorname{sign}\langle w, x_i \rangle\bigr),
+$$
+
+der einfach die falsch klassifizierten Samples zählt. Die Update-Regel dazu leiten wir weiter unten her.
 
 ## Optimieren mit Fehlerterm
 
-<!-- Folie 7 -->
-Wenn L(x,y; w) ∊ ℝ den Fehler eines Modells mit Gewichtsvektor w angibt,
-dann suchen wir w sodass L(w) = L(x,y; w) minimal wird.
-Extremstellen von L bestimmen:
-◼
-◼
-◼
-◼
-L’ bestimmen
-L’(w) = 0 nach w umstellen
-Formel für w ausrechnen (aus den Daten x,y)
-Kandidaten für w ausprobieren
-(liegt ein Minimum vor?)
+Wenn $L(x, y; w) \in \mathbb{R}$ den Fehler eines Modells mit Gewichtsvektor $w$ angibt, dann suchen wir $w$, sodass $L(w) := L(x, y; w)$ minimal wird. Die Daten $x, y$ sind dabei fest, variabel ist $w$.
 
-<!-- Folie 8 -->
-Wenn L(x,y; w) ∊ ℝ den Fehler eines Modells mit Gewichtsvektor w angibt,
-dann suchen wir w sodass L(w) = L(x,y; w) minimal wird.
-Extremstellen von L bestimmen:
-◼
-◼
-◼
-◼
-Schaffen wir das immer?
-L’ bestimmen
-L’(w) = 0 nach w umstellen
-Formel für w ausrechnen (aus den Daten x,y)
-Kandidaten für w ausprobieren
-(liegt ein Minimum vor?)
+**Exakt**, wie in der Schule: Extremstellen von $L$ bestimmen.
 
-<!-- Folie 9 -->
-Wenn L(x,y; w) ∊ ℝ den Fehler eines Modells mit Gewichtsvektor w angibt,
-dann suchen wir w sodass L(w) = L(x,y; w) minimal wird.
-Approximative Extremstellen von L bestimmen:
-◼
-◼
-◼
-◼
-Zufällig ein w auswählen
-L(w) ausrechnen, vergleichen mit letztem niedrigstem Wert
-Größer? Pech gehabt, weitermachen.
-Kleiner? Besseres w gefunden!
-Jetzt ggf. aufhören, wenn w gut genug ist.
+1. $L'$ bestimmen,
+2. $L'(w) = 0$ nach $w$ umstellen,
+3. Formel für $w$ ausrechnen (aus den Daten $x, y$),
+4. Kandidaten für $w$ ausprobieren – liegt ein Minimum vor?
 
-<!-- Folie 10 -->
-Wenn L(x,y; w) ∊ ℝ den Fehler eines Modells mit Gewichtsvektor w angibt,
-dann suchen wir w sodass L(w) = L(x,y; w) minimal wird.
-Clever approximative Extremstellen von L bestimmen:
-◼
-◼
-◼
-◼
-Zufällig Clever ein w auswählen, in der Nähe der bisher besten Schätzung
-L(w) ausrechnen, vergleichen mit letztem niedrigstem Wert
-Größer? Pech gehabt, weitermachen.
-Kleiner? Besseres w gefunden!
-Jetzt ggf. aufhören, wenn w gut genug ist.
+Für die lineare Regression mit MSE klappt das (die Normalgleichungen). Schaffen wir das immer? Nein: Für die logistische Regression hat $L'(w) = 0$ keine geschlossene Lösung, und für tiefe Netze erst recht nicht.
 
-## Quelle: Fisseha Berhane
+**Approximativ**, ganz dumm:
 
-<!-- Folie 11 -->
-https://datascience-enthusiast.com/DL/Optimization_methods.html
+1. Zufällig ein $w$ auswählen,
+2. $L(w)$ ausrechnen, vergleichen mit dem bisher niedrigsten Wert,
+3. Größer? Pech gehabt, weitermachen. Kleiner? Besseres $w$ gefunden!
+4. Jetzt ggf. aufhören, wenn $w$ gut genug ist.
+
+**Approximativ, clever**: Wie eben, aber im ersten Schritt $w$ nicht zufällig, sondern *in der Nähe der bisher besten Schätzung* auswählen. Das ist eine lokale Suche, und die Frage ist nur noch, in welche Richtung man von der besten Schätzung aus gehen soll.
 
 ## Gradienten
 
-<!-- Folie 12 -->
-Wenn L(x,y; w) ∊ ℝ den Fehler eines Modells mit Gewichtsvektor w angibt,
-dann suchen wir w sodass L(w) = L(x,y; w) minimal wird.
-Wir stellen uns (für den Moment) vor, dass w ∊ ℝ2 ist (also die Daten 2 Features haben).
-Wir stellen uns die w-Ebene vor, darauf ein L(w)-Gebirge.
-An jedem Punkt die Frage: wohin sollen wir gehen, wenn wir runter wollen?
+Wir stellen uns für den Moment vor, dass $w \in \mathbb{R}^2$ ist (also die Daten zwei Features haben). Wir stellen uns die $w$-Ebene vor und darauf ein $L(w)$-Gebirge. An jedem Punkt die Frage: Wohin sollen wir gehen, wenn wir runter wollen? Antwort: In die Richtung, wo $L(w)$ am schnellsten kleiner wird, also „nach unten“ – das heißt entlang des negativen **Gradienten** $\operatorname{grad}(L)(w) = L'(w) \in \mathbb{R}^2$.
 
-<!-- Folie 13 -->
-Wenn L(x,y; w) ∊ ℝ den Fehler eines Modells mit Gewichtsvektor w angibt,
-dann suchen wir w sodass L(w) = L(x,y; w) minimal wird.
-Wir stellen uns (für den Moment) vor, dass w ∊ ℝ2 ist (also die Daten 2 Features haben).
-Wir stellen uns die w-Ebene vor, darauf ein L(w)-Gebirge.
-An jedem Punkt die Frage: wohin sollen wir gehen, wenn wir runter wollen?
-Antwort: In die Richtung, wo L(w) am schnellsten kleiner wird, also “nach unten”.
+<!-- TODO Abbildung: Loss-Gebirge über der w-Ebene mit Gradientenabstiegspfad (Folie 11, Quelle Fisseha Berhane; oder eigenes matplotlib-Contour-Plot) -->
 
-<!-- Folie 14 -->
-Wenn L(x,y; w) ∊ ℝ den Fehler eines Modells mit Gewichtsvektor w angibt,
-dann suchen wir w sodass L(w) = L(x,y; w) minimal wird.
-Wir stellen uns (für den Moment) vor, dass w ∊ ℝ2 ist (also die Daten 2 Features haben).
-Wir stellen uns die w-Ebene vor, darauf ein L(w)-Gebirge.
-An jedem Punkt die Frage: wohin sollen wir gehen, wenn wir runter wollen?
-Antwort: In die Richtung, wo L(w) am schnellsten kleiner wird, also “nach unten”.
-D.h. entlang des Gradienten grad(L)(w) = L’(w) ∊ ℝ2
+### Gradienten konkret
 
-## Gradienten - Konkret
+Betrachten wir den MSE für eine lineare Regression:
 
-<!-- Folie 15 -->
-Wenn wir den MSE für eine lineare Regression betrachten:
-L(w) = 1/N Σi=1..N (yi - 〈w,xi〉)2
-Halte (zunächst) Komponente w2 fest und variiere w1
-→ Funktion in einer Variablen L(w1)
-Ableitung L’(w1) gibt Änderung von L abhängig von w1 an,
-also Änderung in Richtung der ersten Koordinate der w-Ebene.
-“Wenn ich einen (infinitesimalen) Schritt nach Osten gehe, wie stark ändert sich L dann?”
+$$
+L(w) = \frac1N \sum_{i=1}^N \bigl( y_i - \langle w, x_i \rangle \bigr)^2 .
+$$
 
-<!-- Folie 16 -->
-Wenn wir den MSE für eine lineare Regression betrachten:
-L(w) = 1/N Σi=1..N (yi - 〈w,xi〉)2
-Halte (danach) Komponente w1 fest und variiere w2
-→ Funktion in einer Variablen L(w2)
-Ableitung L’(w2) gibt Änderung von L abhängig von w2 an,
-also Änderung in Richtung der zweiten Koordinate der w-Ebene.
-“Wenn ich einen (infinitesimalen) Schritt nach Norden gehe, wie stark ändert sich L dann?”
+Halte zunächst die Komponente $w_2$ fest und variiere $w_1$. Das gibt eine Funktion in einer Variablen, $w_1 \mapsto L(w_1, w_2)$, und ihre Ableitung gibt die Änderung von $L$ abhängig von $w_1$ an, also die Änderung in Richtung der ersten Koordinate der $w$-Ebene: „Wenn ich einen (infinitesimalen) Schritt nach Osten gehe, wie stark ändert sich $L$ dann?“ Danach $w_1$ festhalten und $w_2$ variieren: ein Schritt nach Norden.
 
-<!-- Folie 17 -->
-Wenn wir den MSE für eine lineare Regression betrachten:
-L(w) = 1/N Σi=1..N (yi - 〈w,xi〉)2
-L’(w1) und L’(w2) heißen besser
-d/dw1 L(w) und d/dw2 L(w)
-und L’(w) = ( d/dw1 L(w), d/dw2 L(w) )
-Nicht verwechseln: Ableitung L’ (eine Funktion)
-und L’(w), der Gradientenvektor an einem Punkt w.
+Diese beiden Ableitungen heißen besser **partielle Ableitungen** $\frac{\partial}{\partial w_1} L(w)$ und $\frac{\partial}{\partial w_2} L(w)$, und der Gradient ist der Vektor aus beiden:
 
-<!-- Folie 18 -->
-Wenn wir den MSE für eine lineare Regression betrachten:
-L(w) = 1/N Σi=1..N (yi - 〈w,xi〉)2
-L’(w) = ( d/dw1 L(w), d/dw2 L(w) )
-= d/dw1L(w) e1 + d/dw2L(w) e2
-Änderung in Richtung e1 ausrechnen:
-〈L’(w), e1〉 = d/dw1L(w)
+$$
+L'(w) = \left( \frac{\partial L}{\partial w_1}(w),\ \frac{\partial L}{\partial w_2}(w) \right)
+= \frac{\partial L}{\partial w_1}(w)\, e_1 + \frac{\partial L}{\partial w_2}(w)\, e_2 .
+$$
 
-<!-- Folie 19 -->
-Wenn wir den MSE für eine lineare Regression betrachten:
-L(w) = 1/N Σi=1..N (yi - 〈w,xi〉)2
-L’(w) = ( d/dw1 L(w), d/dw2 L(w) )
-= d/dw1L(w) e1 + d/dw2L(w) e2
-Änderung in Richtung v ausrechnen:
-〈L’(w), v〉 = d/dw1L(w) v1 + d/dw2L(w) v2
+Nicht verwechseln: die Ableitung $L'$ (eine Funktion, die jedem $w$ einen Vektor zuordnet) und $L'(w)$, der Gradientenvektor an einem Punkt $w$.
 
-<!-- Folie 20 -->
-Wenn wir den MSE für eine lineare Regression betrachten:
-L(w) = 1/N Σi=1..N (yi - 〈w,xi〉)2
-L’(w) = ( d/dw1 L(w), d/dw2 L(w) )
-= d/dw1L(w) e1 + d/dw2L(w) e2
-In welche Richtung v ist die Änderung maximal?
-〈L’(w), v〉 = d/dw1L(w) v1 + d/dw2L(w) v2
+**Richtungsableitung.** Die Änderung in Richtung $e_1$ ist $\langle L'(w), e_1 \rangle = \frac{\partial L}{\partial w_1}(w)$. Die Änderung in Richtung eines beliebigen Einheitsvektors $v$ ist
 
-<!-- Folie 21 -->
-Wenn wir den MSE für eine lineare Regression betrachten:
-L(w) = 1/N Σi=1..N (yi - 〈w,xi〉)2
-L’(w) = ( d/dw1 L(w), d/dw2 L(w) )
-= d/dw1L(w) e1 + d/dw2L(w) e2
-In Richtung v=L’(w) ist die Änderung maximal:
-〈L’(w), L’(w)〉 = || L’(w) ||2
+$$
+\langle L'(w), v \rangle = \frac{\partial L}{\partial w_1}(w)\, v_1 + \frac{\partial L}{\partial w_2}(w)\, v_2 .
+$$
 
-<!-- Folie 22 -->
-Wenn wir den MSE für eine lineare Regression betrachten:
-L(w) = 1/N Σi=1..N (yi - 〈w,xi〉)2
-L’(w) = ( d/dw1 L(w), d/dw2 L(w) )
-= d/dw1L(w) e1 + d/dw2L(w) e2
-Endlich Ausrechnen:
-d/dw1L(w) = 1/N Σi=1..N 2(yi - w1xi1 - w2xi2)(-xi1)
-d/dw2L(w) = 1/N Σi=1..N 2(yi - w1xi1 - w2xi2)(-xi2)
+In welche Richtung $v$ ist die Änderung maximal? Nach Cauchy-Schwarz ist $\langle L'(w), v \rangle \le \|L'(w)\| \, \|v\|$ mit Gleichheit genau dann, wenn $v$ in Richtung $L'(w)$ zeigt. In Richtung $v = L'(w)$ ist die Änderung also maximal, $\langle L'(w), L'(w) \rangle = \|L'(w)\|^2$ – und in Richtung $-L'(w)$ minimal. Der Gradient zeigt bergauf, der negative Gradient bergab.
 
-<!-- Folie 23 -->
-Wenn wir den MSE für eine lineare Regression betrachten:
-L(w) = 1/N Σi=1..N (yi - 〈w,xi〉)2
-L’(w) = ( d/dw1 L(w), d/dw2 L(w) ) = d/dw1L(w) e1 + d/dw2L(w) e2
-d/dw1L(w) = 1/N Σi=1..N 2(yi - w1xi1 - w2xi2)(-xi1)
-d/dw2L(w) = 1/N Σi=1..N 2(yi - w1xi1 - w2xi2)(-xi2)
-Fiktive Daten: x1 = (1,0), y1=0, x2 = (0,1), y2=1, N=2
-walt = (1,1)
+**Endlich ausrechnen.** Mit der Kettenregel:
 
-<!-- Folie 24 -->
-Wenn wir den MSE für eine lineare Regression betrachten:
-L(w) = 1/N Σi=1..N (yi - 〈w,xi〉)2
-L’(w) = ( d/dw1 L(w), d/dw2 L(w) ) = d/dw1L(w) e1 + d/dw2L(w) e2
-d/dw1L(w) = 1/N Σi=1..N 2(yi - w1xi1 - w2xi2)(-xi1)
-d/dw2L(w) = 1/N Σi=1..N 2(yi - w1xi1 - w2xi2)(-xi2)
-Fiktive Daten: x1 = (1,0), y1=0, x2 = (0,1), y2=1, N=2,
-walt = (1,1)
-d/dw1L(walt) = Σi=1..2(yi - xi1 - xi2)(-xi1) = (0-1)(-1) + (1-1)(-0) = 1
-d/dw2L(walt) = Σi=1..2(yi - xi1 - xi2)(-xi2) = (0-1)(-0) + (1-1)(-1) = 0
+$$
+\frac{\partial L}{\partial w_1}(w) = \frac1N \sum_{i=1}^N 2\,(y_i - w_1 x_{i1} - w_2 x_{i2})\,(-x_{i1}),
+\qquad
+\frac{\partial L}{\partial w_2}(w) = \frac1N \sum_{i=1}^N 2\,(y_i - w_1 x_{i1} - w_2 x_{i2})\,(-x_{i2}).
+$$
 
-<!-- Folie 26 -->
-Wenn wir den MSE für eine lineare Regression betrachten:
-L(w) = 1/N Σi=1..N (yi - 〈w,xi〉)2
-L’(w) = ( d/dw1 L(w), d/dw2 L(w) ) = d/dw1L(w) e1 + d/dw2L(w) e2
-Fiktive Daten: x1 = (1,0), y1=0, x2 = (0,1), y2=1, N=2,
-walt = (1,1)
-L’(w) = (1,0)
-wneu := walt - ρ L’(w)
-mit z.B. ρ=½ also wneu = (1,1) - (½,0) = (½, 1)
+:::{prf:example} Ein Gradientenschritt von Hand
+Fiktive Daten: $x_1 = (1, 0)$, $y_1 = 0$, $x_2 = (0, 1)$, $y_2 = 1$, also $N = 2$, und $w_{\text{alt}} = (1, 1)$. Dann ist (der Faktor $\frac{2}{N} = 1$ fällt weg)
 
-## Optimieren mit Fehlerterm
+$$
+\begin{aligned}
+\frac{\partial L}{\partial w_1}(w_{\text{alt}}) &= \sum_{i=1}^2 (y_i - x_{i1} - x_{i2})(-x_{i1}) = (0 - 1)(-1) + (1 - 1)(-0) = 1, \\
+\frac{\partial L}{\partial w_2}(w_{\text{alt}}) &= \sum_{i=1}^2 (y_i - x_{i1} - x_{i2})(-x_{i2}) = (0 - 1)(-0) + (1 - 1)(-1) = 0,
+\end{aligned}
+$$
 
-<!-- Folie 27 -->
-Wenn L(x,y; w) ∊ ℝ den Fehler eines Modells mit Gewichtsvektor w angibt,
-dann suchen wir w sodass L(w) = L(x,y; w) minimal wird.
-Sehr clever approximative Extremstellen von L bestimmen:
-◼
-Sehr clever ein w auswählen, in der Nähe der bisher besten Schätzung:
-wneu := walt - ρ L’(walt)
-◼
-◼
-◼
-“Gradientenabstieg”
-L(w) ausrechnen, vergleichen mit letztem niedrigstem Wert
-Größer? Pech gehabt, weitermachen.
-Kleiner? Besseres w gefunden!
-Jetzt ggf. aufhören, wenn w gut genug ist.
+also $L'(w_{\text{alt}}) = (1, 0)$. Der Update-Schritt $w_{\text{neu}} := w_{\text{alt}} - \rho\, L'(w_{\text{alt}})$ mit z.B. $\rho = \tfrac12$ liefert $w_{\text{neu}} = (1, 1) - (\tfrac12, 0) = (\tfrac12, 1)$. Probe: Vorher war $\langle w, x_1 \rangle = 1$ bei $y_1 = 0$, nachher $\tfrac12$ – der Fehler auf dem ersten Sample ist gesunken, der auf dem zweiten unverändert.
+:::
 
-## Quelle: Amini, Alexander & Soleimany, Ava
+<!-- TODO Abbildung: Tafelbild Gradientenabstieg (from_2025/slides/tafelbild-gradientenabstieg.jpg) -->
 
-<!-- Folie 28 -->
-& Karaman, Sertac & Rus, Daniela. (2018).
-Spatial Uncertainty Sampling for
-End-to-End Control.
+## Gradientenabstieg
 
-## Quelle: Li, Hao, Zheng Xu, Gavin
+Damit haben wir die sehr clevere Variante der approximativen Minimierung:
 
-<!-- Folie 29 -->
-Taylor, Christoph Studer, and Tom
-Goldstein. "Visualizing the loss
-landscape of neural nets." arXiv
-preprint arXiv:1712.09913 (2017).
+1. Sehr clever ein $w$ auswählen, in der Nähe der bisher besten Schätzung:
 
-## Interaktiv:
+   $$
+   w_{\text{neu}} := w_{\text{alt}} - \rho\, L'(w_{\text{alt}}).
+   $$
 
-<!-- Folie 30 -->
-Loss Landscape Explorer
-https://losslandscape.com/explorer
+2. $L(w)$ ausrechnen, vergleichen mit dem bisher niedrigsten Wert,
+3. Größer? Pech gehabt, weitermachen (ggf. mit kleinerem $\rho$). Kleiner? Besseres $w$ gefunden!
+4. Jetzt ggf. aufhören, wenn $w$ gut genug ist.
 
-## Training eines einzelnen Neurons
+Das ist der **Gradientenabstieg**, und $\rho$ ist die **Lernrate** – dieselbe, die wir beim Perzeptron schon hatten. Zu klein, und man braucht ewig; zu groß, und man springt über das Tal hinweg.
 
-<!-- Folie 31 -->
-Neue, einheitliche Perspektive
-Perzeptron
-Aktivierungsfunktion:
-sign (Vorzeichen +1 oder -1)
-Training: Update-Regel:
-wneu= walt + ρ(ytrue - sign(〈w,x〉))x
-Fehlerterm (=Loss-Funktion):
-Kandidat Perceptron Hinge Loss:
-LHinge(x,y; w) = Σi=1..N max(0, -yisign〈w,xi〉)
-Ableitung?!?
+Wie so ein Loss-Gebirge für ein echtes neuronales Netz aussieht, zeigen z.B. Li, Xu, Taylor, Studer und Goldstein, *Visualizing the loss landscape of neural nets* (arXiv:1712.09913, 2017), oder interaktiv der [Loss Landscape Explorer](https://losslandscape.com/explorer). Die Landschaften sind nicht konvex, es gibt viele lokale Minima, Sattelpunkte und Plateaus – und trotzdem funktioniert Gradientenabstieg erstaunlich gut.
 
-<!-- Folie 32 -->
-Neue, einheitliche Perspektive
-Perzeptron
-Aktivierungsfunktion:
-sign (Vorzeichen +1 oder -1)
-Training: Update-Regel:
-wneu= walt + ρ(ytrue - sign(〈w,x〉))x
-Fehlerterm (=Loss-Funktion):
-“hard” Perceptron Loss:
-LHinge(x,y; w) = Σi=1..N max(0, -yisign〈w,xi〉)
-Besser: “soft” Perceptron Loss:
-LHinge(x,y; w) = Σi=1..N max(0, -yi〈w,xi〉)
-LHinge’(w) = Σi=1..N -yixi max(0, -yi〈w,xi〉) / (-yi〈w,xi〉)
-= Summe falsch klassifizierter
+<!-- TODO Abbildungen: Loss Landscape (Li et al. 2017), Amini et al. 2018 (Folien 28–29) -->
 
-<!-- Folie 33 -->
-Neue, einheitliche Perspektive
-Perzeptron
-Aktivierungsfunktion:
-sign (Vorzeichen +1 oder -1)
-Training: Update-Regel:
-wneu= walt + ρ(ytrue - sign(〈w,x〉))x
-Fehlerterm (=Loss-Funktion):
-“hard” Perceptron Loss:
-LHinge(x,y; w) = Σi=1..N max(0, -yisign〈w,xi〉)
-Besser: “soft” Perceptron Loss:
-LHinge(x,y; w) = Σi=1..N max(0, -yi〈w,xi〉)
-Allgemeine Update-Regel:
-wneu = walt - ρ L’(w)
-Für einzelnes (x, ytrue) also N=1 und
-wneu = walt ± ρ x wenn x falsch klassifiziert.
-LHinge’(w) = Σi=1..N -yixi max(0, -yi〈w,xi〉) / (-yi〈w,xi〉)
-= Summe falsch klassifizierter
+## Zurück zum Perzeptron
 
-## Loss-Funktionen
+Die neue Perspektive erklärt auch die Perzeptronregel. Der „harte“ Perceptron Loss $\sum_i \max(0, -y_i \operatorname{sign}\langle w, x_i \rangle)$ hat ein Problem: Ableitung?!? Die Funktion ist stückweise konstant, der Gradient ist fast überall $0$. Besser ist der „weiche“ Perceptron Loss ohne das $\operatorname{sign}$:
 
-<!-- Folie 34 -->
-Die wir bisher gesehen haben:
+$$
+L_{\text{Perc}}(w) = \sum_{i=1}^N \max\bigl(0,\, -y_i \langle w, x_i \rangle\bigr).
+$$
 
-## Training eines einzelnen Neurons
+Ein Summand ist $0$, wenn $x_i$ korrekt klassifiziert ist ($y_i \langle w, x_i \rangle > 0$), und sonst $-y_i \langle w, x_i \rangle > 0$, also proportional dazu, *wie weit* auf der falschen Seite $x_i$ liegt. Die (schwache) Ableitung, Blatt 3, ist
 
-<!-- Folie 35 -->
-Take-Home Message
-Ein einzelnes Neuron besteht aus
-◼
-◼
-einer Aktivierungsfunktion τ,
-einem Gewichtsvektor w (Parameter).
-Inferenz:
-ypred = τ(〈w,x〉)
-Für binäre Klassifikation:
-τ=𝜎
-L(w) = LBCE(w)
-Das ist logistische Regression.
-Training (mit Hyperparameter ρ):
-Das kommt auf die Loss-Funktion L(w) an:
-wneu = walt - ρ L’(walt)
+$$
+L_{\text{Perc}}'(w) = \sum_{i \text{ falsch klassifiziert}} -y_i x_i ,
+$$
 
-## Nicht-Stochastischer Gradientenabstieg??
+die Summe über die falsch klassifizierten Samples. Die allgemeine Update-Regel $w_{\text{neu}} = w_{\text{alt}} - \rho\, L'(w)$ liefert für ein einzelnes $(x, y_{\text{true}})$, also $N = 1$:
 
-<!-- Folie 36 -->
-Gradientenabstieg ist der Oberbegriff
-und gleichzeitig auch die spezifische
-Bezeichnung für:
-Den ganzen Datensatz einlesen, dabei die
-Loss-Funktion auswerten und den
-Gradienten bestimmen. Damit Gewichte
-anpassen und erneut den ganzen
-Datensatz einlesen usw.
-Stochastischer Gradientenabstieg ist das
-Anpassen der Gewichte mit einer
-Schätzung des Gradienten aus einem
-Teildatensatz, meist ist ein einzelnes
-Sample gemeint. Das ist zufällig gewählt
-(die Anordnung der Daten wird als zufällig
-angenommen), daher stochastisch.
-Kompromiss Mini-Batch SGD:
-Eine kleine, handhabbare Menge von
-Samples wird gemeinsam verarbeitet,
-damit dann der Gradient approximiert.
+$$
+w_{\text{neu}} = w_{\text{alt}} \pm \rho\, x \quad \text{wenn } x \text{ falsch klassifiziert ist, sonst } w_{\text{neu}} = w_{\text{alt}}.
+$$
+
+Das ist exakt die Perzeptronregel. Rosenblatt hat also, ohne es so zu nennen, stochastischen Gradientenabstieg auf dem Perceptron Loss gemacht.
+
+### Loss-Funktionen, die wir bisher gesehen haben
+
+Für ein einzelnes Sample mit $y = 1$, aufgetragen gegen den Wert der Entscheidungsfunktion $f(x) = \langle w, x \rangle$:
+
+* **Perceptron Loss** $\max(0, -f(x))$: null, sobald $f(x) > 0$, davor linear.
+* **Hinge Loss** $\max(0, 1 - f(x))$: null erst ab $f(x) \ge 1$, verlangt also einen *Sicherheitsabstand* (Margin) – das ist der Loss der Support Vector Machine.
+* **BCE Loss** $-\log \sigma(f(x))$: glatt, wird nie exakt null, bestraft auch richtig klassifizierte Samples noch ein bisschen, wenn sie nahe an der Grenze liegen.
+
+<!-- TODO Abbildung: die drei Loss-Kurven L(y=1, f(x)) für f(x) in [-4, 4] (Folie 34) -->
+
+## Take-Home Message
+
+Ein einzelnes Neuron besteht aus einer Aktivierungsfunktion $\tau$ und einem Gewichtsvektor $w$ (den Parametern). Inferenz:
+
+$$
+y_{\text{pred}} = \tau(\langle w, x \rangle).
+$$
+
+Training, mit Hyperparameter $\rho$, hängt von der Loss-Funktion $L(w)$ ab:
+
+$$
+w_{\text{neu}} = w_{\text{alt}} - \rho\, L'(w_{\text{alt}}).
+$$
+
+Für binäre Klassifikation nimmt man $\tau = \sigma$ und $L = L_{\text{BCE}}$. Das ist logistische Regression.
+
+## Nicht-stochastischer Gradientenabstieg??
+
+*Gradientenabstieg* ist der Oberbegriff und gleichzeitig die spezifische Bezeichnung für: den ganzen Datensatz einlesen, dabei die Loss-Funktion auswerten und den Gradienten bestimmen, damit die Gewichte anpassen, und erneut den ganzen Datensatz einlesen usw. (auch *Batch Gradient Descent*).
+
+*Stochastischer Gradientenabstieg* (SGD) ist das Anpassen der Gewichte mit einer *Schätzung* des Gradienten aus einem Teildatensatz – meist ist ein einzelnes Sample gemeint. Das ist zufällig gewählt (die Anordnung der Daten wird als zufällig angenommen), daher stochastisch. Der geschätzte Gradient ist verrauscht, aber im Mittel korrekt, und man kommt viel häufiger zu einem Update.
+
+Der Kompromiss ist **Mini-Batch SGD**: Eine kleine, handhabbare Menge von Samples (die *Batch Size*, z.B. 32 oder 64) wird gemeinsam verarbeitet und damit der Gradient approximiert. Das ist, was in der Praxis fast immer gemeint ist, wenn jemand „SGD“ sagt – auch `torch.optim.SGD` aus dem letzten Kapitel weiß nichts davon, wie viele Samples im Batch waren. Ein Durchlauf durch den gesamten Datensatz heißt **Epoche**.
 
 ## Ziel für nächste Woche
 
-<!-- Folie 37 -->
-Ziel: Verstehen können, was dort geschieht:
-TensorFlow Playground
-https://playground.tensorflow.org
+Verstehen können, was im [TensorFlow Playground](https://playground.tensorflow.org) geschieht: mehrere Neuronen in mehreren Schichten, trainiert mit Gradientenabstieg – wofür wir die Ableitung durch alle Schichten hindurch brauchen.
 
-## Zum neuen Übungsblatt
+## Tipps zum Übungsblatt
 
-<!-- Folie 38 -->
-Tipps für Blatt 5
-Lesen Sie die Folien zu Vorlesung 4 nochmal aufmerksam - da sind
-nützliche Hinweise zu finden, um Aufgabe 3 zu lösen.
-Wenn Sie sich bei Aufgabe 1 schwer tun,
-versuchen Sie zunächst die Rechnung 𝜎(−𝑥) = 1−𝜎(𝑥) aus Vorlesung 4
-nachzuvollziehen.
+* Lesen Sie das Kapitel zu Vorlesung 4 nochmal aufmerksam – da sind nützliche Hinweise zu finden, um Aufgabe 3 (Softmax vs. Sigmoid) zu lösen.
+* Wenn Sie sich bei Aufgabe 1 (Ableitung von $\sigma$) schwer tun, versuchen Sie zunächst die Rechnung $\sigma(-x) = 1 - \sigma(x)$ aus Vorlesung 4 nachzuvollziehen.
