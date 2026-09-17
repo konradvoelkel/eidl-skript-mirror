@@ -1,17 +1,13 @@
 ---
-title: "VL 06: Backpropagation"
-short_title: "VL 06"
+title: "Backpropagation"
+short_title: "Backpropagation"
 ---
 
 # Backpropagation
 
-:::{note} Stand
-Erste Prosafassung (aus den Folien von VL 06, WiSe 2025/26). Abbildungen fehlen noch, siehe die `TODO`-Kommentare.
-:::
+## Ziel
 
-## Ziel für heute
-
-Verstehen können, was im [TensorFlow Playground](https://playground.tensorflow.org) geschieht. Als Aufwärmübung: Setzen Sie dort die Gewichte von Hand, mit 2 Hidden Layers zu je 2 Neuronen, um das XOR-Problem zu lösen. Das geht (Kapitel 1), aber es ist mühsam – und genau das Mühsame soll der Gradientenabstieg übernehmen. Dafür brauchen wir den Gradienten der Loss-Funktion nach *allen* Gewichten aller Schichten.
+Verstehen können, was im [TensorFlow Playground](https://playground.tensorflow.org) geschieht. Als Aufwärmübung: Setzen Sie dort die Gewichte von Hand, mit 2 Hidden Layers zu je 2 Neuronen, um das XOR-Problem zu lösen. Das geht ([Kapitel „Das Perzeptron“](../part-grundlagen/02-perzeptron.md)), aber es ist mühsam – und genau das Mühsame soll der Gradientenabstieg übernehmen. Dafür brauchen wir den Gradienten der Loss-Funktion nach *allen* Gewichten aller Schichten.
 
 ## Training mehrerer Schichten: Motivation
 
@@ -23,7 +19,11 @@ $$
 y_{\text{pred}} = \bigl\langle w_{\text{zweit}},\, \sigma(\langle w_{\text{erst}}, x \rangle) \bigr\rangle .
 $$
 
-<!-- TODO Abbildung: x → [w_erst] → σ → [w_zweit] → y_pred -->
+:::{figure} ../images/vl06-two-neurons.png
+:width: 90%
+
+Beispielsetup 1: zwei Neuronen hintereinander.
+:::
 
 Wir planen eine Regression mit $x, y \in \mathbb{R}$, daher nehmen wir den MSE-Loss:
 
@@ -191,83 +191,68 @@ Achtung: Das ist nicht notwendig für diese Veranstaltung, das ist weiterführen
 * Wikipedia: *Loss functions for classification*.
 * Michael Nielsens Buchkapitel zu Backpropagation (sehr mathematisch): [neuralnetworksanddeeplearning.com/chap2.html](http://neuralnetworksanddeeplearning.com/chap2.html).
 
-## Aktivierungsfunktionen und weitere Layer
+## Backpropagation als Induktion
 
-Ein Neuron „forward“ ist $\tau\langle w, x \rangle$. Beim Perzeptron ist $\tau = \operatorname{sign}$, bei der logistischen Regression $\tau = \sigma$. Allgemein ist $\tau$ beliebig – aber differenzierbar, sonst funktioniert Backpropagation nicht.
+Noch einmal systematisch, als Wiederholung und Zusammenfassung aus der Übung – denn Backpropagation ist Klausurstoff (Aufgabentyp 4), und die Formulierung als Induktion ist die, mit der man jede Architektur erschlägt.
 
-### Neues Ziel: Funktionen lernen
+### Warum Backpropagation funktioniert
 
-Bisher war das Ziel Klassifikation. Neues Ziel: Das neuronale Netz soll eine Funktion lernen (Regression), und unser Modell von der Funktion ist *stückweise linear*. Welches $\tau$ ist dafür geeignet?
+1. Im **Forward Pass** speichern wir für jede Rechenoperation das Zwischenergebnis und merken uns die Ableitung der einzelnen Rechenoperation und auf welche vorangehenden Ergebnisse wir zurückgreifen müssen (Konstruktion des DAG).
+2. Im **Backward Pass** können wir für jede Rechenoperation jeweils nach den Gewichten ableiten, die für diese Operation relevant sind. Wenn wir nach Gewichten ableiten, von denen die vorangegangenen Rechenoperationen abhängen, müssen wir die Kettenregel anwenden. Dazu benötigen wir nur die Ableitung der neuen Rechenoperation (gespeichert im Forward Pass), den Wert der Rechenoperation (gespeichert im Forward Pass) und die Ableitung der vorangegangenen Rechenoperationen.
 
-:::{prf:definition} ReLU
-Die *Rectified Linear Unit* ist
+Mit vollständiger Induktion sehen wir also: Wir können alle Ableitungen berechnen mit *einem* Durchlauf durch den DAG. Insbesondere können wir die Loss-Funktion (das „Ende“ des DAG) nach allen Gewichten ableiten und so den vollständigen Gradienten berechnen.
 
-$$
-\operatorname{ReLU}(y) := \max(0, y).
-$$
+### Der Induktionsschritt, systematisch
 
-Ein Neuron mit $\tau = \operatorname{ReLU}$ heißt ReLU-Neuron.
-:::
-
-**Ableitung** von $\max(0, y)$ nach $y$: Für $y > 0$ ist $\max(0, y) = y$, also ist die Ableitung $1$. Für $y < 0$ ist $\max(0, y) = 0$, also ist die Ableitung $0$. Für $y = 0$ ist die Ableitung nicht definiert – wir *definieren* sie als $0$, das spart Rechnungen. (Dass das erlaubt ist, ist genau der Inhalt von Blatt 3: schwache Ableitungen dürfen an einzelnen Punkten beliebig sein.)
-
-**Wieso ist ReLU geeignet?** Lineare Abbildung + ReLU ist die Projektion auf einen Halbraum, denn ReLU ist genau die Projektion von $\mathbb{R}$ auf $[0, \infty)$, und ein Halbraum ist eine Seite einer Hyperebene. Ein ReLU-Neuron $\max(0, \langle w, x \rangle + b)$ ist also null auf der einen Seite der Hyperebene $\langle w, x \rangle + b = 0$ und linear ansteigend auf der anderen. Summiert man mehrere solche „Knickfunktionen“ mit Gewichten, bekommt man stückweise lineare Funktionen, deren Knickstellen auf den Hyperebenen liegen – und mit genug Neuronen kann man damit jede stetige Funktion beliebig gut approximieren. Beispiel an der Tafel; im nächsten Kapitel bauen wir so von Hand $x^2$.
-
-<!-- TODO Abbildung: ReLU-Graph; Summe von drei ReLUs als stückweise lineare Funktion -->
-
-### Layer, nochmal
-
-Mehrere Neuronen, die parallel verarbeitet werden, bilden eine Schicht. Ein **Linear Layer** ist eine Matrix (Zeilen = Gewichtsvektoren) plus Bias. Ein **ReLU Layer** ist eine Schicht, in der jedes Neuron die Aktivierungsfunktion ReLU nutzt, also Linear Layer + komponentenweises ReLU. In PyTorch: `nn.Sequential(nn.Linear(n, m), nn.ReLU())`.
-
-### Problem bei ReLU: sterbende Neuronen
-
-Wenn ein Neuron immer $0$ liefert, weil die Eingabe immer negativ ist, „fließt“ keine Information mehr durch das Neuron während der Backpropagation – die Ableitung ist $0$, also ist $\delta$ für dieses Neuron $0$, also ändern sich seine Gewichte nie wieder. Das Neuron ist tot. Zwei Lösungen:
-
-**Lösung 1**: Statt $\tau = \max(0, y)$ verwende $\tau(y) = f(y)[y < 0] + g(y)[y \ge 0]$ mit passenden $f, g$, sodass auch für $y < 0$ die Ableitung nicht null ist. Mit $f(y) := \alpha(e^y - 1)$ und $g(y) := y$ heißt $\tau$ **ELU** (Exponential Linear Unit); mit $f(y) := 0{,}01\,y$ heißt es Leaky ReLU.
-
-**Lösung 2**: Statt $\max(0, y)$ verwende ein glattes $\tau$, sodass für $y \to -\infty$ gilt $\tau(y) \to 0$ und für $y \to +\infty$ gilt $\tau(y) \to +\infty$, aber ohne harten Knick:
+Wir bezeichnen den Input als $x \in \mathcal{X}$. Die „bisherigen Rechenoperationen“ sind eine Abbildung $Y \colon \mathcal{X} \to \mathcal{Y}$, also $y := Y(x; w_Y)$, deren Ableitungen $\frac{dY}{dw_Y}(x; w_Y)$ wir per Induktion kennen. Die „nächste Rechenoperation“ ist eine Abbildung $Z \colon \mathcal{Y} \to \mathcal{Z}$, deren Ableitungen $\frac{dZ}{dy}$ und $\frac{dZ}{dw_Z}$ wir kennen. Die Kettenregel erlaubt uns, $Z(Y(x; w_Y); w_Z)$ nach $w_Y$ abzuleiten:
 
 $$
-\tau(y) := y\,\sigma(y) \quad \text{(Swish, auch SiLU)}, \qquad
-\tau(y) := y\,\Phi(y) \quad \text{(GELU, Gaussian Error Linear Unit)},
+\frac{d}{dw_Y} Z(Y(x; w_Y); w_Z) = \frac{dZ}{dy}(y; w_Z) \cdot \frac{dY}{dw_Y}(x; w_Y),
+\qquad
+\frac{d}{dw_Z} Z(Y(x; w_Y); w_Z) = \frac{dZ}{dw_Z}(y; w_Z).
 $$
 
-wobei $\Phi$ die Verteilungsfunktion der Standardnormalverteilung ist. Beide sind im negativen Bereich nicht strikt null, sondern haben eine kleine Delle unter der Achse, und die Ableitung verschwindet nur asymptotisch. GELU ist heute die Standardwahl in Transformern.
-
-Welche Aktivierungsfunktionen in der Praxis genutzt wurden, listete [paperswithcode.com/methods/category/activation-functions](https://paperswithcode.com/methods/category/activation-functions) (inzwischen nur noch im Internet Archive).
-
-<!-- TODO Abbildung: ReLU, ELU, Swish, GELU im Vergleich (Folie 46) -->
-
-## Autoencoder
-
-### Im Kontrast zu unserem bisherigen Vorgehen
-
-Bisher haben wir ein Neuron oder ein neuronales Netz zur Klassifikation oder Regression verwendet: Eine nicht bekannte Funktion $f$, für die wir manche Werte kennen (Label $y = f(x)$ für Trainingsdaten $(x, y)$), wollen wir mit dem Modell „schätzen“. Was, wenn wir keine Label haben?
-
-### Herleitung zur abstrakten Idee
-
-Ohne Label müssen wir den Output des neuronalen Netzes anders bewerten. Wie Erfolg messen? Welches Ziel ist im Training noch sinnvoll?
-
-Ein mögliches Ziel: **Transformation der Eingabe in ein anderes Koordinatensystem** (Feature Extraction). Das kann man rückgängig machen – und messen, wie gut das klappt. Abstrakt: $f$ ist nicht bekannt, aber $g \circ f$ ist bekannt, nämlich $g(f(x)) = x$. Hier heißt $f$ **Encoder** und $g$ **Decoder**, und $g \circ f$ soll die Identität sein.
-
-Das allein wäre trivial ($f = g = \operatorname{id}$). Interessant wird es mit einer Einschränkung: **Dimensionsreduktion**. Versuche, die Dimensionalität zu reduzieren ohne Informationsverlust – transformiere die Eingabe in ein *kleineres* Koordinatensystem, sodass man es trotzdem rückgängig machen kann. Der Encoder $f \colon \mathbb{R}^n \to \mathbb{R}^k$ mit $k \ll n$ muss dann lernen, was an den Daten wesentlich ist.
-
-### Loss-Funktion
-
-Trainingsziel: Output so ähnlich wie möglich zum Input (**Rekonstruktion**). Vergleiche Input mit Output, z.B. über die mittlere quadratische Abweichung der Pixelwerte:
+Spezialfälle: Wenn die nächste Rechenoperation der Loss ist, gibt es keine „neuen Gewichte“, dann ist nur die Ableitung nach „bisherigen Gewichten“ relevant. Der Induktionsanfang ist gegeben, indem $Y$ die Identitätsfunktion ist (Ableitung ist $1$). In knapperer Notation, mit Kleinbuchstaben als Funktionsnamen:
 
 $$
-L(x; f, g) = \frac1N \sum_{i=1}^N \bigl\| x_i - g(f(x_i)) \bigr\|^2 .
+\frac{dz}{dw} = \frac{dz}{dy} \cdot \frac{dy}{dw}.
 $$
 
-Der Autoencoder ist also ein neuronales Netz mit einem „Flaschenhals“ in der Mitte, trainiert mit MSE zwischen Ein- und Ausgabe – und die Label sind die Eingaben selbst. Man nennt das auch *self-supervised*.
+### Nicht konkret genug? Ein weiteres einfaches Beispiel
 
-<!-- TODO Abbildung: Autoencoder schematisch (Michaela Massi 2019, CC-BY-SA 4.0) -->
+Wir wählen als Input $x \in \mathcal{X} \subseteq \mathbb{R}^n$. Im Beispiel soll $y := y(x; w) := w \cdot x$ sein, also ein linearer Layer. Die „nächste Rechenoperation“ ist $z \colon \mathbb{R} \to \mathbb{R}$, und zwar $z := z(y) := \operatorname{ReLU}(y) = \max(0, y)$. Die Ableitung nach $y$ ist $[y > 0]$. Aus $\frac{dz}{dw} = \frac{dz}{dy} \cdot \frac{dy}{dw}$ wird also
 
-Im Vergleich zur Dimensionsreduktion mit PCA: Ist der Autoencoder linear (keine Aktivierungsfunktionen), so findet er denselben Unterraum wie PCA. Mit Nichtlinearitäten kann er gekrümmte Strukturen in den Daten erfassen, die PCA verfehlt, und rekonstruiert z.B. Bilder bei gleicher Dimension des Flaschenhalses deutlich besser.
+$$
+\frac{dz}{dw} = [y > 0] \cdot x .
+$$
 
-<!-- TODO Abbildung: Rekonstruktion Autoencoder vs. PCA (Michaela Massi 2019) -->
+Übungsaufgabe: Erweitern Sie den linearen Layer um ein zweites Neuron (also ein weiterer Gewichtsvektor $v \in \mathbb{R}^n$ tritt auf) und erweitern Sie die Berechnung um eine Loss-Funktion $\| z - z_{\text{ground truth}} \|^2$. (Das ist Blatt 7 in Kurzform.)
 
-## Tipps zum Übungsblatt
+## Backpropagation in PyTorch: der Berechnungsgraph
 
-Auf Blatt 6 lesen Sie einen Autoencoder-Quelltext und formulieren Fragen dazu. Benutzen Sie zur Formulierung der Fragen sowie zur Beantwortung *keine* generative KI – sonst lernen Sie genau das nicht: wie man anhand der offiziellen Dokumentation prüfen kann, ob die KI-Antwort korrekt ist. Ziel ist nicht die „richtige Lösung“, sondern der Erwerb der Kompetenz, Deep-Learning-Quelltexte kritisch zu lesen.
+Bevor es um LLMs geht, ein Blick darauf, wie PyTorch Backpropagation *tatsächlich* macht (`VL_11_backprop.ipynb`). Wir bauen ein sehr kleines „Netzwerk“:
+
+```python
+x = torch.tensor(3.0)                       # Input (Konstante)
+w = torch.tensor(2.0, requires_grad=True)   # Gewicht: "Beobachte mich!"
+b = torch.tensor(1.0, requires_grad=True)   # Bias
+z = w * x     # z = 6
+y = z + b     # y = 7
+L = y ** 2    # Loss = 49
+```
+
+Der **Berechnungsgraph** (ein DAG, directed acyclic graph) entsteht erst beim Ausführen: Jeder Tensor, der aus einer Operation mit einem `requires_grad`-Tensor entstanden ist, trägt eine `grad_fn` (`L.grad_fn` ist `PowBackward0`, davor `AddBackward0`, davor `MulBackward0` und `AccumulateGrad` für die Blätter $w$ und $b$). Die `grad_fn` weiß, wie man die Operation ableitet, und hält Referenzen auf die *saved tensors*, die gespeicherten Zwischenergebnisse – genau die $z_k$ aus Kapitel 6.
+
+`L.backward()` ist der rekursive Aufruf der Kettenregel, initial mit $\frac{dL}{dL} = 1$:
+
+$$
+\frac{dL}{dw} = \frac{dL}{dy} \cdot \frac{dy}{dz} \cdot \frac{dz}{dw} = 2y \cdot 1 \cdot x = 14 \cdot 3 = 42,
+\qquad
+\frac{dL}{db} = 2y \cdot 1 = 14.
+$$
+
+Danach steht das Ergebnis in `w.grad` und `b.grad`. Der Optimizer-Schritt muss unter `torch.no_grad()` passieren, damit der Update selbst nicht Teil des Graphen wird, und die Gradienten müssen danach mit `zero_()` zurückgesetzt werden – sonst *akkumuliert* PyTorch sie beim nächsten `backward()`. Das ist der Grund für `optimizer.zero_grad()` in jeder Trainingsschleife.
+
+**Freezing**: Setzt man `w.requires_grad = False`, so hat `z = w * x` keine `grad_fn` mehr, der Graph ist an dieser Stelle abgeschnitten, und ein Optimizer verändert $w$ nicht mehr, $b$ aber schon. So friert man beim Transfer Learning Schichten eines vortrainierten Modells ein – und spart dabei Speicher, weil für eingefrorene Parameter keine Gradienten gehalten werden.
+
+**Convolution Backprop**: Wie funktioniert Backprop, wenn Gewichte geteilt werden wie bei einem Faltungslayer? Der Kernel `[0.5]` wird über den Input `[1, 2, 3]` geschoben, $o_i = x_i \cdot k$, und der Loss ist $o_1 + o_2 + o_3$. Der Gradient nach $k$ ist die *Summe* der Beiträge aller Positionen, $\frac{dL}{dk} = x_1 + x_2 + x_3 = 6$: Ein geteilter Parameter bekommt die Gradienten aller seiner Verwendungen aufsummiert – im Graphen führen mehrere Kanten zu demselben Blatt.

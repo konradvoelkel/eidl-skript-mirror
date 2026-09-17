@@ -1,15 +1,84 @@
 ---
-title: "VL 02: Perzeptron in der Praxis, vortrainierte Modelle"
-short_title: "VL 02"
+title: "Das Perzeptron"
+short_title: "Perzeptron"
 ---
 
-# Perzeptron in der Praxis, vortrainierte Modelle
+# Das Perzeptron
 
-:::{note} Stand
-Erste Prosafassung (aus den Folien von VL 02, WiSe 2025/26). Abbildungen fehlen noch, siehe die `TODO`-Kommentare.
+## Das Neuron und das Perzeptron
+
+### Das McCulloch-Pitts-Neuron
+
+Das Modell von 1943 ist von der Biologie inspiriert: Ein Neuron bekommt über Dendriten Signale $x_1, \dots, x_n$ von anderen Neuronen, summiert sie gewichtet auf und „feuert“, wenn die Summe eine Schwelle überschreitet. Als Formel: Mit Gewichten $w_1, \dots, w_n \in \mathbb{R}$ ist die *Aktivierung*
+
+$$
+\zeta = \sum_{j=1}^n w_j x_j = w \cdot x
+$$
+
+und die Ausgabe
+
+$$
+y = \sigma(\zeta)
+$$
+
+für eine nichtlineare *Aktivierungsfunktion* $\sigma \colon \mathbb{R} \to \mathbb{R}$. Bei McCulloch und Pitts ist $\sigma$ eine Schwellenwertfunktion, die $0$ oder $1$ ausgibt; später wird $\sigma$ die logistische Sigmoidfunktion oder ReLU sein. Die Struktur „Skalarprodukt, gefolgt von einer nichtlinearen Funktion“ ist das Kochrezept, das uns durch die gesamte Vorlesung begleiten wird.
+
+:::{figure} ../images/vl01-neuron.png
+:width: 90%
+
+Das McCulloch-Pitts-Neuron: gewichtete Summe der Eingaben, dann eine nichtlineare Aktivierungsfunktion.
 :::
 
-## Wie war das mit dem Perzeptron?
+### Das Perzeptron
+
+Rosenblatts Beitrag war weniger das Neuron als der *Lernalgorithmus* dafür. Das Perzeptron ist ein Modell zur **binären Klassifikation**: Input sind Stichproben von $(X, Y)$ mit $X \in \mathbb{R}^n$ und $Y \in \{0, 1\}$. Die Parameter des Modells sind ein Gewichtsvektor $w \in \mathbb{R}^n$ und ein Biasterm $b \in \mathbb{R}$. Die Inferenz ist
+
+$$
+f(x) = [\, w \cdot x + b > 0 \,],
+$$
+
+wobei $[\cdot]$ die Iverson-Klammer ist: $[A] = 1$, wenn die Aussage $A$ wahr ist, sonst $0$. Das Perzeptron ist also ein McCulloch-Pitts-Neuron mit der Schwellenwertfunktion $\sigma(\zeta) = [\zeta + b > 0]$. Man beachte: $f$ ist eine *nichtlineare* Funktion, obwohl im Inneren nur ein Skalarprodukt steht.
+
+Den Bias kann man loswerden, indem man ihn als nulltes Gewicht auffasst: Mit $w_0 := b$ und $x_0 := 1$ ist $w \cdot x + b = \sum_{j=0}^n w_j x_j$. Das ist ein Trick, den wir noch öfter sehen werden.
+
+Geometrisch beschreibt die Gleichung $w \cdot x + b = 0$ eine Hyperebene in $\mathbb{R}^n$ (in $\mathbb{R}^2$: eine Gerade), und $f$ gibt an, auf welcher Seite der Hyperebene $x$ liegt. Der Vektor $w$ steht senkrecht auf dieser Hyperebene.
+
+:::{prf:definition} Linear trennbar
+Zwei Mengen $A, B \subseteq \mathbb{R}^n$ heißen *linear trennbar*, wenn es $w \in \mathbb{R}^n$ und $b \in \mathbb{R}$ gibt mit
+$w \cdot a + b > 0$ für alle $a \in A$ und $w \cdot c + b \le 0$ für alle $c \in B$.
+:::
+
+Ein Perzeptron kann also genau die Klassifikationsprobleme lösen, bei denen die beiden Klassen linear trennbar sind – nicht mehr. Das berühmte Gegenbeispiel ist XOR: Die Punkte $(0,0)$ und $(1,1)$ lassen sich nicht durch eine Gerade von $(0,1)$ und $(1,0)$ trennen. Das ist die mathematische Substanz hinter dem AI Winter – und der Grund, warum wir mehrere Neuronen hintereinander schalten werden.
+
+Wie das Perzeptron *trainiert* wird, also wie $w$ und $b$ aus den Daten bestimmt werden, ist Thema des übernächsten Abschnitts und von Übungsblatt 2.
+
+## Was ist ein neuronales Netz?
+
+Ein **Multilayer Perceptron** (MLP) entsteht, indem die Ausgaben von mehreren (verallgemeinerten) Perzeptrons als Eingabe für ein weiteres Perzeptron verwendet werden, welches also eine Schicht (Layer) weiter hinten ist.
+
+:::{figure} ../images/vl01-mlp.png
+:width: 90%
+
+Ein Multilayer Perceptron mit 3 Eingaben, einer versteckten Schicht aus 4 Neuronen und einem Ausgabeneuron. Jeder Pfeil ist ein Gewicht.
+:::
+
+Formal: Eine Schicht mit $m$ Neuronen, die alle dieselben $n$ Eingaben bekommen, hat eine Gewichtsmatrix $W \in \mathbb{R}^{m \times n}$ und einen Biasvektor $b \in \mathbb{R}^m$ und berechnet
+
+$$
+h = \sigma(W x + b),
+$$
+
+wobei $\sigma$ komponentenweise angewendet wird. Ein Netz mit $L$ Schichten berechnet dann
+
+$$
+h^{(0)} = x, \qquad h^{(k)} = \sigma^{(k)}\!\left(W^{(k)} h^{(k-1)} + b^{(k)}\right) \quad (k = 1, \dots, L), \qquad f(x) = h^{(L)}.
+$$
+
+Dabei können die Schichten verschieden groß sein, manche Einträge von $W^{(k)}$ können $0$ sein (fehlende Pfeile), es kann Pfeile rückwärts geben (rekurrente Netze), und es können viele verschiedene nichtlineare Funktionen vorkommen (ReLU, Convolution, Softmax, …). Die Gesamtheit der Einträge aller $W^{(k)}$ und $b^{(k)}$ sind die *Parameter* oder *Gewichte* des Netzes; bei modernen Modellen sind das Milliarden von Zahlen. „Deep“ heißt: $L$ ist groß.
+
+Warum das hintereinanderschalten hilft, sehen wir am XOR-Problem: Mit zwei Perzeptrons in der ersten Schicht, die „$x_1 \lor x_2$“ und „$\lnot(x_1 \land x_2)$“ berechnen, und einem dritten Perzeptron, das deren Ausgaben mit UND verknüpft, ist XOR plötzlich linear trennbar – im Raum der Ausgaben der ersten Schicht.
+
+## Das Perzeptron trainieren
 
 Im letzten Kapitel haben wir das Perzeptron als Modell kennengelernt: ein Gewichtsvektor $w \in \mathbb{R}^n$, ein Bias $b \in \mathbb{R}$, und die Inferenz $f(x) = [\, w \cdot x + b > 0 \,]$. Was fehlt, ist das *Lernen*. Bevor wir ein Modell implementieren, sollten wir uns ein paar Fragen stellen, die für jedes Modell in dieser Vorlesung wieder auftauchen werden:
 
@@ -32,7 +101,7 @@ $$
 f(x) = [\, w \cdot x + b > 0 \,],
 $$
 
-also $f(x) = 1$ genau dann, wenn $\sum_j w_j x_j + b > 0$. Mit dem Trick $w_0 := b$, $x_0 := 1$ aus dem letzten Kapitel schreiben wir im Folgenden einfach $f(x) = [\, w \cdot x > 0 \,]$ und denken uns den Bias als nulltes Gewicht.
+also $f(x) = 1$ genau dann, wenn $\sum_j w_j x_j + b > 0$. Mit dem Trick $w_0 := b$, $x_0 := 1$ von oben schreiben wir im Folgenden einfach $f(x) = [\, w \cdot x > 0 \,]$ und denken uns den Bias als nulltes Gewicht.
 
 **Training: die Perzeptronregel.** Gegeben die bisherigen Gewichte $w$ und ein einzelnes Sample $(x, y)$, setze
 
@@ -52,7 +121,11 @@ Die Regel schiebt also die Trennhyperebene bei jedem Fehler ein Stück in Richtu
 
 **Initialisierung.** Irgendwo muss $w$ anfangen; wir initialisieren $w$ z.B. auf den Vektor $(1, 1, \dots, 1)$. Auch das ist eine Entscheidung mit Konsequenzen, wie wir später sehen werden.
 
-<!-- TODO Abbildung: make_blobs-Daten in R^2 mit Trenngerade w·x + b = 0 vor und nach einigen Perzeptron-Updates -->
+:::{figure} ../images/vl02-perceptron-updates.png
+:width: 90%
+
+Die Perzeptronregel bei der Arbeit: Trenngerade $w \cdot x + b = 0$ nach 0, 1, 2 und 3 Epochen über 60 Datenpunkte, Lernrate $r = 0{,}05$.
+:::
 
 ## Zurück in die Theorie: Wozu das olle Perzeptron?
 
@@ -109,25 +182,25 @@ $$
 
 Das ist äquivalent zu einer einzigen linearen Regression mit Gewichtsvektor $u_1 v + u_2 w$. Allgemein: Ein Produkt von Matrizen ist wieder eine Matrix, mehrere lineare Schichten hintereinander sind wieder eine lineare Schicht. Ohne die Nichtlinearität $\tau$ zwischen den Schichten bringt Tiefe gar nichts. Genau deshalb heißt $\tau$ auch *Aktivierungsfunktion* und nicht Dekoration.
 
-## Vortrainierte Modelle verwenden: Orientierung
+## Tipps zu den Übungsblättern
 
-### Was tun mit Deep Learning?
+### Blatt 1: Lineare Algebra und NumPy
 
-Bevor wir selbst Modelle trainieren, lohnt sich ein Blick darauf, was es schon gibt. Wenn wir für eine Aufgabe ein vortrainiertes Modell verwenden wollen, müssen wir wissen, welches Modell geeignet sein kann. Dafür schauen wir bei **Hugging Face**: [huggingface.co/models](https://huggingface.co/models) listet Modelle, [huggingface.co/tasks](https://huggingface.co/tasks) sortiert sie nach Aufgabe („The Hugging Face Hub hosts many models for a variety of machine learning tasks.“). Die Task-Seiten sind ein guter Einstieg, um das Vokabular zu lernen: Was ist Image Classification, Object Detection, Token Classification, Text Generation, …? Einen systematischen Rundgang machen wir im nächsten Kapitel.
+Das erste Blatt wiederholt lineare Algebra: Skalarprodukt, Orthogonalität, Länge und Winkel, und setzt das in NumPy und Matplotlib um. Erinnern Sie sich an die Interpretation des Kosinus eines Winkels als Verhältnis von Seiten im rechtwinkligen Dreieck: Mit Ankathete $a$ und Hypotenuse $b$ ist
 
-<!-- TODO Abbildung: Screenshot huggingface.co/tasks (Folien 27–28) oder Liste der Task-Kategorien -->
+$$
+\cos(\alpha) = \frac{a}{b}.
+$$
 
-### Hugging Face … ?
+Was passiert im Spezialfall $b = 1$? Dann ist $\cos(\alpha) = a$, d.h. der Kosinus ist die Länge der Projektion eines Einheitsvektors auf die Richtung des anderen Schenkels. Genau das steckt in der Formel
 
-Surfen Sie ruhig weiter auf huggingface.co. Hier ein paar Fakten zur Einordnung:
+$$
+\cos(\alpha) = \frac{u \cdot v}{\|u\| \, \|v\|}
+$$
 
-* HF verdient Geld mit gehosteter Inferenz.
-* HF lockt Entwickler an mit guter Infrastruktur: Libraries (z.B. `transformers`, `diffusers`, `gradio`), Hosting (git-Repositories für Modelle, Datensätze und „Spaces“) und Dokumentation – insbesondere für **Finetuning**, das Nachtrainieren von vortrainierten Modellen.
-* HF ist ein privates Unternehmen aus New York City, gegründet 2016, Ende 2023 mit ca. 4,5 Mrd. $ bewertet.
+für den Winkel zwischen zwei Vektoren $u, v \in \mathbb{R}^n$: Das Skalarprodukt $w \cdot x$ im Perzeptron misst, „wie sehr $x$ in Richtung $w$ zeigt“.
 
-Mit anderen Worten: Der Hub ist ein kommerzielles Angebot, aber die Modelle und Libraries darauf sind größtenteils offen, und für uns ist er die bequemste Art, an Gewichte zu kommen.
-
-## Tipps zum Übungsblatt
+### Blatt 2: Perzeptron in NumPy
 
 Auf Blatt 2 implementieren Sie ein Perzeptron mit Python und NumPy und werten es aus. Eingabedaten sind $(x, y)$, wobei `x` ein zweidimensionales Array ist (eine Zeile pro Sample, eine Spalte pro Feature); Ausgabe ist die Genauigkeit auf einem Testset nach dem Training.
 

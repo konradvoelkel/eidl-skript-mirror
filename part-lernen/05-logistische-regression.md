@@ -1,15 +1,41 @@
 ---
-title: "VL 04: Logistische Regression"
-short_title: "VL 04"
+title: "Logistische Regression"
+short_title: "Logistische Regression"
 ---
 
 # Logistische Regression
 
-:::{note} Stand
-Erste Prosafassung (aus den Folien von VL 04, WiSe 2025/26). Abbildungen fehlen noch, siehe die `TODO`-Kommentare.
+Im ersten Abschnitt basteln wir eine S-förmige Kurve aus dem $\tanh$, haben aber keine Interpretation dafür. Danach bauen wir die S-Kurve von der Wahrscheinlichkeitsrechnung her auf, und dann fällt die Interpretation von selbst ab.
+
+## Lineare Regression zur Klassifikation
+
+Wenn wir an Regression denken, dann oft an eine Regressionsgerade in einem $x$-$y$-Plot, bei dem auf der $x$-Achse die unabhängige Variable (der *Regressor*) und auf der $y$-Achse die abhängige Variable (der *Regressand*) aufgetragen ist. Bei der Klassifikation ist der Regressand die Klasse, $y \in \{0, 1\}$.
+
+Schauen wir uns das Schritt für Schritt an, für einen eindimensionalen Regressor $x \in \mathbb{R}$ mit zwei Klassen, deren $x$-Werte sich überlappen:
+
+1. Im eindimensionalen Plot liegen alle Punkte der Klasse 0 auf der Höhe $y = 0$ und alle Punkte der Klasse 1 auf $y = 1$.
+2. Die lineare Regression fittet eine Gerade $\hat{y} = w x + b$ durch diese Punktwolke. Die Gerade nimmt Werte in ganz $\mathbb{R}$ an, auch weit außerhalb von $[0, 1]$.
+3. **Harte Klassifikation**: Wir entscheiden für Klasse 1, wenn $\hat{y} > \tfrac12$. Die Entscheidungsgrenze ist der Punkt $x^*$ mit $w x^* + b = \tfrac12$; die vorhergesagte Klasse als Funktion von $x$ ist eine Sprungfunktion.
+4. Für einen zweidimensionalen Regressor $x \in \mathbb{R}^2$ wird aus der Geraden eine Regressionshyperebene über der $(x_1, x_2)$-Ebene, und die Entscheidungsgrenze $\{ w \cdot x + b = \tfrac12 \}$ ist eine Gerade in der $(x_1, x_2)$-Ebene – genau wie beim Perzeptron.
+
+:::{figure}
+:width: 90%
+
+![](../images/vl03-linreg-classification-1d.png)
+![](../images/vl03-linreg-classification-2d.png)
+
+Lineare Regression zur Klassifikation. Oben, eindimensionaler Regressor: Regressionsgerade durch die 0/1-Daten, harte Klassifikation mit Entscheidungsgrenze $x^*$, und die $\tanh$-Variante. Unten, zweidimensionaler Regressor: Die Entscheidungsgrenze ist eine Gerade, die Regressionsfunktion eine Ebene.
 :::
 
-Am Ende des letzten Kapitels hatten wir eine S-förmige Kurve aus dem $\tanh$ gebastelt, aber keine Interpretation dafür. In diesem Kapitel bauen wir die S-Kurve von der Wahrscheinlichkeitsrechnung her auf, und dann fällt die Interpretation von selbst ab.
+### S-Förmigkeit herstellen
+
+Die Sprungfunktion $[\hat{y} > \tfrac12]$ ist unbefriedigend: Sie ist nicht differenzierbar, und sie verrät nicht, wie *sicher* die Entscheidung ist. Anstelle von $[\hat{y} > \tfrac12]$ könnte man $[\tanh(\hat{y}) > 0]$ verwenden; $\tanh$ liegt zwischen $-1$ und $+1$. Um zwischen $0$ und $1$ zu landen, kann man z.B.
+
+$$
+\tfrac12 \left( \tanh(\hat{y}) + 1 \right)
+$$
+
+nutzen. Das liefert eine S-förmige Kurve, die glatt von 0 nach 1 übergeht. Aber: Die Interpretation einer Zahl zwischen 0 und 1 als *Wahrscheinlichkeit* ist damit noch unklar. Genau das klärt das nächste Kapitel mit der logistischen Regression.
 
 ## Wahrscheinlichkeiten und Chancen (Odds)
 
@@ -93,7 +119,11 @@ $$
 
 $M$ ist der Maximalwert (die obere Asymptote), $k$ die Steilheit, $\mu$ die Position des Wendepunkts. Das Standardsigmoid steigt monoton von $0$ (für $x \to -\infty$) nach $1$ (für $x \to +\infty$) und hat bei $x = 0$ den Wert $\sigma(0) = \tfrac12$.
 
-<!-- TODO Abbildung: Plot von σ(x) auf [-6, 6] -->
+:::{figure} ../images/vl04-sigmoid.png
+:width: 90%
+
+Das Standardsigmoid $\sigma$, der Tangens hyperbolicus als umskaliertes Sigmoid, und die Ableitung $\sigma' = \sigma(1-\sigma)$ mit Maximum $\tfrac14$ bei $0$.
+:::
 
 ### Symmetrie
 
@@ -157,7 +187,7 @@ Darum nennt man $\sigma$ als Inverse von $\operatorname{logit}$ auch **expit**.
 
 ### Wie interpretieren wir das?
 
-Gegeben einen Wert $x \in \mathbb{R}$ gibt $\sigma(x)$ einen Wert $p := \sigma(x) \in (0, 1)$, sodass $x = \operatorname{logit}(p)$. Jeder Wert $x$ lässt sich also als *Logit* auffassen – als logarithmierte Chance –, und $\sigma(x)$ gibt die Wahrscheinlichkeit des Bernoulli-Experiments an, zu der $x$ der Logit-Wert ist. Das ist die Interpretation, die uns im letzten Kapitel gefehlt hat: Eine Zahl zwischen 0 und 1, die aus $\sigma$ kommt, ist eine Wahrscheinlichkeit, wenn die Eingabe ein Logit war.
+Gegeben einen Wert $x \in \mathbb{R}$ gibt $\sigma(x)$ einen Wert $p := \sigma(x) \in (0, 1)$, sodass $x = \operatorname{logit}(p)$. Jeder Wert $x$ lässt sich also als *Logit* auffassen – als logarithmierte Chance –, und $\sigma(x)$ gibt die Wahrscheinlichkeit des Bernoulli-Experiments an, zu der $x$ der Logit-Wert ist. Das ist die Interpretation, die uns im ersten Abschnitt gefehlt hat: Eine Zahl zwischen 0 und 1, die aus $\sigma$ kommt, ist eine Wahrscheinlichkeit, wenn die Eingabe ein Logit war.
 
 ## Logistische Regression
 
@@ -220,7 +250,11 @@ y_pred = model(inputs).data.numpy()
 
 Die fünf Zeilen in der Schleife sind *die* Trainingsschleife von PyTorch, die uns in allen weiteren Kapiteln begleitet: Gradienten auf null setzen, Vorwärtsrechnung, Loss berechnen, Gradienten rückwärts berechnen (`backward`), Parameter anpassen (`step`). Was `criterion` (die Loss-Funktion, hier der mittlere quadratische Fehler MSE) und `optimizer` (hier stochastischer Gradientenabstieg SGD mit Lernrate $0{,}01$) genau tun, klären die nächsten beiden Kapitel.
 
-<!-- TODO Abbildung: Ergebnis der linearen Regression (Folie 44) -->
+:::{figure} ../images/vl04-lin-vs-log-regression.png
+:width: 90%
+
+Dieselben 0/1-Daten, einmal mit linearer Regression (MSE-Loss) und einmal mit logistischer Regression (BCE-Loss) gefittet.
+:::
 
 ### Logistische Regression in PyTorch
 
@@ -245,8 +279,6 @@ optimizer = torch.optim.SGD(model.parameters(), lr=0.01)
 ```
 
 Der Rest der Trainingsschleife bleibt identisch. `BCELoss` ist die *binäre Kreuzentropie*, die wir in Blatt 5 mit der Kullback-Leibler-Divergenz in Verbindung bringen: Sie misst, wie weit die vorhergesagte Verteilung $(\sigma(\hat{y}), 1 - \sigma(\hat{y}))$ von der wahren Verteilung $(y, 1 - y)$ entfernt ist.
-
-<!-- TODO Abbildung: Ergebnis der logistischen Regression, S-Kurve durch die 0/1-Daten (Folie 47) -->
 
 ## Weg von der 2-Klassen-Gesellschaft: Softmax
 
@@ -279,41 +311,7 @@ Softmax verallgemeinert also tatsächlich das Sigmoid, wobei nur die *Differenz*
 Nicht jedes Multiklassen-Klassifikationsproblem schreit nach dem Softmax. Softmax ist dann sinnvoll, wenn $\operatorname{argmax}$ sinnvoll wäre, also wenn sich die Klassen gegenseitig ausschließen (ein Bild zeigt *entweder* eine Katze *oder* einen Hund). Sonst – z.B. bei Tags, von denen mehrere gleichzeitig zutreffen können – nimmt man paarweise binomiale Klassifikation mit Sigmoid, ein $\sigma$ pro Klasse.
 :::
 
-## Kurze Erinnerung an die Kettenregel
-
-Für das Training werden wir Ableitungen von verketteten Funktionen brauchen, deshalb zum Abschluss die Kettenregel in der Form, die wir benötigen – für Funktionen zwischen Vektorräumen.
-
-Für eine Funktion $g \colon \mathbb{R}^n \to \mathbb{R}^m$ an einem Punkt $x_0$ ist die Ableitung $(Dg)(x_0)$ – eine $m \times n$-Matrix, die Jacobi-Matrix – die beste lineare Approximation, also für $x_1$ nah bei $x_0$:
-
-$$
-g(x_1) \approx g(x_0) + (Dg)(x_0)\,(x_1 - x_0).
-$$
-
-Gegeben eine weitere Funktion $f \colon \mathbb{R}^m \to \mathbb{R}^k$, ebenso
-
-$$
-f(y_1) \approx f(y_0) + (Df)(y_0)\,(y_1 - y_0).
-$$
-
-Im Spezialfall $y_0 = g(x_0)$, $y_1 = g(x_1)$ setzen wir ein:
-
-$$
-\begin{aligned}
-f(g(x_1)) &\approx f(g(x_0)) + (Df)(g(x_0))\,\bigl(g(x_1) - g(x_0)\bigr) \\
-&\approx f(g(x_0)) + (Df)(g(x_0))\,\bigl(g(x_0) + (Dg)(x_0)(x_1 - x_0) - g(x_0)\bigr) \\
-&= f(g(x_0)) + (Df)(g(x_0))\,(Dg)(x_0)\,(x_1 - x_0).
-\end{aligned}
-$$
-
-Damit ist $(Df)(g(x_0)) \cdot (Dg)(x_0)$ die beste lineare Approximation von $f \circ g$ bei $x_0$. In anderer Notation der gleiche Sachverhalt:
-
-$$
-D(f \circ g) = \bigl((Df) \circ g\bigr) \cdot Dg .
-$$
-
-Die Ableitung einer Verkettung ist das Matrixprodukt der Ableitungen, ausgewertet an den richtigen Stellen. Das ist bereits die halbe Backpropagation.
-
-## Tipps zum Übungsblatt
+## Tipps zu den Übungsblättern 4 und 5
 
 Auf Blatt 4 implementieren Sie die logistische Regression in PyTorch, auf Blatt 5 rechnen Sie mit Sigmoid, Softmax und Kreuzentropie.
 

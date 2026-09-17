@@ -1,13 +1,9 @@
 ---
-title: "VL 12: Generative Adversarial Networks"
-short_title: "VL 12"
+title: "Generative Adversarial Networks"
+short_title: "GANs"
 ---
 
 # Generative Adversarial Networks
-
-:::{note} Stand
-Erste Prosafassung (aus den Folien von VL 12, WiSe 2025/26). Abbildungen fehlen noch, siehe die `TODO`-Kommentare.
-:::
 
 ## Historie
 
@@ -27,11 +23,15 @@ Yann LeCun, auf Quora: „There are many interesting recent developments in deep
 
 Zwei Netze: Der **Generator** $G$ bekommt einen zufälligen latenten Vektor $z \sim \mathcal{N}(0, I)$ (das *Rauschen*) und erzeugt daraus ein Sample $G(z)$, z.B. ein Bild. Der **Diskriminator** $D$ bekommt ein Bild – entweder ein echtes $x$ aus dem Trainingsdatensatz oder ein generiertes $G(z)$ – und gibt eine Wahrscheinlichkeit $D(x) \in (0, 1)$ aus, dass das Bild echt ist. Man beachte: Der Generator bekommt *nie* echte Bilder als Input; er sieht die Daten nur indirekt, über den Gradienten des Diskriminators.
 
-<!-- TODO Abbildung: GAN-Aufbau (kdnuggets 2017 oder eigenes Diagramm: z → G → fake, real/fake → D → echt?) -->
+:::{figure} ../images/vl12-gan-schema.png
+:width: 90%
+
+Generator und Diskriminator. Der Generator sieht nie echte Daten – nur den Gradienten, der durch den Diskriminator zurückfließt.
+:::
 
 ### Erinnerung: Samples generieren
 
-Der Generator generiert Samples aus einer Verteilung. Diese Verteilung ist, was im (Pre-)Training gelernt wird, indem die Samples aus dem Trainingsdatensatz als latente Vektoren repräsentiert werden. Generatives Modell = Verteilung lernen (Kapitel 1). Beim VAE haben wir dafür den latenten Raum explizit auf eine Normalverteilung gezwungen; beim GAN sagt uns der Diskriminator, ob die generierte Verteilung schon von der echten zu unterscheiden ist.
+Der Generator generiert Samples aus einer Verteilung. Diese Verteilung ist, was im (Pre-)Training gelernt wird, indem die Samples aus dem Trainingsdatensatz als latente Vektoren repräsentiert werden. Generatives Modell = Verteilung lernen ([Kapitel „Was ist Deep Learning?“](../part-grundlagen/01-was-ist-deep-learning.md)). Beim VAE haben wir dafür den latenten Raum explizit auf eine Normalverteilung gezwungen; beim GAN sagt uns der Diskriminator, ob die generierte Verteilung schon von der echten zu unterscheiden ist.
 
 ### GAN-Training
 
@@ -63,7 +63,7 @@ Der **Generator** kann ein einfaches Multilayer Perceptron sein, etwa der Decode
 
 ### Conditional GANs
 
-Generator und Diskriminator bekommen Zusatzinformationen, z.B. Klassenlabels: Der Generator generiert $G(z, y)$ bedingt auf ein gegebenes Klassenlabel $y$, der Diskriminator entscheidet $D(x, y)$ bedingt zum Klassenlabel. So bekommt man einen Generator, dem man sagen kann, *welche* Ziffer er zeichnen soll (die vierte MNIST-Task aus Kapitel 7). Geht auch mit anderen Zusatzinformationen, z.B. Text kodiert als Vektor von Wort-Embeddings – das ist der Weg zu Text-zu-Bild-Modellen.
+Generator und Diskriminator bekommen Zusatzinformationen, z.B. Klassenlabels: Der Generator generiert $G(z, y)$ bedingt auf ein gegebenes Klassenlabel $y$, der Diskriminator entscheidet $D(x, y)$ bedingt zum Klassenlabel. So bekommt man einen Generator, dem man sagen kann, *welche* Ziffer er zeichnen soll (die vierte MNIST-Task aus dem [Kapitel „Autoencoder“](../part-representation-learning/09-autoencoder.md)). Geht auch mit anderen Zusatzinformationen, z.B. Text kodiert als Vektor von Wort-Embeddings – das ist der Weg zu Text-zu-Bild-Modellen.
 
 ### Wasserstein GANs – wozu?
 

@@ -1,13 +1,9 @@
 ---
-title: "VL 05: Stochastischer Gradientenabstieg"
-short_title: "VL 05"
+title: "Gradientenabstieg"
+short_title: "Gradientenabstieg"
 ---
 
-# Stochastischer Gradientenabstieg
-
-:::{note} Stand
-Erste Prosafassung (aus den Folien von VL 05, WiSe 2025/26). Abbildungen fehlen noch, siehe die `TODO`-Kommentare.
-:::
+# Gradientenabstieg
 
 ## Training eines einzelnen Neurons: Was bisher geschah
 
@@ -61,11 +57,49 @@ Für die lineare Regression mit MSE klappt das (die Normalgleichungen). Schaffen
 
 **Approximativ, clever**: Wie eben, aber im ersten Schritt $w$ nicht zufällig, sondern *in der Nähe der bisher besten Schätzung* auswählen. Das ist eine lokale Suche, und die Frage ist nur noch, in welche Richtung man von der besten Schätzung aus gehen soll.
 
+## Kurze Erinnerung an die Kettenregel
+
+Für das Training werden wir Ableitungen von verketteten Funktionen brauchen, deshalb zum Abschluss die Kettenregel in der Form, die wir benötigen – für Funktionen zwischen Vektorräumen.
+
+Für eine Funktion $g \colon \mathbb{R}^n \to \mathbb{R}^m$ an einem Punkt $x_0$ ist die Ableitung $(Dg)(x_0)$ – eine $m \times n$-Matrix, die Jacobi-Matrix – die beste lineare Approximation, also für $x_1$ nah bei $x_0$:
+
+$$
+g(x_1) \approx g(x_0) + (Dg)(x_0)\,(x_1 - x_0).
+$$
+
+Gegeben eine weitere Funktion $f \colon \mathbb{R}^m \to \mathbb{R}^k$, ebenso
+
+$$
+f(y_1) \approx f(y_0) + (Df)(y_0)\,(y_1 - y_0).
+$$
+
+Im Spezialfall $y_0 = g(x_0)$, $y_1 = g(x_1)$ setzen wir ein:
+
+$$
+\begin{aligned}
+f(g(x_1)) &\approx f(g(x_0)) + (Df)(g(x_0))\,\bigl(g(x_1) - g(x_0)\bigr) \\
+&\approx f(g(x_0)) + (Df)(g(x_0))\,\bigl(g(x_0) + (Dg)(x_0)(x_1 - x_0) - g(x_0)\bigr) \\
+&= f(g(x_0)) + (Df)(g(x_0))\,(Dg)(x_0)\,(x_1 - x_0).
+\end{aligned}
+$$
+
+Damit ist $(Df)(g(x_0)) \cdot (Dg)(x_0)$ die beste lineare Approximation von $f \circ g$ bei $x_0$. In anderer Notation der gleiche Sachverhalt:
+
+$$
+D(f \circ g) = \bigl((Df) \circ g\bigr) \cdot Dg .
+$$
+
+Die Ableitung einer Verkettung ist das Matrixprodukt der Ableitungen, ausgewertet an den richtigen Stellen. Das ist bereits die halbe Backpropagation.
+
 ## Gradienten
 
 Wir stellen uns für den Moment vor, dass $w \in \mathbb{R}^2$ ist (also die Daten zwei Features haben). Wir stellen uns die $w$-Ebene vor und darauf ein $L(w)$-Gebirge. An jedem Punkt die Frage: Wohin sollen wir gehen, wenn wir runter wollen? Antwort: In die Richtung, wo $L(w)$ am schnellsten kleiner wird, also „nach unten“ – das heißt entlang des negativen **Gradienten** $\operatorname{grad}(L)(w) = L'(w) \in \mathbb{R}^2$.
 
-<!-- TODO Abbildung: Loss-Gebirge über der w-Ebene mit Gradientenabstiegspfad (Folie 11, Quelle Fisseha Berhane; oder eigenes matplotlib-Contour-Plot) -->
+:::{figure} ../images/vl05-loss-landscape.png
+:width: 90%
+
+Ein (erfundenes) Loss-Gebirge über der $w$-Ebene mit zwei Gradientenabstiegspfaden von verschiedenen Startpunkten. Beide landen im selben Tal – das ist nicht immer so.
+:::
 
 ### Gradienten konkret
 
@@ -115,9 +149,13 @@ $$
 also $L'(w_{\text{alt}}) = (1, 0)$. Der Update-Schritt $w_{\text{neu}} := w_{\text{alt}} - \rho\, L'(w_{\text{alt}})$ mit z.B. $\rho = \tfrac12$ liefert $w_{\text{neu}} = (1, 1) - (\tfrac12, 0) = (\tfrac12, 1)$. Probe: Vorher war $\langle w, x_1 \rangle = 1$ bei $y_1 = 0$, nachher $\tfrac12$ – der Fehler auf dem ersten Sample ist gesunken, der auf dem zweiten unverändert.
 :::
 
-<!-- TODO Abbildung: Tafelbild Gradientenabstieg (from_2025/slides/tafelbild-gradientenabstieg.jpg) -->
+:::{figure} ../images/vl05-tafelbild-gradientenabstieg.jpg
+:width: 90%
 
-## Gradientenabstieg
+Tafelbild zum Gradientenschritt von Hand (WiSe 2025/26).
+:::
+
+## Der Algorithmus
 
 Damit haben wir die sehr clevere Variante der approximativen Minimierung:
 
@@ -167,7 +205,11 @@ Für ein einzelnes Sample mit $y = 1$, aufgetragen gegen den Wert der Entscheidu
 * **Hinge Loss** $\max(0, 1 - f(x))$: null erst ab $f(x) \ge 1$, verlangt also einen *Sicherheitsabstand* (Margin) – das ist der Loss der Support Vector Machine.
 * **BCE Loss** $-\log \sigma(f(x))$: glatt, wird nie exakt null, bestraft auch richtig klassifizierte Samples noch ein bisschen, wenn sie nahe an der Grenze liegen.
 
-<!-- TODO Abbildung: die drei Loss-Kurven L(y=1, f(x)) für f(x) in [-4, 4] (Folie 34) -->
+:::{figure} ../images/vl05-loss-curves.png
+:width: 90%
+
+Drei Loss-Funktionen für ein Sample der Klasse $y = 1$ in Abhängigkeit vom Wert der Entscheidungsfunktion $f(x)$.
+:::
 
 ## Take-Home Message
 
@@ -193,11 +235,17 @@ Für binäre Klassifikation nimmt man $\tau = \sigma$ und $L = L_{\text{BCE}}$. 
 
 Der Kompromiss ist **Mini-Batch SGD**: Eine kleine, handhabbare Menge von Samples (die *Batch Size*, z.B. 32 oder 64) wird gemeinsam verarbeitet und damit der Gradient approximiert. Das ist, was in der Praxis fast immer gemeint ist, wenn jemand „SGD“ sagt – auch `torch.optim.SGD` aus dem letzten Kapitel weiß nichts davon, wie viele Samples im Batch waren. Ein Durchlauf durch den gesamten Datensatz heißt **Epoche**.
 
-## Ziel für nächste Woche
+## Tipps zu den Übungsblättern
 
-Verstehen können, was im [TensorFlow Playground](https://playground.tensorflow.org) geschieht: mehrere Neuronen in mehreren Schichten, trainiert mit Gradientenabstieg – wofür wir die Ableitung durch alle Schichten hindurch brauchen.
+### Blatt 3: Schwache Ableitungen
 
-## Tipps zum Übungsblatt
+Auf Blatt 3 geht es um das verallgemeinerte Perzeptron und um *schwache Ableitungen*, damit wir später auch Funktionen mit Knick (wie $|x|$ oder ReLU) ableiten können.
+
+* Das Beispiel mit der Betragsfunktion ist wichtig. Versuchen Sie zu verstehen, dass die veränderte Vorzeichenfunktion „quatschi“ mit $\operatorname{quatschi}(x) = \operatorname{sign}(x)$ für $x \neq 0$ und $\operatorname{quatschi}(0) := 100$ ebenfalls eine schwache Ableitung der Betragsfunktion ist.
+* Lassen Sie sich nicht von Integralen einschüchtern, denn um die geht es „in Wirklichkeit“ nicht. Aber Integrale haben eine besondere Eigenschaft, die hier zur Geltung kommt – gerade bei dem Beispiel oben: Der Wert an einem einzelnen Punkt spielt keine Rolle.
+* Wir brauchen das später beim Gradientenabstieg und bei Backpropagation.
+
+### Blatt 5: Sigmoid, Softmax, Kreuzentropie
 
 * Lesen Sie das Kapitel zu Vorlesung 4 nochmal aufmerksam – da sind nützliche Hinweise zu finden, um Aufgabe 3 (Softmax vs. Sigmoid) zu lösen.
 * Wenn Sie sich bei Aufgabe 1 (Ableitung von $\sigma$) schwer tun, versuchen Sie zunächst die Rechnung $\sigma(-x) = 1 - \sigma(x)$ aus Vorlesung 4 nachzuvollziehen.

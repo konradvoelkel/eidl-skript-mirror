@@ -1,80 +1,9 @@
 ---
-title: "VL 11: LLMs benutzen"
-short_title: "VL 11"
+title: "LLMs benutzen"
+short_title: "LLMs benutzen"
 ---
 
 # LLMs benutzen
-
-:::{note} Stand
-Erste Prosafassung (aus den Folien von VL 11, WiSe 2025/26). Abbildungen fehlen noch, siehe die `TODO`-Kommentare. Der Code ist in den Notebooks `VL_11_backprop.ipynb` und `VL_11_llamacpp.ipynb`.
-:::
-
-## Recap & Vertiefung: Backpropagation im Notebook
-
-Bevor es um LLMs geht, ein Blick darauf, wie PyTorch Backpropagation *tatsächlich* macht (`VL_11_backprop.ipynb`). Wir bauen ein sehr kleines „Netzwerk“:
-
-```python
-x = torch.tensor(3.0)                       # Input (Konstante)
-w = torch.tensor(2.0, requires_grad=True)   # Gewicht: "Beobachte mich!"
-b = torch.tensor(1.0, requires_grad=True)   # Bias
-z = w * x     # z = 6
-y = z + b     # y = 7
-L = y ** 2    # Loss = 49
-```
-
-Der **Berechnungsgraph** (ein DAG, directed acyclic graph) entsteht erst beim Ausführen: Jeder Tensor, der aus einer Operation mit einem `requires_grad`-Tensor entstanden ist, trägt eine `grad_fn` (`L.grad_fn` ist `PowBackward0`, davor `AddBackward0`, davor `MulBackward0` und `AccumulateGrad` für die Blätter $w$ und $b$). Die `grad_fn` weiß, wie man die Operation ableitet, und hält Referenzen auf die *saved tensors*, die gespeicherten Zwischenergebnisse – genau die $z_k$ aus Kapitel 6.
-
-`L.backward()` ist der rekursive Aufruf der Kettenregel, initial mit $\frac{dL}{dL} = 1$:
-
-$$
-\frac{dL}{dw} = \frac{dL}{dy} \cdot \frac{dy}{dz} \cdot \frac{dz}{dw} = 2y \cdot 1 \cdot x = 14 \cdot 3 = 42,
-\qquad
-\frac{dL}{db} = 2y \cdot 1 = 14.
-$$
-
-Danach steht das Ergebnis in `w.grad` und `b.grad`. Der Optimizer-Schritt muss unter `torch.no_grad()` passieren, damit der Update selbst nicht Teil des Graphen wird, und die Gradienten müssen danach mit `zero_()` zurückgesetzt werden – sonst *akkumuliert* PyTorch sie beim nächsten `backward()`. Das ist der Grund für `optimizer.zero_grad()` in jeder Trainingsschleife.
-
-**Freezing**: Setzt man `w.requires_grad = False`, so hat `z = w * x` keine `grad_fn` mehr, der Graph ist an dieser Stelle abgeschnitten, und ein Optimizer verändert $w$ nicht mehr, $b$ aber schon. So friert man beim Transfer Learning Schichten eines vortrainierten Modells ein – und spart dabei Speicher, weil für eingefrorene Parameter keine Gradienten gehalten werden.
-
-**Convolution Backprop**: Wie funktioniert Backprop, wenn Gewichte geteilt werden wie bei einem Faltungslayer? Der Kernel `[0.5]` wird über den Input `[1, 2, 3]` geschoben, $o_i = x_i \cdot k$, und der Loss ist $o_1 + o_2 + o_3$. Der Gradient nach $k$ ist die *Summe* der Beiträge aller Positionen, $\frac{dL}{dk} = x_1 + x_2 + x_3 = 6$: Ein geteilter Parameter bekommt die Gradienten aller seiner Verwendungen aufsummiert – im Graphen führen mehrere Kanten zu demselben Blatt.
-
-## Recap & Vertiefung: Universalität
-
-### Warum neuronale Netze funktionieren
-
-**Universelles Approximationstheorem, grobe Aussage** (wir erinnern uns an Kapitel 7): Mit neuronalen Netzen (beliebig viele Neuronen, beliebig viele Layer, fully connected, ReLU) lässt sich jede Funktion beliebig gut approximieren. Der Beweis in fünf Schritten:
-
-1. Jede beschränkte messbare Funktion $f \colon E \subseteq \mathbb{R} \to \mathbb{R}$ ist beliebig gut ($\forall \varepsilon > 0$) durch *einfache Funktionen* $g, h$ approximierbar: $g \le f \le h$ und $0 \le h - g < \varepsilon$. Dabei sind einfache Funktionen endliche Linearkombinationen von Indikatorfunktionen messbarer Mengen. (Stetige Funktionen sind integrierbar, integrierbare Funktionen sind messbar.)
-2. Eine Funktion $f \colon E \to \mathbb{R}$ (für $E$ messbar) ist messbar genau dann, wenn es eine Folge einfacher Funktionen $f_n$ gibt, die punktweise gegen $f$ konvergieren und $|f_n| \le |f|$ erfüllen. Eine messbare Funktion ist integrierbar, wenn es eine dominierende integrierbare Funktion $h$ gibt, $|f| \le |h|$. Wir können also sagen: $\{\text{messbare Funktionen}\} \approx \{\text{interessante Funktionen}\}$.
-3. Jede einfache Funktion ist beliebig genau approximierbar durch *Stufenfunktionen*, d.h. endliche Linearkombinationen von Indikatorfunktionen von Intervallen. Also: $\{\text{messbare Funktionen}\} \approx \{\text{approximierbar mit Stufenfunktionen}\}$.
-4. Eine einzelne Stufe lässt sich mit einem einfachen neuronalen Netz realisieren: Zwei Neuronen mit sehr steilen Sigmoiden (oder zwei ReLUs) an den Intervallgrenzen, mit Gewichten $+h$ und $-h$ in der Ausgabeschicht, ergeben eine Stufe der Höhe $h$ auf dem Intervall (Grafik von Michael Nielsen, Kapitel 4 seines Buchs).
-5. Die leicht zu verstehende Konstruktion mit 2 Hidden Layers bei Michael Nielsen funktioniert auch mit beliebig hoher Ein- und Ausgabedimension, also zur Approximation von Funktionen $\mathbb{R}^n \to \mathbb{R}^n$. Es gibt auch Konstruktionen mit nur 1 Hidden Layer.
-
-Die richtige Frage ist also nie „Geht das mit neuronalen Netzen?“ (Antwort: JA), sondern „*Wie* geht das am *effizientesten* mit neuronalen Netzen?“
-
-<!-- TODO Abbildung: Stufe aus zwei steilen Sigmoiden (Michael Nielsen, Kap. 4) -->
-
-### Präzisere Ergebnisse
-
-:::{prf:theorem} Universelle Approximation (Pinkus / Kidger–Lyons)
-Sei $E \subseteq \mathbb{R}^d$ eine kompakte (d.h. beschränkte und abgeschlossene) Teilmenge. Sei $\sigma \colon \mathbb{R} \to \mathbb{R}$ eine beliebige stetige Funktion, aber keine affin-lineare Abbildung, die in wenigstens einem Punkt stetig differenzierbar mit Ableitung ungleich $0$ ist. Dann gibt es zu jeder stetigen Funktion $f \colon E \to \mathbb{R}^D$ und jedem $\varepsilon > 0$ ein neuronales Netz $n$ mit Aktivierungen $\sigma$ und endlich vielen hidden Layers, je höchstens $d + D + 2$ groß, mit
-
-$$
-\sup_{x \in E} \| n(x) - f(x) \| < \varepsilon .
-$$
-:::
-
-Also: schmale, aber tiefe Netze reichen. Und noch präziser, mit Aussage über die *Größe*:
-
-:::{prf:theorem} Yarotsky (2017)
-Es gibt eine Konstante $c$, sodass gilt: Zu jeder $k$-fach stetig differenzierbaren Funktion $f \colon E \to \mathbb{R}^D$ und jedem $\varepsilon > 0$ gibt es ein neuronales Netz $n$ mit ReLU-Aktivierungen und $c \log(1/\varepsilon)$ vielen hidden Layers, insgesamt etwa $c\, \varepsilon^{-d/k}$ Gewichten und $\sup_{x \in E} \| n(x) - f(x) \| < \varepsilon$.
-:::
-
-Siehe auch arXiv:1901.10267. Die Anzahl der Gewichte wächst mit der Eingabedimension $d$ exponentiell (der Fluch der Dimensionalität), aber glattere Funktionen (größeres $k$) brauchen weniger – und die Tiefe wächst nur logarithmisch in der Genauigkeit.
-
-### Neuronale Netze vs. Bäume und Wälder
-
-Umgekehrt lässt sich jedes ReLU-Netz auch als Entscheidungsbaum schreiben: Jedes ReLU-Neuron ist eine Ja/Nein-Entscheidung „$\langle w, x \rangle + b > 0$?“, und die Regionen, in denen alle Entscheidungen feststehen, sind genau die Stücke, auf denen das Netz linear ist (Caglar Aytekin, *Neural Networks are Decision Trees*, 2022). Der Baum ist allerdings exponentiell groß.
 
 ## Transformer-LLMs in der Praxis einsetzen
 
@@ -92,7 +21,7 @@ Wir konkretisieren anhand eines Beispiel-Tasks, z.B. „Gegeben einen Text, iden
 6. **Vortrainierte Transformer auf besonderen Daten weiter trainieren** (Finetuning). Pro: relativ billig (keine sehr langen Trainingszeiten = Stromkosten nötig). Contra: benötigt wenigstens Hardware zum Training (teurer für größere Modelle).
 7. **Transformer-Modell auf Chat-Formate finetunen mit RLHF** (Reinforcement Learning from Human Feedback, wie bei ChatGPT). Pro: Feedback führt zu Qualitätssteigerung, z.B. NSFW-Removal o.ä. Contra: etwas komplizierter als „einfaches“ Training.
 8. **Sehr große Modelle über eine API verwenden** (ggf. nur Sampling-Output). Der De-facto-Standard für die „meisten“ LLM-Use-Cases für Softwareentwickler.
-9. **Vorhersagen eines großen Modells in ein kleineres übertragen** (Destillation). Das schauen wir uns in Kapitel 14 noch an; so lässt sich z.B. die Inferenz beschleunigen.
+9. **Vorhersagen eines großen Modells in ein kleineres übertragen** (Destillation). Das schauen wir uns im [Kapitel „Destillation“](18-destillation.md) noch an; so lässt sich z.B. die Inferenz beschleunigen.
 10. **Constrained Generation**: Ausgabe sampeln, die einem (z.B. JSON-)Schema genügt – ein wesentlicher Baustein für „agentische Workflows“.
 
 ## Selbst Inferenz und Training durchführen
@@ -135,6 +64,6 @@ Finetuning ist auch sehr teuer, weil alle Parameter Gradienten und Optimizer-Zus
 
 Konkret eine Anwendung wie z.B. der „Chatbot“ [hAInrich](https://www.heicad.hhu.de/lehre/masters-programme-ai-and-data-science/hainrich) am HeiCAD: Retrieval-Augmented Generation (RAG) – Dokumente werden mit Weg 2 in Vektoren verwandelt und in einer Vektordatenbank abgelegt, zur Anfrage werden die ähnlichsten Dokumente gesucht und mit Weg 4 als Kontext in den Prompt eines LLM gegeben. Mehr dazu in Kapitel 13.
 
-## Tipps zum Übungsblatt
+## Tipps zu Übungsblatt 11
 
 Wir schauen rein, wenn dazu noch Zeit bleibt: das Kaggle-Notebook „PyTorch | Flowers | TransLearning + Ensemble | Test = 99.67 %“. Fragen, die wir klären wollen: Worum geht es da überhaupt? Was „ist“ Ensembling bzw. ein Ensemble-Modell? Was ist z.B. das Modell GoogLeNet von 2014, das da verwendet wird?

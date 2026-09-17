@@ -34,27 +34,32 @@ project:
        - file: README.md
     - title: Grundlagen
       children:
-       - file: part-grundlagen/01-ueberblick-perzeptron.md
-       - file: part-grundlagen/02-perzeptron-vortrainierte-modelle.md
-       - file: part-grundlagen/03-pytorch-tensoren.md
+       - file: part-grundlagen/01-was-ist-deep-learning.md
+       - file: part-grundlagen/02-perzeptron.md
+       - file: part-grundlagen/03-vortrainierte-modelle.md
+       - file: part-grundlagen/04-tensoren.md
     - title: Lernen
       children:
-       - file: part-lernen/04-logistische-regression.md
-       - file: part-lernen/05-sgd.md
-       - file: part-lernen/06-backprop.md
+       - file: part-lernen/05-logistische-regression.md
+       - file: part-lernen/06-gradientenabstieg.md
+       - file: part-lernen/07-backpropagation.md
+       - file: part-lernen/08-aktivierungsfunktionen-universalitaet.md
     - title: Representation Learning
       children:
-       - file: part-representation-learning/07-autoencoder.md
-       - file: part-representation-learning/08-latent-space-vae.md
-       - file: part-representation-learning/09-representation-learning.md
+       - file: part-representation-learning/09-autoencoder.md
+       - file: part-representation-learning/10-variational-autoencoder.md
+       - file: part-representation-learning/11-word2vec.md
+       - file: part-representation-learning/12-representation-learning-graphen.md
+       - file: part-representation-learning/13-sequenzen-rnn-transformer.md
     - title: Architekturen und Anwendungen
       children:
-       - file: part-architekturen-anwendungen/10-cnn.md
-       - file: part-architekturen-anwendungen/11-llms-benutzen.md
-       - file: part-architekturen-anwendungen/12-gans.md
-       - file: part-architekturen-anwendungen/13-latent-spaces-anwendungen.md
-       - file: part-architekturen-anwendungen/14-destillation.md
-       - file: part-architekturen-anwendungen/15-maerchenstunde.md
+       - file: part-architekturen-anwendungen/14-faltung-cnn.md
+       - file: part-architekturen-anwendungen/15-llms-benutzen.md
+       - file: part-architekturen-anwendungen/16-gans.md
+       - file: part-architekturen-anwendungen/17-anwendungsbeispiele.md
+       - file: part-architekturen-anwendungen/18-destillation.md
+       - file: part-architekturen-anwendungen/19-optimierer.md
+       - file: part-architekturen-anwendungen/20-adversarial-attacks-polysemie.md
     - title: Notebooks
       children:
        - file: notebooks/nn-by-hand.ipynb
@@ -102,6 +107,7 @@ site:
   options:
     favicon: favicon.ico
     logo: site_logo.png
+    logo_text: Einführung in Deep Learning
     style: _site/custom-style.css
   parts:
     navbar_end: _site/navbar_end.md

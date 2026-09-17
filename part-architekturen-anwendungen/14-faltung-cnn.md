@@ -1,13 +1,9 @@
 ---
-title: "VL 10: Convolutional Neural Networks"
-short_title: "VL 10"
+title: "Faltung und Convolutional Neural Networks"
+short_title: "CNNs"
 ---
 
-# Convolutional Neural Networks
-
-:::{note} Stand
-Erste Prosafassung (aus den Folien von VL 10, WiSe 2025/26). Abbildungen fehlen noch, siehe die `TODO`-Kommentare. Der Code ist im Notebook `VL_10_convolutions.ipynb`.
-:::
+# Faltung und Convolutional Neural Networks
 
 ## Motivation zur Faltung
 
@@ -15,7 +11,11 @@ Erste Prosafassung (aus den Folien von VL 10, WiSe 2025/26). Abbildungen fehlen 
 
 Wer schon einmal ein Bild in GIMP oder Photoshop weichgezeichnet hat, hat eine Faltung benutzt: Jeder Pixel wird durch einen gewichteten Mittelwert seiner Nachbarn ersetzt. Und wer Kanten gefunden hat („make a difference“): Das Originalbild minus das weichgezeichnete Bild lässt genau die Stellen übrig, an denen sich benachbarte Pixel stark unterscheiden – die Kanten.
 
-<!-- TODO Abbildungen: Blur-Beispiel, Kantenfindung als Differenz (Folien 3–4) -->
+:::{figure} ../images/vl10-blur-edges.png
+:width: 90%
+
+Faltung in der Bildverarbeitung: Original, mit einer Gaußfunktion weichgezeichnet, und die Differenz beider – die Kanten.
+:::
 
 ### Das menschliche Auge erkennt Kanten(orientierung)
 
@@ -51,7 +51,11 @@ Ein Faltungsfilter ist also ein *Neuron mit $2n + 1$ Gewichten*, das an jeder Po
 
 Wir möchten ein Signal mit einem Filter falten. Das Signal ist der ASML-Aktienkurs in US-Dollar (closing price adjusted for splits, ein Teildatensatz über 5 Jahre); der Filter ist eine schmale Gaußfunktion (`gaussian_narrow`). Das Ergebnis ist der geglättete Kurs: Die Gaußfunktion ist ein gewichteter gleitender Mittelwert, und je breiter sie ist, desto glatter das Ergebnis. Faltung mit einem Peak (einer diskreten Delta-Funktion) gibt das Signal unverändert zurück; Faltung mit einer Kastenfunktion ist der ungewichtete gleitende Mittelwert; Faltung mit der Differenz zweier Gaußfunktionen (*Difference of Gaussians*, DoG) hebt Änderungen hervor und ist ein Kantendetektor. (Tipp: „DoG filter“ ist kein Snapchat-Filter.)
 
-<!-- TODO Abbildungen: Filterfunktionen (peak, constant, box, gaussian, DoG) und ASML-Kurs gefaltet mit jedem davon (Folien 12–14; Notebook, from_2025/slides/ASML.csv) -->
+:::{figure} ../images/vl10-asml-convolutions.png
+:width: 90%
+
+Der ASML-Aktienkurs (Schlusskurse 2020–2025) gefaltet mit vier Filtern. Delta lässt das Signal unverändert, Kasten und Gauß glätten, die Difference of Gaussians hebt Änderungen hervor.
+:::
 
 ### Programmierung
 

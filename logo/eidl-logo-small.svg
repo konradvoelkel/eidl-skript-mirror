@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="100%" height="100%">
+  <!-- Squircle Base for High Contrast Across Light/Dark Browser UIs -->
+  <rect width="32" height="32" rx="7" fill="#090D16"/>
+
+  <!-- Simplified Stacking Layers -->
+  <rect x="5" y="21" width="15" height="4.5" rx="2.25" fill="#334155"/>
+  <rect x="12" y="6.5" width="15" height="4.5" rx="2.25" fill="#334155"/>
+
+  <!-- Bold Sigmoid Activation (Direct Silhouette) -->
+  <path d="M 6,23.25 C 11.5,23.25 13.5,19.25 16,16 C 18.5,12.75 20.5,8.75 26,8.75"
+        fill="none" stroke="#38BDF8" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

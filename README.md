@@ -32,19 +32,25 @@ Die Note wird vollständig aus der Klausur gebildet, die Übungsblätter zuvor s
 
 ## Inhalt
 
-Grober zeitlicher Ablauf:
+Das Skript ist nach Themen gegliedert, die Vorlesung nach Wochen. Der grobe zeitliche Ablauf (Vorlesung 1–15) und die zugehörigen Kapitel:
 
-1. Geschichte (Perzeptron)
-2. Logistische Regression ($\sim$ 1 Neuron) ausführlichst
-3. Stochastischer Gradientenabstieg
-4. Backpropagation: effiziente Berechnung der Ableitung für tiefe Netze
-5. `PyTorch` für Inferenz und Training from Scratch
-6. AutoEncoder und VAE (unsupervised Representation Learning)
-7. Latente Vektoren für Natural Language Processing (NLP) mit word2vec
-8. Intro Convolutional Neural Networks (CNN)
-9. Intro Generative-Adversarial Networks (GAN)
-10. Vortrainierte LLMs in DL-Anwendungen nutzen
-11. Einzelne Exkurse/Vertiefungen nach Laune
+| VL | Kapitel |
+|---|---|
+| 1 | [Was ist Deep Learning?](part-grundlagen/01-was-ist-deep-learning.md), [Das Perzeptron](part-grundlagen/02-perzeptron.md) (Neuron, MLP) |
+| 2 | [Das Perzeptron](part-grundlagen/02-perzeptron.md) (Training, verallgemeinertes Perzeptron), [Vortrainierte Modelle](part-grundlagen/03-vortrainierte-modelle.md) (Orientierung) |
+| 3 | [Vortrainierte Modelle](part-grundlagen/03-vortrainierte-modelle.md) (Tasks, Praxis), [Tensoren](part-grundlagen/04-tensoren.md), [Logistische Regression](part-lernen/05-logistische-regression.md) (Einstieg) |
+| 4 | [Logistische Regression](part-lernen/05-logistische-regression.md), Kettenregel |
+| 5 | [Gradientenabstieg](part-lernen/06-gradientenabstieg.md) |
+| 6 | [Backpropagation](part-lernen/07-backpropagation.md), [Aktivierungsfunktionen](part-lernen/08-aktivierungsfunktionen-universalitaet.md), [Autoencoder](part-representation-learning/09-autoencoder.md) (Idee) |
+| 7 | [Aktivierungsfunktionen und Universalität](part-lernen/08-aktivierungsfunktionen-universalitaet.md) (Netze von Hand), [Autoencoder](part-representation-learning/09-autoencoder.md) (MNIST, Label-AE) |
+| 8 | [Autoencoder](part-representation-learning/09-autoencoder.md) (Sparse, Denoising), [VAE](part-representation-learning/10-variational-autoencoder.md), [word2vec](part-representation-learning/11-word2vec.md) |
+| 9 | [Representation Learning und Graphen](part-representation-learning/12-representation-learning-graphen.md), [RNNs und Transformer](part-representation-learning/13-sequenzen-rnn-transformer.md) |
+| 10 | [Faltung und CNNs](part-architekturen-anwendungen/14-faltung-cnn.md) |
+| 11 | [Backpropagation](part-lernen/07-backpropagation.md) (Berechnungsgraph), [Universalität](part-lernen/08-aktivierungsfunktionen-universalitaet.md), [LLMs benutzen](part-architekturen-anwendungen/15-llms-benutzen.md) |
+| 12 | [GANs](part-architekturen-anwendungen/16-gans.md) |
+| 13 | [Backpropagation](part-lernen/07-backpropagation.md) (Induktion), [word2vec](part-representation-learning/11-word2vec.md) (Geometrie), [VAE](part-representation-learning/10-variational-autoencoder.md) (latente Räume), [Anwendungsbeispiele](part-architekturen-anwendungen/17-anwendungsbeispiele.md) |
+| 14 | [Destillation](part-architekturen-anwendungen/18-destillation.md) |
+| 15 | [Optimierer](part-architekturen-anwendungen/19-optimierer.md), [Adversarial Attacks und Polysemie](part-architekturen-anwendungen/20-adversarial-attacks-polysemie.md) |
 
 Was wir nicht machen werden: Transformer-Modelle trainieren (GPT usw.), auf großen echten Daten arbeiten, aktuelle Architekturen nachimplementieren, Optimierungstheorie, CUDA-Programmierung, Reinforcement Learning.
 
