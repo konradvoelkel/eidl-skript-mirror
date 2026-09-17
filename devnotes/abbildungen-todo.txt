@@ -1,0 +1,62 @@
+part-lernen/05-sgd.md:9:Erste Prosafassung (aus den Folien von VL 05, WiSe 2025/26). Abbildungen fehlen noch, siehe die `TODO`-Kommentare.
+part-lernen/05-sgd.md:68:Abbildung: Loss-Gebirge über der w-Ebene mit Gradientenabstiegspfad (Folie 11, Quelle Fisseha Berhane; oder eigenes matplotlib-Contour-Plot)
+part-lernen/05-sgd.md:118:Abbildung: Tafelbild Gradientenabstieg (from_2025/slides/tafelbild-gradientenabstieg.jpg)
+part-lernen/05-sgd.md:138:Abbildungen: Loss Landscape (Li et al. 2017), Amini et al. 2018 (Folien 28–29)
+part-lernen/05-sgd.md:170:Abbildung: die drei Loss-Kurven L(y=1, f(x)) für f(x) in [-4, 4] (Folie 34)
+part-architekturen-anwendungen/10-cnn.md:9:Erste Prosafassung (aus den Folien von VL 10, WiSe 2025/26). Abbildungen fehlen noch, siehe die `TODO`-Kommentare. Der Code ist im Notebook `VL_10_convolutions.ipynb`.
+part-architekturen-anwendungen/10-cnn.md:18:Abbildungen: Blur-Beispiel, Kantenfindung als Differenz (Folien 3–4)
+part-architekturen-anwendungen/10-cnn.md:24:Abbildung: Hubel & Wiesel Neuron-Antwort auf Balkenorientierung (Wikipedia Mads00, CC-BY-SA)
+part-architekturen-anwendungen/10-cnn.md:54:Abbildungen: Filterfunktionen (peak, constant, box, gaussian, DoG) und ASML-Kurs gefaltet mit jedem davon (Folien 12–14; Notebook, from_2025/slides/ASML.csv)
+part-architekturen-anwendungen/10-cnn.md:100:Abbildung: GIMP-Faltungsmatrix-Dialog und Ergebnis (Folie 30)
+part-architekturen-anwendungen/12-gans.md:9:Erste Prosafassung (aus den Folien von VL 12, WiSe 2025/26). Abbildungen fehlen noch, siehe die `TODO`-Kommentare.
+part-architekturen-anwendungen/12-gans.md:30:Abbildung: GAN-Aufbau (kdnuggets 2017 oder eigenes Diagramm: z → G → fake, real/fake → D → echt?)
+part-architekturen-anwendungen/12-gans.md:90:Abbildung: CycleGAN-Beispiele (Folie 21)
+part-architekturen-anwendungen/12-gans.md:96:Abbildung: StyleGAN-Gesichter (github.com/NVlabs/stylegan)
+part-architekturen-anwendungen/11-llms-benutzen.md:9:Erste Prosafassung (aus den Folien von VL 11, WiSe 2025/26). Abbildungen fehlen noch, siehe die `TODO`-Kommentare. Der Code ist in den Notebooks `VL_11_backprop.ipynb` und `VL_11_llamacpp.ipynb`.
+part-architekturen-anwendungen/11-llms-benutzen.md:55:Abbildung: Stufe aus zwei steilen Sigmoiden (Michael Nielsen, Kap. 4)
+part-architekturen-anwendungen/13-latent-spaces-anwendungen.md:9:Erste Prosafassung (aus den Folien von VL 13, WiSe 2025/26). Abbildungen fehlen noch, siehe die `TODO`-Kommentare.
+part-architekturen-anwendungen/13-latent-spaces-anwendungen.md:61:Abbildung: 2D-Projektion von Wortvektoren mit Parallelogrammen (Folie 13)
+part-architekturen-anwendungen/13-latent-spaces-anwendungen.md:94:Abbildung: Interpolation im latenten Raum eines MNIST-Autoencoders (Folie 27)
+part-architekturen-anwendungen/13-latent-spaces-anwendungen.md:106:Abbildungen: latenter Raum AE (3 Punkte) vs. VAE (+ε, +σε), Folien 32–34
+part-architekturen-anwendungen/13-latent-spaces-anwendungen.md:112:Abbildung: Arvanitidis et al., Figure 1
+part-lernen/06-backprop.md:9:Erste Prosafassung (aus den Folien von VL 06, WiSe 2025/26). Abbildungen fehlen noch, siehe die `TODO`-Kommentare.
+part-lernen/06-backprop.md:26:Abbildung: x → [w_erst] → σ → [w_zweit] → y_pred
+part-lernen/06-backprop.md:216:Abbildung: ReLU-Graph; Summe von drei ReLUs als stückweise lineare Funktion
+part-lernen/06-backprop.md:239:Abbildung: ReLU, ELU, Swish, GELU im Vergleich (Folie 46)
+part-lernen/06-backprop.md:265:Abbildung: Autoencoder schematisch (Michaela Massi 2019, CC-BY-SA 4.0)
+part-lernen/06-backprop.md:269:Abbildung: Rekonstruktion Autoencoder vs. PCA (Michaela Massi 2019)
+part-representation-learning/07-autoencoder.md:9:Erste Prosafassung (aus den Folien von VL 07, WiSe 2025/26). Abbildungen fehlen noch, siehe die `TODO`-Kommentare.
+part-representation-learning/07-autoencoder.md:56:Abbildung: Heatmap von ReLU(x)+ReLU(y) auf [-1,2]^2 mit den vier Booleschen Ecken markiert (Folie 13)
+part-representation-learning/07-autoencoder.md:78:Abbildungen: XOR-Region; Playground-Lösungen mit 3 bzw. 2 Hidden Layers (from_2025/slides/krude-xor-approximation*.png)
+part-representation-learning/07-autoencoder.md:96:Abbildung: x² und stückweise lineare Interpolation an ganzzahligen Stützstellen (Folien 28–30)
+part-representation-learning/07-autoencoder.md:122:Abbildung: Autoencoder-Layout, mit NN-SVG erstellt (Folie 37)
+part-representation-learning/07-autoencoder.md:217:Abbildung: Label-Autoencoder-Architektur (Folie 54)
+part-architekturen-anwendungen/15-maerchenstunde.md:9:Erste Prosafassung (aus den Folien von VL 15, WiSe 2025/26). Abbildungen fehlen noch, siehe die `TODO`-Kommentare.
+part-architekturen-anwendungen/15-maerchenstunde.md:99:Abbildung: Dimpled Manifold (aus der BA Wieczorek 2023)
+part-architekturen-anwendungen/15-maerchenstunde.md:123:Abbildungen: Manifold-Hypothese, Problemfälle (Rauschen, Kreuzung), Polysemie-Beispiel (Folien 36–41, Ben Ruppik)
+part-lernen/04-logistische-regression.md:9:Erste Prosafassung (aus den Folien von VL 04, WiSe 2025/26). Abbildungen fehlen noch, siehe die `TODO`-Kommentare.
+part-lernen/04-logistische-regression.md:96:Abbildung: Plot von σ(x) auf [-6, 6]
+part-lernen/04-logistische-regression.md:223:Abbildung: Ergebnis der linearen Regression (Folie 44)
+part-lernen/04-logistische-regression.md:249:Abbildung: Ergebnis der logistischen Regression, S-Kurve durch die 0/1-Daten (Folie 47)
+part-grundlagen/03-pytorch-tensoren.md:9:Erste Prosafassung (aus den Folien von VL 03, WiSe 2025/26). Abbildungen fehlen noch, siehe die `TODO`-Kommentare.
+part-grundlagen/03-pytorch-tensoren.md:187:Abbildungen (Folien 54–62): Regressionsgerade auf 0/1-Daten; harte Klassifikation; 2D-Regressor mit Entscheidungsgrenze; 3D-Regressionshyperebene; 1D-Fall mit Sprungfunktion und S-Kurve
+part-grundlagen/02-perzeptron-vortrainierte-modelle.md:9:Erste Prosafassung (aus den Folien von VL 02, WiSe 2025/26). Abbildungen fehlen noch, siehe die `TODO`-Kommentare.
+part-grundlagen/02-perzeptron-vortrainierte-modelle.md:55:Abbildung: make_blobs-Daten in R^2 mit Trenngerade w·x + b = 0 vor und nach einigen Perzeptron-Updates
+part-grundlagen/02-perzeptron-vortrainierte-modelle.md:118:Abbildung: Screenshot huggingface.co/tasks (Folien 27–28) oder Liste der Task-Kategorien
+part-representation-learning/09-representation-learning.md:9:Erste Prosafassung (aus den Folien von VL 09, WiSe 2025/26). Abbildungen fehlen noch, siehe die `TODO`-Kommentare.
+part-representation-learning/09-representation-learning.md:41:Abbildung: Satzgraph Die→Katze→frisst→Mäuse, Der→Hund→frisst→Leckerli (Folien 12–17)
+part-representation-learning/09-representation-learning.md:75:Abbildung: Message Passing auf dem Kaffee/Tee-Graphen (Folie 24)
+part-representation-learning/09-representation-learning.md:89:Abbildung: rekurrentes Neuron, gefaltet und entfaltet (Wikipedia, Fdeloche 2017, CC-BY-SA 4.0)
+part-representation-learning/09-representation-learning.md:113:Abbildungen: GRU (Wikipedia, Jeblad 2018) und LSTM (Wikipedia, Guillaume Chevalier 2018), beide CC-BY-SA 4.0
+part-representation-learning/09-representation-learning.md:167:Abbildung: Transformer-Architektur (Fig. 1, Vaswani et al. 2017)
+part-representation-learning/08-latent-space-vae.md:9:Erste Prosafassung (aus den Folien von VL 08, WiSe 2025/26). Abbildungen fehlen noch, siehe die `TODO`-Kommentare. Diese Vorlesung war mit 85 Folien sehr voll; ggf. word2vec/NLP in das nächste Kapitel verschieben.
+part-representation-learning/08-latent-space-vae.md:29:Abbildung: Sparse latents vs. dense latents (Folie 7)
+part-representation-learning/08-latent-space-vae.md:41:Abbildungen: Ergebnis-Beispiele MNIST / USPS / Fashion-MNIST (Folien 10–12), Latents von Fashion-MNIST & USPS
+part-representation-learning/08-latent-space-vae.md:71:Abbildungen: latenter Raum mit 3 bzw. 300 Punkten, klassisch / +ε / +σε (Folien 28–32)
+part-representation-learning/08-latent-space-vae.md:103:Abbildung: VAE-Schema (Lilian Weng)
+part-representation-learning/08-latent-space-vae.md:137:Abbildungen: CBOW und Skip-gram Architekturen (Lilian Weng, "Learning Word Embedding", 2017)
+part-grundlagen/01-ueberblick-perzeptron.md:9:Erste Prosafassung (aus den Folien von VL 01, WiSe 2025/26). Abbildungen fehlen noch, siehe die `TODO`-Kommentare.
+part-grundlagen/01-ueberblick-perzeptron.md:64:Abbildung: Segmentation with Gaussian mixture models (Scipy Lectures, CC BY) oder eigene matplotlib-Variante
+part-grundlagen/01-ueberblick-perzeptron.md:87:Abbildung: two-class demo data (make_blobs, linear trennbar entlang x-Achse) und lineare Regression mit Klasse als abhängiger Variable, Farbe = Vorhersage
+part-grundlagen/01-ueberblick-perzeptron.md:142:Abbildung: schematisches Neuron (x_1..x_5 → ζ = Σ w x → y = σ(ζ)), Grafik CC-BY-SA Whiteknight/Wikimedia oder eigenes TikZ/SVG
+part-grundlagen/01-ueberblick-perzeptron.md:171:Abbildung: MLP mit 3 Eingabeneuronen, 4 versteckten, 1 Ausgabeneuron (Folie 27)

@@ -16,6 +16,11 @@ Stand: 2026-09-17
 2. **Inhalt überarbeiten**: Text in eigene Worte bringen, Formeln in LaTeX setzen, Abbildungen ersetzen/neu erzeugen (matplotlib),
    Redundanzen aus inkrementellen Folien (Overlays) zusammenfassen. Dabei sicherstellen, dass alles enthalten ist, was
    Übungsblätter und Klausur-Aufgabenschatz voraussetzen (siehe Tabelle unten).
+   *Stand 2026-09-17: Alle 15 Kapitel liegen als erste Prosafassung mit LaTeX-Formeln vor (Formeln, die in den
+   Google-Slides Bilder waren, wurden aus den gerenderten Folien rekonstruiert). Noch offen: Abbildungen – die Stellen
+   sind als `<!-- TODO Abbildung -->` markiert, Liste in `abbildungen-todo.txt`; fachliche Durchsicht der Ergänzungen,
+   die über die Folien hinausgehen (z.B. Perzeptron-Konvergenzsatz in VL 02, Attention-Formel in VL 09,
+   Momentum/Adam-Formeln in VL 15).*
 3. **Übungsblätter** anpassen (`part-exercises/`, bereits per pandoc konvertiert; Abgabetermine noch aus 2025).
 4. **Danach** neue Beamer-Decks aus dem Skript ableiten, Themenfolge wie bisher, Header aus `../slides/Einführung in Deep Learning 2026 header.tex`.
 
