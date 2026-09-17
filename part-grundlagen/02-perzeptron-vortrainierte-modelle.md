@@ -5,335 +5,134 @@ short_title: "VL 02"
 
 # Perzeptron in der Praxis, vortrainierte Modelle
 
-:::{warning} Rohfassung
-Dieses Kapitel ist eine automatische Transkription der Folien von VL 02 aus dem WiSe 2025/26
-(`from_2025/slides/Einführung in Deep Learning 2025_26 VL 02_ Perzeptron, Vortrainierte Modelle.pdf`), Folie für Folie in der Originalreihenfolge.
-Formeln und Abbildungen sind dabei größtenteils verloren gegangen; der Text ist noch nicht überarbeitet.
+:::{note} Stand
+Erste Prosafassung (aus den Folien von VL 02, WiSe 2025/26). Abbildungen fehlen noch, siehe die `TODO`-Kommentare.
 :::
 
 ## Wie war das mit dem Perzeptron?
 
-<!-- Folie 2 -->
+Im letzten Kapitel haben wir das Perzeptron als Modell kennengelernt: ein Gewichtsvektor $w \in \mathbb{R}^n$, ein Bias $b \in \mathbb{R}$, und die Inferenz $f(x) = [\, w \cdot x + b > 0 \,]$. Was fehlt, ist das *Lernen*. Bevor wir ein Modell implementieren, sollten wir uns ein paar Fragen stellen, die für jedes Modell in dieser Vorlesung wieder auftauchen werden:
 
-## In die Praxis
+* Was sind die **freien Parameter** (Gewichte) des Modells – welche Variablen ändern sich beim Training?
+* Wie soll die **Inferenz** durchgeführt werden?
+* Wie funktioniert das **Training**?
+  * supervised oder unsupervised?
+  * Was genau erlauben wir für Datentypen?
+  * Welche Berechnung passt die Gewichte an?
+  * Was ist die Zielgröße – wann ist genug trainiert?
+  * Welche **Hyperparameter** gibt es, und worauf legen wir sie fest?
 
-<!-- Folie 3 -->
-Wir implementieren ein Perzeptron (Blatt 2)
-Als Aufwärmübung. Zu klärende Fragen:
-◼ Was sind die freien Parameter (Gewichte) des Modells
-(welche Variablen ändern sich beim Training)?
-◼ Wie soll Inferenz durchgeführt werden?
-◼ Wie funktioniert das Training?
-…
+Für das Perzeptron beantworten wir sie so.
 
-<!-- Folie 4 -->
-Wir implementieren ein Perzeptron (Blatt 2)
-Als Aufwärmübung. Zu klärende Fragen:
-◼ Was sind die freien Parameter (Gewichte) des Modells
-(welche Variablen ändern sich beim Training)?
-◼ Wie soll Inferenz durchgeführt werden?
-◼ Wie funktioniert das Training?
-◼
-◼
-◼
-◼
-◼
-supervised/unsupervised?
-was genau erlauben wir für Datentypen?
-welche Berechnung zur Anpassung der Gewichte?
-was ist die Zielgröße (wann ist genug trainiert)?
-welche Hyperparameter gibt es
-und worauf legen wir sie fest?
+**Daten und Aufgabe.** Das Perzeptron ist ein Modell zur binären Klassifikation, also Supervised Learning. Input sind Stichproben von $(X, Y)$, wobei $X$ Werte in $\mathbb{R}^n$ hat und $Y \in \{0, 1\}$ die Klasse ist. Die Dimensionalität $n$ der Eingabedaten ist ein Hyperparameter – einer, den wir in der Regel nicht optimieren wollen, weil er von den Daten vorgegeben ist. Ziel ist die Berechnung einer Funktion $f$ mit $Y = f(X) + \varepsilon$ für einen möglichst kleinen Fehler $\varepsilon$.
 
-<!-- Folie 5 -->
-Wir implementieren ein Perzeptron (Blatt 2)
-Das Perzeptron ist ein Modell zur binären Klassifikation,
-d.h. Supervised Learning,
-Input sind Stichproben von (X,Y),
-wobei X Werte in ℝn hat und Y ∊ {0,1} die Klasse ist.
-Dabei ist das n, also die Dimensionalität der Eingabedaten,
-ein Hyperparameter (den wir i.d.R. nicht optimieren wollen).
-Ziel ist die Berechnung einer Funktion f(X) mit Y = f(X) + ε.
+**Parameter und Inferenz.** Die Parameter sind $n$ Gewichte $w_j$, zusammengefasst zu $w \in \mathbb{R}^n$, und der Bias $b$. Die Inferenz ist
 
-<!-- Folie 6 -->
-Wir implementieren ein Perzeptron (Blatt 2)
-Das Perzeptron ist ein Modell zur binären Klassifikation,
-d.h. Supervised Learning,
-Input sind Stichproben von (X,Y),
-wobei X Werte in ℝn hat und Y ∊ {0,1} die Klasse ist.
-Die Parameter des Modells sind n Gewichte wj bzw.
-ein Gewichtsvektor w ∊ ℝn.
-Inferenz geht so: f(x) = [ w · x > 0 ] (Iversen-Bracket),
-also ist f(x) = 1 wenn ∑jwjxj > 0 ist. Das f ist eine nichtlineare Funktion!
+$$
+f(x) = [\, w \cdot x + b > 0 \,],
+$$
 
-<!-- Folie 7 -->
-Wir implementieren ein Perzeptron (Blatt 2)
-Das Perzeptron ist ein Modell zur binären Klassifikation,
-Input sind Stichproben von (X,Y) mit X ∊ ℝn, Y ∊ {0,1}.
-Die Parameter des Modells sind ein Gewichtsvektor w ∊ ℝn.
-Inferenz geht so: f(x) = [ w · x > 0 ]
-Training = Anpassung der Gewichte:
-Gegeben bisherige Gewichte w und ein einzelnes Sample (x,y) setze
-wneu := w + r · (y - f(x))x.
-Dabei ist r ein Hyperparameter, die Lernrate.
+also $f(x) = 1$ genau dann, wenn $\sum_j w_j x_j + b > 0$. Mit dem Trick $w_0 := b$, $x_0 := 1$ aus dem letzten Kapitel schreiben wir im Folgenden einfach $f(x) = [\, w \cdot x > 0 \,]$ und denken uns den Bias als nulltes Gewicht.
 
-<!-- Folie 8 -->
-Wir implementieren ein Perzeptron (Blatt 2)
-Das Perzeptron ist ein Modell zur binären Klassifikation,
-Input sind Stichproben von (X,Y) mit X ∊ ℝn, Y ∊ {0,1}.
-Die Parameter des Modells sind ein Gewichtsvektor w ∊ ℝn.
-Inferenz geht so: f(x) = [ w · x > 0 ]
-Training: Gegeben bisherige Gewichte w und ein einzelnes Sample (x,y)
-wneu := w + r · (y - f(x))x.
-Wenn y = f(x), also bei korrekter Klassifikation, so ist wneu = w
-Wenn y ≠ f(x), so ist wneu = w + rx oder wneu = w - rx (je nach Klasse y)
-Erinnerung: x · x > 0 gilt immer außer für x = 0.
+**Training: die Perzeptronregel.** Gegeben die bisherigen Gewichte $w$ und ein einzelnes Sample $(x, y)$, setze
 
-<!-- Folie 9 -->
-Wir implementieren ein Perzeptron (Blatt 2)
-Das Perzeptron ist ein Modell zur binären Klassifikation,
-Input sind Stichproben von (X,Y) mit X ∊ ℝn, Y ∊ {0,1}.
-Die Parameter des Modells sind ein Gewichtsvektor w ∊ ℝn.
-Inferenz geht so: f(x) = [ w · x > 0 ]
-Training: Gegeben bisherige Gewichte w und ein einzelnes Sample (x,y)
-wneu := w + r · (y - f(x))x.
-Das Ziel messen wir in Anteil falsch klassifizierter Samples.
-Wir initialisieren w z.B. auf den Vektor (1,1,...,1).
+$$
+w_{\text{neu}} := w + r \cdot (y - f(x)) \, x .
+$$
 
-<!-- Folie 10 -->
-Wir implementieren ein Perzeptron (Blatt 2)
-Das Perzeptron ist ein Modell zur binären Klassifikation,
-Input sind Stichproben von (X,Y) mit X ∊ ℝn, Y ∊ {0,1}.
-Die Parameter des Modells sind ein Gewichtsvektor w ∊ ℝn
-und der Biasterm b ∊ ℝ.
-Inferenz geht so: f(x) = [ w · x + b > 0 ]
-Training: Gegeben bisherige Gewichte w, b und ein einzelnes Sample (x,y)
-wneu := w + r · (y - f(x))x und bneu := b + r · (y - f(x))
-Aber wir kennen das schon: mit w0 := b und x0 := 1 ist alles wie zuvor.
+Dabei ist $r > 0$ ein Hyperparameter, die **Lernrate**. Was macht diese Regel?
 
-<!-- Folie 11 -->
-Wir implementieren ein Perzeptron (Blatt 2)
-Übungsaufgabe:
-Ein Perzeptron mit Python&Numpy implementieren und auswerten
-Eingabedaten: (x,y) wobei x ein zweidimensionaler Array ist
-Ausgabe: Genauigkeit auf einem Testset (nach Training).
+* Wenn $y = f(x)$, also bei korrekter Klassifikation, ist $y - f(x) = 0$ und damit $w_{\text{neu}} = w$: Nichts passiert.
+* Wenn $y = 1$, aber $f(x) = 0$, so ist $w_{\text{neu}} = w + r x$. Dann ist $w_{\text{neu}} \cdot x = w \cdot x + r \, (x \cdot x)$, und weil $x \cdot x > 0$ für alle $x \neq 0$ gilt, ist die Aktivierung für dieses $x$ *gewachsen* – in Richtung der richtigen Entscheidung $f(x) = 1$.
+* Wenn $y = 0$, aber $f(x) = 1$, so ist $w_{\text{neu}} = w - r x$, und die Aktivierung *sinkt* entsprechend.
 
-<!-- Folie 12 -->
-Wir implementieren ein Perzeptron (Blatt 2)
-Übungsaufgabe:
-Ein Perzeptron mit Python&Numpy implementieren und auswerten
-Eingabedaten: (x,y) wobei x ein zweidimensionaler Array ist
-Ausgabe: Genauigkeit auf einem Testset (nach Training).
-Tipp: Lernrate 0.01
-Tipp 2: die selben Daten mehrmals verwenden im Training
-Tipp 3: zum Üben hier gut geeignet: scikit-learn’s datasets.make_blobs
+Die Regel schiebt also die Trennhyperebene bei jedem Fehler ein Stück in Richtung des falsch klassifizierten Punkts. Man kann beweisen (Perzeptron-Konvergenzsatz, Novikoff 1962), dass diese Regel nach endlich vielen Fehlern eine trennende Hyperebene findet, *falls* die Daten linear trennbar sind. Falls nicht, terminiert das Verfahren nie von selbst.
 
-<!-- Folie 13 -->
-Wir implementieren ein Perzeptron (Blatt 2)
-Übungsaufgabe:
-Ein Perzeptron mit Python&Numpy implementieren und auswerten
-Eingabedaten: (x,y) wobei x ein zweidimensionaler Array ist
-Ausgabe: Genauigkeit auf einem Testset (nach Training).
-Komplett lost? Kommilitonen ebenfalls überfordert?
-Bitte Bescheid sagen und ggf. das hier lesen (ist aber ugly code):
-github.com/nandesh553/100-Days-of-Deep-Learning/blob/main/Day%207%20-%20Perceptrons%20from%20scratch%20using%20NumPy.ipynb
+**Zielgröße.** Wir messen den Erfolg als Anteil falsch klassifizierter Samples (Fehlerrate), bzw. als Anteil korrekt klassifizierter Samples (Accuracy) auf einem Testset.
 
-## Zurück in die Theorie
+**Initialisierung.** Irgendwo muss $w$ anfangen; wir initialisieren $w$ z.B. auf den Vektor $(1, 1, \dots, 1)$. Auch das ist eine Entscheidung mit Konsequenzen, wie wir später sehen werden.
 
-<!-- Folie 14 -->
-Wozu das olle Perzeptron?
-Moderne neuronale Netze verwenden meist keine Perzeptrons mehr.
-Beliebter ist stattdessen die Multilineare oder Logistische Regression,
-die ebenfalls gleich strukturierte Eingabedaten annimmt und sehr
-ähnlich verarbeitet:
-Skalarprodukt, gefolgt von einer nichtlinearen Funktion.
-Dieses “Kochrezept” (die gemeinsame Verallgemeinerung) heißt
-manchmal auch einfach “Perzeptron”.
-Offene Frage: wie trainiert man ein “verallgemeinertes Perzeptron”?
+<!-- TODO Abbildung: make_blobs-Daten in R^2 mit Trenngerade w·x + b = 0 vor und nach einigen Perzeptron-Updates -->
 
-## Wie geht’s weiter mit dem Perzeptron?
+## Zurück in die Theorie: Wozu das olle Perzeptron?
 
-<!-- Folie 15 -->
-Training des verallgemeinerten Perzeptrons
-Das verallgemeinerte Perzeptron ist ein Regressionsmodell mit
-Funktion
-f(x) = τ(w · x)
-Spezialfall
-Lineare Regression: τ(a) = a
-Perzeptron:
-τ(a) = [a > 0]
+Moderne neuronale Netze verwenden meist keine Perzeptrons mehr. Beliebter ist die multilineare oder logistische Regression, die ebenfalls gleich strukturierte Eingabedaten annimmt und sehr ähnlich verarbeitet: *Skalarprodukt, gefolgt von einer nichtlinearen Funktion.* Dieses Kochrezept – die gemeinsame Verallgemeinerung – heißt manchmal auch einfach „Perzeptron“.
 
-<!-- Folie 16 -->
-Training des verallgemeinerten Perzeptrons
-Das verallgemeinerte Perzeptron ist ein Regressionsmodell mit
-Funktion
-f(x) = τ(w · x)
-Spezialfall
-Training
-Lineare Regression: τ(a) = a
-kleinste Quadrate
-Perzeptron:
-τ(a) = [a > 0] Perzeptronregel
-wneu := w + r · (y - f(x))x
+:::{prf:definition} Verallgemeinertes Perzeptron
+Das verallgemeinerte Perzeptron ist ein Regressionsmodell mit Parametern $w \in \mathbb{R}^n$ und Funktion
 
-<!-- Folie 17 -->
-Training des verallgemeinerten Perzeptrons
-Das verallgemeinerte Perzeptron ist ein Regressionsmodell mit
-Funktion
-f(x) = τ(w · x)
-Spezialfall
-Lineare Regression: τ(a) = a
-Perzeptron:
-τ(a) = [a > 0]
-Stetige Version:
-τ(a) = tanh(a), hyperbolischer Tangens
-Logistische Reg.:
-τ(a) = σ(a), logistische Sigmoidfunktion
+$$
+f(x) = \tau(w \cdot x)
+$$
 
-<!-- Folie 18 -->
-Training des verallgemeinerten Perzeptrons
-Das verallgemeinerte Perzeptron ist ein Regressionsmodell mit
-Funktion
-f(x) = τ(w · x)
-Spezialfall
-Lineare Regression: τ(a) = a
-Perzeptron:
-τ(a) = [a > 0]
-Stetige Version:
-τ(a) = tanh(a), hyperbolischer Tangens
-Logistische Reg.:
-τ(a) = σ(a), logistische Sigmoidfunktion
-Update-Regel?
-wneu = ???
+für eine feste *Aktivierungsfunktion* $\tau \colon \mathbb{R} \to \mathbb{R}$.
+:::
 
-<!-- Folie 19 -->
-Training des verallgemeinerten Perzeptrons
-Das verallgemeinerte Perzeptron ist ein Regressionsmodell mit
-Funktion
-f(x) = τ(w · x)
-Spezialfall
-Lineare Regression: τ(a) = a
-Perzeptron:
-τ(a) = [a > 0]
-Stetige Version:
-τ(a) = tanh(a), hyperbolischer Tangens
-Logistische Reg.:
-τ(a) = σ(a), logistische Sigmoidfunktion
-→ werden wir noch eingehend studieren
+Die Wahl von $\tau$ bestimmt, welches bekannte Modell wir vor uns haben – und wie man es trainiert:
 
-<!-- Folie 20 -->
-Training des Mehrschichten-Perzeptrons (MLP)
-Das verallgemeinerte Perzeptron ist ein Regressionsmodell mit
-Funktion
-f(x) = τ(w · x)
-Angenommen, x ∊ ℝ2 und v,w ∊ ℝ2 sind die Gewichte von zwei
-Perzeptrons:
-x1
-g(x) = [v · x > 0]
-x2
-f(x) = [w · x > 0]
+| Modell | $\tau(a)$ | Training |
+|---|---|---|
+| Lineare Regression | $\tau(a) = a$ | kleinste Quadrate |
+| Perzeptron | $\tau(a) = [a > 0]$ | Perzeptronregel $w_{\text{neu}} := w + r (y - f(x)) x$ |
+| „stetiges Perzeptron“ | $\tau(a) = \tanh(a)$ | ? |
+| Logistische Regression | $\tau(a) = \sigma(a) = \frac{1}{1 + e^{-a}}$ | ? |
 
-<!-- Folie 21 -->
-Training des Mehrschichten-Perzeptrons (MLP)
-Das verallgemeinerte Perzeptron ist ein Regressionsmodell mit
-Funktion
-f(x) = τ(w · x)
-Angenommen, x ∊ ℝ2 und v,w ∊ ℝ2 sind die Gewichte von zwei
-Perzeptrons und z := (g(x), f(x)) ist der Ergebnisvektor.
-x1
-g(x) = [v · x > 0]
-h(x) = [u · z > 0]
-x2
-f(x) = [w · x > 0]
-Perzeptron-Updateregel nur für 1 Perzeptron (hier: h bzw u)
+Die letzten beiden Zeilen sind stetige, sogar differenzierbare Versionen der Sprungfunktion $[a > 0]$: $\tanh$ bildet nach $(-1, 1)$ ab, die logistische Sigmoidfunktion $\sigma$ nach $(0, 1)$. Die offene Frage ist die Update-Regel: Wie trainiert man ein verallgemeinertes Perzeptron mit beliebigem $\tau$? Die Antwort – Gradientenabstieg auf einer Loss-Funktion – werden wir in den nächsten Kapiteln eingehend studieren; die Perzeptronregel wird sich dabei als Spezialfall erweisen (Blatt 3).
 
-<!-- Folie 22 -->
-Training des Mehrschichten-Perzeptrons (MLP)
-Das verallgemeinerte Perzeptron ist ein Regressionsmodell mit
-Funktion
-f(x) = τ(w · x)
-Angenommen, x ∊ ℝ2 und v,w ∊ ℝ2 sind die Gewichte von zwei
-Perzeptrons und z := (g(x), f(x)) ist der Ergebnisvektor.
-x1
-g(x) = [v · x > 0]
-h(x) = [u · z > 0]
-x2
-f(x) = [w · x > 0]
-→ Multilayer-Training? Backpropagation! … machen wir noch.
+## Mehrere Schichten
 
-<!-- Folie 23 -->
-Training der Mehrschichten-Linearen Regression
-Die lineare Regression ist ein Regressionsmodell mit Funktion
-f(x) = w · x
-Angenommen, x ∊ ℝ2 und v,w ∊ ℝ2 sind die Gewichte von zwei
-lin.Reg. und z := (v · x, w · x) ist der Ergebnisvektor.
-x1
-g(x) = v · x
-h(x) = u · z = u1(v · x)+u2(w · x)
-x2
-f(x) = w · x
+### Warum die Perzeptronregel nicht reicht
 
-<!-- Folie 24 -->
-Training der Mehrschichten-Linearen Regression
-Die lineare Regression ist ein Regressionsmodell mit Funktion
-f(x) = w · x
-Angenommen, x ∊ ℝ2 und v,w ∊ ℝ2 sind die Gewichte von zwei
-lin.Reg. und z := (v · x, w · x) ist der Ergebnisvektor.
-x1
-g(x) = v · x
-h(x) = u · z = u1(v · x)+u2(w · x)
-x2
-f(x) = w · x
-=
-u1v1x1+u1v2x2+u2w1x1+u2w2x2
-= (u1v+u2w) · x
-→ äquivalent zu einer einzigen linearen Regression
+Angenommen, $x \in \mathbb{R}^2$ und $v, w \in \mathbb{R}^2$ sind die Gewichte von zwei Perzeptrons,
 
-## Vortrainierte Modelle verwenden; Orientierung
+$$
+g(x) = [\, v \cdot x > 0 \,], \qquad f(x) = [\, w \cdot x > 0 \,],
+$$
 
-<!-- Folie 25 -->
+und $z := (g(x), f(x)) \in \{0,1\}^2$ ist der Ergebnisvektor der ersten Schicht. Ein drittes Perzeptron mit Gewichten $u \in \mathbb{R}^2$ berechnet daraus
 
-## Tasks
+$$
+h(x) = [\, u \cdot z > 0 \,].
+$$
 
-<!-- Folie 26 -->
-Was tun mit Deep Learning?
-Wenn wir für eine Aufgabe ein vortrainiertes
-Modell verwenden wollen,
-müssen wir wissen, welches Modell
-geeignet sein kann.
-→ Wir schauen bei Hugging Face
-huggingface.co/models
-huggingface.co/tasks
-“The Hugging Face Hub hosts many models
-for a variety of machine learning tasks.”
+Das ist ein Multilayer Perceptron mit einer versteckten Schicht. Die Perzeptronregel sagt uns, wie wir $u$ anpassen, wenn $h(x)$ falsch liegt – aber sie sagt nichts darüber, wie $v$ und $w$ angepasst werden sollten. Welches der beiden Perzeptrons in der ersten Schicht war „schuld“? Die Antwort auf diese Frage heißt **Backpropagation**, und sie funktioniert nur für differenzierbare $\tau$. Das machen wir noch.
 
-<!-- Folie 29 -->
+### Warum lineare Regression keine Schichten braucht
 
-## Hugging Face … ?
+Man könnte auf die Idee kommen, statt Perzeptrons einfach lineare Regressionen zu stapeln, die haben ja ein bekanntes Trainingsverfahren. Seien also $g(x) = v \cdot x$ und $f(x) = w \cdot x$ zwei lineare Regressionen, $z := (v \cdot x, w \cdot x)$, und $h(x) = u \cdot z$. Dann ist
 
-<!-- Folie 30 -->
-Surfen Sie ruhig weiter auf HuggingFace.co. Hier ein paar Fakten:
-◼
-◼
-◼
-HF verdient Geld mit gehosteter Inferenz
-HF lockt Entwickler an mit guter Infrastruktur wie
-◼ Libraries (z.B. transformers, diffusers, gradio),
-◼ Hosting (git repos, models, spaces),
-◼ Dokumentation
-für Finetuning (Nachtrainieren von vortrainierten Modellen).
-HF ist ein privates Unternehmen aus New York City, gegründet 2016,
-Heute (bzw. Ende 2023) mit ca. 4.5 Mrd. $ bewertet
+$$
+h(x) = u_1 (v \cdot x) + u_2 (w \cdot x)
+= u_1 v_1 x_1 + u_1 v_2 x_2 + u_2 w_1 x_1 + u_2 w_2 x_2
+= (u_1 v + u_2 w) \cdot x .
+$$
 
-## Zum neuen Übungsblatt
+Das ist äquivalent zu einer einzigen linearen Regression mit Gewichtsvektor $u_1 v + u_2 w$. Allgemein: Ein Produkt von Matrizen ist wieder eine Matrix, mehrere lineare Schichten hintereinander sind wieder eine lineare Schicht. Ohne die Nichtlinearität $\tau$ zwischen den Schichten bringt Tiefe gar nichts. Genau deshalb heißt $\tau$ auch *Aktivierungsfunktion* und nicht Dekoration.
 
-<!-- Folie 31 -->
-Tipps für Blatt 2
-◼ Arbeiten Sie direkt mit der Perzeptronregel
-wneu := w + r · (y - f(x))x
-und lassen Sie sich nicht vom verallgemeinerten Perzeptron verwirren.
-◼ Benutzen Sie Scikit-learn:
-◼ sklearn.model_selection.train_test_split
-◼ sklearn.datasets.make_blobs
-◼
-sklearn.datasets.load_iris
+## Vortrainierte Modelle verwenden: Orientierung
+
+### Was tun mit Deep Learning?
+
+Bevor wir selbst Modelle trainieren, lohnt sich ein Blick darauf, was es schon gibt. Wenn wir für eine Aufgabe ein vortrainiertes Modell verwenden wollen, müssen wir wissen, welches Modell geeignet sein kann. Dafür schauen wir bei **Hugging Face**: [huggingface.co/models](https://huggingface.co/models) listet Modelle, [huggingface.co/tasks](https://huggingface.co/tasks) sortiert sie nach Aufgabe („The Hugging Face Hub hosts many models for a variety of machine learning tasks.“). Die Task-Seiten sind ein guter Einstieg, um das Vokabular zu lernen: Was ist Image Classification, Object Detection, Token Classification, Text Generation, …? Einen systematischen Rundgang machen wir im nächsten Kapitel.
+
+<!-- TODO Abbildung: Screenshot huggingface.co/tasks (Folien 27–28) oder Liste der Task-Kategorien -->
+
+### Hugging Face … ?
+
+Surfen Sie ruhig weiter auf huggingface.co. Hier ein paar Fakten zur Einordnung:
+
+* HF verdient Geld mit gehosteter Inferenz.
+* HF lockt Entwickler an mit guter Infrastruktur: Libraries (z.B. `transformers`, `diffusers`, `gradio`), Hosting (git-Repositories für Modelle, Datensätze und „Spaces“) und Dokumentation – insbesondere für **Finetuning**, das Nachtrainieren von vortrainierten Modellen.
+* HF ist ein privates Unternehmen aus New York City, gegründet 2016, Ende 2023 mit ca. 4,5 Mrd. $ bewertet.
+
+Mit anderen Worten: Der Hub ist ein kommerzielles Angebot, aber die Modelle und Libraries darauf sind größtenteils offen, und für uns ist er die bequemste Art, an Gewichte zu kommen.
+
+## Tipps zum Übungsblatt
+
+Auf Blatt 2 implementieren Sie ein Perzeptron mit Python und NumPy und werten es aus. Eingabedaten sind $(x, y)$, wobei `x` ein zweidimensionales Array ist (eine Zeile pro Sample, eine Spalte pro Feature); Ausgabe ist die Genauigkeit auf einem Testset nach dem Training.
+
+* Arbeiten Sie direkt mit der Perzeptronregel $w_{\text{neu}} := w + r \cdot (y - f(x)) \, x$ und lassen Sie sich nicht vom verallgemeinerten Perzeptron verwirren.
+* Lernrate: $r = 0{,}01$ ist ein guter Startwert.
+* Verwenden Sie dieselben Daten mehrmals im Training (mehrere *Epochen*).
+* Benutzen Sie Scikit-learn: `sklearn.model_selection.train_test_split` für den Split, `sklearn.datasets.make_blobs` für gut geeignete Übungsdaten, `sklearn.datasets.load_iris` für einen echten Datensatz.
+* Komplett lost, Kommilitonen ebenfalls überfordert? Bitte Bescheid sagen.

@@ -5,645 +5,201 @@ short_title: "VL 03"
 
 # PyTorch Basics und Tensoren
 
-:::{warning} Rohfassung
-Dieses Kapitel ist eine automatische Transkription der Folien von VL 03 aus dem WiSe 2025/26
-(`from_2025/slides/Einführung in Deep Learning 2025_26 VL 03_ PyTorch Basics, Tensoren.pdf`), Folie für Folie in der Originalreihenfolge.
-Formeln und Abbildungen sind dabei größtenteils verloren gegangen; der Text ist noch nicht überarbeitet.
+:::{note} Stand
+Erste Prosafassung (aus den Folien von VL 03, WiSe 2025/26). Abbildungen fehlen noch, siehe die `TODO`-Kommentare.
 :::
 
-## Vortrainierte Modelle verwenden; Orientierung
+## Vortrainierte Modelle verwenden: Orientierung
 
-<!-- Folie 2 -->
+Wenn wir für eine Aufgabe ein vortrainiertes Modell verwenden wollen, müssen wir wissen, welches Modell geeignet sein kann. Auf [huggingface.co/tasks](https://huggingface.co/tasks) sind die Modelle nach *Tasks* sortiert. Wir gehen exemplarisch einige davon durch – nicht, um die Modelle zu verstehen, sondern um das Vokabular zu lernen und ein Gefühl dafür zu bekommen, was heute „von der Stange“ geht.
 
-## Tasks
+### Tasks in Computer Vision
 
-<!-- Folie 3 -->
-Was tun mit Deep Learning?
-Wenn wir für eine Aufgabe ein vortrainiertes
-Modell verwenden wollen,
-müssen wir wissen, welches Modell
-geeignet sein kann.
-→ Wir schauen bei Hugging Face
-huggingface.co/models
-huggingface.co/tasks
-“The Hugging Face Hub hosts many models
-for a variety of machine learning tasks.”
+* **Depth Estimation**: Von einem Bild für jeden Pixel bei $(x, y)$ auch eine $z$-Koordinate schätzen. Beispiel: Intels *Dense Prediction Transformer* (DPT) von 2022, ein Vision Transformer.
+* **Image Classification**: Von einem Bild sagen, was es ist. Beispiel: Microsofts *ResNet* (CNN, 2016), trainiert auf ImageNet – gibt zu einem Foto „Igel“ zurück.
+* **Object Detection**: Von einem Bild sagen, was drauf ist, mit Bounding Boxes. Beispiel: *YOLOS* (NeurIPS 2021), trainiert auf ImageNet und COCO – findet in Bild #7781 des COCO-Datensatzes „Cat, Banana, Chair“.
+* **Image Segmentation**: Auf einem Bild für jedes erkannte Objekt die Umrisse finden, das Bild also aufteilen. Beispiel: Nvidias *Segformer* (2021), trainiert auf ImageNet, COCO und ADE20k.
+* **Image-to-Image**: Ein Bild als Input, ein Bild als Output, z.B. historische Fotos einfärben. Beispiel: Renato Sortinos *ColorizeNet*, ein Finetune von ControlNet / Stable Diffusion 2.1 auf bearbeitetem COCO.
+* **Unconditional Image Generation**: Nur ein Bild als Output, z.B. ein Katzenbild (je nach Datenbasis). Beispiel: Googles *DDPM* (2020), Denoising Diffusion Probabilistic Models.
+* **Zero-Shot Image Classification**: Von einem Bild sagen, was es ist – ohne dass für die Klassen gelabelte Daten vorlagen. Beispiel: OpenAIs *CLIP-ViT* (2021), Contrastive Language-Image Pretrained Vision Transformer, dem man die Kandidaten als Text gibt („a photo of a car“).
 
-## Tasks in Computer Vision
+Zur Einordnung des Vokabulars: **Zero-Shot** heißt ohne gelabelte Daten für die neue Aufgabe, **One-Shot** (oder Single-Shot) mit einem gelabelten Sample, **Few-Shot** mit einigen wenigen gelabelten Samples.
 
-<!-- Folie 4 -->
-Exemplarisch erstmal das
+### Tasks in NLP
 
-<!-- Folie 5 -->
-Von einem Bild für jeden Pixel bei (x,y)
-auch eine z-Koordinate schätzen
-Beispiel: Intel’s Dense Prediction Transformer (DPT) von 2022
-(ein Vision Transformer)
+Wir betrachten nur einen Teil der NLP-Tasks:
 
-<!-- Folie 6 -->
-Von einem Bild sagen, was es ist
-Beispiel: Microsoft’s ResNet CNN von 2016
-Trainiert auf ImageNet
-Igel
+* **Text Classification**: Texten ein Genre, eine Stimmung (Sentiment) o.ä. zuordnen. Beispiel: *DistilBERT* (2019), self-supervised trainiert mit BERT (Bidirectional Encoder Representations from Transformers) als Lehrer – zur Destillation kommen wir in VL 14.
+* **Token Classification**: Named Entity Recognition (NER) oder Part-of-Speech (PoS) Tagging, also jedem Wort ein Label geben. Beispiel: *flair ner-german* (2020) von der HU Berlin.
+* **Summarization**: Zu einem Text (Satz oder Dokument) eine kurze Zusammenfassung schreiben. Beispiel: Facebooks *BART* (2019), Bidirectional and Auto-Regressive Transformers.
+* **Fill-Mask**: Einen Lückentext füllen. Beispiel: wieder *DistilBERT* – das ist nämlich genau die Aufgabe, mit der BERT-artige Modelle vortrainiert werden.
 
-<!-- Folie 7 -->
-Von einem Bild sagen, was drauf ist
-Beispiel: YOLOS von 2021 (NeurIPS)
-Trainiert auf ImageNet und COCO
-Cat, Banana,
-Chair
-#7781 from
-COCO dataset
+## Vortrainierte Modelle verwenden: Praktisch
 
-<!-- Folie 8 -->
-Beispiel: Nvidia’s Segformer von 2021
-Trainiert auf ImageNet, COCO und ADE20k
-Auf einem Bild für jedes erkannte
-Objekt Umrisse finden (das Bild
-segmentieren = aufteilen)
-Cat, Banana,
-Chair
-#7781 from
-COCO dataset
+### Beispiel: Übersetzen mit WMT19
 
-<!-- Folie 9 -->
-Ein Bild als Input, ein Bild als Output
-z.B. historische Photos einfärben
-Beispiel: Renato Sortino’s ColorizeNet
-Finetune von ControlNet / Stable Diffusion 2.1
-auf bearbeitetem COCO
+Wir übersetzen von Englisch nach Deutsch mit Facebooks WMT19-Modell, nach der Anleitung von Hugging Face:
 
-<!-- Folie 10 -->
-Ein Bild als Output
-z.B. ein Katzenbild (je nach Datenbasis)
-Beispiel: Google’s DDPM (2020)
-(Denoising Diffusion Probabilistic Models)
-
-<!-- Folie 11 -->
-Beispiel: OpenAI’s CLIP-ViT (2021)
-Contrastive Language-Image Pretrained Vision Transformer
-Von einem Bild sagen, was es ist
-(z.B. ein Foto von einem Auto)
-Zero-Shot = ohne gelabelte Daten
-
-<!-- Folie 12 -->
-Beispiel: OpenAI’s CLIP-ViT (2021)
-Contrastive Language-Image Pretrained Vision Transformer
-Von einem Bild sagen, was es ist
-(z.B. ein Foto von einem Auto)
-Zero-Shot = ohne gelabelte Daten
-
-<!-- Folie 13 -->
-vgl. Single-Shot / One-Shot = ein gelabeltes Sample,
-Few-Shot = einige wenige gelabelte Samples
-Beispiel: OpenAI’s CLIP-ViT (2021)
-Contrastive Language-Image Pretrained Vision Transformer
-Von einem Bild sagen, was es ist
-(z.B. ein Foto von einem Auto)
-Zero-Shot = ohne gelabelte Daten
-
-## Tasks
-
-<!-- Folie 14 -->
-
-## Tasks in NLP
-
-<!-- Folie 15 -->
-Wir betrachten
-einen Teil der
-NLP-Tasks
-
-<!-- Folie 16 -->
-Texten ein Genre oder eine Stimmung
-o.ä. zuordnen
-Beispiel: DistilBERT (2019)
-Self-supervised trainiert mit BERT
-(Bidirectional Encoder
-Representations from
-Transformers) als Lehrer
-
-<!-- Folie 17 -->
-Beispiel: flair ner-german (2020)
-von der HU Berlin
-Named Entity
-Recognition (NER)
-oder Part-of-Speech
-(PoS) tagging
-
-<!-- Folie 18 -->
-Zu einem Text (Satz oder
-Dokument o.ä.) eine kurze
-Zusammenfassung schreiben
-Beispiel: Facebook’s BART (2019)
-(Bidirectional and Auto-Regressive
-Transformers)
-
-<!-- Folie 19 -->
-Einen Lückentext füllen
-Beispiel: DistilBERT (2019) wieder!
-
-## Vortrainierte Modelle verwenden; Praktisch
-
-<!-- Folie 20 -->
-
-## Beispiel: Vortrainiertes Modell verwenden
-
-<!-- Folie 21 -->
-Wir übersetzen von Englisch nach Deutsch mit Facebook’s WMT19
-Nach der Anleitung von Hugging Face:
+```python
 from transformers import FSMTForConditionalGeneration, FSMTTokenizer
+
 mname = "facebook/wmt19-en-de"
 tokenizer = FSMTTokenizer.from_pretrained(mname)
 model = FSMTForConditionalGeneration.from_pretrained(mname)
+
 input = "I am not sure if deep learning is really for me."
 input_ids = tokenizer.encode(input, return_tensors="pt")
 outputs = model.generate(input_ids)
 decoded = tokenizer.decode(outputs[0], skip_special_tokens=True)
-print(decoded) # Ich bin mir nicht sicher, ob Deep Learning wirklich etwas für mich ist.
+print(decoded)
+# Ich bin mir nicht sicher, ob Deep Learning wirklich etwas für mich ist.
+```
 
-<!-- Folie 22 -->
-Wir übersetzen von Englisch nach Deutsch mit Facebook’s WMT19
-Auf der GPU mit CUDA rechnen:
-from transformers import FSMTForConditionalGeneration, FSMTTokenizer
-mname = "facebook/wmt19-en-de"
-tokenizer = FSMTTokenizer.from_pretrained(mname)
+Das Muster ist typisch für alle Modelle auf dem Hub: Ein **Tokenizer** verwandelt Text in Zahlen (`input_ids`, als PyTorch-Tensor, daher `return_tensors="pt"`), das **Modell** verwandelt Zahlen in Zahlen, und der Tokenizer verwandelt das Ergebnis zurück in Text. `from_pretrained` lädt die Gewichte beim ersten Aufruf aus dem Hub herunter und cached sie lokal.
+
+### Auf der GPU rechnen
+
+Um auf der GPU mit CUDA zu rechnen, müssen Modell *und* Eingabedaten dorthin verschoben werden:
+
+```python
 model = FSMTForConditionalGeneration.from_pretrained(mname).to("cuda")
-input = "I am not sure if deep learning is really for me."
 input_ids = tokenizer.encode(input, return_tensors="pt").to("cuda")
-outputs = model.generate(input_ids)
-decoded = tokenizer.decode(outputs[0], skip_special_tokens=True)
-print(decoded) # Ich bin mir nicht sicher, ob Deep Learning wirklich etwas für mich ist.
+```
 
-<!-- Folie 23 -->
-Wir übersetzen von Englisch nach Deutsch mit Facebook’s WMT19
-Was zuvor geschah:
-$ pip install 'transformers[torch]'
-in der Shell, oder in einem Notebook:
-!pip install 'transformers[torch]'
-Das allein installiert noch kein CUDA,
-d.h. alle Rechnungen (mit PyTorch) finden auf der CPU mit dem Hauptspeicher statt,
-das ist intern “device 0”.
+Der übliche Workflow, damit der Code auch ohne GPU läuft:
 
-<!-- Folie 24 -->
-Wir übersetzen von Englisch nach Deutsch mit Facebook’s WMT19
-Üblicher Workflow:
+```python
 import torch
-device = torch.device("cuda")
-if torch.cuda.is_available()
-else torch.device("cpu")
+
+device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 model.to(device)
-Alternativ kann die accelerate-Library von HF auch dynamisch Teile
-des Modells auf die GPU, andere Teile im Hauptspeicher belassen, um
-sehr große Modelle zu nutzen.
+```
 
-<!-- Folie 25 -->
-Wir übersetzen von Englisch nach Deutsch mit Facebook’s WMT19
-Was zuvor geschah (in Ubuntu Linux auf NVIDIA Hardware):
-$ lspci | grep -i nvidia
-0d:00.0 VGA compatible controller: NVIDIA Corporation TU104 [GeForce RTX 2060] (rev a1)
-$ nvidia-smi
-+------------------------------------------------------------------------------+
-| NVIDIA-SMI 470.199.02
-Driver Version: 470.199.02
-CUDA Version: 11.4 |
-|-------------------------------+----------------------+-----------------------+
-$ sudo apt install cuda
-$ sudo systemctl reboot
+Alternativ kann die `accelerate`-Library von HF auch dynamisch Teile des Modells auf die GPU legen und andere Teile im Hauptspeicher belassen, um sehr große Modelle zu nutzen.
 
-<!-- Folie 26 -->
-Wir übersetzen von Englisch nach Deutsch mit Facebook’s WMT19
-Was zuvor geschah (in Ubuntu Linux auf NVIDIA Hardware):
-$ nvidia-smi
-+------------------------------------------------------------------------------+
-| NVIDIA-SMI 470.199.02
-Driver Version: 470.199.02
-CUDA Version: 11.4 |
-|-------------------------------+----------------------+-----------------------+
-$ nvcc --version
-nvcc: NVIDIA (R) Cuda compiler driver
-Copyright (c) 2005-2019 NVIDIA Corporation
-Built on Sun_Jul_28_19:07:16_PDT_2019
-Cuda compilation tools, release 10.1, V10.1.243
-Das bedeutet, die GPU kann CUDA 11.4, installiert ist CUDA 10.1. Passt!
+### Was zuvor geschah: Installation
 
-<!-- Folie 27 -->
-Wir übersetzen von Englisch nach Deutsch mit Facebook’s WMT19
-Was zuvor geschah (in Ubuntu Linux auf NVIDIA Hardware):
-$ pip install torch torchvision --index-url \
-https://download.pytorch.org/whl/cu129
-Hat es geklappt? Python Interpreter auf und:
-import torch
-torch.cuda.is_available()
-Auf AMD GPUs: statt CUDA heißt das ROCm, aber der Befehl ist der selbe.
-Auf MacOS 12.3+ gibt es auch Beschleunigung, MPS.
+`pip install 'transformers[torch]'` in der Shell (oder `!pip install ...` in einem Notebook) installiert `transformers` und PyTorch. Das allein installiert noch kein CUDA, d.h. alle Rechnungen finden auf der CPU mit dem Hauptspeicher statt – das ist intern „device 0“ vom Typ `cpu`.
 
-<!-- Folie 28 -->
-Wir übersetzen von Englisch nach Deutsch mit Facebook’s WMT19
-Was zuvor geschah (in Linux):
-In dem Ordner, in dem man gerade arbeitet (also .py-Code speichert usw.):
-$ python -m venv .env
-$ source .env/bin/activate
-Und erst DANACH mit pip fleissig installieren.
-Oder entspannt
-uv benutzen ;-)
-Später ggf.
-$ source .env/bin/deactivate
+Für CUDA (Ubuntu Linux auf NVIDIA-Hardware) prüft man zuerst, was da ist:
 
-<!-- Folie 29 -->
-Alternative zur lokalen Installation: Google Colab
-Übersicht, was Google Colab ist und kann:
-colab.research.google.com/notebooks/intro.ipynb
-Neues Notebook ausprobieren: http://colab.research.google.com/#create=true
-Beispiel eines Hugging Face Tutorials / Dokumentation Notebooks:
-colab.research.google.com/github/huggingface/notebooks/blob/main/transformers_doc/en/task_summary.ipynb
+```bash
+lspci | grep -i nvidia
+nvidia-smi
+```
+
+`nvidia-smi` zeigt die Treiberversion und die maximale CUDA-Version, die die GPU bzw. der Treiber unterstützt (z.B. 11.4); `nvcc --version` zeigt die installierte CUDA-Toolkit-Version (z.B. 10.1). Die installierte Version darf kleiner sein als die maximale – das passt dann. Anschließend PyTorch mit passendem CUDA-Build installieren:
+
+```bash
+pip install torch torchvision --index-url https://download.pytorch.org/whl/cu129
+```
+
+Hat es geklappt? Python-Interpreter auf und `torch.cuda.is_available()` sollte `True` liefern. Auf AMD-GPUs heißt das Ganze ROCm statt CUDA, aber der Python-Befehl ist derselbe; auf macOS 12.3+ gibt es Beschleunigung über MPS (`torch.backends.mps.is_available()`).
+
+Und noch davor: eine virtuelle Umgebung im Arbeitsordner anlegen, damit die Installation nicht das System-Python verändert:
+
+```bash
+python -m venv .env
+source .env/bin/activate
+```
+
+und erst *danach* mit `pip` fleißig installieren. Oder entspannt `uv` benutzen, das Umgebung und Pakete in einem Schritt verwaltet.
+
+### Alternative: Google Colab
+
+Wer nicht lokal installieren will oder keine GPU hat: [Google Colab](https://colab.research.google.com/notebooks/intro.ipynb) bietet Jupyter-Notebooks mit (begrenzter) GPU-Zeit im Browser. Ein neues Notebook gibt es unter [colab.research.google.com/#create=true](http://colab.research.google.com/#create=true); die Hugging-Face-Dokumentation ist als Colab-Notebooks verfügbar, z.B. die [Task Summary](https://colab.research.google.com/github/huggingface/notebooks/blob/main/transformers_doc/en/task_summary.ipynb).
 
 ## PyTorch Basics: Tensoren
 
-<!-- Folie 30 -->
+### Tensoren ≈ Arrays
 
-## PyTorch Datenmodell
+Vier Fragen: Was ist ein Array? Was ist ein Tensor? Was ist ein Array in NumPy? Was ist ein Tensor in Torch?
 
-<!-- Folie 31 -->
-Tensoren ≈ Arrays
-Was ist ein Array?
-Was ist ein Tensor?
-Was ist ein Array in Numpy?
-Was ist ein Tensor in Torch?
+* Ein **Array** ist eine Sammlung von Daten von gleichem Typ, die fortlaufend im Speicher liegen (können).
+* Ein **Tensor** ist, je nachdem, wen man fragt:
+  * Physiker: ein Objekt, das sich tensoriell transformiert.
+  * Mathematiker: ein Element in einem Tensorproduktraum.
+  * Informatiker: ein fancy Wort für Arrays.
+* Ein **Tensor in Torch** ist eine Sammlung von Daten von gleichem Typ (dem `dtype`), die fortlaufend im Speicher liegen – und zwar potentiell im GPU-Speicher – optimiert für Gradientenabstiegsmethoden (Attribut `grad`, dazu mehr in VL 05/06).
 
-<!-- Folie 32 -->
-Tensoren ≈ Arrays
-Was ist ein Array?
-Was ist ein Tensor?
-Was ist ein Array in Numpy?
-Ein Array ist eine Sammlung von Daten von
-gleichem Typ, die fortlaufend im Speicher
-liegen (können).
-Physiker: Ein Tensor ist ein Objekt, dass
-sich tensoriell transformiert.
-Was ist ein Tensor in Torch?
+Man kann einen Torch-Tensor aus einem NumPy-Array herstellen, sogar ohne zusätzlichen Speicher zu verbrauchen (`torch.from_numpy` teilt sich den Speicher mit dem Array). Lesen Sie dazu das PyTorch-Tutorial „Tensors“.
 
-<!-- Folie 33 -->
-Tensoren ≈ Arrays
-Was ist ein Array?
-Was ist ein Tensor?
-Was ist ein Array in Numpy?
-Was ist ein Tensor in Torch?
-Ein Array ist eine Sammlung von Daten von
-gleichem Typ, die fortlaufend im Speicher
-liegen.
-Physiker: Ein Tensor ist ein Objekt, dass
-sich tensoriell transformiert.
-Mathematiker: Ein Tensor ist ein Element in
-einem Tensorproduktraum.
+### Ausflug: Tensoren in der Mathematik
 
-<!-- Folie 34 -->
-Tensoren ≈ Arrays
-Was ist ein Array?
-Was ist ein Tensor?
-Was ist ein Array in Numpy?
-Was ist ein Tensor in Torch?
-Ein Array ist eine Sammlung von Daten von
-gleichem Typ, die fortlaufend im Speicher
-liegen.
-Physiker: Ein Tensor ist ein Objekt, dass
-sich tensoriell transformiert.
-Mathematiker: Ein Tensor ist ein Element in
-einem Tensorproduktraum.
-Informatiker: Ein Tensor ist ein fancy Wort
-für Arrays.
+Der Informatiker hat nicht ganz Unrecht, aber das mathematische Konzept hilft zu verstehen, was `shape` und `reshape` eigentlich bedeuten. Wer den Ausflug überspringen will, kann bei „Ausflug beendet“ weiterlesen.
 
-<!-- Folie 35 -->
-Tensoren ≈ Arrays
-Was ist ein Array?
-Was ist ein Tensor?
-Was ist ein Array in Numpy?
-Was ist ein Tensor in Torch?
-Ein Tensor in Torch ist eine Sammlung
-von Daten von gleichem Typ (dem dtype),
-die fortlaufend im Speicher liegen, und
-zwar potentiell im GPU-Speicher,
-optimiert für Gradientenabstiegsmethoden
-(Attribut “grad”).
-Man kann einen Torch Tensor aus einem
-Numpy Array herstellen - sogar ohne
-zusätzlichen Speicher zu verbrauchen!
-→ PyTorch Tutorial “Tensors”
+**Tensorprodukt.** Gegeben Vektorräume $U, V, W$ (z.B. $V = \mathbb{R}^n$ und $W = \mathbb{R}^m$) kann man das Tensorprodukt bilden: $V \otimes W$ ist definiert als ein Vektorraum, sodass es eine 1:1-Korrespondenz gibt
 
-## Ausflug: Tensoren in der Mathematik
+$$
+\{\text{bilineare Abbildungen } V \times W \to U\} \longleftrightarrow \{\text{lineare Abbildungen } V \otimes W \to U\}.
+$$
 
-<!-- Folie 36 -->
-Definitionen
-Gegeben Vektorräume U, V, W
-(z.B. V = ℝn und W = ℝm)
-kann man das Tensorprodukt bilden:
-V ⊗ W ist definiert als ein Vektorraum
-sodass es eine 1:1-Korrespondenz gibt:
-{Bilineare Abbildungen V ✕ W → U}
-{Lineare Abbildungen V ⊗ W → U}
-Insbesondere gibt es eine bilineare Abb.
-V ✕ W → V ⊗ W.
+Insbesondere gibt es eine bilineare Abbildung $V \times W \to V \otimes W$, $(v, w) \mapsto v \otimes w$. Wenn $v_1, \dots, v_n \in V$ und $w_1, \dots, w_m \in W$ Basen sind, so bilden die $v_i \otimes w_j$ eine Basis von $V \otimes W$; insbesondere ist $\dim(V \otimes W) = n \cdot m$ und $\mathbb{R}^n \otimes \mathbb{R}^m \cong \mathbb{R}^{nm}$.
 
-<!-- Folie 37 -->
-Definitionen
-Gegeben Vektorräume U, V, W
-(z.B. V = ℝn und W = ℝm)
-kann man das Tensorprodukt bilden:
-V ⊗ W ist definiert als ein Vektorraum
-sodass es eine 1:1-Korrespondenz gibt:
-{Bilineare Abbildungen V ✕ W → U}
-{Lineare Abbildungen V ⊗ W → U}
-Insbesondere gibt es eine bilineare Abb.
-V ✕ W → V ⊗ W.
-Wenn v1, ..., vn ∊ V und w1, ..., wm ∊ W
-Basen sind, so ist vi⊗wj Basis von V ⊗ W.
+**Dualraum.** Man kann den Dualraum bilden: $V^\vee := \operatorname{Hom}(V, \mathbb{R})$, die Menge der linearen Abbildungen $V \to \mathbb{R}$, ist ein neuer Vektorraum. Man nennt die Elemente von $V$ *Vektoren*, die Elemente von $V^\vee$ *Kovektoren* oder *Linearformen*. Wenn $v_1, \dots, v_n$ eine Basis von $V$ ist, sind die Linearformen $v_i^\vee := (v_i \cdot \,)$ eine Basis von $V^\vee$. Man sagt, die Elemente von $W \otimes V^\vee$ sind *kovariant* in $W$ und *kontravariant* in $V$; in Einstein-Notation schreibt man Indizes für $W$ unten, für $V^\vee$ oben.
 
-<!-- Folie 38 -->
-Definitionen
-Gegeben Vektorräume U, V, W
-(z.B. V = ℝn und W = ℝm)
-kann man das Tensorprodukt bilden:
-V ⊗ W ist definiert als ein Vektorraum
-sodass es eine 1:1-Korrespondenz gibt:
-{Bilineare Abbildungen V ✕ W → U}
-{Lineare Abbildungen V ⊗ W → U}
-Insbesondere gibt es eine bilineare Abb.
-V ✕ W → V ⊗ W.
-Wenn v1, ..., vn ∊ V und w1, ..., wm ∊ W
-Basen sind, so ist vi⊗wj Basis von V ⊗ W.
-Man kann den Dualraum bilden:
-Vv := Hom(V, ℝ), (ein neuer Vektorraum)
-Die Menge der linearen Abbildungen V→ℝ.
-Man nennt die Elemente von V Vektoren,
-die Elemente von Vv Kovektoren oder
-Linearformen.
+Gegeben $\mathbb{R}^n$ mit der Standardbasis und dem Standardskalarprodukt können wir Vektoren in Kovektoren verwandeln (und zurück) durch Transponieren: Der Spaltenvektor $v \in \mathbb{R}^n$ wird zum Zeilenvektor $v^T \in (\mathbb{R}^n)^\vee$, und die Matrixmultiplikation $v^T w = v \cdot w \in \mathbb{R}$ ist das Skalarprodukt.
 
-<!-- Folie 39 -->
-Definitionen
-Gegeben Vektorräume U, V, W
-(z.B. V = ℝn und W = ℝm)
-kann man das Tensorprodukt bilden:
-V ⊗ W ist definiert als ein Vektorraum
-sodass es eine 1:1-Korrespondenz gibt:
-{Bilineare Abbildungen V ✕ W → U}
-{Lineare Abbildungen V ⊗ W → U}
-Insbesondere gibt es eine bilineare Abb.
-V ✕ W → V ⊗ W.
-Wenn v1, ..., vn ∊ V und w1, ..., wm ∊ W
-Basen sind, so ist vi⊗wj Basis von V ⊗ W.
-Man kann den Dualraum bilden:
-Vv := Hom(V, ℝ), (ein neuer Vektorraum)
-Die Menge der linearen Abbildungen V→ℝ.
-Man nennt die Elemente von V Vektoren,
-die Elemente von Vv Kovektoren oder
-Linearformen.
-Wenn v1, ..., vn ∊ V eine Basis ist, sind die
-Linearformen viv := vi· eine Basis von Vv.
-Man sagt, die Elemente von W⊗Vv sind
-kovariant in W und kontravariant in V.
-In Einstein-Notation schreiben wir Indizes
-für W unten, für Vv oben.
+**Skalare, Vektoren und Matrizen als Tensoren.** Gegeben einen Vektorraum $V$ lässt sich das iterierte Tensorprodukt $V^{\otimes k} = V \otimes \dots \otimes V$ ($k$ mal) betrachten, mit der Konvention $V^{\otimes 0} = \mathbb{R}$ (denn $V \otimes \mathbb{R} = V$). Eine Matrix $M \in \mathbb{R}^{n \times m}$ lässt sich auffassen als lineare Abbildung $F \colon \mathbb{R}^m \to \mathbb{R}^n$; die Spalten der Matrix sind $F(e_1), \dots, F(e_m)$, die Bilder der Basisvektoren. Für jeden Vektor $v \in \mathbb{R}^m$ ist stets
 
-<!-- Folie 40 -->
-Dualisieren mit Standardskalarprodukt
-Gegeben einen Vektorraum ℝn mit der
-Standardbasis und dem
-Standard-Skalarprodukt können wir
-Vektoren in Kovektoren verwandeln (und
-zurück) durch Transponieren:
-Spaltenvektor v ∊ ℝn wird zu
-Zeilenvektor vT ∊ (ℝn)v,
-über die Matrixmultiplikation
-(Skalarprodukt):
-vT w = v · w ∊ ℝ
+$$
+v = \sum_{i=1}^m (e_i \cdot v) \, e_i,
+\qquad\text{also}\qquad
+F(v) = \sum_{i=1}^m (e_i \cdot v) \, F(e_i),
+$$
 
-<!-- Folie 41 -->
-Skalare, Vektoren und Matrizen als Tensoren
-Gegeben einen Vektorraum V lässt sich
-auch das iterierte Tensorprodukt
-betrachten:
-V⊗k = V⊗ … ⊗V (k mal)
-Dabei ist es Konvention, dass
-V⊗0 = ℝ, denn V⊗ℝ = V.
+und damit
 
-<!-- Folie 42 -->
-Skalare, Vektoren und Matrizen als Tensoren
-Gegeben einen Vektorraum V lässt sich
-auch das iterierte Tensorprodukt
-betrachten:
-V⊗k = V⊗ … ⊗V (k mal)
-Dabei ist es Konvention, dass
-V⊗0 = ℝ, denn V⊗ℝ = V.
-Eine Matrix M ∊ ℝnxm lässt sich auffassen
-als lineare Abbildung F : ℝm → ℝn.
-Die Spalten der Matrix sind F(e1), …, F(em),
-die Bilder der Basisvektoren (in ℝn).
-Es ist für jeden Vektor v ∊ ℝm stets
-v = (e1 · v)e1 + … + (em · v)em
-= ∑i=1..m (ei·v)ei
+$$
+F = \sum_{i=1}^m F(e_i) \, (e_i \cdot \,) = \sum_{i=1}^m F(e_i) \otimes e_i^\vee \;\in\; \mathbb{R}^n \otimes (\mathbb{R}^m)^\vee .
+$$
 
-<!-- Folie 43 -->
-Skalare, Vektoren und Matrizen als Tensoren
-Gegeben einen Vektorraum V lässt sich
-auch das iterierte Tensorprodukt
-betrachten:
-V⊗k = V⊗ … ⊗V (k mal)
-Dabei ist es Konvention, dass
-V⊗0 = ℝ, denn V⊗ℝ = V.
-Es ist für jeden Vektor v ∊ ℝm stets
-v = (e1 · v)e1 + … + (em · v)em
-= ∑i=1..m (ei·v)ei
-Eine Matrix M ∊ ℝnxm lässt sich auffassen
-als lineare Abbildung F : ℝm → ℝn.
-Die Spalten der Matrix sind F(e1), …, F(em),
-die Bilder der Basisvektoren (in ℝn).
-F(v) = F( ∑i=1..m (ei·v)ei )
-= ∑i=1..m (ei·v) F(ei) also
-F = ∑i=1..m F(ei) (ei· )
-= ∑i=1..m F(ei) (ei)v ∊ ℝn⊗(ℝm)v
+Jedes Element eines Tensorproduktraums wird *Tensor* genannt – also auch Skalare $x \in \mathbb{R} = V^{\otimes 0}$, Vektoren $v \in V = V^{\otimes 1}$ und lineare Abbildungen $F \in \operatorname{Hom}(W, V) = V \otimes W^\vee$. Ein Skalar ist ein Tensor vom Rang 0, ein Vektor vom Rang 1, eine Matrix vom Rang 2. Und was ist $T \in \mathbb{R}^n \otimes \mathbb{R}^m \otimes (\mathbb{R}^p)^\vee \otimes (\mathbb{R}^q)^\vee$ für ein Tensor? Eine bilineare Abbildung $\mathbb{R}^p \times \mathbb{R}^q \to \mathbb{R}^n \otimes \mathbb{R}^m$, zum Beispiel – oder eine lineare Abbildung $\mathbb{R}^p \otimes \mathbb{R}^q \to \mathbb{R}^{n} \otimes \mathbb{R}^m$, oder vier Indizes, je nach Lesart.
 
-<!-- Folie 44 -->
-Skalare, Vektoren und Matrizen als Tensoren
-Gegeben einen Vektorraum V lässt sich
-auch das iterierte Tensorprodukt
-betrachten:
-V⊗k = V⊗ … ⊗V (k mal)
-Dabei ist es Konvention, dass
-V⊗0 = ℝ, denn V⊗ℝ = V.
-Es ist für jeden Vektor v ∊ ℝm stets
-v = (e1 · v)e1 + … + (em · v)em
-= ∑i=1..m (ei·v)ei
-Eine Matrix M ∊ ℝnxm lässt sich auffassen
-als lineare Abbildung F : ℝm → ℝn
-bzw. als Element des Tensorproduktraums:
-F = ∑i=1..m F(ei) (ei)v ∊ ℝn⊗(ℝm)v
-Jedes Element eines Tensorproduktraums,
-also auch Skalare x ∊ ℝ = V⊗0,
-Vektoren v ∊ V = V⊗1 und lineare
-Abbildungen F ∊ Hom(W,V) = V⊗(W)v
-wird Tensor genannt.
+**Obacht: lineare Abbildung ≠ Matrix.** Jede Matrix lässt sich als lineare Abbildung interpretieren. Umgekehrt lässt sich, gegeben eine Wahl von Basen, jede lineare Abbildung als Matrix schreiben, die *darstellende Matrix*. Genauso hat der gleiche Vektor $v \in V$ verschiedene darstellende Vektoren $[v]_B \in \mathbb{R}^n$ für verschiedene Basen $B$. Zu einem Tensor $T \in U \otimes V \otimes W$ lässt sich ebenso eine Darstellung finden, wenn man Basen von $U$, $V$ und $W$ wählt: Sie hat zu jedem Tripel von Indizes $(i, j, k)$ ein „Matrixelement“, nämlich den Koeffizienten von $u_i \otimes v_j \otimes w_k$. Das lässt sich dreidimensional darstellen, analog zur zweidimensionalen Darstellung für Matrizen.
 
-<!-- Folie 45 -->
-Größere Tensoren
-Was ist mit T ∊ ℝn⊗ℝm⊗(ℝp)v⊗(ℝq)v,
-was ist das für ein Tensor?
+**Zurück zu NumPy & Co.** In der Mathematik müssen wir uns zu einem Tensor merken, wie das Tensorprodukt zustande kam, um zu wissen, welche Variablen kovariant und welche kontravariant sind. Wählt man überall Basen, so verschwindet der Unterschied – man sieht nur noch die Koeffizienten. In NumPy arbeiten wir implizit mit Darstellungen in der Standardbasis von $\mathbb{R}^n$. Ist der Shape eines Arrays `a` z.B. `a.shape == (4, 10, 2)`, so bedeutet dies mathematisch gesehen
 
-<!-- Folie 46 -->
-Obacht: lineare Abbildung ≠ Matrix
-Wir wissen: jede Matrix lässt sich als
-lineare Abbildung interpretieren.
-Umgekehrt: gegeben eine Wahl von Basen
-lässt sich jede lineare Abbildung als Matrix
-schreiben, die darstellende Matrix.
-Wir können so auch jeden Vektor in einer
-Basis darstellen, und der gleiche Vektor
-v ∊ V kann mehrere verschiedene
-darstellende Vektoren [v]B ∊ ℝn haben
-(wobei n = dimV ist und B eine Basis).
+$$
+a \in \mathbb{R}^4 \otimes \mathbb{R}^{10} \otimes \mathbb{R}^2 .
+$$
 
-<!-- Folie 47 -->
-Obacht: lineare Abbildung ≠ Matrix
-Wir wissen: jede Matrix lässt sich als
-lineare Abbildung interpretieren.
-Umgekehrt: gegeben eine Wahl von Basen
-lässt sich jede lineare Abbildung als Matrix
-schreiben, die darstellende Matrix.
-Wir können so auch jeden Vektor in einer
-Basis darstellen, und der gleiche Vektor
-v ∊ V kann mehrere verschiedene
-darstellende Vektoren [v]B ∊ ℝn haben
-(wobei n = dimV ist und B eine Basis).
-Zu einem Tensor T ∊ U⊗V⊗W lässt sich
-auch eine Darstellung finden, wenn man
-Basen von U, V und W wählt.
-Diese hat nun zu jedem Tripel von Indizes
-(i, j, k) ein “Matrixelement”, nämlich den
-Koeffizienten von ui⊗vj⊗wk.
-Das lässt sich dreidimensional darstellen,
-analog zur zweidimensionalen Darstellung
-für Matrizen.
+:::{admonition} Quizfrage
+:class: hint
+Was macht `reshape`?
+:::
 
-<!-- Folie 48 -->
-Zurück zu Numpy & Co
-In der Mathematik müssen wir uns zu
-einem Tensor in einem Tensorproduktraum
-merken, wie das Tensorprodukt zustande
-kam, um zu wissen, welche Variablen
-kovariant und welche kontravariant sind.
+Antwort: Wegen $\mathbb{R}^n \otimes \mathbb{R}^m \cong \mathbb{R}^{nm}$ hat $\mathbb{R}^4 \otimes \mathbb{R}^{10}$ eine Basis der Form $e_i \otimes e_j$ mit insgesamt $4 \cdot 10 = 40$ Elementen, also ist `a.reshape(-1, 2) == a.reshape(40, 2)` derselbe Tensor, nur mit anderer Klammerung der Faktoren. Reshape ändert keine Daten, nur die Interpretation des Speichers.
 
-<!-- Folie 49 -->
-Zurück zu Numpy & Co
-In der Mathematik müssen wir uns zu
-einem Tensor in einem Tensorproduktraum
-merken, wie das Tensorprodukt zustande
-kam, um zu wissen, welche Variablen
-kovariant und welche kontravariant sind.
-Wählt man überall Basen, so verschwindet
-der Unterschied (man sieht nur noch die
-Koeffizienten).
-In Numpy arbeiten wir implizit mit
-Darstellungen in der Standardbasis von ℝn.
-
-<!-- Folie 50 -->
-Zurück zu Numpy & Co
-In der Mathematik müssen wir uns zu
-einem Tensor in einem Tensorproduktraum
-merken, wie das Tensorprodukt zustande
-kam, um zu wissen, welche Variablen
-kovariant und welche kontravariant sind.
-Wählt man überall Basen, so verschwindet
-der Unterschied (man sieht nur noch die
-Koeffizienten).
-In Numpy arbeiten wir implizit mit
-Darstellungen in der Standardbasis von ℝn.
-Ist der Shape eines Numpy Arrays a z.B.
-a.shape == (4,10,2)
-So bedeutet dies, dass mathematisch
-gesehen
-a ∊ ℝ4⊗ℝ10⊗ℝ2.
-Quizfrage: Was macht der Reshape?
-
-## Ausflug beendet.
-
-<!-- Folie 51 -->
-Zurück zu Numpy & Co
-In der Mathematik müssen wir uns zu
-einem Tensor in einem Tensorproduktraum
-merken, wie das Tensorprodukt zustande
-kam, um zu wissen, welche Variablen
-kovariant und welche kontravariant sind.
-Wählt man überall Basen, so verschwindet
-der Unterschied (man sieht nur noch die
-Koeffizienten).
-In Numpy arbeiten wir implizit mit
-Darstellungen in der Standardbasis von ℝn.
-n
-m
-n*m
-Es ist ℝ ⊗ℝ = ℝ
-.
-Ist der Shape eines Numpy Arrays a z.B.
-a.shape == (4,10,2)
-So bedeutet dies, dass mathematisch
-gesehen
-a ∊ ℝ4⊗ℝ10⊗ℝ2.
-Quizfrage: Was macht der Reshape?
-Beispiel: ℝ4⊗ℝ10 hat eine Basis der Form
-ei⊗ej, also insgesamt der Länge 4*10=40.
-a.reshape(-1,2) == a.reshape(40,2)
+**Ausflug beendet.**
 
 ## Lineare Regression zur Klassifikation
 
-<!-- Folie 52 -->
+Wenn wir an Regression denken, dann oft an eine Regressionsgerade in einem $x$-$y$-Plot, bei dem auf der $x$-Achse die unabhängige Variable (der *Regressor*) und auf der $y$-Achse die abhängige Variable (der *Regressand*) aufgetragen ist. Bei der Klassifikation ist der Regressand die Klasse, $y \in \{0, 1\}$.
 
-<!-- Folie 53 -->
-Wenn wir an Regression denken, dann oft an eine Regressionsgerade in einem x-y-Plot,
-bei dem auf der x-Achse die unabhängige Variable (der Regressor) und auf der y-Achse
-die abhängige Variable (der Regressand) aufgetragen ist.
+Schauen wir uns das Schritt für Schritt an, für einen eindimensionalen Regressor $x \in \mathbb{R}$ mit zwei Klassen, deren $x$-Werte sich überlappen:
 
-<!-- Folie 54 -->
+1. Im eindimensionalen Plot liegen alle Punkte der Klasse 0 auf der Höhe $y = 0$ und alle Punkte der Klasse 1 auf $y = 1$.
+2. Die lineare Regression fittet eine Gerade $\hat{y} = w x + b$ durch diese Punktwolke. Die Gerade nimmt Werte in ganz $\mathbb{R}$ an, auch weit außerhalb von $[0, 1]$.
+3. **Harte Klassifikation**: Wir entscheiden für Klasse 1, wenn $\hat{y} > \tfrac12$. Die Entscheidungsgrenze ist der Punkt $x^*$ mit $w x^* + b = \tfrac12$; die vorhergesagte Klasse als Funktion von $x$ ist eine Sprungfunktion.
+4. Für einen zweidimensionalen Regressor $x \in \mathbb{R}^2$ wird aus der Geraden eine Regressionshyperebene über der $(x_1, x_2)$-Ebene, und die Entscheidungsgrenze $\{ w \cdot x + b = \tfrac12 \}$ ist eine Gerade in der $(x_1, x_2)$-Ebene – genau wie beim Perzeptron.
 
-<!-- Folie 55 -->
-Eindimensionaler Plot der gleichen Situation:
+<!-- TODO Abbildungen (Folien 54–62): Regressionsgerade auf 0/1-Daten; harte Klassifikation; 2D-Regressor mit Entscheidungsgrenze; 3D-Regressionshyperebene; 1D-Fall mit Sprungfunktion und S-Kurve -->
 
-<!-- Folie 56 -->
-Eindimensionaler Plot, harte Klassifikation
+### S-Förmigkeit herstellen
 
-<!-- Folie 57 -->
-Verallgemeinerung auf zweidimensionalen Regressor
+Die Sprungfunktion $[\hat{y} > \tfrac12]$ ist unbefriedigend: Sie ist nicht differenzierbar, und sie verrät nicht, wie *sicher* die Entscheidung ist. Anstelle von $[\hat{y} > \tfrac12]$ könnte man $[\tanh(\hat{y}) > 0]$ verwenden; $\tanh$ liegt zwischen $-1$ und $+1$. Um zwischen $0$ und $1$ zu landen, kann man z.B.
 
-<!-- Folie 58 -->
-Visualisierung der Entscheidungsgrenze
+$$
+\tfrac12 \left( \tanh(\hat{y}) + 1 \right)
+$$
 
-<!-- Folie 59 -->
-Dreidimensionales Bild, Regressionshyperebene
+nutzen. Das liefert eine S-förmige Kurve, die glatt von 0 nach 1 übergeht. Aber: Die Interpretation einer Zahl zwischen 0 und 1 als *Wahrscheinlichkeit* ist damit noch unklar. Genau das klärt das nächste Kapitel mit der logistischen Regression.
 
-<!-- Folie 60 -->
-Eindimensionaler Fall, Vorhersage auf y-Achse
+## Tipps zum Übungsblatt
 
-<!-- Folie 61 -->
-Eindimensionaler Fall, Vorhersage auf y-Achse
+Auf Blatt 3 geht es um das verallgemeinerte Perzeptron und um *schwache Ableitungen*, damit wir später auch Funktionen mit Knick (wie $|x|$ oder ReLU) ableiten können.
 
-<!-- Folie 62 -->
-Eindimensionaler Fall, Vorhersage auf y-Achse
-
-<!-- Folie 63 -->
-S-Förmigkeit herstellen
-Anstelle von [y > ½] könnte man auch [tanh(y) > 0] verwenden;
-tanh liegt zwischen -1 und +1.
-Um zwischen 0 und 1 zu landen, kann z.B. ½ * (tanh(y)+1) nutzen.
-Das liefert eine S-förmige Kurve.
-Aber: Interpretation einer Zahl zwischen 0 und 1 als Wahrscheinlichkeit unklar.
-
-## Zum neuen Übungsblatt
-
-<!-- Folie 64 -->
-Tipps für Blatt 3
-◼ Das Beispiel mit der Betragsfunktion ist wichtig. Versuchen Sie zu
-verstehen, dass die veränderte Vorzeichenfunktion “quatschi” mit
-der Definition quatschi(x) = sign(x) für x≠0 und quatschi(0) := 100
-ebenfalls eine schwache Ableitung der Betragsfunktion ist.
-◼ Lassen Sie sich nicht von Integralen einschüchtern,
-Denn um die geht es “in Wirklichkeit” nicht.
-Aber Integrale haben eine besondere Eigenschaft,
-die hier zur Geltung kommt - gerade bei dem Beispiel oben.
-→ Wir brauchen das später beim Gradientenabstieg/Backpropagation.
+* Das Beispiel mit der Betragsfunktion ist wichtig. Versuchen Sie zu verstehen, dass die veränderte Vorzeichenfunktion „quatschi“ mit $\operatorname{quatschi}(x) = \operatorname{sign}(x)$ für $x \neq 0$ und $\operatorname{quatschi}(0) := 100$ ebenfalls eine schwache Ableitung der Betragsfunktion ist.
+* Lassen Sie sich nicht von Integralen einschüchtern, denn um die geht es „in Wirklichkeit“ nicht. Aber Integrale haben eine besondere Eigenschaft, die hier zur Geltung kommt – gerade bei dem Beispiel oben: Der Wert an einem einzelnen Punkt spielt keine Rolle.
+* Wir brauchen das später beim Gradientenabstieg und bei Backpropagation.
