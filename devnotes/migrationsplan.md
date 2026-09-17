@@ -18,7 +18,7 @@ Stand: 2026-09-17
    Übungsblätter und Klausur-Aufgabenschatz voraussetzen (siehe Tabelle unten).
    *Stand 2026-09-17: Alle 15 Kapitel liegen als erste Prosafassung mit LaTeX-Formeln vor (Formeln, die in den
    Google-Slides Bilder waren, wurden aus den gerenderten Folien rekonstruiert). Noch offen: Abbildungen – die Stellen
-   sind als `<!-- TODO Abbildung -->` markiert, Liste in `abbildungen-todo.txt`; fachliche Durchsicht der Ergänzungen,
+   sind als `<!-- TODO Abbildung -->` markiert, fachliche Durchsicht der Ergänzungen,
    die über die Folien hinausgehen (z.B. Perzeptron-Konvergenzsatz in VL 02, Attention-Formel in VL 09,
    Momentum/Adam-Formeln in VL 15).*
 3. **Übungsblätter** anpassen (`part-exercises/`, bereits per pandoc konvertiert; Abgabetermine noch aus 2025).
@@ -26,23 +26,11 @@ Stand: 2026-09-17
 
 ## Zuordnung Vorlesung ↔ Kapitel ↔ Übungsblatt ↔ Klausur
 
-| VL | Kapitel | Blatt (2025) | Klausur-Aufgabenschatz (Bezug) |
-|----|---------|--------------|--------------------------------|
-| 01 | `part-grundlagen/01-ueberblick-perzeptron.md` | 00 (Lin. Algebra: Skalarprodukt, Orthogonalität, Länge), 01 (Winkel, NumPy, Matplotlib) | A1 MC: Perzeptron ohne Bias |
-| 02 | `part-grundlagen/02-perzeptron-vortrainierte-modelle.md` | 02 (Perzeptron in NumPy) | A2 Anwendungskonzept (Transfer Learning) |
-| 03 | `part-grundlagen/03-pytorch-tensoren.md` | 03 (verallg. Perzeptron, schwache Ableitung), 04 (PyTorch) | A1 MC: `requires_grad`, Tensor-Rang; A3 Code-Verständnis |
-| 04 | `part-lernen/04-logistische-regression.md` | 05 (Sigmoid, Softmax, Kreuzentropie) | A1 MC: Odds, Sigmoid, Softmax |
-| 05 | `part-lernen/05-sgd.md` | — | A1 MC: SGD; A4 Update-Schritt |
-| 06 | `part-lernen/06-backprop.md` | 07 (Backprop von Hand, 2×2 ReLU) | A4 Backpropagation & Update; A1 MC: vanishing gradient, ReLU-Ableitung |
-| 07 | `part-representation-learning/07-autoencoder.md` | 06 (Autoencoder) | A1 MC: Swish/sterbende Neuronen, AE ≈ Identität, Dropout |
-| 08 | `part-representation-learning/08-latent-space-vae.md` | 08 (Denoising/Label-AE MNIST), 09 (VAE, Frenzel) | A1 MC: Reparameterization Trick, Denoising AE, word2vec CBOW/Skip-Gram |
-| 09 | `part-representation-learning/09-representation-learning.md` | — | A1 MC: BERT Masked LM, RNN/LSTM, Positionsembedding |
-| 10 | `part-architekturen-anwendungen/10-cnn.md` | 10 (Faltung, Filter, Pooling) | A1 MC: 1×1-Faltung, Äquivarianz, Parameter-Sharing, Stride, Gauß-Kernel |
-| 11 | `part-architekturen-anwendungen/11-llms-benutzen.md` | 11 (BERT latent classifier) | A1 MC: Ollama/quantisierte LLMs; A3 Code-Verständnis |
-| 12 | `part-architekturen-anwendungen/12-gans.md` | — | A1 MC: Diskriminator, Generator-Input, WGAN/Mode Collapse |
-| 13 | `part-architekturen-anwendungen/13-latent-spaces-anwendungen.md` | — | A1 MC: Empfehlungssystem im Latent Space; A2 Anwendungskonzept |
-| 14 | `part-architekturen-anwendungen/14-destillation.md` | — | A5 gruppierte MC |
-| 15 | `part-architekturen-anwendungen/15-maerchenstunde.md` | 12 = Take-Home-Probeklausur | — |
+Seit dem Umbau am 2026-09-17 sind die Kapitel inhaltlich geschnitten (20 Kapitel, Dateinamen ohne VL-Nummer).
+Die Zuordnung Vorlesungswoche → Kapitel steht als Tabelle in `README.md` („Inhalt“), der Abgleich mit dem
+Klausur-Aufgabenschatz in `klausur-abdeckung.md`. Übungsblätter (2025): 00/01 → Perzeptron (Lin. Algebra),
+02 → Perzeptron, 03 → Gradientenabstieg (schwache Ableitungen), 04/05 → Logistische Regression,
+06/08 → Autoencoder, 07 → Backpropagation, 09 → VAE, 10 → CNNs, 11 → LLMs benutzen.
 
 Klausurformat 2025/26: 6 Aufgaben, 55 Punkte, 90 Minuten, keine Hilfsmittel; Aufgabentypen laut
 `../from_2025/exam/exam2025-eidl-aufgabenschatz.tex`: (1) Multiple Choice W/F, (2) Anwendungskonzept,

@@ -62,6 +62,7 @@ project:
        - file: part-architekturen-anwendungen/20-adversarial-attacks-polysemie.md
     - title: Notebooks
       children:
+       - file: notebooks/README.md
        - file: notebooks/nn-by-hand.ipynb
        - file: notebooks/VL_10_convolutions.ipynb
        - file: notebooks/VL_11_backprop.ipynb

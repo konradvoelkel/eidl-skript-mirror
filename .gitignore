@@ -142,3 +142,5 @@ _build/
 monkeytype.sqlite3
 exports/
 scalene-profile.json
+# LLM-Gewichte (zu groß)
+*.gguf

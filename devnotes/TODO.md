@@ -1,64 +1,86 @@
 # TODO eidl-skript
 
-Stand: 2026-09-17. Erledigtes nach unten in „Erledigt“ verschieben.
+Stand: 2026-09-17 (abends). Erledigtes nach unten in „Erledigt“ verschieben.
+Punkte mit **[Entscheidung]** brauchen eine Antwort von Konrad; ein Vorschlag steht jeweils dabei.
 
 ## Inhalt (Skript)
 
-- [ ] **Fachliche Durchsicht** der Prosafassung, insbesondere der Stellen, die über die Folien 2025 hinausgehen:
-  - VL 01: Perzeptron-Definition vorgezogen, Hyperebenen-Geometrie, XOR über OR/NAND/AND
-  - VL 02: Perzeptron-Konvergenzsatz (Novikoff), Tabelle verallg. Perzeptron
-  - VL 03: Rang-0/1/2-Tensoren, `reshape`-Antwort
-  - VL 04: $H'(p) = -\operatorname{logit}(p)$, $\tanh(x) = 2\sigma(2x)-1$, Softmax = $\sigma$(Differenz)
-  - VL 05: Cauchy-Schwarz-Argument für die Gradientenrichtung, Hinge vs. Perceptron Loss
-  - VL 06: $\delta_k$-Notation, ELU/Leaky/Swish/GELU-Formeln
-  - VL 07: explizite ReLU-Interpolation $Q(x)$ für $x^2$ (Probe gerechnet), Weierstraß-Bemerkung
-  - VL 08: KL-Term des Sparse AE, geschlossene Form der Gauß-KL, CBOW-Formel
-  - VL 09: Message-Passing-, RNN-, Attention-Formel; BLEU als geometrisches Mittel
-  - VL 10: 2D-Faltungsformel, Kanäle, 1×1-Faltung, Korrelation vs. Faltung
-  - VL 11: Konvolutions-Backprop-Summe, LoRA-Parameterzahl, RAG-Skizze
-  - VL 12: Minimax-Formel, DCGAN-Hinweis, Diffusion-Ablösung
-  - VL 13: top-p, two-tower-Modell
-  - VL 14: $T^2$-Faktor im Distillation Loss
-  - VL 15: Momentum/Adam-Updategleichungen, FGSM-Formel, Polysemie-Absatz (aus Ruppik-Folien rekonstruiert)
-- [ ] **Abbildungen** – 62 Stellen `<!-- TODO Abbildung -->`, Liste in `abbildungen-todo.txt`.
-  Vorhandene Bilddateien in `../from_2025/slides/` (Tafelbilder, XOR-Playground, Bolukbasi Fig. 7, Arvanitidis Fig. 1, convolutions.png, asml.png); Rest per matplotlib neu erzeugen oder aus Google Slides exportieren.
-- [ ] **Kapitelstruktur**: Reihenfolge laut Vorstellungsdeck 2026 (LogReg/SGD/Backprop *vor* PyTorch) – Kapitel 03 nach hinten?
-- [ ] VL 06/07-Grenze neu ziehen (AE-Einführung am Ende von 06 vs. handgemachte Netze am Anfang von 07).
-- [ ] VL 08 entlasten: word2vec/NLP-Teil nach VL 09 verschieben?
-- [ ] Lehrbuchverweise ergänzen (Prince *UDL* Kapitel pro Thema; Deisenroth et al. für Mathe).
-- [ ] „Stand“-Hinweisboxen am Kapitelanfang entfernen, sobald ein Kapitel durchgesehen ist.
-- [ ] Formalia-Kapitel (`README.md`): Übungsleitung 2026/27, Räume/Zeiten bestätigen.
+- [ ] **Fachliche Durchsicht** der Prosafassung, insbesondere der Stellen, die über die Folien 2025 hinausgehen
+  (Liste pro Kapitel, Kapitelnamen neu):
+  - Perzeptron: Definition vorgezogen, Hyperebenen-Geometrie, XOR über OR/NAND/AND, Perzeptron-Konvergenzsatz (Novikoff), Tabelle verallg. Perzeptron, „ohne Bias nur durch den Ursprung“
+  - Was ist DL: Accuracy/Precision/Recall-Absatz (neu, wegen Klausur A2)
+  - Tensoren: Rang-0/1/2-Tensoren, `reshape`-Antwort
+  - Logistische Regression: $H'(p) = -\operatorname{logit}(p)$, $\tanh(x) = 2\sigma(2x)-1$, Softmax = $\sigma$(Differenz)
+  - Gradientenabstieg: Cauchy-Schwarz-Argument, Hinge vs. Perceptron Loss
+  - Backpropagation: $\delta_k$-Notation, Faltungs-Backprop-Beispiel (aus Klausur-Set A, neu), Konvolutions-Gradientensumme
+  - Aktivierungsfunktionen/Universalität: ELU/Leaky/Swish/GELU-Formeln, explizite $Q(x)$ für $x^2$ (Probe gerechnet), Weierstraß-Bemerkung
+  - Autoencoder: KL-Term des Sparse AE, Early Stopping / Data Augmentation (neu)
+  - VAE: geschlossene Gauß-KL, `logvar` (neu)
+  - word2vec: CBOW-Formel, top-p
+  - RepL/Graphen: Message-Passing-Formel
+  - Sequenzen: RNN-Rekursion, Attention-Formel, BLEU als geometrisches Mittel
+  - CNN: 2D-Faltungsformel, Kanäle, 1×1, Korrelation vs. Faltung, Ausgabegrößen-Formel + Shape-Beispiel (neu)
+  - LLMs: LoRA-Parameterzahl, RAG-Skizze
+  - GANs: Minimax-Formel, DCGAN, Diffusions-Ablösung
+  - Anwendungen: two-tower-Modell
+  - Destillation: $T^2$-Faktor
+  - Optimierer: Momentum/Adam-Gleichungen; Adversarial: FGSM-Formel, Polysemie-Absatz (aus Ruppik-Folien rekonstruiert)
+- [ ] **[Entscheidung] Kapitelschnitt prüfen.** Umgesetzt: 20 Kapitel, VL-Nummern nur noch in der Tabelle in `README.md`.
+  Bewusst getroffene Schnitte, die man anders setzen könnte:
+  - „Vortrainierte Modelle“ (Kap. 3) steht *vor* „Tensoren“ und „Logistische Regression“ – wie 2025. Das Vorstellungsdeck 2026 sieht PyTorch erst nach LogReg/SGD vor. *Vorschlag:* Reihenfolge lassen (die HF-Tour motiviert, warum man das alles lernt), aber im Vortrag Kap. 3 auf eine halbe Sitzung kürzen.
+  - „Aktivierungsfunktionen und Universalität“ (Kap. 8) bündelt ReLU & Co., Netze von Hand und die Approximationssätze. *Alternative:* Universalität als eigenes kurzes Kapitel am Ende von Teil II.
+  - „Backpropagation“ (Kap. 7) enthält jetzt drei Zugänge (Beispielrechnung, Induktion, Berechnungsgraph in PyTorch). Ggf. den PyTorch-Teil in ein eigenes Kapitel „Autograd“ auslagern, wenn er wächst.
+  - „VAE und latente Räume“ (Kap. 10) referenziert GANs, die erst in Kap. 16 kommen. *Vorschlag:* so lassen, Vorwärtsverweis ist markiert.
+- [ ] **Abbildungen**: 35 eingebettet (erzeugt von `make_figures.py`; Bilddateien in `images/`). Noch offen (9 Marker im Text):
+  - Hubel & Wiesel (Wikipedia Mads00, CC-BY-SA) – Download + Lizenzhinweis
+  - GIMP-Faltungsmatrix – Screenshot selbst machen
+  - CycleGAN / StyleGAN-Beispiele – Paper-Figuren; *Vorschlag:* verlinken statt einbetten (Lizenz)
+  - HuggingFace-Tasks-Screenshot – *Vorschlag:* durch die Aufzählung im Text ersetzen und Marker löschen
+  - Loss Landscape (Li et al.), Amini et al. – *Vorschlag:* verlinken
+  - Denoising-AE-Ergebnisbilder MNIST/USPS/Fashion – braucht trainiertes Modell; `blatt08-solution/` hat `denoising-example.png`, `dlae-latent-space.png`, `dlae-loss-curve.png` → übernehmen?
+  - GRU/LSTM-Diagramme (Wikipedia, CC-BY-SA) – Download + Lizenzhinweis, oder eigene Zeichnung
+  - Transformer Fig. 1 – *Vorschlag:* verlinken
+- [ ] Lehrbuchverweise ergänzen (Prince *UDL*: Kap. 3 shallow nets ↔ Universalität, Kap. 4 deep nets, Kap. 6 fitting/SGD, Kap. 7 gradients/backprop, Kap. 10 CNNs, Kap. 12 Transformer, Kap. 15 GANs, Kap. 17 VAE; Deisenroth et al. für Lin. Algebra/Analysis).
+- [ ] „Stand“-Hinweisboxen wurden beim Umbau entfernt; ggf. eine allgemeine Box in `index.md` („Entwurf, Stand …“).
+- [ ] Formalia (`README.md`): Übungsleitung 2026/27, Räume/Zeiten bestätigen.
+- [ ] Glossar für die Klausurvorbereitung (Vorschlag aus `klausur-abdeckung.md`).
+- [ ] „Rezept Anwendungskonzept“ in Kap. 17 (Vorschlag aus `klausur-abdeckung.md`).
 
 ## Übungsblätter
 
-- [ ] Abgabetermine 2026/27 eintragen (aktuell noch 2025-Daten mit Hinweis).
-- [ ] Blätter an neue Kapitelreihenfolge anpassen; Blatt 12 = Take-Home-Probeklausur anlegen.
-- [ ] Lösungen: bisher nur die in den `.tex` eingebetteten; Notebook-/Skript-Lösungen aus `../from_2025/exercises/blattNN-solution/` einbinden oder verlinken.
-- [ ] Englische Fassungen (`sheetNN.tex`) – konvertieren oder fallen lassen?
-- [ ] `hidefromsolutions`-Inhalte prüfen (werden vom Generator verworfen).
+- [ ] **[Entscheidung] Abgabetermine 2026/27.** 2025 waren es Mittwoche 12:00, wöchentlich ab 22.10.2025, Weihnachtspause 17.12.→14.01.
+  *Vorschlag* (eine Woche später als 2025, unter der Annahme Vorlesungsbeginn Mi 14.10.2026): Blatt 0 ohne Abgabe;
+  1: 21.10., 2: 28.10., 3: 04.11., 4: 11.11., 5: 18.11., 6: 25.11., 7: 02.12., 8: 09.12., 9: 16.12.2026,
+  10: 13.01., 11: 20.01.2027, 12 (Take-Home-Probeklausur): 27.01.2027. Nach Bestätigung per `sed` in `part-exercises/` eintragen.
+- [ ] Blatt 12 = Take-Home-Probeklausur anlegen (Grundlage: `../from_2025/exam/exam2025-eidl-probeklausur.tex`).
+- [ ] Lösungen: bisher nur die in den `.tex` eingebetteten. Notebook-/Skript-Lösungen liegen in `../from_2025/exercises/blattNN-solution/`.
+  *Vorschlag:* nicht ins Skript (öffentlich!), sondern eigenes privates Repo/Ordner; im Skript nur die kurzen Lösungsvorschläge als Dropdown wie jetzt.
+- [ ] **[Entscheidung] Englische Fassungen** (`sheetNN.tex`): 2025 gab es alle Blätter zweisprachig. *Vorschlag:* fallen lassen, solange die Vorlesung deutsch ist; sonst gleicher pandoc-Weg (`build_skript_from_2025.py` erweitern).
+- [ ] Blätter an neue Kapitelnamen anpassen (Verweise wie „Folien zu Vorlesung 4“ → Kapitelname).
 
 ## Klausur
 
-- [ ] Aufgabenschatz (`../from_2025/exam/exam2025-eidl-aufgabenschatz.tex`) gegen die Kapitel abgleichen: Deckt das Skript jede MC-Aussage ab? (Zuordnung in `migrationsplan.md`.)
-- [ ] `exam2026-eidl-exam-1/2.tex` (englische Entwürfe) – Status klären.
+- [x] Aufgabenschatz gegen die Kapitel abgeglichen → `klausur-abdeckung.md` (62/66 Begriffe, 4 fehlende ergänzt).
+- [ ] `exam2026-eidl-exam-1/2.tex` (englische Entwürfe vom 20.01.2026) – Status klären: Sind das die Vorlagen für 2026/27?
 
 ## Notebooks
 
-- [ ] `notebooks/` laufen nicht im Build (`jupyter: true` ist nur Thebe); entscheiden: ausgeführte Outputs einchecken oder `--execute` mit Python-Image.
-- [ ] Datenabhängigkeiten: `ASML.csv`, `pallino.jpg`, MNIST-Download, Qwen-GGUF (491 MB, nicht ins Repo).
-- [ ] `latent-classifier.ipynb` liegt doppelt vor (slides/ und exercises/), Version vergleichen.
+- [ ] Notebooks laufen nicht im Build (bewusst; `notebooks/README.md` erklärt das). `ASML.csv` und `pallino.jpg` liegen jetzt im Ordner, `*.gguf` ist per `.gitignore` ausgeschlossen.
+- [ ] **[Entscheidung]** Outputs eingecheckt lassen (Stand 2025) oder Notebooks einmal neu ausführen? *Vorschlag:* vor Semesterstart einmal mit aktuellem torch/transformers durchlaufen lassen, dann einchecken.
 
 ## Infrastruktur
 
-- [ ] GitLab Pages auf „Everyone“ stellen – **zum Semesterstart, bewusst noch nicht** (Site: https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de/).
-- [ ] PDF-Export (`myst build --pdf`) testen; LaTeX-Preamble aus EiPy übernommen, ungetestet.
-- [ ] `_site/sidebar_footer.md` ist leer, `navbar_end.md` nur „Inhaltsverzeichnis“ – wie bei EiPy füllen?
-- [ ] Ggf. Google Search Console Verification-Datei wieder in CI aufnehmen (wurde entfernt).
+- [ ] GitLab Pages auf „Everyone“ stellen – **zum Semesterstart, bewusst noch nicht** (https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de/).
+- [x] PDF-Export getestet: `uv run --only-group dev myst build --pdf` → `exports/eidl-skript.pdf`, 182 Seiten, Mathe und Abbildungen ok.
+- [ ] PDF: Code-Listings ohne Syntax-Highlighting, weil `minted`/`latexminted` auf diesem Rechner einen `ArgParser`-Fehler wirft (Versionskonflikt mit pygments 2.18). *Vorschlag:* `code_style: minted` in `myst.yml` entfernen (dann `verbatim`) oder `pip install --upgrade latexminted`.
+- [ ] PDF-Export in die CI aufnehmen und als Download verlinken? (Image bräuchte dann TeX Live – groß.) *Vorschlag:* PDF lokal bauen und bei Bedarf manuell hochladen.
+- [ ] `_site/sidebar_footer.md` ist leer, `navbar_end.md` nur „Inhaltsverzeichnis“ – wie bei EiPy (dort auch leer); lassen.
+- [ ] Logo: `logo/` enthält die SVGs und Exporte; `site_logo.png` (180 px) und `favicon.ico` (16/32/48) sind daraus erzeugt, `logo_text` in `myst.yml` gesetzt. Für Rocket.Chat `logo/eidl-logo-512.png` verwenden.
 
 ## Beamer-Folien (Schritt 4 des Migrationsplans)
 
-- [ ] Erst nach Durchsicht des Skripts: pro Kapitel ein Beamer-Deck im Stil von `../slides/Einführung in Deep Learning 2026 header.tex` (hhubeamer).
-- [ ] Entscheiden, ob Folien aus dem MyST-Quelltext generiert werden (myst → LaTeX-Export) oder von Hand.
+- [ ] Erst nach Durchsicht des Skripts: pro Vorlesungswoche ein Beamer-Deck im Stil von `../slides/Einführung in Deep Learning 2026 header.tex` (hhubeamer). Die Tabelle in `README.md` sagt, welche Kapitel(teile) in welche Woche gehören.
+- [ ] **[Entscheidung]** Folien aus dem MyST-Quelltext generieren oder von Hand? *Vorschlag:* von Hand in LaTeX, aber Formeln und Abbildungen aus dem Skript übernehmen (`images/` ist direkt `\includegraphics`-tauglich; Formeln 1:1 kopierbar).
 
 ## Erledigt
 
@@ -66,3 +88,9 @@ Stand: 2026-09-17. Erledigtes nach unten in „Erledigt“ verschieben.
 - [x] 15 Kapitel als Prosafassung mit LaTeX-Formeln (2026-09-17)
 - [x] Übungsblätter 00–11 per pandoc konvertiert (2026-09-17)
 - [x] GitLab-Remote, CI mit kaniko-Image-Build, Pages-Deploy (2026-09-17)
+- [x] Abbildungen per matplotlib erzeugt, 35 eingebettet (2026-09-17)
+- [x] Kapitel inhaltlich neu geschnitten: 20 Kapitel ohne VL-Nummern, Querverweise angepasst (2026-09-17)
+- [x] Logo/Favicon eingebunden (2026-09-17)
+- [x] Klausur-Abgleich, fehlende Begriffe ergänzt (2026-09-17)
+- [x] `hidefromsolutions` wird in keinem Blatt verwendet – kein Handlungsbedarf (2026-09-17)
+- [x] `latent-classifier.ipynb` in slides/ und exercises/ sind identisch (2026-09-17)
