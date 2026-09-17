@@ -1,0 +1,106 @@
+# See docs at: https://mystmd.org/guide/frontmatter
+version: 1
+project:
+  id: eidl-skript
+  short_title: EiDL
+  title: Einführung in Deep Learning
+  subtitle: Skript zur Vorlesung im Bachelor Informatik
+  description: Skript zur Vorlesung+Übung an der HHU Wintersemester 2026/27
+  subject: Deep Learning
+  keywords: [deep learning, neural networks, pytorch, course]
+  authors:
+    - name: Dr. Konrad Völkel
+      url: http://www.konradvoelkel.com
+      affiliations:
+        - hhu
+  affiliations:
+    - id: hhu
+      institution: Heinrich-Heine-Universität Düsseldorf
+      ror: https://ror.org/024z2rq82
+      isni: 0000 0001 2176 9917
+      department: Institut für Informatik
+      address: Universitätsstraße 1
+      city: Düsseldorf
+      region: Nordrhein-Westfalen
+      country: Germany
+      postal_code: 40225
+
+  license: CC-BY-4.0
+  open_access: true
+  toc:
+    - file: index.md
+    - title: Überblick
+      children:
+       - file: README.md
+    - title: Grundlagen
+      children:
+       - file: part-grundlagen/01-ueberblick-perzeptron.md
+       - file: part-grundlagen/02-perzeptron-vortrainierte-modelle.md
+       - file: part-grundlagen/03-pytorch-tensoren.md
+    - title: Lernen
+      children:
+       - file: part-lernen/04-logistische-regression.md
+       - file: part-lernen/05-sgd.md
+       - file: part-lernen/06-backprop.md
+    - title: Representation Learning
+      children:
+       - file: part-representation-learning/07-autoencoder.md
+       - file: part-representation-learning/08-latent-space-vae.md
+       - file: part-representation-learning/09-representation-learning.md
+    - title: Architekturen und Anwendungen
+      children:
+       - file: part-architekturen-anwendungen/10-cnn.md
+       - file: part-architekturen-anwendungen/11-llms-benutzen.md
+       - file: part-architekturen-anwendungen/12-gans.md
+       - file: part-architekturen-anwendungen/13-latent-spaces-anwendungen.md
+       - file: part-architekturen-anwendungen/14-destillation.md
+       - file: part-architekturen-anwendungen/15-maerchenstunde.md
+    - title: Notebooks
+      children:
+       - file: notebooks/nn-by-hand.ipynb
+       - file: notebooks/VL_10_convolutions.ipynb
+       - file: notebooks/VL_11_backprop.ipynb
+       - file: notebooks/VL_11_llamacpp.ipynb
+       - file: notebooks/latent-classifier.ipynb
+    - title: Übungsaufgaben
+      children:
+       - pattern: part-exercises/eidl2026blatt*.md
+         sort: ascending
+#    - title: Developer Notes (temp.)
+#      children:
+#       - pattern: devnotes/*.*
+  jupyter: true
+  settings:
+    myst_to_tex:
+      code_style: minted # needs pygment
+  exports:
+    - format: pdf
+      template: plain_latex
+      output: exports/eidl-skript.pdf
+      options:
+        preamble: |
+          \usepackage{xcolor}
+          \definecolor{hhuBlau}{HTML}{006AB3}
+          \usepackage{hyperref}
+          \hypersetup{
+              colorlinks=true,
+              linkcolor=hhuBlau,
+              citecolor=hhuBlau,
+              urlcolor=hhuBlau,
+              pdftitle={Einführung in Deep Learning},
+              pdfauthor={Dr. Konrad Völkel}
+          }
+          \usepackage{fontspec}
+          \setmonofont{DejaVu Sans Mono}
+          \newcommand{\sectionbreak}{\clearpage}
+
+
+site:
+  template: book-theme
+  options:
+    favicon: favicon.ico
+    logo: site_logo.png
+    style: _site/custom-style.css
+  parts:
+    navbar_end: _site/navbar_end.md
+    primary_sidebar_footer: _site/sidebar_footer.md

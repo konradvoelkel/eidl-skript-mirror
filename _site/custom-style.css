@@ -1,0 +1,98 @@
+/* custom-style.css */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  /* HHU Corporate Identity Colors */
+  --hhu-blue: #006AB3;
+  --hhu-dark-blue: #003964;
+  --hhu-ice-blue: #B5CBD6; 
+  --hhu-text: #000000;
+  
+  --hhu-green: #8CB110;
+  --hhu-red: #BE0A26;
+  --hhu-orange: #EE7F00;
+}
+
+/* 1. Typography Overrides */
+body {
+  font-family: 'Inter', sans-serif;
+  color: var(--hhu-text);
+}
+
+code, kbd, samp, pre, .math-display {
+  font-family: 'JetBrains Mono', monospace !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--hhu-dark-blue);
+  font-weight: 600;
+}
+
+/* 2. Links & Navigation */
+a {
+  color: var(--hhu-blue);
+  text-decoration-color: rgba(0, 106, 179, 0.3);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+a:hover {
+  color: var(--hhu-dark-blue);
+}
+
+nav.myst-toc a.active {
+  color: var(--hhu-blue) !important;
+  border-left-color: var(--hhu-blue) !important;
+  font-weight: 600;
+}
+
+/* 3. Structural Elements & Code Blocks */
+/* Overrides hardcoded Tailwind borders for code blocks */
+div.myst-code {
+  border-left-color: var(--hhu-blue) !important;
+  border-left-width: 3px !important;
+}
+
+/* Minimalist inline code highlighting */
+p > code, li > code, td > code {
+  background-color: rgba(181, 203, 214, 0.15) !important; 
+  color: var(--hhu-dark-blue) !important;
+  border-radius: 3px;
+  padding: 0.1rem 0.3rem;
+}
+
+/* 4. Minimalist Admonitions (Borders and text color only, no heavy backgrounds) */
+aside.myst-admonition {
+  background-color: transparent !important;
+  border: 1px solid #e5e7eb !important; /* light gray border */
+  border-left-width: 4px !important;
+}
+
+aside.myst-admonition-note, aside.myst-admonition-info {
+  border-left-color: var(--hhu-blue) !important;
+}
+aside.myst-admonition-note > header, aside.myst-admonition-info > header {
+  color: var(--hhu-blue) !important;
+}
+
+aside.myst-admonition-tip, aside.myst-admonition-hint {
+  border-left-color: var(--hhu-green) !important;
+}
+aside.myst-admonition-tip > header, aside.myst-admonition-hint > header {
+  color: var(--hhu-green) !important;
+}
+
+aside.myst-admonition-warning {
+  border-left-color: var(--hhu-orange) !important;
+}
+aside.myst-admonition-warning > header {
+  color: var(--hhu-orange) !important;
+}
+
+aside.myst-admonition-danger, aside.myst-admonition-error {
+  border-left-color: var(--hhu-red) !important;
+}
+aside.myst-admonition-danger > header {
+  color: var(--hhu-red) !important;
+}

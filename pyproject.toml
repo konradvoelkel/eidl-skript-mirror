@@ -1,0 +1,32 @@
+[project]
+name = "eidl-skript"
+version = "0.1.0"
+description = "Skript zur Vorlesung Einführung in Deep Learning an der HHU (Wintersemester 2026/27)"
+readme = "README.md"
+authors = [ { email = "konrad.voelkel@hhu.de", name = "Konrad Völkel" } ]
+requires-python = ">=3.13"
+classifiers = [
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+]
+dependencies = [
+  "numpy>=2.4,<3",
+  "matplotlib>=3.9",
+  "pandas>=3",
+  "scikit-learn>=1.9,<2",
+  "torch",
+  "torchvision",
+  "transformers",
+  "huggingface-hub",
+  "llama-cpp-python",
+  "gensim",
+  "ipykernel",
+  "jupyterlab",
+]
+
+[dependency-groups]
+dev = [ "mystmd>=1.10.1,<2", "ruff" ]
+
+[tool.uv]
+package = false

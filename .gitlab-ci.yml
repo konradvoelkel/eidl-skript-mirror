@@ -1,0 +1,37 @@
+stages:
+  - build
+  - deploy
+
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  BASE_URL: "" # "/$CI_PROJECT_NAME"
+  HOST: "127.0.0.1"
+
+cache:
+  paths:
+    - .cache/pip
+
+myst-build:
+  stage: build
+  image: $CI_REGISTRY_IMAGE:latest
+  script:
+    - python -V
+    - node -v
+    - npm -v
+    - myst build --html
+    
+  artifacts:
+    paths:
+      - _build/html
+
+pages:
+  stage: deploy
+  image: busybox:latest
+  script:
+    - mv _build/html public
+    - cp _site/google*.html public/
+  artifacts:
+    paths:
+      - public
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH

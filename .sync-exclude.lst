@@ -1,0 +1,11 @@
+_build
+_build/
+_build/*
+]__pycache__
+.git
+].ruff_cache
+.venv
+].hypothesis
+].mypy_cache
+].nox
+].pytest_cache
