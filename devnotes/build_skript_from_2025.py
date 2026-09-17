@@ -152,6 +152,8 @@ def convert_sheet(tex: Path, number: int) -> str:
         out.append(l)
     md = "\n".join(out)
     md = re.sub(r"\n{3,}", "\n\n", md)
+    if not re.search(r"^## ", md, flags=re.M):  # no sections: tasks become level-2 headings
+        md = re.sub(r"^### Aufgabe", "## Aufgabe", md, flags=re.M)
 
     abgabe = ""
     if "Abgabetag" in meta:
