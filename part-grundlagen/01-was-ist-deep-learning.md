@@ -94,6 +94,8 @@ Zwei linear trennbare Klassen (links) und eine lineare Regression mit der Klasse
 
 Wie bewerte ich die Güte des Modells, wie bewerte ich den Erfolg der Inferenz? Die Standardantwort ist der **Training-Test-Split**: Man hält einen Teil der Datenpunkte zurück (verwendet ihn nicht im Training), um damit das trainierte Modell zu testen. Die kompliziertere Variante ist die $k$-fold cross validation, bei der man die Daten in $k$ Teile zerlegt und reihum jeden Teil einmal als Testset verwendet.
 
+Und was misst man auf dem Testset? Bei Klassifikation naheliegend die **Accuracy**, den Anteil korrekt klassifizierter Samples. Die ist irreführend, wenn die Klassen unbalanciert sind (99 % Nicht-Spam: ein Modell, das immer „kein Spam“ sagt, hat 99 % Accuracy). Dann schaut man pro Klasse auf **Precision** (welcher Anteil der als positiv vorhergesagten Samples ist wirklich positiv?) und **Recall** (welcher Anteil der wirklich positiven Samples wurde gefunden?); bei Regression auf den mittleren quadratischen Fehler. Wir kommen bei den Loss-Funktionen darauf zurück.
+
 :::{admonition} Quizfrage
 :class: hint
 Was kann beim Vergleich verschiedener Modelle und der Optimierung von Hyperparametern mit dem Testset passieren?

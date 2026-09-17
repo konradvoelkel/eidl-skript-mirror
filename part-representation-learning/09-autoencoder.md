@@ -118,7 +118,8 @@ Neu gegenüber Kapitel 4 sind `Dataset` und `DataLoader`: Der Datensatz liefert 
 
 ### Tricks beim Training
 
-* **Mehr Epochen trainieren!**
+* **Mehr Epochen trainieren!** – aber nicht beliebig viele: Wenn der Loss auf dem Testset wieder *steigt*, während er auf den Trainingsdaten weiter sinkt, overfittet das Modell. **Early Stopping** heißt, an diesem Punkt aufzuhören (bzw. die Gewichte von dort zu behalten).
+* **Data Augmentation**: die Trainingsdaten durch zufällige Transformationen vervielfachen, die das Label nicht ändern – Bilder leicht drehen, verschieben, spiegeln, verrauschen. Das Modell sieht nie zweimal dasselbe Bild und kann es nicht auswendig lernen; auch das ist Regularisierung.
 * **Lernrate anpassen** – statt `lr=1e-3` mal mit `lr=1e-2` probieren.
 * Die Gewichte können zu groß werden, dann kann man eine **L2-Regularisierung** nutzen, den *Weight Decay* (als Parameter für den Optimierer, wie die Lernrate): `weight_decay=1e-5`. Das addiert $\lambda \|W\|^2$ zum Loss und zieht die Gewichte bei jedem Schritt ein wenig Richtung null.
 * SGD kann sehr langsam sein. Es gibt eine ganze Reihe von Tricks wie z.B. eine adaptive Lernrate und cleveres Mitteln über mehrere Batches hinweg, die in **Adam** implementiert sind: `optim.Adam(model.parameters(), lr=1e-3)`. Dazu mehr in VL 15.

@@ -111,6 +111,27 @@ Ein **Convolutional Neural Network** ist ein neuronales Netz, in dem (einige) Sc
 
 Man beachte: Jede Berechnung mit einem Faltungslayer kann auch mit einem linearen (fully connected) Layer durchgeführt werden – die Faltung ist ja linear, also eine Matrix, nur eine sehr spezielle mit vielen Nullen und wiederholten Einträgen. Der Punkt der Faltung ist nicht, dass sie *mehr* kann, sondern dass sie mit viel weniger Parametern das Richtige kann, wenn die Daten lokale, verschiebungsinvariante Struktur haben. Und man muss nicht alle Layer zu Faltungen machen; die letzten Schichten eines CNN sind fast immer linear.
 
+### Ausgabegröße einer Faltungsschicht
+
+Wie groß ist die Feature Map nach einer Faltung? Bei Eingabelänge $n$, Kernelgröße $k$, Padding $p$ (Nullen an jedem Rand) und Stride $s$ ist die Ausgabelänge
+
+$$
+n_{\text{out}} = \left\lfloor \frac{n + 2p - k}{s} \right\rfloor + 1,
+$$
+
+pro Dimension. Ohne Padding („valid“) schrumpft das Bild also um $k - 1$; mit $p = (k-1)/2$ („same“) bleibt es gleich groß. Pooling folgt derselben Formel mit $k = s$ = Poolgröße. Beispiel für ein kleines CNN auf $28 \times 28$-Bildern (MNIST):
+
+```python
+nn.Conv2d(1, 8, kernel_size=5)      # 28 -> 24, 8 Kanäle
+nn.MaxPool2d(kernel_size=2, stride=2)  # 24 -> 12
+nn.Conv2d(8, 16, kernel_size=5)     # 12 -> 8, 16 Kanäle
+nn.MaxPool2d(kernel_size=2, stride=2)  # 8 -> 4
+nn.Flatten()                        # 16 * 4 * 4 = 256
+nn.Linear(16 * 4 * 4, 10)
+```
+
+Die Zahl im `nn.Linear` muss man also ausrechnen – der häufigste Shape-Fehler beim Bau eines CNN. Mit `kernel_size=3` statt 5 wären es $28 \to 26 \to 13 \to 11 \to 5$, also `16 * 5 * 5`.
+
 ### 1-dimensionale CNNs
 
 Im Notebook: `F.conv1d` mit handgesetzten Filtern (Gauß, DoG) auf dem ASML-Kurs, und die Beobachtung, dass ein gelernter 1D-Filter genau solche Formen annimmt.

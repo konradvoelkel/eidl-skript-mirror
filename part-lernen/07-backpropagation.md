@@ -256,3 +256,19 @@ Danach steht das Ergebnis in `w.grad` und `b.grad`. Der Optimizer-Schritt muss u
 **Freezing**: Setzt man `w.requires_grad = False`, so hat `z = w * x` keine `grad_fn` mehr, der Graph ist an dieser Stelle abgeschnitten, und ein Optimizer verändert $w$ nicht mehr, $b$ aber schon. So friert man beim Transfer Learning Schichten eines vortrainierten Modells ein – und spart dabei Speicher, weil für eingefrorene Parameter keine Gradienten gehalten werden.
 
 **Convolution Backprop**: Wie funktioniert Backprop, wenn Gewichte geteilt werden wie bei einem Faltungslayer? Der Kernel `[0.5]` wird über den Input `[1, 2, 3]` geschoben, $o_i = x_i \cdot k$, und der Loss ist $o_1 + o_2 + o_3$. Der Gradient nach $k$ ist die *Summe* der Beiträge aller Positionen, $\frac{dL}{dk} = x_1 + x_2 + x_3 = 6$: Ein geteilter Parameter bekommt die Gradienten aller seiner Verwendungen aufsummiert – im Graphen führen mehrere Kanten zu demselben Blatt.
+
+:::{prf:example} Backpropagation durch Faltung und ReLU von Hand
+Ein Neuron führt eine 1D-Faltung gefolgt von ReLU aus: Eingabesignal $x = [2, 0, -1, 4]$, Kernel $k = [k_0, k_1] = [1, -1]$, Bias $b = 0$, „valid“ ohne Padding, Stride 1. Die Pre-Aktivierung an Position $i$ ist $z_i = x_i k_0 + x_{i+1} k_1 + b$, die Ausgabe $a_i = \operatorname{ReLU}(z_i)$.
+
+*Forward:* $z = [2 \cdot 1 + 0 \cdot (-1),\ 0 + (-1)(-1),\ -1 + 4 \cdot (-1)] = [2, 1, -5]$, also $a = [2, 1, 0]$.
+
+*Loss:* $L = \tfrac12 \sum_i (a_i - t_i)^2$ mit Target $t = [1, 2, 0]$, also $\frac{\partial L}{\partial a} = a - t = [1, -1, 0]$.
+
+*Backward nach $k_0$:* Die ReLU-Maske ist $[z_i > 0] = [1, 1, 0]$; nur die Positionen $0$ und $1$ leiten den Gradienten weiter. Da $k_0$ an jeder Position mit $x_i$ multipliziert wird, ist $\frac{\partial z_i}{\partial k_0} = x_i$, und die Beiträge summieren sich:
+
+$$
+\frac{\partial L}{\partial k_0} = \sum_i (a_i - t_i)\,[z_i > 0]\,x_i = 1 \cdot 1 \cdot 2 + (-1) \cdot 1 \cdot 0 + 0 = 2 .
+$$
+
+*Update* mit Lernrate $\rho = 0{,}1$: $k_0 \leftarrow 1 - 0{,}1 \cdot 2 = 0{,}8$. Analog $\frac{\partial L}{\partial k_1} = 1 \cdot 0 + (-1)(-1) + 0 = 1$.
+:::

@@ -50,7 +50,7 @@ $$
 L_{\text{VAE}} = \operatorname{MSE}(x, \operatorname{dec}(y)) + D_{KL}\bigl( q(y \mid x) \,\|\, \mathcal{N}(0, 1) \bigr),
 $$
 
-wobei $q(y \mid x) = \mathcal{N}(\mu_x, \sigma_x^2)$ die Dichte der latenten Verteilung für ein festes $x$ ist. Dabei sind die beiden Standardnormalverteilungen – das $\mathcal{N}(0,1)$ für $\varepsilon$ und das $\mathcal{N}(0,1)$ im KL-Term – nicht „dieselben“!! Die erste ist die Rauschquelle, die zweite ist die *Prior*-Verteilung, an die sich die Gesamtheit der latenten Verteilungen anschmiegen soll, damit der latente Raum um den Ursprung herum lückenlos gefüllt ist. Für Normalverteilungen hat der KL-Term eine geschlossene Form:
+wobei $q(y \mid x) = \mathcal{N}(\mu_x, \sigma_x^2)$ die Dichte der latenten Verteilung für ein festes $x$ ist. Dabei sind die beiden Standardnormalverteilungen – das $\mathcal{N}(0,1)$ für $\varepsilon$ und das $\mathcal{N}(0,1)$ im KL-Term – nicht „dieselben“!! Die erste ist die Rauschquelle, die zweite ist die *Prior*-Verteilung, an die sich die Gesamtheit der latenten Verteilungen anschmiegen soll, damit der latente Raum um den Ursprung herum lückenlos gefüllt ist. In der Praxis lässt man den Encoder statt $\sigma_x$ den Logarithmus der Varianz ausgeben, $\ell_x := \ln \sigma_x^2$ (im Code meist `logvar`), damit kein Ausgang auf positive Werte eingeschränkt werden muss; dann ist $\sigma_x = \exp(\ell_x / 2)$. Für Normalverteilungen hat der KL-Term eine geschlossene Form:
 
 $$
 D_{KL}\bigl( \mathcal{N}(\mu, \sigma^2) \,\|\, \mathcal{N}(0, 1) \bigr) = \tfrac12 \left( \mu^2 + \sigma^2 - 1 - \ln \sigma^2 \right).
