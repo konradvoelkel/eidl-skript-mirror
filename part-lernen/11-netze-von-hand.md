@@ -23,7 +23,7 @@ Was noch fehlt, und was wir in diesem und den nächsten Kapiteln angehen:
 
 ## Parameter von Hand wählen
 
-Bevor wir Netze trainieren, überzeugen wir uns davon, dass die gesuchten Gewichte überhaupt *existieren*: Wir bauen kleine Netze von Hand. Das Notebook dazu ist `nn-by-hand.ipynb`.
+Bevor wir Netze trainieren, überzeugen wir uns davon, dass die gesuchten Gewichte überhaupt *existieren*: Wir bauen kleine Netze von Hand.
 
 ### Easy mode: Boolesche Variablen
 
@@ -99,7 +99,15 @@ $$
 Q(x) = 9 - 5\,\operatorname{ReLU}(x + 3) + \sum_{k=-2}^{2} 2\,\operatorname{ReLU}(x - k).
 $$
 
-Probe: $Q(0) = 9 - 15 + 2(2 + 1) = 0$ und $Q(3) = 9 - 30 + 2(5 + 4 + 3 + 2 + 1) = 9$. Das ist ein Netz mit einer versteckten Schicht aus 6 ReLU-Neuronen (Gewicht $1$, Bias $-k$ für $k = -3, \dots, 2$) und einer linearen Ausgabeschicht mit Gewichten $(-5, 2, 2, 2, 2, 2)$ und Bias $9$. Die Symmetrie $x^2 = (-x)^2$ haben wir dabei ignoriert – geht das besser? Mit $|x|$ als erster Schicht halbiert sich die Anzahl der Knicke.
+Probe: $Q(0) = 9 - 15 + 2(2 + 1) = 0$ und $Q(3) = 9 - 30 + 2(5 + 4 + 3 + 2 + 1) = 9$. Das ist ein Netz mit einer versteckten Schicht aus 6 ReLU-Neuronen (Gewicht $1$, Bias $-k$ für $k = -3, \dots, 2$) und einer linearen Ausgabeschicht mit Gewichten $(-5, 2, 2, 2, 2, 2)$ und Bias $9$. Die Symmetrie $x^2 = (-x)^2$ haben wir dabei ignoriert – geht das besser? Der Betrag ist selbst ein kleines Netz, $|x| = \operatorname{ReLU}(x) + \operatorname{ReLU}(-x)$ (zwei Neuronen mit Gewichten $1$ und $-1$, dann ein Neuron mit Gewichtsvektor $(1, 1)$), und damit reicht die Interpolation auf $[0, 3]$:
+
+$$
+P(x) = |x| + 2\operatorname{ReLU}(|x| - 1) + 2\operatorname{ReLU}(|x| - 2).
+$$
+
+Das sind nur noch 3 Neuronen in der Interpolationsschicht – dafür ist das Netz tiefer, weil $|x|$ zwei Schichten vorweg kostet. Weniger Neuronen pro Schicht gegen mehr Schichten: ein Tausch, den wir noch öfter sehen werden.
+
+In der Praxis könnte man PyTorch auch direkt bitten, $x^2$ oder $xy$ *exakt* zu berechnen (Stichwort *Gates*, etwa in LSTMs), auch wenn man damit das reine MLP verlässt. Der Haken: Im Allgemeinen weiß man vorher nicht, ob man $x^2$ braucht, um die gesuchte Funktion gut zu approximieren.
 
 :::{figure} ../images/vl07-square-interpolation.png
 :width: 90%

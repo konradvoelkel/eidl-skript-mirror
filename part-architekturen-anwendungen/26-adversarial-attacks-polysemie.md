@@ -29,7 +29,7 @@ $$
 x_{\text{adv}} := x + \epsilon \cdot \operatorname{sign}\bigl(\nabla_x L(f(x), y_{\text{Ziel}})\bigr)
 $$
 
-(Fast Gradient Sign Method, Goodfellow et al. 2014) oder iterativ mit kleinen Schritten. Anders als sonst: Gradientenabstieg im **Eingaberaum**, nicht im Gewichtsraum – Backpropagation liefert $\nabla_x$ genauso wie $\nabla_w$, denn im DAG ist $x$ nur ein weiteres Blatt.
+(Fast Gradient Sign Method, Goodfellow et al. 2014) oder iterativ mit kleinen Schritten. Anders als sonst: Gradientenabstieg im **Eingaberaum**, nicht im Gewichtsraum – Backpropagation liefert $\nabla_x$ genauso wie $\nabla_w$, denn im DAG ist $x$ nur ein weiteres Blatt. Genau das tut auch das „Dreaming“ auf Blatt 11 ([Kapitel „LLMs benutzen“](20-llms-benutzen.md)): Es sucht per Adam im Raum der Eingabe-Embeddings nach einem Text, der den Spam-Detektor maximal triggert – ein adversarial example ohne den Anspruch, unauffällig zu sein.
 
 Dass das nicht nur mit Pixeln funktioniert: Sharif et al. 2016, *Accessorize to a Crime: Real and Stealthy Attacks on State-of-the-Art Face Recognition* – eine bedruckte Brillenfassung lässt ein Gesichtserkennungssystem eine andere Person erkennen. Und aus dem Heise-Newsticker vom 2.2.2026: [Manipulierte Straßenschilder: Wenn das autonome Auto Fußgänger umfährt](https://www.heise.de/news/Manipulierte-Strassenschilder-Wenn-das-autonome-Auto-Fussgaenger-umfaehrt-11162744.html).
 

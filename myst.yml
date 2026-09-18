@@ -66,14 +66,16 @@ project:
        - file: part-architekturen-anwendungen/24-destillation.md
        - file: part-architekturen-anwendungen/25-optimierer.md
        - file: part-architekturen-anwendungen/26-adversarial-attacks-polysemie.md
-    - title: Notebooks
-      children:
-       - file: notebooks/README.md
-       - file: notebooks/nn-by-hand.ipynb
-       - file: notebooks/VL_10_convolutions.ipynb
-       - file: notebooks/VL_11_backprop.ipynb
-       - file: notebooks/VL_11_llamacpp.ipynb
-       - file: notebooks/latent-classifier.ipynb
+#   Notebooks aus 2025: Inhalte sind in die Kapitel übernommen (siehe notebooks/README.md),
+#   deshalb nicht mehr im Buch. latent-classifier.ipynb hängt als Download an Blatt 11.
+#    - title: Notebooks
+#      children:
+#       - file: notebooks/README.md
+#       - file: notebooks/nn-by-hand.ipynb
+#       - file: notebooks/VL_10_convolutions.ipynb
+#       - file: notebooks/VL_11_backprop.ipynb
+#       - file: notebooks/VL_11_llamacpp.ipynb
+#       - file: notebooks/latent-classifier.ipynb
     - title: Übungsaufgaben
       children:
        - pattern: part-exercises/eidl2026blatt*.md

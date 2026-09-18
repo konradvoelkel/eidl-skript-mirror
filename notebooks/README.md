@@ -1,19 +1,23 @@
-# Notebooks aus der Vorlesung
+# Notebooks aus der Vorlesung 2025/26
 
-Übernommen aus dem WiSe 2025/26. Die Notebooks werden beim Build des Skripts **nicht ausgeführt**;
-die eingecheckten Outputs sind die aus der Vorlesung. Zum lokalen Ausführen:
+Diese Notebooks sind **nicht Teil des Buchs** (TOC-Eintrag in `myst.yml` auskommentiert). Ihr Inhalt
+ist am 2026-09-18 in die Kapitel übernommen worden – Code, Ergebnisse und Erklärungen stehen jetzt dort:
+
+| Notebook | jetzt in | Status |
+|---|---|---|
+| `VL_11_backprop.ipynb` | Kapitel „Autograd und Berechnungsgraph“ | vollständig übernommen |
+| `nn-by-hand.ipynb` | Kapitel „Netze von Hand bauen“ (Abbildungen via `devnotes/make_figures.py`) | vollständig übernommen |
+| `VL_10_convolutions.ipynb` | Kapitel „Faltung und CNNs“ (Abbildung `images/vl10-pallino-conv.png` aus dem Output) | vollständig übernommen |
+| `VL_11_llamacpp.ipynb` | Kapitel „LLMs benutzen“ | vollständig übernommen |
+| `latent-classifier.ipynb` | Blatt 11 (Download auf der Blatt-Seite), Beschreibung in „LLMs benutzen“ | **bleibt** – Studierende führen es aus |
+
+Sie bleiben hier als Referenz und zum lokalen Ausführen; die eingecheckten Outputs sind die aus der Vorlesung.
 
 ```bash
 uv sync            # installiert torch, transformers, llama-cpp-python usw. (groß!)
 uv run jupyter lab notebooks/
 ```
 
-| Notebook | Kapitel | Daten |
-|---|---|---|
-| `nn-by-hand.ipynb` | Aktivierungsfunktionen und Universalität | – |
-| `VL_10_convolutions.ipynb` | Faltung und CNNs | `ASML.csv` (Yahoo Finance, Schlusskurse), `pallino.jpg` (beide hier im Ordner) |
-| `VL_11_backprop.ipynb` | Backpropagation | – |
-| `VL_11_llamacpp.ipynb` | LLMs benutzen | `qwen2.5-0.5b-instruct-q4_k_m.gguf` (491 MB, **nicht im Repo**; von https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct-GGUF laden oder `ollama pull qwen2.5:0.5b`) |
-| `latent-classifier.ipynb` | LLMs benutzen / Blatt 11 | lädt BERT über `transformers` |
-
-Die Kopie von `latent-classifier.ipynb` in `from_2025/exercises/` ist quelltextidentisch (geprüft 2026-09-17).
+Daten: `ASML.csv` (Yahoo Finance, Schlusskurse) und `pallino.jpg` für die Faltung;
+`qwen2.5-0.5b-instruct-q4_k_m.gguf` (491 MB, **nicht im Repo**) für llama.cpp von
+https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct-GGUF laden oder `ollama pull qwen2.5:0.5b`.

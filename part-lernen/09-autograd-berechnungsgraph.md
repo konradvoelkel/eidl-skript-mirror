@@ -9,7 +9,7 @@ Im [Kapitel „Backpropagation“](08-backpropagation.md) haben wir Gradienten v
 
 ## Ein Beispiel im Kleinen
 
-Ein Blick darauf, wie PyTorch Backpropagation *tatsächlich* macht (`VL_11_backprop.ipynb`). Wir bauen ein sehr kleines „Netzwerk“:
+Ein Blick darauf, wie PyTorch Backpropagation *tatsächlich* macht. Wir bauen ein sehr kleines „Netzwerk“:
 
 ```python
 x = torch.tensor(3.0)                       # Input (Konstante)
@@ -20,7 +20,16 @@ y = z + b     # y = 7
 L = y ** 2    # Loss = 49
 ```
 
-Der **Berechnungsgraph** (ein DAG, directed acyclic graph) entsteht erst beim Ausführen: Jeder Tensor, der aus einer Operation mit einem `requires_grad`-Tensor entstanden ist, trägt eine `grad_fn` (`L.grad_fn` ist `PowBackward0`, davor `AddBackward0`, davor `MulBackward0` und `AccumulateGrad` für die Blätter $w$ und $b$). Die `grad_fn` weiß, wie man die Operation ableitet, und hält Referenzen auf die *saved tensors*, die gespeicherten Zwischenergebnisse – genau die $z_k$ aus dem [Kapitel „Backpropagation“](08-backpropagation.md).
+Der **Berechnungsgraph** (ein DAG, directed acyclic graph) entsteht erst beim Ausführen: Jeder Tensor, der aus einer Operation mit einem `requires_grad`-Tensor entstanden ist, trägt eine `grad_fn`, und man kann den Graphen von hinten nach vorn ablaufen:
+
+```python
+print(L.grad_fn)                                    # <PowBackward0>
+print(L.grad_fn.next_functions[0][0])               # <AddBackward0>
+print(L.grad_fn.next_functions[0][0].next_functions)
+# ((<MulBackward0>, 0), (<AccumulateGrad>, 0))  -- z, und das Blatt b
+```
+
+Die `grad_fn` weiß, wie man die Operation ableitet, und hält Referenzen auf die *saved tensors*, die gespeicherten Zwischenergebnisse – genau die $z_k$ aus dem [Kapitel „Backpropagation“](08-backpropagation.md). `AccumulateGrad` sind die Blätter des Graphen, die Parameter $w$ und $b$; die topologische Sortierung ist implizit.
 
 `L.backward()` ist der rekursive Aufruf der Kettenregel, initial mit $\frac{dL}{dL} = 1$:
 
@@ -30,11 +39,51 @@ $$
 \frac{dL}{db} = 2y \cdot 1 = 14.
 $$
 
-Danach steht das Ergebnis in `w.grad` und `b.grad`. Der Optimizer-Schritt muss unter `torch.no_grad()` passieren, damit der Update selbst nicht Teil des Graphen wird, und die Gradienten müssen danach mit `zero_()` zurückgesetzt werden – sonst *akkumuliert* PyTorch sie beim nächsten `backward()`. Das ist der Grund für `optimizer.zero_grad()` in jeder Trainingsschleife.
+```python
+L.backward()
+print(w.grad, b.grad)   # tensor(42.), tensor(14.)
+```
 
-**Freezing**: Setzt man `w.requires_grad = False`, so hat `z = w * x` keine `grad_fn` mehr, der Graph ist an dieser Stelle abgeschnitten, und ein Optimizer verändert $w$ nicht mehr, $b$ aber schon. So friert man beim Transfer Learning Schichten eines vortrainierten Modells ein – und spart dabei Speicher, weil für eingefrorene Parameter keine Gradienten gehalten werden.
+Danach steht das Ergebnis in `w.grad` und `b.grad`. Ein Schritt Gradientenabstieg von Hand, das ist alles, was `optimizer.step()` tut:
 
-**Convolution Backprop**: Wie funktioniert Backprop, wenn Gewichte geteilt werden wie bei einem Faltungslayer? Der Kernel `[0.5]` wird über den Input `[1, 2, 3]` geschoben, $o_i = x_i \cdot k$, und der Loss ist $o_1 + o_2 + o_3$. Der Gradient nach $k$ ist die *Summe* der Beiträge aller Positionen, $\frac{dL}{dk} = x_1 + x_2 + x_3 = 6$: Ein geteilter Parameter bekommt die Gradienten aller seiner Verwendungen aufsummiert – im Graphen führen mehrere Kanten zu demselben Blatt.
+```python
+lr = 0.01
+with torch.no_grad():        # sonst würde der Update selbst Teil des Graphen
+    w -= lr * w.grad         # 2.0 - 0.01 * 42 = 1.58
+    b -= lr * b.grad         # 1.0 - 0.01 * 14 = 0.86
+    w.grad.zero_()           # sonst wird beim nächsten backward() akkumuliert
+    b.grad.zero_()
+```
+
+Der Optimizer-Schritt muss unter `torch.no_grad()` passieren, damit der Update selbst nicht Teil des Graphen wird, und die Gradienten müssen danach mit `zero_()` zurückgesetzt werden – sonst *akkumuliert* PyTorch sie beim nächsten `backward()`. Das ist der Grund für `optimizer.zero_grad()` in jeder Trainingsschleife.
+
+## Freezing
+
+Setzt man `w.requires_grad = False`, so hat `z = w * x` keine `grad_fn` mehr, der Graph ist an dieser Stelle abgeschnitten:
+
+```python
+w.requires_grad = False
+z = w * x
+print(z.grad_fn)             # None  -- Blatt abgeschnitten
+print((z + b).grad_fn)       # <AddBackward0>  -- b wird weiter beobachtet
+```
+
+Ein Optimizer verändert $w$ nicht mehr, $b$ aber schon. So friert man beim Transfer Learning Schichten eines vortrainierten Modells ein – und spart dabei Speicher, weil für eingefrorene Parameter keine Gradienten gehalten werden.
+
+## Geteilte Gewichte: Backprop durch eine Faltung
+
+Wie funktioniert Backprop, wenn Gewichte geteilt werden wie bei einem Faltungslayer? Der Kernel `[0.5]` wird über den Input `[1, 2, 3]` geschoben, $o_i = x_i \cdot k$, und der Loss ist $o_1 + o_2 + o_3$:
+
+```python
+x = torch.tensor([1.0, 2.0, 3.0])
+k = torch.tensor([0.5], requires_grad=True)
+o1, o2, o3 = x[0] * k, x[1] * k, x[2] * k   # von Hand, wie nn.Conv1d
+loss = o1 + o2 + o3
+loss.backward()
+print(k.grad)                # tensor([6.])
+```
+
+Der Gradient nach $k$ ist die *Summe* der Beiträge aller Positionen, $\frac{dL}{dk} = x_1 + x_2 + x_3 = 6$: Ein geteilter Parameter bekommt die Gradienten aller seiner Verwendungen aufsummiert – im Graphen führen mehrere Kanten zu demselben Blatt.
 
 :::{prf:example} Backpropagation durch Faltung und ReLU von Hand
 Ein Neuron führt eine 1D-Faltung gefolgt von ReLU aus: Eingabesignal $x = [2, 0, -1, 4]$, Kernel $k = [k_0, k_1] = [1, -1]$, Bias $b = 0$, „valid“ ohne Padding, Stride 1. Die Pre-Aktivierung an Position $i$ ist $z_i = x_i k_0 + x_{i+1} k_1 + b$, die Ausgabe $a_i = \operatorname{ReLU}(z_i)$.

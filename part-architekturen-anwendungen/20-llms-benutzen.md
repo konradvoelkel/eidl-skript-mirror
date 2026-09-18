@@ -48,13 +48,77 @@ ollama run llama3.2:1b "Explain how LLMs work"
 
 Das ist kein Deep Learning, das ist „Deep-Learning-Produkte benutzen“ – trotzdem super für Rapid Prototyping und jede Menge Anwendungen. Ollama bietet einen OpenAI-kompatiblen API-Endpoint, das verhindert Vendor Lock-in: Code, der gegen die OpenAI-API geschrieben ist, läuft mit einer Zeile Änderung lokal.
 
-### Lokale LLMs benutzen (im Notebook)
+### Lokale LLMs benutzen: Wege 2, 3 und 10 in Code
 
-`VL_11_llamacpp.ipynb` zeigt die Wege 1–3 und 10 mit `qwen2.5:0.5b` (nur ~300 MB, läuft auf der Laptop-CPU):
+Wir probieren die Wege 2, 3 und 10 mit `qwen2.5:0.5b` aus – nur ~300 MB, läuft auf der Laptop-CPU. Vorbereitung im Terminal:
 
-* **Embeddings** mit `ollama.embeddings(model=..., prompt=TEXT)`: Ein Text wird zu einem Vektor mit 896 Dimensionen.
-* **Wahrscheinlichkeitsverteilungen** mit `llama_cpp.Llama(model_path=..., logits_all=True)`: Statt Text zu generieren, schauen wir uns die Logits für das nächste Token nach „The color of the sky is“ an, wenden Softmax an und lesen die Top-25 ab – und die Wahrscheinlichkeit für ` red`. Das ist die logistische Regression aus Kapitel 4, nur mit 150 000 Klassen.
-* **Strukturierter Output**: Wir zwingen das LLM, JSON auszugeben, und nutzen `pydantic`, um zu garantieren, dass die Datentypen (Integer, String, …) stimmen: Aus „Yesterday I met Sabine. She is 29 years old, works as a doctor and loves her life in Munich.“ wird ein `Person(name, age, occupation, location)`-Objekt.
+```bash
+ollama pull qwen2.5:0.5b
+ollama run qwen2.5:0.5b     # interaktiver Chat, mit /bye beenden
+pip install ollama llama-cpp-python pydantic
+```
+
+Ein erster Test im Chat: „Wie kann man mit Deep Learning Hunde von Katzen unterscheiden (also, warum funktioniert das)? Zähle nur 5–10 Stichpunkte auf.“ Lesen und amüsieren – 0,5 Milliarden Parameter sind eben nicht 50 Milliarden; auf Englisch fällt die Antwort meist besser aus. Ollama läuft danach als Server auf Port 11434 (`http://localhost:11434` zeigt „Ollama is running“, unter `/v1/models` steht das Modell).
+
+**Weg 2, Embeddings.** Ein Text wird zu einem Vektor fester Länge (bei Qwen 2.5 0.5B: 896 Dimensionen), ideal für semantische Suche oder als Feature für einen Klassifikator:
+
+```python
+import ollama, numpy as np
+
+response = ollama.embeddings(model="qwen2.5:0.5b", prompt="Heute ist es kalt draußen.")
+vector = np.array(response["embedding"])
+print(vector.shape, np.linalg.norm(vector))     # (896,)  ~300
+```
+
+**Weg 3, die Verteilung des nächsten Tokens.** Statt Text zu generieren, schauen wir uns die Logits an. Dafür nehmen wir llama.cpp direkt (den Python-Wrapper `llama_cpp`) und das Modell als GGUF-Datei von [huggingface.co/Qwen/Qwen2.5-0.5B-Instruct-GGUF](https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct-GGUF) (Variante `q4_k_m`, 491 MB):
+
+```python
+from llama_cpp import Llama
+import numpy as np
+
+llm = Llama(model_path="qwen2.5-0.5b-instruct-q4_k_m.gguf", logits_all=True, n_ctx=512, verbose=False)
+
+def next_token_probs(text):
+    llm.reset()
+    tokens = llm.tokenize(text.encode("utf-8"))
+    llm.eval(tokens)
+    logits = np.array(llm.scores[len(tokens) - 1])   # Logits an der letzten Position
+    return np.exp(logits) / np.sum(np.exp(logits))    # Softmax
+
+probs = next_token_probs("The color of the sky is")
+print(probs.shape)                                   # (151936,) -- die Vokabulargröße
+for i in np.argsort(probs)[-5:][::-1]:
+    print(repr(llm.detokenize([i]).decode()), f"{probs[i]:.2%}")
+# ' changing' 12.1%, ' always' 6.5%, ' blue' 3.9%, ' determined' 3.0%, ' very' 3.0%
+red = llm.tokenize(b" red")[0]
+print(f"{probs[red]:.2%}")                           # 0.74%
+```
+
+Das ist die logistische Regression aus dem [Kapitel „Logistische Regression“](../part-lernen/06-logistische-regression.md) – Softmax über Logits –, nur mit 150 000 Klassen; alles aus dem [Kapitel „Latente Räume geometrisch“](22-latente-raeume.md) über Sampling-Strategien und Temperatur setzt genau hier an. (Bei `llm.scores` gibt es einen Fallstrick: Das Array hat immer `n_ctx` Zeilen, `scores[-1]` wäre also die falsche Position.)
+
+**Weg 10, strukturierter Output.** Wir zwingen das LLM, JSON auszugeben, und nutzen `pydantic`, um zu garantieren, dass die Datentypen stimmen:
+
+```python
+from pydantic import BaseModel
+import ollama
+
+class Person(BaseModel):
+    name: str
+    age: int
+    occupation: str
+    location: str
+
+text = "Yesterday I met Sabine. She is 29 years old, works as a doctor and loves her life in Munich."
+response = ollama.chat(
+    model="qwen2.5:0.5b", format="json",
+    messages=[{"role": "user", "content":
+        f"Extract information about the person from this text into JSON using {list(Person.model_fields)}: {text}"}],
+)
+person = Person.model_validate_json(response["message"]["content"])
+print(person)   # name='Sabine' age=29 occupation='doctor' location='Munich'
+```
+
+`format="json"` ist *constrained generation*: Beim Sampling werden nur Token zugelassen, die die Ausgabe syntaktisch gültig halten. Die Validierung mit `pydantic` prüft danach, ob auch die Typen stimmen (`age` ist wirklich ein `int`) – erst damit wird die Ausgabe eines LLM zu etwas, worauf man Software bauen kann.
 
 ### Selbst Transformer finetunen
 
@@ -62,8 +126,18 @@ Finetuning ist auch sehr teuer, weil alle Parameter Gradienten und Optimizer-Zus
 
 ## Wie geht eigentlich … eine Anwendung?
 
-Konkret eine Anwendung wie z.B. der „Chatbot“ [hAInrich](https://www.heicad.hhu.de/lehre/masters-programme-ai-and-data-science/hainrich) am HeiCAD: Retrieval-Augmented Generation (RAG) – Dokumente werden mit Weg 2 in Vektoren verwandelt und in einer Vektordatenbank abgelegt, zur Anfrage werden die ähnlichsten Dokumente gesucht und mit Weg 4 als Kontext in den Prompt eines LLM gegeben. Mehr dazu in Kapitel 13.
+Konkret eine Anwendung wie z.B. der „Chatbot“ [hAInrich](https://www.heicad.hhu.de/lehre/masters-programme-ai-and-data-science/hainrich) am HeiCAD: Retrieval-Augmented Generation (RAG) – Dokumente werden mit Weg 2 in Vektoren verwandelt und in einer Vektordatenbank abgelegt, zur Anfrage werden die ähnlichsten Dokumente gesucht und mit Weg 4 als Kontext in den Prompt eines LLM gegeben. Mehr dazu im [Kapitel „Anwendungsbeispiele“](23-anwendungsbeispiele.md).
 
 ## Tipps zu Übungsblatt 11
+
+### Latente Repräsentationen klassifizieren
+
+Blatt 11 kommt mit einem Notebook (`latent-classifier.ipynb`, auf der Seite des Blatts zum Download), das Weg 2 durchspielt – und dann zwei Dinge tut, die man mit dem Gelernten schon versteht:
+
+1. **Klassifikation im latenten Raum.** Ein kleines BERT (`prajjwal1/bert-medium`, 512-dimensionale Repräsentationen) bleibt *eingefroren* (`bert_model.eval()`, kein Gradient), und die Repräsentation des `[CLS]`-Tokens – `outputs.last_hidden_state[:, 0, :]` – dient als Feature-Vektor für jede SMS des UCI-Spam-Datensatzes. Darauf trainieren wir nur ein MLP (`Linear(512, 64) → ReLU → Linear(64, 1) → Sigmoid`) mit BCE-Loss: fünf Epochen, 98 % Test-Accuracy. Der latente Raum, per PCA auf zwei Dimensionen projiziert, zeigt Spam und Ham als weitgehend getrennte Wolken – die Trennung ist schon *im* BERT-Raum da, das MLP muss sie nur noch finden.
+2. **Dreaming.** Welcher Input triggert den Spam-Detektor maximal? Wir umgehen den Tokenizer und optimieren direkt die Eingabe-Embeddings (`bert_model(inputs_embeds=...)`) mit Adam auf $1 - p_{\text{Spam}}$ – Gradientenabstieg im *Eingaberaum* statt im Gewichtsraum, wie bei den Adversarial Attacks. Die optimierten „weichen Wörter“ dekodiert man per Kosinus-Ähnlichkeit zu den nächsten Vokabeln; heraus kommt Unsinn wie „sending barrett leonardo“, der dem Klassifikator trotzdem 100 % Spam wert ist.
+3. **Saliency.** Welcher Teil einer Nachricht hat die Entscheidung bestimmt? Der Gradient der Spam-Wahrscheinlichkeit nach den Eingabe-Embeddings, pro Token die Norm (`inputs_embeds.grad.norm(dim=-1)`): Große Werte heißen „an diesem Wort hängt viel“. Das ist die einfachste Form von Erklärbarkeit – und zugleich die Anleitung, wie man den Detektor umgeht.
+
+### Transfer Learning und Ensembles
 
 Wir schauen rein, wenn dazu noch Zeit bleibt: das Kaggle-Notebook „PyTorch | Flowers | TransLearning + Ensemble | Test = 99.67 %“. Fragen, die wir klären wollen: Worum geht es da überhaupt? Was „ist“ Ensembling bzw. ein Ensemble-Modell? Was ist z.B. das Modell GoogLeNet von 2014, das da verwendet wird?

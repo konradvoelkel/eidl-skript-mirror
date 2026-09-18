@@ -59,7 +59,42 @@ Der ASML-Aktienkurs (Schlusskurse 2020–2025) gefaltet mit vier Filtern. Delta 
 
 ### Programmierung
 
-Für den Code schauen wir ins Notebook (`VL_10_convolutions.ipynb`): mit `scipy.signal.convolve` für NumPy-Arrays und mit `torch.nn.functional.conv1d` für Tensoren. Bei `conv1d` muss man sich an die Dimensionen gewöhnen: Eingabe und Filter haben den Shape `(batch, channels, length)` bzw. `(out_channels, in_channels, kernel_size)`.
+Für NumPy-Arrays gibt es `scipy.signal.convolve`. Der Filter ist einfach ein Array von Funktionswerten auf einem Gitter, und `mode='same'` sorgt per Zero-Padding dafür, dass das Ergebnis so lang ist wie das Signal:
+
+```python
+import numpy as np
+from scipy.signal import convolve
+
+x = np.linspace(-6, 6, 1000)
+kernel = np.exp(-x**2 / (2 * 0.1**2))          # schmale Gaußfunktion
+kernel /= kernel.sum()                         # normieren, sonst skaliert der Kurs
+smoothed = convolve(data, kernel, mode='same') # data: die Schlusskurse als Array
+```
+
+Für Tensoren nimmt man `torch.nn.functional.conv1d`, und dort muss man sich an die Dimensionen gewöhnen: Eingabe und Filter haben den Shape `(batch, channels, length)` bzw. `(out_channels, in_channels, kernel_size)`, also für ein einzelnes Signal und einen einzelnen Filter zweimal `unsqueeze(0)`:
+
+```python
+import torch
+import torch.nn.functional as F
+
+signal = torch.tensor(data, dtype=torch.float32).unsqueeze(0).unsqueeze(0)  # (1, 1, N)
+filt = torch.tensor([-1.0, -1, 1, 1, 1]).view(1, 1, 5)                      # (1, 1, 5)
+out = F.conv1d(signal, filt, padding=2).squeeze()                           # wieder (N,)
+```
+
+Ein *Difference-of-Gaussians*-Filter entsteht als Differenz zweier normierter Gaußkerne verschiedener Breite:
+
+```python
+def gaussian_1d(size, sigma):
+    t = torch.arange(size).float() - size // 2
+    g = torch.exp(-t**2 / (2 * sigma**2))
+    return g / g.sum()
+
+dog = gaussian_1d(11, sigma=1) - gaussian_1d(11, sigma=20)
+out = F.conv1d(signal, dog.view(1, 1, -1), padding=5).squeeze()
+```
+
+Was man dabei beobachtet: Ein Faltungslayer, den man auf solchen Zeitreihen *lernen* lässt, findet von selbst Filter, die wie Gauß- oder DoG-Kerne aussehen – Glätten und Änderungen hervorheben sind schlicht die nützlichsten Operationen.
 
 ### Das Faltungstheorem
 
@@ -69,7 +104,13 @@ $$
 \mathcal{F}(f \ast g) = \mathcal{F}(f) \cdot \mathcal{F}(g),
 $$
 
-d.h. Faltung im Ortsraum ist Multiplikation im Frequenzraum. Auch umgekehrt: $\mathcal{F}(f \cdot g) = \mathcal{F}(f) \ast \mathcal{F}(g)$. Das erklärt, warum die Gaußfunktion glättet: Ihre Fouriertransformierte ist wieder eine Gaußfunktion, die hohe Frequenzen (= schnelle Änderungen, Rauschen) dämpft. Kurzer Ausflug in die Fourier-Transformation? Andrew Zisserman, [Lecture 2](https://www.robots.ox.ac.uk/~az/lectures/ia/lect2.pdf).
+d.h. Faltung im Ortsraum ist Multiplikation im Frequenzraum. Auch umgekehrt: $\mathcal{F}(f \cdot g) = \mathcal{F}(f) \ast \mathcal{F}(g)$. Konkret: Mit einer reinen Sinuswelle zu falten heißt, den Koeffizienten dieser Welle in der Zerlegung des Signals herauszugreifen. Aus dem Faltungstheorem folgen auch die Assoziativität $(f \ast g) \ast h = f \ast (g \ast h)$ und die praktische Regel
+
+$$
+\frac{d}{dx}(f \ast g) = f' \ast g = f \ast g',
+$$
+
+d.h. „glätten und dann ableiten“ ist dasselbe wie „mit dem abgeleiteten Filter falten“ – genau das ist der DoG-Kantendetektor, näherungsweise die Ableitung der Gaußfunktion. Das Faltungstheorem erklärt auch, warum die Gaußfunktion glättet: Ihre Fouriertransformierte ist wieder eine Gaußfunktion, die hohe Frequenzen (= schnelle Änderungen, Rauschen) dämpft. Kurzer Ausflug in die Fourier-Transformation? Andrew Zisserman, [Lecture 2](https://www.robots.ox.ac.uk/~az/lectures/ia/lect2.pdf).
 
 ## Eindimensionales Pooling
 
@@ -132,14 +173,36 @@ nn.Linear(16 * 4 * 4, 10)
 
 Die Zahl im `nn.Linear` muss man also ausrechnen – der häufigste Shape-Fehler beim Bau eines CNN. Mit `kernel_size=3` statt 5 wären es $28 \to 26 \to 13 \to 11 \to 5$, also `16 * 5 * 5`.
 
-### 1-dimensionale CNNs
+### 2-dimensionale Faltung in PyTorch
 
-Im Notebook: `F.conv1d` mit handgesetzten Filtern (Gauß, DoG) auf dem ASML-Kurs, und die Beobachtung, dass ein gelernter 1D-Filter genau solche Formen annimmt.
+`nn.Conv2d` ist ein Layer mit lernbaren Gewichten; man kann die Gewichte aber auch von Hand setzen und den Layer als Bildfilter benutzen. Ein Farbfoto wird zu einem Tensor der Form `(1, 3, H, W)` (Batch, RGB-Kanäle, Höhe, Breite), und ein Filter mit `in_channels=3` summiert über die drei Farbkanäle:
 
-### 2-dimensionale CNNs
+```python
+import torch, torch.nn as nn
+from PIL import Image
+from torchvision import transforms
 
-Im Notebook: `nn.Conv2d` auf einem Foto (`pallino.jpg`) mit verschiedenen $3 \times 3$-Filtern. Weiterführend:
+img = transforms.ToTensor()(Image.open("pallino.jpg")).unsqueeze(0)  # (1, 3, H, W)
+
+conv = nn.Conv2d(in_channels=3, out_channels=1, kernel_size=5, padding=1, bias=False)
+w = torch.full((5, 5), -1.0)        # überall -1 ...
+w[2, 1:4] = 7.0                     # ... außer drei Werten in der Mitte: 7
+conv.weight.data = w.expand(1, 3, 5, 5).clone()   # derselbe Filter auf allen Kanälen
+
+out = torch.clamp(conv(img), 0, 1).squeeze()      # (H', W'), auf [0, 1] gekappt
+```
+
+Die Gewichte summieren sich zu $22 \cdot (-1) + 3 \cdot 7 = -1$: In gleichmäßigen Flächen ist die Antwort leicht negativ und wird auf $0$ gekappt, nur dort, wo die drei Mittelpixel heller sind als ihre Umgebung – an Kanten und Texturen – bleibt etwas übrig. Das Ergebnis hat einen Kanal, ist also ein Graustufenbild; unten in Falschfarben.
+
+:::{figure} ../images/vl10-pallino-conv.png
+:width: 90%
+
+`nn.Conv2d` mit dem handgesetzten $5 \times 5$-Filter oben: Aus einem Foto wird ein Kantenbild. Ein CNN lernt solche Filter selbst – in der ersten Schicht sehen sie meist genau so aus.
+:::
+
+Weiterführend:
 
 * Animationen von Vincent Dumoulin und Francesco Visin zu Padding, Stride und Dilation: [github.com/vdumoulin/conv_arithmetic](https://github.com/vdumoulin/conv_arithmetic).
 * Interaktives MNIST-CNN-Explorationswerkzeug von Adam Harley: [adamharley.com/nn_vis/cnn/2d.html](https://adamharley.com/nn_vis/cnn/2d.html) – man zeichnet eine Ziffer und sieht alle Feature Maps aller Schichten.
-* Für Code ins Notebook schauen; das Übungsblatt 10 rechnet Faltungen und Pooling von Hand.
+* *Universal Fourier Features Emerge* ([arXiv:2312.08550](https://arxiv.org/abs/2312.08550)): warum gelernte Filter so oft wie Fourier-Basisfunktionen aussehen.
+* Das Übungsblatt 10 rechnet Faltungen und Pooling von Hand.

@@ -73,8 +73,9 @@ Punkte mit **[Entscheidung]** brauchen eine Antwort von Konrad; ein Vorschlag st
 
 ## Notebooks
 
-- [ ] Notebooks laufen nicht im Build (bewusst; `notebooks/README.md` erklärt das). `ASML.csv` und `pallino.jpg` liegen jetzt im Ordner, `*.gguf` ist per `.gitignore` ausgeschlossen.
-- [ ] **[Entscheidung]** Outputs eingecheckt lassen (Stand 2025) oder Notebooks einmal neu ausführen? *Vorschlag:* vor Semesterstart einmal mit aktuellem torch/transformers durchlaufen lassen, dann einchecken.
+- [x] Notebooks aus dem Buch genommen (TOC auskommentiert) und Inhalte in die Kapitel übernommen: backprop → Autograd, nn-by-hand → Netze von Hand, convolutions → CNNs (+ `vl10-pallino-conv.png`), llamacpp → LLMs benutzen (2026-09-18). Dateien bleiben in `notebooks/` als Referenz, `notebooks/README.md` erklärt den Stand.
+- [ ] `latent-classifier.ipynb` ist das einzige verbleibende Notebook mit Funktion: Download auf der Blatt-11-Seite (`downloads:` im Frontmatter). Vor Semesterstart einmal mit aktuellem torch/transformers durchlaufen lassen (bert-medium-Download, `ipywidgets` für die Saliency-Zelle) und Outputs neu einchecken.
+- [ ] Code-Beispiele in den Kapiteln (CNN, LLMs, Autograd) sind aus den Notebooks übernommen, aber nicht erneut ausgeführt – bei der fachlichen Durchsicht einmal laufen lassen.
 
 ## Infrastruktur
 
