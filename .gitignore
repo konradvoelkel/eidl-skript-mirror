@@ -144,3 +144,6 @@ exports/
 scalene-profile.json
 # LLM-Gewichte (zu groß)
 *.gguf
+
+# Claude Code Editor-Konfiguration
+.claude/

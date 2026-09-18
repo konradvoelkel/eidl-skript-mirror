@@ -4,6 +4,11 @@ Stand: 2026-09-17, automatischer Abgleich (Stichwortsuche, `devnotes/klausur-abd
 Quelle: `../from_2025/exam/exam2025-eidl-aufgabenschatz.tex` – 49 MC-Aussagen (A1), 3 Anwendungskonzepte (A2),
 5 Code-Verständnis-Sets (A3), 3 Backprop-Rechnungen (A4), 4 gruppierte MC-Sets (A5).
 
+Die Kapitelnamen in der Tabelle beziehen sich auf den Stand vom 2026-09-17 (20 Kapitel). Seit den Kapitelsplits
+am 2026-09-18 gilt: „Perzeptron“ → Neuron und Perzeptron / Perzeptron trainieren; „Backprop“ → Backpropagation /
+Autograd; „Aktivierung/Univ.“ → Aktivierungsfunktionen / Netze von Hand / Universelle Approximation;
+„RNN/Transformer“ → RNNs / Transformer; „VAE“ (latente Räume) und „word2vec“ (Geometrie) → Latente Räume geometrisch.
+
 Die vier beim ersten Abgleich fehlenden Begriffe (Perzeptron ohne Bias, Early Stopping/Data Augmentation,
 Precision/Recall, `logvar`) wurden am 2026-09-17 in die Kapitel eingearbeitet.
 

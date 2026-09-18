@@ -1,6 +1,6 @@
 # Migrationsplan EiDL 2025/26 → 2026/27
 
-Stand: 2026-09-17
+Stand: 2026-09-18
 
 ## Ausgangslage
 
@@ -26,7 +26,8 @@ Stand: 2026-09-17
 
 ## Zuordnung Vorlesung ↔ Kapitel ↔ Übungsblatt ↔ Klausur
 
-Seit dem Umbau am 2026-09-17 sind die Kapitel inhaltlich geschnitten (20 Kapitel, Dateinamen ohne VL-Nummer).
+Seit dem Umbau am 2026-09-17 sind die Kapitel inhaltlich geschnitten (Dateinamen ohne VL-Nummer); am 2026-09-18
+wurden überfrachtete Kapitel nochmals geteilt, jetzt 26 Kapitel (Details: `TODO.md`, „Kapitelsplits“).
 Die Zuordnung Vorlesungswoche → Kapitel steht als Tabelle in `README.md` („Inhalt“), der Abgleich mit dem
 Klausur-Aufgabenschatz in `klausur-abdeckung.md`. Übungsblätter (2025): 00/01 → Perzeptron (Lin. Algebra),
 02 → Perzeptron, 03 → Gradientenabstieg (schwache Ableitungen), 04/05 → Logistische Regression,
@@ -43,10 +44,10 @@ Entwürfe für 2026 (englisch, amsart): `exam2026-eidl-exam-1.tex`, `exam2026-ei
 
 - Im Vorstellungsdeck 2026 ist die geplante Reihenfolge leicht anders als 2025: Logistische Regression und SGD/Backprop
   *vor* PyTorch. Entscheiden, ob Kapitel 03 (PyTorch) nach hinten wandert.
-- VL 08 war 2025 mit 85 Folien überladen (AE-Varianten + VAE + word2vec + NLP); ggf. word2vec/NLP in Kapitel 09 verschieben.
-- VL 06 endet bereits mit Autoencoder-Einführung, VL 07 beginnt mit „handgemachten Netzen" (Universalität) – Kapitelgrenzen neu ziehen.
+- ~~VL 08 war 2025 mit 85 Folien überladen (AE-Varianten + VAE + word2vec + NLP); ggf. word2vec/NLP in Kapitel 09 verschieben.~~ Im Skript sind das jetzt eigene Kapitel (Autoencoder, VAE, word2vec); die Folienverteilung ist Thema von Schritt 4.
+- ~~VL 06 endet bereits mit Autoencoder-Einführung, VL 07 beginnt mit „handgemachten Netzen" (Universalität) – Kapitelgrenzen neu ziehen.~~ Erledigt (Kapitelsplits 2026-09-18).
 - Lehrbuchbezug: Prince, *Understanding Deep Learning* (Kapitel pro Thema referenzieren), Deisenroth et al. für Mathe-Grundlagen.
-- Notebooks (`notebooks/`) laufen noch nicht im Build (`jupyter: true` ohne Kernel-Setup); Datensätze (MNIST) nicht im Repo.
+- ~~Notebooks (`notebooks/`) laufen noch nicht im Build.~~ Inhalte am 2026-09-18 in die Kapitel übernommen, Notebooks aus dem Buch genommen (siehe `notebooks/README.md`).
 - Englische Übungsblätter (`sheetNN.tex`) sind nicht konvertiert; bei Bedarf gleicher Weg über pandoc.
 
 ## Google-Slides-Quellen (Drive-Ordner `1blU81WO_aaZRyH02UFrwk4AamOyWT-sv`)
