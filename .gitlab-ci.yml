@@ -29,12 +29,12 @@ build-image:
     - when: manual
       allow_failure: true
 
+# No `needs` on build-image: when the Dockerfile is unchanged that job is
+# manual, and a `needs` dependency on a pending manual job would skip this job
+# (and the whole pipeline). Stage order already runs image builds first.
 myst-build:
   stage: build
   image: $CI_REGISTRY_IMAGE:latest
-  needs:
-    - job: build-image
-      optional: true
   script:
     - node -v
     - myst --version
