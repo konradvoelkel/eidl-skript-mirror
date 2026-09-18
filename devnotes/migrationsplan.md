@@ -28,7 +28,7 @@ Stand: 2026-09-18
 
 Seit dem Umbau am 2026-09-17 sind die Kapitel inhaltlich geschnitten (Dateinamen ohne VL-Nummer); am 2026-09-18
 wurden überfrachtete Kapitel nochmals geteilt, jetzt 26 Kapitel (Details: `TODO.md`, „Kapitelsplits“).
-Die Zuordnung Vorlesungswoche → Kapitel steht als Tabelle in `README.md` („Inhalt“), der Abgleich mit dem
+Die Zuordnung Vorlesungswoche → Kapitel steht als Tabelle in `kurs-2026-27.md` (nicht im Buch), der Abgleich mit dem
 Klausur-Aufgabenschatz in `klausur-abdeckung.md`. Übungsblätter (2025): 00/01 → Perzeptron (Lin. Algebra),
 02 → Perzeptron, 03 → Gradientenabstieg (schwache Ableitungen), 04/05 → Logistische Regression,
 06/08 → Autoencoder, 07 → Backpropagation, 09 → VAE, 10 → CNNs, 11 → LLMs benutzen.

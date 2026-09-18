@@ -25,7 +25,7 @@ Punkte mit **[Entscheidung]** brauchen eine Antwort von Konrad; ein Vorschlag st
   - Anwendungen: two-tower-Modell
   - Destillation: $T^2$-Faktor
   - Optimierer: Momentum/Adam-Gleichungen; Adversarial: FGSM-Formel, Polysemie-Absatz (aus Ruppik-Folien rekonstruiert)
-- [ ] **[Entscheidung] Kapitelschnitt prüfen.** Stand: 26 Kapitel (nach den Splits unten), VL-Nummern nur noch in der Tabelle in `README.md`.
+- [ ] **[Entscheidung] Kapitelschnitt prüfen.** Stand: 26 Kapitel (nach den Splits unten), VL-Nummern nur noch in der Tabelle in `kurs-2026-27.md`.
   Bewusst getroffene Schnitte, die man anders setzen könnte (Nummern = alte Zählung vor den Splits):
   - „Vortrainierte Modelle“ (Kap. 3) steht *vor* „Tensoren“ und „Logistische Regression“ – wie 2025. Das Vorstellungsdeck 2026 sieht PyTorch erst nach LogReg/SGD vor. *Vorschlag:* Reihenfolge lassen (die HF-Tour motiviert, warum man das alles lernt), aber im Vortrag Kap. 3 auf eine halbe Sitzung kürzen.
   - „Aktivierungsfunktionen und Universalität“ (Kap. 8) bündelt ReLU & Co., Netze von Hand und die Approximationssätze. *Erledigt durch Split 2* (drei Kapitel).
@@ -37,7 +37,7 @@ Punkte mit **[Entscheidung]** brauchen eine Antwort von Konrad; ein Vorschlag st
   - [x] Split 3: „Das Perzeptron“ → **Neuron und Perzeptron** (Neuron, Perzeptron, MLP-Definition, Tipps Blatt 1) + **Das Perzeptron trainieren** (Perzeptronregel, verallg. Perzeptron, mehrere Schichten, Tipps Blatt 2)
   - [x] Split 4: „Sequenzen: RNNs und Transformer“ → **RNNs** + **Transformer**
   - [x] Split 5: neues Kapitel **Latente Räume geometrisch** (nach GANs) aus „VAE“ § „Latente Räume für Bilder“ + „word2vec“ § „Wortvektoren geometrisch verstehen“; VAE-Kapitel heißt dann nur noch „Variational Autoencoder“ (Vorwärtsverweis auf GANs entfällt)
-  - [x] Alle Dateien neu nummerieren (01–26), `myst.yml`-TOC, VL-Tabelle in `README.md`, Querverweise (`.md`-Links) und Binnenverweise („übernächster Abschnitt“, „siehe oben“, „aus Kapitel 6“ = alte VL-Nummern!) anpassen
+  - [x] Alle Dateien neu nummerieren (01–26), `myst.yml`-TOC, VL-Tabelle (jetzt in `kurs-2026-27.md`), Querverweise (`.md`-Links) und Binnenverweise („übernächster Abschnitt“, „siehe oben“, „aus Kapitel 6“ = alte VL-Nummern!) anpassen
   - [x] Build prüfen (keine fehlenden Dateien/Bilder), Wortzahlen je Kapitel danach: alle ≤ ~1 750 außer Logistische Regression (2 263) und Gradientenabstieg (2 061), bewusst nicht gesplittet
 - [ ] **Abbildungen**: 35 eingebettet (erzeugt von `make_figures.py`; Bilddateien in `images/`). Noch offen (9 Marker im Text):
   - Hubel & Wiesel (Wikipedia Mads00, CC-BY-SA) – Download + Lizenzhinweis
@@ -50,7 +50,7 @@ Punkte mit **[Entscheidung]** brauchen eine Antwort von Konrad; ein Vorschlag st
   - Transformer Fig. 1 – *Vorschlag:* verlinken
 - [ ] Lehrbuchverweise ergänzen (Prince *UDL*: Kap. 3 shallow nets ↔ Universalität, Kap. 4 deep nets, Kap. 6 fitting/SGD, Kap. 7 gradients/backprop, Kap. 10 CNNs, Kap. 12 Transformer, Kap. 15 GANs, Kap. 17 VAE; Deisenroth et al. für Lin. Algebra/Analysis).
 - [ ] „Stand“-Hinweisboxen wurden beim Umbau entfernt; ggf. eine allgemeine Box in `index.md` („Entwurf, Stand …“).
-- [ ] Formalia (`README.md`): Übungsleitung 2026/27, Räume/Zeiten bestätigen.
+- [ ] Formalia (`kurs-2026-27.md`, bewusst nicht im Buch): Übungsleitung 2026/27, Räume/Zeiten bestätigen; Verteilung an die Studierenden klären (ILIAS/Rocket.Chat?).
 - [ ] Glossar für die Klausurvorbereitung (Vorschlag aus `klausur-abdeckung.md`).
 - [ ] „Rezept Anwendungskonzept“ in Kap. 17 (Vorschlag aus `klausur-abdeckung.md`).
 
@@ -88,7 +88,7 @@ Punkte mit **[Entscheidung]** brauchen eine Antwort von Konrad; ein Vorschlag st
 
 ## Beamer-Folien (Schritt 4 des Migrationsplans)
 
-- [ ] Erst nach Durchsicht des Skripts: pro Vorlesungswoche ein Beamer-Deck im Stil von `../slides/Einführung in Deep Learning 2026 header.tex` (hhubeamer). Die Tabelle in `README.md` sagt, welche Kapitel(teile) in welche Woche gehören.
+- [ ] Erst nach Durchsicht des Skripts: pro Vorlesungswoche ein Beamer-Deck im Stil von `../slides/Einführung in Deep Learning 2026 header.tex` (hhubeamer). Die Tabelle in `kurs-2026-27.md` sagt, welche Kapitel(teile) in welche Woche gehören.
 - [ ] **[Entscheidung]** Folien aus dem MyST-Quelltext generieren oder von Hand? *Vorschlag:* von Hand in LaTeX, aber Formeln und Abbildungen aus dem Skript übernehmen (`images/` ist direkt `\includegraphics`-tauglich; Formeln 1:1 kopierbar).
 
 ## Erledigt
