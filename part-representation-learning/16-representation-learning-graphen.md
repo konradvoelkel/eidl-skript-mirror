@@ -20,7 +20,7 @@ Wie genau? Zwei Mechanismen haben wir bereits gesehen: Dimensionsreduktion durch
 Representation Learning ist die automatische Variante von *Feature Engineering*. Zwei klassische, handgemachte Beispiele:
 
 * Das **Spektrogramm** einer Audiodatei. So wird eine Waveform-Datei (z.B. eine Unterhaltung, ein Song) in ein Bild umgewandelt, indem die (Kurzzeit-)Fourier-Transformation genutzt wird. Relevant für Sprachsynthese und Spracherkennung.
-* Enthält ein Bild horizontale Kanten? Vertikale Kanten? Ecken? Ein Klassifikator für „das Bild enthält ein Haus“ ist leichter zu trainieren, wenn nicht nur Pixelwerte eingehen, sondern auch die Positionen von Ecken und Kanten. Die automatische Variante davon sind **CNNs** (Convolutional Neural Networks), siehe das [Kapitel „Faltung und CNNs“](../part-architekturen-anwendungen/14-faltung-cnn.md).
+* Enthält ein Bild horizontale Kanten? Vertikale Kanten? Ecken? Ein Klassifikator für „das Bild enthält ein Haus“ ist leichter zu trainieren, wenn nicht nur Pixelwerte eingehen, sondern auch die Positionen von Ecken und Kanten. Die automatische Variante davon sind **CNNs** (Convolutional Neural Networks), siehe das [Kapitel „Faltung und CNNs“](../part-architekturen-anwendungen/19-faltung-cnn.md).
 
 ## node2vec
 

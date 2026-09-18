@@ -7,7 +7,7 @@ short_title: "LLMs benutzen"
 
 ## Transformer-LLMs in der Praxis einsetzen
 
-Zur Erinnerung der Aufbau eines Transformers (Kapitel 9, Fig. 1 in „Attention is all you need“): Encoder- und Decoder-Stapel aus Attention- und MLP-Blöcken. Ein *Large Language Model* ist ein sehr großer, meist Decoder-only Transformer, der das nächste Token vorhersagt.
+Zur Erinnerung der Aufbau eines Transformers ([Kapitel „Transformer“](../part-representation-learning/18-transformer.md), Fig. 1 in „Attention is all you need“): Encoder- und Decoder-Stapel aus Attention- und MLP-Blöcken. Ein *Large Language Model* ist ein sehr großer, meist Decoder-only Transformer, der das nächste Token vorhersagt.
 
 ### Verschiedene Wege, LLMs zu nutzen
 
@@ -21,7 +21,7 @@ Wir konkretisieren anhand eines Beispiel-Tasks, z.B. „Gegeben einen Text, iden
 6. **Vortrainierte Transformer auf besonderen Daten weiter trainieren** (Finetuning). Pro: relativ billig (keine sehr langen Trainingszeiten = Stromkosten nötig). Contra: benötigt wenigstens Hardware zum Training (teurer für größere Modelle).
 7. **Transformer-Modell auf Chat-Formate finetunen mit RLHF** (Reinforcement Learning from Human Feedback, wie bei ChatGPT). Pro: Feedback führt zu Qualitätssteigerung, z.B. NSFW-Removal o.ä. Contra: etwas komplizierter als „einfaches“ Training.
 8. **Sehr große Modelle über eine API verwenden** (ggf. nur Sampling-Output). Der De-facto-Standard für die „meisten“ LLM-Use-Cases für Softwareentwickler.
-9. **Vorhersagen eines großen Modells in ein kleineres übertragen** (Destillation). Das schauen wir uns im [Kapitel „Destillation“](18-destillation.md) noch an; so lässt sich z.B. die Inferenz beschleunigen.
+9. **Vorhersagen eines großen Modells in ein kleineres übertragen** (Destillation). Das schauen wir uns im [Kapitel „Destillation“](24-destillation.md) noch an; so lässt sich z.B. die Inferenz beschleunigen.
 10. **Constrained Generation**: Ausgabe sampeln, die einem (z.B. JSON-)Schema genügt – ein wesentlicher Baustein für „agentische Workflows“.
 
 ## Selbst Inferenz und Training durchführen

@@ -114,7 +114,7 @@ for epoch in range(15):
         optimizer.step()
 ```
 
-Neu gegenüber Kapitel 4 sind `Dataset` und `DataLoader`: Der Datensatz liefert einzelne Samples (hier mit einer `transform`, die das Bild in einen Vektor der Länge 784 verwandelt), der Loader fasst sie zu zufällig gemischten Mini-Batches zusammen. Die Trainingsschleife selbst ist dieselbe wie immer, nur dass das Label das Bild selbst ist.
+Neu gegenüber dem [Kapitel „Tensoren“](../part-grundlagen/05-tensoren.md) sind `Dataset` und `DataLoader`: Der Datensatz liefert einzelne Samples (hier mit einer `transform`, die das Bild in einen Vektor der Länge 784 verwandelt), der Loader fasst sie zu zufällig gemischten Mini-Batches zusammen. Die Trainingsschleife selbst ist dieselbe wie immer, nur dass das Label das Bild selbst ist.
 
 ### Tricks beim Training
 

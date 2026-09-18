@@ -49,4 +49,4 @@ Genau das passiert bei **Polysemie**: Ein Wort wie „Maus“ (Tier, Computermau
 Die Manifold-Hypothese und ihre Grenzen: Daten nahe einer Kurve; Rauschen; zwei sich kreuzende Kurven (keine Mannigfaltigkeit – so sieht Polysemie im Embedding-Raum aus); und das Dimpled Manifold Model, in dem die Entscheidungsgrenze sich an die Daten schmiegt und Adversarial Examples nur einen winzigen Schritt entfernt sind.
 :::
 
-Damit schließt sich der Kreis zur Kernfrage aus Kapitel 8: Welche Struktur finden wir im Latent Space? Manchmal eine schöne Mannigfaltigkeit – und manchmal etwas Interessanteres.
+Damit schließt sich der Kreis zur Kernfrage aus dem [Kapitel „Latente Räume geometrisch“](22-latente-raeume.md): Welche Struktur finden wir im Latent Space? Manchmal eine schöne Mannigfaltigkeit – und manchmal etwas Interessanteres.

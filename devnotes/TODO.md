@@ -25,12 +25,20 @@ Punkte mit **[Entscheidung]** brauchen eine Antwort von Konrad; ein Vorschlag st
   - Anwendungen: two-tower-Modell
   - Destillation: $T^2$-Faktor
   - Optimierer: Momentum/Adam-Gleichungen; Adversarial: FGSM-Formel, Polysemie-Absatz (aus Ruppik-Folien rekonstruiert)
-- [ ] **[Entscheidung] Kapitelschnitt prüfen.** Umgesetzt: 20 Kapitel, VL-Nummern nur noch in der Tabelle in `README.md`.
-  Bewusst getroffene Schnitte, die man anders setzen könnte:
+- [ ] **[Entscheidung] Kapitelschnitt prüfen.** Stand: 26 Kapitel (nach den Splits unten), VL-Nummern nur noch in der Tabelle in `README.md`.
+  Bewusst getroffene Schnitte, die man anders setzen könnte (Nummern = alte Zählung vor den Splits):
   - „Vortrainierte Modelle“ (Kap. 3) steht *vor* „Tensoren“ und „Logistische Regression“ – wie 2025. Das Vorstellungsdeck 2026 sieht PyTorch erst nach LogReg/SGD vor. *Vorschlag:* Reihenfolge lassen (die HF-Tour motiviert, warum man das alles lernt), aber im Vortrag Kap. 3 auf eine halbe Sitzung kürzen.
-  - „Aktivierungsfunktionen und Universalität“ (Kap. 8) bündelt ReLU & Co., Netze von Hand und die Approximationssätze. *Alternative:* Universalität als eigenes kurzes Kapitel am Ende von Teil II.
-  - „Backpropagation“ (Kap. 7) enthält jetzt drei Zugänge (Beispielrechnung, Induktion, Berechnungsgraph in PyTorch). Ggf. den PyTorch-Teil in ein eigenes Kapitel „Autograd“ auslagern, wenn er wächst.
-  - „VAE und latente Räume“ (Kap. 10) referenziert GANs, die erst in Kap. 16 kommen. *Vorschlag:* so lassen, Vorwärtsverweis ist markiert.
+  - „Aktivierungsfunktionen und Universalität“ (Kap. 8) bündelt ReLU & Co., Netze von Hand und die Approximationssätze. *Erledigt durch Split 2* (drei Kapitel).
+  - „Backpropagation“ (Kap. 7) enthält jetzt drei Zugänge (Beispielrechnung, Induktion, Berechnungsgraph in PyTorch). *Erledigt durch Split 1* (eigenes Kapitel „Autograd und Berechnungsgraph“).
+  - „VAE und latente Räume“ (Kap. 10) referenziert GANs, die erst in Kap. 16 kommen. *Erledigt durch Split 5*: Abschnitt „Latente Räume für Bilder“ ist jetzt Teil von „Latente Räume geometrisch“ nach den GANs.
+- [x] **Kapitelsplits** (Entscheidung Konrad 2026-09-18, umgesetzt am selben Tag: Kapitel mit zwei bis drei Themen aufteilen; 20 → 26 Kapitel, Nummern in Dateinamen durchgehend neu):
+  - [x] Split 1: „Backpropagation“ → **Backpropagation** (Ziel, Motivation, konkret, Induktion) + **Autograd und Berechnungsgraph** (PyTorch-Teil)
+  - [x] Split 2: „Aktivierungsfunktionen und Universalität“ → **Aktivierungsfunktionen** + **Netze von Hand bauen** („Geheimnis lüften“, „Parameter von Hand wählen“) + **Universelle Approximation**
+  - [x] Split 3: „Das Perzeptron“ → **Neuron und Perzeptron** (Neuron, Perzeptron, MLP-Definition, Tipps Blatt 1) + **Das Perzeptron trainieren** (Perzeptronregel, verallg. Perzeptron, mehrere Schichten, Tipps Blatt 2)
+  - [x] Split 4: „Sequenzen: RNNs und Transformer“ → **RNNs** + **Transformer**
+  - [x] Split 5: neues Kapitel **Latente Räume geometrisch** (nach GANs) aus „VAE“ § „Latente Räume für Bilder“ + „word2vec“ § „Wortvektoren geometrisch verstehen“; VAE-Kapitel heißt dann nur noch „Variational Autoencoder“ (Vorwärtsverweis auf GANs entfällt)
+  - [x] Alle Dateien neu nummerieren (01–26), `myst.yml`-TOC, VL-Tabelle in `README.md`, Querverweise (`.md`-Links) und Binnenverweise („übernächster Abschnitt“, „siehe oben“, „aus Kapitel 6“ = alte VL-Nummern!) anpassen
+  - [x] Build prüfen (keine fehlenden Dateien/Bilder), Wortzahlen je Kapitel danach: alle ≤ ~1 750 außer Logistische Regression (2 263) und Gradientenabstieg (2 061), bewusst nicht gesplittet
 - [ ] **Abbildungen**: 35 eingebettet (erzeugt von `make_figures.py`; Bilddateien in `images/`). Noch offen (9 Marker im Text):
   - Hubel & Wiesel (Wikipedia Mads00, CC-BY-SA) – Download + Lizenzhinweis
   - GIMP-Faltungsmatrix – Screenshot selbst machen

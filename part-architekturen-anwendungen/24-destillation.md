@@ -57,7 +57,7 @@ Ba, Caruana: *Do Deep Nets Really Need to be Deep?* (2013). Wie muss ein neurona
 1. **Expressivity**: Ist das Netz komplex genug, um die Funktion abzubilden?
 2. **Learnability**: Kann der Gradientenabstieg diese Funktion im großen Suchraum finden?
 
-Ergebnisse: Expressivity ist nicht das Problem (vgl. das [Kapitel „Aktivierungsfunktionen und Universalität“](../part-lernen/08-aktivierungsfunktionen-universalitaet.md)), flache und breite Netzwerke sind stark. Learnability ist das Problem flacher Netze: Ein flaches Netz, das mit den Soft-Labels eines tiefen Netzes trainiert wird, erreicht dessen Genauigkeit – dasselbe flache Netz direkt auf den Daten trainiert aber nicht.
+Ergebnisse: Expressivity ist nicht das Problem (vgl. das [Kapitel „Universelle Approximation“](../part-lernen/12-universelle-approximation.md)), flache und breite Netzwerke sind stark. Learnability ist das Problem flacher Netze: Ein flaches Netz, das mit den Soft-Labels eines tiefen Netzes trainiert wird, erreicht dessen Genauigkeit – dasselbe flache Netz direkt auf den Daten trainiert aber nicht.
 
 ## Model Distillation
 
@@ -73,7 +73,7 @@ q_i = \frac{\exp(z_i / T)}{\sum_j \exp(z_j / T)},
 L_{\text{distill}} = T^2 \cdot D_{KL}\bigl( q^{\text{Lehrer}} \,\|\, q^{\text{Schüler}} \bigr).
 $$
 
-Mit $T > 1$ werden die kleinen Wahrscheinlichkeiten der falschen Klassen sichtbar (Temperature Scaling im [Kapitel „Wortvektoren“](../part-representation-learning/11-word2vec.md)), und genau die tragen die Information. In der Praxis kombiniert man das mit dem gewöhnlichen Kreuzentropie-Loss auf den echten Labels bei $T = 1$.
+Mit $T > 1$ werden die kleinen Wahrscheinlichkeiten der falschen Klassen sichtbar (Temperature Scaling im [Kapitel „Latente Räume geometrisch“](22-latente-raeume.md)), und genau die tragen die Information. In der Praxis kombiniert man das mit dem gewöhnlichen Kreuzentropie-Loss auf den echten Labels bei $T = 1$.
 
 ### Dark Knowledge
 
@@ -93,7 +93,7 @@ DistilBERT := jeder zweite Layer von BERT (als Initialisierung). Der Loss ist di
 * **Masked Language Modeling Loss**: wie BERT, Lernen aus den Daten, mit Temperatur 1.
 * **Cosine-Distance Loss**: latente Mannigfaltigkeiten beibehalten, d.h. die Outputs der Layer (die hidden states) von Schüler und Lehrer im Kosinusabstand vergleichen.
 
-Das ist das Modell aus Kapitel 3 für Text Classification und Fill-Mask.
+Das ist das Modell aus dem [Kapitel „Vortrainierte Modelle“](../part-grundlagen/04-vortrainierte-modelle.md) für Text Classification und Fill-Mask.
 
 ## Anwendungen
 
@@ -103,7 +103,7 @@ Vgl. Yan, Agarwal, Venkataraman: *Decoding Speculative Decoding* (2024). Problem
 
 ### SDXL Turbo
 
-Sauer, Lorenz, Blattmann, Rombach: *Adversarial Diffusion Distillation* (2023). Aus einem vortrainierten tiefen Diffusionsmodell (SDXL) zum Generieren von Bildern aus Bildbeschreibungen in einem $k$-Schritte-Iterationsprozess des Entrauschens wird ein 1-Schritt-Modell destilliert – mit Distillation Loss (Schüler-Output soll dem Lehrer-Output nach $k$ Schritten ähneln) und Adversarial Loss (GAN-Training aus dem [Kapitel „GANs“](16-gans.md), damit die Bilder scharf bleiben). Bildgenerierung in Echtzeit.
+Sauer, Lorenz, Blattmann, Rombach: *Adversarial Diffusion Distillation* (2023). Aus einem vortrainierten tiefen Diffusionsmodell (SDXL) zum Generieren von Bildern aus Bildbeschreibungen in einem $k$-Schritte-Iterationsprozess des Entrauschens wird ein 1-Schritt-Modell destilliert – mit Distillation Loss (Schüler-Output soll dem Lehrer-Output nach $k$ Schritten ähneln) und Adversarial Loss (GAN-Training aus dem [Kapitel „GANs“](21-gans.md), damit die Bilder scharf bleiben). Bildgenerierung in Echtzeit.
 
 ### Gemini Flash
 

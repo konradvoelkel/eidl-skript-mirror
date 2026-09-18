@@ -68,7 +68,7 @@ Jordan, Keller et al.: *Muon: An optimizer for hidden layers in neural networks*
 
 ### Wieso so kompliziert?
 
-Genau genommen liegt der Gradient der Loss-Funktion an einem Punkt des Gewichtsraums im *Kotangentialraum* des Graphen der Loss-Funktion – er ist eine Linearform, die Änderungsrichtungen Zahlen zuordnet ([Kapitel „Tensoren“](../part-grundlagen/04-tensoren.md): Kovektoren!). Um einen Vektor aus dem Gewichtsraum daraus zu machen, mit dem wir einen Schritt gehen können, müssen wir „dualisieren“. Dabei kann man verschiedene Geometrien betrachten:
+Genau genommen liegt der Gradient der Loss-Funktion an einem Punkt des Gewichtsraums im *Kotangentialraum* des Graphen der Loss-Funktion – er ist eine Linearform, die Änderungsrichtungen Zahlen zuordnet ([Kapitel „Tensoren“](../part-grundlagen/05-tensoren.md): Kovektoren!). Um einen Vektor aus dem Gewichtsraum daraus zu machen, mit dem wir einen Schritt gehen können, müssen wir „dualisieren“. Dabei kann man verschiedene Geometrien betrachten:
 
 * Die **euklidische Geometrie**, einfach $\mathbb{R}^n$ mit dem Standardskalarprodukt; dann kann man die Zahlen, die man ausrechnet, wie gehabt als Vektor in $\mathbb{R}^n$ auffassen. Das ist SGD.
 * Die **Riemannsche Geometrie**, die durch die Fisher-Informationsmatrix gegeben ist – der *Natural Gradient* (Amari). Die Fisher-Matrix ist die zweite Ableitung der relativen Entropie; Schritte werden so gemessen, wie stark sich die *Ausgabeverteilung* des Modells ändert, nicht die Gewichte.
