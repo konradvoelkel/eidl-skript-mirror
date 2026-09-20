@@ -7,7 +7,14 @@ short_title: "Backpropagation"
 
 ## Ziel
 
-Verstehen können, was im [TensorFlow Playground](https://playground.tensorflow.org) geschieht. Als Aufwärmübung: Setzen Sie dort die Gewichte von Hand, mit 2 Hidden Layers zu je 2 Neuronen, um das XOR-Problem zu lösen. Das geht ([Kapitel „Neuron und Perzeptron“](../part-grundlagen/02-neuron-perzeptron.md)), aber es ist mühsam – und genau das Mühsame soll der Gradientenabstieg übernehmen. Dafür brauchen wir den Gradienten der Loss-Funktion nach *allen* Gewichten aller Schichten.
+Verstehen können, was im [TensorFlow Playground](https://playground.tensorflow.org) geschieht.
+
+:::{admonition} Ausprobieren: TensorFlow Playground
+:class: tip
+Wählen Sie den XOR-Datensatz (die vier Quadranten), 2 Hidden Layers zu je 2 Neuronen, Aktivierung `tanh` oder `ReLU`, und setzen Sie die sechs Gewichte *von Hand* (auf eine Verbindung klicken, Wert eintippen), bis die vier Quadranten richtig gefärbt sind. Das geht ([Kapitel „Neuron und Perzeptron“](../part-grundlagen/02-neuron-perzeptron.md) und [„Netze von Hand bauen“](12-netze-von-hand.md)), aber es ist mühsam. Dann Reset und Play. Zu beobachten: Der Gradientenabstieg findet meist *krumme* Gewichte, die trotzdem funktionieren; manche Neuronen sind redundant oder tragen nichts bei; die Lösung hängt von der zufälligen Initialisierung ab, und man kann während des Trainings einzelne Gewichte von Hand editieren und zusehen, wie das Netz sich erholt. Mit einem einzigen Hidden Layer aus vielen Neuronen sieht man, wie die Entscheidungsgrenze aus Stücken zusammengesetzt wird; das ist die Universalität aus dem [Kapitel „Universelle Approximation“](13-universelle-approximation.md).
+:::
+
+Genau das Mühsame soll der Gradientenabstieg übernehmen. Dafür brauchen wir den Gradienten der Loss-Funktion nach *allen* Gewichten aller Schichten.
 
 ## Training mehrerer Schichten: Motivation
 
@@ -135,11 +142,16 @@ $$
 \nabla_{b_3} E = r .
 $$
 
-Für die Ableitung nach $W_3$: $dE = r^T dW_3\, z_3 = \operatorname{tr}(r^T dW_3\, z_3) = \operatorname{tr}(z_3 r^T dW_3)$ – der Trick ist, dass die Spur zyklisch vertauscht werden darf – also
+Für die Ableitung nach $W_3$ ist das Ergebnis
 
 $$
 \nabla_{W_3} E = r\, z_3^T .
 $$
+
+:::{admonition} Vertiefung: der Spur-Trick
+:class: note dropdown
+Woher kommt das? Aus $dE = r^T dW_3\, z_3$ soll ein Ausdruck der Form $\langle \nabla_{W_3} E, dW_3 \rangle = \operatorname{tr}\bigl((\nabla_{W_3} E)^T dW_3\bigr)$ werden. Der Skalar $r^T dW_3\, z_3$ ist seine eigene Spur, und die Spur darf zyklisch vertauscht werden: $\operatorname{tr}(r^T dW_3\, z_3) = \operatorname{tr}(z_3 r^T dW_3)$. Der Vergleich mit $\operatorname{tr}\bigl((\nabla_{W_3} E)^T dW_3\bigr)$ liefert $(\nabla_{W_3} E)^T = z_3 r^T$. Wer das nicht mag, rechnet komponentenweise: $\partial E / \partial (W_3)_{jk} = r_j\,(z_3)_k$, dasselbe Ergebnis.
+:::
 
 Das ist ein *äußeres Produkt*: Der Gradient nach der Gewichtsmatrix ist Residuum mal Eingabe der Schicht, transponiert – so wie beim einzelnen Neuron der Gradient nach $w$ gleich Fehler mal $x$ war.
 
@@ -179,7 +191,7 @@ $$
 
 Das Fehlersignal wird von Schicht zu Schicht *rückwärts propagiert*: mit der transponierten Gewichtsmatrix multipliziert und mit der Ableitung der Aktivierungsfunktion gewichtet. Man nutzt die Zwischenschritte $z_k$ aus der Vorwärtsrechnung, um den vollen Gradienten effizient zu berechnen – ein Vorwärtsdurchlauf, ein Rückwärtsdurchlauf, fertig. Der Aufwand ist etwa das Doppelte einer Inferenz, unabhängig von der Anzahl der Parameter. Das ist **Backpropagation**, und danach kommt Gradientenabstieg.
 
-Genau das tut `loss.backward()` in PyTorch ([Kapitel „Autograd und Berechnungsgraph“](09-autograd-berechnungsgraph.md)): Beim Vorwärtsrechnen merkt sich jeder Tensor mit `requires_grad`, aus welcher Operation er entstanden ist (der *Berechnungsgraph*), und `backward` läuft diesen Graphen rückwärts ab und schreibt die Gradienten in die `.grad`-Attribute der Parameter. `optimizer.step()` macht dann $W \leftarrow W - \rho \nabla_W E$.
+Genau das tut `loss.backward()` in PyTorch ([Kapitel „Autograd und Berechnungsgraph“](10-autograd-berechnungsgraph.md)): Beim Vorwärtsrechnen merkt sich jeder Tensor mit `requires_grad`, aus welcher Operation er entstanden ist (der *Berechnungsgraph*), und `backward` läuft diesen Graphen rückwärts ab und schreibt die Gradienten in die `.grad`-Attribute der Parameter. `optimizer.step()` macht dann $W \leftarrow W - \rho \nabla_W E$.
 
 ### Matrix-Differentialkalkül: Literaturtipps
 

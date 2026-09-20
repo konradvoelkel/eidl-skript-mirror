@@ -16,10 +16,10 @@ Warum – und wie genau – funktioniert Deep Learning so gut? Die Zutaten, die 
 Was noch fehlt, und was wir in diesem und den nächsten Kapiteln angehen:
 
 * Sinnvolle Loss-Funktionen festlegen: Regression mit MSE, (binäre) Klassifikation mit (B)CE; BCE vs. NLL vs. $D_{KL}$.
-* Architekturen neben einfachen MLPs, wie z.B. Autoencoder – und damit auch Representation Learning und Transfer Learning ([Kapitel „Autoencoder“](../part-representation-learning/13-autoencoder.md) und folgende).
-* Regularisierung und Tricks gegen verschwindende Gradienten ([Kapitel „Aktivierungsfunktionen“](10-aktivierungsfunktionen.md), Dropout und Batch-Normalisierung im Autoencoder-Kapitel).
+* Architekturen neben einfachen MLPs, wie z.B. Autoencoder – und damit auch Representation Learning und Transfer Learning ([Kapitel „Autoencoder“](../part-representation-learning/14-autoencoder.md) und folgende).
+* Regularisierung und Tricks gegen verschwindende Gradienten ([Kapitel „Aktivierungsfunktionen“](11-aktivierungsfunktionen.md), Dropout und Batch-Normalisierung im Autoencoder-Kapitel).
 * Hyperparameter wählen und optimieren; alles hängt von den Daten ab …
-* Und ganz grundsätzlich: Elementare Funktionen sind leicht approximierbar – das jetzt, zuerst von Hand (dieses Kapitel), dann als Satz ([Kapitel „Universelle Approximation“](12-universelle-approximation.md)).
+* Und ganz grundsätzlich: Elementare Funktionen sind leicht approximierbar – das jetzt, zuerst von Hand (dieses Kapitel), dann als Satz ([Kapitel „Universelle Approximation“](13-universelle-approximation.md)).
 
 ## Parameter von Hand wählen
 

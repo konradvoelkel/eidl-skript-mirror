@@ -20,7 +20,7 @@ Wie genau? Zwei Mechanismen haben wir bereits gesehen: Dimensionsreduktion durch
 Representation Learning ist die automatische Variante von *Feature Engineering*. Zwei klassische, handgemachte Beispiele:
 
 * Das **Spektrogramm** einer Audiodatei. So wird eine Waveform-Datei (z.B. eine Unterhaltung, ein Song) in ein Bild umgewandelt, indem die (Kurzzeit-)Fourier-Transformation genutzt wird. Relevant für Sprachsynthese und Spracherkennung.
-* Enthält ein Bild horizontale Kanten? Vertikale Kanten? Ecken? Ein Klassifikator für „das Bild enthält ein Haus“ ist leichter zu trainieren, wenn nicht nur Pixelwerte eingehen, sondern auch die Positionen von Ecken und Kanten. Die automatische Variante davon sind **CNNs** (Convolutional Neural Networks), siehe das [Kapitel „Faltung und CNNs“](../part-architekturen-anwendungen/19-faltung-cnn.md).
+* Enthält ein Bild horizontale Kanten? Vertikale Kanten? Ecken? Ein Klassifikator für „das Bild enthält ein Haus“ ist leichter zu trainieren, wenn nicht nur Pixelwerte eingehen, sondern auch die Positionen von Ecken und Kanten. Die automatische Variante davon sind **CNNs** (Convolutional Neural Networks), siehe das [Kapitel „Faltung und CNNs“](../part-architekturen-anwendungen/20-faltung-cnn.md).
 
 ## node2vec
 
@@ -60,13 +60,16 @@ Wie könnte *wav2vec* aussehen – word2vec für Audio? Was sind die „Wörter�
 
 ### Graph Neural Networks
 
-Etwas anderes: Anstatt die Struktur des Graphen in (Knoten, Kontext)-Paare zu entwickeln, lässt sich die Struktur des Graphen auch direkt im neuronalen Netz nutzen. Beispiel: Ein Graph mit Knoten Kaffee, Tee, Kanne, Tasse, Mühle. Jeder Knoten trägt einen Feature-Vektor, und in jeder Schicht des Netzes aktualisiert jeder Knoten seinen Vektor aus den Vektoren seiner Nachbarn – **Message Passing**:
+Etwas anderes: Anstatt die Struktur des Graphen in (Knoten, Kontext)-Paare zu entwickeln, lässt sich die Struktur des Graphen auch direkt im neuronalen Netz nutzen. Beispiel: Ein Graph mit Knoten Kaffee, Tee, Kanne, Tasse, Mühle. Jeder Knoten trägt einen Feature-Vektor, und in jeder Schicht des Netzes aktualisiert jeder Knoten seinen Vektor aus den Vektoren seiner Nachbarn – **Message Passing**. Mit der Adjazenzmatrix $A$ des Graphen ist das eine Matrixmultiplikation: Stehen die Knotenvektoren als Zeilen in $H$, so enthält $AH$ für jeden Knoten die Summe der Vektoren seiner Nachbarn. Die Gewichte sind für alle Knoten gleich, sodass das Netz auf Graphen beliebiger Größe funktioniert. Das ist der Grundbaustein von Graph Neural Networks; wir vertiefen das hier nicht.
 
+:::{admonition} Vertiefung: die Message-Passing-Formel
+:class: note dropdown
 $$
 h_v^{(k+1)} = \tau\Bigl( W^{(k)} h_v^{(k)} + \sum_{u \in N(v)} U^{(k)} h_u^{(k)} \Bigr).
 $$
 
-Die Gewichte $W^{(k)}, U^{(k)}$ sind für alle Knoten gleich, sodass das Netz auf Graphen beliebiger Größe funktioniert. Das ist der Grundbaustein von GNNs; wir vertiefen das hier nicht.
+Dabei ist $N(v)$ die Nachbarschaft von $v$; $W^{(k)}$ verarbeitet den eigenen Vektor, $U^{(k)}$ die Nachrichten der Nachbarn. In Matrixform, mit den Knotenvektoren als Zeilen von $H^{(k)}$: $H^{(k+1)} = \tau\bigl( H^{(k)} W^{(k)T} + A\, H^{(k)} U^{(k)T} \bigr)$. Varianten unterscheiden sich darin, wie die Nachbarn gewichtet werden (Mittelwert statt Summe, Normierung mit dem Grad, gelernte Attention).
+:::
 
 :::{figure} ../images/vl09-message-passing.png
 :width: 90%

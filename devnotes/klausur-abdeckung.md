@@ -9,6 +9,9 @@ am 2026-09-18 gilt: „Perzeptron“ → Neuron und Perzeptron / Perzeptron trai
 Autograd; „Aktivierung/Univ.“ → Aktivierungsfunktionen / Netze von Hand / Universelle Approximation;
 „RNN/Transformer“ → RNNs / Transformer; „VAE“ (latente Räume) und „word2vec“ (Geometrie) → Latente Räume geometrisch.
 
+Seit 2026-09-20 gibt es zusätzlich „Loss-Funktionen und Maximum Likelihood“ (Kapitel 07, Split von „Gradientenabstieg“);
+die Kapitel*namen* in der Tabelle gelten unverändert, die Dateinummern ab „Backpropagation“ sind um eins höher.
+
 Die vier beim ersten Abgleich fehlenden Begriffe (Perzeptron ohne Bias, Early Stopping/Data Augmentation,
 Precision/Recall, `logvar`) wurden am 2026-09-17 in die Kapitel eingearbeitet.
 

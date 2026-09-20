@@ -5,7 +5,7 @@ short_title: "Autograd"
 
 # Autograd und Berechnungsgraph
 
-Im [Kapitel „Backpropagation“](08-backpropagation.md) haben wir Gradienten von Hand rückwärts durch ein Netz gerechnet. PyTorch tut genau dasselbe – automatisch, für beliebige Architekturen, und mit demselben Muster: Zwischenergebnisse im Vorwärtsdurchlauf speichern, Kettenregel im Rückwärtsdurchlauf. Dieses Kapitel schaut hinter die Kulissen von `loss.backward()`.
+Im [Kapitel „Backpropagation“](09-backpropagation.md) haben wir Gradienten von Hand rückwärts durch ein Netz gerechnet. PyTorch tut genau dasselbe – automatisch, für beliebige Architekturen, und mit demselben Muster: Zwischenergebnisse im Vorwärtsdurchlauf speichern, Kettenregel im Rückwärtsdurchlauf. Dieses Kapitel schaut hinter die Kulissen von `loss.backward()`.
 
 ## Ein Beispiel im Kleinen
 
@@ -29,7 +29,7 @@ print(L.grad_fn.next_functions[0][0].next_functions)
 # ((<MulBackward0>, 0), (<AccumulateGrad>, 0))  -- z, und das Blatt b
 ```
 
-Die `grad_fn` weiß, wie man die Operation ableitet, und hält Referenzen auf die *saved tensors*, die gespeicherten Zwischenergebnisse – genau die $z_k$ aus dem [Kapitel „Backpropagation“](08-backpropagation.md). `AccumulateGrad` sind die Blätter des Graphen, die Parameter $w$ und $b$; die topologische Sortierung ist implizit.
+Die `grad_fn` weiß, wie man die Operation ableitet, und hält Referenzen auf die *saved tensors*, die gespeicherten Zwischenergebnisse – genau die $z_k$ aus dem [Kapitel „Backpropagation“](09-backpropagation.md). `AccumulateGrad` sind die Blätter des Graphen, die Parameter $w$ und $b$; die topologische Sortierung ist implizit.
 
 `L.backward()` ist der rekursive Aufruf der Kettenregel, initial mit $\frac{dL}{dL} = 1$:
 

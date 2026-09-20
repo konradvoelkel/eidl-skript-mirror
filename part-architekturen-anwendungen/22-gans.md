@@ -57,13 +57,16 @@ Der **Generator** kann ein einfaches Multilayer Perceptron sein, etwa der Decode
 
 ### Ausprobieren: GAN Lab
 
-[poloclub.github.io/ganlab](https://poloclub.github.io/ganlab/) (2019, Georgia Tech & Google Brain): ein GAN auf 2D-Punktwolken im Browser, mit Visualisierung der Generator-Verteilung, des Diskriminator-Gradientenfelds und der Loss-Kurven. Man sieht dort live, wie die generierte Verteilung zur echten wandert – und wie Mode Collapse aussieht.
+:::{admonition} Ausprobieren: GAN Lab
+:class: tip
+[poloclub.github.io/ganlab](https://poloclub.github.io/ganlab/) (2019, Georgia Tech und Google Brain): ein GAN auf 2D-Punktwolken im Browser, mit der Generator-Verteilung, dem Gradientenfeld des Diskriminators und den Loss-Kurven live. Was man dort sehen sollte: Bei der Ring- oder Gauß-Wolke wandert die generierte Verteilung zur echten, bis das Gradientenfeld flach wird. Beim *linearen* Datensatz läuft das Training regelmäßig in ein lokales Minimum, in dem der Generator nur einen Teil der Linie bedient, und mehrere Neustarts liefern verschiedene Ergebnisse; das ist Mode Collapse in klein. Daraus folgt die Faustregel für GANs: *früh aufhören.* Anders als beim Autoencoder wird es nicht monoton besser. Man beobachtet die Samples und behält die Gewichte von dem Zeitpunkt, an dem sie gut aussahen. Die Loss-Kurven sind dabei nur bedingt hilfreich, siehe unten bei Wasserstein.
+:::
 
 ## Varianten von GANs
 
 ### Conditional GANs
 
-Generator und Diskriminator bekommen Zusatzinformationen, z.B. Klassenlabels: Der Generator generiert $G(z, y)$ bedingt auf ein gegebenes Klassenlabel $y$, der Diskriminator entscheidet $D(x, y)$ bedingt zum Klassenlabel. So bekommt man einen Generator, dem man sagen kann, *welche* Ziffer er zeichnen soll (die vierte MNIST-Task aus dem [Kapitel „Autoencoder“](../part-representation-learning/13-autoencoder.md)). Geht auch mit anderen Zusatzinformationen, z.B. Text kodiert als Vektor von Wort-Embeddings – das ist der Weg zu Text-zu-Bild-Modellen.
+Generator und Diskriminator bekommen Zusatzinformationen, z.B. Klassenlabels: Der Generator generiert $G(z, y)$ bedingt auf ein gegebenes Klassenlabel $y$, der Diskriminator entscheidet $D(x, y)$ bedingt zum Klassenlabel. So bekommt man einen Generator, dem man sagen kann, *welche* Ziffer er zeichnen soll (die vierte MNIST-Task aus dem [Kapitel „Autoencoder“](../part-representation-learning/14-autoencoder.md)). Geht auch mit anderen Zusatzinformationen, z.B. Text kodiert als Vektor von Wort-Embeddings – das ist der Weg zu Text-zu-Bild-Modellen.
 
 ### Wasserstein GANs – wozu?
 
@@ -79,7 +82,16 @@ Andere Loss-Funktion: die **Wasserstein-Distanz**, auch „Earth Mover's Distanc
 
 **Kritiker** statt Diskriminator: Statt einer Wahrscheinlichkeit in $(0, 1)$ gibt der Kritiker eine reelle Zahl aus und schätzt damit die Wasserstein-Distanz zwischen den realen Bildern und den gegebenen Bildern. Wenn der Kritiker alle Bilder für echt hält, schätzt er $0$, ansonsten gibt es ein Signal, welches für das Training genutzt werden kann. Beides führt zu glatteren Loss-Landschaften und damit zu effektiverem Gradientenabstieg, und der Kritiker-Loss korreliert tatsächlich mit der Bildqualität.
 
-Wie? Die Details (warum es funktioniert: Kantorovich-Rubinstein-Dualität, Lipschitz-Beschränkung des Kritikers durch Weight Clipping oder Gradient Penalty) sind mathematisch nicht trivial. Ein Tutorial von Lilian Weng: [lilianweng.github.io/posts/2017-08-20-gan](https://lilianweng.github.io/posts/2017-08-20-gan).
+:::{admonition} Vertiefung: warum der Kritiker die Wasserstein-Distanz schätzt
+:class: note dropdown
+Die Wasserstein-1-Distanz zwischen zwei Verteilungen $p$ und $q$ ist als Transportproblem definiert. Die Kantorovich-Rubinstein-Dualität sagt, dass man sie auch so schreiben kann:
+
+$$
+W(p, q) = \sup_{\|f\|_{\text{Lip}} \le 1} \Bigl( \mathbb{E}_{x \sim p}[f(x)] - \mathbb{E}_{x \sim q}[f(x)] \Bigr),
+$$
+
+ein Supremum über alle Funktionen $f$, die höchstens Steigung $1$ haben (1-Lipschitz). Der Kritiker *ist* dieses $f$: ein Netz, das auf echten Bildern hohe und auf generierten Bildern niedrige Werte ausgeben soll; die Differenz der Mittelwerte ist die geschätzte Distanz. Damit das eine Schranke bleibt, muss der Kritiker Lipschitz-beschränkt bleiben: im Original-WGAN (Arjovsky et al. 2017) durch Abschneiden der Gewichte (*weight clipping*), in WGAN-GP (Gulrajani et al. 2017) durch einen Strafterm auf die Gradientennorm (*gradient penalty*). Tutorial: Lilian Weng, [From GAN to WGAN](https://lilianweng.github.io/posts/2017-08-20-gan).
+:::
 
 ## Konkrete Modelle
 

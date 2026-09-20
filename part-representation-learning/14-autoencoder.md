@@ -84,7 +84,7 @@ class Autoencoder(nn.Module):
         return latent, self.decoder(latent)
 ```
 
-Das Sigmoid am Ende des Decoders sorgt dafür, dass die Ausgabe wie Pixelwerte in $[0, 1]$ liegt. Die Architektur lässt sich mit [Netron](https://netron.app) visualisieren, nachdem man das Modell mit `torch.save(model, 'model.pth')` gespeichert hat.
+Das Sigmoid am Ende des Decoders sorgt dafür, dass die Ausgabe wie Pixelwerte in $[0, 1]$ liegt. In der Vorlesung 2025 hatte auch der Encoder ein Sigmoid am Ende; nötig ist das erst für den Sparse Autoencoder weiter unten, dessen Strafterm latente Werte in $[0, 1]$ voraussetzt. Die Architektur lässt sich mit [Netron](https://netron.app) visualisieren, nachdem man das Modell mit `torch.save(model, 'model.pth')` gespeichert hat.
 
 ### Code-Beispiel: Training
 
@@ -122,7 +122,7 @@ Neu gegenüber dem [Kapitel „Tensoren“](../part-grundlagen/05-tensoren.md) s
 * **Data Augmentation**: die Trainingsdaten durch zufällige Transformationen vervielfachen, die das Label nicht ändern – Bilder leicht drehen, verschieben, spiegeln, verrauschen. Das Modell sieht nie zweimal dasselbe Bild und kann es nicht auswendig lernen; auch das ist Regularisierung.
 * **Lernrate anpassen** – statt `lr=1e-3` mal mit `lr=1e-2` probieren.
 * Die Gewichte können zu groß werden, dann kann man eine **L2-Regularisierung** nutzen, den *Weight Decay* (als Parameter für den Optimierer, wie die Lernrate): `weight_decay=1e-5`. Das addiert $\lambda \|W\|^2$ zum Loss und zieht die Gewichte bei jedem Schritt ein wenig Richtung null.
-* SGD kann sehr langsam sein. Es gibt eine ganze Reihe von Tricks wie z.B. eine adaptive Lernrate und cleveres Mitteln über mehrere Batches hinweg, die in **Adam** implementiert sind: `optim.Adam(model.parameters(), lr=1e-3)`. Dazu mehr in VL 15.
+* SGD kann sehr langsam sein. Es gibt eine ganze Reihe von Tricks wie z.B. eine adaptive Lernrate und cleveres Mitteln über mehrere Batches hinweg, die in **Adam** implementiert sind: `optim.Adam(model.parameters(), lr=1e-3)`. Faustregel für den Rest des Kurses: Adam statt SGD, ohne dass wir Optimierer weiter vertiefen. Was Adam genau tut, steht im [Kapitel „Optimierer“](../part-architekturen-anwendungen/26-optimierer.md).
 * Oft ist I/O oder die CPU ein Bottleneck beim Laden der Daten. Im Konstruktor des `DataLoader` mit anderen `batch_size`s experimentieren (im Zweifel mehr, bis Out of Memory), und mehrere CPU-Kerne zum Laden der Daten nutzen: `num_workers=8`.
 
 ## Label Autoencoder
@@ -171,7 +171,7 @@ L_{\text{sparse}} = \sum_{j=1}^L D_{KL}\bigl(\operatorname{Ber}(\varrho) \,\|\, 
 = \sum_{j=1}^L \left( \varrho \ln\frac{\varrho}{\hat\varrho_j} + (1 - \varrho) \ln\frac{1 - \varrho}{1 - \hat\varrho_j} \right).
 $$
 
-Der Term ist $0$ genau dann, wenn jede latente Dimension im Mittel nur zu 10 % „an“ ist. Dense latents nutzen alle Dimensionen für jeden Datenpunkt; sparse latents verteilen die Datenpunkte auf wenige aktive Dimensionen, was die einzelnen Dimensionen interpretierbarer macht.
+Der Term ist $0$ genau dann, wenn jede latente Dimension im Mittel nur zu 10 % „an“ ist. Im Code muss er ausdrücklich zum Rekonstruktions-Loss addiert werden, `loss = reconstruction_loss + beta * sparsity_loss`; eine Funktion, die ihn nur berechnet, ändert am Training nichts. Dense latents nutzen alle Dimensionen für jeden Datenpunkt; sparse latents verteilen die Datenpunkte auf wenige aktive Dimensionen, was die einzelnen Dimensionen interpretierbarer macht.
 
 :::{figure} ../images/vl08-sparse-vs-dense.png
 :width: 90%
@@ -197,10 +197,6 @@ Code angucken: `denoising-autoencoder-mnist.py` (Blatt 8) implementiert genau da
 
 Wir haben das Autoencoder-Design eingesetzt, um Bilder zu komprimieren (mit Sparsity Constraint), Bilder zu klassifizieren, Bilder zu entrauschen – und all das zusammen. Ein ML-System, welches diese Bilder verarbeiten soll, kann nun den fertig trainierten Encoder verwenden und direkt auf den Repräsentationen im Latent Space arbeiten. Das ist **Modularisierung im Training**: Der Encoder wird einmal trainiert und dann als Feature-Extraktor wiederverwendet.
 
-Frage: Welche Struktur finden wir im Latent Space bzw. in den Latent Vectors der Daten? Die **Latent-Manifold-Hypothese** besagt, dass die Daten in $\mathbb{R}^D$ nahe einer niedrigdimensionalen gekrümmten Fläche (Mannigfaltigkeit) liegen und der latente Raum diese Fläche „flach“ parametrisiert. Dazu mehr in VL 13.
+Frage: Welche Struktur finden wir im Latent Space bzw. in den Latent Vectors der Daten? Die **Latent-Manifold-Hypothese** besagt, dass die Daten in $\mathbb{R}^D$ nahe einer niedrigdimensionalen gekrümmten Fläche (Mannigfaltigkeit) liegen und der latente Raum diese Fläche „flach“ parametrisiert. Dazu mehr im [Kapitel „Latente Räume geometrisch“](../part-architekturen-anwendungen/23-latente-raeume.md).
 
-Später werden wir das Autoencoder-Design einsetzen, um Text (Strings) natürlicher Sprache zu kodieren, sodass die latente Repräsentation interessante Struktur aufweist – das ist word2vec, weiter unten.
-
-## Tipps zu Übungsblatt 6
-
-Auf Blatt 6 lesen Sie einen Autoencoder-Quelltext und formulieren Fragen dazu. Benutzen Sie zur Formulierung der Fragen sowie zur Beantwortung *keine* generative KI – sonst lernen Sie genau das nicht: wie man anhand der offiziellen Dokumentation prüfen kann, ob die KI-Antwort korrekt ist. Ziel ist nicht die „richtige Lösung“, sondern der Erwerb der Kompetenz, Deep-Learning-Quelltexte kritisch zu lesen.
+Später werden wir das Autoencoder-Design einsetzen, um Text (Strings) natürlicher Sprache zu kodieren, sodass die latente Repräsentation interessante Struktur aufweist – das ist word2vec ([Kapitel „word2vec“](16-word2vec.md)).

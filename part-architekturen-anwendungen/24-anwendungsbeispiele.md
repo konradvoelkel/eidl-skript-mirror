@@ -37,7 +37,7 @@ Aufgabe: Gegeben eine Liste besuchter bzw. gekaufter Items (Artikel, Produkte) p
 
 Lösungsansatz: Ein neuronales Netz konvertiert Items in Vektoren, sodass Items, die auf vielen Listen gemeinsam auftreten, zu Vektoren zugeordnet werden, die einen kleinen (Kosinus-)Abstand zueinander haben (Feature Engineering / Representation Learning). Dann finde im Latent Space Items in der Nähe vergangener Items eines Nutzers.
 
-Wie trainieren wir das neuronale Netz? Die Listen der Nutzer sind „Sätze“, die Items sind „Wörter“ – das ist word2vec (Skip-gram) auf Kauflisten, bzw. node2vec auf dem bipartiten Nutzer-Item-Graphen aus dem [Kapitel über Representation Learning und Graphen](../part-representation-learning/16-representation-learning-graphen.md). Alternativ bettet man Nutzer *und* Items in denselben Latent Space ein und trainiert supervised darauf, dass gekaufte Paare einen kleinen Abstand haben (*two-tower model*).
+Wie trainieren wir das neuronale Netz? Die Listen der Nutzer sind „Sätze“, die Items sind „Wörter“ – das ist word2vec (Skip-gram) auf Kauflisten, bzw. node2vec auf dem bipartiten Nutzer-Item-Graphen aus dem [Kapitel über Representation Learning und Graphen](../part-representation-learning/17-representation-learning-graphen.md). Alternativ bettet man Nutzer *und* Items in denselben Latent Space ein und trainiert supervised darauf, dass gekaufte Paare einen kleinen Abstand haben (*two-tower model*).
 
 ## Vibecoding Deep Learning
 

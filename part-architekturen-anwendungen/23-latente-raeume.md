@@ -73,7 +73,7 @@ Der Generator eines GANs ist typischerweise gegeben durch eine Verteilung auf ei
 
 Der Encoder eines VAE kodiert ein Eingabebild $x$ als Paar $(v_x, \sigma_x)$, wobei $v_x \in \mathbb{R}^n$ ein latenter Vektor wie beim Autoencoder ist. Der Unterschied vom VAE zum AE liegt im Training: Statt $\operatorname{decode}(v_x)$ mit $x$ zu vergleichen, wird $\operatorname{decode}(v_x + \varepsilon)$ mit $x$ verglichen, wobei $\varepsilon$ Varianz $\sigma_x^2$ hat. Nach erfolgreichem Training ist dann auch $\operatorname{decode}(v_x) \approx x$, aber der Latent Space bzw. Decoder sieht anders aus als beim AE: Um jeden Code herum gibt es eine Umgebung, die ebenfalls zu einem ähnlichen Bild dekodiert.
 
-Häufig wird zusätzlich zum $+\varepsilon$-Trick auch noch ein Summand zur Loss-Funktion hinzugefügt, damit die Codes der Trainingsdaten im Latent Space ungefähr standardnormalverteilt sind (Variational Loss, siehe [Kapitel „Variational Autoencoder“](../part-representation-learning/14-variational-autoencoder.md)). So kann man später aus der Standardnormalverteilung im Latent Space sampeln und bleibt in der gelernten Verteilung.
+Häufig wird zusätzlich zum $+\varepsilon$-Trick auch noch ein Summand zur Loss-Funktion hinzugefügt, damit die Codes der Trainingsdaten im Latent Space ungefähr standardnormalverteilt sind (Variational Loss, siehe [Kapitel „Variational Autoencoder“](../part-representation-learning/15-variational-autoencoder.md)). So kann man später aus der Standardnormalverteilung im Latent Space sampeln und bleibt in der gelernten Verteilung.
 
 ### Arvanitidis et al. 2017: Latent Space Oddity
 

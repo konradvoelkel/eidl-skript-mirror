@@ -13,7 +13,7 @@ Dieses Skript begleitet die Vorlesung „Einführung in Deep Learning“ im Bach
 
 *Formale Voraussetzungen*: keine.
 
-*Inhaltliche Voraussetzungen*: Inhalte des Moduls **Data Science**, denn wir setzen rudimentäre Python-Kenntnisse und Grundlagen des maschinellen Lernens voraus, insbesondere die vektorisierte Programmierung mit NumPy und die Idee der linearen Regression.
+*Inhaltliche Voraussetzungen*: Inhalte des Moduls **Data Science**, denn wir setzen rudimentäre Python-Kenntnisse und Grundlagen des maschinellen Lernens voraus, insbesondere die vektorisierte Programmierung mit NumPy und die Idee der linearen Regression. Wo wir auf Stochastik aus dem Modul Data Science zurückgreifen, verlinken wir die passende Stelle im [Data-Science-Skript](https://voelkel.pages.cs.uni-duesseldorf.de/ds-skript/); insbesondere Erwartungswert, Entropie und Maximum Likelihood sollten Sie dort nachschlagen können.
 
 ### Was wir nicht machen werden
 

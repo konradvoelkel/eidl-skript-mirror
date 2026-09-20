@@ -23,13 +23,18 @@ Das ist die These der Bachelorarbeit „Das Dimpled Manifold Model als Erklärun
 
 ### Wie wird's gemacht?
 
-Mit Gradientenabstiegsmethoden sucht man, ausgehend von einem Bild eines weißen Hais, Richtungen, die die Klassifikation ändern, ohne besonders viel am Bild zu ändern:
+Mit Gradientenabstiegsmethoden sucht man, ausgehend von einem Bild eines weißen Hais, Richtungen, die die Klassifikation ändern, ohne besonders viel am Bild zu ändern: ein Schritt in Richtung des Gradienten des Loss nach dem *Bild*, oder viele kleine Schritte. Anders als sonst: Gradientenabstieg im **Eingaberaum**, nicht im Gewichtsraum – Backpropagation liefert $\nabla_x$ genauso wie $\nabla_w$, denn im DAG ist $x$ nur ein weiteres Blatt. Genau das tut auch das „Dreaming“ auf Blatt 11 ([Kapitel „LLMs benutzen“](21-llms-benutzen.md)): Es sucht per Adam im Raum der Eingabe-Embeddings nach einem Text, der den Spam-Detektor maximal triggert – ein adversarial example ohne den Anspruch, unauffällig zu sein.
+
+:::{admonition} Vertiefung: Fast Gradient Sign Method
+:class: note dropdown
+Goodfellow, Shlens und Szegedy 2014: Mit dem Loss $L(f(x), y)$ für das wahre Label $y$ ist
 
 $$
-x_{\text{adv}} := x + \epsilon \cdot \operatorname{sign}\bigl(\nabla_x L(f(x), y_{\text{Ziel}})\bigr)
+x_{\text{adv}} := x + \epsilon \cdot \operatorname{sign}\bigl(\nabla_x L(f(x), y)\bigr)
 $$
 
-(Fast Gradient Sign Method, Goodfellow et al. 2014) oder iterativ mit kleinen Schritten. Anders als sonst: Gradientenabstieg im **Eingaberaum**, nicht im Gewichtsraum – Backpropagation liefert $\nabla_x$ genauso wie $\nabla_w$, denn im DAG ist $x$ nur ein weiteres Blatt. Genau das tut auch das „Dreaming“ auf Blatt 11 ([Kapitel „LLMs benutzen“](20-llms-benutzen.md)): Es sucht per Adam im Raum der Eingabe-Embeddings nach einem Text, der den Spam-Detektor maximal triggert – ein adversarial example ohne den Anspruch, unauffällig zu sein.
+ein Bild, das sich in jedem Pixel um höchstens $\epsilon$ vom Original unterscheidet und den Loss in erster Näherung maximal vergrößert. Gezielt auf eine Wunschklasse $y_{\text{Ziel}}$: Minus statt Plus und $y_{\text{Ziel}}$ statt $y$. Ein einziger Gradientenschritt genügt oft, weil das Modell in der Umgebung des Bildes fast linear ist; die iterative Variante (PGD) macht viele kleine Schritte und projiziert nach jedem zurück in den $\epsilon$-Würfel um $x$.
+:::
 
 Dass das nicht nur mit Pixeln funktioniert: Sharif et al. 2016, *Accessorize to a Crime: Real and Stealthy Attacks on State-of-the-Art Face Recognition* – eine bedruckte Brillenfassung lässt ein Gesichtserkennungssystem eine andere Person erkennen. Und aus dem Heise-Newsticker vom 2.2.2026: [Manipulierte Straßenschilder: Wenn das autonome Auto Fußgänger umfährt](https://www.heise.de/news/Manipulierte-Strassenschilder-Wenn-das-autonome-Auto-Fussgaenger-umfaehrt-11162744.html).
 
@@ -49,4 +54,4 @@ Genau das passiert bei **Polysemie**: Ein Wort wie „Maus“ (Tier, Computermau
 Die Manifold-Hypothese und ihre Grenzen: Daten nahe einer Kurve; Rauschen; zwei sich kreuzende Kurven (keine Mannigfaltigkeit – so sieht Polysemie im Embedding-Raum aus); und das Dimpled Manifold Model, in dem die Entscheidungsgrenze sich an die Daten schmiegt und Adversarial Examples nur einen winzigen Schritt entfernt sind.
 :::
 
-Damit schließt sich der Kreis zur Kernfrage aus dem [Kapitel „Latente Räume geometrisch“](22-latente-raeume.md): Welche Struktur finden wir im Latent Space? Manchmal eine schöne Mannigfaltigkeit – und manchmal etwas Interessanteres.
+Damit schließt sich der Kreis zur Kernfrage aus dem [Kapitel „Latente Räume geometrisch“](23-latente-raeume.md): Welche Struktur finden wir im Latent Space? Manchmal eine schöne Mannigfaltigkeit – und manchmal etwas Interessanteres.

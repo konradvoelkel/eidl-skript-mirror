@@ -42,7 +42,7 @@ denn dann ist $\varepsilon$ wieder eine Konstante und $\sigma_x$ ein ganz normal
 
 ### Training
 
-Wie trainiert man einen Variational Autoencoder? Für jeden Datenpunkt $x \in D$ berechne $\operatorname{enc}(x) = (\mu_x, \sigma_x)$ – der Encoder hat jetzt $2L$ Ausgänge –, generiere ein $\varepsilon \sim \mathcal{N}(0, 1)$ und setze $y := \mu_x + \sigma_x \varepsilon$. Die Loss-Funktion ist *naiv* $\operatorname{MSE}(x, \operatorname{dec}(y))$. Das hat einen Haken: Das Netz kann $\sigma_x \to 0$ lernen und ist dann wieder ein klassischer Autoencoder.
+Wie trainiert man einen Variational Autoencoder? Für jeden Datenpunkt $x \in D$ berechne $\operatorname{enc}(x) = (\mu_x, \sigma_x)$ – der Encoder hat jetzt $2L$ Ausgänge –, generiere ein $\varepsilon \sim \mathcal{N}(0, 1)$ und setze $y := \mu_x + \sigma_x \varepsilon$. Die Loss-Funktion ist *naiv* $\operatorname{MSE}(x, \operatorname{dec}(y))$. Das hat einen Haken, und zwar in beide Richtungen: Das Netz kann $\sigma_x \to 0$ lernen und ist dann wieder ein klassischer Autoencoder. Oder es lässt $\mu_x$ und $\sigma_x$ beliebig groß werden, dann explodieren die latenten Vektoren, die Wolken der einzelnen Datenpunkte liegen weit auseinander, und der latente Raum füllt sich nie lückenlos.
 
 Stabileres Training mit dem Extra-Term **Variational Loss**:
 
@@ -57,6 +57,13 @@ D_{KL}\bigl( \mathcal{N}(\mu, \sigma^2) \,\|\, \mathcal{N}(0, 1) \bigr) = \tfrac
 $$
 
 Diese Loss-Funktion ist genau der negative **ELBO** (evidence lower bound) $\mathcal{L}(\theta, q)$ aus dem Kapitel „Expectation Maximization“ in Data Science.
+
+:::{admonition} Zwei Fragen, die immer kommen
+:class: note
+*Wie wird $\sigma_x$ berechnet?* Gar nicht aus den Daten, sondern erfunden: $\mu_x$ und $\sigma_x$ sind einfach die $2L$ Ausgänge des Encoders, und der Gradientenabstieg stellt sie so ein, dass der Loss klein wird. Der Encoder lernt, wie unsicher er sich bei jedem Datenpunkt sein darf.
+
+*Was hat das mit PCA und EM zu tun?* Ein linearer Autoencoder ohne Aktivierungsfunktionen findet denselben Unterraum wie PCA ([Kapitel „Autoencoder“](14-autoencoder.md)), nur bis auf Drehung und Vertauschung der Achsen. Ein Gaussian Mixture Model mit EM aus Data Science fittet *wenige* Cluster, jeder mit eigener Normalverteilung, und ordnet jeden Datenpunkt einem Cluster zu. Der VAE geht den umgekehrten Weg: *Jeder* Datenpunkt bekommt seine eigene Normalverteilung im latenten Raum, und der KL-Term sorgt dafür, dass alle zusammen ungefähr eine Standardnormalverteilung ergeben.
+:::
 
 ### Recap
 

@@ -16,7 +16,7 @@ Vier Fragen: Was ist ein Array? Was ist ein Tensor? Was ist ein Array in NumPy? 
   * Physiker: ein Objekt, das sich tensoriell transformiert.
   * Mathematiker: ein Element in einem Tensorproduktraum.
   * Informatiker: ein fancy Wort für Arrays.
-* Ein **Tensor in Torch** ist eine Sammlung von Daten von gleichem Typ (dem `dtype`), die fortlaufend im Speicher liegen – und zwar potentiell im GPU-Speicher – optimiert für Gradientenabstiegsmethoden (Attribut `grad`, dazu mehr in VL 05/06).
+* Ein **Tensor in Torch** ist eine Sammlung von Daten von gleichem Typ (dem `dtype`), die fortlaufend im Speicher liegen – und zwar potentiell im GPU-Speicher – optimiert für Gradientenabstiegsmethoden (Attribut `grad`, dazu mehr in den Kapiteln [„Gradientenabstieg“](../part-lernen/08-gradientenabstieg.md) und [„Autograd und Berechnungsgraph“](../part-lernen/10-autograd-berechnungsgraph.md)).
 
 Man kann einen Torch-Tensor aus einem NumPy-Array herstellen, sogar ohne zusätzlichen Speicher zu verbrauchen (`torch.from_numpy` teilt sich den Speicher mit dem Array). Lesen Sie dazu das PyTorch-Tutorial „Tensors“.
 
@@ -68,3 +68,5 @@ Was macht `reshape`?
 Antwort: Wegen $\mathbb{R}^n \otimes \mathbb{R}^m \cong \mathbb{R}^{nm}$ hat $\mathbb{R}^4 \otimes \mathbb{R}^{10}$ eine Basis der Form $e_i \otimes e_j$ mit insgesamt $4 \cdot 10 = 40$ Elementen, also ist `a.reshape(-1, 2) == a.reshape(40, 2)` derselbe Tensor, nur mit anderer Klammerung der Faktoren. Reshape ändert keine Daten, nur die Interpretation des Speichers.
 
 **Ausflug beendet.**
+
+**Das Bild, das man sich für PyTorch merken sollte.** Der Shape sagt nur, wie viele Zahlen in jede Richtung gehen, nicht, welche Richtung was bedeutet. Das muss man sich selbst merken, und genau an dieser Stelle entstehen die Fehler, die keinen Fehler werfen, sondern ohne Murren einen sinnlosen Output produzieren (der Autor hat einmal bei einem quadratischen Bild die beiden Achsen vertauscht und lange gesucht). Die Konvention, die überall in PyTorch gilt: Die *erste* Achse ist der Batch. Ein Tensor mit Shape `(32, 784)` sind 32 Datenpunkte mit je 784 Features, eine Zeile pro Datenpunkt. `(32, 28, 28)` sind 32 Bilder, also 32 Matrizen übereinandergestapelt; `(32, 3, 28, 28)` dieselben Bilder mit drei Farbkanälen. `nn.Linear` und fast alle anderen Layer wirken auf die *letzte* Achse und lassen die Batch-Achse in Ruhe. Wer einen Tensor vor sich hat, sollte als Erstes sagen können, welche Achse der Batch ist und was die übrigen Achsen bedeuten; `reshape` und `view` ändern nur die Klammerung, nicht die Bedeutung.

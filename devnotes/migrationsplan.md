@@ -1,6 +1,6 @@
 # Migrationsplan EiDL 2025/26 → 2026/27
 
-Stand: 2026-09-18
+Stand: 2026-09-20 (Historie; offene Punkte stehen nur in `TODO.md`)
 
 ## Ausgangslage
 
@@ -22,14 +22,16 @@ Stand: 2026-09-18
    die über die Folien hinausgehen (z.B. Perzeptron-Konvergenzsatz in VL 02, Attention-Formel in VL 09,
    Momentum/Adam-Formeln in VL 15).*
 3. **Übungsblätter** anpassen (`part-exercises/`, bereits per pandoc konvertiert; Abgabetermine noch aus 2025).
-4. **Danach** neue Beamer-Decks aus dem Skript ableiten, Themenfolge wie bisher, Header aus `../slides/Einführung in Deep Learning 2026 header.tex`.
+4. **Danach** neue Beamer-Decks aus dem Skript ableiten (Entscheidung 2026-09-20: aus dem Skript, nicht aus den Slides 2025), Themenfolge laut `kurs-2026-27.md`, Header aus `../slides/Einführung in Deep Learning 2026 header.tex`.
 
 ## Zuordnung Vorlesung ↔ Kapitel ↔ Übungsblatt ↔ Klausur
 
 Seit dem Umbau am 2026-09-17 sind die Kapitel inhaltlich geschnitten (Dateinamen ohne VL-Nummer); am 2026-09-18
-wurden überfrachtete Kapitel nochmals geteilt, jetzt 26 Kapitel (Details: `TODO.md`, „Kapitelsplits“).
-Die Zuordnung Vorlesungswoche → Kapitel steht als Tabelle in `kurs-2026-27.md` (nicht im Buch), der Abgleich mit dem
-Klausur-Aufgabenschatz in `klausur-abdeckung.md`. Übungsblätter (2025): 00/01 → Perzeptron (Lin. Algebra),
+wurden überfrachtete Kapitel nochmals geteilt (26 Kapitel), am 2026-09-20 kam „Loss-Funktionen und Maximum Likelihood“
+als Split von „Gradientenabstieg“ hinzu, jetzt **27 Kapitel (01–27)**. Die Zuordnung Vorlesungswoche → Kapitel steht
+als Tabelle in `kurs-2026-27.md` (nicht im Buch; seit 2026-09-20 aus dem Ist der Aufzeichnungen 2025 abgeleitet), der
+Abgleich mit dem Klausur-Aufgabenschatz in `klausur-abdeckung.md`. Die Aufzeichnungen 2025/26 selbst sind ausgewertet
+in `../transcripts/` und `diskussion-vorlesung-vs-skript.md`. Übungsblätter (2025): 00/01 → Perzeptron (Lin. Algebra),
 02 → Perzeptron, 03 → Gradientenabstieg (schwache Ableitungen), 04/05 → Logistische Regression,
 06/08 → Autoencoder, 07 → Backpropagation, 09 → VAE, 10 → CNNs, 11 → LLMs benutzen.
 
@@ -40,10 +42,10 @@ Entwürfe für 2026 (englisch, amsart): `exam2026-eidl-exam-1.tex`, `exam2026-ei
 
 ## Offene Punkte / Ideen
 
-→ Konsolidiert in `TODO.md`; hier nur noch die ursprünglichen Notizen.
+→ Alle in `TODO.md`. Die folgenden Notizen sind die ursprünglichen vom 2026-09-17/18 und nur noch Historie.
 
-- Im Vorstellungsdeck 2026 ist die geplante Reihenfolge leicht anders als 2025: Logistische Regression und SGD/Backprop
-  *vor* PyTorch. Entscheiden, ob Kapitel 03 (PyTorch) nach hinten wandert.
+- ~~Im Vorstellungsdeck 2026 ist die geplante Reihenfolge leicht anders als 2025: Logistische Regression und SGD/Backprop
+  *vor* PyTorch. Entscheiden, ob Kapitel 03 (PyTorch) nach hinten wandert.~~ Reihenfolge bleibt wie 2025 (Plan in `kurs-2026-27.md`, 2026-09-20).
 - ~~VL 08 war 2025 mit 85 Folien überladen (AE-Varianten + VAE + word2vec + NLP); ggf. word2vec/NLP in Kapitel 09 verschieben.~~ Im Skript sind das jetzt eigene Kapitel (Autoencoder, VAE, word2vec); die Folienverteilung ist Thema von Schritt 4.
 - ~~VL 06 endet bereits mit Autoencoder-Einführung, VL 07 beginnt mit „handgemachten Netzen" (Universalität) – Kapitelgrenzen neu ziehen.~~ Erledigt (Kapitelsplits 2026-09-18).
 - Lehrbuchbezug: Prince, *Understanding Deep Learning* (Kapitel pro Thema referenzieren), Deisenroth et al. für Mathe-Grundlagen.

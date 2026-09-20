@@ -147,3 +147,6 @@ scalene-profile.json
 
 # Claude Code Editor-Konfiguration
 .claude/
+
+# Vorlesungstranskripte (Standbilder, zu groß fürs Repo)
+transcripts/

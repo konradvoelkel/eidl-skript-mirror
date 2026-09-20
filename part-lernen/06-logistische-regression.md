@@ -83,7 +83,9 @@ $$
 $$
 :::
 
-Schon mal irgendwo gesehen? Die Entropie des Bernoulli-Experiments ist
+Schon mal irgendwo gesehen? Im Data-Science-Skript haben wir den *Informationsgehalt* (die Überraschung) eines Ereignisses mit Wahrscheinlichkeit $p$ als $-\log p$ definiert und die *Entropie* als erwartete Überraschung ([Informationsgehalt](https://voelkel.pages.cs.uni-duesseldorf.de/ds-skript/erwartungswert#informationsgehalt), [Entropie](https://voelkel.pages.cs.uni-duesseldorf.de/ds-skript/erwartungswert#entropie)). Der Logarithmus steht dort aus einem Grund, der uns noch oft nützen wird: Für unabhängige Ereignisse multiplizieren sich die Wahrscheinlichkeiten, und $\log$ macht daraus eine Summe. Zwei Überraschungen addieren sich. Ein fairer Münzwurf ist $1$ bit Überraschung, eine 6 beim Würfeln $\log_2 6 \approx 2{,}58$ bit, beides zusammen $3{,}58$ bit.
+
+Für das Bernoulli-Experiment ist die Entropie
 
 $$
 H(p) = -p \ln p - (1 - p) \ln(1 - p),
@@ -92,10 +94,10 @@ $$
 und ihre Ableitung nach $p$ ist
 
 $$
-H'(p) = -\ln p - 1 + \ln(1-p) + 1 = -\operatorname{logit}(p).
+H'(p) = -\ln p - 1 + \ln(1-p) + 1 = -\operatorname{logit}(p)
 $$
 
-Interpretation: Bei Erhöhen von $p$ ist die Abnahme an Informationsgewinn durch $\operatorname{logit}(p)$ gegeben. Entropie misst man in bit (Logarithmus zur Basis 2) oder nat (natürlicher Logarithmus), die Ableitung in *logit*. Zum Beispiel ist $H(0{,}5) = 1 \text{ bit} = 0{,}69 \text{ nat}$.
+(im DS-Skript: [Die binäre Entropiefunktion](https://voelkel.pages.cs.uni-duesseldorf.de/ds-skript/wichtigste-diskrete-verteilungen#die-bin-re-entropiefunktion), dort mit $\log_2$ und kleinem $h$). Interpretation: Bei Erhöhen von $p$ ist die Abnahme an Informationsgewinn durch $\operatorname{logit}(p)$ gegeben. Entropie misst man in bit ($\log_2$) oder nat ($\ln$), die Ableitung in *logit*. Zum Beispiel ist $H(0{,}5) = 1 \text{ bit} = 0{,}69 \text{ nat}$.
 
 ## Logistische Sigmoidfunktion
 
@@ -117,7 +119,7 @@ $$
 $$
 :::
 
-$M$ ist der Maximalwert (die obere Asymptote), $k$ die Steilheit, $\mu$ die Position des Wendepunkts. Das Standardsigmoid steigt monoton von $0$ (für $x \to -\infty$) nach $1$ (für $x \to +\infty$) und hat bei $x = 0$ den Wert $\sigma(0) = \tfrac12$.
+$M$ ist der Maximalwert (die obere Asymptote), $k$ die Steilheit, $\mu$ die Position des Wendepunkts. Bei $\sigma(w \cdot x + b)$ übernimmt $\|w\|$ die Rolle von $k$, siehe [Kapitel „Neuron und Perzeptron“](../part-grundlagen/02-neuron-perzeptron.md): Die Länge von $w$ bestimmt, wie steil die Wahrscheinlichkeit mit dem Abstand zur Entscheidungsgrenze wächst. Das Standardsigmoid steigt monoton von $0$ (für $x \to -\infty$) nach $1$ (für $x \to +\infty$) und hat bei $x = 0$ den Wert $\sigma(0) = \tfrac12$.
 
 :::{figure} ../images/vl04-sigmoid.png
 :width: 90%
@@ -278,7 +280,7 @@ criterion = nn.BCELoss()  # <---
 optimizer = torch.optim.SGD(model.parameters(), lr=0.01)
 ```
 
-Der Rest der Trainingsschleife bleibt identisch. `BCELoss` ist die *binäre Kreuzentropie*, die wir in Blatt 5 mit der Kullback-Leibler-Divergenz in Verbindung bringen: Sie misst, wie weit die vorhergesagte Verteilung $(\sigma(\hat{y}), 1 - \sigma(\hat{y}))$ von der wahren Verteilung $(y, 1 - y)$ entfernt ist.
+Der Rest der Trainingsschleife bleibt identisch. `BCELoss` ist die *binäre Kreuzentropie*: die erwartete Überraschung, wenn man mit den vorhergesagten Wahrscheinlichkeiten $(\sigma(\hat{y}), 1 - \sigma(\hat{y}))$ rechnet, die Wahrheit aber $(y, 1 - y)$ ist. Sie ist bis auf eine Konstante die Kullback-Leibler-Divergenz aus dem [DS-Skript](https://voelkel.pages.cs.uni-duesseldorf.de/ds-skript/relative-entropie) (dort $H(p \Vert r)$ geschrieben); den genauen Zusammenhang rechnen Sie auf Blatt 5 nach. Woher diese Loss-Funktion *kommt*, klärt das nächste Kapitel.
 
 ## Weg von der 2-Klassen-Gesellschaft: Softmax
 
@@ -304,16 +306,16 @@ $$
 \operatorname{sm}_1(v) = \frac{e^x}{e^x + e^y} = \frac{1}{1 + e^{y - x}} = \sigma(x - y),
 $$
 
-Softmax verallgemeinert also tatsächlich das Sigmoid, wobei nur die *Differenz* der Logits zählt (Blatt 5).
+Softmax verallgemeinert also tatsächlich das Sigmoid, wobei nur die *Differenz* der Logits zählt (Blatt 5). Obacht beim Vergleich mit $\sigma$: In der Softmax-Formel steht *kein* Minus im Exponenten. Das Minus in $\sigma(x) = 1/(1 + e^{-x})$ entsteht erst beim Kürzen für $K = 2$, wie eben gerechnet. Die Probe, dass $\operatorname{sm}(v)$ wirklich eine Wahrscheinlichkeitsverteilung ist: Alle Einträge sind positiv, und die Summe ist $\sum_j e^{v_j} \big/ \sum_k e^{v_k} = 1$.
 
 :::{admonition} Obacht!
 :class: warning
 Nicht jedes Multiklassen-Klassifikationsproblem schreit nach dem Softmax. Softmax ist dann sinnvoll, wenn $\operatorname{argmax}$ sinnvoll wäre, also wenn sich die Klassen gegenseitig ausschließen (ein Bild zeigt *entweder* eine Katze *oder* einen Hund). Sonst – z.B. bei Tags, von denen mehrere gleichzeitig zutreffen können – nimmt man paarweise binomiale Klassifikation mit Sigmoid, ein $\sigma$ pro Klasse.
 :::
 
-## Tipps zu den Übungsblättern 4 und 5
+:::{admonition} Obacht: $e^x$ und $\ln$ am Computer
+:class: warning
+In `float32` ist $e^{89}$ bereits `inf`, und $\sigma(-100) = 1/(1 + e^{100})$ wird zu $1/\texttt{inf} = 0$ gerundet. Wer dann die Kreuzentropie selbst ausschreibt, berechnet $\ln 0 = -\infty$ und $0 \cdot (-\infty) = \texttt{nan}$; der Loss ist `nan`, und ab dem nächsten Schritt sind es alle Gewichte auch. Ähnlich beim Softmax: $e^{v_j}$ läuft über, sobald ein Logit größer als etwa $88$ ist.
 
-Auf Blatt 4 implementieren Sie die logistische Regression in PyTorch, auf Blatt 5 rechnen Sie mit Sigmoid, Softmax und Kreuzentropie.
-
-* Wenn Sie die Trainingsroutine zu kompliziert finden, können Sie anfangen, Test-Cases zu schreiben für das Training aus einer einzelnen Stichprobe (und hierbei z.B. mit den ersten 2 Features des Iris-Datensatzes arbeiten) und diese ans Laufen zu bringen.
-* Das Training sollte so ablaufen, dass der Loss dabei sinkt – nicht notwendig strikt monoton, aber im Mittel schon. Wenn das bei Ihnen nicht passiert, ist etwas schief gegangen. Nach einiger Zeit (wenn die Eingabedaten schon mehrmals zum Lernen genutzt wurden) ändert sich der Loss nur noch sehr wenig bis gar nicht. Plotten kann helfen: `losses` gegen `epoch`.
+Abhilfe ist immer dieselbe: nie erst $e^x$ und dann $\ln$ berechnen, sondern beides algebraisch zusammenfassen. Zum Beispiel ist $\ln \sigma(z) = -\ln(1 + e^{-z})$, und für $z < 0$ schreibt man das als $z - \ln(1 + e^{z})$, dann ist der Exponent nie groß. Beim Softmax darf man von allen $v_k$ das Maximum abziehen, ohne das Ergebnis zu ändern (*log-sum-exp-Trick*). PyTorch hat das eingebaut: `nn.BCEWithLogitsLoss` und `nn.CrossEntropyLoss` nehmen die *Logits* entgegen, nicht die Wahrscheinlichkeiten, und rechnen stabil. (`nn.BCELoss` auf Wahrscheinlichkeiten fängt $\ln 0$ mit einem Trick ab, indem es den Logarithmus bei $-100$ abschneidet. Das verhindert `nan`, ist aber ein Pflaster, keine Lösung.) Für Blatt 4 heißt das: Wenn Ihr Loss `nan` wird, ist meist das die Ursache, nicht ein Fehler in Ihrer Trainingsschleife.
+:::

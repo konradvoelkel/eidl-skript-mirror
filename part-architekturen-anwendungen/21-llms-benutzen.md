@@ -7,7 +7,7 @@ short_title: "LLMs benutzen"
 
 ## Transformer-LLMs in der Praxis einsetzen
 
-Zur Erinnerung der Aufbau eines Transformers ([Kapitel „Transformer“](../part-representation-learning/18-transformer.md), Fig. 1 in „Attention is all you need“): Encoder- und Decoder-Stapel aus Attention- und MLP-Blöcken. Ein *Large Language Model* ist ein sehr großer, meist Decoder-only Transformer, der das nächste Token vorhersagt.
+Zur Erinnerung der Aufbau eines Transformers ([Kapitel „Transformer“](../part-representation-learning/19-transformer.md), Fig. 1 in „Attention is all you need“): Encoder- und Decoder-Stapel aus Attention- und MLP-Blöcken. Ein *Large Language Model* ist ein sehr großer, meist Decoder-only Transformer, der das nächste Token vorhersagt.
 
 ### Verschiedene Wege, LLMs zu nutzen
 
@@ -21,7 +21,7 @@ Wir konkretisieren anhand eines Beispiel-Tasks, z.B. „Gegeben einen Text, iden
 6. **Vortrainierte Transformer auf besonderen Daten weiter trainieren** (Finetuning). Pro: relativ billig (keine sehr langen Trainingszeiten = Stromkosten nötig). Contra: benötigt wenigstens Hardware zum Training (teurer für größere Modelle).
 7. **Transformer-Modell auf Chat-Formate finetunen mit RLHF** (Reinforcement Learning from Human Feedback, wie bei ChatGPT). Pro: Feedback führt zu Qualitätssteigerung, z.B. NSFW-Removal o.ä. Contra: etwas komplizierter als „einfaches“ Training.
 8. **Sehr große Modelle über eine API verwenden** (ggf. nur Sampling-Output). Der De-facto-Standard für die „meisten“ LLM-Use-Cases für Softwareentwickler.
-9. **Vorhersagen eines großen Modells in ein kleineres übertragen** (Destillation). Das schauen wir uns im [Kapitel „Destillation“](24-destillation.md) noch an; so lässt sich z.B. die Inferenz beschleunigen.
+9. **Vorhersagen eines großen Modells in ein kleineres übertragen** (Destillation). Das schauen wir uns im [Kapitel „Destillation“](25-destillation.md) noch an; so lässt sich z.B. die Inferenz beschleunigen.
 10. **Constrained Generation**: Ausgabe sampeln, die einem (z.B. JSON-)Schema genügt – ein wesentlicher Baustein für „agentische Workflows“.
 
 ## Selbst Inferenz und Training durchführen
@@ -94,7 +94,7 @@ red = llm.tokenize(b" red")[0]
 print(f"{probs[red]:.2%}")                           # 0.74%
 ```
 
-Das ist die logistische Regression aus dem [Kapitel „Logistische Regression“](../part-lernen/06-logistische-regression.md) – Softmax über Logits –, nur mit 150 000 Klassen; alles aus dem [Kapitel „Latente Räume geometrisch“](22-latente-raeume.md) über Sampling-Strategien und Temperatur setzt genau hier an. (Bei `llm.scores` gibt es einen Fallstrick: Das Array hat immer `n_ctx` Zeilen, `scores[-1]` wäre also die falsche Position.)
+Das ist die logistische Regression aus dem [Kapitel „Logistische Regression“](../part-lernen/06-logistische-regression.md) – Softmax über Logits –, nur mit 150 000 Klassen; alles aus dem [Kapitel „Latente Räume geometrisch“](23-latente-raeume.md) über Sampling-Strategien und Temperatur setzt genau hier an. (Bei `llm.scores` gibt es einen Fallstrick: Das Array hat immer `n_ctx` Zeilen, `scores[-1]` wäre also die falsche Position.)
 
 **Weg 10, strukturierter Output.** Wir zwingen das LLM, JSON auszugeben, und nutzen `pydantic`, um zu garantieren, dass die Datentypen stimmen:
 
@@ -126,18 +126,8 @@ Finetuning ist auch sehr teuer, weil alle Parameter Gradienten und Optimizer-Zus
 
 ## Wie geht eigentlich … eine Anwendung?
 
-Konkret eine Anwendung wie z.B. der „Chatbot“ [hAInrich](https://www.heicad.hhu.de/lehre/masters-programme-ai-and-data-science/hainrich) am HeiCAD: Retrieval-Augmented Generation (RAG) – Dokumente werden mit Weg 2 in Vektoren verwandelt und in einer Vektordatenbank abgelegt, zur Anfrage werden die ähnlichsten Dokumente gesucht und mit Weg 4 als Kontext in den Prompt eines LLM gegeben. Mehr dazu im [Kapitel „Anwendungsbeispiele“](23-anwendungsbeispiele.md).
+Konkret eine Anwendung wie z.B. der „Chatbot“ [hAInrich](https://www.heicad.hhu.de/lehre/masters-programme-ai-and-data-science/hainrich) am HeiCAD: Retrieval-Augmented Generation (RAG) – Dokumente werden mit Weg 2 in Vektoren verwandelt und in einer Vektordatenbank abgelegt, zur Anfrage werden die ähnlichsten Dokumente gesucht und mit Weg 4 als Kontext in den Prompt eines LLM gegeben. Mehr dazu im [Kapitel „Anwendungsbeispiele“](24-anwendungsbeispiele.md).
 
-## Tipps zu Übungsblatt 11
-
-### Latente Repräsentationen klassifizieren
-
-Blatt 11 kommt mit einem Notebook (`latent-classifier.ipynb`, auf der Seite des Blatts zum Download), das Weg 2 durchspielt – und dann zwei Dinge tut, die man mit dem Gelernten schon versteht:
-
-1. **Klassifikation im latenten Raum.** Ein kleines BERT (`prajjwal1/bert-medium`, 512-dimensionale Repräsentationen) bleibt *eingefroren* (`bert_model.eval()`, kein Gradient), und die Repräsentation des `[CLS]`-Tokens – `outputs.last_hidden_state[:, 0, :]` – dient als Feature-Vektor für jede SMS des UCI-Spam-Datensatzes. Darauf trainieren wir nur ein MLP (`Linear(512, 64) → ReLU → Linear(64, 1) → Sigmoid`) mit BCE-Loss: fünf Epochen, 98 % Test-Accuracy. Der latente Raum, per PCA auf zwei Dimensionen projiziert, zeigt Spam und Ham als weitgehend getrennte Wolken – die Trennung ist schon *im* BERT-Raum da, das MLP muss sie nur noch finden.
-2. **Dreaming.** Welcher Input triggert den Spam-Detektor maximal? Wir umgehen den Tokenizer und optimieren direkt die Eingabe-Embeddings (`bert_model(inputs_embeds=...)`) mit Adam auf $1 - p_{\text{Spam}}$ – Gradientenabstieg im *Eingaberaum* statt im Gewichtsraum, wie bei den Adversarial Attacks. Die optimierten „weichen Wörter“ dekodiert man per Kosinus-Ähnlichkeit zu den nächsten Vokabeln; heraus kommt Unsinn wie „sending barrett leonardo“, der dem Klassifikator trotzdem 100 % Spam wert ist.
-3. **Saliency.** Welcher Teil einer Nachricht hat die Entscheidung bestimmt? Der Gradient der Spam-Wahrscheinlichkeit nach den Eingabe-Embeddings, pro Token die Norm (`inputs_embeds.grad.norm(dim=-1)`): Große Werte heißen „an diesem Wort hängt viel“. Das ist die einfachste Form von Erklärbarkeit – und zugleich die Anleitung, wie man den Detektor umgeht.
-
-### Transfer Learning und Ensembles
+## Ausblick: Transfer Learning und Ensembles
 
 Wir schauen rein, wenn dazu noch Zeit bleibt: das Kaggle-Notebook „PyTorch | Flowers | TransLearning + Ensemble | Test = 99.67 %“. Fragen, die wir klären wollen: Worum geht es da überhaupt? Was „ist“ Ensembling bzw. ein Ensemble-Modell? Was ist z.B. das Modell GoogLeNet von 2014, das da verwendet wird?

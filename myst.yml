@@ -42,30 +42,31 @@ project:
     - title: Lernen
       children:
        - file: part-lernen/06-logistische-regression.md
-       - file: part-lernen/07-gradientenabstieg.md
-       - file: part-lernen/08-backpropagation.md
-       - file: part-lernen/09-autograd-berechnungsgraph.md
-       - file: part-lernen/10-aktivierungsfunktionen.md
-       - file: part-lernen/11-netze-von-hand.md
-       - file: part-lernen/12-universelle-approximation.md
+       - file: part-lernen/07-loss-funktionen-maximum-likelihood.md
+       - file: part-lernen/08-gradientenabstieg.md
+       - file: part-lernen/09-backpropagation.md
+       - file: part-lernen/10-autograd-berechnungsgraph.md
+       - file: part-lernen/11-aktivierungsfunktionen.md
+       - file: part-lernen/12-netze-von-hand.md
+       - file: part-lernen/13-universelle-approximation.md
     - title: Representation Learning
       children:
-       - file: part-representation-learning/13-autoencoder.md
-       - file: part-representation-learning/14-variational-autoencoder.md
-       - file: part-representation-learning/15-word2vec.md
-       - file: part-representation-learning/16-representation-learning-graphen.md
-       - file: part-representation-learning/17-rnn.md
-       - file: part-representation-learning/18-transformer.md
+       - file: part-representation-learning/14-autoencoder.md
+       - file: part-representation-learning/15-variational-autoencoder.md
+       - file: part-representation-learning/16-word2vec.md
+       - file: part-representation-learning/17-representation-learning-graphen.md
+       - file: part-representation-learning/18-rnn.md
+       - file: part-representation-learning/19-transformer.md
     - title: Architekturen und Anwendungen
       children:
-       - file: part-architekturen-anwendungen/19-faltung-cnn.md
-       - file: part-architekturen-anwendungen/20-llms-benutzen.md
-       - file: part-architekturen-anwendungen/21-gans.md
-       - file: part-architekturen-anwendungen/22-latente-raeume.md
-       - file: part-architekturen-anwendungen/23-anwendungsbeispiele.md
-       - file: part-architekturen-anwendungen/24-destillation.md
-       - file: part-architekturen-anwendungen/25-optimierer.md
-       - file: part-architekturen-anwendungen/26-adversarial-attacks-polysemie.md
+       - file: part-architekturen-anwendungen/20-faltung-cnn.md
+       - file: part-architekturen-anwendungen/21-llms-benutzen.md
+       - file: part-architekturen-anwendungen/22-gans.md
+       - file: part-architekturen-anwendungen/23-latente-raeume.md
+       - file: part-architekturen-anwendungen/24-anwendungsbeispiele.md
+       - file: part-architekturen-anwendungen/25-destillation.md
+       - file: part-architekturen-anwendungen/26-optimierer.md
+       - file: part-architekturen-anwendungen/27-adversarial-attacks-polysemie.md
 #   Notebooks aus 2025: Inhalte sind in die Kapitel übernommen (siehe notebooks/README.md),
 #   deshalb nicht mehr im Buch. latent-classifier.ipynb hängt als Download an Blatt 11.
 #    - title: Notebooks

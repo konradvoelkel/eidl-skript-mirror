@@ -42,7 +42,22 @@ Dabei ist $r > 0$ ein Hyperparameter, die **Lernrate**. Was macht diese Regel?
 * Wenn $y = 1$, aber $f(x) = 0$, so ist $w_{\text{neu}} = w + r x$. Dann ist $w_{\text{neu}} \cdot x = w \cdot x + r \, (x \cdot x)$, und weil $x \cdot x > 0$ für alle $x \neq 0$ gilt, ist die Aktivierung für dieses $x$ *gewachsen* – in Richtung der richtigen Entscheidung $f(x) = 1$.
 * Wenn $y = 0$, aber $f(x) = 1$, so ist $w_{\text{neu}} = w - r x$, und die Aktivierung *sinkt* entsprechend.
 
-Die Regel schiebt also die Trennhyperebene bei jedem Fehler ein Stück in Richtung des falsch klassifizierten Punkts. Man kann beweisen (Perzeptron-Konvergenzsatz, Novikoff 1962), dass diese Regel nach endlich vielen Fehlern eine trennende Hyperebene findet, *falls* die Daten linear trennbar sind. Falls nicht, terminiert das Verfahren nie von selbst.
+Warum funktioniert das nicht nur für einen Schritt, sondern irgendwann sicher? Für ein festes Sample $(x, y)$ mit $y = 1$, das nach $k$ Updates immer noch falsch klassifiziert ist, gilt wegen der Bilinearität des Skalarprodukts
+
+$$
+w^{(k)} \cdot x = w^{(0)} \cdot x + k\, r\, \|x\|^2 ,
+$$
+
+und dieser Wert wird für großes $k$ irgendwann positiv, egal wie schlecht $w^{(0)}$ war. Geometrisch: Jedes Update addiert ein Vielfaches von $x$ zu $w$, dreht $w$ also Schritt für Schritt *in Richtung* $x$ (bei $y = 0$ von $x$ weg), und die Entscheidungsgrenze, die senkrecht auf $w$ steht, dreht sich mit, bis $x$ auf der richtigen Seite liegt. Das ist die eine Rechnung, die man zu diesem Kapitel einmal selbst auf Papier gemacht haben sollte (Blatt 3, Aufgabe 4). Natürlich kann ein Update für $x$ ein anderes Sample $x'$ auf die falsche Seite schieben; dass sich das nicht endlos wiederholt, ist die Aussage des Konvergenzsatzes.
+
+Die Regel schiebt also die Trennhyperebene bei jedem Fehler ein Stück in Richtung des falsch klassifizierten Punkts. Falls die Daten linear trennbar sind, findet sie nach endlich vielen Fehlern eine trennende Hyperebene; falls nicht, terminiert das Verfahren nie von selbst.
+
+:::{admonition} Vertiefung: der Perzeptron-Konvergenzsatz
+:class: note dropdown
+(Novikoff 1962.) Seien die Label als $y_i \in \{-1, +1\}$ kodiert. Angenommen, es gibt einen Einheitsvektor $w^*$ und eine *Margin* $\gamma > 0$ mit $y_i\,(w^* \cdot x_i) \ge \gamma$ für alle $i$, und alle Datenpunkte erfüllen $\|x_i\| \le R$. Dann macht die Perzeptronregel mit Start $w^{(0)} = 0$ höchstens $R^2 / \gamma^2$ Fehler, unabhängig von der Lernrate, der Dimension $n$ und der Anzahl $N$ der Datenpunkte.
+
+Beweisidee: Bei jedem Fehler wächst $w \cdot w^*$ um mindestens $r\gamma$, nach $k$ Fehlern also auf mindestens $k r \gamma$. Gleichzeitig wächst $\|w\|^2$ bei jedem Fehler um höchstens $r^2 R^2$, denn $\|w + r y x\|^2 = \|w\|^2 + 2 r y\,(w \cdot x) + r^2 \|x\|^2$, und der mittlere Term ist bei einem Fehler nicht positiv. Nach $k$ Fehlern ist also $\|w\| \le r R \sqrt{k}$. Mit Cauchy-Schwarz $w \cdot w^* \le \|w\|$ folgt $k r \gamma \le r R \sqrt{k}$, also $k \le R^2 / \gamma^2$. Das Verfahren nutzt die Margin, ohne sie zu kennen.
+:::
 
 **Zielgröße.** Wir messen den Erfolg als Anteil falsch klassifizierter Samples (Fehlerrate), bzw. als Anteil korrekt klassifizierter Samples (Accuracy) auf einem Testset.
 
@@ -108,13 +123,3 @@ h(x) = u_1 (v \cdot x) + u_2 (w \cdot x)
 $$
 
 Das ist äquivalent zu einer einzigen linearen Regression mit Gewichtsvektor $u_1 v + u_2 w$. Allgemein: Ein Produkt von Matrizen ist wieder eine Matrix, mehrere lineare Schichten hintereinander sind wieder eine lineare Schicht. Ohne die Nichtlinearität $\tau$ zwischen den Schichten bringt Tiefe gar nichts. Genau deshalb heißt $\tau$ auch *Aktivierungsfunktion* und nicht Dekoration.
-
-## Tipps zu Übungsblatt 2
-
-Auf Blatt 2 implementieren Sie ein Perzeptron mit Python und NumPy und werten es aus. Eingabedaten sind $(x, y)$, wobei `x` ein zweidimensionales Array ist (eine Zeile pro Sample, eine Spalte pro Feature); Ausgabe ist die Genauigkeit auf einem Testset nach dem Training.
-
-* Arbeiten Sie direkt mit der Perzeptronregel $w_{\text{neu}} := w + r \cdot (y - f(x)) \, x$ und lassen Sie sich nicht vom verallgemeinerten Perzeptron verwirren.
-* Lernrate: $r = 0{,}01$ ist ein guter Startwert.
-* Verwenden Sie dieselben Daten mehrmals im Training (mehrere *Epochen*).
-* Benutzen Sie Scikit-learn: `sklearn.model_selection.train_test_split` für den Split, `sklearn.datasets.make_blobs` für gut geeignete Übungsdaten, `sklearn.datasets.load_iris` für einen echten Datensatz.
-* Komplett lost, Kommilitonen ebenfalls überfordert? Bitte Bescheid sagen.

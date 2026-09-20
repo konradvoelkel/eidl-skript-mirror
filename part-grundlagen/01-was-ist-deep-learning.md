@@ -49,7 +49,21 @@ Der scheinbare Widerspruch löst sich auf, wenn man Python als *Steuersprache* b
 3. Was ist der Unterschied zwischen CUDA und ROCm?
 :::
 
+:::{admonition} Antworten zum Lesetext
+:class: note dropdown
+1. **GPU und SIMD.** SIMD (*single instruction, multiple data*) ist ein Rechenprinzip: dieselbe Operation gleichzeitig auf vielen Datenelementen. Eine GPU ist ein Produkt, das dieses Prinzip mit tausenden kleinen Rechenkernen umsetzt, ursprünglich für die parallele Berechnung von Bildpunkten. Für Deep Learning zählt nur das Prinzip, denn Matrixmultiplikation ist SIMD-Arbeit. Deshalb eignet sich eine Gaming-Grafikkarte zum Trainieren, und deshalb sind die Chips in Rechenzentren, die nie ein Bild ausgeben, streng genommen keine *Graphics* Processing Units mehr.
+2. **PyTorch** wurde bei Facebook AI Research entwickelt (heute Meta) und wird seit 2022 unter dem Dach der Linux Foundation als PyTorch Foundation weiterentwickelt; Meta bleibt der größte Beitragende. TensorFlow, die Konkurrenz von Google, hat an Bedeutung verloren.
+3. **CUDA und ROCm** sind die Software-Plattformen (Compiler, Bibliotheken, Treiber), mit denen man SIMD-Programme auf NVIDIA- bzw. AMD-Hardware schreibt und ausführt. CUDA ist proprietär und seit 2007 der De-facto-Standard, auf dem PyTorch und fast alle Forschungscodes aufsetzen. ROCm ist AMDs quelloffenes Gegenstück; die Schicht HIP bildet die CUDA-Schnittstelle nach, aber ROCm kam später und hat weniger fertige Bibliotheken. Genau das ist der *moat* aus dem Titel: nicht die Hardware, sondern die Software drumherum. Wir programmieren in dieser Vorlesung weder CUDA noch ROCm, sondern PyTorch, das beides als Backend benutzen kann.
+:::
+
 ## Erinnerung: Begriffe aus dem maschinellen Lernen
+
+:::{admonition} Notation: Datenpunkt, Feature, Stichprobe
+:class: note
+Ein einzelner Datenpunkt ist ein Vektor $x \in \mathbb{R}^n$; seine Komponenten $x_1, \dots, x_n$ heißen *Features*. Eine Stichprobe besteht aus $N$ solchen Vektoren. Wenn wir beides gleichzeitig brauchen, schreiben wir den Datenpunkt-Index hochgestellt in Klammern: $x^{(1)}, \dots, x^{(N)}$, und $x^{(i)}_j$ ist Feature $j$ von Datenpunkt $i$. In NumPy ist das `x[i, j]`: eine Zeile pro Datenpunkt, eine Spalte pro Feature. In Summen über die Stichprobe, in denen die Features nicht einzeln vorkommen, schreiben wir kürzer $x_i$ für den $i$-ten Datenpunkt.
+
+Für das Skalarprodukt benutzen wir $w \cdot x$ und $\langle w, x \rangle$ gleichbedeutend, beides ist $\sum_{j=1}^n w_j x_j$.
+:::
 
 ### Daten und erzeugende Verteilung
 

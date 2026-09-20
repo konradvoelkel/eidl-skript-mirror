@@ -79,7 +79,7 @@ $$
 [\text{sch}, \text{chw}, \text{hwi}, \text{wim}, \text{imm}, \text{mm!}] \quad\text{und}\quad [\text{sch}, \text{chw}, \text{hwi}, \text{wim}, \text{imm}, \text{mme}, \text{men}],
 $$
 
-die haben sehr ähnliche Trigrammhäufigkeitsverteilungen. Konkret zu klärende Fragen: Leerzeichen wie jedes andere Zeichen behandeln? Über das Satzende „.“ hinaus? Flexibles $n$, z.B. Silben statt Buchstabentrigramme? Die Antworten darauf bilden die **Tokenisierungsstrategie**, den Tokenizer. Der Einfachheit halber bleiben wir zunächst bei Token = Wörter, d.h. wir löschen Satzzeichen und trennen an Leerzeichen; Byte Pair Encoding, der Tokenizer moderner LLMs, kommt im [Kapitel „Transformer“](18-transformer.md).
+die haben sehr ähnliche Trigrammhäufigkeitsverteilungen. Konkret zu klärende Fragen: Leerzeichen wie jedes andere Zeichen behandeln? Über das Satzende „.“ hinaus? Flexibles $n$, z.B. Silben statt Buchstabentrigramme? Die Antworten darauf bilden die **Tokenisierungsstrategie**, den Tokenizer. Der Einfachheit halber bleiben wir zunächst bei Token = Wörter, d.h. wir löschen Satzzeichen und trennen an Leerzeichen; Byte Pair Encoding, der Tokenizer moderner LLMs, kommt im [Kapitel „Transformer“](19-transformer.md).
 
 **Modernerer Ansatz (supervised)**: mit einem neuronalen Netz; Menschen labeln Ähnlichkeit. Eingabe: Paare $(D_i, D_j)$, Ausgabe: Ähnlichkeitsschätzung. **Unsupervised mit neuronalen Netzen**:
 
@@ -88,7 +88,7 @@ die haben sehr ähnliche Trigrammhäufigkeitsverteilungen. Konkret zu klärende 
 3. Für jedes Paar $(D_i, D_j)$ die Listen von Repräsentationen vergleichen (z.B. Kosinus-Ähnlichkeit der Mittelwerte), daraus ein Ähnlichkeitsmaß für das Paar berechnen.
 4. Die Top-$k$ ähnlichsten Paare ausgeben.
 
-Problem 3 („Hund“ und „Tier“) löst word2vec, weil beide in ähnlichen Kontexten vorkommen und daher nahe beieinander liegen. Problem 1 (Wortreihenfolge) löst es nicht – dafür braucht man Modelle, die Sequenzen verarbeiten ([Kapitel „Recurrent Neural Networks“](17-rnn.md) und [„Transformer“](18-transformer.md)).
+Problem 3 („Hund“ und „Tier“) löst word2vec, weil beide in ähnlichen Kontexten vorkommen und daher nahe beieinander liegen. Problem 1 (Wortreihenfolge) löst es nicht – dafür braucht man Modelle, die Sequenzen verarbeiten ([Kapitel „Recurrent Neural Networks“](18-rnn.md) und [„Transformer“](19-transformer.md)).
 
 ### Literatur und Softwarepakete
 
