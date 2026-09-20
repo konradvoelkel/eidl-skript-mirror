@@ -2,7 +2,6 @@ Dies ist die Rohfassung eines Entwurfs eines Skripts begleitend zur Vorlesung + 
 
 [Link zur PDF-Version](https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de/eidl-skript.pdf) (wird bei jedem Build neu erzeugt)
 
-:::{admonition} Stand dieses Entwurfs
-:class: warning
-Entwurf, Stand 2026-09-20. Die Kapitel sind aus den Vorlesungsfolien 2025/26 entstanden, in Prosa ausgeschrieben und um die Grundlagen ergänzt, die in der Vorlesung mündlich blieben. Die Übungsblätter sind die von 2025/26 mit Abgabeterminen, die noch nicht angepasst sind. Fehler bitte melden; die fachliche Durchsicht läuft.
+:::{note}
+Wenn Sie Fehler finden, oder etwas unklar ist, freue ich mich über eine Nachricht -- Konrad Völkel
 :::

@@ -50,8 +50,10 @@ Aktueller Stand des Skripts: 27 Kapitel (01–27) plus Glossar. HTML-Build ohne 
 - [ ] **[Entscheidung] Abgabetermine 2026/27.** 2025 waren es Mittwoche 12:00, wöchentlich ab 22.10.2025,
   Weihnachtspause 17.12.→14.01. *Vorschlag* (eine Woche später als 2025, unter der Annahme Vorlesungsbeginn Mi
   14.10.2026): Blatt 0 ohne Abgabe; 1: 21.10., 2: 28.10., 3: 04.11., 4: 11.11., 5: 18.11., 6: 25.11., 7: 02.12.,
-  8: 09.12., 9: 16.12.2026, 10: 13.01., 11: 20.01.2027, 12 (Take-Home-Probeklausur): 27.01.2027. Nach Bestätigung
-  per `sed` in `part-exercises/` eintragen und die Notiz „Übernommen aus dem WiSe 2025/26“ je Blatt entfernen.
+  8: 09.12., 9: 16.12.2026, 10: 13.01., 11: 20.01.2027, 12 (Take-Home-Probeklausur): 27.01.2027. Die Zeile
+  „N Punkte, Abgabe bis …“ ist seit 2026-09-20 aus allen Blättern raus (Konrad); nach Bestätigung je Blatt neu
+  eintragen. Die Notiz je Blatt lautet jetzt „Übungsaufgaben von 2025, werden ggf. noch angepasst …“ und bleibt,
+  bis das Blatt wirklich angepasst ist.
 - [ ] Blatt 12 = Take-Home-Probeklausur anlegen (Grundlage: `../eidl-25/exam/`, Probeklausur 2025).
 - [ ] Lösungen: bisher nur die in den Blättern eingebetteten Dropdowns. Notebook-/Skript-Lösungen liegen in
   `~/Sciebo/hhu/eidl-25/exercises/blattNN-solution/`. *Vorschlag:* nicht ins Skript (öffentlich!), sondern eigenes
@@ -107,7 +109,8 @@ Aktueller Stand des Skripts: 27 Kapitel (01–27) plus Glossar. HTML-Build ohne 
 
 ### 2026-09-20, zweite Runde (aus der TODO-Liste selbst erledigt)
 
-- [x] `index.md`: Hinweisbox „Entwurf, Stand 2026-09-20“.
+- [x] `index.md`: Hinweisbox – seit 2026-09-20 abends nur noch die Bitte um Fehlermeldungen (Konrad), kein
+  Entwurfs-Disclaimer mehr.
 - [x] Alle neun `<!-- TODO Abbildung -->`-Marker aufgelöst: Hugging-Face-Tasks als Tabelle (04); Denoising-AE-Bilder
   aus der Musterlösung 2025 nach `images/vl08-*.png` (14); Faltungsmatrix-Abbildung selbst erzeugt aus
   `notebooks/pallino.jpg` (`images/vl10-faltungsmatrix.png`, 20); CycleGAN, StyleGAN, Transformer Fig. 1, Hubel &
