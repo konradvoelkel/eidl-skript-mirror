@@ -123,3 +123,8 @@ h(x) = u_1 (v \cdot x) + u_2 (w \cdot x)
 $$
 
 Das ist äquivalent zu einer einzigen linearen Regression mit Gewichtsvektor $u_1 v + u_2 w$. Allgemein: Ein Produkt von Matrizen ist wieder eine Matrix, mehrere lineare Schichten hintereinander sind wieder eine lineare Schicht. Ohne die Nichtlinearität $\tau$ zwischen den Schichten bringt Tiefe gar nichts. Genau deshalb heißt $\tau$ auch *Aktivierungsfunktion* und nicht Dekoration.
+
+:::{admonition} Weiterlesen
+:class: seealso
+Prince, *UDL*, Kap. 3 (Shallow neural networks) und 4 (Deep neural networks) für das Stapeln von Schichten. Beide Bücher sind frei verfügbar, siehe [Über dieses Skript](../README.md).
+:::

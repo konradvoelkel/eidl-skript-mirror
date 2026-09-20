@@ -21,7 +21,7 @@ Faltung in der Bildverarbeitung: Original, mit einer Gaußfunktion weichgezeichn
 
 Hubel & Wiesel (1959) haben in der Sehrinde von Katzen Neuronen gefunden, die auf Balken einer bestimmten *Orientierung* antworten – und auf andere Orientierungen nicht (Reproduktion von Wurtz 1969, in Robert H. Wurtz: „Recounting the impact of Hubel and Wiesel“, J Physiol 2009). Solche Neuronen sind lokale Kantendetektoren: Sie schauen auf einen kleinen Ausschnitt des Gesichtsfelds und reagieren auf ein bestimmtes Muster darin. CNNs sind die technische Umsetzung dieser Idee, und die ersten Schichten eines trainierten CNN sehen tatsächlich aus wie Kantendetektoren verschiedener Orientierung.
 
-<!-- TODO Abbildung: Hubel & Wiesel Neuron-Antwort auf Balkenorientierung (Wikipedia Mads00, CC-BY-SA) -->
+Das klassische Bild dazu, ein Neuron, das nur bei einer Balkenorientierung feuert, steht im Wikipedia-Artikel zu [Hubel und Wiesel](https://en.wikipedia.org/wiki/Orientation_column) (Orientation column, Abbildung CC-BY-SA).
 
 ### In der Informatik
 
@@ -140,15 +140,19 @@ $$
 (f \ast g)(x_1, x_2) = \sum_{y_1 = -n}^{n} \sum_{y_2 = -n}^{n} f(y_1, y_2)\, g(x_1 - y_1, x_2 - y_2).
 $$
 
-Ein $3 \times 3$-Filter hat 9 Gewichte, die an jeder Pixelposition dasselbe Skalarprodukt mit der $3 \times 3$-Nachbarschaft bilden. Beispiel mit GIMP: Unter *Filter → Allgemein → Faltungsmatrix* kann man die 9 Werte selbst eintragen und sieht unten den Output der 2D-Faltung – Weichzeichner, Schärfen, Kanten, Relief sind alles nur verschiedene Matrizen.
+Ein $3 \times 3$-Filter hat 9 Gewichte, die an jeder Pixelposition dasselbe Skalarprodukt mit der $3 \times 3$-Nachbarschaft bilden. Beispiel mit GIMP: Unter *Filter $\to$ Allgemein $\to$ Faltungsmatrix* kann man die 9 Werte selbst eintragen und sieht unten den Output der 2D-Faltung – Weichzeichner, Schärfen, Kanten, Relief sind alles nur verschiedene Matrizen.
 
-<!-- TODO Abbildung: GIMP-Faltungsmatrix-Dialog und Ergebnis (Folie 30) -->
+:::{figure} ../images/vl10-faltungsmatrix.png
+:width: 100%
+
+Vier $3 \times 3$-Faltungsmatrizen und ihr Ergebnis auf demselben Graustufenbild (`notebooks/pallino.jpg`): Identität, Weichzeichnen (Mittelwert), Schärfen, Kanten. Genau so funktioniert der Dialog *Faltungsmatrix* in GIMP.
+:::
 
 Bei Farbbildern hat die Eingabe 3 **Kanäle** (RGB), und ein Filter hat dann Shape $3 \times 3 \times 3$: Er summiert über alle Eingabekanäle. Eine Faltungsschicht mit $C_{\text{out}}$ Filtern erzeugt $C_{\text{out}}$ Ausgabekanäle (*Feature Maps*). Ein $1 \times 1$-Filter schaut nur auf einen Pixel, aber über alle Kanäle – das ist ein linearer Layer pro Pixel und wird benutzt, um die Anzahl der Kanäle zu ändern, ohne die räumlichen Dimensionen anzurühren.
 
 ## CNNs
 
-Ein **Convolutional Neural Network** ist ein neuronales Netz, in dem (einige) Schichten Faltungen sind: `nn.Conv1d` bzw. `nn.Conv2d` mit lernbaren Filtergewichten, gefolgt von einer Aktivierungsfunktion, oft gefolgt von Pooling. Typische Architektur für Bildklassifikation: mehrere Blöcke aus Conv → ReLU → MaxPool, wobei die räumliche Auflösung sinkt und die Anzahl der Kanäle steigt, dann *flatten* und ein oder zwei lineare Schichten mit Softmax. Die Faltungsschichten lernen in den frühen Layern allgemeine Merkmale wie Kanten und Ecken, in späteren Layern zusammengesetzte Muster.
+Ein **Convolutional Neural Network** ist ein neuronales Netz, in dem (einige) Schichten Faltungen sind: `nn.Conv1d` bzw. `nn.Conv2d` mit lernbaren Filtergewichten, gefolgt von einer Aktivierungsfunktion, oft gefolgt von Pooling. Typische Architektur für Bildklassifikation: mehrere Blöcke aus Conv $\to$ ReLU $\to$ MaxPool, wobei die räumliche Auflösung sinkt und die Anzahl der Kanäle steigt, dann *flatten* und ein oder zwei lineare Schichten mit Softmax. Die Faltungsschichten lernen in den frühen Layern allgemeine Merkmale wie Kanten und Ecken, in späteren Layern zusammengesetzte Muster.
 
 Man beachte: Jede Berechnung mit einem Faltungslayer kann auch mit einem linearen (fully connected) Layer durchgeführt werden – die Faltung ist ja linear, also eine Matrix, nur eine sehr spezielle mit vielen Nullen und wiederholten Einträgen. Der Punkt der Faltung ist nicht, dass sie *mehr* kann, sondern dass sie mit viel weniger Parametern das Richtige kann, wenn die Daten lokale, verschiebungsinvariante Struktur haben. Und man muss nicht alle Layer zu Faltungen machen; die letzten Schichten eines CNN sind fast immer linear.
 
@@ -206,3 +210,8 @@ Weiterführend:
 * Interaktives MNIST-CNN-Explorationswerkzeug von Adam Harley: [adamharley.com/nn_vis/cnn/2d.html](https://adamharley.com/nn_vis/cnn/2d.html) – man zeichnet eine Ziffer und sieht alle Feature Maps aller Schichten.
 * *Universal Fourier Features Emerge* ([arXiv:2312.08550](https://arxiv.org/abs/2312.08550)): warum gelernte Filter so oft wie Fourier-Basisfunktionen aussehen.
 * Das Übungsblatt 10 rechnet Faltungen und Pooling von Hand.
+
+:::{admonition} Weiterlesen
+:class: seealso
+Prince, *UDL*, Kap. 10 (Convolutional networks) und 11 (Residual networks). Beide Bücher sind frei verfügbar, siehe [Über dieses Skript](../README.md).
+:::

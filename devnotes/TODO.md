@@ -1,11 +1,12 @@
 # TODO eidl-skript
 
-Stand: 2026-09-20 (abends). Erledigtes steht unten unter „Erledigt“, nach Datum. Punkte mit **[Entscheidung]**
+Stand: 2026-09-20 (spät abends). Erledigtes steht unten unter „Erledigt“, nach Datum. Punkte mit **[Entscheidung]**
 brauchen eine Antwort von Konrad; ein Vorschlag steht jeweils dabei. Überblick über alle Dateien in `devnotes/`:
 `devnotes/README.md`.
 
-Aktueller Stand des Skripts: 27 Kapitel (01–27), Build ohne Warnungen (`uv run --only-group dev myst build --html`).
-Alle Änderungen vom 2026-09-20 sind **noch nicht committet** (Umbenennungen sind per `git mv` vorgemerkt).
+Aktueller Stand des Skripts: 27 Kapitel (01–27) plus Glossar. HTML-Build ohne Warnungen
+(`uv run --only-group dev myst build --html`), PDF-Export ohne LaTeX-Fehler, 181 Seiten
+(`uv run --only-group dev myst build --pdf` → `exports/eidl-skript.pdf`, gitignored).
 
 ## Inhalt (Skript)
 
@@ -15,33 +16,20 @@ Alle Änderungen vom 2026-09-20 sind **noch nicht committet** (Umbenennungen sin
     Batch-Bild für Tensoren (05), Numerik-Box zu `exp`/`log` (06), Maximum Likelihood → BCE und Gradient $p - y$
     (07/08), Summe über Pfade und numerische Probe (08), Feature-Skalierung (08), Erwartungswert-Absatz zu SGD (08),
     Playground-Box (09), VAE-Fragenbox (15), GAN-Lab-Box mit Regel „früh aufhören“ (22), CBOW-Formel (16),
-    Ausgabegrößen-Formel und Shape-Beispiel (20), Minimax-Formel (22), Reparametrisierung (15), $T^2$-Faktor (25).
-  - *(b) Vertiefungen*, seit 2026-09-20 als aufklappbare Box „Vertiefung: …“ markiert und nicht Vorlesungsstoff:
+    Ausgabegrößen-Formel und Shape-Beispiel (20), Minimax-Formel (22), Reparametrisierung (15), $T^2$-Faktor (25),
+    Antwortbox zu GPU/SIMD, PyTorch, CUDA/ROCm (01), Rezept Anwendungskonzept (24), Glossar (`glossar.md`).
+  - *(b) Vertiefungen*, als aufklappbare Box „Vertiefung: …“ markiert und nicht Vorlesungsstoff:
     Konvergenzsatz (03), Cauchy-Schwarz (08), Spur-Trick (09), Message-Passing-Formel (17), Wasserstein-Dualität (22),
     FGSM (27). Nur auf Korrektheit prüfen, nicht auf Didaktik.
-  - Konkrete Prüfaufträge aus den Aufzeichnungen 2025: Interpolationsformel in „Netze von Hand“ (12) nachrechnen
-    (2025 war eine KI-generierte Fassung falsch); Encoder mit oder ohne Sigmoid in „Autoencoder“ (14) entscheiden
-    (Skript: ohne, mit Hinweis; Vorlesung 2025: mit); die neuen Lösungsvorschläge zu Blatt 1 Aufgabe 4b, Blatt 3
-    Aufgabe 2b und Blatt 5 Aufgabe 1b gegenrechnen.
-- [ ] **Abbildungen**: 35 eingebettet (`make_figures.py`, Dateien in `images/`). Noch offen (Marker `<!-- TODO Abbildung -->`
-  im Text):
-  - Hubel & Wiesel (Wikipedia Mads00, CC-BY-SA) – Download + Lizenzhinweis
-  - GIMP-Faltungsmatrix – Screenshot selbst machen
-  - CycleGAN / StyleGAN-Beispiele – *Vorschlag:* verlinken statt einbetten (Lizenz)
-  - HuggingFace-Tasks-Screenshot – *Vorschlag:* durch die Aufzählung im Text ersetzen, Marker löschen
-  - Loss Landscape (Li et al.), Amini et al. – *Vorschlag:* verlinken (der Explorer ist jetzt als Box eingebaut)
-  - Denoising-AE-Ergebnisbilder – `../from_2025/exercises/blatt08-solution/` hat `denoising-example.png`,
-    `dlae-latent-space.png`, `dlae-loss-curve.png` → übernehmen?
-  - GRU/LSTM-Diagramme (Wikipedia, CC-BY-SA) – Download + Lizenzhinweis, oder eigene Zeichnung
-  - Transformer Fig. 1 – *Vorschlag:* verlinken
-- [ ] Lehrbuchverweise ergänzen (Prince *UDL*: Kap. 3 shallow nets ↔ Universalität, 4 deep nets, 6 fitting/SGD,
-  7 gradients/backprop, 10 CNNs, 12 Transformer, 15 GANs, 17 VAE; Deisenroth et al. für Lin. Algebra/Analysis).
-- [ ] „Stand“-Hinweisbox in `index.md` („Entwurf, Stand …“); `index.md` ist derzeit ein Einzeiler.
-- [ ] Glossar für die Klausurvorbereitung (Vorschlag aus `klausur-abdeckung.md`).
-- [ ] „Rezept Anwendungskonzept“ in „Anwendungsbeispiele“ (24): die Schrittfolge, die 2025 der Hörsaal im Dialog
-  entwickelt hat (was haben wir, kein großes Modell, Vektor je Frage, Nachbarsuche, vom String zum Vektor, Güte
-  messen), als Kasten *am Ende* des Kapitels, damit das Spiel im Hörsaal erhalten bleibt. Dazu die 2025 angekündigte
-  Klausurfrage „wie trainiert man das Netz für das Empfehlungssystem“ ausformulieren.
+  - Konkrete Prüfaufträge: Encoder mit oder ohne Sigmoid in „Autoencoder“ (14) entscheiden (Skript: ohne, mit
+    Hinweis; Vorlesung 2025: mit); die neuen Lösungsvorschläge zu Blatt 1 Aufgabe 4b, Blatt 3 Aufgabe 2b und Blatt 5
+    Aufgabe 1b gegenrechnen; die „Weiterlesen“-Boxen (17 Kapitel) auf passende UDL/MML-Kapitelnummern prüfen.
+- [ ] **Abbildungen**, verbleibende Wünsche (alle `<!-- TODO Abbildung -->`-Marker sind seit 2026-09-20 aufgelöst,
+  entweder durch eigene Bilder, Bilder aus den Musterlösungen 2025 oder Links): Hubel & Wiesel und GRU/LSTM sind
+  nur verlinkt (Wikipedia, CC-BY-SA); wer sie einbetten will, lädt die Dateien nach `images/` und ergänzt den
+  Lizenzhinweis in der Bildunterschrift.
+- [ ] „Rezept Anwendungskonzept“ (24) ist geschrieben; die 2025 angekündigte Klausurfrage „wie trainiert man das
+  Netz für das Empfehlungssystem“ ist dort noch nicht als ausformulierte Aufgabe, nur als Absatz im Beispiel.
 - [ ] Zeitreihen / Aktienkurs-Beispiel (2025 gewünscht, nicht geliefert): bewusst zurückgestellt, sprengt den Rahmen.
   `notebooks/ASML.csv` liegt bereit, falls „RNNs“ (18) später ein Beispiel bekommen soll.
 - [ ] Formalia (`kurs-2026-27.md`, bewusst nicht im Buch): Übungsleitung 2026/27, Räume/Zeiten bestätigen;
@@ -57,32 +45,24 @@ Alle Änderungen vom 2026-09-20 sind **noch nicht committet** (Umbenennungen sin
 
 ## Übungsblätter
 
-- [x] Tipps zu den Blättern aus den Kapiteln in die Blätter verschoben (Box „Hinweise“ je Blatt, 2026-09-20), ergänzt um
-  das, was 2025 in der Vorlesung dazu gesagt wurde (Blatt 2: 2D-Daten plotten, `make_blobs` zuerst; Blatt 3:
-  „quatschi“; Blatt 4: zum Debuggen ohne Train-Test-Split, `nan`-Loss).
-- [x] Neue Aufgaben mit Lösungsvorschlag (2026-09-20): Blatt 1 Aufgabe 4b (Abstand zur Geraden), Blatt 3 Aufgabe 2b
-  (Gradient mit numerischer Probe), Blatt 5 Aufgabe 1b (Ableitung der BCE, Gradient $p - y$). Punktzahlen der
-  Blätter noch nicht angepasst.
-- [ ] **[Entscheidung] Punkte und Bestehensgrenzen** der Blätter 1, 3, 5 nach den neuen Aufgaben anpassen
-  (*Vorschlag:* je +1 Punkt, Bestehensgrenze bleibt „die Hälfte“).
+- [ ] **[Entscheidung] Punkte und Bestehensgrenzen** der Blätter 1, 3, 5 nach den neuen Aufgaben 4b, 2b, 1b
+  anpassen (*Vorschlag:* je +1 Punkt, Bestehensgrenze bleibt „die Hälfte“).
 - [ ] **[Entscheidung] Abgabetermine 2026/27.** 2025 waren es Mittwoche 12:00, wöchentlich ab 22.10.2025,
   Weihnachtspause 17.12.→14.01. *Vorschlag* (eine Woche später als 2025, unter der Annahme Vorlesungsbeginn Mi
   14.10.2026): Blatt 0 ohne Abgabe; 1: 21.10., 2: 28.10., 3: 04.11., 4: 11.11., 5: 18.11., 6: 25.11., 7: 02.12.,
   8: 09.12., 9: 16.12.2026, 10: 13.01., 11: 20.01.2027, 12 (Take-Home-Probeklausur): 27.01.2027. Nach Bestätigung
   per `sed` in `part-exercises/` eintragen und die Notiz „Übernommen aus dem WiSe 2025/26“ je Blatt entfernen.
-- [ ] Blatt 12 = Take-Home-Probeklausur anlegen (Grundlage: `../from_2025/exam/exam2025-eidl-probeklausur.tex`).
-- [ ] Lösungen: bisher nur die in den `.tex` eingebetteten. Notebook-/Skript-Lösungen liegen in
-  `../from_2025/exercises/blattNN-solution/`. *Vorschlag:* nicht ins Skript (öffentlich!), sondern eigenes privates
-  Repo/Ordner; im Skript nur die kurzen Lösungsvorschläge als Dropdown wie jetzt.
+- [ ] Blatt 12 = Take-Home-Probeklausur anlegen (Grundlage: `../eidl-25/exam/`, Probeklausur 2025).
+- [ ] Lösungen: bisher nur die in den Blättern eingebetteten Dropdowns. Notebook-/Skript-Lösungen liegen in
+  `~/Sciebo/hhu/eidl-25/exercises/blattNN-solution/`. *Vorschlag:* nicht ins Skript (öffentlich!), sondern eigenes
+  privates Repo/Ordner.
 - [ ] **[Entscheidung] Englische Fassungen** (`sheetNN.tex`): 2025 gab es alle Blätter zweisprachig. *Vorschlag:*
   fallen lassen, solange die Vorlesung deutsch ist.
-- [ ] Blätter 7 bis 10 auf Verweise wie „Vorlesungsfolien“ prüfen und durch Kapitelnamen ersetzen (1 bis 6 und 11
-  sind erledigt).
 
 ## Klausur
 
-- [x] Aufgabenschatz gegen die Kapitel abgeglichen → `klausur-abdeckung.md` (62/66 Begriffe, 4 fehlende ergänzt).
-- [ ] `exam2026-eidl-exam-1/2.tex` (englische Entwürfe vom 20.01.2026) – Status klären: Vorlagen für 2026/27?
+- [ ] `exam2026-eidl-exam-1/2.tex` (englische Entwürfe vom 20.01.2026 in `../eidl-25/exam/`) – Status klären:
+  Vorlagen für 2026/27?
 - Keine weiteren Klausuransagen aus den Aufzeichnungen übernehmen (Entscheidung Konrad 2026-09-20).
 
 ## Notebooks
@@ -91,9 +71,7 @@ Alle Änderungen vom 2026-09-20 sind **noch nicht committet** (Umbenennungen sin
   Vor Semesterstart mit aktuellem torch/transformers durchlaufen lassen (bert-medium-Download, `ipywidgets` für die
   Saliency-Zelle) und Outputs neu einchecken.
 - [ ] Code-Beispiele in den Kapiteln (CNN, LLMs, Autograd, Autoencoder) sind aus den Notebooks übernommen, aber nicht
-  erneut ausgeführt – bei der fachlichen Durchsicht einmal laufen lassen.
-- [ ] `notebooks/VL_10_convolutions.ipynb`: `show_filter_results` faltet mit Kernelgröße 5 und `padding=1`, der
-  Kommentar behauptet gleiche Ausgabelänge; das Kapitel nutzt `padding=2`. Notebook angleichen (bleibt als Referenz).
+  erneut ausgeführt – bei der fachlichen Durchsicht einmal laufen lassen (`uv sync` installiert torch, groß).
 
 ## Beamer-Folien (Schritt 4 des Migrationsplans)
 
@@ -114,16 +92,32 @@ Alle Änderungen vom 2026-09-20 sind **noch nicht committet** (Umbenennungen sin
 
 - [ ] GitLab Pages auf „Everyone“ stellen – **zum Semesterstart, bewusst noch nicht**
   (https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de/).
-- [ ] PDF: Code-Listings ohne Syntax-Highlighting (`minted`/`latexminted` wirft `ArgParser`-Fehler, Versionskonflikt
-  mit pygments 2.18). *Vorschlag:* `code_style: minted` in `myst.yml` entfernen oder `pip install --upgrade latexminted`.
-- [ ] PDF-Export in die CI? (Image bräuchte TeX Live.) *Vorschlag:* lokal bauen
-  (`uv run --only-group dev myst build --pdf` → `exports/`), bei Bedarf manuell hochladen.
+- [ ] PDF-Export in die CI? (Image bräuchte TeX Live.) *Vorschlag:* lokal bauen, bei Bedarf manuell hochladen.
 - `_site/sidebar_footer.md` leer, `navbar_end.md` nur „Inhaltsverzeichnis“ – wie bei EiPy; lassen.
 - Logo: `logo/` enthält SVGs und Exporte; für Rocket.Chat `logo/eidl-logo-512.png`.
 
 ## Erledigt
 
-### 2026-09-20 (Auswertung der Vorlesungsaufzeichnungen 2025/26)
+### 2026-09-20, zweite Runde (aus der TODO-Liste selbst erledigt)
+
+- [x] `index.md`: Hinweisbox „Entwurf, Stand 2026-09-20“.
+- [x] Alle neun `<!-- TODO Abbildung -->`-Marker aufgelöst: Hugging-Face-Tasks als Tabelle (04); Denoising-AE-Bilder
+  aus der Musterlösung 2025 nach `images/vl08-*.png` (14); Faltungsmatrix-Abbildung selbst erzeugt aus
+  `notebooks/pallino.jpg` (`images/vl10-faltungsmatrix.png`, 20); CycleGAN, StyleGAN, Transformer Fig. 1, Hubel &
+  Wiesel, GRU/LSTM als Links (22, 19, 20, 18). Der Loss-Landscape-Marker war schon beim Split von 08 weg.
+- [x] Lehrbuchverweise: „Weiterlesen“-Box (Prince *UDL*, Deisenroth *MML*) am Ende von 17 Kapiteln.
+- [x] Glossar zur Klausurvorbereitung (`glossar.md`, TOC-Abschnitt „Anhang“, Link in `README.md`): alle Begriffe aus
+  `klausur-abdeckung.md` in ein bis drei Sätzen mit Kapitel-Link.
+- [x] „Rezept: ein Anwendungskonzept schreiben“ als Abschnitt am Ende von „Anwendungsbeispiele“ (24), sechs Punkte.
+- [x] Blätter 7 bis 10 geprüft: nur Blatt 9 verwies auf „die Vorlesung“, jetzt Kapitel-Link.
+- [x] Interpolationsformel $Q(x)$ und $P(x)$ in „Netze von Hand“ (12) nachgerechnet: alle Stützstellen stimmen.
+- [x] `notebooks/VL_10_convolutions.ipynb`: `padding=kernel_size // 2` statt `padding=1`, Kommentar korrigiert.
+- [x] PDF-Export repariert: `code_style: minted` aus `myst.yml` entfernt (Listings jetzt `verbatim`); fünf
+  Mehrbild-`figure`-Direktiven in Einzelfiguren aufgeteilt (06, 12, 14, 15, 23), die in LaTeX „Not in outer par
+  mode“ warfen; literale Pfeile „→“ im Fließtext durch `$\to$` ersetzt (sie zwangen LaTeX in den Mathemodus);
+  Überschrift „Von Bernoulli zu Multinoulli“. Ergebnis: 0 LaTeX-Fehler, 181 Seiten.
+
+### 2026-09-20, erste Runde (Auswertung der Vorlesungsaufzeichnungen 2025/26)
 
 - [x] 15 Aufzeichnungen transkribiert und je Sitzung `transcripts/<vl>/notiz.md` geschrieben; `transcripts/uebersicht.md`
   und `transcripts/abschlussbericht.md`. `transcripts/` ist in `.gitignore` (Standbilder), liegt nur in Sciebo.
@@ -139,6 +133,8 @@ Alle Änderungen vom 2026-09-20 sind **noch nicht committet** (Umbenennungen sin
 - [x] Vertiefungen als aufklappbare Boxen markiert (siehe oben unter „Fachliche Durchsicht (b)“).
 - [x] Externe Werkzeuge als „Ausprobieren“-Boxen mit dem, was 2025 daran gezeigt wurde: Playground (09), Loss
   Landscape Explorer (08), GAN Lab (22).
+- [x] Tipps zu den Blättern aus den Kapiteln in die Blätter verschoben (Box „Hinweise“ je Blatt), ergänzt um das,
+  was 2025 in der Vorlesung dazu gesagt wurde; neue Aufgaben 1/4b, 3/2b, 5/1b mit Lösungsvorschlag.
 - [x] Stale VL-Nummern in der Prosa („VL 05/06“, „VL 13“, „VL 15“, „weiter unten“) durch Kapitel-Links ersetzt.
 - [x] `README.md`: Satz zu den Rückverweisen auf das DS-Skript.
 

@@ -105,3 +105,8 @@ $$
 Dabei können die Schichten verschieden groß sein, manche Einträge von $W^{(k)}$ können $0$ sein (fehlende Pfeile), es kann Pfeile rückwärts geben (rekurrente Netze), und es können viele verschiedene nichtlineare Funktionen vorkommen (ReLU, Convolution, Softmax, …). Die Gesamtheit der Einträge aller $W^{(k)}$ und $b^{(k)}$ sind die *Parameter* oder *Gewichte* des Netzes; bei modernen Modellen sind das Milliarden von Zahlen. „Deep“ heißt: $L$ ist groß.
 
 Warum das hintereinanderschalten hilft, sehen wir am XOR-Problem: Mit zwei Perzeptrons in der ersten Schicht, die „$x_1 \lor x_2$“ und „$\lnot(x_1 \land x_2)$“ berechnen, und einem dritten Perzeptron, das deren Ausgaben mit UND verknüpft, ist XOR plötzlich linear trennbar – im Raum der Ausgaben der ersten Schicht.
+
+:::{admonition} Weiterlesen
+:class: seealso
+Prince, *UDL*, Kap. 3 (Shallow neural networks); Deisenroth et al., *MML*, Kap. 3 (Analytic geometry: Skalarprodukt, Winkel, Projektion). Beide Bücher sind frei verfügbar, siehe [Über dieses Skript](../README.md).
+:::

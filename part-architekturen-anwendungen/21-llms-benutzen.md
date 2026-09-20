@@ -13,10 +13,10 @@ Zur Erinnerung der Aufbau eines Transformers ([Kapitel „Transformer“](../par
 
 Wir konkretisieren anhand eines Beispiel-Tasks, z.B. „Gegeben einen Text, identifiziere, ob er emotional positiv oder negativ gefärbt ist“ (Sentiment-Analyse).
 
-1. **Wort-Vektor-Einbettungen direkt verwenden** (statt word2vec z.B. die Embedding-Schicht von Gemma) → semantische Ähnlichkeit, semantische Suche, semantisches Clustering etc. Pro: sehr billig (keine tiefen Modelle für Inferenz notwendig). Contra: Zusammenhänge über längere Texte hinweg nicht sichtbar.
+1. **Wort-Vektor-Einbettungen direkt verwenden** (statt word2vec z.B. die Embedding-Schicht von Gemma) $\to$ semantische Ähnlichkeit, semantische Suche, semantisches Clustering etc. Pro: sehr billig (keine tiefen Modelle für Inferenz notwendig). Contra: Zusammenhänge über längere Texte hinweg nicht sichtbar.
 2. **Satz-Vektor-Einbettungen**, bzw. längere Texte in Vektoren umwandeln (z.B. mit BERT). Pro: sehr hohe Qualität der Repräsentationen. Contra: LLM notwendig zur Berechnung der Repräsentationen. (Blatt 11: BERT-Embeddings als Features für einen Klassifikator.)
 3. **Nicht Token sampeln, sondern die Verteilung der Ausgabetoken direkt betrachten.** Pro: vollständige Information aus dem LLM, kein „zufälliges“ Sampling. Contra: weniger intuitiv zu verwenden, man arbeitet mit Verteilungen im Latent Space statt mit Text.
-4. **Fertig trainierte Transformer mit bestimmten Prompts verwenden**, z.B. „Analog zur Transformation [A] → [B] verarbeite [C]“ (*one-shot prompt*), etwa [A] = Text auf Englisch, [B] = Text auf Deutsch, [C] = neuer Text auf Englisch. Pro: extrem vielseitig und bisher sehr, sehr erfolgreich. Contra: benötigt viele Token (noch mehr für *few-shot prompts*).
+4. **Fertig trainierte Transformer mit bestimmten Prompts verwenden**, z.B. „Analog zur Transformation [A] $\to$ [B] verarbeite [C]“ (*one-shot prompt*), etwa [A] = Text auf Englisch, [B] = Text auf Deutsch, [C] = neuer Text auf Englisch. Pro: extrem vielseitig und bisher sehr, sehr erfolgreich. Contra: benötigt viele Token (noch mehr für *few-shot prompts*).
 5. **Transformer von Grund auf trainieren** (eigenes Pretraining). Pro: vollständige Kontrolle über Trainingsdaten und damit prinzipiell über Outputs. Contra: extrem teuer; Llama 2 (etwa auf dem Niveau von Gemini 1 Pro / ChatGPT 3.5) kostete ca. 2–10 Mio. $.
 6. **Vortrainierte Transformer auf besonderen Daten weiter trainieren** (Finetuning). Pro: relativ billig (keine sehr langen Trainingszeiten = Stromkosten nötig). Contra: benötigt wenigstens Hardware zum Training (teurer für größere Modelle).
 7. **Transformer-Modell auf Chat-Formate finetunen mit RLHF** (Reinforcement Learning from Human Feedback, wie bei ChatGPT). Pro: Feedback führt zu Qualitätssteigerung, z.B. NSFW-Removal o.ä. Contra: etwas komplizierter als „einfaches“ Training.
@@ -28,7 +28,7 @@ Wir konkretisieren anhand eines Beispiel-Tasks, z.B. „Gegeben einen Text, iden
 
 ### Rechnung mit der Parametermenge
 
-Hugging Face Transformers ist die Standardbibliothek; die Dokumentation rechnet vor: Llama 2 7B benötigt bei voller Präzision (32 Bit pro Parameter, etwa zum Training) ca. $7 \cdot 4 \text{ GB} = 28$ GB VRAM, aber bei halber Präzision (16 Bit) ca. $7 \cdot 2 \text{ GB} = 14$ GB VRAM, passt also auf eine 16-GB-Consumer-GPU. Für Inferenz benötigt man keine Gradienten und keine Optimizer-Zustände → halber Platzbedarf, und mit 4-Bit-**Quantisierung** nochmal weniger: 8 GB oder darunter. Aber: Llama 2 70B ist erst in einer Liga mit GPT-4 → 80 bis 280 GB.
+Hugging Face Transformers ist die Standardbibliothek; die Dokumentation rechnet vor: Llama 2 7B benötigt bei voller Präzision (32 Bit pro Parameter, etwa zum Training) ca. $7 \cdot 4 \text{ GB} = 28$ GB VRAM, aber bei halber Präzision (16 Bit) ca. $7 \cdot 2 \text{ GB} = 14$ GB VRAM, passt also auf eine 16-GB-Consumer-GPU. Für Inferenz benötigt man keine Gradienten und keine Optimizer-Zustände $\to$ halber Platzbedarf, und mit 4-Bit-**Quantisierung** nochmal weniger: 8 GB oder darunter. Aber: Llama 2 70B ist erst in einer Liga mit GPT-4 $\to$ 80 bis 280 GB.
 
 ### Llamas & Co
 

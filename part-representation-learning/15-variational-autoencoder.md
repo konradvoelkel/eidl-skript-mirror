@@ -23,13 +23,16 @@ Das gesampelte $\varepsilon$ ist im Rückwärtsdurchlauf einfach eine Konstante.
 
 **Beispiel im latenten Raum.** Mit 3 Datenpunkten: Klassisch sind das 3 Punkte. Mit $+\varepsilon$ werden es 3 Wolken gleicher Größe. Mit $+\sigma\varepsilon$ für einen Skalierungsfaktor $\sigma$ kann man die Wolkengröße steuern. Mit 300 Datenpunkten: Klassisch eine Punktwolke mit Löchern und Ausreißern; gut wäre eine Verteilung, die den latenten Raum lückenlos und gleichmäßig füllt, sodass man an *jeder* Stelle dekodieren kann.
 
-:::{figure}
+:::{figure} ../images/vl08-latent-3points.png
 :width: 90%
 
-![](../images/vl08-latent-3points.png)
-![](../images/vl08-latent-300points.png)
+Drei Datenpunkte im latenten Raum – klassisch, mit gleichem Rauschen $+\varepsilon$, mit datenabhängigem Rauschen $+\sigma_x\varepsilon$.
+:::
 
-Oben: drei Datenpunkte im latenten Raum – klassisch, mit gleichem Rauschen $+\varepsilon$, mit datenabhängigem Rauschen $+\sigma_x\varepsilon$. Unten: 300 Datenpunkte – ein klassischer Autoencoder lässt Löcher und Ausreißer, ein VAE zieht die Codes zur Standardnormalverteilung.
+:::{figure} ../images/vl08-latent-300points.png
+:width: 90%
+
+300 Datenpunkte – ein klassischer Autoencoder lässt Löcher und Ausreißer, ein VAE zieht die Codes zur Standardnormalverteilung.
 :::
 
 Modelliere die Verteilung also mit einer Gaußschen Mischung im latenten Raum, in der die Störung $\varepsilon$ von den Daten abhängt: Zu jedem Datenpunkt $x \in D$ brauchen wir zusätzlich zu $\operatorname{enc}(x) \in L$ auch eine Standardabweichung $\sigma_x$ (bzw. besser noch eine Kovarianzmatrix $\operatorname{cov}(x)$), dann $\operatorname{dec}(\operatorname{enc}(x) + \varepsilon)$ mit $\varepsilon \sim \mathcal{N}(0, \sigma_x^2)$. Aber Sampling aus einer Verteilung, deren Parameter $\sigma_x$ von den Gewichten abhängen, lässt sich nicht ableiten. **Reparametrisierungstrick**: statt $\varepsilon \sim \mathcal{N}(0, \sigma_x^2)$ besser
@@ -73,4 +76,9 @@ Ein VAE ist ein Autoencoder, dessen Encoder statt eines Punkts eine Normalvertei
 :width: 90%
 
 Der Variational Autoencoder mit Reparametrisierungstrick: Der Encoder liefert $\mu_x$ und $\sigma_x$, das Rauschen $\varepsilon$ ist eine Konstante für die Backpropagation, der KL-Term zieht die Codes zum Prior.
+:::
+
+:::{admonition} Weiterlesen
+:class: seealso
+Prince, *UDL*, Kap. 17 (Variational autoencoders) mit ELBO und Reparametrisierung; Deisenroth et al., *MML*, Kap. 11 (Gaussian mixture models, EM) zum Vergleich. Beide Bücher sind frei verfügbar, siehe [Über dieses Skript](../README.md).
 :::

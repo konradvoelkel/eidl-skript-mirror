@@ -242,3 +242,8 @@ Was „im Mittel korrekt“ genau heißt: Der Loss $L(w) = \frac1N \sum_{i=1}^N 
 Wo steckt in diesem Verfahren überall Zufall? Im Startvektor, in den Daten, die wir als Stichprobe einer Verteilung modellieren, und in der Reihenfolge, in der die Samples verarbeitet werden. Deshalb liefern zwei Trainingsläufe mit denselben Daten verschiedene Gewichte, und ein Schritt lässt sich nicht sinnvoll rückgängig machen; man kann nur neu starten.
 
 Der Kompromiss ist **Mini-Batch SGD**: Eine kleine, handhabbare Menge von Samples (die *Batch Size*, z.B. 32 oder 64) wird gemeinsam verarbeitet und damit der Gradient approximiert. Das ist, was in der Praxis fast immer gemeint ist, wenn jemand „SGD“ sagt – auch `torch.optim.SGD` aus dem [Kapitel „Logistische Regression“](06-logistische-regression.md) weiß nichts davon, wie viele Samples im Batch waren. Ein Durchlauf durch den gesamten Datensatz heißt **Epoche**.
+
+:::{admonition} Weiterlesen
+:class: seealso
+Prince, *UDL*, Kap. 6 (Fitting models: Gradientenabstieg, SGD, Lernrate); Deisenroth et al., *MML*, Kap. 5 (Vector calculus) und 7 (Continuous optimization). Beide Bücher sind frei verfügbar, siehe [Über dieses Skript](../README.md).
+:::

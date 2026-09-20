@@ -11,7 +11,17 @@ short_title: "Vortrainierte Modelle"
 
 Bevor wir selbst Modelle trainieren, lohnt sich ein Blick darauf, was es schon gibt. Wenn wir für eine Aufgabe ein vortrainiertes Modell verwenden wollen, müssen wir wissen, welches Modell geeignet sein kann. Dafür schauen wir bei **Hugging Face**: [huggingface.co/models](https://huggingface.co/models) listet Modelle, [huggingface.co/tasks](https://huggingface.co/tasks) sortiert sie nach Aufgabe („The Hugging Face Hub hosts many models for a variety of machine learning tasks.“). Die Task-Seiten sind ein guter Einstieg, um das Vokabular zu lernen: Was ist Image Classification, Object Detection, Token Classification, Text Generation, …? Einen systematischen Rundgang machen wir im nächsten Abschnitt.
 
-<!-- TODO Abbildung: Screenshot huggingface.co/tasks (Folien 27–28) oder Liste der Task-Kategorien -->
+Die Task-Seite gruppiert nach Modalität. Zur Orientierung, in der Reihenfolge von dort:
+
+| Modalität | Tasks (Auswahl) |
+|---|---|
+| Computer Vision | Image Classification, Object Detection, Image Segmentation, Depth Estimation, Image-to-Image, Text-to-Image, Zero-Shot Image Classification |
+| Natural Language Processing | Text Classification, Token Classification, Question Answering, Summarization, Translation, Text Generation, Fill-Mask, Sentence Similarity |
+| Audio | Automatic Speech Recognition, Text-to-Speech, Audio Classification |
+| Multimodal | Image-to-Text, Visual Question Answering, Document Question Answering, Feature Extraction |
+| Tabular, Reinforcement Learning | Tabular Classification und Regression; Reinforcement Learning |
+
+Die Namen sind das Vokabular, in dem Modellkarten, Papers und Stellenanzeigen reden.
 
 ### Hugging Face … ?
 

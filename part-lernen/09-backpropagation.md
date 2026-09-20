@@ -239,3 +239,8 @@ $$
 $$
 
 Übungsaufgabe: Erweitern Sie den linearen Layer um ein zweites Neuron (also ein weiterer Gewichtsvektor $v \in \mathbb{R}^n$ tritt auf) und erweitern Sie die Berechnung um eine Loss-Funktion $\| z - z_{\text{ground truth}} \|^2$. (Das ist Blatt 7 in Kurzform.)
+
+:::{admonition} Weiterlesen
+:class: seealso
+Prince, *UDL*, Kap. 7 (Gradients and initialization), dort Backpropagation mit derselben Rückwärts-Notation. Beide Bücher sind frei verfügbar, siehe [Über dieses Skript](../README.md).
+:::

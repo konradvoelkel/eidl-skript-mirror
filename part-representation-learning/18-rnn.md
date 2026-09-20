@@ -45,7 +45,7 @@ Idee: Jeder Layer ist nah dran an „nichts ändern“ (Identität), und der Gra
 
 **LSTM** (Long Short-Term Memory): Zusätzlich zum hidden state $h_t$ (= Output, *short term memory*) gibt es einen **cell state** $c_t$ (*long term memory*), der nur durch Addition und komponentenweise Multiplikation verändert wird – eine Art Skip Connection durch die Zeit. Drei Gates (Sigmoide) steuern ihn: *forget* (was aus $c_{t-1}$ gelöscht wird), *input* (was neu hineingeschrieben wird), *output* (was davon in $h_t$ sichtbar wird). Mehr Erklärungen: Shi Yan @ MLReview, *Understanding LSTM and its diagrams*.
 
-<!-- TODO Abbildungen: GRU (Wikipedia, Jeblad 2018) und LSTM (Wikipedia, Guillaume Chevalier 2018), beide CC-BY-SA 4.0 -->
+Schaltbilder der Zellen: [LSTM](https://de.wikipedia.org/wiki/Long_short-term_memory) und [GRU](https://en.wikipedia.org/wiki/Gated_recurrent_unit) auf Wikipedia (Abbildungen CC-BY-SA); die Gates sind dort als $\sigma$-Knoten gezeichnet, die elementweise multiplizieren, also genau die stetigen Bitmasken aus dem [Kapitel „Netze von Hand bauen“](../part-lernen/12-netze-von-hand.md).
 
 Bill Gates (2018): „huge milestone in advancing artificial intelligence“ – weil OpenAI mit LSTMs Dota 2 gewann. Auch mit LSTMs gebaut: AlphaStar von Google DeepMind, spielt StarCraft 2 (2019).
 

@@ -34,6 +34,10 @@ Nach erfolgreicher Teilnahme können die Studierenden:
 * Wenig bis keine Überschneidung: Machine Learning, Data Science 2, Introduction to NLP, Python for NLP
 * Vertiefung: Deep Learning im Master, zahlreiche darauf aufbauende Kurse wie etwa Advanced Deep Learning, Implementing Transformer Models, Representations in Natural Language Processing, Probabilistic Machine Learning, Reinforcement Learning
 
+## Klausurvorbereitung
+
+Das [Glossar](glossar.md) listet die Begriffe, die in Klausuraufgaben vorkommen, mit Link zum jeweiligen Kapitel.
+
 ## Literatur
 
 * Simon J.D. Prince, *Understanding Deep Learning*, MIT Press 2023, frei verfügbar unter <https://udlbook.github.io/udlbook/>

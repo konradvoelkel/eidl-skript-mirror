@@ -27,9 +27,9 @@ $$
 \operatorname{Attention}(Q, K, V) = \operatorname{sm}\!\left( \frac{Q K^T}{\sqrt{d_k}} \right) V ,
 $$
 
-wobei Queries $Q$, Keys $K$ und Values $V$ lineare Projektionen der Token-Vektoren sind: Jedes Token „fragt“ mit seiner Query alle anderen Tokens, vergleicht sie mit deren Keys (Skalarprodukt, Softmax → Gewichte) und sammelt eine gewichtete Summe ihrer Values ein. Das ist eine Schicht, in der jedes Token von jedem anderen abhängt – ohne Reihenfolge, daher die Positionskodierung – und die vollständig parallel berechnet werden kann. Wir implementieren keine Transformer in dieser Vorlesung; in VL 11 benutzen wir sie.
+wobei Queries $Q$, Keys $K$ und Values $V$ lineare Projektionen der Token-Vektoren sind: Jedes Token „fragt“ mit seiner Query alle anderen Tokens, vergleicht sie mit deren Keys (Skalarprodukt, Softmax $\to$ Gewichte) und sammelt eine gewichtete Summe ihrer Values ein. Das ist eine Schicht, in der jedes Token von jedem anderen abhängt – ohne Reihenfolge, daher die Positionskodierung – und die vollständig parallel berechnet werden kann. Wir implementieren keine Transformer in dieser Vorlesung; in VL 11 benutzen wir sie.
 
-<!-- TODO Abbildung: Transformer-Architektur (Fig. 1, Vaswani et al. 2017) -->
+Das Architekturbild ist Figure 1 in Vaswani et al., *Attention Is All You Need* ([arXiv:1706.03762](https://arxiv.org/abs/1706.03762)): links der Encoder-Stapel, rechts der Decoder-Stapel, dazwischen die Cross-Attention. Eine annotierte, ausführbare Fassung ist [The Annotated Transformer](https://nlp.seas.harvard.edu/annotated-transformer/).
 
 ### Konkrete Modelle mit Transformern
 
@@ -52,3 +52,8 @@ Die Vokabulargröße bei GPT-4s BPE „tiktoken“ ist z.B. 100 256; durchschnit
 ### Implementierung des Transformers
 
 Alexander Rush et al.: *The Annotated Transformer* (updated 2022 edition) – der Artikel „Attention is all you need“ zusammen mit Codeschnipseln und einigen Kommentaren. Für Verrückte oder sehr Interessierte: „I made a transformer by hand (no training!)“ von Theia Vogel, mit sorgfältig von Hand bestimmten Gewichten – die Fortsetzung unseres „Parameter von Hand wählen“ aus Kapitel 7.
+
+:::{admonition} Weiterlesen
+:class: seealso
+Prince, *UDL*, Kap. 12 (Transformers). Beide Bücher sind frei verfügbar, siehe [Über dieses Skript](../README.md).
+:::

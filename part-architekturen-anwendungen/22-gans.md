@@ -99,13 +99,13 @@ ein Supremum über alle Funktionen $f$, die höchstens Steigung $1$ haben (1-Lip
 
 Zhu, Park, Isola, Efros (ICCV 2017), *Unpaired Image-to-Image Translation using Cycle-Consistent Adversarial Networks*: Image-to-image translation lernt die Abbildung von einem Eingabebild auf ein Ausgabebild – normalerweise aus einem Trainingsdatensatz *gepaarter* Bilder. Für viele Tasks gibt es aber keine Paare (Foto ↔ Monet-Gemälde, Pferd ↔ Zebra, Sommer ↔ Winter). CycleGAN lernt eine Abbildung $G \colon X \to Y$, sodass die Verteilung von $G(X)$ von $Y$ nicht unterscheidbar ist (adversarial loss) – und weil das allein hochgradig unterbestimmt ist, gleichzeitig die inverse Abbildung $F \colon Y \to X$ mit einem **Cycle-Consistency-Loss** $F(G(x)) \approx x$ (und umgekehrt). Ein Pferd, das zum Zebra und zurück wird, muss wieder dasselbe Pferd sein.
 
-<!-- TODO Abbildung: CycleGAN-Beispiele (Folie 21) -->
+Beispielbilder (Monet ↔ Foto, Zebra ↔ Pferd, Sommer ↔ Winter) auf der Projektseite [junyanz.github.io/CycleGAN](https://junyanz.github.io/CycleGAN/).
 
 ### StyleGAN
 
 Karras, Laine, Aila – NVIDIA (CVPR 2019), *A Style-Based Generator Architecture for Generative Adversarial Networks*: eine alternative Generator-Architektur, die sich an der Style-Transfer-Literatur orientiert. Der latente Vektor $z$ wird zuerst durch ein MLP in einen Zwischenraum $w$ abgebildet und dann *auf jeder Auflösungsstufe* des Generators als „Stil“ eingespeist. Das führt zu einer automatisch gelernten, unsupervised Trennung von High-Level-Attributen (z.B. Pose und Identität bei Gesichtern) und stochastischer Variation (z.B. Sommersprossen, Haare), und erlaubt intuitive, skalenspezifische Kontrolle der Synthese. Dazu ein neuer Datensatz von Gesichtern (FFHQ). StyleGAN2 ist hinter [thispersondoesnotexist.com](https://thispersondoesnotexist.com).
 
-<!-- TODO Abbildung: StyleGAN-Gesichter (github.com/NVlabs/stylegan) -->
+Beispielgesichter und das Video zur Interpolation im Stil-Raum: [github.com/NVlabs/stylegan](https://github.com/NVlabs/stylegan).
 
 ### Viele konkrete Modelle
 
@@ -114,3 +114,8 @@ Karras, Laine, Aila – NVIDIA (CVPR 2019), *A Style-Based Generator Architectur
 ## Selbst GANs basteln
 
 Tutorial time: [pytorch.org/tutorials/beginner/dcgan_faces_tutorial.html](https://pytorch.org/tutorials/beginner/dcgan_faces_tutorial.html), das offizielle DCGAN-Tutorial auf dem CelebA-Gesichterdatensatz. Die Trainingsschleife dort ist genau die oben beschriebene: erst $D$ mit echten und generierten Bildern, dann $G$ mit Label „echt“, abwechselnd pro Batch.
+
+:::{admonition} Weiterlesen
+:class: seealso
+Prince, *UDL*, Kap. 15 (Generative adversarial networks), inklusive Wasserstein-GAN und StyleGAN. Beide Bücher sind frei verfügbar, siehe [Über dieses Skript](../README.md).
+:::

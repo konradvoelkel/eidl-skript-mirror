@@ -75,14 +75,22 @@ $$
 
 Setzt man das mit den obigen Bausteinen zusammen, so müsste es mit 4 Hidden Layers zu je 4 Neuronen klappen. Gradientenabstieg mit Backpropagation findet allerdings auch Approximationen mit 3 Hidden Layers – und mit 2 Hidden Layers (siehe die Bilder `krude-xor-approximation.png` aus dem TensorFlow Playground).
 
-:::{figure}
+:::{figure} ../images/vl07-xor-region.png
 :width: 90%
 
-![](../images/vl07-xor-region.png)
-![](../images/vl07-xor-playground-3hidden.png)
-![](../images/vl07-xor-playground-2hidden.png)
+XOR als Schnitt von NAND und OR.
+:::
 
-Oben: XOR als Schnitt von NAND und OR. Unten: Vom Gradientenabstieg gefundene Approximationen im TensorFlow Playground mit 3 bzw. 2 versteckten Schichten.
+:::{figure} ../images/vl07-xor-playground-3hidden.png
+:width: 90%
+
+Vom Gradientenabstieg gefundene Approximation im TensorFlow Playground mit 3 versteckten Schichten.
+:::
+
+:::{figure} ../images/vl07-xor-playground-2hidden.png
+:width: 90%
+
+Dasselbe mit 2 versteckten Schichten.
 :::
 
 ### Take-Home Message

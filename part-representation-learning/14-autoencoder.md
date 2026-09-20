@@ -189,7 +189,23 @@ $$
 
 Das zwingt das Netzwerk dazu, einzelne Pixel nicht zu stark zu gewichten und eher globale Strukturen zu suchen – ein einzelner verrauschter Pixel darf die Rekonstruktion nicht kippen.
 
-<!-- TODO Abbildungen: Ergebnis-Beispiele MNIST / USPS / Fashion-MNIST (Folien 10–12), Latents von Fashion-MNIST & USPS -->
+:::{figure} ../images/vl08-denoising-example.png
+:width: 90%
+
+Denoising Sparse Label Autoencoder auf MNIST (Musterlösung zu Blatt 8, WiSe 2025/26): verrauschte Eingabe, Rekonstruktion, Original.
+:::
+
+:::{figure} ../images/vl08-dlae-loss-curve.png
+:width: 90%
+
+Dasselbe Modell: Loss-Kurve über die Epochen.
+:::
+
+:::{figure} ../images/vl08-dlae-latent-space.png
+:width: 90%
+
+Der latente Raum desselben Modells, per PCA auf zwei Dimensionen projiziert und nach Ziffer eingefärbt.
+:::
 
 Code angucken: `denoising-autoencoder-mnist.py` (Blatt 8) implementiert genau das, als *Denoising Sparse Label Autoencoder* – alle Tricks auf einmal, mit SiLU, BatchNorm und Dropout.
 
@@ -200,3 +216,8 @@ Wir haben das Autoencoder-Design eingesetzt, um Bilder zu komprimieren (mit Spar
 Frage: Welche Struktur finden wir im Latent Space bzw. in den Latent Vectors der Daten? Die **Latent-Manifold-Hypothese** besagt, dass die Daten in $\mathbb{R}^D$ nahe einer niedrigdimensionalen gekrümmten Fläche (Mannigfaltigkeit) liegen und der latente Raum diese Fläche „flach“ parametrisiert. Dazu mehr im [Kapitel „Latente Räume geometrisch“](../part-architekturen-anwendungen/23-latente-raeume.md).
 
 Später werden wir das Autoencoder-Design einsetzen, um Text (Strings) natürlicher Sprache zu kodieren, sodass die latente Repräsentation interessante Struktur aufweist – das ist word2vec ([Kapitel „word2vec“](16-word2vec.md)).
+
+:::{admonition} Weiterlesen
+:class: seealso
+Prince, *UDL*, Kap. 14 (Unsupervised learning) als Einordnung; Deisenroth et al., *MML*, Kap. 10 (PCA) für den linearen Fall. Beide Bücher sind frei verfügbar, siehe [Über dieses Skript](../README.md).
+:::

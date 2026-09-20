@@ -140,3 +140,8 @@ Das behandeln wir in dieser Vorlesung nicht mehr (sondern in den darauf aufbauen
 * **2020** AlphaFold 2 „löst“ das Proteinfaltungsproblem – Nobelpreis für Chemie 2024.
 * **2021** Diffusionsmodelle für realistische Bildgenerierung.
 * **2022** Veröffentlichung von ChatGPT; danach RLHF, Copilot, Multimodalität, RAG, Agents, …
+
+:::{admonition} Weiterlesen
+:class: seealso
+Prince, *UDL*, Kap. 1 (Introduction) und 2 (Supervised learning); Deisenroth et al., *MML*, Kap. 8 (When models meet data). Beide Bücher sind frei verfügbar, siehe [Über dieses Skript](../README.md).
+:::

@@ -75,3 +75,8 @@ Genau genommen liegt der Gradient der Loss-Funktion an einem Punkt des Gewichtsr
 * Verschiedene andere sogenannte affine Geometrien; das ist ein aktives Forschungsgebiet in der Optimierungstheorie, Stichwort **Informationsgeometrie**. Z.B. Derun Zhou, Keisuke Yano, Mahito Sugiyama: *Dual Riemannian Newton Method on Statistical Manifolds* (2025), [arXiv:2511.11318](https://arxiv.org/pdf/2511.11318).
 
 Adam und Muon sind in diesem Bild billige Näherungen an eine bessere Geometrie des Gewichtsraums.
+
+:::{admonition} Weiterlesen
+:class: seealso
+Prince, *UDL*, Abschnitte 6.3 und 6.4 (Momentum, Adam); Deisenroth et al., *MML*, Kap. 7 (Continuous optimization). Beide Bücher sind frei verfügbar, siehe [Über dieses Skript](../README.md).
+:::

@@ -26,7 +26,7 @@ Representation Learning ist die automatische Variante von *Feature Engineering*.
 
 ### word2vec aus anderer Perspektive
 
-Ein Satz, wie er bei word2vec eingeht, kann als linearer Graph modelliert werden: „Die → Katze → frisst → Mäuse“. Mehrere Sätze können gleiche Wörter enthalten, damit bilden mehrere Sätze größere Graphen mit linearen Teilgraphen: „Der → Hund → frisst → Leckerli“ teilt sich den Knoten „frisst“ mit dem ersten Satz.
+Ein Satz, wie er bei word2vec eingeht, kann als linearer Graph modelliert werden: „Die $\to$ Katze $\to$ frisst $\to$ Mäuse“. Mehrere Sätze können gleiche Wörter enthalten, damit bilden mehrere Sätze größere Graphen mit linearen Teilgraphen: „Der $\to$ Hund $\to$ frisst $\to$ Leckerli“ teilt sich den Knoten „frisst“ mit dem ersten Satz.
 
 Mit diesem Graphen allein lassen sich die Sätze nicht zurückgewinnen, denn „Der Hund frisst Mäuse“ sowie „Die Katze frisst Leckerli“ sind keine ursprünglichen Sätze, aber Pfade im Graphen. Besser wäre ein probabilistisches Modell auf Grundlage des Graphen: für jeden Knoten $x$ eine Wahrscheinlichkeitsverteilung auf den Knoten $y$ mit Kante $x \to y$, abhängig von der vorherigen Kante $z \to x$ (eine Markovkette zweiter Ordnung).
 
@@ -51,7 +51,7 @@ Bei **node2vec** (Grover & Leskovec, 2016) haben wir zwei Schritte:
 
 Schritt 1 ist sehr ressourcenintensiv, kann aber parallelisiert werden. Software dafür: [StellarGraph](https://stellargraph.readthedocs.io/en/stable/demos/link-prediction/node2vec-link-prediction.html) (OK API, nutzt gensim), eine schnelle Implementierung mit Apache Spark ([arXiv:1805.00280](https://arxiv.org/abs/1805.00280)), und als Modul für PyTorch [`torch_geometric.nn.models.Node2Vec`](https://pytorch-geometric.readthedocs.io/en/latest/generated/torch_geometric.nn.models.Node2Vec.html) (siehe auch das [Beispiel](https://github.com/pyg-team/pytorch_geometric/blob/master/examples/node2vec.py)).
 
-Beispielanwendungen: [Recommendations using node2vec](https://www.kaggle.com/code/himj26/recommedations-using-node2vec) – aus einem Netflix-Datensatz werden Serien und Filme sowie deren Genres extrahiert und zu einem bipartiten Graphen Titel → Genre gebaut; nach node2vec kann man zu einem Titel im Latent Space nach ähnlichen Titeln suchen. Ähnlich, mit mehr Klassen von Knoten: [Knowledge graph analysis with node2vec](https://www.kaggle.com/code/ferdzso/knowledge-graph-analysis-with-node2vec).
+Beispielanwendungen: [Recommendations using node2vec](https://www.kaggle.com/code/himj26/recommedations-using-node2vec) – aus einem Netflix-Datensatz werden Serien und Filme sowie deren Genres extrahiert und zu einem bipartiten Graphen Titel $\to$ Genre gebaut; nach node2vec kann man zu einem Titel im Latent Space nach ähnlichen Titeln suchen. Ähnlich, mit mehr Klassen von Knoten: [Knowledge graph analysis with node2vec](https://www.kaggle.com/code/ferdzso/knowledge-graph-analysis-with-node2vec).
 
 :::{admonition} Denkaufgabe
 :class: hint
@@ -75,4 +75,9 @@ Dabei ist $N(v)$ die Nachbarschaft von $v$; $W^{(k)}$ verarbeitet den eigenen Ve
 :width: 90%
 
 Message Passing in einem GNN: Jeder Knoten aktualisiert seinen Vektor aus den Vektoren seiner Nachbarn, hier für „Kanne“.
+:::
+
+:::{admonition} Weiterlesen
+:class: seealso
+Prince, *UDL*, Kap. 13 (Graph neural networks). Beide Bücher sind frei verfügbar, siehe [Über dieses Skript](../README.md).
 :::

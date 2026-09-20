@@ -46,3 +46,8 @@ Siehe auch arXiv:1901.10267. Die Anzahl der Gewichte wächst mit der Eingabedime
 ### Neuronale Netze vs. Bäume und Wälder
 
 Umgekehrt lässt sich jedes ReLU-Netz auch als Entscheidungsbaum schreiben: Jedes ReLU-Neuron ist eine Ja/Nein-Entscheidung „$\langle w, x \rangle + b > 0$?“, und die Regionen, in denen alle Entscheidungen feststehen, sind genau die Stücke, auf denen das Netz linear ist (Caglar Aytekin, *Neural Networks are Decision Trees*, 2022). Der Baum ist allerdings exponentiell groß.
+
+:::{admonition} Weiterlesen
+:class: seealso
+Prince, *UDL*, Kap. 3 (Universal approximation theorem), Kap. 4 (Depth vs. width) und Kap. 20 (Why does deep learning work?). Beide Bücher sind frei verfügbar, siehe [Über dieses Skript](../README.md).
+:::

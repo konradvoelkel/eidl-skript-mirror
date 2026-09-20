@@ -19,13 +19,16 @@ Der Klassiker bei word2vec: KING − MAN + WOMAN = QUEEN. Also ist WOMAN − MAN
 
 Analog, aber in allen LLMs: Semantische Beziehungen werden zu *Richtungen* im latenten Raum, und Richtungen kann man addieren. Das ist keine Eigenschaft, auf die word2vec trainiert wurde, sie entsteht von selbst aus dem Kontext-Vorhersage-Training.
 
-:::{figure}
+:::{figure} ../images/vl13-word-arithmetic.png
 :width: 90%
 
-![](../images/vl13-word-arithmetic.png)
-![](../images/vl13-bolukbasi-fig7.png)
+Beziehungen zwischen Wörtern als parallele Richtungen im Vektorraum (schematisch).
+:::
 
-Oben: Beziehungen zwischen Wörtern als parallele Richtungen im Vektorraum (schematisch). Unten: Figure 7 aus Bolukbasi et al. 2016 – Berufe, projiziert auf die Gender-Richtung.
+:::{figure} ../images/vl13-bolukbasi-fig7.png
+:width: 90%
+
+Figure 7 aus Bolukbasi et al. 2016 – Berufe, projiziert auf die Gender-Richtung.
 :::
 
 **Bolukbasi et al. 2016, *Man is to Computer Programmer as Woman is to Homemaker? Debiasing Word Embeddings***: Dieselbe Arithmetik findet auch MAN − WOMAN ≈ COMPUTER PROGRAMMER − HOMEMAKER. Die Embeddings enthalten die Stereotype des Trainingskorpus als Richtungen, und man kann sie messen – und, das ist der Beitrag des Papers, durch Projektion auf das orthogonale Komplement der Gender-Richtung teilweise entfernen (`bolukbasi16-man-is-to-computer-programmer-figure7.png`).

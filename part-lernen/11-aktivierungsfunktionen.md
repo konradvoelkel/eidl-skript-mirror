@@ -59,3 +59,8 @@ Welche Aktivierungsfunktionen in der Praxis genutzt wurden, listete [paperswithc
 
 Aktivierungsfunktionen im Vergleich. ELU, Swish und GELU sind im negativen Bereich nicht konstant null.
 :::
+
+:::{admonition} Weiterlesen
+:class: seealso
+Prince, *UDL*, Abschnitt 3.2 (Activation functions) und Kap. 7 (Initialization, sterbende Neuronen). Beide Bücher sind frei verfügbar, siehe [Über dieses Skript](../README.md).
+:::

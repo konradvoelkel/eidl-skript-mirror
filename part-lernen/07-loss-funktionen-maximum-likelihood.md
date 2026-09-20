@@ -121,3 +121,8 @@ Umgekehrt ist das der Vorteil gegenüber dem Perzeptron: Bei *nicht* trennbaren 
 ## Take-Home Message
 
 Training heißt: eine Loss-Funktion $L(w)$ in den Gewichten minimieren, die Daten sind dabei Konstanten. Die binäre Kreuzentropie ist die negative Log-Likelihood der logistischen Regression, der MSE die der linearen Regression mit Gauß-Rauschen. Exakt lösen kann man das nur in Ausnahmefällen; sonst sucht man lokal, und dafür braucht man die Richtung, in der $L$ am schnellsten fällt.
+
+:::{admonition} Weiterlesen
+:class: seealso
+Prince, *UDL*, Kap. 5 (Loss functions: Maximum Likelihood als Rezept für alle Loss-Funktionen); Deisenroth et al., *MML*, Abschnitt 8.3 (Parameter estimation) und Kap. 9 (Linear regression). Beide Bücher sind frei verfügbar, siehe [Über dieses Skript](../README.md).
+:::

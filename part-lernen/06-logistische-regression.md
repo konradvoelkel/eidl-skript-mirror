@@ -18,13 +18,16 @@ Schauen wir uns das Schritt für Schritt an, für einen eindimensionalen Regress
 3. **Harte Klassifikation**: Wir entscheiden für Klasse 1, wenn $\hat{y} > \tfrac12$. Die Entscheidungsgrenze ist der Punkt $x^*$ mit $w x^* + b = \tfrac12$; die vorhergesagte Klasse als Funktion von $x$ ist eine Sprungfunktion.
 4. Für einen zweidimensionalen Regressor $x \in \mathbb{R}^2$ wird aus der Geraden eine Regressionshyperebene über der $(x_1, x_2)$-Ebene, und die Entscheidungsgrenze $\{ w \cdot x + b = \tfrac12 \}$ ist eine Gerade in der $(x_1, x_2)$-Ebene – genau wie beim Perzeptron.
 
-:::{figure}
+:::{figure} ../images/vl03-linreg-classification-1d.png
 :width: 90%
 
-![](../images/vl03-linreg-classification-1d.png)
-![](../images/vl03-linreg-classification-2d.png)
+Lineare Regression zur Klassifikation, eindimensionaler Regressor: Regressionsgerade durch die 0/1-Daten, harte Klassifikation mit Entscheidungsgrenze $x^*$, und die $\tanh$-Variante.
+:::
 
-Lineare Regression zur Klassifikation. Oben, eindimensionaler Regressor: Regressionsgerade durch die 0/1-Daten, harte Klassifikation mit Entscheidungsgrenze $x^*$, und die $\tanh$-Variante. Unten, zweidimensionaler Regressor: Die Entscheidungsgrenze ist eine Gerade, die Regressionsfunktion eine Ebene.
+:::{figure} ../images/vl03-linreg-classification-2d.png
+:width: 90%
+
+Zweidimensionaler Regressor: Die Entscheidungsgrenze ist eine Gerade, die Regressionsfunktion eine Ebene.
 :::
 
 ### S-Förmigkeit herstellen
@@ -284,7 +287,7 @@ Der Rest der Trainingsschleife bleibt identisch. `BCELoss` ist die *binäre Kreu
 
 ## Weg von der 2-Klassen-Gesellschaft: Softmax
 
-### Bernoulli → Multinoulli
+### Von Bernoulli zu Multinoulli
 
 Von binomial (2 Klassen) zu multinomial ($K$ Klassen): Anstelle eines einzelnen $\hat{y}$-Werts der linearen Regression, der uns mit $\sigma$ die Wahrscheinlichkeit für Klasse 1 angibt, benötigen wir nun einen Vektor der Länge $K$, der sich auf $1$ aufsummiert. Für $K = 2$ erwarten wir den Vektor $(\sigma(\hat{y}), 1 - \sigma(\hat{y}))$.
 
@@ -318,4 +321,9 @@ Nicht jedes Multiklassen-Klassifikationsproblem schreit nach dem Softmax. Softma
 In `float32` ist $e^{89}$ bereits `inf`, und $\sigma(-100) = 1/(1 + e^{100})$ wird zu $1/\texttt{inf} = 0$ gerundet. Wer dann die Kreuzentropie selbst ausschreibt, berechnet $\ln 0 = -\infty$ und $0 \cdot (-\infty) = \texttt{nan}$; der Loss ist `nan`, und ab dem nächsten Schritt sind es alle Gewichte auch. Ähnlich beim Softmax: $e^{v_j}$ läuft über, sobald ein Logit größer als etwa $88$ ist.
 
 Abhilfe ist immer dieselbe: nie erst $e^x$ und dann $\ln$ berechnen, sondern beides algebraisch zusammenfassen. Zum Beispiel ist $\ln \sigma(z) = -\ln(1 + e^{-z})$, und für $z < 0$ schreibt man das als $z - \ln(1 + e^{z})$, dann ist der Exponent nie groß. Beim Softmax darf man von allen $v_k$ das Maximum abziehen, ohne das Ergebnis zu ändern (*log-sum-exp-Trick*). PyTorch hat das eingebaut: `nn.BCEWithLogitsLoss` und `nn.CrossEntropyLoss` nehmen die *Logits* entgegen, nicht die Wahrscheinlichkeiten, und rechnen stabil. (`nn.BCELoss` auf Wahrscheinlichkeiten fängt $\ln 0$ mit einem Trick ab, indem es den Logarithmus bei $-100$ abschneidet. Das verhindert `nan`, ist aber ein Pflaster, keine Lösung.) Für Blatt 4 heißt das: Wenn Ihr Loss `nan` wird, ist meist das die Ursache, nicht ein Fehler in Ihrer Trainingsschleife.
+:::
+
+:::{admonition} Weiterlesen
+:class: seealso
+Prince, *UDL*, Kap. 5 (Loss functions), dort die logistische Regression als Maximum-Likelihood-Modell; Deisenroth et al., *MML*, Kap. 6 (Probability). Beide Bücher sind frei verfügbar, siehe [Über dieses Skript](../README.md).
 :::

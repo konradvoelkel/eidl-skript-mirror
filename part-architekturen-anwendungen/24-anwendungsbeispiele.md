@@ -42,3 +42,16 @@ Wie trainieren wir das neuronale Netz? Die Listen der Nutzer sind „Sätze“, 
 ## Vibecoding Deep Learning
 
 Wir schauen uns praktisch an, wie man mit generiertem Code arbeiten kann. Beispiel-Aufgabe (das Empfehlungssystem von oben): Gegeben eine Liste besuchter bzw. gekaufter Items (Artikel, Produkte) pro Nutzer, empfehle einem neuen Nutzer ein Item, welches interessant ist (mit hoher Wahrscheinlichkeit angeklickt oder gekauft wird). Die Kompetenz, die dabei geübt wird, ist dieselbe wie auf Blatt 6 und Blatt 9: generierten Deep-Learning-Code anhand der Dokumentation kritisch prüfen – stimmt die Loss-Funktion, stimmen die Shapes, wird tatsächlich das trainiert, was behauptet wird?
+
+## Rezept: ein Anwendungskonzept schreiben
+
+Die drei Beispiele oben folgen alle demselben Muster, und dasselbe Muster ist in der Klausur der Aufgabentyp „Anwendungskonzept“: Zu einer Aufgabenstellung aus der Praxis (Müll auf Fotos erkennen, Lagerbestände vorhersagen, Produktbeschreibungen erzeugen) soll man skizzieren, wie man sie mit Deep Learning angeht. Was dabei immer beantwortet werden muss, in dieser Reihenfolge:
+
+1. **Was haben wir?** Welche Daten liegen vor, in welcher Modalität (Bild, Text, Tabelle, Zeitreihe, Graph), mit welchen Labels, wie viele. Was fehlt, und was können wir uns beschaffen oder selbst labeln.
+2. **Was soll rauskommen?** Klassifikation, Regression, Ranking, Generierung, oder nur eine Repräsentation für die Nachbarsuche. Damit steht die Ausgabeschicht fest: Sigmoid, Softmax, linear, oder gar keine.
+3. **Welches Modell, und woher?** Fast nie selbst von null trainieren: ein vortrainiertes Modell als Feature-Extraktor einfrieren und einen kleinen Kopf trainieren, oder finetunen, oder ein fertiges Modell nur benutzen. Erst wenn das nicht reicht, eigene Architektur.
+4. **Welcher Loss?** Er folgt aus Punkt 2: BCE für binär, Kreuzentropie für Klassen, MSE für Zahlen, Rekonstruktion für Autoencoder, kontrastiv für Paare. Wer zwei Ziele hat, addiert zwei Terme.
+5. **Womit messen wir Güte?** Train-Test-Split, und eine Metrik, die zur Aufgabe passt: Accuracy nur bei balancierten Klassen, sonst Precision und Recall; bei Rankings Top-k; bei Generierung ein Mensch. Ohne diesen Punkt weiß man nicht, ob es funktioniert.
+6. **Was kann schiefgehen?** Datenschutz und Logging, Kosten und Latenz, Verteilungsverschiebung zwischen Trainingsdaten und Einsatz, Overfitting auf das Testset, Bias in den Labels.
+
+Wer diese sechs Punkte zu einer Aufgabe in je zwei Sätzen beantworten kann, hat ein Anwendungskonzept. Die Punkte 1 und 5 sind die, die in der Praxis am häufigsten vergessen werden.
