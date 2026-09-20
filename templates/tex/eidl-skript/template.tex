@@ -1,0 +1,62 @@
+\documentclass{article}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{datetime}
+\usepackage{graphicx}
+\usepackage{natbib}
+\bibliographystyle{abbrvnat}
+% --- eidl-skript additions to the MyST plain_latex template (same approach as ds-skript) ---
+% amssymb: MyST 1.10 only auto-imports amsmath; the book uses \mathbb, \square, ...
+\usepackage{amssymb}
+% caption: MyST emits \caption* for unlabelled figures, which only exists with this package
+\usepackage{caption}
+% German hyphenation and typographic conventions (texlive-lang-german is in the CI image)
+\usepackage[ngerman]{babel}
+% A4 with moderate margins instead of the US-letter article default
+\usepackage[a4paper, margin=2.5cm]{geometry}
+% xelatex: Latin Modern for text, DejaVu Sans Mono for code (fonts-dejavu-core in the CI image)
+\usepackage{fontspec}
+\setmonofont{DejaVu Sans Mono}[Scale=MatchLowercase]
+% every chapter (= \section, one per .md file) starts on a new page
+\usepackage{etoolbox}
+\pretocmd{\section}{\clearpage}{}{}
+% ------------------------------------------------------------------------------------------
+
+[-IMPORTS-]
+
+\definecolor{hhuBlau}{HTML}{006AB3}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=hhuBlau,
+  citecolor=hhuBlau,
+  urlcolor=hhuBlau,
+  pdftitle={[-doc.title-]},
+  pdfauthor={[-doc.authors|join(", ", "name")-]}
+}
+
+\title{[-doc.title-]}
+
+\author{[-doc.authors|join(" \\and ", "name")-]}
+
+\newdate{articleDate}{[-doc.date.day-]}{[-doc.date.month-]}{[-doc.date.year-]}
+\date{\displaydate{articleDate}}
+
+\begin{document}
+\maketitle
+[# if parts.abstract #]\begin{abstract}[-parts.abstract-]\end{abstract}[# endif #]
+
+[# if options.link #]
+\newcommand{\documentnote}[1]{{%
+  \let\thempfn\relax%
+  \footnotetext[0]{\emph{#1}}%
+}}
+\documentnote{Online unter:\\ \href{[-options.link-]}{[-options.link-]}}
+[# endif #]
+
+[-CONTENT-]
+
+
+[# if doc.bibliography #]
+\bibliography{[- doc.bibliography | join(", ") -]}
+[# endif #]
+\end{document}

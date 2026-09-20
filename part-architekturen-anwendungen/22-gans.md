@@ -97,9 +97,9 @@ ein Supremum über alle Funktionen $f$, die höchstens Steigung $1$ haben (1-Lip
 
 ### CycleGAN
 
-Zhu, Park, Isola, Efros (ICCV 2017), *Unpaired Image-to-Image Translation using Cycle-Consistent Adversarial Networks*: Image-to-image translation lernt die Abbildung von einem Eingabebild auf ein Ausgabebild – normalerweise aus einem Trainingsdatensatz *gepaarter* Bilder. Für viele Tasks gibt es aber keine Paare (Foto ↔ Monet-Gemälde, Pferd ↔ Zebra, Sommer ↔ Winter). CycleGAN lernt eine Abbildung $G \colon X \to Y$, sodass die Verteilung von $G(X)$ von $Y$ nicht unterscheidbar ist (adversarial loss) – und weil das allein hochgradig unterbestimmt ist, gleichzeitig die inverse Abbildung $F \colon Y \to X$ mit einem **Cycle-Consistency-Loss** $F(G(x)) \approx x$ (und umgekehrt). Ein Pferd, das zum Zebra und zurück wird, muss wieder dasselbe Pferd sein.
+Zhu, Park, Isola, Efros (ICCV 2017), *Unpaired Image-to-Image Translation using Cycle-Consistent Adversarial Networks*: Image-to-image translation lernt die Abbildung von einem Eingabebild auf ein Ausgabebild – normalerweise aus einem Trainingsdatensatz *gepaarter* Bilder. Für viele Tasks gibt es aber keine Paare (Foto $\leftrightarrow$ Monet-Gemälde, Pferd $\leftrightarrow$ Zebra, Sommer $\leftrightarrow$ Winter). CycleGAN lernt eine Abbildung $G \colon X \to Y$, sodass die Verteilung von $G(X)$ von $Y$ nicht unterscheidbar ist (adversarial loss) – und weil das allein hochgradig unterbestimmt ist, gleichzeitig die inverse Abbildung $F \colon Y \to X$ mit einem **Cycle-Consistency-Loss** $F(G(x)) \approx x$ (und umgekehrt). Ein Pferd, das zum Zebra und zurück wird, muss wieder dasselbe Pferd sein.
 
-Beispielbilder (Monet ↔ Foto, Zebra ↔ Pferd, Sommer ↔ Winter) auf der Projektseite [junyanz.github.io/CycleGAN](https://junyanz.github.io/CycleGAN/).
+Beispielbilder (Monet $\leftrightarrow$ Foto, Zebra $\leftrightarrow$ Pferd, Sommer $\leftrightarrow$ Winter) auf der Projektseite [junyanz.github.io/CycleGAN](https://junyanz.github.io/CycleGAN/).
 
 ### StyleGAN
 

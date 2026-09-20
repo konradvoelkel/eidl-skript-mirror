@@ -5,8 +5,8 @@ brauchen eine Antwort von Konrad; ein Vorschlag steht jeweils dabei. Überblick 
 `devnotes/README.md`.
 
 Aktueller Stand des Skripts: 27 Kapitel (01–27) plus Glossar. HTML-Build ohne Warnungen
-(`uv run --only-group dev myst build --html`), PDF-Export ohne LaTeX-Fehler, 181 Seiten
-(`uv run --only-group dev myst build --pdf` → `exports/eidl-skript.pdf`, gitignored).
+(`uv run --only-group dev myst build --html`), PDF-Export ohne LaTeX-Fehler, 135 Seiten A4
+(`uv run --only-group dev myst build --pdf` → `exports/eidl-skript.pdf`, gitignored; in der CI als `build-pdf`).
 
 ## Inhalt (Skript)
 
@@ -56,8 +56,8 @@ Aktueller Stand des Skripts: 27 Kapitel (01–27) plus Glossar. HTML-Build ohne 
 - [ ] Lösungen: bisher nur die in den Blättern eingebetteten Dropdowns. Notebook-/Skript-Lösungen liegen in
   `~/Sciebo/hhu/eidl-25/exercises/blattNN-solution/`. *Vorschlag:* nicht ins Skript (öffentlich!), sondern eigenes
   privates Repo/Ordner.
-- [ ] **[Entscheidung] Englische Fassungen** (`sheetNN.tex`): 2025 gab es alle Blätter zweisprachig. *Vorschlag:*
-  fallen lassen, solange die Vorlesung deutsch ist.
+- [x] **[Entscheidung 2026-09-20]** Englische Fassungen (`sheetNN.tex`) fallen weg, solange die Vorlesung deutsch
+  ist.
 
 ## Klausur
 
@@ -90,9 +90,16 @@ Aktueller Stand des Skripts: 27 Kapitel (01–27) plus Glossar. HTML-Build ohne 
 
 ## Infrastruktur
 
-- [ ] GitLab Pages auf „Everyone“ stellen – **zum Semesterstart, bewusst noch nicht**
-  (https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de/).
-- [ ] PDF-Export in die CI? (Image bräuchte TeX Live.) *Vorschlag:* lokal bauen, bei Bedarf manuell hochladen.
+- [ ] GitLab Pages auf „Everyone“ gestellt (Konrad, 2026-09-20), aber https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de/
+  leitete direkt danach noch auf die GitLab-Anmeldung um. Nach dem nächsten Pipeline-Lauf prüfen (`curl -sI` muss
+  200 statt 302 auf `…/auth` liefern); sonst Settings → General → Visibility → „Pages: Everyone“ nochmal
+  kontrollieren.
+- [x] PDF-Export in der CI wie bei DS-/EiPy-Skript (2026-09-20): Job `build-pdf` mit `allow_failure`, PDF landet
+  unter `public/eidl-skript.pdf` und ist auf `index.md` verlinkt. Dafür TeX Live ins CI-Image und ein eigenes
+  Template `templates/tex/eidl-skript/` (plain_latex + amssymb, caption, babel ngerman, A4, HHU-Linkfarbe,
+  DejaVu Sans Mono, Kapitel auf neuer Seite). Grund: `plain_latex` ignoriert die `preamble`-Option in `myst.yml`
+  stillschweigend, deshalb waren `\mathbb` & Co. bisher undefiniert (248 LaTeX-Fehler, die latexmk durchwinkte).
+  Jetzt 0 Fehler, 135 Seiten (A4). Ohne Docker lokal weiterhin `uv run --only-group dev myst build --pdf`.
 - `_site/sidebar_footer.md` leer, `navbar_end.md` nur „Inhaltsverzeichnis“ – wie bei EiPy; lassen.
 - Logo: `logo/` enthält SVGs und Exporte; für Rocket.Chat `logo/eidl-logo-512.png`.
 

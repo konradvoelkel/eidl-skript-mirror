@@ -1,0 +1,37 @@
+jtex: v1
+title: eidl-skript (plain_latex + amssymb, babel ngerman, HHU-Farben, Kapitel auf neuer Seite)
+description: MyST plain_latex template with the additions the EiDL script needs
+version: 1.0.0
+license: CC-BY-4.0
+authors:
+  - name: Steve Purves (plain_latex)
+  - name: Konrad Völkel (eidl-skript additions)
+tags:
+  - article
+  - vanilla
+doc:
+  - id: title
+    required: true
+  - id: authors
+    required: true
+  - id: date
+  - id: bibliography
+options:
+  - id: link
+    type: string
+    title: Footnote Link
+    description: Footnote containing a link back to the online version
+files:
+  - template.tex
+packages:
+  - amssymb
+  - caption
+  - geometry
+  - babel
+  - fontspec
+  - etoolbox
+  - xcolor
+  - datetime
+  - graphicx
+  - hyperref
+  - natbib

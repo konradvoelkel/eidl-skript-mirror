@@ -43,13 +43,28 @@ myst-build:
     paths:
       - _build/html
 
+# PDF via xelatex (TeX Live is in the CI image). Allowed to fail so that a
+# LaTeX hiccup never blocks the HTML deploy; the pages job then just ships
+# without a PDF. Build locally with `uv run --only-group dev myst build --pdf`.
+build-pdf:
+  stage: build
+  image: $CI_REGISTRY_IMAGE:latest
+  script:
+    - myst build --pdf
+  allow_failure: true
+  artifacts:
+    paths:
+      - exports/eidl-skript.pdf
+
 pages:
   stage: deploy
   image: busybox:latest
   needs:
     - myst-build
+    - build-pdf
   script:
     - mv _build/html public
+    - cp exports/eidl-skript.pdf public/ || echo "no PDF in this run"
   artifacts:
     paths:
       - public

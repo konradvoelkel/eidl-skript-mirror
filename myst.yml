@@ -90,25 +90,13 @@ project:
   jupyter: true
   exports:
     - format: pdf
-      template: plain_latex
+      # own template (templates/tex/eidl-skript): plain_latex + amssymb, babel ngerman,
+      # HHU link colour, DejaVu Sans Mono, chapter = new page. plain_latex ignores
+      # a `preamble` option, so the additions live in the template itself.
+      template: ./templates/tex/eidl-skript
       output: exports/eidl-skript.pdf
       options:
-        preamble: |
-          \usepackage{xcolor}
-          \definecolor{hhuBlau}{HTML}{006AB3}
-          \usepackage{hyperref}
-          \hypersetup{
-              colorlinks=true,
-              linkcolor=hhuBlau,
-              citecolor=hhuBlau,
-              urlcolor=hhuBlau,
-              pdftitle={Einführung in Deep Learning},
-              pdfauthor={Dr. Konrad Völkel}
-          }
-          \usepackage{fontspec}
-          \setmonofont{DejaVu Sans Mono}
-          \newcommand{\sectionbreak}{\clearpage}
-
+        link: https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de/
 
 site:
   domains:
