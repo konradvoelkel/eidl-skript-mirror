@@ -84,7 +84,7 @@ class Autoencoder(nn.Module):
         return latent, self.decoder(latent)
 ```
 
-Das Sigmoid am Ende des Decoders sorgt dafür, dass die Ausgabe wie Pixelwerte in $[0, 1]$ liegt. In der Vorlesung 2025 hatte auch der Encoder ein Sigmoid am Ende; nötig ist das erst für den Sparse Autoencoder weiter unten, dessen Strafterm latente Werte in $[0, 1]$ voraussetzt. Die Architektur lässt sich mit [Netron](https://netron.app) visualisieren, nachdem man das Modell mit `torch.save(model, 'model.pth')` gespeichert hat.
+Das Sigmoid am Ende des Decoders sorgt dafür, dass die Ausgabe wie Pixelwerte in $[0, 1]$ liegt. Man kann auch dem Encoder ein Sigmoid ans Ende setzen; nötig ist das erst für den Sparse Autoencoder weiter unten, dessen Strafterm latente Werte in $[0, 1]$ voraussetzt. Die Architektur lässt sich mit [Netron](https://netron.app) visualisieren, nachdem man das Modell mit `torch.save(model, 'model.pth')` gespeichert hat.
 
 ### Code-Beispiel: Training
 

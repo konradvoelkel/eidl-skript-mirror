@@ -40,7 +40,7 @@ Dass das nicht nur mit Pixeln funktioniert: Sharif et al. 2016, *Accessorize to 
 
 ## Polysemie und die Manifold-Hypothese
 
-(Folien von Ben Ruppik, aus der Vorlesung *Topological Data Analysis* im Master AI & Data Science, Juni 2025; siehe `from_2025/slides/2025-06-09 TDA guest lecture Ben Ruppik.pdf`.)
+(Folien von Ben Ruppik, aus der Vorlesung *Topological Data Analysis* im Master AI & Data Science, Juni 2025.)
 
 **Manifold Hypothesis**: High-dimensional data lies on or near a low-dimensional structure called a *manifold*. Das ist die Annahme hinter allem, was wir über latente Räume gesagt haben: Der Autoencoder findet die Parametrisierung der Mannigfaltigkeit, der VAE glättet sie, word2vec legt Wörter auf eine Mannigfaltigkeit, auf der Richtungen Bedeutung haben.
 
