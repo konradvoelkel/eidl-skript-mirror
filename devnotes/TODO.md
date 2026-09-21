@@ -92,10 +92,8 @@ Aktueller Stand des Skripts: 27 Kapitel (01–27) plus Glossar. HTML-Build ohne 
 
 ## Infrastruktur
 
-- [ ] GitLab Pages auf „Everyone“ gestellt (Konrad, 2026-09-20), aber https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de/
-  leitete direkt danach noch auf die GitLab-Anmeldung um. Nach dem nächsten Pipeline-Lauf prüfen (`curl -sI` muss
-  200 statt 302 auf `…/auth` liefern); sonst Settings → General → Visibility → „Pages: Everyone“ nochmal
-  kontrollieren.
+- [x] GitLab Pages auf „Everyone“ (Konrad, 2026-09-20); aktiv seit dem nächsten Pages-Deploy, geprüft 2026-09-21
+  (`curl` → 200, PDF unter `/eidl-skript.pdf` erreichbar).
 - [x] PDF-Export in der CI wie bei DS-/EiPy-Skript (2026-09-20): Job `build-pdf` mit `allow_failure`, PDF landet
   unter `public/eidl-skript.pdf` und ist auf `index.md` verlinkt. Dafür TeX Live ins CI-Image und ein eigenes
   Template `templates/tex/eidl-skript/` (plain_latex + amssymb, caption, babel ngerman, A4, HHU-Linkfarbe,
