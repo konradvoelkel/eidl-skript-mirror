@@ -35,9 +35,9 @@ Aktueller Stand des Skripts: 27 Kapitel (01–27) plus Glossar. HTML-Build ohne 
 - [x] Termine, Räume und Verteilung geklärt am 2026-09-24 (Quelle LSF 278733): Vorlesung Mi 12:30–14:00 in
   HS 5E (25.21), 14.10.2026–03.02.2027; Übung Do 10:30–12:00 in 25.22.U1.52, ab der ersten Woche. Verteilung
   läuft wie 2025/26 über **ILIAS** (Kurs 2165367) plus das ILIAS-Forum als Diskussionsraum, kein Rocket.Chat.
-- [ ] **Übungsleitung 2026/27 weiterhin offen.** Elisa Kleinfeld steht in LSF als „begleitend“, korrigiert aber
-  nur die Übungsblätter und hält die Übungsgruppe **nicht** (Hinweis Konrad, 2026-09-24). Wer die Übung Do 10:30
-  leitet, ist zu klären – auf der ILIAS-Seite wird bisher niemand namentlich genannt, da ist also nichts falsch.
+- [x] **Übungsleitung 2026/27: Konrad selbst** (2026-09-24). Elisa Kleinfeld steht in LSF als „begleitend“,
+  korrigiert aber nur die Übungsblätter und hält die Übungsgruppe nicht. Die ILIAS-Kursseite nennt – wie
+  2025/26 – niemanden namentlich.
 
 ## Vorlesungsplan (`kurs-2026-27.md`)
 
