@@ -150,3 +150,14 @@ scalene-profile.json
 
 # Vorlesungstranskripte (Standbilder, zu groß fürs Repo)
 transcripts/
+
+# Beamer-Folien: TeX-Quellen sind im Repo, PDFs und LaTeX-Nebenprodukte nicht
+slides/*.pdf
+*.aux
+*.nav
+*.snm
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.out

@@ -1,0 +1,448 @@
+% !Mode:: "TeX:UTF-8"
+% VL 1, gebaut aus part-grundlagen/01-was-ist-deep-learning.md
+% (Wochenzuordnung: kurs-2026-27.md; Zeitverteilung und Dialogmuster:
+%  transcripts/vl01-ueberblick-2025/notiz.md).
+%
+% Wenig Text auf den Folien, die Ausführung steht in \note{} — die Folie ist der
+% Gesprächsanlass, nicht das Handout.
+\input{Einführung in Deep Learning 2026 header}
+
+% Fassung mit Dozentennotizen (zweiter Schirm): die nächste Zeile einkommentieren.
+% Muss nach dem Header stehen, der lädt die Dokumentklasse.
+% \setbeameroption{show notes on second screen=right}
+
+\graphicspath{{../images/}}
+
+\title[Was ist Deep Learning? (VL 1)]{Was ist Deep Learning?\\\large Einführung in Deep Learning, VL 1}
+\date{14.10.2026}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% ------------------------------------------------------------------ Formalia
+\begin{frame}
+  \frametitle{Organisatorisches}
+
+  \begin{itemize}\setlength{\itemsep}{6pt}
+  \item Übung: \emph{morgen} 10:30, 25.22.U1.52
+  \item Blätter wöchentlich, Abgabe Mi 12:00
+  \item Zulassung: 8 von 11 Blättern
+  \item Klausur: 11.02.2027
+  \item Fragen ins ILIAS-Forum
+  \end{itemize}
+
+  \note{Vier Minuten, nicht mehr --- die Details stehen auf der ILIAS-Kursseite.
+    Betonen: die Übung fängt schon morgen an, und Fragen gehören ins Forum, nicht
+    in mein Postfach, weil dann alle etwas davon haben. „Bestanden“ heißt
+    mindestens die Hälfte der Punkte; statt eines zwölften Blatts gibt es eine
+    Probeklausur. Zweitklausur ist am 15.03.2027.}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Material}
+
+  \begin{itemize}\setlength{\itemsep}{6pt}
+  \item \emph{Neu}: Skript zur Vorlesung\\
+    {\small\url{voelkel.pages.cs.uni-duesseldorf.de/eidl-skript/}}
+  \item Folien vorab in ILIAS
+  \item Lösungshinweise nach Abgabeschluss
+  \item Aufzeichnungen aus 2025/26 in der Mediathek
+  \end{itemize}
+
+  \note{Das Skript ist die Neuerung gegenüber den Vorjahren: es deckt den Stoff ab und
+    geht an einigen Stellen darüber hinaus, mit Vertiefungsboxen zum Aufklappen.
+    Wer die Vorlesung verpasst, liest das Kapitel. Ausdrücklich um Fehlermeldungen bitten.
+    Tafelanschriebe gibt es nicht digital. Zum Weiterlesen frei verfügbar: Prince,
+    \emph{Understanding Deep Learning}, und Deisenroth/Faisal/Ong, \emph{MML} ---
+    beide sind im Skript pro Kapitel verlinkt.}
+\end{frame}
+
+% ------------------------------------------------------------------ Voraussetzungen
+\begin{frame}
+  \frametitle{Keine Angst vor:}
+
+  \begin{center}
+    \Large
+    Vektor \quad Matrix \quad Ableitung\\[8pt]
+    Zufallsvariable \quad lineare Regression\\[8pt]
+    Python mit NumPy
+  \end{center}
+
+  \note{Handzeichen einsammeln: Wer hat Data Science gehört? Wer hat schon mal ein
+    neuronales Netz trainiert? Das gibt mir ein Bild vom Raum und ihnen das Gefühl,
+    nicht allein zu sein.
+    „Keine Angst vor“ heißt nicht „auswendig können“. Wer bei der Ableitung zuckt,
+    bekommt in VL 5/6 ein Problem --- lieber jetzt auffrischen.
+    Machine Learning und Data Science 2 sind \emph{nicht} nötig.}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Was wir zusammen lernen}
+
+  \begin{itemize}\setlength{\itemsep}{6pt}
+  \item Wie ein neuronales Netz lernt
+  \item \texttt{PyTorch}
+  \item Fertige Modelle benutzen --- und verändern
+  \item Text und Bilder
+  \end{itemize}
+
+  \note{Die Begriffe dahinter: Gradientenabstieg, Loss-Funktion, Matrizen- und
+    Tensorkalkül, latenter Raum, logistische Regression --- die kann man hier
+    aufzählen, sie stehen bewusst nicht auf der Folie.
+    2025 kamen aus der Umfrage (mit ChatGPT geclustert) genau diese vier Wünsche
+    zurück. Das kann man sagen, es nimmt der Liste das Beliebige.}
+\end{frame}
+
+% ------------------------------------------------------------------ Umfrage
+\begin{frame}
+  \frametitle{Eingangsumfrage}
+
+  \begin{center}
+    \Huge Was ist für Sie\\[6pt] Deep Learning?
+  \end{center}
+
+  \note{\textbf{Browser-Block, etwa zehn Minuten, live in ILIAS} --- wie 2025.
+    Die Umfrage läuft seit Anfang Oktober, hier die Ergebnisse gemeinsam durchgehen:
+    Vorkenntnisse, die eigenen Definitionen, Interessen, Anwesenheitsabsicht.
+    Die \emph{falschen} Definitionen sind der Einstieg: gemeinsam korrigieren,
+    nicht von mir vortragen. Daraus fällt die Definition auf der nächsten Folie
+    fast von selbst heraus.
+    Wer die Umfrage noch nicht ausgefüllt hat: jetzt, dauert zwei Minuten.}
+\end{frame}
+
+% ------------------------------------------------------------------ Definition
+\begin{frame}
+  \frametitle{Der Name ist erfreulich ehrlich}
+
+  \begin{center}
+    \Large
+    \emph{deep} = viele Ebenen (Layer)\\[10pt]
+    \emph{learning} = Training\\[20pt]
+    \normalsize Training künstlicher neuronaler Netze mit vielen Ebenen.
+  \end{center}
+
+  \note{Take-Home-Message der Sitzung: Deep Learning ist der Teil von Machine Learning,
+    der tiefe neuronale Netze einsetzt --- nicht mehr und nicht weniger. Kein Bewusstsein,
+    keine Magie, keine Definition von „KI“ nötig.
+    Rückfrage in den Raum: Was ist dann eine Ebene? Was heißt Training? --- genau das
+    ist der Inhalt des Semesters, und hier beginnt der Semesterplan.}
+\end{frame}
+
+% ------------------------------------------------------------------ Semesterplan
+\begin{frame}
+  \frametitle{Der grobe Plan}
+
+  \begin{columns}[t]
+    \begin{column}{0.5\textwidth}
+      \begin{enumerate}\setlength{\itemsep}{1pt}
+      \item Was ist Deep Learning? (heute)
+      \item Neuron und Perzeptron
+      \item Vortrainierte Modelle, Tensoren
+      \item Logistische Regression
+      \item Loss und Gradientenabstieg
+      \item Backpropagation
+      \item Netze von Hand bauen
+      \item Autoencoder
+      \end{enumerate}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \begin{enumerate}\setlength{\itemsep}{1pt}\setcounter{enumi}{8}
+      \item VAE, word2vec, Graphen
+      \item RNNs und Transformer
+      \item Faltung und CNNs
+      \item Autograd, LLMs benutzen
+      \item GANs
+      \item Latente Räume, Anwendungen
+      \item Destillation, Vibe-Coding
+      \end{enumerate}
+    \end{column}
+  \end{columns}
+
+  \note{Zwölf Minuten --- der längste Block der Sitzung, weil 2025 zu jedem Stichwort
+    eine Frage kam. Das ist gut so: hier entsteht die Landkarte, an die der Rest
+    angehängt wird. Aufhänger: Mark-I-Perzeptron (echte Hardware!), Hugging Face,
+    „was ist ein latenter Raum“.
+    Nicht dabei und ausdrücklich sagen: Transformer selbst trainieren, große echte
+    Daten, Optimierungstheorie, CUDA-Programmierung, Reinforcement Learning.}
+\end{frame}
+
+% ------------------------------------------------------------------ Python
+\begin{frame}
+  \frametitle{Python ist eine Katastrophe}
+
+  \begin{center}
+    \Large
+    single-threaded, GIL\\[6pt]
+    interpretiert\\[6pt]
+    dynamisch gebunden\\[6pt]
+    nicht maschinennah
+  \end{center}
+
+  \note{Als Provokation stehen lassen und \emph{nicht} sofort auflösen.
+    Frage in den Raum: Wenn das alles stimmt --- warum ist dann jedes ML-Framework
+    in Python? Antworten sammeln, dann umblättern.
+    Details, falls sie kommen: Garbage Collection und GIL erschweren Multithreading;
+    Typechecking zur Laufzeit; SIMD-Register und Cachegrößen sind aus Python heraus
+    schwer zu nutzen.}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Python ist perfekt}
+
+  \begin{center}
+    \Large
+    Rapid Prototyping\\[6pt]
+    Rechnen in C, Rust, CUDA\\[6pt]
+    riesiges Ökosystem\\[6pt]
+    Gewichte sind sprachunabhängig
+  \end{center}
+
+  \bigskip
+  \begin{center}
+    Python ist die \emph{Steuersprache}.
+  \end{center}
+
+  \note{Die Auflösung ist der Punkt, nicht die Listen: die Arbeit ---
+    Matrixmultiplikationen auf Millionen von Zahlen --- passiert in kompiliertem
+    Code, oft auf der GPU. Python sagt nur, welche Operation als nächstes dran ist.
+    Genau das ist die Idee der vektorisierten Programmierung mit NumPy; PyTorch
+    treibt sie weiter. Beide Python-Folien zusammen: sechs Minuten.}
+\end{frame}
+
+% ------------------------------------------------------------------ ML-Begriffe
+\begin{frame}
+  \frametitle{Erinnerung: Woher kommen die Daten?}
+
+  \begin{center}
+    \Large
+    $x_1, \dots, x_N \in \mathbb{R}^n$\\[14pt]
+    \normalsize gezogen aus einer \emph{erzeugenden Verteilung} $X$,\\
+    die wir nicht kennen.
+  \end{center}
+
+  \bigskip
+  \begin{center}
+    Ein \textbf{Modell} beschreibt sie: als Dichte $p(x)$ --- oder als \emph{Sampler}.
+  \end{center}
+
+  \note{Die Komponenten von $x_i$ heißen Features; die Grundannahme des maschinellen
+    Lernens ist, dass die Daten eine Stichprobe aus einer Population sind.
+    Ein Modell mit Sampler heißt \textbf{generativ}.
+    Frage in den Raum, die 2025 gut lief: Ich habe eine Dichte --- wie komme ich
+    damit zu Stichproben? Antwort: Rejection Sampling, Monte-Carlo. Steht bewusst
+    nicht im Skript, ist aber die Brücke zwischen den beiden Beschreibungen.}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Ein generatives Modell in Aktion}
+
+  \begin{center}
+    \includegraphics[width=0.8\textwidth]{vl01-gmm-segmentation.png}
+  \end{center}
+
+  \note{Kein Deep Learning, ganz bewusst: ein generatives Modell kann sehr klein sein.
+    Ein Gaussian Mixture Model mit zwei Komponenten wird an das Histogramm der
+    Pixelwerte gefittet --- zwei Gauß-Kurven, ein Schnittpunkt, fertig ist die
+    Segmentierung in Vorder- und Hintergrund.
+    Frage: Was wäre hier das „Training“, was die „Inferenz“?}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Supervised und Unsupervised}
+
+  \begin{center}
+    \Large
+    mit Labels $y_i$ \quad$\longrightarrow$\quad supervised\\[10pt]
+    ohne Labels \quad$\longrightarrow$\quad unsupervised
+  \end{center}
+
+  \bigskip
+  \begin{center}
+    \normalsize
+    \textbf{Training}: Daten $\to$ Gewichte \qquad
+    \textbf{Inferenz}: neue Daten + Gewichte $\to$ Vorhersage
+  \end{center}
+
+  \note{Take-Home: Supervised heißt, ich habe in den Trainingsdaten eine Spalte,
+    die ich später nicht mehr bekomme und vorhersagen will.
+    Unsupervised: generative Modelle wie eben, Clustering, Dimensionsreduktion.
+    Oft ist $y_i \in \mathbb{R}$ (Regression) oder $y_i \in \{0,1\}$ (binäre Klassifikation).
+    „Gefittetes Modell“ heißt bei uns immer: ein Satz Zahlen.}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Regression und Klassifikation}
+
+  \begin{center}
+    \Large
+    $Y = f(X) + \varepsilon$\\[14pt]
+    \normalsize linear: $f(x) = w \cdot x + b$\\[14pt]
+    Klassifikation: $Y$ nimmt endlich viele Werte an
+  \end{center}
+
+  \note{2025 kam hier die Frage, wie lineare Regression auf zweidimensionalen Daten
+    aussieht. Antwort über das Skalarprodukt --- und die Konvention $x_1, x_2$ statt
+    $x, y$, weil $y$ für das Label reserviert ist. Das ist eine gute Stelle, um die
+    Notation des Skripts einzuführen.}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Klassifikation als Regression?}
+
+  \begin{center}
+    \includegraphics[width=0.64\textwidth]{vl01-blobs-linreg.png}
+  \end{center}
+
+  \note{Links zwei linear trennbare Klassen, rechts eine lineare Regression mit der
+    Klasse als abhängiger Variable: die Vorhersage ist eine reelle Zahl, die man bei
+    $\tfrac12$ abschneiden kann.
+    Frage in den Raum: Das funktioniert doch --- was ist daran unbefriedigend?
+    Die Antwort (Wahrscheinlichkeitsinterpretation, Ausreißer verschieben die Gerade)
+    kommt in VL 4 mit der logistischen Regression. Hier nur die Unzufriedenheit säen.}
+\end{frame}
+
+% ------------------------------------------------------------------ Modellgüte
+\begin{frame}
+  \frametitle{Wie gut ist das Modell?}
+
+  \begin{center}
+    \Large Training-Test-Split
+  \end{center}
+
+  \bigskip
+  \begin{center}
+    Accuracy \quad Precision \quad Recall \quad MSE
+  \end{center}
+
+  \note{Testset zurückhalten, nur zum Testen benutzen; aufwändiger: $k$-fold
+    cross validation.
+    Accuracy ist irreführend bei unbalancierten Klassen --- 99\,\% Nicht-Spam, ein
+    Modell das immer „kein Spam“ sagt, hat 99\,\% Accuracy. Das Beispiel in den Raum
+    werfen und fragen, was man stattdessen misst: Precision (wie viele der als positiv
+    vorhergesagten sind wirklich positiv?) und Recall (wie viele der wirklich positiven
+    wurden gefunden?). Bei Regression der mittlere quadratische Fehler.}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Quizfrage}
+
+  \begin{center}
+    \Large Was passiert mit dem Testset,\\[6pt]
+    wenn ich damit Modelle vergleiche\\[6pt]
+    und Hyperparameter optimiere?
+  \end{center}
+
+  \note{\textbf{Nicht auflösen, sammeln.} Das ist der dialogischste Moment der Sitzung,
+    2025 gut zehn Minuten wert.
+    Erwartbare Antworten: Sampling-Bias; Overfitting auf das Testset. Den scheinbaren
+    Widerspruch ausdrücklich stehen lassen, bis jemand den \emph{indirekten} Fit
+    erklärt: ich wähle die Hyperparameter nach dem Testergebnis, also fließt das
+    Testset doch ins Modell ein.
+    Erst dann die Pointe: Validation-Split --- und das Stichwort Spillover.}
+\end{frame}
+
+% ------------------------------------------------------------------ Lesetext
+\begin{frame}
+  \frametitle{Lesetext: \emph{How AMD May Get Across the CUDA Moat}}
+
+  \begin{enumerate}\setlength{\itemsep}{8pt}
+  \item GPU oder SIMD?
+  \item Wer entwickelt PyTorch?
+  \item CUDA oder ROCm?
+  \end{enumerate}
+
+  \note{Browser-Block, acht Minuten: den Artikel (HPCwire, 2023) kurz zeigen.
+    Fragen 1 und 2 im Hörsaal beantworten lassen --- 2025 kam eine gute Antwort über
+    Raster und Shader versus Rechenzentrum. SIMD ist das Prinzip, die GPU das Produkt.
+    PyTorch: Facebook AI Research, heute Meta, seit 2022 unter der Linux Foundation.
+    Frage 3 ausdrücklich als Hausaufgabe offen lassen --- die Antwort steht im Skript
+    in der Antwortbox zum Aufklappen.}
+\end{frame}
+
+% ------------------------------------------------------------------ Geschichte
+\begin{frame}
+  \frametitle{Kurzgeschichte: bis 2010}
+
+  \begin{center}
+    \Large
+    1943 \quad McCulloch \& Pitts\\[8pt]
+    1958 \quad Rosenblatt: Perzeptron\\[8pt]
+    1969 \quad Minsky \& Papert $\Rightarrow$ AI Winter\\[8pt]
+    1986 \quad Backpropagation
+  \end{center}
+
+  \note{1943: ein Hirnneuron, modelliert mit elektrischen Schaltkreisen.
+    1958: das Perzeptron wurde tatsächlich \emph{gebaut} --- der Mark I Perceptron
+    mit Fotozellen als Eingabe und Potentiometern als Gewichten, nachgestellt von
+    Elektromotoren. Das ist der Aufhänger für nächste Woche.
+    1969: nur linear trennbare Klassen --- gilt als Auslöser des ersten AI Winter.
+    Dazu sagen: Olazaran (1996) zeigt, dass diese offizielle Geschichte soziologisch
+    komplizierter ist; steht im Skript.
+    1986: Backpropagation macht mehr Schichten praktikabel --- unser VL 6.}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Kurzgeschichte: 2010--2015}
+
+  \begin{center}
+    \Large
+    2012 \quad AlexNet \quad {\small(VL 11)}\\[10pt]
+    2013 \quad word2vec \quad {\small(VL 9)}\\[10pt]
+    2014 \quad GANs \quad {\small(VL 13)}
+  \end{center}
+
+  \note{AlexNet: „the paper that sparked the field of Deep Learning“ --- ein CNN
+    gewinnt ImageNet mit großem Abstand, trainiert auf GPUs.
+    word2vec: Wörter als Vektoren in einem latenten Raum.
+    GANs: erstmals „realistische“ Bildgenerierung.
+    Alle drei kommen wieder, deshalb die VL-Nummern daneben.
+    Lesetipp: „The Decade of Deep Learning“ von Leo Gao.}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Kurzgeschichte: nach 2015}
+
+  \begin{center}
+    \Large
+    2017 \quad Transformer\\[8pt]
+    2020 \quad AlphaFold 2\\[8pt]
+    2021 \quad Diffusionsmodelle\\[8pt]
+    2022 \quad ChatGPT
+  \end{center}
+
+  \note{Transformer: „Attention is all you need“, Grundlage für GPT --- wir schauen
+    sie in VL 10 an, trainieren aber keine.
+    AlphaFold 2 „löst“ das Proteinfaltungsproblem, Nobelpreis Chemie 2024.
+    Nach ChatGPT: RLHF, Copilot, Multimodalität, RAG, Agents.
+    Ehrlich bleiben: das meiste davon ist Stoff der aufbauenden Module im Master.}
+\end{frame}
+
+% ------------------------------------------------------------------ Abschluss
+\begin{frame}
+  \frametitle{In die Praxis}
+
+  \begin{itemize}\setlength{\itemsep}{8pt}
+  \item Morgen 10:30: Blatt 0, gemeinsam, ohne Abgabe
+  \item Blatt 1 ab heute --- Mathe, Abgabe nächsten Mittwoch
+  \item Blatt 2: Perzeptron in NumPy
+  \end{itemize}
+
+  \bigskip
+  \begin{center}
+    Nächste Woche: \emph{Neuron und Perzeptron}.
+  \end{center}
+
+  \note{Drei Minuten. Ausdrücklich ansagen, dass Blatt 1 mathematischer Hintergrund
+    ist und erst Blatt 2 programmiert wird --- das hat 2025 Rückfragen erspart.
+    Und: wer die Eingangsumfrage noch nicht ausgefüllt hat, bitte bis morgen.}
+\end{frame}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

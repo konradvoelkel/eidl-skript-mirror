@@ -1,0 +1,97 @@
+% !Mode:: "TeX:UTF-8"
+\newcommand{\thepage}{} % to silence a hyperref warning about pdfpagelabels
+\RequirePackage[]{silence}
+\WarningsOff[hyperref]
+\PassOptionsToPackage{log-declarations=false}{xparse}
+%\RequirePackage[l2tabu, orthodox]{nag}
+\RequirePackage{luatex85} % to make \pdf...= commands work with LuaTeX
+\documentclass[aspectratio=169,t]{beamer}
+\usepackage{ifthen}
+\usepackage[T1]{fontenc}
+\usepackage{iftex}
+\ifLuaTeX
+ \usepackage{fontspec}
+ \setmainfont[Ligatures=TeX]{Source Sans Pro}
+\else
+ \usepackage[utf8]{inputenc}
+\fi
+\usepackage{german}
+\usepackage{newunicodechar}
+\newunicodechar{€}{\texteuro}
+\newunicodechar{ß}{\ss}
+\renewcommand{\SS}{\iffontchar\font"1E9E \symbol{"1E9E}\else SS\fi}
+\usepackage{ellipsis}
+\usepackage{microtype}
+\usepackage{listings}
+\usepackage{sourcecodepro}
+\lstset{language=Python, basicstyle=\ttfamily}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+
+\newtheorem{proposition}[theorem]{Proposition}
+
+\DeclareMathOperator*{\argmax}{argmax}
+\DeclareMathOperator{\supp}{supp}
+\newcommand{\E}{\ensuremath{\mathbb{E}}}
+\newcommand{\V}{\ensuremath{\mathbb{V}}}
+
+\setbeamercolor{emph}{fg=purple}
+\renewcommand<>{\emph}[1]{%
+  {\usebeamercolor[fg]{emph}\only#2{\itshape}#1}%
+}
+
+
+
+\hypersetup{draft=false,colorlinks=false,pdfpagemode=UseOutlines,plainpages=false,
+            breaklinks=true,bookmarksnumbered=true,pdfborder=0 0 0,
+            pdftitle={Einführung in Deep Learning WiSe 2026/27 HHU},
+            pdfauthor={Konrad Voelkel},
+            pdfsubject={data science}}
+
+%\documentclass[aspectratio=169,t]{beamer}
+\usetheme{hhubeamer} % put the hhu-beamer-theme in /usr/share/texmf/tex/latex/beamer/themes/
+
+% -------------------- Code listings config --------------------
+% Define custom colors for syntax highlighting
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.96,0.96,0.94} % Very light gray/beige
+% Configure the listings package
+\lstset{
+    language=Python,
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen}\itshape,
+    keywordstyle=\color{blue}\bfseries,
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize, % Use a monospaced font
+    breakatwhitespace=false,         
+    breaklines=true,      
+             % Enable automatic line breaking
+    captionpos=b,                      % Caption at the bottom
+    keepspaces=true,                 
+    numbers=left,                      % Line numbers on the left
+    numbersep=10pt,                    % Distance of line numbers from the code
+    showspaces=false,                
+    showstringspaces=false,            % Don't show weird underscores in strings
+    showtabs=false,                  
+    tabsize=4,
+    frame=single,                      % Add a subtle border around the code
+    rulecolor=\color{black!20},        % Border color
+  }
+
+\event[]{}
+\author[Wintersemester 2026/27]{Dr. Konrad Völkel, Wintersemester 2026/27}
+
+%\title{Data Science, VL 1}
+%\date{16.04.2026}
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
