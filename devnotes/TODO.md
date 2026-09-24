@@ -32,8 +32,10 @@ Aktueller Stand des Skripts: 27 Kapitel (01–27) plus Glossar. HTML-Build ohne 
   Netz für das Empfehlungssystem“ ist dort noch nicht als ausformulierte Aufgabe, nur als Absatz im Beispiel.
 - [ ] Zeitreihen / Aktienkurs-Beispiel (2025 gewünscht, nicht geliefert): bewusst zurückgestellt, sprengt den Rahmen.
   `notebooks/ASML.csv` liegt bereit, falls „RNNs“ (18) später ein Beispiel bekommen soll.
-- [ ] Formalia (`kurs-2026-27.md`, bewusst nicht im Buch): Übungsleitung 2026/27, Räume/Zeiten bestätigen;
-  Verteilung an die Studierenden klären (ILIAS/Rocket.Chat?).
+- [x] Formalia geklärt am 2026-09-24 (Quelle LSF 278733): Übungsleitung 2026/27 ist **Elisa Kleinfeld**
+  („begleitend“); Vorlesung Mi 12:30–14:00 in HS 5E (25.21), 14.10.2026–03.02.2027; Übung Do 10:30–12:00 in
+  25.22.U1.52, ab der ersten Woche. Verteilung läuft wie 2025/26 über **ILIAS** (Kurs 2165367) plus das
+  ILIAS-Forum als Diskussionsraum, kein Rocket.Chat. `kurs-2026-27.md` ist entsprechend zu aktualisieren.
 
 ## Vorlesungsplan (`kurs-2026-27.md`)
 
@@ -47,13 +49,16 @@ Aktueller Stand des Skripts: 27 Kapitel (01–27) plus Glossar. HTML-Build ohne 
 
 - [ ] **[Entscheidung] Punkte und Bestehensgrenzen** der Blätter 1, 3, 5 nach den neuen Aufgaben 4b, 2b, 1b
   anpassen (*Vorschlag:* je +1 Punkt, Bestehensgrenze bleibt „die Hälfte“).
-- [ ] **[Entscheidung] Abgabetermine 2026/27.** 2025 waren es Mittwoche 12:00, wöchentlich ab 22.10.2025,
-  Weihnachtspause 17.12.→14.01. *Vorschlag* (eine Woche später als 2025, unter der Annahme Vorlesungsbeginn Mi
-  14.10.2026): Blatt 0 ohne Abgabe; 1: 21.10., 2: 28.10., 3: 04.11., 4: 11.11., 5: 18.11., 6: 25.11., 7: 02.12.,
-  8: 09.12., 9: 16.12.2026, 10: 13.01., 11: 20.01.2027, 12 (Take-Home-Probeklausur): 27.01.2027. Die Zeile
-  „N Punkte, Abgabe bis …“ ist seit 2026-09-20 aus allen Blättern raus (Konrad); nach Bestätigung je Blatt neu
-  eintragen. Die Notiz je Blatt lautet jetzt „Übungsaufgaben von 2025, werden ggf. noch angepasst …“ und bleibt,
-  bis das Blatt wirklich angepasst ist.
+- [x] **Abgabetermine 2026/27 bestätigt (Konrad, 2026-09-24)** und in ILIAS eingetragen: Blatt 0 ohne Abgabe;
+  1: 21.10., 2: 28.10., 3: 04.11., 4: 11.11., 5: 18.11., 6: 25.11., 7: 02.12., 8: 09.12., 9: 16.12.2026,
+  10: 13.01., 11: 20.01.2027, Probeklausur als Take-Home mit Abgabe 27.01.2027 — jeweils Mittwoch 12:00.
+- [ ] Die Zeile „N Punkte, Abgabe bis …“ je Blatt wieder eintragen (ist seit 2026-09-20 draußen); die Termine
+  stehen jetzt fest, die Punkte hängen an der Entscheidung oben. Die Notiz „Übungsaufgaben von 2025, werden ggf.
+  noch angepasst …“ bleibt, bis das Blatt wirklich angepasst ist.
+- [ ] **[Entscheidung vertagt]** Blatt 6 (Iris-Autoencoder) wird nach dem neuen Wochenplan eine Woche *vor* der
+  Autoencoder-Vorlesung ausgegeben (AE ist jetzt VL 8 statt VL 7, CNNs VL 11, LLMs VL 12). Optionen: Blätter 6/7
+  in der Ausgabe tauschen, Blatt 6 anpassen, oder so lassen (Skript-Kapitel steht online). Bei der
+  Blatt-Überarbeitung ansehen; in ILIAS ist vorerst die unveränderte Reihenfolge eingetragen.
 - [ ] Blatt 12 = Take-Home-Probeklausur anlegen (Grundlage: `../eidl-25/exam/`, Probeklausur 2025).
 - [ ] Lösungen: bisher nur die in den Blättern eingebetteten Dropdowns. Notebook-/Skript-Lösungen liegen in
   `~/Sciebo/hhu/eidl-25/exercises/blattNN-solution/`. *Vorschlag:* nicht ins Skript (öffentlich!), sondern eigenes
@@ -63,6 +68,9 @@ Aktueller Stand des Skripts: 27 Kapitel (01–27) plus Glossar. HTML-Build ohne 
 
 ## Klausur
 
+- [x] Termine aus LSF (2026-09-24): **Erstklausur Do 11.02.2027**, LSF-Fenster 8:30–11:30, Hörsäle 5F (25.21)
+  und 2D (22.01); **Zweitklausur Mo 15.03.2027**, Fenster 8:30–11:30, Hörsaal 5D (25.21). Geschrieben wird
+  jeweils 9:00–10:30 (90 Minuten, Entscheidung Konrad 2026-09-24); so steht es auf der ILIAS-Seite.
 - [ ] `exam2026-eidl-exam-1/2.tex` (englische Entwürfe vom 20.01.2026 in `../eidl-25/exam/`) – Status klären:
   Vorlagen für 2026/27?
 - Keine weiteren Klausuransagen aus den Aufzeichnungen übernehmen (Entscheidung Konrad 2026-09-20).
@@ -89,6 +97,22 @@ Aktueller Stand des Skripts: 27 Kapitel (01–27) plus Glossar. HTML-Build ohne 
 - [ ] Externe Werkzeuge sind im Skript verlinkt und werden in der Vorlesung benutzt, solange sie existieren:
   TensorFlow Playground (09), Loss Landscape Explorer (08), GAN Lab (22), Ollama/llama.cpp (21). Vor jedem Semester
   einmal anklicken.
+
+## ILIAS (Kurs 2026/27, ref_id 2165367)
+
+Textfassung von Seite und Objektbaum: `../ilias/` (analog zu `ds2-26/ilias/`), Workflow in
+`../ilias/README.md`, aktueller Durchlauf in `../ilias/runs/ws2026-27.yaml`.
+
+- [x] Am 2026-09-24 aufgesetzt: Objekte und Seitengestaltung aus dem Kurs 2025/26 (1948423) übernommen
+  (Lösungshinweise-Dateien dabei ausgelassen), Kursseite auf 2026/27 umgeschrieben (Ankündigung, Raum und Zeit,
+  Themenliste, Material mit Skript-Link, Externe Resourcen inkl. UDL/MML, 19-zeilige Wochentabelle),
+  Übungstermine für alle 12 Übungseinheiten gesetzt, Umfragefenster gesetzt, Forum geleert,
+  Kalender und Neuigkeiten deaktiviert. Der Kurs ist noch **offline**.
+- [ ] Vorlesungsfolien 2026/27 als neue Versionen der kopierten Dateien hochladen (aktuell liegen dort die
+  Folien von 2025/26) – hängt an den Beamer-Decks.
+- [ ] Zusatzmaterial aktualisieren: „EiDL-Klausur-2024“ durch die Erstklausur 2025/26 ersetzen, Probeklausur
+  und Blatt 0 / Sheet 0 prüfen.
+- [ ] Kurs online schalten, wenn die Blätter und die erste Foliensitzung stehen.
 
 ## Infrastruktur
 
