@@ -28,12 +28,13 @@ transformers 5.17, **CPU** (siehe „Umgebung“ unten). Die extrahierten Blöck
 * Kapitel 14, Autoencoder nach 15 Epochen: SGD `lr=1e-2` → **0.2284**, SGD `lr=1e-1` → 0.0719,
   Adam `lr=1e-3` → 0.0188.
 
-## Offene Entscheidung
+## Entscheidung zum Autoencoder-Training (2026-09-25)
 
-Das Autoencoder-Training im Kapitel ist mit `optim.SGD(lr=1e-2)` und 15 Epochen so eingestellt, dass
-praktisch nichts passiert – wer es nachbaut, sieht Matsch. Direkt danach kommt die Tricks-Liste
-(„mehr Epochen“, „Lernrate anpassen“, „Adam statt SGD“), die genau das aufräumt. Entweder das im Text
-explizit sagen, oder gleich Adam zeigen und SGD als Kontrast. Steht als Entscheidung in `TODO.md`.
+Das Training im Kapitel ist mit `optim.SGD(lr=1e-2)` und 15 Epochen so eingestellt, dass praktisch
+nichts passiert – wer es nachbaut, sieht Matsch. **Das bleibt so** (Konrad): einmal zu sehen, wie es
+aussieht, wenn ein Netz *nicht* lernt, gehört dazu; die Tricks-Liste direkt danach räumt es auf.
+Die gemessenen Vergleichswerte (SGD `lr=1e-1` → 0.072, Adam `lr=1e-3` → 0.019) sind Material für den
+Hörsaal, nicht für den Text.
 
 ## Umgebung
 

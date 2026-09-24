@@ -87,10 +87,10 @@ Aktueller Stand des Skripts: 27 Kapitel (01–27) plus Glossar. HTML-Build ohne 
   Beispieldaten in „Logistische Regression“ (06), Imports + `IMAGESIZE` in „Autoencoder“ (14), `data` aus
   `ASML.csv` in „Faltung und CNNs“ (20), gemessene Wahrscheinlichkeiten in „LLMs benutzen“ (21);
   `ollama`, `pydantic`, `sacremoses` in `pyproject.toml` nachgetragen.
-- [ ] **[Entscheidung] Autoencoder-Training (14):** mit den abgedruckten Hyperparametern (SGD, `lr=1e-2`,
-  15 Epochen) sinkt der MSE nur von 0.231 auf 0.228 – die Rekonstruktion bleibt Matsch. Zum Vergleich gemessen:
-  SGD `lr=1e-1` → 0.072, Adam `lr=1e-3` → 0.019. *Vorschlag:* im Text einen Satz ergänzen, dass dieses Training
-  bewusst zu langsam ist (die Tricks-Liste danach räumt das auf), oder direkt Adam als Ausgangspunkt zeigen.
+- [x] **[Entscheidung 2026-09-25] Autoencoder-Training (14) bleibt wie es ist.** Mit SGD `lr=1e-2` und
+  15 Epochen sinkt der MSE nur von 0.231 auf 0.228, die Rekonstruktion bleibt Matsch – und genau das soll man
+  einmal gesehen haben, bevor die Tricks-Liste (mehr Epochen, Lernrate, Adam) danach aufräumt. Gemessene
+  Vergleichswerte für den Hörsaal: SGD `lr=1e-1` → 0.072, Adam `lr=1e-3` → 0.019.
 - [ ] Torch aus `uv sync` ist der cu130-Build, der NVIDIA-Treiber hier ist 12.9 → `torch.cuda.is_available()`
   ist False, alles läuft auf der CPU. Vor Demos im Hörsaal entweder Treiber aktualisieren oder einen
   passenden Torch-Build pinnen.
