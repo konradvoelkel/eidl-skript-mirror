@@ -12,6 +12,8 @@ Im [Kapitel „Backpropagation“](09-backpropagation.md) haben wir Gradienten v
 Ein Blick darauf, wie PyTorch Backpropagation *tatsächlich* macht. Wir bauen ein sehr kleines „Netzwerk“:
 
 ```python
+import torch
+
 x = torch.tensor(3.0)                       # Input (Konstante)
 w = torch.tensor(2.0, requires_grad=True)   # Gewicht: "Beobachte mich!"
 b = torch.tensor(1.0, requires_grad=True)   # Bias

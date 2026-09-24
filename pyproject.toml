@@ -20,6 +20,9 @@ dependencies = [
   "transformers",
   "huggingface-hub",
   "llama-cpp-python",
+  "ollama",            # Kapitel "LLMs benutzen"
+  "pydantic",          # dito, strukturierte Ausgabe
+  "sacremoses",        # Tokenizer von facebook/wmt19-en-de (Kapitel "Vortrainierte Modelle")
   "gensim",
   "ipykernel",
   "jupyterlab",

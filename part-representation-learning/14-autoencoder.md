@@ -65,6 +65,15 @@ Zunächst: Kompression und Klassifikation, mit den Zielen *Accuracy erhöhen* un
 Ein Autoencoder in PyTorch ist ein `nn.Module` mit zwei `nn.Sequential`-Blöcken. Schematisch:
 
 ```python
+import torch
+import torch.nn as nn
+import torch.optim as optim
+from torch.utils.data import DataLoader
+from torchvision import datasets, transforms
+
+device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
+IMAGESIZE = 28
+
 class Autoencoder(nn.Module):
     def __init__(self, latent_dim=12):
         super().__init__()
@@ -89,7 +98,6 @@ Das Sigmoid am Ende des Decoders sorgt dafür, dass die Ausgabe wie Pixelwerte i
 ### Code-Beispiel: Training
 
 ```python
-IMAGESIZE = 28
 transform_mnist = transforms.Compose([
     transforms.ToTensor(),
     transforms.Lambda(lambda x: x.view(-1)),   # 28x28 -> 784

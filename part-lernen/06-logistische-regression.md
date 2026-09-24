@@ -232,6 +232,11 @@ class LinearRegression(nn.Module):
 Ein Modell ist eine Unterklasse von `nn.Module`; im Konstruktor werden die Bausteine mit Parametern angelegt (hier eine einzige lineare Schicht `nn.Linear`, das ist $x \mapsto Wx + b$), und `forward` beschreibt die Inferenz. Das Training:
 
 ```python
+import numpy as np
+
+x = np.linspace(0, 10, 50)                      # irgendein eindimensionaler Datensatz
+y = 2.5 * x + 1.0 + np.random.normal(0, 1, 50)  # verrauschte Gerade
+
 model = LinearRegression(1, 1)
 criterion = nn.MSELoss()
 optimizer = torch.optim.SGD(model.parameters(), lr=0.01)

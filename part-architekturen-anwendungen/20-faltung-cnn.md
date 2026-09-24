@@ -63,7 +63,10 @@ Für NumPy-Arrays gibt es `scipy.signal.convolve`. Der Filter ist einfach ein Ar
 
 ```python
 import numpy as np
+import pandas as pd
 from scipy.signal import convolve
+
+data = pd.read_csv("ASML.csv")["Close"].to_numpy()   # Schlusskurse als Array
 
 x = np.linspace(-6, 6, 1000)
 kernel = np.exp(-x**2 / (2 * 0.1**2))          # schmale Gaußfunktion
@@ -186,7 +189,7 @@ import torch, torch.nn as nn
 from PIL import Image
 from torchvision import transforms
 
-img = transforms.ToTensor()(Image.open("pallino.jpg")).unsqueeze(0)  # (1, 3, H, W)
+img = transforms.ToTensor()(Image.open("pallino.jpg")).unsqueeze(0)  # irgendein Foto, (1, 3, H, W)
 
 conv = nn.Conv2d(in_channels=3, out_channels=1, kernel_size=5, padding=1, bias=False)
 w = torch.full((5, 5), -1.0)        # überall -1 ...

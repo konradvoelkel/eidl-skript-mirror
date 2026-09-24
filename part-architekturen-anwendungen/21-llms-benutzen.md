@@ -89,9 +89,9 @@ probs = next_token_probs("The color of the sky is")
 print(probs.shape)                                   # (151936,) -- die Vokabulargröße
 for i in np.argsort(probs)[-5:][::-1]:
     print(repr(llm.detokenize([i]).decode()), f"{probs[i]:.2%}")
-# ' changing' 12.1%, ' always' 6.5%, ' blue' 3.9%, ' determined' 3.0%, ' very' 3.0%
+# ' changing' 10.3%, ' always' 6.7%, ' blue' 4.0%, ' a' 3.2%, ' determined' 3.0%
 red = llm.tokenize(b" red")[0]
-print(f"{probs[red]:.2%}")                           # 0.74%
+print(f"{probs[red]:.2%}")                           # 0.72%
 ```
 
 Das ist die logistische Regression aus dem [Kapitel „Logistische Regression“](../part-lernen/06-logistische-regression.md) – Softmax über Logits –, nur mit 150 000 Klassen; alles aus dem [Kapitel „Latente Räume geometrisch“](23-latente-raeume.md) über Sampling-Strategien und Temperatur setzt genau hier an. (Bei `llm.scores` gibt es einen Fallstrick: Das Array hat immer `n_ctx` Zeilen, `scores[-1]` wäre also die falsche Position.)

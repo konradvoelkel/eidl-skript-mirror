@@ -82,8 +82,20 @@ Aktueller Stand des Skripts: 27 Kapitel (01–27) plus Glossar. HTML-Build ohne 
 - [ ] `latent-classifier.ipynb` ist das einzige verbleibende Notebook mit Funktion (Download auf der Blatt-11-Seite).
   Vor Semesterstart mit aktuellem torch/transformers durchlaufen lassen (bert-medium-Download, `ipywidgets` für die
   Saliency-Zelle) und Outputs neu einchecken.
-- [ ] Code-Beispiele in den Kapiteln (CNN, LLMs, Autograd, Autoencoder) sind aus den Notebooks übernommen, aber nicht
-  erneut ausgeführt – bei der fachlichen Durchsicht einmal laufen lassen (`uv sync` installiert torch, groß).
+- [x] **Alle 24 Python-Blöcke am 2026-09-24 ausgeführt** (Venv auf `/media/konrad/xtraspace/eidl-venv`, CPU).
+  Ergebnis und Korrekturen: `codecheck-2026-09-24.md`. Kurz: `import torch` in „Autograd“ (10) ergänzt,
+  Beispieldaten in „Logistische Regression“ (06), Imports + `IMAGESIZE` in „Autoencoder“ (14), `data` aus
+  `ASML.csv` in „Faltung und CNNs“ (20), gemessene Wahrscheinlichkeiten in „LLMs benutzen“ (21);
+  `ollama`, `pydantic`, `sacremoses` in `pyproject.toml` nachgetragen.
+- [ ] **[Entscheidung] Autoencoder-Training (14):** mit den abgedruckten Hyperparametern (SGD, `lr=1e-2`,
+  15 Epochen) sinkt der MSE nur von 0.231 auf 0.228 – die Rekonstruktion bleibt Matsch. Zum Vergleich gemessen:
+  SGD `lr=1e-1` → 0.072, Adam `lr=1e-3` → 0.019. *Vorschlag:* im Text einen Satz ergänzen, dass dieses Training
+  bewusst zu langsam ist (die Tricks-Liste danach räumt das auf), oder direkt Adam als Ausgangspunkt zeigen.
+- [ ] `pallino.jpg` (Beispielbild in Kapitel 20) liegt nicht im Repo; nur das Ergebnisbild
+  `images/vl10-pallino-conv.png`. Entweder Foto dazulegen oder im Text sagen, dass jedes Foto geht.
+- [ ] Torch aus `uv sync` ist der cu130-Build, der NVIDIA-Treiber hier ist 12.9 → `torch.cuda.is_available()`
+  ist False, alles läuft auf der CPU. Vor Demos im Hörsaal entweder Treiber aktualisieren oder einen
+  passenden Torch-Build pinnen.
 
 ## Beamer-Folien (Schritt 4 des Migrationsplans)
 
@@ -96,9 +108,11 @@ Aktueller Stand des Skripts: 27 Kapitel (01–27) plus Glossar. HTML-Build ohne 
 - [ ] Dozentennotizen je Deck: die Dialogmuster, die 2025 getragen haben und bewusst *nicht* im Skript stehen
   (Type-Check-Argument, Gegenbeispiel „Eingabe 100“ bei Netzen von Hand, die 20 Minuten offen gehaltene Frage „wo
   steckt Zufall“, das Anwendungsbeispiel als Spiel). Quelle: `transcripts/*/notiz.md`, Abschnitt „Beobachtungen“.
-- [ ] Externe Werkzeuge sind im Skript verlinkt und werden in der Vorlesung benutzt, solange sie existieren:
-  TensorFlow Playground (09), Loss Landscape Explorer (08), GAN Lab (22), Ollama/llama.cpp (21). Vor jedem Semester
-  einmal anklicken.
+- [x] Externe Werkzeuge am 2026-09-24 geprüft: TensorFlow Playground (09), Loss Landscape Explorer (08),
+  GAN Lab (22), Ollama (21) antworten alle mit 200. Ebenso alle 67 externen Links im Skript – bis auf einen
+  toten (`muhark.github.io`, word2vec from scratch), jetzt ersetzt durch das offizielle PyTorch-Tutorial
+  „Word Embeddings: Encoding Lexical Semantics“. Der HPCwire-Artikel (01) blockt `curl` mit 403, im Browser
+  ist er da. Vor jedem Semester wiederholen.
 
 ## ILIAS (Kurs 2026/27, ref_id 2165367)
 
