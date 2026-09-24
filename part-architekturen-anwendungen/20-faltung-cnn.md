@@ -189,7 +189,7 @@ import torch, torch.nn as nn
 from PIL import Image
 from torchvision import transforms
 
-img = transforms.ToTensor()(Image.open("pallino.jpg")).unsqueeze(0)  # irgendein Foto, (1, 3, H, W)
+img = transforms.ToTensor()(Image.open("pallino.jpg")).unsqueeze(0)  # notebooks/pallino.jpg, (1, 3, H, W)
 
 conv = nn.Conv2d(in_channels=3, out_channels=1, kernel_size=5, padding=1, bias=False)
 w = torch.full((5, 5), -1.0)        # überall -1 ...

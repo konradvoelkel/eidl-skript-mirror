@@ -15,7 +15,7 @@ transformers 5.17, **CPU** (siehe „Umgebung“ unten). Die extrahierten Blöck
 | 10 Autograd | 6 | `import torch` fehlte im ersten Block → ergänzt. Danach stimmen **alle** abgedruckten Ausgaben: `<PowBackward0>`, `<AddBackward0>`, `((<MulBackward0>, 0), (<AccumulateGrad>, 0))`, `tensor(42.) tensor(14.)`, `None`, `tensor([6.])`. |
 | 14 Autoencoder | 2 | Läuft (MNIST-Download, 15 Epochen CPU ≈ 3 min), aber **lernt fast nichts**: MSE 0.2308 → 0.2284. Imports, `device` und `IMAGESIZE` fehlten und standen zudem nach der Klasse, die sie benutzt → ergänzt und nach vorn gezogen. Offene Entscheidung, siehe unten. |
 | 18 RNN | 1 | Läuft (definiert nur das Modell). `h_n, c_n` werden bewusst nicht benutzt, der Text erklärt das. |
-| 20 Faltung und CNNs | 5 | Läuft. `data` (Schlusskurse) war undefiniert → Zeile mit `ASML.csv` ergänzt. Die Shape-Rechnung des CNN stimmt: 28×28 → `(1, 10)`, `16*4*4 = 256`. `pallino.jpg` liegt nicht im Repo. |
+| 20 Faltung und CNNs | 5 | Läuft. `data` (Schlusskurse) war undefiniert → Zeile mit `ASML.csv` ergänzt. Die Shape-Rechnung des CNN stimmt: 28×28 → `(1, 10)`, `16*4*4 = 256`. `pallino.jpg` liegt als `notebooks/pallino.jpg` im Repo (beim Prüflauf mit einem Ersatzbild getestet); der Codekommentar nennt jetzt den Pfad. |
 | 21 LLMs benutzen | 3 | Alle drei laufen. Embedding: `(896,)`, Norm 296.8 („~300“ ✓). Strukturierte Ausgabe: `name='Sabine' age=29 occupation='doctor' location='Munich'` – exakt wie abgedruckt. llama.cpp: läuft mit `qwen2.5-0.5b-instruct-q4_k_m.gguf`, Vokabulargröße `(151936,)` ✓, die Top-5 weichen leicht ab → Kommentar aktualisiert. Brauchte `ollama` und `pydantic` (fehlten in `pyproject.toml`). |
 
 ## Gemessene Werte, die im Text standen

@@ -91,8 +91,6 @@ Aktueller Stand des Skripts: 27 Kapitel (01–27) plus Glossar. HTML-Build ohne 
   15 Epochen) sinkt der MSE nur von 0.231 auf 0.228 – die Rekonstruktion bleibt Matsch. Zum Vergleich gemessen:
   SGD `lr=1e-1` → 0.072, Adam `lr=1e-3` → 0.019. *Vorschlag:* im Text einen Satz ergänzen, dass dieses Training
   bewusst zu langsam ist (die Tricks-Liste danach räumt das auf), oder direkt Adam als Ausgangspunkt zeigen.
-- [ ] `pallino.jpg` (Beispielbild in Kapitel 20) liegt nicht im Repo; nur das Ergebnisbild
-  `images/vl10-pallino-conv.png`. Entweder Foto dazulegen oder im Text sagen, dass jedes Foto geht.
 - [ ] Torch aus `uv sync` ist der cu130-Build, der NVIDIA-Treiber hier ist 12.9 → `torch.cuda.is_available()`
   ist False, alles läuft auf der CPU. Vor Demos im Hörsaal entweder Treiber aktualisieren oder einen
   passenden Torch-Build pinnen.
