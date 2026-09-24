@@ -6,12 +6,27 @@
   /* HHU Corporate Identity Colors */
   --hhu-blue: #006AB3;
   --hhu-dark-blue: #003964;
-  --hhu-ice-blue: #B5CBD6; 
+  --hhu-ice-blue: #B5CBD6;
   --hhu-text: #000000;
-  
+
   --hhu-green: #8CB110;
   --hhu-red: #BE0A26;
   --hhu-orange: #EE7F00;
+}
+
+/* --- Markenfarbe dieses Skripts (BRANDING.md, beschlossen 2026-09-22) -------------
+   Ein Farbton je Projekt, alle sechs auf derselben Helligkeit und Buntheit:
+   oklch(0.52 0.12 295) = #6f59a6. Weisse Schrift darauf erfuellt WCAG AA.
+   Die HHU-Hausfarben bleiben, was sie sind -- Farben fuer Abbildungen und fuer die
+   Signal-Admonitions (Tipp gruen, Warnung orange, Gefahr rot). Die Markenfarbe ist
+   der Akzent des Buches: Links, aktive Navigation, Codeblock-Kante, Notiz/Info. */
+:root {
+  --brand: #6f59a6;          /* oklch(0.52 0.12 295) -- Violett */
+  --brand-tint: #efebff;      /* oklch(0.95 0.03 295) -- helle Flaeche */
+  --brand-dark: #b39ef2;      /* oklch(0.75 0.12 295) -- Akzent im Dunkelmodus */
+}
+@media (prefers-color-scheme: dark) {
+  :root { --brand: var(--brand-dark); }
 }
 
 /* 1. Typography Overrides */
@@ -24,56 +39,61 @@ code, kbd, samp, pre, .math-display {
   font-family: 'JetBrains Mono', monospace !important;
 }
 
+/* Ueberschriften bleiben beim Fast-Schwarz des Themes: das Theme setzt sie ueber
+   Tailwind-Klassen, ein Farbwunsch hier braeuchte !important und muesste den Dunkelmodus
+   gleich mitbauen. Die Marke zeigt sich in den Akzenten (Links, Code, Notiz-Kasten),
+   der Fliesstext bleibt schwarz -- dieselbe Haltung wie auf der Website. */
 h1, h2, h3, h4, h5, h6 {
-  color: var(--hhu-dark-blue);
   font-weight: 600;
 }
 
-/* 2. Links & Navigation */
-a {
-  color: var(--hhu-blue);
-  text-decoration-color: rgba(0, 106, 179, 0.3);
+/* 2. Links & Navigation -- Markenfarbe.
+   Das Theme faerbt Inhaltslinks ueber die Klasse `link` (Tailwind blue-700); ein blosses
+   `a { color: ... }` verliert dagegen an Spezifitaet und bleibt wirkungslos -- genau das
+   war hier bis 2026-09-24 der Fall. Navigation und Kopfzeile bleiben absichtlich neutral,
+   sonst leuchtet die halbe Seite. */
+a.link, article a.link, .myst-content a.link {
+  color: var(--brand) !important;
+  text-decoration-color: color-mix(in oklab, var(--brand) 30%, transparent);
   text-decoration-thickness: 1px;
   text-underline-offset: 2px;
 }
 
-a:hover {
-  color: var(--hhu-dark-blue);
+a.link:hover, article a.link:hover {
+  color: color-mix(in oklab, var(--brand) 75%, black) !important;
 }
 
 nav.myst-toc a.active {
-  color: var(--hhu-blue) !important;
-  border-left-color: var(--hhu-blue) !important;
+  color: var(--brand) !important;
+  border-left-color: var(--brand) !important;
   font-weight: 600;
 }
 
 /* 3. Structural Elements & Code Blocks */
-/* Overrides hardcoded Tailwind borders for code blocks */
 div.myst-code {
-  border-left-color: var(--hhu-blue) !important;
+  border-left-color: var(--brand) !important;
   border-left-width: 3px !important;
 }
 
-/* Minimalist inline code highlighting */
 p > code, li > code, td > code {
-  background-color: rgba(181, 203, 214, 0.15) !important; 
-  color: var(--hhu-dark-blue) !important;
+  background-color: var(--brand-tint) !important;
+  color: color-mix(in oklab, var(--brand) 80%, black) !important;
   border-radius: 3px;
   padding: 0.1rem 0.3rem;
 }
 
-/* 4. Minimalist Admonitions (Borders and text color only, no heavy backgrounds) */
+/* 4. Minimalist Admonitions: Notiz/Info in der Markenfarbe, Signale in HHU-Farben */
 aside.myst-admonition {
   background-color: transparent !important;
-  border: 1px solid #e5e7eb !important; /* light gray border */
+  border: 1px solid #e5e7eb !important;
   border-left-width: 4px !important;
 }
 
 aside.myst-admonition-note, aside.myst-admonition-info {
-  border-left-color: var(--hhu-blue) !important;
+  border-left-color: var(--brand) !important;
 }
 aside.myst-admonition-note > header, aside.myst-admonition-info > header {
-  color: var(--hhu-blue) !important;
+  color: var(--brand) !important;
 }
 
 aside.myst-admonition-tip, aside.myst-admonition-hint {
