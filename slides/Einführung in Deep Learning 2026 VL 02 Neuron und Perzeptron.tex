@@ -20,7 +20,7 @@
 
   \note{\textbf{Ablauf, 90 Minuten} (2025: 60 Min. Folien, 15 Min. Tafel, 13 Min. Dialog):\\[2pt]
     \begin{tabular}{@{}rll@{}}
-      0--5   & Folie 2       & Rückblick, Blatt 1 ist abzugeben\\
+      0--5   & Folie 2       & Rückblick, erstes Blatt ist abgegeben\\
       5--15  & Folien 3--4   & McCulloch-Pitts-Neuron, Kochrezept\\
       15--28 & Folien 5--7   & Perzeptron, Bias-Trick, Geometrie \textbf{(Tafel)}\\
       28--35 & Folien 8--9   & Abstand, Skalierung von $w$\\
@@ -30,7 +30,7 @@
       62--75 & Folie 15      & \textbf{Tafel: warum sie für ein Sample funktioniert}\\
       75--82 & Folien 16--17 & Verallgemeinertes Perzeptron\\
       82--88 & Folien 18--19 & Mehrere Schichten, warum die Regel nicht reicht\\
-      88--90 & Folie 20      & Blatt 2\\
+      88--90 & Folie 20      & Übungsblatt\\
     \end{tabular}\\[4pt]
     Die Tafelphase ist der Kern der Sitzung --- 2025 war das Ein-Sample-Argument das,
     was der Dozent am Ende „das Wichtigste“ genannt hat. Wenn die Zeit knapp wird:
@@ -46,8 +46,8 @@
     Heute: das kleinste Netz --- ein einziges Neuron.
   \end{center}
 
-  \note{Zwei Sätze Rückblick, mehr nicht. Ansagen: Blatt 1 ist heute 12:00 fällig gewesen,
-    Blatt 2 kommt raus und implementiert die Perzeptronregel.
+  \note{Zwei Sätze Rückblick, mehr nicht. Ansagen: das erste Blatt war heute 12:00 fällig,
+    das nächste kommt raus und implementiert die Perzeptronregel.
     Wer letzte Woche nicht da war: Kapitel 1 im Skript, zehn Minuten Lesezeit.}
 \end{frame}
 
@@ -129,7 +129,7 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Geometrie: $w$ steht senkrecht auf der Trenngeraden}
+  \frametitle{$w$ steht senkrecht auf der Trenngeraden}
 
   \begin{center}
     \Large $w \cdot (x - x') = (w \cdot x + b) - (w \cdot x' + b) = 0$
@@ -164,7 +164,7 @@
     Neurons ist der Abstand zur Hyperebene, mal $\|w\|$.
     Beispiel zum Mitrechnen: $w = (3,4)$, $b = -5$, also $\|w\| = 5$. Punkt $(1,\frac12)$
     liegt auf $H$. Punkt $(3,4)$: Aktivierung $9+16-5 = 20$, Abstand $4$. Punkt $(-1,0)$:
-    Aktivierung $-8$, Abstand $-8/5$, andere Seite. Das ist Aufgabe auf Blatt 1.}
+    Aktivierung $-8$, Abstand $-8/5$, andere Seite. Das ist eine Übungsaufgabe.}
 \end{frame}
 
 \begin{frame}
@@ -250,11 +250,12 @@
 \begin{frame}
   \frametitle{Drei Fälle}
 
-  \begin{itemize}\setlength{\itemsep}{10pt}
+  % description statt itemize: Beamer schneidet lange \item[...]-Labels links ab.
+  \begin{description}[$y = 1,\ f(x) = 0$]\setlength{\itemsep}{10pt}
   \item[$y = f(x)$] nichts passiert
-  \item[$y = 1, f(x) = 0$] $w_{\text{neu}} = w + r x$, Aktivierung wächst
-  \item[$y = 0, f(x) = 1$] $w_{\text{neu}} = w - r x$, Aktivierung sinkt
-  \end{itemize}
+  \item[$y = 1,\ f(x) = 0$] $w_{\text{neu}} = w + r x$, Aktivierung wächst
+  \item[$y = 0,\ f(x) = 1$] $w_{\text{neu}} = w - r x$, Aktivierung sinkt
+  \end{description}
 
   \note{Der mittlere Fall zum Mitrechnen: $w_{\text{neu}} \cdot x = w \cdot x + r\,(x \cdot x)$,
     und $x \cdot x > 0$ für $x \neq 0$. Die Aktivierung wächst also --- in Richtung der
@@ -278,7 +279,7 @@
     also in Richtung $x$ (bei $y = 0$ von $x$ weg); die Entscheidungsgrenze steht
     senkrecht auf $w$ und dreht sich mit.
     Ausdrücklich sagen: Das ist die eine Rechnung, die man einmal selbst auf Papier
-    gemacht haben sollte (Blatt 3, Aufgabe 4).
+    gemacht haben sollte (steht auf einem Übungsblatt).
     Einschränkung nennen: Ein Update für $x$ kann ein anderes $x'$ auf die falsche Seite
     schieben --- dass das endet, ist der Konvergenzsatz.}
 \end{frame}
@@ -291,7 +292,7 @@
   \end{center}
 
   \note{Trenngerade nach 0, 1, 2 und 3 Epochen über 60 Datenpunkte, Lernrate $r = 0{,}05$.
-    Genau das baut Blatt 2 nach.
+    Genau das baut das Übungsblatt nach.
     Hier den Konvergenzsatz nur beim Namen nennen (Novikoff 1962): höchstens
     $R^2/\gamma^2$ Fehler, wenn es eine Margin $\gamma$ gibt. Der Beweis steht als
     Vertiefung im Skript.}
@@ -318,7 +319,7 @@
 
   \note{Die beiden Fragezeichen sind das Programm der nächsten Wochen: Gradientenabstieg
     auf einer Loss-Funktion (VL 5), und die Perzeptronregel wird sich als Spezialfall
-    erweisen (Blatt 3).
+    erweisen (Übungsblatt).
     Die letzten beiden $\tau$ sind glatte Versionen der Sprungfunktion: $\tanh$ nach
     $(-1,1)$, $\sigma$ nach $(0,1)$.}
 \end{frame}
@@ -367,7 +368,7 @@
 
 % ------------------------------------------------------------------ Abschluss
 \begin{frame}
-  \frametitle{Blatt 2}
+  \frametitle{Übungsblatt}
 
   \begin{itemize}\setlength{\itemsep}{8pt}
   \item Perzeptronregel selbst implementieren (NumPy, nicht das verallgemeinerte Perzeptron)

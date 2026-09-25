@@ -106,6 +106,13 @@ Aktueller Stand des Skripts: 27 Kapitel (01–27) plus Glossar. HTML-Build ohne 
   laut `kurs-2026-27.md`, gemeinsamer Header, Bilder per `\graphicspath` direkt aus `images/`. Alle bauen mit
   `latexmk -lualatex` ohne zu volle Rahmen (14–23 Folien je Deck). Textarm gehalten: die Folie ist der
   Gesprächsanlass, die Ausführung steht in `\note{}`.
+- [x] **Durchsicht der Decks 2026-09-25** (`folien-review-2026-09-25.md`), am selben Tag umgesetzt: Schrift
+  (Source Sans Pro statt Serifen-Fallback, Mathe kursiv), Frametitle mit Breitenbegrenzung, drei Titel
+  gekürzt, Item-Labels als `description`, Blatt-Verweise ohne Nummern („Übungsblatt“), Codezeile VL 3,
+  `build.sh`-Glob.
+- [ ] Rest aus der Durchsicht: Notizseite (`note page` plain + `\scriptsize`, sonst läuft die Titelnotiz
+  über), Ablaufplan-Foliennummern in 10 Decks, fachliche Punkte in VL 5/7/9/14 (siehe Abschnitt B),
+  Bilder für VL 10/13/15 und neun zu kleine Bilder (Abschnitt C).
 - [ ] Decks inhaltlich gegenlesen und im Hörsaal erproben; Folien-PDFs in ILIAS hochladen (die kopierten
   Dateien dort sind noch die von 2025/26).
 - [x] Dozentennotizen sind in den Decks (2026-09-25): je Folie ein `\note{}` mit den Dialogmustern aus

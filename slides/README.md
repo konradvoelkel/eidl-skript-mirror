@@ -22,6 +22,12 @@ Gebraucht wird das HHU-Beamer-Theme (`hhubeamer`) unter
   Gesprächsanlass; die Notizen enthalten die Dialogmuster aus den Aufzeichnungen
   2025/26 (`transcripts/*/notiz.md`, nicht im Repo), Zeitbudgets und die Fragen,
   die im Hörsaal gestellt werden.
+* **Übungsblätter ohne Nummer** nennen („Übungsblatt“, „eine Übungsaufgabe“, „das nächste Blatt“),
+  auf Folien wie in Notizen. Die Zuordnung Blatt ↔ Woche kann sich noch verschieben
+  (`devnotes/TODO.md`); Nummern in den Decks wären dann falsch, ohne dass es jemand merkt.
+* Der Header ersetzt die Frametitle-Vorlage des Themes durch eine Kopie mit Breitenbegrenzung
+  (lange Titel brechen vor dem Logo um) und setzt Source Sans Pro als Sans-Schrift (das Theme lädt
+  `helvet`, das unter LuaTeX nicht existiert). Titel trotzdem unter etwa 45 Zeichen halten.
 * Fassung mit Notizen für den zweiten Schirm: im Deck die Zeile
   `\setbeameroption{show notes on second screen=right}` nach dem `\input{...header}`
   einkommentieren.

@@ -28,7 +28,7 @@
       55--65 & Folien 12--13 & Label Autoencoder, zwei Köpfe\\
       65--75 & Folie 14      & Architektur-Tricks: Dropout, BatchNorm\\
       75--88 & Folien 15--17 & Sparse und Denoising\\
-      88--90 & Folie 18      & Blatt 8\\
+      88--90 & Folie 18      & Übungsblatt\\
     \end{tabular}\\[4pt]
     Der Autoencoder ist das erste Modell, das nicht klassifiziert --- den Perspektivwechsel
     („die Label sind die Eingaben selbst“) langsam machen.}
@@ -228,7 +228,7 @@ for epoch in range(15):
   \end{center}
 
   \note{Kreuzentropie $=$ negative Log-Likelihood $\mathrel{\hat=}$ KL-Divergenz zwischen
-    echten Labels und Vorhersage --- das war Blatt 5.
+    echten Labels und Vorhersage --- das war eine Übungsaufgabe.
     \texttt{CrossEntropyLoss} macht Softmax und NLL in einem Schritt, numerisch stabil
     (VL 4!) --- deshalb bekommt es die Logits, nicht die Wahrscheinlichkeiten.}
 \end{frame}
@@ -323,7 +323,7 @@ for epoch in range(15):
 \end{frame}
 
 \begin{frame}
-  \frametitle{Blatt 8}
+  \frametitle{Übungsblatt}
 
   \begin{center}
     \Large MNIST-Autoencoder selbst bauen.

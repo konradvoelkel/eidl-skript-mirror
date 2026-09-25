@@ -19,7 +19,7 @@
   \note{\textbf{Ablauf, 90 Minuten} (2025: 55 Min. Folien, 14 Min. Code, 21 Min. Tensor-Ausflug
     mit Tafel):\\[2pt]
     \begin{tabular}{@{}rll@{}}
-      0--4   & Folie 2       & Rückblick Blatt 2, heute zwei Themen\\
+      0--4   & Folie 2       & Rückblick Übungsblatt, heute zwei Themen\\
       4--12  & Folien 3--4   & Hugging Face: was es ist, wie man sucht\\
       12--30 & Folien 5--7   & \textbf{Task-Rundgang} (Browser), Vokabular\\
       30--42 & Folien 8--9   & WMT19-Beispiel, das Muster Tokenizer--Modell--Tokenizer\\
@@ -27,7 +27,7 @@
       50--56 & Folien 12--13 & Tensor $\approx$ Array\\
       56--75 & Folien 14--16 & \textbf{Ausflug Tensorprodukt (Tafel)}, Reshape-Quiz\\
       75--85 & Folien 17--18 & Das Batch-Bild, Shape-Fehler\\
-      85--90 & Folie 19      & Blatt 3\\
+      85--90 & Folie 19      & Übungsblatt\\
     \end{tabular}\\[4pt]
     Der Ausflug ist der anspruchsvollste Teil der Sitzung und lebt von der Tafel.
     2025 war der Stoff nach gut einer Stunde durch und der Rest wurde Vorgriff ---
@@ -43,7 +43,7 @@
     Heute: Modelle, die \emph{andere} trainiert haben --- und die Datenstruktur dahinter.
   \end{center}
 
-  \note{Blatt 2 ist abgegeben (Perzeptron in NumPy), Blatt 3 kommt raus.
+  \note{Das Perzeptron-Blatt ist abgegeben, das nächste kommt raus.
     Heute zwei Themen, die wenig miteinander zu tun scheinen und es doch tun: Wer fertige
     Modelle benutzt, bekommt Tensoren zurück und muss sie lesen können.}
 \end{frame}
@@ -91,14 +91,15 @@
 \begin{frame}
   \frametitle{Computer Vision}
 
-  \begin{itemize}\setlength{\itemsep}{4pt}
-  \item[\textbf{Depth Estimation}] pro Pixel eine $z$-Koordinate \hfill {\small DPT}
-  \item[\textbf{Image Classification}] was ist drauf? \hfill {\small ResNet}
-  \item[\textbf{Object Detection}] was ist wo? \hfill {\small YOLOS}
-  \item[\textbf{Segmentation}] Umrisse pro Objekt \hfill {\small Segformer}
-  \item[\textbf{Image-to-Image}] Bild rein, Bild raus \hfill {\small ColorizeNet}
-  \item[\textbf{Zero-Shot}] Klassen als Text \hfill {\small CLIP-ViT}
-  \end{itemize}
+  % description statt itemize: Beamer schneidet lange \item[...]-Labels links ab.
+  \begin{description}[Image Classification]\setlength{\itemsep}{4pt}
+  \item[Depth Estimation] pro Pixel eine $z$-Koordinate \hfill {\small DPT}
+  \item[Image Classification] was ist drauf? \hfill {\small ResNet}
+  \item[Object Detection] was ist wo? \hfill {\small YOLOS}
+  \item[Segmentation] Umrisse pro Objekt \hfill {\small Segformer}
+  \item[Image-to-Image] Bild rein, Bild raus \hfill {\small ColorizeNet}
+  \item[Zero-Shot] Klassen als Text \hfill {\small CLIP-ViT}
+  \end{description}
 
   \note{Im Browser jeweils ein Beispiel live zeigen --- die Task-Seiten haben Widgets.
     Vokabel erklären: \emph{Zero-Shot} heißt ohne gelabelte Daten für die neue Aufgabe,
@@ -110,12 +111,12 @@
 \begin{frame}
   \frametitle{NLP}
 
-  \begin{itemize}\setlength{\itemsep}{6pt}
-  \item[\textbf{Text Classification}] Genre, Sentiment \hfill {\small DistilBERT}
-  \item[\textbf{Token Classification}] NER, PoS-Tagging \hfill {\small flair ner-german}
-  \item[\textbf{Summarization}] Zusammenfassung \hfill {\small BART}
-  \item[\textbf{Fill-Mask}] Lückentext \hfill {\small DistilBERT}
-  \end{itemize}
+  \begin{description}[Token Classification]\setlength{\itemsep}{6pt}
+  \item[Text Classification] Genre, Sentiment \hfill {\small DistilBERT}
+  \item[Token Classification] NER, PoS-Tagging \hfill {\small flair ner-german}
+  \item[Summarization] Zusammenfassung \hfill {\small BART}
+  \item[Fill-Mask] Lückentext \hfill {\small DistilBERT}
+  \end{description}
 
   \note{Fill-Mask ist die interessanteste Zeile: Das ist genau die Aufgabe, mit der
     BERT-artige Modelle \emph{vortrainiert} werden --- Lücke rein, vorhersagen lassen.
@@ -172,7 +173,7 @@ print(tokenizer.decode(outputs[0], skip_special_tokens=True))
   \begin{lstlisting}
 import torch
 
-device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
+device = "cuda" if torch.cuda.is_available() else "cpu"
 model.to(device)
 input_ids = input_ids.to(device)
   \end{lstlisting}
@@ -339,7 +340,7 @@ pip install 'transformers[torch]'
 \end{frame}
 
 \begin{frame}
-  \frametitle{Blatt 3}
+  \frametitle{Übungsblatt}
 
   \begin{itemize}\setlength{\itemsep}{8pt}
   \item Ableitungen wiederholen --- und an einer Stelle verallgemeinern

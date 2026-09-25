@@ -54,6 +54,51 @@
 %\documentclass[aspectratio=169,t]{beamer}
 \usetheme{hhubeamer} % put the hhu-beamer-theme in /usr/share/texmf/tex/latex/beamer/themes/
 
+% Folientitel: Das Theme setzt den Titel als tikz-Knoten ohne Breitenbegrenzung, lange Titel
+% laufen unter das Logo. Dieselbe Vorlage wie in beamerinnerthemehhubeamer.sty, nur mit
+% text width, sodass ein zu langer Titel vor dem Logo umbricht statt darunter zu laufen.
+% Das Theme wählt die Vorlage "hhubeamer" vor jedem Frame neu, deshalb wird sie hier unter
+% demselben Namen ersetzt (defbeamertemplate verweigert sonst die Neudefinition).
+\makeatletter
+\expandafter\let\csname beamer@@tmpop@frametitle@hhubeamer\endcsname\@undefined
+\defbeamertemplate{frametitle}{hhubeamer}[1][]
+{%
+\ifnum\value{page}>1%
+  \begin{beamercolorbox}[wd=\paperwidth,ht=2.11cm]{frametitle}
+    \begin{tikzpicture}
+      \useasboundingbox[fill=white](0,0) rectangle(\the\paperwidth,2.11);
+      \ifx\insertframetitle\@empty%
+      \else%
+        \fill[hhublue] (0,1.5) rectangle ++(0.3,-0.5);
+        \fill[hhublue] (0.3,1.25) circle (0.25);
+        \draw[hhuiceblue!65,thick] (.9,0.4) -- ++(12,0);
+      \fi
+      \node[anchor=south] at (14.5,-.02) {\includegraphics[height=16.8mm]{fig/template/HHU-vertikal.pdf}};
+      \ifx\insertframesubtitle\@empty%
+          {\node[anchor=west, hhublue,font=\LARGE, text width=12.4cm, align=left] at (.75,1.22){\insertframetitle};}
+      \else%
+          {\node[anchor=west, hhublue,font=\LARGE, text width=12.4cm, align=left] at (.75,1.22){\insertframetitle};
+          \node[anchor=west, hhublue,font=\large] at (.75,0){\insertframesubtitle};}%
+      \fi
+    \end{tikzpicture}
+  \end{beamercolorbox}
+  \ifx\insertframetitle\@empty%
+    \vspace{-1.5cm}
+  \fi
+\fi
+}
+\makeatother
+
+% Schrift: Das Theme lädt helvet (Type-1-Familie phv). Unter LuaTeX/fontspec gibt es die in der
+% TU-Kodierung nicht ("Font shape TU/phv undefined"), und LaTeX fiel still auf Latin Modern Roman
+% zurück. Beamer setzt in der Sans-Familie, deshalb hier \setsansfont, und zwar *nach* dem Theme.
+% professionalfonts lässt die Mathe-Fonts in Ruhe (Latin Modern Math, kursive Variablen), statt
+% sie wie Beamers Standard-Fonttheme serifenlos und aufrecht zu verbiegen.
+\usefonttheme{professionalfonts}
+\ifLuaTeX
+  \setsansfont[Ligatures=TeX]{Source Sans Pro}
+\fi
+
 % -------------------- Code listings config --------------------
 % Define custom colors for syntax highlighting
 \definecolor{codegreen}{rgb}{0,0.6,0}

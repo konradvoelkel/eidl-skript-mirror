@@ -27,7 +27,7 @@
       56--72 & Folien 16--18 & \textbf{PyTorch: die Trainingsschleife}\\
       72--82 & Folien 19--20 & Softmax, wann er passt\\
       82--87 & Folie 21      & Numerik: warum der Loss \texttt{nan} wird\\
-      87--90 & Folie 22      & Blatt 4\\
+      87--90 & Folie 22      & Übungsblatt\\
     \end{tabular}\\[4pt]
     2025 war der Stoff nach 75 Minuten durch und der Rest wurde Vorgriff auf VL 5.
     Besser: die Trainingsschleife langsamer durchgehen, sie ist die Blaupause für
@@ -198,7 +198,7 @@
     $\sigma' = \sigma(1-\sigma)$ mit Maximum $\frac14$ bei 0. Bemerkenswert: Die Ableitung
     lässt sich aus dem \emph{Funktionswert} berechnen, ohne $e^{-x}$ noch einmal
     auszuwerten --- das ist beim Training praktisch. Der Beweis mit der Quotientenregel
-    ist Blatt 5.}
+    ist eine Übungsaufgabe.}
 \end{frame}
 
 \begin{frame}
@@ -351,7 +351,7 @@ criterion = nn.BCELoss()                       # <---
     Probe: Alle Einträge positiv, Summe $\sum_j e^{v_j} / \sum_k e^{v_k} = 1$, also eine
     Wahrscheinlichkeitsverteilung --- ein Punkt im Wahrscheinlichkeitssimplex.
     Für $K = 2$ kommt genau das Sigmoid heraus, wobei nur die \emph{Differenz} der Logits
-    zählt (Blatt 5).}
+    zählt (Übungsaufgabe).}
 \end{frame}
 
 \begin{frame}
@@ -389,12 +389,12 @@ criterion = nn.BCELoss()                       # <---
   \note{Abhilfe ist immer dieselbe: nie erst $e^x$ und dann $\ln$, sondern beides
     algebraisch zusammenfassen. $\ln \sigma(z) = -\ln(1+e^{-z})$, für $z<0$ umgeschrieben
     als $z - \ln(1+e^{z})$. Beim Softmax das Maximum abziehen (log-sum-exp-Trick).
-    Für Blatt 4 ausdrücklich ansagen: Wenn der Loss \texttt{nan} wird, ist meistens das
+    Für das Übungsblatt ausdrücklich ansagen: Wenn der Loss \texttt{nan} wird, ist meistens das
     die Ursache --- nicht ein Fehler in der Trainingsschleife.}
 \end{frame}
 
 \begin{frame}
-  \frametitle{Blatt 4}
+  \frametitle{Übungsblatt}
 
   \begin{itemize}\setlength{\itemsep}{8pt}
   \item Erst sehr einfache Testcases schreiben
