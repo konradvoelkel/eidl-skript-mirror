@@ -33,8 +33,9 @@ Aktueller Stand des Skripts: 27 Kapitel (01–27) plus Glossar. HTML-Build ohne 
 - [ ] Zeitreihen / Aktienkurs-Beispiel (2025 gewünscht, nicht geliefert): bewusst zurückgestellt, sprengt den Rahmen.
   `notebooks/ASML.csv` liegt bereit, falls „RNNs“ (18) später ein Beispiel bekommen soll.
 - [x] Termine, Räume und Verteilung geklärt am 2026-09-24 (Quelle LSF 278733): Vorlesung Mi 12:30–14:00 in
-  HS 5E (25.21), 14.10.2026–03.02.2027; Übung Do 10:30–12:00 in 25.22.U1.52, ab der ersten Woche. Verteilung
-  läuft wie 2025/26 über **ILIAS** (Kurs 2165367) plus das ILIAS-Forum als Diskussionsraum, kein Rocket.Chat.
+  HS 5E (25.21), 14.10.2026–03.02.2027; Übung Do 10:30–12:00 in 25.22.U1.52, ab der ersten Woche. Material und
+  Abgaben über **ILIAS** (Kurs 2165367); Fragen laufen über den Rocket.Chat-Kanal `#eidl-2026` (angelegt
+  2026-09-25, Einladungslink ohne Ablauf), inhaltlich wie organisatorisch – kein Forum.
 - [x] **Übungsleitung 2026/27: Konrad selbst** (2026-09-24). Elisa Kleinfeld steht in LSF als „begleitend“,
   korrigiert aber nur die Übungsblätter und hält die Übungsgruppe nicht. Die ILIAS-Kursseite nennt – wie
   2025/26 – niemanden namentlich.
@@ -120,8 +121,11 @@ Textfassung von Seite und Objektbaum: `../ilias/` (analog zu `ds2-26/ilias/`), W
 - [x] Am 2026-09-24 aufgesetzt: Objekte und Seitengestaltung aus dem Kurs 2025/26 (1948423) übernommen
   (Lösungshinweise-Dateien dabei ausgelassen), Kursseite auf 2026/27 umgeschrieben (Ankündigung, Raum und Zeit,
   Themenliste, Material mit Skript-Link, Externe Resourcen inkl. UDL/MML, 19-zeilige Wochentabelle),
-  Übungstermine für alle 12 Übungseinheiten gesetzt, Umfragefenster gesetzt, Forum geleert,
+  Übungstermine für alle 12 Übungseinheiten gesetzt, Umfragefenster gesetzt,
   Kalender und Neuigkeiten deaktiviert. Der Kurs ist noch **offline**.
+- [ ] **In ILIAS noch offen** (Session war abgelaufen, 2026-09-25): den Absatz „Raum und Zeit“
+  auf die Chat-Fassung umstellen (`../ilias/out/ws2026-27/ilias/raumzeit.json`) und das
+  Forum-Objekt löschen; danach prüfen, ob der leere Objekteblock „Foren“ von der Seite muss.
 - [ ] Vorlesungsfolien 2026/27 als neue Versionen der kopierten Dateien hochladen (aktuell liegen dort die
   Folien von 2025/26) – hängt an den Beamer-Decks.
 - [ ] Zusatzmaterial aktualisieren: „EiDL-Klausur-2024“ durch die Erstklausur 2025/26 ersetzen, Probeklausur
