@@ -1,0 +1,366 @@
+% !Mode:: "TeX:UTF-8"
+% VL 3, gebaut aus part-grundlagen/04-vortrainierte-modelle.md und 05-tensoren.md
+% (Dialogmuster und Zeiten: transcripts/vl03-pytorch-tensoren-2025/notiz.md).
+\input{Einführung in Deep Learning 2026 header}
+
+% Fassung mit Dozentennotizen (zweiter Schirm): die nächste Zeile einkommentieren.
+% \setbeameroption{show notes on second screen=right}
+
+\graphicspath{{../images/}}
+
+\title[Vortrainierte Modelle und Tensoren (VL 3)]{Vortrainierte Modelle und Tensoren\\\large Einführung in Deep Learning, VL 3}
+\date{28.10.2026}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+
+  \note{\textbf{Ablauf, 90 Minuten} (2025: 55 Min. Folien, 14 Min. Code, 21 Min. Tensor-Ausflug
+    mit Tafel):\\[2pt]
+    \begin{tabular}{@{}rll@{}}
+      0--4   & Folie 2       & Rückblick Blatt 2, heute zwei Themen\\
+      4--12  & Folien 3--4   & Hugging Face: was es ist, wie man sucht\\
+      12--30 & Folien 5--7   & \textbf{Task-Rundgang} (Browser), Vokabular\\
+      30--42 & Folien 8--9   & WMT19-Beispiel, das Muster Tokenizer--Modell--Tokenizer\\
+      42--50 & Folien 10--11 & GPU, Installation, Colab\\
+      50--56 & Folien 12--13 & Tensor $\approx$ Array\\
+      56--75 & Folien 14--16 & \textbf{Ausflug Tensorprodukt (Tafel)}, Reshape-Quiz\\
+      75--85 & Folien 17--18 & Das Batch-Bild, Shape-Fehler\\
+      85--90 & Folie 19      & Blatt 3\\
+    \end{tabular}\\[4pt]
+    Der Ausflug ist der anspruchsvollste Teil der Sitzung und lebt von der Tafel.
+    2025 war der Stoff nach gut einer Stunde durch und der Rest wurde Vorgriff ---
+    lieber den Ausflug langsamer machen als vorzugreifen.}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Wo wir stehen}
+
+  \begin{center}
+    \Large
+    Bisher: ein Neuron, das wir selbst trainieren.\\[14pt]
+    Heute: Modelle, die \emph{andere} trainiert haben --- und die Datenstruktur dahinter.
+  \end{center}
+
+  \note{Blatt 2 ist abgegeben (Perzeptron in NumPy), Blatt 3 kommt raus.
+    Heute zwei Themen, die wenig miteinander zu tun scheinen und es doch tun: Wer fertige
+    Modelle benutzt, bekommt Tensoren zurück und muss sie lesen können.}
+\end{frame}
+
+% ------------------------------------------------------------------ Hugging Face
+\begin{frame}
+  \frametitle{Hugging Face}
+
+  \begin{center}
+    \Large huggingface.co/models\\[6pt] huggingface.co/tasks
+  \end{center}
+
+  \bigskip
+  \begin{itemize}
+  \item Firma aus New York, 2016 gegründet
+  \item verdient Geld mit gehosteter Inferenz
+  \item lockt mit Infrastruktur: \texttt{transformers}, \texttt{diffusers}, Hosting, Doku
+  \end{itemize}
+
+  \note{Der Hub ist ein kommerzielles Angebot, aber die Modelle und Libraries darauf sind
+    größtenteils offen --- und für uns die bequemste Art, an Gewichte zu kommen.
+    Ende 2023 mit etwa 4,5 Mrd. \$ bewertet.
+    2025 hat hier der Vergleich Likes gegen Downloads gut funktioniert: Likes sagen, was
+    die Community feiert, Downloads, was tatsächlich benutzt wird.}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Wonach sortiert man Modelle?}
+
+  \begin{center}
+    \Large Nach \emph{Task}.
+  \end{center}
+
+  \bigskip
+  \begin{center}
+    Computer Vision \quad NLP \quad Audio\\[6pt] Multimodal \quad Tabular \quad Reinforcement Learning
+  \end{center}
+
+  \note{Jetzt in den Browser: huggingface.co/tasks. Der Rundgang dient nicht dem
+    Verständnis der Modelle, sondern dem \emph{Vokabular} --- das ist die Sprache, in der
+    Modellkarten, Papers und Stellenanzeigen reden.
+    Audio, Tabular und Reinforcement Learning klammern wir im Kurs aus, das hier ansagen.}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Computer Vision}
+
+  \begin{itemize}\setlength{\itemsep}{4pt}
+  \item[\textbf{Depth Estimation}] pro Pixel eine $z$-Koordinate \hfill {\small DPT}
+  \item[\textbf{Image Classification}] was ist drauf? \hfill {\small ResNet}
+  \item[\textbf{Object Detection}] was ist wo? \hfill {\small YOLOS}
+  \item[\textbf{Segmentation}] Umrisse pro Objekt \hfill {\small Segformer}
+  \item[\textbf{Image-to-Image}] Bild rein, Bild raus \hfill {\small ColorizeNet}
+  \item[\textbf{Zero-Shot}] Klassen als Text \hfill {\small CLIP-ViT}
+  \end{itemize}
+
+  \note{Im Browser jeweils ein Beispiel live zeigen --- die Task-Seiten haben Widgets.
+    Vokabel erklären: \emph{Zero-Shot} heißt ohne gelabelte Daten für die neue Aufgabe,
+    \emph{One-Shot} mit einem Sample, \emph{Few-Shot} mit einigen wenigen.
+    2025 kam die Frage, ob Object Detection ein Spezialfall von Image Classification sei.
+    Antwort: unterschiedliche Aufgabenstellung, aber es gibt Multi-Task-Modelle.}
+\end{frame}
+
+\begin{frame}
+  \frametitle{NLP}
+
+  \begin{itemize}\setlength{\itemsep}{6pt}
+  \item[\textbf{Text Classification}] Genre, Sentiment \hfill {\small DistilBERT}
+  \item[\textbf{Token Classification}] NER, PoS-Tagging \hfill {\small flair ner-german}
+  \item[\textbf{Summarization}] Zusammenfassung \hfill {\small BART}
+  \item[\textbf{Fill-Mask}] Lückentext \hfill {\small DistilBERT}
+  \end{itemize}
+
+  \note{Fill-Mask ist die interessanteste Zeile: Das ist genau die Aufgabe, mit der
+    BERT-artige Modelle \emph{vortrainiert} werden --- Lücke rein, vorhersagen lassen.
+    Diese Idee kommt bei word2vec (VL 9) wieder.
+    DistilBERT ist ein destilliertes Modell; Destillation ist VL 15.}
+\end{frame}
+
+% ------------------------------------------------------------------ Praxis
+\begin{frame}[fragile]
+  \frametitle{Praktisch: Übersetzen}
+
+  \begin{lstlisting}
+from transformers import FSMTForConditionalGeneration, FSMTTokenizer
+
+mname = "facebook/wmt19-en-de"
+tokenizer = FSMTTokenizer.from_pretrained(mname)
+model = FSMTForConditionalGeneration.from_pretrained(mname)
+
+input = "I am not sure if deep learning is really for me."
+input_ids = tokenizer.encode(input, return_tensors="pt")
+outputs = model.generate(input_ids)
+print(tokenizer.decode(outputs[0], skip_special_tokens=True))
+  \end{lstlisting}
+
+  \note{Ausgabe: „Ich bin mir nicht sicher, ob Deep Learning wirklich etwas für mich ist.“
+    Das ist nachgerechnet, der Satz stimmt wörtlich.
+    WMT19 ist nach der Konferenz benannt (Workshop on Machine Translation).
+    \texttt{from\_pretrained} lädt beim ersten Aufruf die Gewichte aus dem Hub und cached
+    sie lokal --- das erste Mal dauert.}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Das Muster hinter allen Hub-Modellen}
+
+  \begin{center}
+    \Huge Text $\to$ Zahlen $\to$ Zahlen $\to$ Text
+  \end{center}
+
+  \bigskip
+  \begin{center}
+    \normalsize Tokenizer \qquad Modell \qquad Tokenizer
+  \end{center}
+
+  \note{Das Modell rechnet nur mit Zahlen; der Tokenizer ist die Übersetzung in beide
+    Richtungen. \texttt{return\_tensors="pt"} heißt: gib mir PyTorch-Tensoren --- damit
+    sind wir beim zweiten Thema.
+    Kurzer Ausblick, falls die Frage kommt: Warum nicht Wörter als Atome? Weil das
+    Vokabular explodiert und unbekannte Wörter keine Repräsentation hätten. Details in VL 10.}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Auf der GPU rechnen}
+
+  \begin{lstlisting}
+import torch
+
+device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
+model.to(device)
+input_ids = input_ids.to(device)
+  \end{lstlisting}
+
+  \bigskip
+  \begin{center}
+    Modell \emph{und} Daten müssen auf dasselbe Gerät.
+  \end{center}
+
+  \note{Der häufigste Anfängerfehler ist, nur eines von beiden zu verschieben --- die
+    Fehlermeldung dazu ist aber eindeutig.
+    Auf AMD heißt es ROCm, der Python-Befehl bleibt derselbe; auf macOS gibt es MPS.
+    Wir programmieren kein CUDA, nur den Wrapper PyTorch --- das 2025 ausdrücklich
+    versprochen.}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Installation}
+
+  \begin{lstlisting}
+python -m venv .env
+source .env/bin/activate
+pip install 'transformers[torch]'
+  \end{lstlisting}
+
+  \bigskip
+  \begin{center}
+    Ohne GPU? \quad Google Colab.
+  \end{center}
+
+  \note{Handzeichen einsammeln: Wer bekommt lokal \texttt{import torch} zum Laufen?
+    2025 waren es zwei Personen --- deshalb Colab ausdrücklich als gleichwertigen Weg
+    anbieten, es gibt dort begrenzte GPU-Zeit im Browser.
+    Wer \texttt{uv} kennt: erledigt Umgebung und Pakete in einem Schritt.
+    Für CUDA: \texttt{nvidia-smi} zeigt Treiber und maximale CUDA-Version, dann den
+    passenden torch-Build installieren; \texttt{torch.cuda.is\_available()} muss True sagen.}
+\end{frame}
+
+% ------------------------------------------------------------------ Tensoren
+\begin{frame}
+  \frametitle{Vier Fragen}
+
+  \begin{itemize}\setlength{\itemsep}{8pt}
+  \item Was ist ein Array?
+  \item Was ist ein Tensor?
+  \item Was ist ein Array in NumPy?
+  \item Was ist ein Tensor in Torch?
+  \end{itemize}
+
+  \note{Array: Daten gleichen Typs, fortlaufend im Speicher.
+    Tensor, je nachdem wen man fragt: Physiker --- etwas, das sich tensoriell
+    transformiert; Mathematiker --- Element eines Tensorproduktraums; Informatiker ---
+    ein fancy Wort für Array.
+    Torch-Tensor: Daten gleichen \texttt{dtype}, fortlaufend, potentiell im GPU-Speicher,
+    optimiert für Gradientenabstieg (Attribut \texttt{grad}).}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Tensor $\approx$ Array}
+
+  \begin{center}
+    \Large \texttt{torch.from\_numpy(a)}
+  \end{center}
+
+  \bigskip
+  \begin{center}
+    teilt sich den Speicher mit dem NumPy-Array.
+  \end{center}
+
+  \note{Kein Kopieren, kein zusätzlicher Speicher --- eine Änderung am einen ist eine
+    Änderung am anderen. Das ist Segen und Falle zugleich.
+    Empfehlung: das PyTorch-Tutorial „Tensors“ einmal durchklicken, steht im Skript verlinkt.}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Ausflug: Tensorprodukt}
+
+  \begin{center}
+    \Large
+    $\{$bilineare Abb. $V \times W \to U\}
+    \;\longleftrightarrow\;
+    \{$lineare Abb. $V \otimes W \to U\}$
+  \end{center}
+
+  \bigskip
+  \begin{center}
+    $\dim(V \otimes W) = n \cdot m$, \qquad $\mathbb{R}^n \otimes \mathbb{R}^m \cong \mathbb{R}^{nm}$
+  \end{center}
+
+  \note{\textbf{Tafelphase.} Ankündigen, dass jetzt ein Ausflug kommt, den man überspringen
+    darf --- und wofür er gut ist: um zu verstehen, was \texttt{shape} und \texttt{reshape}
+    eigentlich tun.
+    An der Tafel: Skalare im Tensorprodukt hin- und herschieben, damit die Bilinearität
+    anschaulich wird. Basen $v_i \otimes w_j$ zählen.
+    Wer nicht mehr folgt: Gedanken auf die Übungsaufgabe schreiben, wir klären es dort.}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Ausflug: Dualraum}
+
+  \begin{center}
+    \Large
+    $V^\vee = \operatorname{Hom}(V, \mathbb{R})$\\[14pt]
+    \normalsize
+    Spaltenvektor $v$ \quad$\longleftrightarrow$\quad Zeilenvektor $v^T$\\[8pt]
+    $v^T w = v \cdot w$
+  \end{center}
+
+  \note{An der Tafel: der Kovektor als „liegender Vektor“, geschrieben als
+    $a x + b y + c z$ --- eine Maschine, die einen Vektor frisst und eine Zahl ausspuckt.
+    Kovariant und kontravariant nur benennen, nicht vertiefen; in Einstein-Notation stehen
+    die Indizes oben oder unten. Die Physiker im Deep Learning bringen diese Sprache mit.}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Quizfrage}
+
+  \begin{center}
+    \Huge Was macht \texttt{reshape}?
+  \end{center}
+
+  \note{Sammeln, nicht sofort auflösen. 2025 kamen Transponieren und lineare Abbildung ---
+    beides aufgreifen und abgrenzen.
+    Auflösung: $\mathbb{R}^4 \otimes \mathbb{R}^{10} \cong \mathbb{R}^{40}$, also ist
+    \texttt{a.reshape(-1, 2)} derselbe Tensor mit anderer Klammerung der Faktoren.
+    \emph{Reshape ändert keine Daten, nur die Interpretation des Speichers.}
+    An der Tafel: das Beispiel mit achtzig Zahlen durchspielen.}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Das Bild, das man sich merken sollte}
+
+  \begin{center}
+    \Large
+    \texttt{(32, 784)} \quad 32 Datenpunkte, 784 Features\\[10pt]
+    \texttt{(32, 28, 28)} \quad 32 Bilder\\[10pt]
+    \texttt{(32, 3, 28, 28)} \quad dieselben mit Farbkanälen
+  \end{center}
+
+  \bigskip
+  \begin{center}
+    Die \emph{erste} Achse ist der Batch.
+  \end{center}
+
+  \note{Das ist das mentale Bild: gestapelte Matrizen, und der vorderste Index sagt,
+    das wievielte Bild es ist.
+    \texttt{nn.Linear} und fast alle Layer wirken auf die \emph{letzte} Achse und lassen
+    den Batch in Ruhe.}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Warum das wichtig ist}
+
+  \begin{center}
+    \Large Der Shape sagt, \emph{wie viele} Zahlen in jede Richtung gehen ---\\[8pt]
+    nicht, \emph{was} die Richtung bedeutet.
+  \end{center}
+
+  \note{Das ist die Take-Home-Message der Sitzung. Die Anekdote erzählen: einmal bei einem
+    \emph{quadratischen} Bild die beiden Achsen vertauscht --- kein Fehler, keine Warnung,
+    nur wochenlang sinnloser Output.
+    Wer einen Tensor vor sich hat, sollte als Erstes sagen können: Welche Achse ist der
+    Batch, was bedeuten die übrigen?}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Blatt 3}
+
+  \begin{itemize}\setlength{\itemsep}{8pt}
+  \item Ableitungen wiederholen --- und an einer Stelle verallgemeinern
+  \item Die Betragsfunktion ist banal, aber wichtig
+  \item Die Integrale dürfen Sie ignorieren
+  \end{itemize}
+
+  \bigskip
+  \begin{center}
+    Nächste Woche: logistische Regression.
+  \end{center}
+
+  \note{Zur Betragsfunktion: Man soll verstehen, dass die an der Null umdefinierte
+    Vorzeichenfunktion ebenfalls eine schwache Ableitung ist --- daher kommt später ReLU
+    davon, obwohl sie in 0 nicht differenzierbar ist.
+    Warum man die Integrale ignorieren darf, besprechen wir in der Übung.}
+\end{frame}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

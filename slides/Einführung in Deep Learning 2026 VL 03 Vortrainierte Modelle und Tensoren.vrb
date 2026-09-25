@@ -1,0 +1,19 @@
+\frametitle{Installation}
+
+  \begin{lstlisting}
+python -m venv .env
+source .env/bin/activate
+pip install 'transformers[torch]'
+  \end{lstlisting}
+
+  \bigskip
+  \begin{center}
+    Ohne GPU? \quad Google Colab.
+  \end{center}
+
+  \note{Handzeichen einsammeln: Wer bekommt lokal \texttt{import torch} zum Laufen?
+    2025 waren es zwei Personen --- deshalb Colab ausdrücklich als gleichwertigen Weg
+    anbieten, es gibt dort begrenzte GPU-Zeit im Browser.
+    Wer \texttt{uv} kennt: erledigt Umgebung und Pakete in einem Schritt.
+    Für CUDA: \texttt{nvidia-smi} zeigt Treiber und maximale CUDA-Version, dann den
+    passenden torch-Build installieren; \texttt{torch.cuda.is\_available()} muss True sagen.}
