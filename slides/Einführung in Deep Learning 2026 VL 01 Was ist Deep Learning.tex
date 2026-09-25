@@ -119,12 +119,17 @@
 \begin{frame}
   \frametitle{Der Name ist erfreulich ehrlich}
 
-  \begin{center}
-    \Large
-    \emph{deep} = viele Ebenen (Layer)\\[10pt]
-    \emph{learning} = Training\\[20pt]
-    \normalsize Training künstlicher neuronaler Netze mit vielen Ebenen.
-  \end{center}
+  \begin{columns}[c]
+    \begin{column}{0.52\textwidth}
+      \Large
+      \emph{deep} = viele Ebenen (Layer)\\[10pt]
+      \emph{learning} = Training\\[18pt]
+      \normalsize Training künstlicher neuronaler Netze\\mit vielen Ebenen.
+    \end{column}
+    \begin{column}{0.44\textwidth}
+      \includegraphics[width=\textwidth]{vl01-mlp.png}
+    \end{column}
+  \end{columns}
 
   \note{Take-Home-Message der Sitzung: Deep Learning ist der Teil von Machine Learning,
     der tiefe neuronale Netze einsetzt --- nicht mehr und nicht weniger. Kein Bewusstsein,
@@ -368,33 +373,73 @@
 \begin{frame}
   \frametitle{Kurzgeschichte: bis 2010}
 
-  \begin{center}
-    \Large
-    1943 \quad McCulloch \& Pitts\\[8pt]
-    1958 \quad Rosenblatt: Perzeptron\\[8pt]
-    1969 \quad Minsky \& Papert $\Rightarrow$ AI Winter\\[8pt]
-    1986 \quad Backpropagation
-  \end{center}
+  \begin{columns}[c]
+    \begin{column}{0.52\textwidth}
+      \begin{itemize}\setlength{\itemsep}{8pt}
+      \item[\textbf{1943}] McCulloch \& Pitts
+      \item[\textbf{1958}] Rosenblatt: Perzeptron
+      \item[\textbf{1969}] Minsky \& Papert $\Rightarrow$ AI Winter
+      \item[\textbf{1986}] Backpropagation
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.46\textwidth}
+      \includegraphics[width=\textwidth]{vl01-neuron.png}
+    \end{column}
+  \end{columns}
 
   \note{1943: ein Hirnneuron, modelliert mit elektrischen Schaltkreisen.
-    1958: das Perzeptron wurde tatsächlich \emph{gebaut} --- der Mark I Perceptron
-    mit Fotozellen als Eingabe und Potentiometern als Gewichten, nachgestellt von
-    Elektromotoren. Das ist der Aufhänger für nächste Woche.
+    1958: das Perzeptron wurde tatsächlich \emph{gebaut} --- Bild auf der nächsten Folie.
     1969: nur linear trennbare Klassen --- gilt als Auslöser des ersten AI Winter.
-    Dazu sagen: Olazaran (1996) zeigt, dass diese offizielle Geschichte soziologisch
-    komplizierter ist; steht im Skript.
     1986: Backpropagation macht mehr Schichten praktikabel --- unser VL 6.}
+\end{frame}
+
+\begin{frame}
+  \frametitle{1958: gebaut, nicht simuliert}
+
+  \begin{columns}[c]
+    \begin{column}{0.48\textwidth}
+      \includegraphics[height=0.58\textheight]{vl01-mark-i-perceptron.jpg}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \footnotesize
+      The Mark I Perceptron, an early pattern recognition system,\\
+      at the Cornell Aeronautical Laboratory.\\[14pt]
+      \normalsize
+      Fotozellen als Eingabe,\\
+      Potentiometer als Gewichte,\\
+      Elektromotoren zum Nachstellen.
+    \end{column}
+  \end{columns}
+
+  \note{Das ist der Aufhänger für nächste Woche: die Gewichte waren Drehwiderstände,
+    das Training war ein Motor, der sie verstellt. Wer das Bild einmal gesehen hat,
+    versteht „Gewicht“ nicht mehr als abstrakte Zahl.
+    Wer mehr will: Olazaran, M. (1996), \emph{A Sociological Study of the Official History
+    of the Perceptrons Controversy} --- zeigt, dass die Erzählung vom AI Winter durch
+    Minsky und Papert so glatt nicht stimmt. Steht im Skript.}
 \end{frame}
 
 \begin{frame}
   \frametitle{Kurzgeschichte: 2010--2015}
 
-  \begin{center}
-    \Large
-    2012 \quad AlexNet \quad {\small(VL 11)}\\[10pt]
-    2013 \quad word2vec \quad {\small(VL 9)}\\[10pt]
-    2014 \quad GANs \quad {\small(VL 13)}
-  \end{center}
+  \begin{itemize}\setlength{\itemsep}{6pt}
+  \item[\textbf{2012}] AlexNet \hfill {\small kommt wieder in VL 11}
+  \item[\textbf{2013}] word2vec \hfill {\small VL 9}
+  \item[\textbf{2014}] GANs \hfill {\small VL 13}
+  \end{itemize}
+
+  \bigskip
+  \begin{columns}[c]
+    \begin{column}{0.32\textwidth}
+      \centering\includegraphics[height=0.22\textheight]{vl10-faltungsmatrix.png}
+    \end{column}
+    \begin{column}{0.32\textwidth}
+      \centering\includegraphics[height=0.22\textheight]{vl13-word-arithmetic.png}
+    \end{column}
+    \begin{column}{0.32\textwidth}
+      \centering\includegraphics[height=0.22\textheight]{vl12-gan-schema.png}
+    \end{column}
+  \end{columns}
 
   \note{AlexNet: „the paper that sparked the field of Deep Learning“ --- ein CNN
     gewinnt ImageNet mit großem Abstand, trainiert auf GPUs.
@@ -407,13 +452,12 @@
 \begin{frame}
   \frametitle{Kurzgeschichte: nach 2015}
 
-  \begin{center}
-    \Large
-    2017 \quad Transformer\\[8pt]
-    2020 \quad AlphaFold 2\\[8pt]
-    2021 \quad Diffusionsmodelle\\[8pt]
-    2022 \quad ChatGPT
-  \end{center}
+  \begin{itemize}\setlength{\itemsep}{10pt}
+  \item[\textbf{2017}] Transformer \hfill {\small VL 10, aber wir trainieren keine}
+  \item[\textbf{2020}] AlphaFold 2
+  \item[\textbf{2021}] Diffusionsmodelle
+  \item[\textbf{2022}] ChatGPT
+  \end{itemize}
 
   \note{Transformer: „Attention is all you need“, Grundlage für GPT --- wir schauen
     sie in VL 10 an, trainieren aber keine.
