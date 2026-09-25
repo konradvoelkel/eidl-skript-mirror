@@ -102,11 +102,16 @@ Aktueller Stand des Skripts: 27 Kapitel (01–27) plus Glossar. HTML-Build ohne 
   Google-Slides 2025. Grund: Von neun Unstimmigkeiten, die 2025 im Hörsaal auffielen, waren fünf Folienfehler, die
   das Skript schon richtig hat (Softmax-Minus, BLEU-Mittel, Wasserstein-Wertebereich, Top-k-Vergleichszeichen,
   Softmax-Abstand in „Latente Räume“).
-- [ ] Pro Vorlesungswoche ein Beamer-Deck im Stil von `../slides/Einführung in Deep Learning 2026 header.tex`
-  (hhubeamer), Zuordnung laut Tabelle in `kurs-2026-27.md`. Formeln und `images/` sind 1:1 übernehmbar.
-- [ ] Dozentennotizen je Deck: die Dialogmuster, die 2025 getragen haben und bewusst *nicht* im Skript stehen
-  (Type-Check-Argument, Gegenbeispiel „Eingabe 100“ bei Netzen von Hand, die 20 Minuten offen gehaltene Frage „wo
-  steckt Zufall“, das Anwendungsbeispiel als Spiel). Quelle: `transcripts/*/notiz.md`, Abschnitt „Beobachtungen“.
+- [x] **Alle 15 Decks stehen** (2026-09-25, `slides/`): ein Deck pro Vorlesungswoche, gebaut aus den Kapiteln
+  laut `kurs-2026-27.md`, gemeinsamer Header, Bilder per `\graphicspath` direkt aus `images/`. Alle bauen mit
+  `latexmk -lualatex` ohne zu volle Rahmen (14–23 Folien je Deck). Textarm gehalten: die Folie ist der
+  Gesprächsanlass, die Ausführung steht in `\note{}`.
+- [ ] Decks inhaltlich gegenlesen und im Hörsaal erproben; Folien-PDFs in ILIAS hochladen (die kopierten
+  Dateien dort sind noch die von 2025/26).
+- [x] Dozentennotizen sind in den Decks (2026-09-25): je Folie ein `\note{}` mit den Dialogmustern aus
+  `transcripts/*/notiz.md`, dazu auf jeder Titelfolie ein Minuten-Ablaufplan aus der jeweiligen Aufzeichnung.
+  Drin sind u.a. der Type-Check (VL 2), die offen gehaltene Zufalls-Frage (VL 5), „Quizfrage nicht auflösen“
+  (VL 1), „beim GAN Lab früh aufhören“ (VL 13) und die Vibecoding-Vorbereitung (VL 15).
 - [x] Externe Werkzeuge am 2026-09-24 geprüft: TensorFlow Playground (09), Loss Landscape Explorer (08),
   GAN Lab (22), Ollama (21) antworten alle mit 200. Ebenso alle 67 externen Links im Skript – bis auf einen
   toten (`muhark.github.io`, word2vec from scratch), jetzt ersetzt durch das offizielle PyTorch-Tutorial

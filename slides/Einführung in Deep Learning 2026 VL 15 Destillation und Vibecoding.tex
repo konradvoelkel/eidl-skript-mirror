@@ -1,0 +1,257 @@
+% !Mode:: "TeX:UTF-8"
+% VL 15, gebaut aus part-architekturen-anwendungen/25-destillation.md und dem
+% Vibecoding-Abschnitt aus 24-anwendungsbeispiele.md
+% (Dialogmuster und Zeiten: transcripts/vl14-destillation-2025/notiz.md).
+\input{Einführung in Deep Learning 2026 header}
+
+% Fassung mit Dozentennotizen (zweiter Schirm): die nächste Zeile einkommentieren.
+% \setbeameroption{show notes on second screen=right}
+
+\graphicspath{{../images/}}
+
+\title[Destillation (VL 15)]{Destillation --- und Vibecoding\\\large Einführung in Deep Learning, VL 15}
+\date{03.02.2027}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+
+  \note{\textbf{Ablauf, 90 Minuten} (2025: 51 Min. Folien, 7 Min. Fragerunden,
+    25 Min. Vibecoding live):\\[2pt]
+    \begin{tabular}{@{}rll@{}}
+      0--4   & Folie 2       & Letzte Vorlesung, Klausurhinweise\\
+      4--18  & Folien 3--5   & \textbf{Dialog: Was lernt ein Netz eigentlich?}\\
+      18--28 & Folien 6--7   & Suche gegen Regression, Model Compression\\
+      28--38 & Folien 8--9   & Pruning, Destillation: drei Ansätze\\
+      38--52 & Folien 10--12 & Distillation Loss, Dark Knowledge\\
+      52--60 & Folien 13--14 & DistilBERT, Schüler schlägt Lehrer\\
+      60--85 & Folie 15      & \textbf{Vibecoding live}\\
+      85--90 & Folie 16      & Klausur, Abschied\\
+    \end{tabular}\\[4pt]
+    \textbf{Vorbereitung für den Vibecoding-Teil:} Gemini-Konto, der Katzen-Hunde-Datensatz
+    (tausend Bilder) und ein vorab erzeugtes, \emph{gelaufenes} Skript. 2025 ging die
+    zweite Runde live schief --- das war lehrreich, kostet aber Zeit.}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Letzte Vorlesung}
+
+  \begin{center}
+    \Large
+    Klausur: Do 11.02.2027, 9:00--10:30\\[10pt]
+    Hörsäle 5F und 2D, Sitzplatzzuteilung vorab
+  \end{center}
+
+  \note{Die Probeklausur ist besprochen. Heute noch ein Thema, das erklärt, warum die
+    kleinen Modelle von heute so gut sind --- und danach ein Blick darauf, wie man mit
+    generiertem Code arbeitet.}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Was lernt ein Netz eigentlich?}
+
+  \begin{center}
+    \Huge Eine Funktion.
+  \end{center}
+
+  \note{\textbf{Dialogeinstieg.} Die Frage in den Raum stellen und die Antworten sortieren
+    --- 2025 kamen „Datenrepräsentation“ und „Interpretation“, und daraus lassen sich die
+    beiden Ansätze der nächsten Folien bauen.}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Ansatz 1: die Funktion ist bekannt}
+
+  \begin{center}
+    \Large
+    $y_i = f(x_i)$ liegt vor oder ist billig zu berechnen\\[16pt]
+    \normalsize $\Longrightarrow$ gewöhnliche Regression
+  \end{center}
+
+  \note{Das ist der einfache Fall: Wir kennen die Zielfunktion und approximieren sie.
+    Die universelle Approximation aus VL 7 sagt, dass das geht.}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Ansatz 2: die Funktion ist unbekannt}
+
+  \begin{center}
+    \Large
+    $f(x_1,\dots,x_k) = P(x_k \mid x_1,\dots,x_{k-1})$
+  \end{center}
+
+  \bigskip
+  \begin{center}
+    \normalsize Das Netz muss die Funktion erst \emph{finden}.
+  \end{center}
+
+  \note{Next token prediction --- man könnte die Wahrscheinlichkeit aus Daten schätzen,
+    aber das ist teuer.
+    Der Autoencoder ist derselbe Fall: Wir trainieren auf die Identität, aber was wir
+    eigentlich wollen, ist der Encoder in der Mitte --- eine Funktion, die wir vorher
+    nicht kannten.}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Der rote Faden: Suche gegen Regression}
+
+  \begin{center}
+    \Large
+    \emph{Suchen} braucht Platz und Flexibilität\\
+    $\Longrightarrow$ große, tiefe Netze\\[16pt]
+    \emph{Regression} auf etwas Bekanntes braucht wenig\\
+    $\Longrightarrow$ kleine, flache Netze genügen
+  \end{center}
+
+  \note{\textbf{Das ist der Satz, an dem die ganze Sitzung hängt.}
+    Bild aus 2025, das gut trägt: ein Gebirge mit Zäunen --- je mehr Platz man hat, desto
+    leichter findet man einen Weg hindurch. Deshalb lernen große Netze leichter.
+    Und daraus folgt die Idee: erst groß suchen, dann klein nachbauen.}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Model Compression}
+
+  \begin{center}
+    \Large
+    \textbf{Pruning}: unwichtige Teile abschneiden\\[14pt]
+    \textbf{Destillation}: ein kleines Netz vom großen lernen lassen
+  \end{center}
+
+  \note{Pruning ist schwierig: Es ist unklar, was weg kann, und nach dem Entfernen werden
+    „unwichtige“ Teile manchmal wichtig.
+    Historischer Vorläufer: Buciluă, Caruana, Niculescu-Mizil, \emph{Model Compression}
+    (2006) --- großes Ensemble trainieren, synthetische Daten labeln lassen, kleines Netz
+    darauf trainieren. Das Training wirkt regularisierend.}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Destillation: drei Ansätze}
+
+  \begin{enumerate}\setlength{\itemsep}{8pt}
+  \item Lehrer-Labels auf echten Daten
+  \item Synthetische Daten vom Lehrer
+  \item \emph{Logits} des Lehrers --- Destillation im engeren Sinn
+  \end{enumerate}
+
+  \note{Der dritte ist der interessante. Die ersten beiden sind „der Lehrer labelt“, der
+    dritte ist „der Schüler hört dem Lehrer beim \emph{Denken} zu“.
+    Hinton, Vinyals, Dean: \emph{Distilling the Knowledge in a Neural Network} (2015).}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Distillation Loss}
+
+  \begin{center}
+    \Large
+    $q_i = \dfrac{\exp(z_i/T)}{\sum_j \exp(z_j/T)}$\\[16pt]
+    $L_{\text{distill}} = T^2 \cdot D_{KL}\bigl(q^{\text{Lehrer}} \,\|\, q^{\text{Schüler}}\bigr)$
+  \end{center}
+
+  \note{Temperature Scaling wie in VL 14 --- mit $T > 1$ werden die kleinen
+    Wahrscheinlichkeiten der falschen Klassen sichtbar.
+    Der Faktor $T^2$ gleicht aus, dass die Gradienten mit $1/T^2$ skalieren; sonst müsste
+    man die Lernrate mit der Temperatur nachziehen.
+    In der Praxis kombiniert man das mit gewöhnlicher Kreuzentropie auf den echten Labels.}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Dark Knowledge}
+
+  \begin{center}
+    \Large
+    Ein Hund, falsch als „Katze“ gelabelt.\\[16pt]
+    Der Lehrer sagt „Katze“ --- aber \emph{vor} dem argmax\\
+    steht $P(\text{Hund})$ deutlich über null.
+  \end{center}
+
+  \note{\textbf{Das ist die Take-Home-Message der Sitzung:} Der Schüler hört dem Lehrer
+    nicht beim \emph{Urteilen} zu, sondern beim \emph{Denken}. Die weichen
+    Wahrscheinlichkeiten vor dem argmax tragen die Information.
+    Deshalb kann ein Schüler auch mit fehlerhaften Labels gut werden --- und deshalb
+    braucht man die Temperatur.}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Der Schüler kann den Lehrer übertreffen}
+
+  \begin{center}
+    \Large
+    \emph{Born Again Neural Networks} (2018)
+  \end{center}
+
+  \bigskip
+  \begin{center}
+    \normalsize sogar bei \emph{gleicher} Architektur.
+  \end{center}
+
+  \note{Das ist die Frage, die 2025 aus dem Hörsaal kam: Darf der Schüler dem Lehrer
+    widersprechen? Antwort: Er wird sogar besser, wenn er es tut --- die weichen Label
+    wirken wie eine Regularisierung.
+    Eine zweite Frage von 2025: Warum gibt es dann überhaupt noch große Modelle? Weil
+    jemand zuerst \emph{suchen} muss.}
+\end{frame}
+
+\begin{frame}
+  \frametitle{DistilBERT}
+
+  \begin{center}
+    \Large
+    40\,\% kleiner, 97\,\% der Leistung\\[14pt]
+    \normalsize jeder zweite Layer als Initialisierung,\\
+    drei Loss-Terme
+  \end{center}
+
+  \note{Distillation Loss (KL zu den skalierten Logits), Masked Language Modeling Loss wie
+    bei BERT, und ein Cosine Loss, der die Richtung der hidden states angleicht.
+    Das ist das Modell aus dem Task-Rundgang in VL 3 --- der Kreis schließt sich.
+    Weitere Beispiele, falls Zeit: Speculative Decoding, SDXL Turbo, Gemini Flash,
+    Chain of Thought als Destillationsziel.}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Vibecoding}
+
+  \begin{center}
+    \Large
+    Aufgabe: Katzen und Hunde sortieren --- mit generiertem Code.
+  \end{center}
+
+  \note{\textbf{Live-Teil, etwa 25 Minuten.} Vorbereitet: Prompt und erstes Skript, schon
+    einmal gelaufen. Im Editor in \emph{Ausführungsreihenfolge} lesen, nicht von oben nach
+    unten; Ergebnis im Dateimanager prüfen.
+    \textbf{Die Pointe, die stehen bleiben muss:} Hohe Accuracy sagt nichts, wenn die
+    Labelphase Murks war. Generierter Code läuft fast immer --- ob er das Richtige tut,
+    sieht man nur, wenn man die Annahmen im Code kennt und in die Ergebnisordner guckt.
+    2025 ist die zweite Runde live schiefgegangen (vermutlich nicht gelöschte Kopien im
+    sortierten Ordner). Das war lehrreich --- aber besser eingeplant als überraschend.}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Das war's}
+
+  \begin{center}
+    \Large
+    Klausur: Do 11.02.2027, 9:00--10:30\\[14pt]
+    \normalsize Fragen bis dahin: im Chat oder in der Fragestunde.
+  \end{center}
+
+  \bigskip
+  \begin{center}
+    Viel Erfolg!
+  \end{center}
+
+  \note{Kurz zusammenfassen, was das Semester getragen hat: Skalarprodukt plus
+    Nichtlinearität, eine Loss-Funktion minimieren, Backpropagation als Buchhaltung,
+    latente Räume als das, worin alles lebt.
+    Und ehrlich sagen, was wir nicht gemacht haben: Zeitreihen, Reinforcement Learning,
+    eigene Transformer trainieren --- dafür gibt es die Aufbaumodule im Master.}
+\end{frame}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

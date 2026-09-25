@@ -1,0 +1,17 @@
+\frametitle{Weg 10: Constrained Generation}
+
+  \lstset{basicstyle=\ttfamily\scriptsize}
+  \begin{lstlisting}
+class Person(BaseModel):
+    name: str; age: int; occupation: str; location: str
+
+response = ollama.chat(model="qwen2.5:0.5b", format="json", messages=[...])
+person = Person.model_validate_json(response["message"]["content"])
+print(person)   # name='Sabine' age=29 occupation='doctor' location='Munich'
+  \end{lstlisting}
+
+  \note{Auch das ist nachgerechnet und kommt genau so heraus.
+    Der Punkt: Statt in Prompts um ein Format zu \emph{betteln}, zwingt man das Sampling
+    in ein Schema --- beim Generieren werden nur Token zugelassen, die das JSON gültig
+    halten.
+    Das ist der Baustein, auf dem agentische Workflows aufbauen.}

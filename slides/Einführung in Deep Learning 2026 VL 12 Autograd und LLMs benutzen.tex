@@ -1,0 +1,331 @@
+% !Mode:: "TeX:UTF-8"
+% VL 12, gebaut aus part-lernen/10-autograd-berechnungsgraph.md und
+% part-architekturen-anwendungen/21-llms-benutzen.md
+% (Dialogmuster und Zeiten: transcripts/vl11-wiederholung-llms-lokal-2025/notiz.md).
+\input{Einführung in Deep Learning 2026 header}
+
+% Fassung mit Dozentennotizen (zweiter Schirm): die nächste Zeile einkommentieren.
+% \setbeameroption{show notes on second screen=right}
+
+\graphicspath{{../images/}}
+
+\title[Autograd und LLMs (VL 12)]{Autograd und LLMs benutzen\\\large Einführung in Deep Learning, VL 12}
+\date{13.01.2027}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+
+  \note{\textbf{Ablauf, 90 Minuten} (2025: 46 Min. Wiederholung, 50 Min. LLM-Praxis ---
+    und 7 Min. Überzug, den wir uns dieses Jahr sparen):\\[2pt]
+    \begin{tabular}{@{}rll@{}}
+      0--4   & Folie 2       & Rückblick, heute zwei Hälften\\
+      4--20  & Folien 3--6   & \textbf{Autograd-Notebook}: Graph, backward, step\\
+      20--28 & Folien 7--8   & Freezing, geteilte Gewichte\\
+      28--40 & Folien 9--10  & Zehn Wege, ein LLM zu nutzen\\
+      40--48 & Folien 11--12 & Wie viel VRAM? Llamas\\
+      48--60 & Folie 13      & \textbf{Ollama live im Terminal}\\
+      60--74 & Folien 14--15 & Die Verteilung direkt auslesen (llama.cpp)\\
+      74--84 & Folie 16      & Constrained Generation, JSON\\
+      84--90 & Folie 17      & Blatt 11\\
+    \end{tabular}\\[4pt]
+    Zwei Notebooks: \texttt{VL\_11\_backprop.ipynb} und \texttt{VL\_11\_llamacpp.ipynb}.
+    Beide zeigen, nicht vorlesen. 2025 hat der Dozent hier überzogen --- notfalls die
+    Wege-Liste kürzen.}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Heute zwei Hälften}
+
+  \begin{center}
+    \Large
+    Erst: Was macht \texttt{loss.backward()} wirklich?\\[16pt]
+    Dann: ein LLM ohne API benutzen.
+  \end{center}
+
+  \note{Die erste Hälfte ist Wiederholung von VL 6 --- diesmal aber im Code statt auf
+    Papier. Das ist die Gelegenheit, Backpropagation ein zweites Mal zu sehen, wenn es
+    beim ersten Mal zu schnell ging.}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Ein sehr kleines Netz}
+
+  \begin{lstlisting}
+import torch
+
+x = torch.tensor(3.0)                      # Input (Konstante)
+w = torch.tensor(2.0, requires_grad=True)  # "Beobachte mich!"
+b = torch.tensor(1.0, requires_grad=True)
+z = w * x     # 6
+y = z + b     # 7
+L = y ** 2    # 49
+  \end{lstlisting}
+
+  \note{\texttt{requires\_grad} ist die ganze Magie: Damit merkt sich PyTorch, dass dieser
+    Tensor beobachtet wird.
+    Der Berechnungsgraph (ein DAG) entsteht \emph{beim Ausführen}, nicht beim Schreiben ---
+    das ist der Unterschied zwischen Formel und Rechenreihenfolge, den wir in VL 6 hatten.}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Der Graph ist sichtbar}
+
+  \begin{lstlisting}
+print(L.grad_fn)                       # <PowBackward0>
+print(L.grad_fn.next_functions[0][0])  # <AddBackward0>
+  \end{lstlisting}
+
+  \bigskip
+  \begin{center}
+    \normalsize Jede \texttt{grad\_fn} weiß, wie man ihre Operation ableitet ---\\
+    und hält die \emph{saved tensors}.
+  \end{center}
+
+  \note{Das sind genau die $z_k$ aus VL 6, die wir im Forward Pass gespeichert haben.
+    \texttt{AccumulateGrad} sind die Blätter des Graphen, also die Parameter.
+    Im Notebook zeigen und einmal den Graphen entlanglaufen --- das macht die Sache
+    greifbar.}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{backward()}
+
+  \begin{center}
+    \Large
+    $\dfrac{dL}{dw} = 2y \cdot 1 \cdot x = 14 \cdot 3 = 42$
+  \end{center}
+
+  \begin{lstlisting}
+L.backward()
+print(w.grad, b.grad)   # tensor(42.), tensor(14.)
+  \end{lstlisting}
+
+  \note{\texttt{backward()} ist der rekursive Aufruf der Kettenregel, initial mit
+    $dL/dL = 1$. Die Zahlen stimmen --- nachgerechnet.
+    Das ist derselbe Rückwärtsdurchlauf wie in VL 6, nur dass ihn niemand von Hand
+    aufschreiben muss.}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Und der Optimizer-Schritt}
+
+  \begin{lstlisting}
+with torch.no_grad():     # sonst wird der Update Teil des Graphen
+    w -= lr * w.grad      # 2.0 - 0.01 * 42 = 1.58
+    b -= lr * b.grad      # 1.0 - 0.01 * 14 = 0.86
+    w.grad.zero_()        # sonst akkumuliert PyTorch
+    b.grad.zero_()
+  \end{lstlisting}
+
+  \bigskip
+  \begin{center}
+    \normalsize Mehr macht \texttt{optimizer.step()} nicht.
+  \end{center}
+
+  \note{Zwei Fallen auf einer Folie: \texttt{no\_grad}, sonst landet das Update selbst im
+    Graphen --- und \texttt{zero\_()}, sonst summiert PyTorch die Gradienten auf.
+    Das erklärt die Zeile \texttt{optimizer.zero\_grad()} aus VL 4, über die sich alle
+    wundern.
+    Übrigens ist das Akkumulieren kein Bug: Man nutzt es für große Batches, die nicht in
+    den Speicher passen.}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Freezing}
+
+  \begin{center}
+    \Large \texttt{w.requires\_grad = False}
+  \end{center}
+
+  \bigskip
+  \begin{center}
+    \normalsize Der Graph ist an dieser Stelle abgeschnitten --- der Optimizer
+    ändert $w$ nicht mehr.
+  \end{center}
+
+  \note{So friert man beim Transfer Learning die Schichten eines vortrainierten Modells
+    ein. Spart nebenbei Speicher, weil für eingefrorene Parameter keine Gradienten
+    gehalten werden.
+    Das ist der Mechanismus hinter „nur den letzten Layer nachtrainieren“.}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Geteilte Gewichte}
+
+  \begin{lstlisting}
+x = torch.tensor([1.0, 2.0, 3.0])
+k = torch.tensor([0.5], requires_grad=True)
+o1, o2, o3 = x[0] * k, x[1] * k, x[2] * k   # wie nn.Conv1d
+loss = o1 + o2 + o3
+loss.backward()
+print(k.grad)     # tensor([6.])
+  \end{lstlisting}
+
+  \bigskip
+  \begin{center}
+    \normalsize $1 + 2 + 3 = 6$: alle Verwendungen werden \emph{summiert}.
+  \end{center}
+
+  \note{Das ist die „Summe über alle Pfade“ aus VL 5, jetzt im Code: Im Graphen führen
+    mehrere Kanten zu demselben Blatt, und die Beiträge addieren sich.
+    Genau so funktioniert Backprop durch eine Faltungsschicht --- ein Kernel wird an jeder
+    Position benutzt.}
+\end{frame}
+
+% ------------------------------------------------------------------ LLMs
+\begin{frame}
+  \frametitle{Zehn Wege, ein LLM zu nutzen}
+
+  \begin{columns}[t]
+    \begin{column}{0.48\textwidth}
+      \begin{enumerate}\setlength{\itemsep}{1pt}
+      \item Wortvektoren
+      \item Satzvektoren
+      \item die Verteilung auslesen
+      \item Prompting
+      \item selbst pretrainieren
+      \end{enumerate}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{enumerate}\setlength{\itemsep}{1pt}\setcounter{enumi}{5}
+      \item Finetuning
+      \item RLHF
+      \item API
+      \item Destillation
+      \item Constrained Generation
+      \end{enumerate}
+    \end{column}
+  \end{columns}
+
+  \note{Am Beispiel-Task durchgehen: „Ist dieser Text positiv oder negativ gefärbt?“
+    Weg 1 ist sehr billig, aber blind für längere Zusammenhänge; Weg 2 hat hohe Qualität,
+    braucht aber ein LLM zur Inferenz (das ist Blatt 11); Weg 5 kostet für Llama 2 zwischen
+    2 und 10 Mio. Dollar.
+    Heute machen wir 1, 3 und 10 im Code.}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Wie viel Rechner braucht man?}
+
+  \begin{center}
+    \Large
+    Llama 2 7B: $7 \cdot 4$ GB $= 28$ GB (32 Bit)\\[10pt]
+    $7 \cdot 2$ GB $= 14$ GB (16 Bit)\\[10pt]
+    quantisiert (4 Bit): unter 5 GB
+  \end{center}
+
+  \note{Die Faustformel ist die wichtigste Zahl der Sitzung: Parameterzahl mal Bytes pro
+    Parameter.
+    Llama2-7B ist etwa 8,6 GB groß und passt auf eine Consumer-Grafikkarte.
+    Llama3.3-70B spielt in der Liga von GPT-4, braucht aber viel VRAM; Llama3.1-405B
+    verteilt man auf mehrere GPUs.}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Ollama}
+
+  \begin{lstlisting}
+curl -fsSL https://ollama.com/install.sh | sh
+ollama run llama3.2:1b "Explain how LLMs work"
+  \end{lstlisting}
+
+  \bigskip
+  \begin{center}
+    \normalsize Baut auf llama.cpp / \texttt{ggml} auf.
+  \end{center}
+
+  \note{\textbf{Live im Terminal zeigen} --- das dauert zwei Minuten und beeindruckt mehr
+    als jede Folie. Ein 1B-Modell läuft auf jedem Laptop.
+    Danach im Browser das Chat-Interface zeigen.
+    Wer es nachbauen will: Für die Übung reicht ein kleines Modell wie
+    \texttt{qwen2.5:0.5b}, das sind 400 MB.}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Weg 1: Embeddings}
+
+  \begin{lstlisting}
+import ollama, numpy as np
+
+response = ollama.embeddings(model="qwen2.5:0.5b",
+                             prompt="Heute ist es kalt draussen.")
+vector = np.array(response["embedding"])
+print(vector.shape, np.linalg.norm(vector))    # (896,)  ~300
+  \end{lstlisting}
+
+  \note{Nachgerechnet: Shape $(896,)$, Norm etwa 297.
+    Das ist word2vec aus VL 9, nur mit einem viel größeren Modell --- und mit Kontext,
+    weil der ganze Satz eingeht.
+    Damit kann man semantisch suchen und clustern, ohne je Text zu generieren.}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Weg 3: die Verteilung direkt}
+
+  \lstset{basicstyle=\ttfamily\scriptsize}
+  \begin{lstlisting}
+probs = next_token_probs("The color of the sky is")
+print(probs.shape)          # (151936,) -- die Vokabulargroesse
+# ' changing' 10.3%, ' always' 6.7%, ' blue' 4.0%, ' a' 3.2%
+print(f"{probs[red]:.2%}")  # 0.72%
+  \end{lstlisting}
+
+  \bigskip
+  \begin{center}
+    \normalsize Ein LLM liefert keinen Text, sondern eine \emph{Verteilung}.
+  \end{center}
+
+  \note{Das ist die Take-Home-Message der zweiten Hälfte. Der Text entsteht erst durch
+    Sampling aus dieser Verteilung --- und was man statt \texttt{argmax} nimmt
+    (Temperatur, Top-$k$, Top-$p$), ist eine eigene Entscheidung.
+    Die Zahlen sind mit Qwen2.5-0.5B-Instruct Q4\_K\_M nachgerechnet; mit anderem Modell
+    oder anderer Quantisierung sehen sie anders aus.
+    Im Notebook \texttt{VL\_11\_llamacpp.ipynb} live zeigen.}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Weg 10: Constrained Generation}
+
+  \lstset{basicstyle=\ttfamily\scriptsize}
+  \begin{lstlisting}
+class Person(BaseModel):
+    name: str; age: int; occupation: str; location: str
+
+response = ollama.chat(model="qwen2.5:0.5b", format="json", messages=[...])
+person = Person.model_validate_json(response["message"]["content"])
+print(person)   # name='Sabine' age=29 occupation='doctor' location='Munich'
+  \end{lstlisting}
+
+  \note{Auch das ist nachgerechnet und kommt genau so heraus.
+    Der Punkt: Statt in Prompts um ein Format zu \emph{betteln}, zwingt man das Sampling
+    in ein Schema --- beim Generieren werden nur Token zugelassen, die das JSON gültig
+    halten.
+    Das ist der Baustein, auf dem agentische Workflows aufbauen.}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Blatt 11}
+
+  \begin{center}
+    \Large BERT-Embeddings als Features für einen Klassifikator.
+  \end{center}
+
+  \bigskip
+  \begin{center}
+    Nächste Woche: GANs.
+  \end{center}
+
+  \note{Das ist Weg 2 aus der Liste. Das Notebook dazu liegt auf der Blatt-11-Seite;
+    es lädt ein bert-medium herunter und braucht \texttt{ipywidgets} für die
+    Saliency-Zelle.
+    Ansagen: Die Probeklausur kommt nächste Woche raus.}
+\end{frame}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
