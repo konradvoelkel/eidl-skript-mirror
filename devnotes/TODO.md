@@ -123,9 +123,8 @@ Textfassung von Seite und Objektbaum: `../ilias/` (analog zu `ds2-26/ilias/`), W
   Themenliste, Material mit Skript-Link, Externe Resourcen inkl. UDL/MML, 19-zeilige Wochentabelle),
   Übungstermine für alle 12 Übungseinheiten gesetzt, Umfragefenster gesetzt,
   Kalender und Neuigkeiten deaktiviert. Der Kurs ist noch **offline**.
-- [ ] **In ILIAS noch offen** (Session war abgelaufen, 2026-09-25): den Absatz „Raum und Zeit“
-  auf die Chat-Fassung umstellen (`../ilias/out/ws2026-27/ilias/raumzeit.json`) und das
-  Forum-Objekt löschen; danach prüfen, ob der leere Objekteblock „Foren“ von der Seite muss.
+- [x] Am 2026-09-25 umgestellt: Absatz „Raum und Zeit“ verlinkt den Rocket.Chat-Kanal `#eidl-2026`
+  samt Einladungslink, das Forum-Objekt ist gelöscht (der Block „Foren“ verschwand mit ihm).
 - [ ] Vorlesungsfolien 2026/27 als neue Versionen der kopierten Dateien hochladen (aktuell liegen dort die
   Folien von 2025/26) – hängt an den Beamer-Decks.
 - [ ] Zusatzmaterial aktualisieren: „EiDL-Klausur-2024“ durch die Erstklausur 2025/26 ersetzen, Probeklausur
