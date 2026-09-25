@@ -137,8 +137,10 @@ Textfassung von Seite und Objektbaum: `../ilias/` (analog zu `ds2-26/ilias/`), W
   Kalender und Neuigkeiten deaktiviert. Der Kurs ist noch **offline**.
 - [x] Am 2026-09-25 umgestellt: Absatz „Raum und Zeit“ verlinkt den Rocket.Chat-Kanal `#eidl-2026`
   samt Einladungslink, das Forum-Objekt ist gelöscht (der Block „Foren“ verschwand mit ihm).
-- [ ] Vorlesungsfolien 2026/27 als neue Versionen der kopierten Dateien hochladen (aktuell liegen dort die
-  Folien von 2025/26) – hängt an den Beamer-Decks.
+- [ ] Vorlesungsfolien 2026/27 wöchentlich vor der Sitzung als **neue Dateien** in den Ordner „Vorlesungsfolien“
+  hochladen und in der Wochentabelle verlinken (Entscheidung 2026-09-25: die 2025/26er Folien bleiben dort
+  zugänglich, sind aber seit 2026-09-25 in der Tabelle entlinkt; Mechanik `unlinked_object_keys` in
+  `../ilias/runs/ws2026-27.yaml`).
 - [ ] Zusatzmaterial aktualisieren: „EiDL-Klausur-2024“ durch die Erstklausur 2025/26 ersetzen, Probeklausur
   und Blatt 0 / Sheet 0 prüfen.
 - [ ] Kurs online schalten, wenn die Blätter und die erste Foliensitzung stehen.
