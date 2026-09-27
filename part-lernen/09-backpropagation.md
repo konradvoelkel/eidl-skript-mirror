@@ -32,10 +32,10 @@ $$
 Beispielsetup 1: zwei Neuronen hintereinander.
 :::
 
-Wir planen eine Regression mit $x, y \in \mathbb{R}$, daher nehmen wir den MSE-Loss:
+Wir planen eine Regression mit $x, y \in \mathbb{R}$, daher nehmen wir den quadratischen Fehler — hier als reine Summe, ohne den Faktor $\frac1N$ des MSE aus dem [Kapitel „Gradientenabstieg“](08-gradientenabstieg.md). Der Faktor verschiebt das Minimum nicht, nur die Größe des Gradienten und damit die passende Lernrate:
 
 $$
-L(x, y; W) = \operatorname{MSE}(y, y_{\text{pred}}) = \sum_{i=1}^N (y_i - y_{\text{pred}, i})^2
+L(x, y; W) = \sum_{i=1}^N (y_i - y_{\text{pred}, i})^2
 \quad\Longrightarrow\quad
 L'(W) = \sum_{i=1}^N 2\,(y_i - y_{\text{pred}, i}) \left( -\frac{\partial}{\partial W} y_{\text{pred}, i} \right).
 $$
@@ -83,7 +83,7 @@ $$
 
 ### Layer
 
-Mehrere Neuronen, die parallel verarbeitet werden, bilden eine **Schicht** (Layer). Mehrmals lineare Regression ist *multilineare Regression* ist ein **Linear Layer** ist eine Matrix, deren Zeilen die Gewichtsvektoren sind. Schreiben wir also $u, v$ als Zeilen in eine Matrix $A \in \mathbb{R}^{2 \times 2}$ und benutzen $\sigma$ auf Vektoren komponentenweise, so ist
+Mehrere Neuronen, die parallel verarbeitet werden, bilden eine **Schicht** (Layer). Mehrmals lineare Regression ist *multiple lineare Regression* ist ein **Linear Layer** ist eine Matrix, deren Zeilen die Gewichtsvektoren sind. Schreiben wir also $u, v$ als Zeilen in eine Matrix $A \in \mathbb{R}^{2 \times 2}$ und benutzen $\sigma$ auf Vektoren komponentenweise, so ist
 
 $$
 y_{\text{pred}} = \langle w, \sigma(Ax) \rangle = w^T \sigma(Ax).
@@ -205,7 +205,7 @@ Achtung: Das ist nicht notwendig für diese Veranstaltung, das ist weiterführen
 
 ## Backpropagation als Induktion
 
-Noch einmal systematisch, als Wiederholung und Zusammenfassung aus der Übung – denn Backpropagation ist Klausurstoff (Aufgabentyp 4), und die Formulierung als Induktion ist die, mit der man jede Architektur erschlägt.
+Noch einmal systematisch, als Wiederholung und Zusammenfassung aus der Übung – denn Backpropagation ist Klausurstoff, und die Formulierung als Induktion ist die, mit der man jede Architektur erschlägt.
 
 ### Warum Backpropagation funktioniert
 
@@ -253,9 +253,9 @@ Eingabe $x = 3$ und Ziel $t = 1$; Loss $L = \tfrac12 (z-t)^2$.
 
 *Antwortprobe: In genau einem der beiden Fälle ist $\frac{\partial L}{\partial v} = 0$.*
 
-Und eine größere, wenn Sie Lust haben: Erweitern Sie den linearen Layer um ein zweites Neuron (also ein weiterer Gewichtsvektor $v \in \mathbb{R}^n$ tritt auf) und erweitern Sie die Berechnung um eine Loss-Funktion $\| z - z_{\text{ground truth}} \|^2$.
+Und eine größere, wenn Sie Lust haben: Nehmen Sie das Beispiel aus dem Abschnitt „Nicht konkret genug?“ ($y = \langle a, x \rangle$, dann $z = \operatorname{ReLU}(y)$) und geben Sie der ersten Schicht ein zweites Neuron, also eine zweite Zeile $a' \in \mathbb{R}^n$. Der Loss ist dann $\|z - z_{\text{ground truth}}\|^2$ mit $z \in \mathbb{R}^2$. Leiten Sie nach beiden Zeilen ab und prüfen Sie, dass die beiden Gradienten sich nicht gegenseitig beeinflussen.
 
 :::{admonition} Weiterlesen
 :class: seealso
-Prince, *UDL*, Kap. 7 (Gradients and initialization), dort Backpropagation mit derselben Rückwärts-Notation. Beide Bücher sind frei verfügbar, siehe [Über dieses Skript](../README.md).
+Prince, *UDL*, Kap. 7 (Gradients and initialization), dort Backpropagation mit derselben Rückwärts-Notation. Das Buch ist frei verfügbar, siehe [Über dieses Skript](../README.md).
 :::

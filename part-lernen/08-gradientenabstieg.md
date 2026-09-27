@@ -255,7 +255,9 @@ Sei $x = (2, -1)$ fest und $L(w) := (1 - w \cdot x)^2$.
    Lernrate $\rho = 0{,}1$ aus.
 3. Berechnen Sie $L$ vor und nach dem Schritt.
 
-*Antwortprobe: $L$ muss kleiner geworden sein.*
+*Antwortprobe: $L$ ist nach dem Schritt **exakt** $0$ — bei $\rho = 0{,}1$ und
+$\|x\|^2 = 5$ landet man genau im Minimum. Kommt etwas anderes heraus, fehlt meist der
+Faktor $2$ aus der Kettenregel.*
 
 :::{admonition} Weiterlesen
 :class: seealso
