@@ -23,7 +23,7 @@ Das ist die These der Bachelorarbeit „Das Dimpled Manifold Model als Erklärun
 
 ### Wie wird's gemacht?
 
-Mit Gradientenabstiegsmethoden sucht man, ausgehend von einem Bild eines weißen Hais, Richtungen, die die Klassifikation ändern, ohne besonders viel am Bild zu ändern: ein Schritt in Richtung des Gradienten des Loss nach dem *Bild*, oder viele kleine Schritte. Anders als sonst: Gradientenabstieg im **Eingaberaum**, nicht im Gewichtsraum – Backpropagation liefert $\nabla_x$ genauso wie $\nabla_w$, denn im DAG ist $x$ nur ein weiteres Blatt. Genau das tut auch das „Dreaming“ auf Blatt 11 ([Kapitel „LLMs benutzen“](21-llms-benutzen.md)): Es sucht per Adam im Raum der Eingabe-Embeddings nach einem Text, der den Spam-Detektor maximal triggert – ein adversarial example ohne den Anspruch, unauffällig zu sein.
+Mit Gradientenabstiegsmethoden sucht man, ausgehend von einem Bild eines weißen Hais, Richtungen, die die Klassifikation ändern, ohne besonders viel am Bild zu ändern: ein Schritt in Richtung des Gradienten des Loss nach dem *Bild*, oder viele kleine Schritte. Anders als sonst: Gradientenabstieg im **Eingaberaum**, nicht im Gewichtsraum – Backpropagation liefert $\nabla_x$ genauso wie $\nabla_w$, denn im DAG ist $x$ nur ein weiteres Blatt. Genau das tut auch das „Dreaming“ im `latent-classifier`-Notebook zum [Kapitel „LLMs benutzen“](21-llms-benutzen.md): Es sucht per Adam im Raum der Eingabe-Embeddings nach einem Text, der den Spam-Detektor maximal triggert – ein adversarial example ohne den Anspruch, unauffällig zu sein.
 
 :::{admonition} Vertiefung: Fast Gradient Sign Method
 :class: note dropdown

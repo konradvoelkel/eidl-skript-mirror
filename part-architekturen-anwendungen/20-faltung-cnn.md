@@ -212,7 +212,7 @@ Weiterführend:
 * Animationen von Vincent Dumoulin und Francesco Visin zu Padding, Stride und Dilation: [github.com/vdumoulin/conv_arithmetic](https://github.com/vdumoulin/conv_arithmetic).
 * Interaktives MNIST-CNN-Explorationswerkzeug von Adam Harley: [adamharley.com/nn_vis/cnn/2d.html](https://adamharley.com/nn_vis/cnn/2d.html) – man zeichnet eine Ziffer und sieht alle Feature Maps aller Schichten.
 * *Universal Fourier Features Emerge* ([arXiv:2312.08550](https://arxiv.org/abs/2312.08550)): warum gelernte Filter so oft wie Fourier-Basisfunktionen aussehen.
-* Das Übungsblatt 10 rechnet Faltungen und Pooling von Hand.
+* Faltung und Pooling einmal von Hand zu rechnen lohnt sich; ein Übungsblatt tut genau das.
 
 :::{admonition} Weiterlesen
 :class: seealso

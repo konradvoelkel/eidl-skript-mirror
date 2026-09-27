@@ -59,6 +59,10 @@ Agenten und Menschen stehen seit 2026-09-27 in `../CLAUDE.md`.
 - [x] **Entschieden am 2026-09-27: `part-exercises/` ganz aus dem TOC**, statt dessen pro Kapitel ein
   kleiner Übungsabschnitt. Die zwölf Blätter liegen in `uebungen-2025/blaetter/` (gitignored, Sciebo),
   die Lösungen daneben. PDF dadurch 110 statt 133 Seiten; `--min-pages` im `build-pdf`-Job auf 100.
+- [ ] **`notebooks/latent-classifier.ipynb` hängt in der Luft.** Es war als `downloads:` an Blatt 11
+  gehängt und damit über das Buch erreichbar; seit die Blätter draußen sind, verweisen die Kapitel 21
+  und 27 zwar darauf, aber niemand kann es herunterladen. Zwei Wege: als `downloads:`-Eintrag an
+  Kapitel 21 hängen, oder den Verweis auf ILIAS umbiegen.
 - [ ] **Die 23 Übungsabschnitte schreiben.** Der Vorschlag steht in `devnotes/uebungen-pro-kapitel.md`:
   je ein Abschnitt `## Übung` am Kapitelende, ein bis drei Aufgaben, mehr Hinweise als auf dem Blatt,
   **keine Lösung**, statt dessen eine nachprüfbare Antwortprobe. Der erste Entwurf hatte 27 Abschnitte

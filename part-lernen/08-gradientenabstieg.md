@@ -92,7 +92,7 @@ $$
 \langle L'(w), v \rangle = \frac{\partial L}{\partial w_1}(w)\, v_1 + \frac{\partial L}{\partial w_2}(w)\, v_2 .
 $$
 
-In welche Richtung $v$ ist die Änderung maximal? Das Skalarprodukt $\langle L'(w), v \rangle$ ist $\|L'(w)\| \cos \alpha$ mit dem Winkel $\alpha$ zwischen $v$ und dem Gradienten (Blatt 1), und der Kosinus ist maximal $1$, wenn $v$ in Richtung $L'(w)$ zeigt, und minimal $-1$ in der Gegenrichtung. Der Gradient zeigt bergauf, der negative Gradient bergab.
+In welche Richtung $v$ ist die Änderung maximal? Das Skalarprodukt $\langle L'(w), v \rangle$ ist $\|L'(w)\| \cos \alpha$ mit dem Winkel $\alpha$ zwischen $v$ und dem Gradienten, und der Kosinus ist maximal $1$, wenn $v$ in Richtung $L'(w)$ zeigt, und minimal $-1$ in der Gegenrichtung. Der Gradient zeigt bergauf, der negative Gradient bergab.
 
 :::{admonition} Vertiefung: dasselbe mit Cauchy-Schwarz
 :class: note dropdown

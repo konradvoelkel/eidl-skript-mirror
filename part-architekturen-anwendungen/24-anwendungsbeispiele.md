@@ -41,7 +41,7 @@ Wie trainieren wir das neuronale Netz? Die Listen der Nutzer sind „Sätze“, 
 
 ## Vibecoding Deep Learning
 
-Wir schauen uns praktisch an, wie man mit generiertem Code arbeiten kann. Beispiel-Aufgabe (das Empfehlungssystem von oben): Gegeben eine Liste besuchter bzw. gekaufter Items (Artikel, Produkte) pro Nutzer, empfehle einem neuen Nutzer ein Item, welches interessant ist (mit hoher Wahrscheinlichkeit angeklickt oder gekauft wird). Die Kompetenz, die dabei geübt wird, ist dieselbe wie auf Blatt 6 und Blatt 9: generierten Deep-Learning-Code anhand der Dokumentation kritisch prüfen – stimmt die Loss-Funktion, stimmen die Shapes, wird tatsächlich das trainiert, was behauptet wird?
+Wir schauen uns praktisch an, wie man mit generiertem Code arbeiten kann. Beispiel-Aufgabe (das Empfehlungssystem von oben): Gegeben eine Liste besuchter bzw. gekaufter Items (Artikel, Produkte) pro Nutzer, empfehle einem neuen Nutzer ein Item, welches interessant ist (mit hoher Wahrscheinlichkeit angeklickt oder gekauft wird). Die Kompetenz, die dabei geübt wird, ist dieselbe, die auch die Übungsblätter verlangen: generierten Deep-Learning-Code anhand der Dokumentation kritisch prüfen – stimmt die Loss-Funktion, stimmen die Shapes, wird tatsächlich das trainiert, was behauptet wird?
 
 ## Rezept: ein Anwendungskonzept schreiben
 

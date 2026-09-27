@@ -139,7 +139,7 @@ Neu gegenüber dem [Kapitel „Tensoren“](../part-grundlagen/05-tensoren.md) s
 
 Ein „klassischer“ Klassifikator-Ansatz auf Basis des Autoencoders: Encoder vom Autoencoder, dann ein linearer Layer auf 10 Dimensionen, dann Softmax. Zur „harten“ Klassifikation noch ein $\operatorname{argmax}$ dahinter hängen.
 
-Loss-Funktion: **Negative Log-Likelihood** = Kreuzentropie $\mathrel{\hat=}$ Kullback-Leibler-Divergenz zwischen echten Labels und Vorhersage (Blatt 5). Das ist der *classification loss*, im Gegensatz zum *reconstruction loss*. In PyTorch: `nn.CrossEntropyLoss()`, das Softmax und NLL in einem Schritt (numerisch stabiler) berechnet und direkt auf die Logits angewendet wird.
+Loss-Funktion: **Negative Log-Likelihood** = Kreuzentropie $\mathrel{\hat=}$ Kullback-Leibler-Divergenz zwischen echten Labels und Vorhersage (siehe [Kapitel „Loss-Funktionen und Maximum Likelihood“](../part-lernen/07-loss-funktionen-maximum-likelihood.md)). Das ist der *classification loss*, im Gegensatz zum *reconstruction loss*. In PyTorch: `nn.CrossEntropyLoss()`, das Softmax und NLL in einem Schritt (numerisch stabiler) berechnet und direkt auf die Logits angewendet wird.
 
 ### Label Autoencoder
 
@@ -200,7 +200,7 @@ Das zwingt das Netzwerk dazu, einzelne Pixel nicht zu stark zu gewichten und ehe
 :::{figure} ../images/vl08-denoising-example.png
 :width: 90%
 
-Denoising Sparse Label Autoencoder auf MNIST (Musterlösung zu Blatt 8, WiSe 2025/26): verrauschte Eingabe, Rekonstruktion, Original.
+Denoising Sparse Label Autoencoder auf MNIST (Musterlösung zu einem Übungsblatt, WiSe 2025/26): verrauschte Eingabe, Rekonstruktion, Original.
 :::
 
 :::{figure} ../images/vl08-dlae-loss-curve.png
@@ -215,7 +215,7 @@ Dasselbe Modell: Loss-Kurve über die Epochen.
 Der latente Raum desselben Modells, per PCA auf zwei Dimensionen projiziert und nach Ziffer eingefärbt.
 :::
 
-Code angucken: `denoising-autoencoder-mnist.py` (Blatt 8) implementiert genau das, als *Denoising Sparse Label Autoencoder* – alle Tricks auf einmal, mit SiLU, BatchNorm und Dropout.
+Code angucken: `denoising-autoencoder-mnist.py` aus dem zugehörigen Übungsblatt implementiert genau das, als *Denoising Sparse Label Autoencoder* – alle Tricks auf einmal, mit SiLU, BatchNorm und Dropout.
 
 ### Bisher, und was es bringt
 

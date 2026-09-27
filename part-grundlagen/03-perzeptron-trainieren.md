@@ -48,7 +48,7 @@ $$
 w^{(k)} \cdot x = w^{(0)} \cdot x + k\, r\, \|x\|^2 ,
 $$
 
-und dieser Wert wird für großes $k$ irgendwann positiv, egal wie schlecht $w^{(0)}$ war. Geometrisch: Jedes Update addiert ein Vielfaches von $x$ zu $w$, dreht $w$ also Schritt für Schritt *in Richtung* $x$ (bei $y = 0$ von $x$ weg), und die Entscheidungsgrenze, die senkrecht auf $w$ steht, dreht sich mit, bis $x$ auf der richtigen Seite liegt. Das ist die eine Rechnung, die man zu diesem Kapitel einmal selbst auf Papier gemacht haben sollte (Blatt 3, Aufgabe 4). Natürlich kann ein Update für $x$ ein anderes Sample $x'$ auf die falsche Seite schieben; dass sich das nicht endlos wiederholt, ist die Aussage des Konvergenzsatzes.
+und dieser Wert wird für großes $k$ irgendwann positiv, egal wie schlecht $w^{(0)}$ war. Geometrisch: Jedes Update addiert ein Vielfaches von $x$ zu $w$, dreht $w$ also Schritt für Schritt *in Richtung* $x$ (bei $y = 0$ von $x$ weg), und die Entscheidungsgrenze, die senkrecht auf $w$ steht, dreht sich mit, bis $x$ auf der richtigen Seite liegt. Das ist die eine Rechnung, die man zu diesem Kapitel einmal selbst auf Papier gemacht haben sollte. Natürlich kann ein Update für $x$ ein anderes Sample $x'$ auf die falsche Seite schieben; dass sich das nicht endlos wiederholt, ist die Aussage des Konvergenzsatzes.
 
 Die Regel schiebt also die Trennhyperebene bei jedem Fehler ein Stück in Richtung des falsch klassifizierten Punkts. Falls die Daten linear trennbar sind, findet sie nach endlich vielen Fehlern eine trennende Hyperebene; falls nicht, terminiert das Verfahren nie von selbst.
 

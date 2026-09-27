@@ -158,7 +158,7 @@ $$
 \sigma'(x) = \sigma(x)\,\bigl(1 - \sigma(x)\bigr) = \sigma(x)\,\sigma(-x).
 $$
 
-Der Beweis mit der Quotientenregel ist Aufgabe auf Blatt 5. Bemerkenswert daran: Die Ableitung lässt sich aus dem Funktionswert berechnen, ohne $e^{-x}$ noch einmal auszuwerten – das ist beim Training praktisch.
+Der Beweis mit der Quotientenregel ist eine lohnende Übung. Bemerkenswert daran: Die Ableitung lässt sich aus dem Funktionswert berechnen, ohne $e^{-x}$ noch einmal auszuwerten – das ist beim Training praktisch.
 
 ## Sigmoid und Logit
 
@@ -288,7 +288,7 @@ criterion = nn.BCELoss()  # <---
 optimizer = torch.optim.SGD(model.parameters(), lr=0.01)
 ```
 
-Der Rest der Trainingsschleife bleibt identisch. `BCELoss` ist die *binäre Kreuzentropie*: die erwartete Überraschung, wenn man mit den vorhergesagten Wahrscheinlichkeiten $(\sigma(\hat{y}), 1 - \sigma(\hat{y}))$ rechnet, die Wahrheit aber $(y, 1 - y)$ ist. Sie ist bis auf eine Konstante die Kullback-Leibler-Divergenz aus dem [DS-Skript](https://voelkel.pages.cs.uni-duesseldorf.de/ds-skript/relative-entropie) (dort $H(p \Vert r)$ geschrieben); den genauen Zusammenhang rechnen Sie auf Blatt 5 nach. Woher diese Loss-Funktion *kommt*, klärt das nächste Kapitel.
+Der Rest der Trainingsschleife bleibt identisch. `BCELoss` ist die *binäre Kreuzentropie*: die erwartete Überraschung, wenn man mit den vorhergesagten Wahrscheinlichkeiten $(\sigma(\hat{y}), 1 - \sigma(\hat{y}))$ rechnet, die Wahrheit aber $(y, 1 - y)$ ist. Sie ist bis auf eine Konstante die Kullback-Leibler-Divergenz aus dem [DS-Skript](https://voelkel.pages.cs.uni-duesseldorf.de/ds-skript/relative-entropie) (dort $H(p \Vert r)$ geschrieben); Den genauen Zusammenhang und woher diese Loss-Funktion *kommt*, klärt das nächste Kapitel.
 
 ## Weg von der 2-Klassen-Gesellschaft: Softmax
 
@@ -314,7 +314,7 @@ $$
 \operatorname{sm}_1(v) = \frac{e^x}{e^x + e^y} = \frac{1}{1 + e^{y - x}} = \sigma(x - y),
 $$
 
-Softmax verallgemeinert also tatsächlich das Sigmoid, wobei nur die *Differenz* der Logits zählt (Blatt 5). Obacht beim Vergleich mit $\sigma$: In der Softmax-Formel steht *kein* Minus im Exponenten. Das Minus in $\sigma(x) = 1/(1 + e^{-x})$ entsteht erst beim Kürzen für $K = 2$, wie eben gerechnet. Die Probe, dass $\operatorname{sm}(v)$ wirklich eine Wahrscheinlichkeitsverteilung ist: Alle Einträge sind positiv, und die Summe ist $\sum_j e^{v_j} \big/ \sum_k e^{v_k} = 1$.
+Softmax verallgemeinert also tatsächlich das Sigmoid, wobei nur die *Differenz* der Logits zählt. Obacht beim Vergleich mit $\sigma$: In der Softmax-Formel steht *kein* Minus im Exponenten. Das Minus in $\sigma(x) = 1/(1 + e^{-x})$ entsteht erst beim Kürzen für $K = 2$, wie eben gerechnet. Die Probe, dass $\operatorname{sm}(v)$ wirklich eine Wahrscheinlichkeitsverteilung ist: Alle Einträge sind positiv, und die Summe ist $\sum_j e^{v_j} \big/ \sum_k e^{v_k} = 1$.
 
 :::{admonition} Obacht!
 :class: warning
@@ -325,7 +325,7 @@ Nicht jedes Multiklassen-Klassifikationsproblem schreit nach dem Softmax. Softma
 :class: warning
 In `float32` ist $e^{89}$ bereits `inf`, und $\sigma(-100) = 1/(1 + e^{100})$ wird zu $1/\texttt{inf} = 0$ gerundet. Wer dann die Kreuzentropie selbst ausschreibt, berechnet $\ln 0 = -\infty$ und $0 \cdot (-\infty) = \texttt{nan}$; der Loss ist `nan`, und ab dem nächsten Schritt sind es alle Gewichte auch. Ähnlich beim Softmax: $e^{v_j}$ läuft über, sobald ein Logit größer als etwa $88$ ist.
 
-Abhilfe ist immer dieselbe: nie erst $e^x$ und dann $\ln$ berechnen, sondern beides algebraisch zusammenfassen. Zum Beispiel ist $\ln \sigma(z) = -\ln(1 + e^{-z})$, und für $z < 0$ schreibt man das als $z - \ln(1 + e^{z})$, dann ist der Exponent nie groß. Beim Softmax darf man von allen $v_k$ das Maximum abziehen, ohne das Ergebnis zu ändern (*log-sum-exp-Trick*). PyTorch hat das eingebaut: `nn.BCEWithLogitsLoss` und `nn.CrossEntropyLoss` nehmen die *Logits* entgegen, nicht die Wahrscheinlichkeiten, und rechnen stabil. (`nn.BCELoss` auf Wahrscheinlichkeiten fängt $\ln 0$ mit einem Trick ab, indem es den Logarithmus bei $-100$ abschneidet. Das verhindert `nan`, ist aber ein Pflaster, keine Lösung.) Für Blatt 4 heißt das: Wenn Ihr Loss `nan` wird, ist meist das die Ursache, nicht ein Fehler in Ihrer Trainingsschleife.
+Abhilfe ist immer dieselbe: nie erst $e^x$ und dann $\ln$ berechnen, sondern beides algebraisch zusammenfassen. Zum Beispiel ist $\ln \sigma(z) = -\ln(1 + e^{-z})$, und für $z < 0$ schreibt man das als $z - \ln(1 + e^{z})$, dann ist der Exponent nie groß. Beim Softmax darf man von allen $v_k$ das Maximum abziehen, ohne das Ergebnis zu ändern (*log-sum-exp-Trick*). PyTorch hat das eingebaut: `nn.BCEWithLogitsLoss` und `nn.CrossEntropyLoss` nehmen die *Logits* entgegen, nicht die Wahrscheinlichkeiten, und rechnen stabil. (`nn.BCELoss` auf Wahrscheinlichkeiten fängt $\ln 0$ mit einem Trick ab, indem es den Logarithmus bei $-100$ abschneidet. Das verhindert `nan`, ist aber ein Pflaster, keine Lösung.) Praktisch heißt das: Wenn Ihr Loss `nan` wird, ist meist das die Ursache, nicht ein Fehler in Ihrer Trainingsschleife.
 :::
 
 :::{admonition} Weiterlesen
