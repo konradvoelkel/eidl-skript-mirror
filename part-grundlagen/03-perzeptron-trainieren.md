@@ -92,7 +92,7 @@ Die Wahl von $\tau$ bestimmt, welches bekannte Modell wir vor uns haben – und 
 | „stetiges Perzeptron“ | $\tau(a) = \tanh(a)$ | ? |
 | Logistische Regression | $\tau(a) = \sigma(a) = \frac{1}{1 + e^{-a}}$ | ? |
 
-Die letzten beiden Zeilen sind stetige, sogar differenzierbare Versionen der Sprungfunktion $[a > 0]$: $\tanh$ bildet nach $(-1, 1)$ ab, die logistische Sigmoidfunktion $\sigma$ nach $(0, 1)$. Die offene Frage ist die Update-Regel: Wie trainiert man ein verallgemeinertes Perzeptron mit beliebigem $\tau$? Die Antwort – Gradientenabstieg auf einer Loss-Funktion – werden wir in den nächsten Kapiteln eingehend studieren; die Perzeptronregel wird sich dabei als Spezialfall erweisen (Blatt 3).
+Die letzten beiden Zeilen sind stetige, sogar differenzierbare Versionen der Sprungfunktion $[a > 0]$: $\tanh$ bildet nach $(-1, 1)$ ab, die logistische Sigmoidfunktion $\sigma$ nach $(0, 1)$. Die offene Frage ist die Update-Regel: Wie trainiert man ein verallgemeinertes Perzeptron mit beliebigem $\tau$? Die Antwort – Gradientenabstieg auf einer Loss-Funktion – werden wir in den nächsten Kapiteln eingehend studieren; die Perzeptronregel wird sich dabei als Spezialfall erweisen.
 
 ## Mehrere Schichten
 

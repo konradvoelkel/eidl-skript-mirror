@@ -161,7 +161,7 @@ $$
 L_{\text{Perc}}(w) = \sum_{i=1}^N \max\bigl(0,\, -y_i \langle w, x_i \rangle\bigr).
 $$
 
-Ein Summand ist $0$, wenn $x_i$ korrekt klassifiziert ist ($y_i \langle w, x_i \rangle > 0$), und sonst $-y_i \langle w, x_i \rangle > 0$, also proportional dazu, *wie weit* auf der falschen Seite $x_i$ liegt. Die (schwache) Ableitung, Blatt 3, ist
+Ein Summand ist $0$, wenn $x_i$ korrekt klassifiziert ist ($y_i \langle w, x_i \rangle > 0$), und sonst $-y_i \langle w, x_i \rangle > 0$, also proportional dazu, *wie weit* auf der falschen Seite $x_i$ liegt. Die (schwache) Ableitung ist
 
 $$
 L_{\text{Perc}}'(w) = \sum_{i \text{ falsch klassifiziert}} -y_i x_i ,
@@ -199,7 +199,7 @@ w_{\text{neu}} = w_{\text{alt}} - \rho\,\bigl(\sigma(\langle w_{\text{alt}}, x \
 = w_{\text{alt}} + \rho\,\bigl(y - f(x)\bigr)\,x .
 $$
 
-Das ist buchstäblich die Perzeptronregel aus dem [Kapitel „Das Perzeptron trainieren“](../part-grundlagen/03-perzeptron-trainieren.md), nur mit $f(x) = \sigma(\langle w, x \rangle)$ statt $[\langle w, x \rangle > 0]$: Statt „falsch oder richtig“ zählt jetzt „um wie viel daneben“. Die Formel $p - y$ werden wir bei Backpropagation als Startwert der Rückwärtsrechnung wiedersehen; sie gilt genauso für Softmax mit Kreuzentropie (Blatt 5).
+Das ist buchstäblich die Perzeptronregel aus dem [Kapitel „Das Perzeptron trainieren“](../part-grundlagen/03-perzeptron-trainieren.md), nur mit $f(x) = \sigma(\langle w, x \rangle)$ statt $[\langle w, x \rangle > 0]$: Statt „falsch oder richtig“ zählt jetzt „um wie viel daneben“. Die Formel $p - y$ werden wir bei Backpropagation als Startwert der Rückwärtsrechnung wiedersehen; sie gilt genauso für Softmax mit Kreuzentropie.
 
 ### Loss-Funktionen, die wir bisher gesehen haben
 
