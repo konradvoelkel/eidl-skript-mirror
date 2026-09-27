@@ -243,11 +243,12 @@ haben bewusst keinen, weil eine schwache Übung schlechter ist als keine. Die Fo
   findet einen Treffer **nicht**, wenn er am Zeilenende steht — die 25 Zeichen danach fehlen
   ja. So haben drei Blatt-Verweise zwei Prüfungen überlebt und standen im veröffentlichten
   PDF. Ohne Kontextbreite suchen, dann mit `-o` nur den Treffer ausgeben.
-* **`devnotes/build_skript_from_2025.py` laufen lassen.** Das Skript hat 2026-09-17 die erste
-  Fassung erzeugt; ein zweiter Lauf legt `part-exercises/` samt Lösungsvorschlägen neu an und
-  schreibt die Kapitel unter ihren alten Namen daneben. Es ist seit dem 2026-09-27 gesperrt
-  (Begründung im Kopf der Datei) und bleibt nur als Protokoll liegen. Dasselbe gilt für
-  `restructure.py`.
+* **Ein Umbau-Skript aus der Entstehungszeit wiederbeleben.** `build_skript_from_2025.py` und
+  `restructure.py` haben am 2026-09-17 die erste Fassung erzeugt und geschnitten; sie sind am
+  2026-09-27 gelöscht worden, weil ein zweiter Lauf das Repo zurückgedreht hätte —
+  `part-exercises/` samt Lösungen neu anlegen bzw. die heutigen Kapitel mit einer alten
+  Fassung überschreiben. In der Historie stehen sie noch (`git log -- devnotes/`). Wer so
+  etwas Neues schreibt: nicht ins Repo legen, oder mit einer Sperre versehen.
 * Eine neue Datei angelegt und den `myst.yml`-Eintrag vergessen — sie taucht dann nicht auf.
 * **Einen relativen Link auf eine Datei gesetzt, die es nicht (mehr) gibt.** Der HTML-Build
   meldet `Cross-reference target not found`; im PDF sieht der Text unauffällig aus.

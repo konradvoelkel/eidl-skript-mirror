@@ -9,8 +9,6 @@ Arbeitsnotizen und Prüfskripte zum Skript, nicht Teil des Buchs. Stand 2026-09-
 | `klausur-abdeckung.md` | Abgleich des Klausur-Aufgabenschatzes 2025/26 mit den Kapiteln | Referenz (Stand 2026-09-17, Kapitelnamen gelten weiter) |
 | `diskussion-vorlesung-vs-skript.md` | Was die Aufzeichnungen 2025/26 über das Skript sagen: neun Thesen, Konrads Entscheidungen, Umsetzung | abgeschlossen, Entscheidungen umgesetzt |
 | `vorschlag-grundlagen.md` | Zwölf Grundlagen-Snippets und wo sie eingebaut wurden | abgeschlossen, umgesetzt |
-| `build_skript_from_2025.py` | Erzeugte die erste Prosafassung aus den Folien-PDFs und die Blätter aus den `.tex` | einmalig gelaufen (2026-09-17), **gesperrt** — es würde `part-exercises/` samt Lösungen neu anlegen |
-| `restructure.py` | Kapitelschnitt 2026-09-17 (Folien-Kapitel → Themen-Kapitel) | einmalig gelaufen, **gesperrt** — es zeigt auf dieses Repo und überschriebe die heutigen Kapitel |
 | `codecheck-2026-09-24.md` | Alle 24 Python-Blöcke der Kapitel ausgeführt: was lief, was nicht, mit Umgebung | Referenz (Stand 2026-09-24) |
 | `folien-review-2026-09-25.md` | Durchsicht der 15 Beamer-Decks: Schriftbild, Titel/Labels, Ablaufplan-Nummern, Blatt-Zuordnung, fachliche Unschärfen, fehlende Bilder | A1–A3, Blatt-Verweise, VL-3-Code erledigt (2026-09-25); Rest offen |
 | `build-log-2026-09-27.md` | Playbook-Durchgang: Messwerte vorher/nachher, die zwei Konversions-Fehlerklassen, minted zurück, Gegenprobe im Image | Protokoll, abgeschlossen |
@@ -18,6 +16,13 @@ Arbeitsnotizen und Prüfskripte zum Skript, nicht Teil des Buchs. Stand 2026-09-
 | `check_pdf_build.py` | Prüft das gebaute PDF: LaTeX-Fehler, Abbruch, fehlende Glyphen, Seitenzahl, Stichproben | läuft im CI-Job `build-pdf`, lokal vor jedem PDF-Commit |
 | `check_ci_yaml.py` | Prüft `.gitlab-ci.yml` auf die Form, die GitLab erwartet (nicht nur auf YAML) | vor jedem Push, der die CI anfasst |
 | `make_figures.py`, `embed_figures.py` | Abbildungen mit matplotlib erzeugen und einbetten | bei Bedarf erneut laufen lassen |
+
+Die beiden einmaligen Umbau-Skripte von 2026-09-17 (`build_skript_from_2025.py`, das die erste
+Prosafassung aus den Folien-PDFs erzeugte, und `restructure.py`, das daraus die Themen-Kapitel
+schnitt) sind am 2026-09-27 **gelöscht** worden. Sie hätten das Repo zurückdrehen können:
+`part-exercises/` samt Lösungen neu anlegen bzw. die heutigen 27 Kapitel mit einer alten
+20-Kapitel-Fassung überschreiben. Wer sie als Protokoll braucht:
+`git show 946600f:devnotes/restructure.py`.
 
 Die Übungsblätter von 2025 samt Lösungsvorschlägen liegen seit dem 2026-09-27 in
 `../uebungen-2025/` (gitignored, nur in Sciebo) und sind aus der git-Historie entfernt —
