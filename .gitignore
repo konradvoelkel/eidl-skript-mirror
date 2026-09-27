@@ -151,11 +151,13 @@ scalene-profile.json
 # Vorlesungstranskripte (Standbilder, zu groß fürs Repo)
 transcripts/
 
-# Lösungsvorschläge zu den Übungsblättern. Liegen in Sciebo, aber nicht im
-# Repository: Das Projekt ist auf gitlab.cs.uni-duesseldorf.de **public**, und die
-# Blätter erscheinen im Skript -- bis zum 2026-09-27 standen die Lösungen damit im
-# veröffentlichten PDF und auf der Website. Behandelt wie transcripts/.
-loesungen/
+# Die Übungsblätter von 2025 samt Lösungsvorschlägen. Liegen in Sciebo, aber nicht im
+# Repository: Das Projekt ist auf gitlab.cs.uni-duesseldorf.de **public**, und die Blätter
+# erschienen bis zum 2026-09-27 im Skript -- die Lösungen standen damit im veröffentlichten
+# PDF und auf der Website. Die echten Blätter pflegt Konrad ohnehin in TeX und gibt sie über
+# ILIAS aus; ins Skript kommen statt dessen kleine Übungsabschnitte je Kapitel.
+# Behandelt wie transcripts/.
+uebungen-2025/
 
 # Beamer-Folien: TeX-Quellen sind im Repo, PDFs und LaTeX-Nebenprodukte nicht
 slides/*.pdf

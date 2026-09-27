@@ -110,7 +110,7 @@ build-pdf:
   script:
     - myst build --pdf 2>&1 | tee myst-pdf.log
     - python3 devnotes/check_pdf_build.py
-        --min-pages 120
+        --min-pages 100
         --expect "Adversarial Example"
         --expect "nvidia-smi"
         --expect "pip install torch torchvision --index-url"

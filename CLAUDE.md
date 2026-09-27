@@ -64,9 +64,9 @@ Wichtig zur Ordnerstruktur:
 * `devnotes/` sind Arbeitsnotizen des Autors, nicht Teil des Buchs (nicht im TOC).
   `devnotes/README.md` sagt, welche Datei wofür da ist; `devnotes/TODO.md` ist die eine
   Liste offener Punkte.
-* `transcripts/` (Vorlesungsaufzeichnungen 2025/26) und `loesungen/` (Lösungsvorschläge zu
-  den Übungsblättern) sind gitignored und liegen nur in Sciebo. **Das Repository ist
-  öffentlich** — was hier landet, ist im Netz.
+* `transcripts/` (Vorlesungsaufzeichnungen 2025/26) und `uebungen-2025/` (die zwölf
+  Übungsblätter samt Lösungsvorschlägen) sind gitignored und liegen nur in Sciebo. **Das
+  Repository ist öffentlich** — was hier landet, ist im Netz.
 
 ## Aufbau
 
@@ -76,7 +76,6 @@ Wichtig zur Ordnerstruktur:
 | `part-lernen/` | Kapitel 06–13: logistische Regression, Loss und Maximum Likelihood, Gradientenabstieg, Backprop, Autograd, Aktivierungen, Netze von Hand, universelle Approximation |
 | `part-representation-learning/` | Kapitel 14–19: Autoencoder, VAE, word2vec, Graphen, RNN, Transformer |
 | `part-architekturen-anwendungen/` | Kapitel 20–27: CNN, LLMs benutzen, GANs, latente Räume, Anwendungen, Destillation, Optimierer, Adversarial Attacks |
-| `part-exercises/` | Übungsblätter 0–11 (Fassung 2025, **ohne** Lösungen) |
 | `slides/` | Beamer-Foliensätze VL 01–15 (`build.sh`, gemeinsamer `header.tex`) |
 | `images/`, `notebooks/`, `logo/` | Abbildungen, Notebooks aus 2025, Logos |
 | `glossar.md` | Klausurbegriffe mit Link ins jeweilige Kapitel |
@@ -164,10 +163,13 @@ die eigene Pages-Domain.
 
 ## Bewusste Entscheidungen — nicht ändern
 
-1. **Keine Lösungen im Skript.** Die Blätter erscheinen im Buch, also stünden
-   Lösungsvorschläge im veröffentlichten PDF und auf der Website — bis zum 2026-09-27 taten
-   sie das. Sie liegen jetzt in `loesungen/` (gitignored, Sciebo). Wer eine Aufgabe
-   bearbeitet, fasst die Lösung dort an, nicht in `part-exercises/`.
+1. **Die Übungsblätter gehören nicht ins Skript.** Sie werden in TeX gepflegt und über
+   ILIAS ausgegeben; im Buch standen sie in einer zweiten, veraltenden Fassung — samt
+   Lösungsvorschlägen, die damit veröffentlicht waren. Seit dem 2026-09-27 sind sie aus dem
+   TOC und aus dem Repository (`uebungen-2025/`, gitignored). Ins Skript kommt statt dessen
+   pro Kapitel ein kleiner Übungsabschnitt: Varianten der echten Aufgaben, mit mehr
+   Hinweisen, **ohne Lösung** — statt dessen eine nachprüfbare Antwortprobe. Der Vorschlag
+   dazu, einer je Kapitel, steht in `devnotes/uebungen-pro-kapitel.md`.
 2. **Gliederung nach Themen, nicht nach Vorlesungswochen.** Der Wochenplan steht in
    `kurs-2026-27.md`, die Folien in `slides/`; das Skript bleibt davon unabhängig.
 3. **Die Notebooks aus 2025 sind nicht im TOC.** Ihre Inhalte sind in die Kapitel übernommen
@@ -193,9 +195,9 @@ die eigene Pages-Domain.
 
 ## Häufige Fehlerquellen in diesem Repository
 
-* **Eine Lösung in ein Übungsblatt geschrieben.** Sie steht dann im veröffentlichten PDF
-  und auf der Website. Gegenprobe vor dem Push:
-  `grep -rn 'Lösungsvorschlag' part-exercises/` muss leer bleiben.
+* **Eine Lösung in einen Übungsabschnitt geschrieben.** Sie steht dann im veröffentlichten
+  PDF und auf der Website — das `:class: dropdown` des HTML wirkt im LaTeX-Export nicht.
+  Gegenprobe vor dem Push: `grep -rn 'Lösungsvorschlag' part-*/` muss leer bleiben.
 * Eine neue Datei angelegt und den `myst.yml`-Eintrag vergessen — sie taucht dann nicht auf.
 * Einen Link auf einen Anker gesetzt, den es nicht gibt. Der Build meldet das, der Text sieht
   trotzdem unauffällig aus.

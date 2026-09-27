@@ -77,10 +77,11 @@ project:
 #       - file: notebooks/VL_11_backprop.ipynb
 #       - file: notebooks/VL_11_llamacpp.ipynb
 #       - file: notebooks/latent-classifier.ipynb
-    - title: Übungsaufgaben
-      children:
-       - pattern: part-exercises/eidl2026blatt*.md
-         sort: ascending
+#   Die Übungsblätter 2025 standen bis zum 2026-09-27 hier. Sie sind aus dem Buch heraus
+#   (und aus dem Repository, siehe .gitignore → uebungen-2025/): Die echten Blätter werden
+#   in TeX gepflegt und über ILIAS ausgegeben, und ihre Lösungsvorschläge standen im
+#   veröffentlichten PDF. Ins Skript kommen statt dessen kleine Übungsabschnitte je
+#   Kapitel; der Vorschlag dazu steht in devnotes/uebungen-pro-kapitel.md.
     - title: Anhang
       children:
        - file: glossar.md
