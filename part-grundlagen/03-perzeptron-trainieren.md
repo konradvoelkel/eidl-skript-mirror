@@ -71,7 +71,7 @@ Die Perzeptronregel bei der Arbeit: Trenngerade $w \cdot x + b = 0$ nach 0, 1, 2
 
 ## Zurück in die Theorie: Wozu das olle Perzeptron?
 
-Moderne neuronale Netze verwenden meist keine Perzeptrons mehr. Beliebter ist die multilineare oder logistische Regression, die ebenfalls gleich strukturierte Eingabedaten annimmt und sehr ähnlich verarbeitet: *Skalarprodukt, gefolgt von einer nichtlinearen Funktion.* Dieses Kochrezept – die gemeinsame Verallgemeinerung – heißt manchmal auch einfach „Perzeptron“.
+Moderne neuronale Netze verwenden meist keine Perzeptrons mehr. Beliebter ist die multiple lineare oder die logistische Regression, die ebenfalls gleich strukturierte Eingabedaten annimmt und sehr ähnlich verarbeitet: *Skalarprodukt, gefolgt von einer nichtlinearen Funktion.* Dieses Kochrezept – die gemeinsame Verallgemeinerung – heißt manchmal auch einfach „Perzeptron“.
 
 :::{prf:definition} Verallgemeinertes Perzeptron
 Das verallgemeinerte Perzeptron ist ein Regressionsmodell mit Parametern $w \in \mathbb{R}^n$ und Funktion
@@ -137,7 +137,9 @@ wäre $1$.
    Skalarprodukts aus — Sie bekommen $r\,\|x\|^2$, unabhängig von $w^{(0)}$.*
 3. Wie viele solche Schritte braucht es mindestens, bis die Aktivierung positiv wird?
 
-*Antwortprobe: eine ganze Zahl, und Sie können sie ausrechnen, ohne zu iterieren.*
+*Antwortprobe: eine ganze Zahl, ohne Iteration ausrechenbar. Machen Sie die Gegenprobe mit
+einem Schritt weniger – dort muss die Aktivierung noch $\le 0$ sein, denn in
+$[\,w \cdot x > 0\,]$ steht ein echtes Größerzeichen.*
 
 :::{admonition} Weiterlesen
 :class: seealso

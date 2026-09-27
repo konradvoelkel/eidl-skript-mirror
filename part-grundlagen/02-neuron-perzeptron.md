@@ -18,10 +18,10 @@ $$
 und die Ausgabe
 
 $$
-y = \sigma(\zeta)
+y = \tau(\zeta)
 $$
 
-für eine nichtlineare *Aktivierungsfunktion* $\sigma \colon \mathbb{R} \to \mathbb{R}$. Bei McCulloch und Pitts ist $\sigma$ eine Schwellenwertfunktion, die $0$ oder $1$ ausgibt; später wird $\sigma$ die logistische Sigmoidfunktion oder ReLU sein. Die Struktur „Skalarprodukt, gefolgt von einer nichtlinearen Funktion“ ist das Kochrezept, das uns durch die gesamte Vorlesung begleiten wird.
+für eine nichtlineare *Aktivierungsfunktion* $\tau \colon \mathbb{R} \to \mathbb{R}$. Bei McCulloch und Pitts ist $\tau$ eine Schwellenwertfunktion, die $0$ oder $1$ ausgibt; später wird $\tau$ die logistische Sigmoidfunktion $\sigma$ sein, oder ReLU. Diese Rollenverteilung gilt im ganzen Buch: $\tau$ ist eine beliebige Aktivierungsfunktion, $\sigma$ immer die logistische Sigmoidfunktion. Die Struktur „Skalarprodukt, gefolgt von einer nichtlinearen Funktion“ ist das Kochrezept, das uns durch die gesamte Vorlesung begleiten wird.
 
 :::{figure} ../images/vl01-neuron.png
 :width: 90%
@@ -37,7 +37,7 @@ $$
 f(x) = [\, w \cdot x + b > 0 \,],
 $$
 
-wobei $[\cdot]$ die Iverson-Klammer ist: $[A] = 1$, wenn die Aussage $A$ wahr ist, sonst $0$. Das Perzeptron ist also ein McCulloch-Pitts-Neuron mit der Schwellenwertfunktion $\sigma(\zeta) = [\zeta + b > 0]$. Man beachte: $f$ ist eine *nichtlineare* Funktion, obwohl im Inneren nur ein Skalarprodukt steht.
+wobei $[\cdot]$ die Iverson-Klammer ist: $[A] = 1$, wenn die Aussage $A$ wahr ist, sonst $0$. Das Perzeptron ist also ein McCulloch-Pitts-Neuron mit der Schwellenwertfunktion $\tau(\zeta) = [\zeta + b > 0]$. Man beachte: $f$ ist eine *nichtlineare* Funktion, obwohl im Inneren nur ein Skalarprodukt steht.
 
 Den Bias kann man loswerden, indem man ihn als nulltes Gewicht auffasst: Mit $w_0 := b$ und $x_0 := 1$ ist $w \cdot x + b = \sum_{j=0}^n w_j x_j$. Das ist ein Trick, den wir noch öfter sehen werden. Umgekehrt heißt das: Ein Perzeptron *ohne* Bias kann nur Hyperebenen durch den Ursprung lernen – zwei Klassen, die sich nur mit einer verschobenen Geraden trennen lassen, bleiben ihm verschlossen.
 
@@ -63,11 +63,11 @@ Das ist der **vorzeichenbehaftete Abstand** von $x$ zur Hyperebene: positiv auf 
 Sei $w = (3, 4)$ und $b = -5$, also $\|w\| = 5$ und $H = \{ x \in \mathbb{R}^2 : 3x_1 + 4x_2 = 5 \}$. Der Punkt $(1, \tfrac12)$ liegt auf $H$, denn $3 + 2 - 5 = 0$. Der Punkt $(3, 4)$ hat Aktivierung $9 + 16 - 5 = 20$ und damit Abstand $20/5 = 4$. Der Punkt $(-1, 0)$ hat Aktivierung $-3 - 5 = -8$ und Abstand $-8/5$: andere Seite.
 :::
 
-Daraus folgt eine Beobachtung, die uns bei der logistischen Regression wieder begegnen wird. Multipliziert man $w$ und $b$ mit derselben Zahl $c > 0$, so ändert sich weder $H$ noch die Entscheidung $[w \cdot x + b > 0]$, aber die Aktivierung wird um den Faktor $c$ skaliert. Die *Richtung* von $w$ legt fest, *was* klassifiziert wird; die *Länge* von $w$ legt fest, wie schnell die Aktivierung mit dem Abstand wächst. Für das Perzeptron ist die Länge egal. Sobald wir statt der Sprungfunktion eine glatte Aktivierungsfunktion verwenden, ist sie es nicht mehr: $\sigma(c \cdot 20)$ ist für $c = 10$ praktisch $1$, für $c = 0{,}01$ nur knapp über $\tfrac12$. Dieselbe Trenngerade, ganz andere „Sicherheit“.
+Daraus folgt eine Beobachtung, die uns bei der logistischen Regression wieder begegnen wird. Multipliziert man $w$ und $b$ mit derselben Zahl $c > 0$, so ändert sich weder $H$ noch die Entscheidung $[w \cdot x + b > 0]$, aber die Aktivierung wird um den Faktor $c$ skaliert. Die *Richtung* von $w$ legt fest, *was* klassifiziert wird; die *Länge* von $w$ legt fest, wie schnell die Aktivierung mit dem Abstand wächst. Für das Perzeptron ist die Länge egal. Sobald wir statt der Sprungfunktion eine glatte Aktivierungsfunktion verwenden, ist sie es nicht mehr: Für die logistische Sigmoidfunktion $\sigma$ ist $\sigma(c \cdot 20)$ bei $c = 10$ praktisch $1$, bei $c = 0{,}01$ nur knapp über $\tfrac12$. Dieselbe Trenngerade, ganz andere „Sicherheit“.
 
 :::{prf:definition} Linear trennbar
 Zwei Mengen $A, B \subseteq \mathbb{R}^n$ heißen *linear trennbar*, wenn es $w \in \mathbb{R}^n$ und $b \in \mathbb{R}$ gibt mit
-$w \cdot a + b > 0$ für alle $a \in A$ und $w \cdot c + b \le 0$ für alle $c \in B$.
+$w \cdot a + b > 0$ für alle $a \in A$ und $w \cdot a' + b \le 0$ für alle $a' \in B$.
 :::
 
 Ein Perzeptron kann also genau die Klassifikationsprobleme lösen, bei denen die beiden Klassen linear trennbar sind – nicht mehr. Das berühmte Gegenbeispiel ist XOR: Die Punkte $(0,0)$ und $(1,1)$ lassen sich nicht durch eine Gerade von $(0,1)$ und $(1,0)$ trennen. Das ist die mathematische Substanz hinter dem AI Winter – und der Grund, warum wir mehrere Neuronen hintereinander schalten werden.
@@ -87,10 +87,10 @@ Ein Multilayer Perceptron mit 3 Eingaben, einer versteckten Schicht aus 4 Neuron
 Formal: Eine Schicht mit $m$ Neuronen, die alle dieselben $n$ Eingaben bekommen, hat eine Gewichtsmatrix $W \in \mathbb{R}^{m \times n}$ und einen Biasvektor $b \in \mathbb{R}^m$ und berechnet
 
 $$
-h = \sigma(W x + b),
+h = \tau(W x + b),
 $$
 
-wobei $\sigma$ komponentenweise angewendet wird.
+wobei $\tau$ komponentenweise angewendet wird.
 
 Wie liest man $Wx$? Die $i$-te Komponente von $Wx$ ist das Skalarprodukt der $i$-ten *Zeile* von $W$ mit $x$. Die Zeilen von $W$ (in NumPy `W[i, :]`) sind also die Gewichtsvektoren der $m$ Neuronen, und $Wx + b$ berechnet $m$ Aktivierungen auf einmal, mit dem vorigen Abschnitt: $m$ skalierte Abstände zu $m$ Hyperebenen. Als Bild in $\mathbb{R}^2$: Jedes Neuron der ersten Schicht zeichnet eine Gerade in die Eingabeebene, und der Vektor $h$ sagt für jede dieser Geraden, auf welcher Seite $x$ liegt und wie weit weg. Das XOR-Beispiel unten ist genau das: zwei Geraden, dann eine Entscheidung im Raum der beiden Seiten-Informationen.
 
@@ -99,7 +99,7 @@ In PyTorch speichert `nn.Linear(n, m)` die Matrix als `weight` mit Shape `(m, n)
 Ein Netz mit $L$ Schichten berechnet dann
 
 $$
-h^{(0)} = x, \qquad h^{(k)} = \sigma^{(k)}\!\left(W^{(k)} h^{(k-1)} + b^{(k)}\right) \quad (k = 1, \dots, L), \qquad f(x) = h^{(L)}.
+h^{(0)} = x, \qquad h^{(k)} = \tau^{(k)}\!\left(W^{(k)} h^{(k-1)} + b^{(k)}\right) \quad (k = 1, \dots, L), \qquad f(x) = h^{(L)}.
 $$
 
 Dabei können die Schichten verschieden groß sein, manche Einträge von $W^{(k)}$ können $0$ sein (fehlende Pfeile), es kann Pfeile rückwärts geben (rekurrente Netze), und es können viele verschiedene nichtlineare Funktionen vorkommen (ReLU, Convolution, Softmax, …). Die Gesamtheit der Einträge aller $W^{(k)}$ und $b^{(k)}$ sind die *Parameter* oder *Gewichte* des Netzes; bei modernen Modellen sind das Milliarden von Zahlen. „Deep“ heißt: $L$ ist groß.

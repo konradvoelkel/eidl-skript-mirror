@@ -17,7 +17,7 @@ Wir setzen voraus, dass Sie die folgenden Begriffe schon einmal gesehen haben un
 
 Begriffe wie Gradientenabstieg, Loss-Funktion, Matrizen- und Tensorkalkül, latenter Raum, logistische Regression. Die Grundlagen von PyTorch. Was ein neuronales Netz ist, wie man fertige Modelle benutzt, wie man fertige Modelle verändert, und was die Besonderheiten bei Text und bei Bildern sind.
 
-Der grobe Plan in Stichworten: Geschichte (Perzeptron) – HuggingFace (fertige Modelle) – PyTorch (eigene Modelle) – logistische Regression (Softmax) – Gradientenabstieg und Backpropagation – Sparse Autoencoder und VAE für die Klassifikation von MNIST-Ziffern – NLP mit word2vec und Tokenizern – CNNs für MNIST – GANs (wie DALL-E mini) – LLMs benutzen.
+Der grobe Plan in Stichworten: Geschichte (Perzeptron) – HuggingFace (fertige Modelle) – PyTorch (eigene Modelle) – logistische Regression (Softmax) – Gradientenabstieg und Backpropagation – Sparse Autoencoder und VAE für die Klassifikation von MNIST-Ziffern – NLP mit word2vec und Tokenizern – CNNs für MNIST – LLMs benutzen – GANs (wie DALL-E mini).
 
 ## Wieso Python eine Katastrophe ist
 
@@ -134,9 +134,13 @@ Lesetipp: „The Decade of Deep Learning“ von Leo Gao, [bmk.sh/2019/12/31/The-
 
 ### Nach 2015
 
-Das behandeln wir in dieser Vorlesung nicht mehr (sondern in den darauf aufbauenden Modulen):
+Das meiste davon ist Stoff der aufbauenden Module. Die Transformer sind die Ausnahme:
 
-* **2017** Transformer, „Attention is all you need“ – die Grundlage für GPT.
+* **2017** Transformer, „Attention is all you need“ – die Grundlage für GPT. Die sehen wir
+  uns im Kapitel [„Transformer“](../part-representation-learning/19-transformer.md) an und
+  benutzen sie im Kapitel
+  [„LLMs benutzen“](../part-architekturen-anwendungen/21-llms-benutzen.md) – trainieren
+  werden wir aber keine.
 * **2020** AlphaFold 2 „löst“ das Proteinfaltungsproblem – Nobelpreis für Chemie 2024.
 * **2021** Diffusionsmodelle für realistische Bildgenerierung.
 * **2022** Veröffentlichung von ChatGPT; danach RLHF, Copilot, Multimodalität, RAG, Agents, …
@@ -148,7 +152,8 @@ tatsächlich rissig; insgesamt gibt es 40 rissige Bauteile. Berechnen Sie Precis
 Recall. Welche der beiden Zahlen würden Sie in der Qualitätssicherung höher gewichten,
 und warum?
 
-*Antwortprobe: beide Werte liegen zwischen 0,5 und 0,9, und sie sind verschieden.*
+*Antwortprobe: die beiden Werte verhalten sich wie 4 zu 3, und der größere ist der, in
+dessen Nenner die 30 steht.*
 
 :::{admonition} Weiterlesen
 :class: seealso
