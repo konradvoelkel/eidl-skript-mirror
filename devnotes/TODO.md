@@ -18,6 +18,7 @@ uv run _site/vendor/install_template.py
 uv run --only-group dev myst build --html         # keine Warnungen erwartet
 uv run --only-group dev myst build --pdf
 uv run devnotes/check_pdf_build.py --min-pages 100
+uv run devnotes/check_doku.py           # stimmt die Doku noch mit dem Repo überein?
 ```
 
 Erwartung: **27 Kapitel plus Glossar, 111 Seiten A4**, 0 LaTeX-Fehler, 0 fehlende Glyphen,
@@ -33,6 +34,19 @@ Hintergrundrauschen.
    TeX** gepflegt, nicht hier — `uebungen-2025/blaetter/` ist nur die Markdown-Konversion von 2025.
 3. **Folien gegenlesen und in ILIAS hochladen** (Abschnitte „Beamer-Folien“ und „ILIAS“).
 4. Die kleinen Reste unter „Infrastruktur“ — alle geprüft und beschrieben, keiner dringend.
+
+**Was auf Konrad wartet** (alles andere ist Arbeit, keine Entscheidung):
+
+| | Wo | Vorschlag |
+|---|---|---|
+| Punkte und Bestehensgrenzen der Blätter 1, 3, 5 | „Übungsblätter“ | je +1 Punkt, Grenze bleibt „die Hälfte“ |
+| Reserve-Kapitel 26/27: raus oder 16. Termin? | „Vorlesungsplan“ | 15 Termine wie 2025 |
+| Blatt 6 kommt vor der Autoencoder-Vorlesung | „Übungsblätter“ | vertagt bis zur Blatt-Überarbeitung |
+| Antwortenbox in Kapitel 01 steht im PDF offen | „Inhalt“ | in einen Anhang oder auf eine Antwortprobe eindampfen |
+| Anhang mit den Endergebnissen der Übungen? | „Übungsblätter“ | erst, wenn die Antwortproben sich als zu dünn erweisen |
+
+Der erste Punkt ist der einzige, der jemanden blockiert: An ihm hängt die Kopfzeile „N Punkte,
+Abgabe bis …“ in den TeX-Blättern.
 
 **Drei Dinge, die man nicht nebenbei ändert:**
 
@@ -254,6 +268,15 @@ Textfassung von Seite und Objektbaum: `~/Sciebo/hhu/eidl-26/ilias/` (analog zu
   Schreibmaschinenschrift im Fließtext (`torch.backends.mps.is_available()`), dazu 3 em `emergencystretch`
   für die Zeilen, die gar keine Trennstelle haben. Gemessen: ohne beides 17/15 (überlang/zu locker),
   mit 1,5 em 14/15, mit 3 em **9/19** — eine zu lockere Zeile bleibt im Satzspiegel, eine überlange nicht.
+- [ ] **Zwei Handgriffe in GitLab, die nur Konrad machen kann** (seit dem History-Rewrite vom
+  2026-09-27 offen): *Settings → Repository → Protected branches* → bei `main` **Allowed to force
+  push wieder ausschalten** (es wurde für den Rewrite eingeschaltet), und *Settings → Repository →
+  Housekeeping* einen Lauf anstoßen, damit die vor dem Rewrite gepushten Objekte wirklich
+  eingesammelt werden — bis dahin sind sie über ihre SHA erreichbar.
+- [ ] `devnotes/embed_figures.py` hat nichts mehr zu tun: Es ersetzt `<!-- TODO Abbildung -->`-Marker,
+  und davon gibt es null. Löschen wie die beiden Umbau-Skripte, oder behalten, falls neue Abbildungen
+  wieder über Marker eingebaut werden? *Vorschlag:* behalten, bis die Abbildungsliste unter „Inhalt“
+  abgearbeitet ist — dann löschen.
 - [ ] Die verbliebenen überlangen Zeilen (9 am Tag der Änderung, 6 nach dem Einbau der Übungen) sind
   URLs im Linktext: MyST setzt sie als gewöhnlichen
   Text in `\href`, nicht als `\url`, deshalb greift keine URL-Trennung. Die schlimmste (77 pt) ist

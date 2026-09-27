@@ -36,6 +36,7 @@ uv run --only-group dev myst build --html # Website nach _build/html
 uv run --only-group dev myst build --pdf  # PDF nach exports/eidl-skript.pdf (braucht LaTeX)
 uv run devnotes/check_pdf_build.py --min-pages 100   # prüft das gebaute PDF
 uv run devnotes/check_ci_yaml.py          # vor jedem Push, wenn .gitlab-ci.yml angefasst wurde
+uv run devnotes/check_doku.py             # prüft diese Datei und devnotes/ gegen das Repo
 ```
 
 Erwartung eines gesunden Laufs (Stand 2026-09-27): HTML ohne Warnungen, PDF **111 Seiten
@@ -58,6 +59,13 @@ Netzverbindung abhängig. Ein lokaler Pfad in `myst.yml` funktioniert für `site
 **nicht**; für das tex-Template unter `templates/tex/eidl-skript` funktioniert er sehr wohl,
 und deshalb liegt das einfach im Repo. Begründung und Aktualisierungsweg:
 `_site/vendor/README.md`.
+
+`check_doku.py` vergleicht, was die Dokumentation behauptet, mit dem, was da ist: Pfade,
+Kapitel- und Übungszahlen, Seitenzahl, `--min-pages` hier und in der CI, die Vollständigkeit
+von `devnotes/README.md`, und die Regeln, die im Buch gelten (keine Blattnummern, keine
+Lösungen, keine Unicode-Pfeile). Er ist entstanden, weil diese Datei an einem einzigen Tag
+drei falsche Angaben angesammelt hatte, ohne dass irgendetwas rot geworden wäre. Wer eine
+Zahl hier bewusst ändert, ändert sie dort mit — oder der Prüfer meldet sich.
 
 **Vor jedem Abschluss einer inhaltlichen Änderung**: `myst build --html` laufen lassen und
 die Warnungen ansehen. Neue Warnungen sind ein Fehler in der Änderung, nicht
