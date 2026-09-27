@@ -22,8 +22,8 @@ uv run devnotes/check_pdf_build.py --min-pages 100
 uv run devnotes/check_doku.py           # stimmt die Doku noch mit dem Repo überein?
 ```
 
-Erwartung: **27 Kapitel plus Glossar, 111 Seiten A4**, 0 LaTeX-Fehler, 0 fehlende Glyphen,
-6 überlange Zeilen, 23 Übungsabschnitte. Weicht etwas davon ab, ist das der erste Befund, nicht
+Erwartung: **27 Kapitel plus Glossar, 112 Seiten A4**, 0 LaTeX-Fehler, 0 fehlende Glyphen,
+5 überlange Zeilen, 23 Übungsabschnitte. Weicht etwas davon ab, ist das der erste Befund, nicht
 Hintergrundrauschen.
 
 **Womit anfangen**, wenn nichts anderes vorgegeben ist:

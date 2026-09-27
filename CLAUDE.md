@@ -39,8 +39,9 @@ uv run devnotes/check_ci_yaml.py          # vor jedem Push, wenn .gitlab-ci.yml 
 uv run devnotes/check_doku.py             # prüft diese Datei und devnotes/ gegen das Repo
 ```
 
-Erwartung eines gesunden Laufs (Stand 2026-09-27): HTML ohne Warnungen, PDF **111 Seiten
-A4**, 0 LaTeX-Fehler, 0 fehlende Glyphen, 6 überlange Zeilen. Die `--min-pages`-Untergrenze
+Erwartung eines gesunden Laufs (Stand 2026-09-27, nach der fachlichen Durchsicht der
+Kapitel 01–05): HTML ohne Warnungen, PDF **112 Seiten A4**, 0 LaTeX-Fehler, 0 fehlende
+Glyphen, 5 überlange Zeilen. Die `--min-pages`-Untergrenze
 soll einen *abgebrochenen* Lauf fangen, nicht eine gewollte Kürzung — sie steht deshalb
 deutlich unter der tatsächlichen Seitenzahl, in der CI auf demselben Wert.
 
@@ -173,7 +174,7 @@ dieselbe Form haben: **Es sieht im HTML unauffällig aus und ist trotzdem falsch
 * **Lange Bezeichner im Fließtext laufen in den Rand.** LaTeX sucht in `\texttt` keine
   Trennstelle, also bleibt `torch.backends.mps.is_available()` in einer Zeile. Das
   Template lädt deshalb `hyphenat` mit `htt` und gibt LaTeX 3 em `emergencystretch`; am Tag
-  der Änderung brachte das 21 → 9 überlange Zeilen, aktuell sind es 6. Codeblöcke sind davon
+  der Änderung brachte das 21 → 9 überlange Zeilen, aktuell sind es 5. Codeblöcke sind davon
   nicht betroffen, dort trennt ohnehin nichts.
 * **`?“` wird im PDF zu `?¿`.** MyST übersetzt das schließende deutsche
   Anführungszeichen in die TeX-Schreibweise mit zwei Accent-graves; direkt hinter einem
@@ -187,6 +188,12 @@ dieselbe Form haben: **Es sieht im HTML unauffällig aus und ist trotzdem falsch
   2026-09-27). Das tex-Template macht `\paragraph` und `\subparagraph` deshalb zu
   Überschriften auf eigener Zeile. Wer das rückgängig machen will, löscht dort den
   `\makeatletter`-Block — dann kommen die 76 wandernden Titel zurück.
+* **Zwei Währungs-`$` in einer Datei öffnen Mathemodus.** Ein einzelnes `$` am Zeilenende
+  lässt MyST als Text stehen (`\$` in der `.tex`), zwei aber paart es zu Inline-Mathematik —
+  und dann meldet der HTML-Bau `unicodeTextInMathMode` für jeden Umlaut dazwischen, während
+  der Satz im PDF in Mathe-Kursive erscheint. Passiert beim Einfügen einer zweiten Geldsumme
+  in ein Kapitel, das schon eine hat (2026-09-27 in `04-vortrainierte-modelle.md`).
+  Abhilfe: „US-Dollar“ ausschreiben, wie in Kapitel 20.
 * **jtex ersetzt seine Marken auch in LaTeX-Kommentaren.** Wer den Namen des
   Import-Platzhalters in einen `%`-Kommentar von `templates/tex/eidl-skript/template.tex`
   schreibt, bekommt den ganzen Import-Block ein zweites Mal in die `.tex` — elf „already
