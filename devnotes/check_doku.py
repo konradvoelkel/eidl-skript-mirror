@@ -12,7 +12,8 @@ Es liest die drei Dokumentationsdateien (`CLAUDE.md`, `devnotes/TODO.md`,
 1. **Pfade.** Jeder in Backticks genannte Pfad existiert (Ausnahmen unten sind benannt).
 2. **Zahlen.** Kapitel, Übungsabschnitte, `dropdown`-Boxen, Seitenzahl des gebauten PDF.
 3. **`--min-pages`** in CLAUDE.md und in `.gitlab-ci.yml` stimmen überein.
-4. **Vollständigkeit.** Jede Datei in `devnotes/` steht in dessen `README.md` und umgekehrt.
+4. **Vollständigkeit.** Jede Datei in `devnotes/` steht in dessen `README.md` und umgekehrt,
+   und `TODO.md` enthält nur offene Punkte (die Historie steht in `erledigt.md`).
 5. **Die Regeln, die im Buch gelten:** keine Verweise auf nummerierte Übungsblätter, keine
    Lösungsvorschläge, keine Unicode-Pfeile im Fließtext.
 
@@ -129,6 +130,16 @@ def fehler_sammeln() -> list[str]:
     for f in sorted(genannt - vorhanden - {"README.md"}):
         if f not in {"build_skript_from_2025.py", "restructure.py"}:  # historisch erwähnt
             fehler.append(f"devnotes/README.md: `{f}` steht im Index, existiert aber nicht")
+
+    # ── 4b. TODO.md enthaelt nur Offenes ────────────────────────────────────────
+    # Am 2026-09-27 standen dort 65 erledigte gegen 24 offene Punkte. Die Historie ist nach
+    # erledigt.md gewandert; wer sie zurueckwandern laesst, macht die Liste wieder unlesbar.
+    erledigt_in_todo = len(re.findall(r"(?m)^- \[x\]", todo))
+    if erledigt_in_todo:
+        fehler.append(
+            f"devnotes/TODO.md: {erledigt_in_todo} erledigte Punkte — die gehoeren nach "
+            "devnotes/erledigt.md, damit die Liste die Frage „was ist zu tun\" beantwortet"
+        )
 
     # ── 5. Regeln, die im Buch gelten ───────────────────────────────────────────
     buchdateien = kapitel + [WURZEL / n for n in ("index.md", "README.md", "glossar.md")]

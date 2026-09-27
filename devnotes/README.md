@@ -5,6 +5,7 @@ Arbeitsnotizen und Prüfskripte zum Skript, nicht Teil des Buchs. Stand 2026-09-
 | Datei | Was | Status |
 |---|---|---|
 | `TODO.md` | Die eine Liste offener Punkte und Entscheidungen, mit Erledigt-Historie | **aktuell**, hier zuerst schauen |
+| `erledigt.md` | Was erledigt wurde und warum — am 2026-09-27 aus `TODO.md` herausgelöst, weil 65 erledigte gegen 24 offene Punkte die Liste unlesbar machten | Historie, erklärt Entscheidungen |
 | `migrationsplan.md` | Wie das Skript aus den Folien 2025/26 entstanden ist; Zuordnung Vorlesung ↔ Kapitel ↔ Blatt ↔ Klausur; Links zu den Google-Slides 2025 | Referenz, Historie |
 | `klausur-abdeckung.md` | Abgleich des Klausur-Aufgabenschatzes 2025/26 mit den Kapiteln | Referenz (Stand 2026-09-17, Kapitelnamen gelten weiter) |
 | `diskussion-vorlesung-vs-skript.md` | Was die Aufzeichnungen 2025/26 über das Skript sagen: neun Thesen, Konrads Entscheidungen, Umsetzung | abgeschlossen, Entscheidungen umgesetzt |
