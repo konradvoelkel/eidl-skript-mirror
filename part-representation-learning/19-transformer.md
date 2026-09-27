@@ -27,7 +27,7 @@ $$
 \operatorname{Attention}(Q, K, V) = \operatorname{sm}\!\left( \frac{Q K^T}{\sqrt{d_k}} \right) V ,
 $$
 
-wobei Queries $Q$, Keys $K$ und Values $V$ lineare Projektionen der Token-Vektoren sind: Jedes Token „fragt“ mit seiner Query alle anderen Tokens, vergleicht sie mit deren Keys (Skalarprodukt, Softmax $\to$ Gewichte) und sammelt eine gewichtete Summe ihrer Values ein. Das ist eine Schicht, in der jedes Token von jedem anderen abhängt – ohne Reihenfolge, daher die Positionskodierung – und die vollständig parallel berechnet werden kann. Wir implementieren keine Transformer in dieser Vorlesung; in VL 11 benutzen wir sie.
+wobei Queries $Q$, Keys $K$ und Values $V$ lineare Projektionen der Token-Vektoren sind: Jedes Token „fragt“ mit seiner Query alle anderen Tokens, vergleicht sie mit deren Keys (Skalarprodukt, Softmax $\to$ Gewichte) und sammelt eine gewichtete Summe ihrer Values ein. Das ist eine Schicht, in der jedes Token von jedem anderen abhängt – ohne Reihenfolge, daher die Positionskodierung – und die vollständig parallel berechnet werden kann. Wir implementieren keine Transformer in dieser Vorlesung; im Kapitel [„LLMs benutzen“](../part-architekturen-anwendungen/21-llms-benutzen.md) benutzen wir sie.
 
 Das Architekturbild ist Figure 1 in Vaswani et al., *Attention Is All You Need* ([arXiv:1706.03762](https://arxiv.org/abs/1706.03762)): links der Encoder-Stapel, rechts der Decoder-Stapel, dazwischen die Cross-Attention. Eine annotierte, ausführbare Fassung ist [The Annotated Transformer](https://nlp.seas.harvard.edu/annotated-transformer/).
 

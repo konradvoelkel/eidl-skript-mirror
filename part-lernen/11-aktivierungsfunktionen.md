@@ -52,7 +52,7 @@ $$
 
 wobei $\Phi$ die Verteilungsfunktion der Standardnormalverteilung ist. Beide sind im negativen Bereich nicht strikt null, sondern haben eine kleine Delle unter der Achse, und die Ableitung verschwindet nur asymptotisch. GELU ist heute die Standardwahl in Transformern.
 
-Welche Aktivierungsfunktionen in der Praxis genutzt wurden, listete [paperswithcode.com/methods/category/activation-functions](https://paperswithcode.com/methods/category/activation-functions) (inzwischen nur noch im Internet Archive).
+Welche Aktivierungsfunktionen in der Praxis genutzt wurden, listete [paperswithcode](https://web.archive.org/web/20250716173325/https://paperswithcode.com/methods/category/activation-functions) – die Seite gibt es nicht mehr, der Link führt auf den Schnappschuss vom Juli 2025 im Internet Archive.
 
 :::{figure} ../images/vl06-activations.png
 :width: 90%
