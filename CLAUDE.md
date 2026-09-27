@@ -125,6 +125,11 @@ dieselbe Form haben: **Es sieht im HTML unauffällig aus und ist trotzdem falsch
   `\rightarrow`, einem Mathe-Modus-Befehl; in einer Tabellenzelle bricht der LaTeX-Lauf daran
   ab, und dann fehlt **alles danach** im PDF, ohne dass das HTML etwas meldet. Schreiben Sie
   „zu“, „wird“, „dann“, „nach“. (In diesem Repo derzeit sauber — bitte so lassen.)
+* **Lange Bezeichner im Fließtext laufen in den Rand.** LaTeX sucht in `\texttt` keine
+  Trennstelle, also bleibt `torch.backends.mps.is_available()` in einer Zeile. Das
+  Template lädt deshalb `hyphenat` mit `htt` und gibt LaTeX 3 em `emergencystretch`
+  (überlange Zeilen 21 → 9). Codeblöcke sind davon nicht betroffen, dort trennt
+  ohnehin nichts.
 * **`?“` wird im PDF zu `?¿`.** MyST übersetzt das schließende deutsche
   Anführungszeichen in die TeX-Schreibweise mit zwei Accent-graves; direkt hinter einem
   Fragezeichen bildet XeLaTeX daraus die Ligatur `¿`. In diesem Buch neunmal, gefunden
@@ -167,10 +172,17 @@ die eigene Pages-Domain.
    Pygments aus dem gebündelten Wheel des `latexminted`-Helfers. Die Projektabhängigkeiten
    in `pyproject.toml`/`uv.lock` gehören zur **Arbeit am** Buch, nicht zu seinem Bau. Wer
    sie ins Image zieht, wiederholt einen Fehler, der `eipy-skript` auf 3,5 GB gebracht hat.
-5. **`latexminted` kommt nicht aus PyPI.** Debians texlive liefert minted v3 samt passendem
+5. **Das Template trägt nur Familien-Gemeingut, `myst.yml` das Buchspezifische.** Im
+   `templates/tex/eidl-skript/template.tex` steht, was für jedes deutschsprachige Skript
+   der Familie gilt (Sprache, A4, Schriften, Überschriften); Markenfarbe, PDF-Metadaten
+   und `\setminted` stehen in `options.preamble` in der `myst.yml`. Damit bleibt der
+   Template-Block zwischen den Büchern kopierbar (PLAYBOOK §3.8i). Wer dort eine neue
+   Option einführt, **deklariert sie in `template.yml`** — jtex verwirft undeklarierte
+   Optionen kommentarlos, ohne Warnung und ohne Fehler.
+6. **`latexminted` kommt nicht aus PyPI.** Debians texlive liefert minted v3 samt passendem
    Helfer; die PyPI-Fassung verdeckt ihn und verlangt eine neuere `minted.sty`. Steht
    ausführlich im Dockerfile.
-6. **Markenfarbe `#6f59a6`** (violett) laut `BRANDING.md`; HHU-Hausfarben bleiben die
+7. **Markenfarbe `#6f59a6`** (violett) laut `BRANDING.md`; HHU-Hausfarben bleiben die
    Abbildungsfarben.
 
 ## Häufige Fehlerquellen in diesem Repository

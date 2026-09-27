@@ -180,15 +180,20 @@ Textfassung von Seite und Objektbaum: `../ilias/` (analog zu `ds2-26/ilias/`), W
   zählt fehlende Glyphen bereits mit. **Gemessen 2026-09-27: 0 fehlende Glyphen**, lokal und im CI-Image —
   dieses Buch zeigt keine Werkzeugausgaben mit Rahmenzeichen oder Emoji. Hier ist nichts zu tun; der Prüfer
   läuft mit `--max-missing-glyphs 0` weiter und meldet es, falls doch einmal eines dazukommt.
-- [ ] **21 überlange Zeilen im PDF** (Stand 2026-09-27, gezählt als `Overfull \hbox` im LaTeX-Log). Sie stammen
-  **nicht** aus Codeblöcken — minted bricht dank `breakanywhere` sauber um —, sondern aus langem Inline-`\texttt{}`
-  im Fließtext: `torch.backends.mps.is_available()`, `optim.Adam`, `sklearn.datasets.make_moons` und Ähnliches.
-  LaTeX kann Schreibmaschinenschrift nicht trennen. Abhilfe wäre `\usepackage[htt]{hyphenat}` oder, sauberer, die
-  längsten Aufrufe im Satz umformulieren. Kein Fehler, nur Ränder — deshalb niedrige Priorität.
-- [ ] **Der apt-Teil des Images ist ungepinnt** (gilt für alle drei Bücher, Playbook §7). `apt-get install
-  texlive-latex-extra` holt, was Debian am Bautag hat; die Digest-Anheftung des Basis-Images deckt das nicht ab,
-  weil die Pakete erst im `RUN` dazukommen. Genau daraus entstand die minted-v2-gegen-v3-Differenz. Schließen
-  ließe es sich mit `snapshot.debian.org` und datierter URL — Preis ist dieselbe Pflege-Zusage wie beim Digest.
+- [x] **Überlange Zeilen: 21 → 9** (2026-09-27). `\usepackage[htt]{hyphenat}` erlaubt Trennung in
+  Schreibmaschinenschrift im Fließtext (`torch.backends.mps.is_available()`), dazu 3 em `emergencystretch`
+  für die Zeilen, die gar keine Trennstelle haben. Gemessen: ohne beides 17/15 (überlang/zu locker),
+  mit 1,5 em 14/15, mit 3 em **9/19** — eine zu lockere Zeile bleibt im Satzspiegel, eine überlange nicht.
+- [ ] Die **neun verbliebenen** überlangen Zeilen sind URLs im Linktext: MyST setzt sie als gewöhnlichen
+  Text in `\href`, nicht als `\url`, deshalb greift keine URL-Trennung. Die schlimmste (77 pt) ist
+  `paperswithcode.com/methods/category/activation-…` in 11. Abhilfe wäre, die Linktexte zu kürzen
+  („paperswithcode“ statt der vollen Adresse) — Inhaltsarbeit, keine Technik.
+- [x] **apt angeheftet** (2026-09-27): `ARG DEBIAN_SNAPSHOT=20260927T000000Z`, die `debian.sources` zeigen
+  auf `snapshot.debian.org`, dazu `Acquire::Check-Valid-Until "false"` (ein Snapshot-Release ist
+  definitionsgemäß abgelaufen; die Signaturprüfung bleibt). Damit ist der ganze Bau angeheftet — Basis-Image
+  per Digest, Debian-Pakete per Zeitstempel, mystmd per Version. Gemessen: vollständiger Bau ohne Cache
+  **1 min 29 s**, snapshot.debian.org war nicht der Flaschenhals. Die installierten Versionen stehen als
+  Kommentar im Dockerfile; Anheben heißt: Zeitstempel setzen, Image bauen, PDF im Container prüfen, committen.
 - [ ] **`imagemagick` ist bewusst nicht im Image.** Dieses Buch hat 45 PNG und 2 JPG und kein einziges SVG, also
   wandelt MyST nichts. Sobald ein SVG dazukommt, meldet MyST das auf stdout, und `check_pdf_build.py --myst-log`
   liest es mit — dann gehören `imagemagick` und `librsvg2-bin` ins Dockerfile (wie in EiPy).
@@ -238,7 +243,11 @@ Auslöser: Durchsicht von `~/Sciebo/hhu/PLAYBOOK.md` gegen dieses Repo. Protokol
 - [x] **`?“` wurde im PDF zu `?¿`** (von Konrad im PDF gesehen, Seite 54: „Geht das mit neuronalen
   Netzen¿‘). Ursache: MyST schreibt das schließende deutsche Anführungszeichen als zwei Accent-graves,
   und XeLaTeX bildet daraus zusammen mit dem vorangehenden `?` die TeX-Ligatur `¿`. Neun Stellen im Buch.
-  `patch_myst_tex.py` klammert die Ersetzung jetzt ein; im PDF 0 Treffer.
+  `patch_myst_tex.py` klammert die Ersetzung jetzt ein; im PDF 0 Treffer. **Geschwister gegengeprüft
+  (nur gelesen, nichts geschrieben):** eipy ist sauber — 0 Treffer im lokalen wie im veröffentlichten PDF,
+  die einzige `?“`-Stelle im Repo steht in `devnotes/` und damit nicht im TOC. **ds-skript hat 7 Treffer**
+  im veröffentlichten PDF; das ist ein Jupyter Book, also ein anderer Weg zum selben Zeichen. Notiert im
+  Playbook, hier nichts zu tun.
 - [x] **76 Überschriften standen hinter ihrem eigenen Abschnitt.** `##` wird zu `\paragraph`, und das ist
   in `article` ein run-in-Titel: Folgt eine Merkbox oder ein Codeblock statt eines Absatzes, wandert der
   Titel bis zum nächsten echten Absatz. Am deutlichsten in Blatt 0, wo „Lineare Algebra: Länge“ unter dem
@@ -246,6 +255,12 @@ Auslöser: Durchsicht von `~/Sciebo/hhu/PLAYBOOK.md` gegen dieses Repo. Protokol
   eigener Zeile (vier Zeilen im `\makeatletter`-Block, einzeln rückgängig zu machen). Das ändert das
   Schriftbild aller 979 Zwischenüberschriften — **wenn das nicht gefällt, ist es eine Zeile Arbeit.**
   137 statt 136 Seiten.
+- [x] **Template aufgeteilt** (PLAYBOOK §3.8i): Im `template.tex` steht nur noch, was für jedes
+  deutschsprachige Skript der Familie gilt; Markenfarbe, PDF-Metadaten und `\setminted` sind in
+  `options.preamble` in der `myst.yml` gewandert, die Option ist in `template.yml` deklariert. Dazu
+  `\setmonofont{DejaVu Sans Mono}[Scale=0.872]` statt `MatchLowercase` — der Faktor ist aus den
+  Zeichenvorschüben gerechnet (lmmono10 0,5250 em zu DejaVu 0,60205 em) und passt die *Breite* an
+  statt der x-Höhe. Dazu die Lesezeichen-Einstellungen von hyperref (`bookmarksnumbered`, `breaklinks`).
 - [x] Gegenprobe im **echten CI-Image** (lokal mit Docker gebaut, 1,13 GB): `myst build --pdf` plus Prüfer
   laufen durch — 137 Seiten, 0 LaTeX-Fehler, 0 fehlende Glyphen.
 
