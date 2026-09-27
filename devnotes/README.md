@@ -13,7 +13,7 @@ Arbeitsnotizen und Prüfskripte zum Skript, nicht Teil des Buchs. Stand 2026-09-
 | `restructure.py` | Kapitelschnitt 2026-09-17 (Folien-Kapitel → Themen-Kapitel) | einmalig gelaufen, nicht mehr nötig |
 | `folien-review-2026-09-25.md` | Durchsicht der 15 Beamer-Decks: Schriftbild, Titel/Labels, Ablaufplan-Nummern, Blatt-Zuordnung, fachliche Unschärfen, fehlende Bilder | A1–A3, Blatt-Verweise, VL-3-Code erledigt (2026-09-25); Rest offen |
 | `build-log-2026-09-27.md` | Playbook-Durchgang: Messwerte vorher/nachher, die zwei Konversions-Fehlerklassen, minted zurück, Gegenprobe im Image | Protokoll, abgeschlossen |
-| `uebungen-pro-kapitel.md` | Vorschlag für je einen kleinen Übungsabschnitt in den 27 Kapiteln, mit Herkunft und Klausurbezug | **offen**, wartet auf Durchsicht |
+| `uebungen-pro-kapitel.md` | Vorschlag für kleine Übungsabschnitte: 23 Abschnitte, 56 Aufgaben, mit Herkunft, Klausurbezug und Streichliste | **offen**, wartet auf Durchsicht |
 | `patch_myst_tex.py` | Repariert den mystmd-Fehler, der vor jeden Bindestrich in Codeblöcken ein Leerzeichen setzt | **nach jedem `uv sync`** laufen lassen; im CI-Image automatisch |
 | `check_pdf_build.py` | Prüft das gebaute PDF: LaTeX-Fehler, Abbruch, fehlende Glyphen, Seitenzahl, Stichproben | läuft im CI-Job `build-pdf`, lokal vor jedem PDF-Commit |
 | `check_ci_yaml.py` | Prüft `.gitlab-ci.yml` auf die Form, die GitLab erwartet (nicht nur auf YAML) | vor jedem Push, der die CI anfasst |

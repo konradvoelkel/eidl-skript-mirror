@@ -169,7 +169,8 @@ die eigene Pages-Domain.
    TOC und aus dem Repository (`uebungen-2025/`, gitignored). Ins Skript kommt statt dessen
    pro Kapitel ein kleiner Übungsabschnitt: Varianten der echten Aufgaben, mit mehr
    Hinweisen, **ohne Lösung** — statt dessen eine nachprüfbare Antwortprobe. Der Vorschlag
-   dazu, einer je Kapitel, steht in `devnotes/uebungen-pro-kapitel.md`.
+   dazu steht in `devnotes/uebungen-pro-kapitel.md` — 23 Abschnitte für 27 Kapitel; vier
+   Kapitel bekommen bewusst keinen, weil eine schwache Übung schlechter ist als keine.
 2. **Gliederung nach Themen, nicht nach Vorlesungswochen.** Der Wochenplan steht in
    `kurs-2026-27.md`, die Folien in `slides/`; das Skript bleibt davon unabhängig.
 3. **Die Notebooks aus 2025 sind nicht im TOC.** Ihre Inhalte sind in die Kapitel übernommen

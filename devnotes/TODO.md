@@ -59,12 +59,13 @@ Agenten und Menschen stehen seit 2026-09-27 in `../CLAUDE.md`.
 - [x] **Entschieden am 2026-09-27: `part-exercises/` ganz aus dem TOC**, statt dessen pro Kapitel ein
   kleiner Übungsabschnitt. Die zwölf Blätter liegen in `uebungen-2025/blaetter/` (gitignored, Sciebo),
   die Lösungen daneben. PDF dadurch 110 statt 133 Seiten; `--min-pages` im `build-pdf`-Job auf 100.
-- [ ] **Die 27 Übungsabschnitte schreiben.** Der Vorschlag steht in `devnotes/uebungen-pro-kapitel.md`:
+- [ ] **Die 23 Übungsabschnitte schreiben.** Der Vorschlag steht in `devnotes/uebungen-pro-kapitel.md`:
   je ein Abschnitt `## Übung` am Kapitelende, ein bis drei Aufgaben, mehr Hinweise als auf dem Blatt,
-  **keine Lösung**, statt dessen eine nachprüfbare Antwortprobe. Offen sind dort drei Punkte:
-  ob wirklich alle 27 Kapitel einen bekommen (04, 21, 22, 24 sind rein begrifflich), ob die
-  Antwortproben genügen oder ein Ergebnis-Anhang dazukommt, und wie sich das zu einem etwaigen
-  Kapitel-Abspann mit Kontrollfragen verhält (wie in eipy-skript).
+  **keine Lösung**, statt dessen eine nachprüfbare Antwortprobe. Der erste Entwurf hatte 27 Abschnitte
+  mit 75 Aufgaben; auf Konrads Hinweis ist ein Viertel gestrichen (56 Aufgaben, Streichliste mit
+  Gründen am Ende des Dokuments). Die Kapitel 04, 17, 21 und 22 bekommen **keinen** Abschnitt.
+  Offen sind noch zwei Punkte: ob die Antwortproben genügen oder ein Ergebnis-Anhang dazukommt, und
+  wie sich das zu einem etwaigen Kapitel-Abspann mit Kontrollfragen verhält (wie in eipy-skript).
 - [x] **Historie umgeschrieben** (2026-09-27, Konrads Entscheidung — niemand sonst hat eine Kopie des
   Repos). `git filter-repo --path part-exercises/ --invert-paths` über alle 61 Commits, danach
   force-push auf `main`. Damit sind die Lösungsvorschläge auch aus der Vergangenheit des öffentlichen

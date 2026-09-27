@@ -5,9 +5,14 @@ Repository (siehe `uebungen-2025/README.md`). Die **echten** Blätter werden in 
 und über ILIAS ausgegeben; im Skript stehen statt dessen kleine Übungen zum Mitrechnen beim
 Lesen.
 
-Dieses Dokument ist ein **Vorschlag**, kein Beschluss: 27 Abschnitte, einer je Kapitel,
+Dieses Dokument ist ein **Vorschlag**, kein Beschluss: **23 Abschnitte mit 56 Aufgaben**,
 jeweils mit Herkunft (welche Aufgabe von 2025 er variiert) und, wo einschlägig, dem Bezug
 zum Klausur-Aufgabenschatz (`klausur-abdeckung.md`).
+
+Der erste Entwurf hatte 27 Abschnitte mit 75 Aufgaben. Ein Viertel ist gestrichen — vier
+ganze Abschnitte und neun einzelne Teilaufgaben; die Liste mit den Gründen steht am Ende.
+Vier Kapitel (04, 17, 21, 22) haben damit **keinen** Übungsabschnitt, und das ist in Ordnung:
+Eine schwache Übung ist schlechter als keine.
 
 ## Die Konvention, die ich vorschlage
 
@@ -34,18 +39,13 @@ braucht ein späteres Kapitel.
 
 ### 01 — Was ist Deep Learning?
 
-**Vorschlag.** Zwei Aufgaben, beide begrifflich; das Kapitel rechnet nichts.
+**Vorschlag.** Eine Rechnung; das Kapitel selbst rechnet nichts.
 
-> 1. Ordnen Sie zu, jeweils *supervised/unsupervised* und *Regression/Klassifikation*:
->    (a) aus Sensordaten die Restlaufzeit einer Maschine schätzen, (b) Kundenrezensionen in
->    Themen gruppieren, ohne dass die Themen vorgegeben sind, (c) auf Fotos entscheiden, ob
->    ein Bauteil einen Riss hat. Nennen Sie zu jedem Fall ein Gütemaß.
->    *Tipp: Fragen Sie zuerst, ob es zu jedem Datenpunkt ein „richtiges Ergebnis“ gibt.*
-> 2. Ein Rissdetektor findet unter 200 Bauteilen 30 als „rissig“ markierte, davon sind 24
->    tatsächlich rissig; insgesamt gibt es 40 rissige Bauteile. Berechnen Sie Precision und
->    Recall. Welche der beiden Zahlen würden Sie in der Qualitätssicherung höher gewichten,
->    und warum?
->    *Antwortprobe: beide Werte liegen zwischen 0,5 und 0,9, und sie sind verschieden.*
+> Ein Rissdetektor findet unter 200 Bauteilen 30 als „rissig“ markierte, davon sind 24
+> tatsächlich rissig; insgesamt gibt es 40 rissige Bauteile. Berechnen Sie Precision und
+> Recall. Welche der beiden Zahlen würden Sie in der Qualitätssicherung höher gewichten,
+> und warum?
+> *Antwortprobe: beide Werte liegen zwischen 0,5 und 0,9, und sie sind verschieden.*
 
 **Herkunft.** Neu. **Klausurbezug:** Precision/Recall/mAP steht in `klausur-abdeckung.md`
 als **fehlend** markiert — das wäre der Ort, es unterzubringen. Ebenso „Deep Learning =
@@ -57,12 +57,10 @@ viele Layer trainieren“ und Object Detection vs. Klassifikation.
 die dort in der Übungsgruppe mündlich fielen.
 
 > Sei $w = \binom{3}{4}$ und $b = -5$, also das Perzeptron $x \mapsto [w \cdot x + b > 0]$.
-> 1. Zeichnen Sie die Gerade $\{x : w \cdot x + b = 0\}$ und den Vektor $w$ in dieselbe Skizze.
->    In welchem Winkel stehen sie zueinander?
-> 2. Berechnen Sie für $x_1 = \binom{4}{2}$, $x_2 = \binom{-1}{0}$ und $x_3 = \binom{3}{-1}$
+> 1. Berechnen Sie für $x_1 = \binom{4}{2}$, $x_2 = \binom{-1}{0}$ und $x_3 = \binom{3}{-1}$
 >    jeweils die Aktivierung $w \cdot x + b$ **und** den vorzeichenbehafteten Abstand zur Geraden.
 >    *Tipp: Der Abstand ist die Aktivierung geteilt durch $\|w\|$, und $\|w\| = 5$.*
-> 3. Ersetzen Sie $w$ durch $10w$ und $b$ durch $10b$. Was ändert sich an der Geraden, was an
+> 2. Ersetzen Sie $w$ durch $10w$ und $b$ durch $10b$. Was ändert sich an der Geraden, was an
 >    den Aktivierungen, was an den Abständen?
 >    *Antwortprobe: Genau eine der drei Größen ändert sich.*
 
@@ -90,23 +88,6 @@ hier mit Zahlen.
 **Herkunft.** Blatt 3 Aufgabe 4, mit konkreten Zahlen und dem allgemeinen Argument als Tipp.
 **Klausurbezug:** Perzeptron-Konvergenz, Iverson-Klammer.
 
-### 04 — Vortrainierte Modelle verwenden
-
-**Vorschlag.** Keine Rechnung; die Übung ist eine Auswahlentscheidung — genau der
-Aufgabentyp A2 der Klausur, nur kleiner.
-
-> Für jede der drei Aufgabenstellungen: Welchen Hugging-Face-*Task* wählen Sie, und welche
-> Form haben Ein- und Ausgabe?
-> (a) In Fotos von Regalen zählen, wie viele Flaschen zu sehen sind.
-> (b) Aus einer E-Mail den Namen des Absenderunternehmens ziehen.
-> (c) Zu einem Produkttext eine einzeilige Zusammenfassung erzeugen.
-> *Tipp: Der Rundgang durch die Tasks in diesem Kapitel nennt alle drei. Achten Sie bei (a)
-> auf den Unterschied zwischen Klassifikation und Object Detection.*
-> *Antwortprobe: Genau einer der drei Tasks liefert eine Liste von Boxen, nicht ein Label.*
-
-**Herkunft.** Neu, aus dem „Rundgang durch die Tasks“. **Klausurbezug:** A2
-Anwendungskonzept, Object Detection/YOLO, COCO/ImageNet-Pretraining.
-
 ### 05 — Tensoren
 
 **Vorschlag.** Shapes im Kopf — die Vorübung zu dem, was in der Klausur als
@@ -116,10 +97,9 @@ Code-Verständnis kommt.
 >    (b) `x.sum(dim=0)` für `x` mit Shape $(8, 5)$, (c) `x.unsqueeze(1)` für `x` mit Shape
 >    $(8,)$, (d) `torch.zeros(4,1) + torch.zeros(1,6)`.
 >    *Tipp: Bei (d) hilft die Broadcasting-Regel: Achsen der Länge 1 werden gedehnt.*
-> 2. Ein Tensor vom Rang 0 — was ist das, und welchen Shape hat er?
-> 3. Ein Batch von 32 Graustufenbildern der Größe $28 \times 28$ liegt als Tensor vor.
+> 2. Ein Batch von 32 Graustufenbildern der Größe $28 \times 28$ liegt als Tensor vor.
 >    Welchen Shape hat er in PyTorch-Konvention, und welchen nach `nn.Flatten()`?
->    *Antwortprobe: Das Produkt der Shape-Einträge ändert sich bei (3) nicht.*
+>    *Antwortprobe: Das Produkt der Shape-Einträge ändert sich bei (2) nicht.*
 
 **Herkunft.** Neu. **Klausurbezug:** „Tensor Rang 0 = Skalar“, `Conv2d`/`MaxPool2d`-Shapes
 (A3) — dies ist die Vorübung dazu.
@@ -225,10 +205,6 @@ Learning.
 > nur Trainingsdaten mit nichtnegativen Einträgen.
 > 1. Zeigen Sie: Die Ausgabe ist für **alle** diese Daten $0$.
 > 2. Welchen Wert hat der Gradient nach $w$ und $b$ dann? Was folgt daraus für das Training?
-> 3. Welche Aktivierungsfunktion aus dem Kapitel hätte das Problem nicht, und um welchen
->    Preis?
->    *Tipp: Sehen Sie sich an, wo die jeweilige Ableitung exakt null ist und wo sie nur
->    klein wird.*
 >    *Antwortprobe: Bei (2) ist die Antwort für $w$ und $b$ dieselbe.*
 
 **Herkunft.** Neu, aus „Problem bei ReLU: sterbende Neuronen“. **Klausurbezug:**
@@ -242,8 +218,6 @@ Sterbende Neuronen/Swish, ReLU-Ableitung, Vanishing Gradient bei Sigmoid.
 >    $\{0,1\}^2$ berechnet. Prüfen Sie alle vier Eingaben nach.
 > 2. Bauen Sie NAND aus Ihrem AND, ohne neu zu rechnen.
 >    *Tipp: Was macht das Vorzeichenwechseln von $w$ und $b$ mit der Entscheidungsgrenze?*
-> 3. Wie viele Neuronen braucht Ihr Netz für XOR mindestens, und warum geht es mit einem
->    einzigen Perzeptron nicht?
 >    *Antwortprobe: Bei (1) gibt es viele richtige Antworten; alle erfüllen dieselben vier
 >    Ungleichungen.*
 
@@ -259,8 +233,6 @@ Sterbende Neuronen/Swish, ReLU-Ableitung, Vanishing Gradient bei Sigmoid.
 >    *Tipp: Zwei steile Rampen an den Stellen $1$ und $2$, die zweite mit umgekehrtem
 >    Vorzeichen. Der Steilheitsparameter $h$ bestimmt, wie gut die Näherung ist.*
 > 2. Wie viele Neuronen brauchen Sie für eine Treppenfunktion mit $k$ Stufen?
-> 3. Was genau sagt der Satz *nicht*? Nennen Sie zwei Dinge.
->    *Tipp: Er sagt nichts über Lernen und nichts über Größe.*
 >    *Antwortprobe: Die Antwort auf (2) ist linear in $k$.*
 
 **Herkunft.** Neu, direkt aus dem Beweis in fünf Schritten im Kapitel.
@@ -278,9 +250,7 @@ Sterbende Neuronen/Swish, ReLU-Ableitung, Vanishing Gradient bei Sigmoid.
 > verbunden mit Bias.
 > 1. Wie viele Parameter hat er? Wie viele davon im Encoder?
 >    *Tipp: Ein Layer $n \to m$ hat $n\cdot m + m$ Parameter.*
-> 2. Wie ändert sich die Zahl, wenn Encoder und Decoder sich die Gewichte teilen
->    (*weight tying*)?
-> 3. Beim Denoising-Autoencoder: Auf welche der beiden Größen — Eingabe oder Zielbild —
+> 2. Beim Denoising-Autoencoder: Auf welche der beiden Größen — Eingabe oder Zielbild —
 >    kommt das Rauschen, und was wäre der Effekt, wenn man es auf die andere legte?
 >    *Antwortprobe: Bei (1) liegt das Ergebnis zwischen 200 000 und 250 000.*
 
@@ -326,23 +296,6 @@ nicht generativ.
 **Herkunft.** Neu. **Klausurbezug:** CBOW vs. Skip-gram Richtung, Embedding-Layer für IDs,
 Top-k-Sampling.
 
-### 17 — Representation Learning und Graphen
-
-**Vorschlag.** node2vec in einem winzigen Graphen.
-
-> Ein Graph mit Knoten $A,B,C,D$ und Kanten $A$–$B$, $B$–$C$, $C$–$D$, $D$–$A$.
-> 1. Schreiben Sie zwei mögliche Random Walks der Länge 4 ab Knoten $A$ auf. Welcher „Satz“
->    entsteht daraus für word2vec?
-> 2. Welche zwei Knoten bekommen bei ausreichend vielen Walks die ähnlichsten Embeddings,
->    und warum?
-> 3. Nennen Sie zwei Merkmale eines Knotens, die man einem GNN von Hand mitgeben kann,
->    statt sie lernen zu lassen.
->    *Tipp: Das Kapitel nennt sie unter „Andere Features, die man manuell hinzufügen kann“.*
->    *Antwortprobe: Der Graph ist ein Kreis — bei (2) hilft Symmetrie beim Argumentieren.*
-
-**Herkunft.** Neu, aus „von Graphen zu Sätzen“. **Klausurbezug:** Faltung = spezieller
-linearer Layer (im GNN-Kontext).
-
 ### 18 — Recurrent Neural Networks
 
 **Vorschlag.** Ein RNN drei Schritte von Hand ausrollen.
@@ -354,8 +307,6 @@ linearer Layer (im GNN-Kontext).
 >    jeweils an die 1 vom Anfang?
 >    *Tipp: Nach dem ersten Schritt ist die Eingabe 0, es bleibt also eine Multiplikation
 >    mit $u$ pro Schritt.*
-> 3. Welches Problem sehen Sie für lange Sequenzen — und mit welchem Baustein aus dem
->    Kapitel geht man dagegen an?
 >    *Antwortprobe: Bei (2) fällt einer der drei Verläufe deutlich langsamer ab als die
 >    anderen.*
 
@@ -406,40 +357,6 @@ ist der am besten belegte Klausurstoff im ganzen Skript.
 Code-Verständnis, Stride reduziert Feature Map, $1\times1$-Faltung, Parameter Sharing,
 Translationsäquivarianz, Gauß-Kernel glättet.
 
-### 21 — LLMs benutzen
-
-**Vorschlag.** Die Speicherrechnung, die im Kapitel steht, an einem zweiten Beispiel.
-
-> 1. Ein Modell mit 7 Milliarden Parametern in `float16`: Wie viel Speicher braucht es für
->    Inferenz? In 4-Bit-Quantisierung?
->    *Tipp: Rechnen Sie in Bytes pro Parameter und runden Sie großzügig.*
-> 2. Ein Sampler sieht die Wahrscheinlichkeiten $0{,}5$, $0{,}3$, $0{,}15$, $0{,}05$.
->    Welche Token bleiben bei Top-$k$ mit $k=2$ übrig, und wie sehen die Wahrscheinlichkeiten
->    danach aus?
-> 3. Was ändert eine Temperatur $T > 1$ an dieser Verteilung, qualitativ?
->    *Antwortprobe: Bei (2) müssen sich die neuen Werte wieder zu 1 summieren.*
-
-**Herkunft.** Neu, aus „Rechnung mit der Parametermenge“ und den Sampling-Abschnitten.
-**Klausurbezug:** Ollama/quantisierte LLMs lokal, Temperatur-Sampling, Top-k-Sampling,
-BERT-Embeddings als Features.
-
-### 22 — Generative Adversarial Networks
-
-**Vorschlag.** Wer sieht was — die Frage, an der in der Klausur die meisten MC-Aussagen
-hängen.
-
-> 1. Füllen Sie aus: Der Generator bekommt als Eingabe ____ und nie ____. Der Diskriminator
->    bekommt als Eingabe ____ und gibt ____ aus.
-> 2. Der Diskriminator wird perfekt und gibt für alle Fakes $0$ aus. Warum ist das ein
->    Problem für das Training des Generators?
->    *Tipp: Sehen Sie sich an, wie der Gradient aussieht, der beim Generator ankommt.*
-> 3. Nennen Sie ein Symptom von Mode Collapse, das man an den erzeugten Bildern sieht — und
->    was die Wasserstein-Variante dagegen unternimmt.
->    *Antwortprobe: Bei (1) sind alle vier Lücken verschieden.*
-
-**Herkunft.** Neu; die Stichworte stehen alle im Kapitel. **Klausurbezug:** Diskriminator
-schätzt P(echt), Generator bekommt Rauschen, Wasserstein/Mode Collapse, Vanishing Gradient.
-
 ### 23 — Latente Räume geometrisch
 
 **Vorschlag.** Analogierechnung mit Zahlen statt mit Wörtern — dann sieht man, dass nichts
@@ -451,8 +368,6 @@ Magisches passiert.
 >    *Tipp: Kosinus heißt: normieren, dann Skalarprodukt. Die Längen unterscheiden sich hier
 >    deutlich, das Ergebnis mit euklidischem Abstand wäre ein anderes.*
 > 2. Interpolieren Sie linear zwischen $\text{MANN}$ und $\text{FRAU}$ in drei Schritten.
-> 3. Warum ist diese Interpolation bei einem Standard-Autoencoder oft unbrauchbar, bei einem
->    VAE aber meistens nicht?
 >    *Antwortprobe: Bei (1) sind die Antworten für Kosinus und euklidischen Abstand
 >    verschieden — das ist der Punkt der Aufgabe.*
 
@@ -534,9 +449,10 @@ Berechnungsgraph/DAG (die Ableitung nach der *Eingabe*), Manifold-Hypothese.
 
 ## Was ich dabei nicht entschieden habe
 
-* **Ob alle 27 Kapitel einen Abschnitt bekommen.** Die Kapitel 04, 21, 22, 24 haben
-  begriffliche Übungen ohne Rechnung — wenn Ihnen das zu dünn ist, lassen Sie sie weg;
-  17 und 19 sind die nächsten Kandidaten.
+* ~~Ob alle 27 Kapitel einen Abschnitt bekommen.~~ Entschieden: 04, 17, 21 und 22 bekommen
+  keinen. 24 bleibt, obwohl es dort nichts zu rechnen gibt — es ist der Aufgabentyp A2 der
+  Klausur und damit die einzige Übung, die das ganze Rezept am Stück verlangt. 19 bleibt,
+  weil die Attention-Rechnung konkret ist.
 * **Ob die Antwortproben reichen.** Alternative wäre ein Anhang „Ergebnisse“ mit nur den
   Endzahlen (nicht den Rechenwegen) — ein eigener TOC-Eintrag, der die Lösungsdiskussion
   nicht wieder aufmacht.
@@ -553,3 +469,39 @@ Berechnungsgraph/DAG (die Ableitung nach der *Eingabe*), Manifold-Hypothese.
   ist der Weg knapp das Doppelte, nicht mehr als das Doppelte. Wer einen Abschnitt
   übernimmt, rechnet ihn trotzdem noch einmal nach, so wie CLAUDE.md es für Rechenbeispiele
   verlangt — ich habe mit Papier gerechnet, nicht mit NumPy.
+
+---
+
+## Gestrichen, und warum
+
+Der erste Entwurf war zu lang: 75 Aufgaben auf 27 Kapitel, das liest niemand mit. Weg sind
+19 — ein Viertel. Wenn Ihnen eine davon fehlt, steht sie hier mit Begründung, und die
+Fassung von vorher steht im git-Log dieses Commits.
+
+**Ganze Abschnitte (4, zusammen 10 Aufgaben):**
+
+| Kapitel | Grund |
+|---|---|
+| 04 Vortrainierte Modelle | Reine Task-Auswahl ohne Rechnung — und 24 macht dieselbe Übung („welches Modell, welcher Loss, welche Metrik“) besser und näher an der Klausur. |
+| 17 RepL und Graphen | „Schreiben Sie zwei mögliche Random Walks auf“ hat keine prüfbare Antwort, und Teil 3 ist Abfragen statt Überlegen. |
+| 21 LLMs benutzen | Die Speicherrechnung steht im Kapitel schon vorgerechnet, die Top-k-Aufgabe ist eine Normierung. Beides zu nah am Text. |
+| 22 GANs | Ein Lückentext und zwei Abfragen — ein Quiz, keine Übung. Von allen Vorschlägen der schwächste. |
+
+**Einzelne Teilaufgaben (9):**
+
+| Kapitel | Weg | Grund |
+|---|---|---|
+| 01 | Teil 1 | Einsortieren nach supervised/Regression ist Begriffsabfrage; Precision/Recall trägt den Abschnitt allein. |
+| 02 | Teil 1 | „Zeichnen Sie die Gerade“ ist eine Anweisung, keine Aufgabe — die Geometrie steckt ohnehin in Teil 2. |
+| 05 | Teil 2 | Rang 0 ist ein Einzeiler und steckt schon in der Shape-Frage. |
+| 11 | Teil 3 | Welche Aktivierungsfunktion das Problem nicht hat, steht zwei Absätze weiter oben im Kapitel. |
+| 12 | Teil 3 | Warum ein einzelnes Perzeptron XOR nicht schafft, führt das Kapitel selbst vor. |
+| 13 | Teil 3 | „Was sagt der Satz nicht“ ist Textverständnis, keine Übung. |
+| 14 | Teil 2 | Weight Tying kommt im Kapitel nicht vor — die Aufgabe verlangt Stoff von außerhalb. |
+| 18 | Teil 3 | Nach Teil 2 ist die Antwort schon gegeben; die Frage wiederholt sie nur. |
+| 23 | Teil 3 | AE gegen VAE wird in Kapitel 15 geübt, hier wäre es das zweite Mal. |
+
+**Das Muster dahinter**, falls Sie weiter kürzen wollen: Weg sind die Teile, die man ohne
+Rechnen aus dem Kapiteltext beantworten kann, und die, deren Antwort im Abschnitt selbst
+schon steht. Übrig bleiben Aufgaben mit einer Zahl am Ende — die kann man falsch haben, und
+genau das soll eine Übung können.
