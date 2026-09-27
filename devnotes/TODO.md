@@ -1,14 +1,48 @@
 # TODO eidl-skript
 
-Stand: 2026-09-27 (nachts). Erledigtes steht unten unter „Erledigt“, nach Datum. Punkte mit **[Entscheidung]**
-brauchen eine Antwort von Konrad; ein Vorschlag steht jeweils dabei. Überblick über alle Dateien in `devnotes/`:
-`devnotes/README.md`.
+Stand: 2026-09-27, nach dem Umbau der Übungen. Erledigtes steht unten unter „Erledigt“, nach Datum.
+Punkte mit **[Entscheidung]** brauchen eine Antwort von Konrad; ein Vorschlag steht jeweils dabei.
 
-Aktueller Stand des Skripts: 27 Kapitel (01–27) plus Glossar. HTML-Build ohne Warnungen
-(`uv run --only-group dev myst build --html`), PDF-Export ohne LaTeX-Fehler und ohne fehlende Glyphen,
-137 Seiten A4 mit Syntaxhervorhebung (`uv run --only-group dev myst build --pdf` → `exports/eidl-skript.pdf`,
-gitignored; in der CI als `build-pdf`, dort mit `check_pdf_build.py` verifiziert). Arbeitsanweisungen für
-Agenten und Menschen stehen seit 2026-09-27 in `../CLAUDE.md`.
+## Einstieg
+
+**Lesereihenfolge:** `../CLAUDE.md` (wie hier gearbeitet wird — Bauen, Stil, Markup-Fallen, bewusste
+Entscheidungen) → diese Liste → `build-log-2026-09-27.md` (was am 27.09. umgebaut wurde und warum,
+mit Messwerten) → `~/Sciebo/hhu/PLAYBOOK.md` (CI, Image, PDF-Prüfung; gilt für alle drei HHU-Bücher).
+Was sonst in `devnotes/` liegt, steht in `devnotes/README.md`.
+
+**Stand prüfen** (fünf Minuten, bevor man etwas ändert):
+
+```sh
+uv sync && uv run devnotes/patch_myst_tex.py      # der Patch ist nach jedem sync nötig
+uv run _site/vendor/install_template.py
+uv run --only-group dev myst build --html         # keine Warnungen erwartet
+uv run --only-group dev myst build --pdf
+uv run devnotes/check_pdf_build.py --min-pages 100
+```
+
+Erwartung: **27 Kapitel plus Glossar, 111 Seiten A4**, 0 LaTeX-Fehler, 0 fehlende Glyphen,
+6 überlange Zeilen, 23 Übungsabschnitte. Weicht etwas davon ab, ist das der erste Befund, nicht
+Hintergrundrauschen.
+
+**Womit anfangen**, wenn nichts anderes vorgegeben ist:
+
+1. **Fachliche Durchsicht der Prosafassung** (Abschnitt „Inhalt“, erster Punkt). Der größte offene
+   Posten und der einzige, der das Buch besser macht statt nur ordentlicher.
+2. **Die echten Übungsblätter auf 2026/27 anziehen** (Abschnitt „Übungsblätter“): Punkte und
+   Bestehensgrenzen, die Kopfzeile je Blatt, Blatt 12 als Take-Home-Probeklausur. Sie werden **in
+   TeX** gepflegt, nicht hier — `uebungen-2025/blaetter/` ist nur die Markdown-Konversion von 2025.
+3. **Folien gegenlesen und in ILIAS hochladen** (Abschnitte „Beamer-Folien“ und „ILIAS“).
+4. Die kleinen Reste unter „Infrastruktur“ — alle geprüft und beschrieben, keiner dringend.
+
+**Drei Dinge, die man nicht nebenbei ändert:**
+
+* **Das Repository ist öffentlich.** Keine Lösungen, keine Klausuraufgaben, keine Personendaten in
+  Dateien, die committet werden. `uebungen-2025/` und `transcripts/` sind deshalb gitignored.
+* **Die Anheftungen** (Basis-Image per Digest, Debian-Pakete per Snapshot, mystmd per Version,
+  kaniko per Tag). Wer eine anhebt, baut das Image und prüft das PDF im Container, bevor er
+  committet — das Rezept steht im Dockerfile und in PLAYBOOK §3.2.
+* **Das tex-Template.** Es trägt nur, was für alle drei Bücher gilt; Buchspezifisches gehört in
+  `options.preamble` in der `myst.yml` (PLAYBOOK §3.8i).
 
 ## Inhalt (Skript)
 
@@ -26,6 +60,13 @@ Agenten und Menschen stehen seit 2026-09-27 in `../CLAUDE.md`.
   - Konkrete Prüfaufträge: Encoder mit oder ohne Sigmoid in „Autoencoder“ (14) entscheiden (Skript: ohne, mit
     Hinweis „man kann auch“; Vorlesung 2025: mit – der Verweis auf 2025 steht seit 2026-09-21 nicht mehr im Text); die neuen Lösungsvorschläge zu Blatt 1 Aufgabe 4b, Blatt 3 Aufgabe 2b und Blatt 5
     Aufgabe 1b gegenrechnen; die „Weiterlesen“-Boxen (17 Kapitel) auf passende UDL/MML-Kapitelnummern prüfen.
+- [ ] **Die Antwortenbox in Kapitel 01 steht im PDF offen da.** „Antworten zum Lesetext“ (drei Fragen zum
+  HPCwire-Artikel) ist eine `dropdown`-Box — im HTML zugeklappt, im PDF nicht, weil `dropdown` im
+  LaTeX-Export keine Wirkung hat. Wer das PDF liest, sieht die Antworten direkt unter den Fragen. Dieselbe
+  Mechanik hat bis zum 2026-09-27 die Lösungsvorschläge der Übungsblätter veröffentlicht; hier ist es kein
+  Vertraulichkeitsproblem, nur ein didaktisches. Optionen: so lassen, in einen Anhang verschieben, oder wie
+  bei den Übungen auf eine Antwortprobe eindampfen. Die sechs `Vertiefung:`-Boxen sind davon nicht betroffen
+  — sie sollen gelesen werden.
 - [ ] **Abbildungen**, verbleibende Wünsche (alle `<!-- TODO Abbildung -->`-Marker sind seit 2026-09-20 aufgelöst,
   entweder durch eigene Bilder, Bilder aus den Musterlösungen 2025 oder Links): Hubel & Wiesel und GRU/LSTM sind
   nur verlinkt (Wikipedia, CC-BY-SA); wer sie einbetten will, lädt die Dateien nach `images/` und ergänzt den
@@ -53,8 +94,8 @@ Agenten und Menschen stehen seit 2026-09-27 in `../CLAUDE.md`.
 ## Übungsblätter
 
 - [x] **Lösungsvorschläge aus dem Skript heraus** (2026-09-27, auf Konrads Hinweis): 15 Blöcke aus den
-  Blättern 0, 1, 3 und 5 nach `loesungen/` verschoben — ein Ordner wie `transcripts/`, in Sciebo, aber
-  nicht im Repo. Vorher standen sie im veröffentlichten PDF (aufgeklappt, nicht einmal versteckt) und
+  Blättern 0, 1, 3 und 5 herausgenommen (heute in `uebungen-2025/loesungen/`) — ein Ordner wie
+  `transcripts/`, in Sciebo, aber nicht im Repo. Vorher standen sie im veröffentlichten PDF (aufgeklappt, nicht einmal versteckt) und
   auf der Website als aufklappbare Box. PDF jetzt 133 statt 137 Seiten, `grep -c Lösungsvorschlag` = 0.
 - [x] **Entschieden am 2026-09-27: `part-exercises/` ganz aus dem TOC**, statt dessen pro Kapitel ein
   kleiner Übungsabschnitt. Die zwölf Blätter liegen in `uebungen-2025/blaetter/` (gitignored, Sciebo),
@@ -83,17 +124,17 @@ Agenten und Menschen stehen seit 2026-09-27 in `../CLAUDE.md`.
 - [x] **Abgabetermine 2026/27 bestätigt (Konrad, 2026-09-24)** und in ILIAS eingetragen: Blatt 0 ohne Abgabe;
   1: 21.10., 2: 28.10., 3: 04.11., 4: 11.11., 5: 18.11., 6: 25.11., 7: 02.12., 8: 09.12., 9: 16.12.2026,
   10: 13.01., 11: 20.01.2027, Probeklausur als Take-Home mit Abgabe 27.01.2027 — jeweils Mittwoch 12:00.
-- [ ] Die Zeile „N Punkte, Abgabe bis …“ je Blatt wieder eintragen (ist seit 2026-09-20 draußen); die Termine
-  stehen jetzt fest, die Punkte hängen an der Entscheidung oben. Die Notiz „Übungsaufgaben von 2025, werden ggf.
-  noch angepasst …“ bleibt, bis das Blatt wirklich angepasst ist.
+- [ ] Die Zeile „N Punkte, Abgabe bis …“ je Blatt eintragen — **in den TeX-Quellen**, nicht mehr im Skript;
+  die Termine stehen fest, die Punkte hängen an der Entscheidung oben.
 - [ ] **[Entscheidung vertagt]** Blatt 6 (Iris-Autoencoder) wird nach dem neuen Wochenplan eine Woche *vor* der
   Autoencoder-Vorlesung ausgegeben (AE ist jetzt VL 8 statt VL 7, CNNs VL 11, LLMs VL 12). Optionen: Blätter 6/7
   in der Ausgabe tauschen, Blatt 6 anpassen, oder so lassen (Skript-Kapitel steht online). Bei der
   Blatt-Überarbeitung ansehen; in ILIAS ist vorerst die unveränderte Reihenfolge eingetragen.
-- [ ] Blatt 12 = Take-Home-Probeklausur anlegen (Grundlage: `../eidl-25/exam/`, Probeklausur 2025).
-- [ ] Lösungen: bisher nur die in den Blättern eingebetteten Dropdowns. Notebook-/Skript-Lösungen liegen in
-  `~/Sciebo/hhu/eidl-25/exercises/blattNN-solution/`. *Vorschlag:* nicht ins Skript (öffentlich!), sondern eigenes
-  privates Repo/Ordner.
+- [ ] Blatt 12 = Take-Home-Probeklausur anlegen (Grundlage: `~/Sciebo/hhu/eidl-25/exam/`, Probeklausur 2025).
+- [ ] Lösungen: Die 15 Textlösungen von 2025 liegen in `uebungen-2025/loesungen/`, Notebook- und
+  Skriptlösungen in `~/Sciebo/hhu/eidl-25/exercises/blattNN-solution/`. Beides gitignored bzw. außerhalb.
+  *Vorschlag:* so lassen — ins öffentliche Repo gehört keine Lösung, und in ILIAS liegen sie ohnehin
+  getrennt.
 - [x] **[Entscheidung 2026-09-20]** Englische Fassungen (`sheetNN.tex`) fallen weg, solange die Vorlesung deutsch
   ist.
 
@@ -102,13 +143,14 @@ Agenten und Menschen stehen seit 2026-09-27 in `../CLAUDE.md`.
 - [x] Termine aus LSF (2026-09-24): **Erstklausur Do 11.02.2027**, LSF-Fenster 8:30–11:30, Hörsäle 5F (25.21)
   und 2D (22.01); **Zweitklausur Mo 15.03.2027**, Fenster 8:30–11:30, Hörsaal 5D (25.21). Geschrieben wird
   jeweils 9:00–10:30 (90 Minuten, Entscheidung Konrad 2026-09-24); so steht es auf der ILIAS-Seite.
-- [ ] `exam2026-eidl-exam-1/2.tex` (englische Entwürfe vom 20.01.2026 in `../eidl-25/exam/`) – Status klären:
+- [ ] `exam2026-eidl-exam-1/2.tex` (englische Entwürfe vom 20.01.2026 in `~/Sciebo/hhu/eidl-25/exam/`) – Status klären:
   Vorlagen für 2026/27?
 - Keine weiteren Klausuransagen aus den Aufzeichnungen übernehmen (Entscheidung Konrad 2026-09-20).
 
 ## Notebooks
 
-- [ ] `latent-classifier.ipynb` ist das einzige verbleibende Notebook mit Funktion (Download auf der Blatt-11-Seite).
+- [ ] `latent-classifier.ipynb` ist das einzige verbleibende Notebook mit Funktion (seit 2026-09-27 als
+  `downloads:` am Kapitel 21).
   Vor Semesterstart mit aktuellem torch/transformers durchlaufen lassen (bert-medium-Download, `ipywidgets` für die
   Saliency-Zelle) und Outputs neu einchecken.
 - [x] **Alle 24 Python-Blöcke am 2026-09-24 ausgeführt** (Venv auf `/media/konrad/xtraspace/eidl-venv`, CPU).
@@ -155,8 +197,10 @@ Agenten und Menschen stehen seit 2026-09-27 in `../CLAUDE.md`.
 
 ## ILIAS (Kurs 2026/27, ref_id 2165367)
 
-Textfassung von Seite und Objektbaum: `../ilias/` (analog zu `ds2-26/ilias/`), Workflow in
-`../ilias/README.md`, aktueller Durchlauf in `../ilias/runs/ws2026-27.yaml`.
+Textfassung von Seite und Objektbaum: `~/Sciebo/hhu/eidl-26/ilias/` (analog zu
+`~/Sciebo/hhu/ds2-26/ilias/`) — also **neben** diesem Repo, nicht darin. Workflow in
+`~/Sciebo/hhu/eidl-26/ilias/README.md`, aktueller Durchlauf in
+`~/Sciebo/hhu/eidl-26/ilias/runs/ws2026-27.yaml`.
 
 - [x] Am 2026-09-24 aufgesetzt: Objekte und Seitengestaltung aus dem Kurs 2025/26 (1948423) übernommen
   (Lösungshinweise-Dateien dabei ausgelassen), Kursseite auf 2026/27 umgeschrieben (Ankündigung, Raum und Zeit,
@@ -168,7 +212,7 @@ Textfassung von Seite und Objektbaum: `../ilias/` (analog zu `ds2-26/ilias/`), W
 - [ ] Vorlesungsfolien 2026/27 wöchentlich vor der Sitzung als **neue Dateien** in den Ordner „Vorlesungsfolien“
   hochladen und in der Wochentabelle verlinken (Entscheidung 2026-09-25: die 2025/26er Folien bleiben dort
   zugänglich, sind aber seit 2026-09-25 in der Tabelle entlinkt; Mechanik `unlinked_object_keys` in
-  `../ilias/runs/ws2026-27.yaml`).
+  `~/Sciebo/hhu/eidl-26/ilias/runs/ws2026-27.yaml`).
 - [ ] Zusatzmaterial aktualisieren: „EiDL-Klausur-2024“ durch die Erstklausur 2025/26 ersetzen, Probeklausur
   und Blatt 0 / Sheet 0 prüfen.
 - [ ] Kurs online schalten, wenn die Blätter und die erste Foliensitzung stehen.
@@ -183,7 +227,7 @@ Textfassung von Seite und Objektbaum: `../ilias/` (analog zu `ds2-26/ilias/`), W
   DejaVu Sans Mono, Kapitel auf neuer Seite). Grund: `plain_latex` ignoriert die `preamble`-Option in `myst.yml`
   stillschweigend, deshalb waren `\mathbb` & Co. bisher undefiniert (248 LaTeX-Fehler, die latexmk durchwinkte).
   Jetzt 0 Fehler, 135 Seiten (A4). Ohne Docker lokal weiterhin `uv run --only-group dev myst build --pdf`.
-- [ ] **Template-Abgleich mit EiPy (2026-09-27).** Beide Bücher haben am selben Tag dasselbe Template
+- [x] **Template-Abgleich mit EiPy — abgeschlossen 2026-09-27.** Beide Bücher haben am selben Tag dasselbe Template
   weiterentwickelt und sind jetzt fast deckungsgleich; der gemeinsame Block steht als Referenz in
   `~/files/work/hhu/PLAYBOOK.md` §3.8i (mit Tabelle, wer was beigesteuert hat). **Von eidl stammen**
   `amssymb`, `caption`, `geometry`/A4 und `\pretocmd{\section}{\clearpage}` — EiPy hat sie übernommen,
@@ -192,15 +236,15 @@ Textfassung von Seite und Objektbaum: `../ilias/` (analog zu `ds2-26/ilias/`), W
   - ~~`microtype`~~ **erledigt 2026-09-27**, zusammen mit `shorthands=off` an babel. Dabei fiel auf, dass
     der gemeinsame Block bei uns **hinter** `datetime` stand: Auf der Titelseite stand deshalb
     „Saturday 26. September, 2026“. Block nach vorn geschoben, jetzt „27. September 2026“.
-  - `\setmonofont{DejaVu Sans Mono}[Scale=0.872]` statt `MatchLowercase`. Der Faktor ist gerechnet:
+  - ~~`Scale=0.872` statt `MatchLowercase`~~ **erledigt 2026-09-27.** Der Faktor ist gerechnet:
     Zeichenvorschub lmmono10 0,5250 em gegen DejaVu 0,60205 em, 0,5250/0,60205 = 0,872. Damit sind die
     Zeichenbreiten identisch, und ein Schriftwechsel ändert keinen einzigen Zeilenumbruch. Nachrechnen
     mit fontTools, wenn die Schrift wechselt.
-  - **[Entscheidung]** Option `preamble` im eigenen Template deklarieren (wie EiPy: `_tex/plain_latex-hhu/`),
-    dann wandert Buchspezifisches — Markenfarbe, PDF-Metadaten, `\setminted` — aus dem Template zurück in
-    die `myst.yml`, und der Template-Block bleibt zwischen den Büchern kopierbar. Vorschlag: ja, aber erst
-    nach der fachlichen Durchsicht; es ist reine Umsortierung ohne sichtbare Wirkung.
-- [ ] **Emoji im PDF prüfen (2026-09-27).** EiPy hatte 58 Emoji aus `rich`/`textual`- und black-Ausgaben, für
+  - ~~Option `preamble` im eigenen Template deklarieren~~ **erledigt 2026-09-27.** Markenfarbe,
+    PDF-Metadaten und `\setminted` stehen jetzt in `options.preamble` in der `myst.yml`, die Option ist
+    in `template.yml` deklariert (undeklarierte verwirft jtex kommentarlos). Der Template-Block ist damit
+    zwischen den Büchern kopierbar.
+- [x] **Emoji im PDF geprüft (2026-09-27).** EiPy hatte 58 Emoji aus `rich`/`textual`- und black-Ausgaben, für
   die keine Schrift im Image eine Glyphe hat; sie fehlten im PDF ersatzlos. Lösung dort: `ucharclasses` +
   `fonts-symbola` (Playbook §3.8b). Ob eidl betroffen ist, sagt der eigene Prüfer — `check_pdf_build.py`
   zählt fehlende Glyphen bereits mit. **Gemessen 2026-09-27: 0 fehlende Glyphen**, lokal und im CI-Image —
@@ -210,7 +254,8 @@ Textfassung von Seite und Objektbaum: `../ilias/` (analog zu `ds2-26/ilias/`), W
   Schreibmaschinenschrift im Fließtext (`torch.backends.mps.is_available()`), dazu 3 em `emergencystretch`
   für die Zeilen, die gar keine Trennstelle haben. Gemessen: ohne beides 17/15 (überlang/zu locker),
   mit 1,5 em 14/15, mit 3 em **9/19** — eine zu lockere Zeile bleibt im Satzspiegel, eine überlange nicht.
-- [ ] Die **neun verbliebenen** überlangen Zeilen sind URLs im Linktext: MyST setzt sie als gewöhnlichen
+- [ ] Die verbliebenen überlangen Zeilen (9 am Tag der Änderung, 6 nach dem Einbau der Übungen) sind
+  URLs im Linktext: MyST setzt sie als gewöhnlichen
   Text in `\href`, nicht als `\url`, deshalb greift keine URL-Trennung. Die schlimmste (77 pt) ist
   `paperswithcode.com/methods/category/activation-…` in 11. Abhilfe wäre, die Linktexte zu kürzen
   („paperswithcode“ statt der vollen Adresse) — Inhaltsarbeit, keine Technik.

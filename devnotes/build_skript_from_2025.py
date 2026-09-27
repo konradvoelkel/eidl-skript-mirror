@@ -10,7 +10,33 @@ import glob
 import re
 import shutil
 import subprocess
+import sys
 from pathlib import Path
+
+# ──────────────────────────────────────────────────────────────────────────────
+# NICHT MEHR LAUFEN LASSEN (Sperre eingebaut 2026-09-27).
+#
+# Dieses Skript hat am 2026-09-17 die erste Fassung des Buchs erzeugt. Seither sind alle
+# Kapitel von Hand überarbeitet, neu geschnitten und umbenannt (aus 15 Vorlesungs-Kapiteln
+# wurden 27 Themen-Kapitel), und die Übungsblätter sind am 2026-09-27 **bewusst** aus dem
+# Buch, aus dem Repository und aus der git-Historie entfernt worden — das Projekt ist
+# öffentlich, und die Blätter enthielten Lösungsvorschläge.
+#
+# Ein Lauf würde `part-exercises/` mit allen zwölf Blättern **samt Lösungen** neu anlegen
+# und die Kapitel unter ihren alten Namen danebenschreiben. Die Pfade oben zeigen auf eine
+# andere Maschine (`/home/voelkel/...`), das Skript stürbe also ohnehin früh — aber wer sie
+# geradezieht, hat den Schaden.
+#
+# Es bleibt im Repo als Protokoll dessen, wie das Buch entstanden ist. Wer es wirklich
+# braucht, entfernt diesen Block bewusst und weiß, was er tut.
+# ──────────────────────────────────────────────────────────────────────────────
+print(
+    "build_skript_from_2025.py ist gesperrt (2026-09-27): Es würde part-exercises/ samt\n"
+    "Lösungsvorschlägen in einem öffentlichen Repo neu anlegen und die Kapitel unter ihren\n"
+    "alten Namen überschreiben. Begründung im Kopf der Datei.",
+    file=sys.stderr,
+)
+raise SystemExit(1)
 
 ROOT = Path("/home/voelkel/sciebo/hhu/eidl-26")
 SRC = ROOT / "from_2025"

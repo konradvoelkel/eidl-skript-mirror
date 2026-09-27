@@ -9,8 +9,9 @@ Arbeitsnotizen und Prüfskripte zum Skript, nicht Teil des Buchs. Stand 2026-09-
 | `klausur-abdeckung.md` | Abgleich des Klausur-Aufgabenschatzes 2025/26 mit den Kapiteln | Referenz (Stand 2026-09-17, Kapitelnamen gelten weiter) |
 | `diskussion-vorlesung-vs-skript.md` | Was die Aufzeichnungen 2025/26 über das Skript sagen: neun Thesen, Konrads Entscheidungen, Umsetzung | abgeschlossen, Entscheidungen umgesetzt |
 | `vorschlag-grundlagen.md` | Zwölf Grundlagen-Snippets und wo sie eingebaut wurden | abgeschlossen, umgesetzt |
-| `build_skript_from_2025.py` | Erzeugte die erste Prosafassung aus den Folien-PDFs und die Blätter aus den `.tex` | einmalig gelaufen (2026-09-17), nicht mehr nötig |
-| `restructure.py` | Kapitelschnitt 2026-09-17 (Folien-Kapitel → Themen-Kapitel) | einmalig gelaufen, nicht mehr nötig |
+| `build_skript_from_2025.py` | Erzeugte die erste Prosafassung aus den Folien-PDFs und die Blätter aus den `.tex` | einmalig gelaufen (2026-09-17), **gesperrt** — es würde `part-exercises/` samt Lösungen neu anlegen |
+| `restructure.py` | Kapitelschnitt 2026-09-17 (Folien-Kapitel → Themen-Kapitel) | einmalig gelaufen, **gesperrt** — es zeigt auf dieses Repo und überschriebe die heutigen Kapitel |
+| `codecheck-2026-09-24.md` | Alle 24 Python-Blöcke der Kapitel ausgeführt: was lief, was nicht, mit Umgebung | Referenz (Stand 2026-09-24) |
 | `folien-review-2026-09-25.md` | Durchsicht der 15 Beamer-Decks: Schriftbild, Titel/Labels, Ablaufplan-Nummern, Blatt-Zuordnung, fachliche Unschärfen, fehlende Bilder | A1–A3, Blatt-Verweise, VL-3-Code erledigt (2026-09-25); Rest offen |
 | `build-log-2026-09-27.md` | Playbook-Durchgang: Messwerte vorher/nachher, die zwei Konversions-Fehlerklassen, minted zurück, Gegenprobe im Image | Protokoll, abgeschlossen |
 | `patch_myst_tex.py` | Repariert den mystmd-Fehler, der vor jeden Bindestrich in Codeblöcken ein Leerzeichen setzt | **nach jedem `uv sync`** laufen lassen; im CI-Image automatisch |

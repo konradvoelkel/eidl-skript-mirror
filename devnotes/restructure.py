@@ -7,7 +7,28 @@ werden durch figure-Direktiven ersetzt.
 
 import re
 import subprocess
+import sys
 from pathlib import Path
+
+# ──────────────────────────────────────────────────────────────────────────────
+# NICHT MEHR LAUFEN LASSEN (Sperre eingebaut 2026-09-27).
+#
+# Dieses Skript hat am 2026-09-17 aus den 15 Vorlesungs-Kapiteln 20 Themen-Kapitel
+# geschnitten. Anders als `build_skript_from_2025.py` zeigt es auf **dieses** Repo
+# (`ROOT = parent.parent`) und liest seine Quellen aus einem alten git-Stand — ein Lauf
+# würde also die heutigen 27 Kapitel mit einer neu erzeugten 20-Kapitel-Fassung
+# überschreiben und alle Überarbeitungen seit dem 17.09. verwerfen.
+#
+# Es bleibt im Repo als Protokoll des Umbaus. Wer es wirklich braucht, entfernt diesen
+# Block bewusst und weiß, was er tut.
+# ──────────────────────────────────────────────────────────────────────────────
+print(
+    "restructure.py ist gesperrt (2026-09-27): Ein Lauf überschriebe die heutigen 27 Kapitel\n"
+    "mit einer neu erzeugten 20-Kapitel-Fassung aus einem alten git-Stand. Begründung im\n"
+    "Kopf der Datei.",
+    file=sys.stderr,
+)
+raise SystemExit(1)
 
 ROOT = Path(__file__).resolve().parent.parent
 OLD_REV = "HEAD"  # Stand vor dem Umbau

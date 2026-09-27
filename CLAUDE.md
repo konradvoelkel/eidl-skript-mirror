@@ -7,6 +7,11 @@ beschreibt, wie in diesem Projekt gearbeitet wird; sie richtet sich an Coding-Ag
 an Menschen gleichermaßen (`CLAUDE.md` und `AGENTS.md` sind dieselbe Konvention unter
 verschiedenen Namen — sollte ein Werkzeug `AGENTS.md` erwarten, genügt ein Symlink).
 
+**Wo was steht.** Diese Datei: wie hier gearbeitet wird. `devnotes/TODO.md`: was offen ist,
+mit Einstieg für einen frischen Durchgang ganz oben. `devnotes/build-log-<datum>.md`: datierte
+Protokolle größerer Umbauten, mit Messwerten. `devnotes/README.md`: was sonst in `devnotes/`
+liegt.
+
 **CI, Image und Build-Infrastruktur: `~/Sciebo/hhu/PLAYBOOK.md`.** Dort stehen die Regeln,
 die für alle drei Bücher (`eipy-skript`, `eidl-skript`, `ds-skript`) gelten — Anheften,
 Image-Bau, mitgeliefertes Site-Template, PDF-Verifikation. Diese Datei bleibt beim Buch,
@@ -29,11 +34,16 @@ uv run devnotes/patch_myst_tex.py         # **nach jedem `uv sync`**, sonst ist 
 uv run _site/vendor/install_template.py   # Site-Template bereitlegen (idempotent)
 uv run --only-group dev myst build --html # Website nach _build/html
 uv run --only-group dev myst build --pdf  # PDF nach exports/eidl-skript.pdf (braucht LaTeX)
-uv run devnotes/check_pdf_build.py --min-pages 120   # prüft das gebaute PDF
+uv run devnotes/check_pdf_build.py --min-pages 100   # prüft das gebaute PDF
 uv run devnotes/check_ci_yaml.py          # vor jedem Push, wenn .gitlab-ci.yml angefasst wurde
 ```
 
-`patch_myst_tex.py` repariert einen Fehler im LaTeX-Export von mystmd: Codeblöcke werden
+Erwartung eines gesunden Laufs (Stand 2026-09-27): HTML ohne Warnungen, PDF **111 Seiten
+A4**, 0 LaTeX-Fehler, 0 fehlende Glyphen, 6 überlange Zeilen. Die `--min-pages`-Untergrenze
+soll einen *abgebrochenen* Lauf fangen, nicht eine gewollte Kürzung — sie steht deshalb
+deutlich unter der tatsächlichen Seitenzahl, in der CI auf demselben Wert.
+
+`patch_myst_tex.py` repariert zwei Fehler im LaTeX-Export von mystmd. Der erste: Codeblöcke werden
 dort als Mathematik escaped, wodurch **vor jedem Bindestrich ein Leerzeichen** landet — aus
 `nvidia-smi` wird `nvidia -smi`, aus `--index-url` wird `- -index -url`. Im HTML passiert
 das nicht, nur im PDF, und es traf 49 Stellen in 18 Kapiteln. Im CI-Image geschieht der
@@ -77,9 +87,11 @@ Wichtig zur Ordnerstruktur:
 | `part-representation-learning/` | Kapitel 14–19: Autoencoder, VAE, word2vec, Graphen, RNN, Transformer |
 | `part-architekturen-anwendungen/` | Kapitel 20–27: CNN, LLMs benutzen, GANs, latente Räume, Anwendungen, Destillation, Optimierer, Adversarial Attacks |
 | `slides/` | Beamer-Foliensätze VL 01–15 (`build.sh`, gemeinsamer `header.tex`) |
-| `images/`, `notebooks/`, `logo/` | Abbildungen, Notebooks aus 2025, Logos |
-| `glossar.md` | Klausurbegriffe mit Link ins jeweilige Kapitel |
-| `kurs-2026-27.md` | Semesterplan, Termine, Organisatorisches |
+| `images/`, `logo/` | Abbildungen, Logos |
+| `notebooks/` | Notebooks aus 2025; nur `latent-classifier.ipynb` hat noch eine Funktion — es hängt als `downloads:` am Kapitel 21 |
+| `glossar.md` | Klausurbegriffe mit Link ins jeweilige Kapitel (im TOC, Abschnitt „Anhang“) |
+| `kurs-2026-27.md` | Semesterplan, Termine, Organisatorisches — **nicht im TOC**, also nicht Teil des Buchs |
+| `uebungen-2025/` | die zwölf Blätter von 2025 samt Lösungen; gitignored, Quelle für neue Übungsabschnitte |
 
 Das Inhaltsverzeichnis steht **explizit** in `myst.yml` unter `project.toc`. Eine neue Datei
 erscheint erst nach einem Eintrag dort.
@@ -96,8 +108,13 @@ Der Ton ist knapp und präzise:
   Bibliotheksversionen prüfen statt erinnern.
 * Rechenbeispiele werden **durchgerechnet**, nicht behauptet. Wer eine Zahl ändert, rechnet
   die Folgezahlen nach.
-* Vertiefungen, die nicht Vorlesungsstoff sind, stehen in einer aufklappbaren Box
-  „Vertiefung: …“ (`:class: dropdown`).
+* Vertiefungen, die nicht Vorlesungsstoff sind, stehen in einer Box
+  `:::{admonition} Vertiefung: …` mit `:class: note dropdown` (derzeit sechs; dazu eine
+  Antwortenbox in Kapitel 01, zusammen sieben `dropdown`-Boxen).
+  **Aufgeklappt wird nur im HTML**: `dropdown` hat im LaTeX-Export keine Wirkung, im PDF
+  steht der Inhalt offen da. Für Vertiefungen ist das in Ordnung — für alles, was erst nach
+  eigenem Nachdenken gelesen werden soll, ist `dropdown` kein Versteck. Genau daran hingen
+  bis zum 2026-09-27 die Lösungsvorschläge der Übungsblätter im PDF.
 
 ## Markup — die Fallen dieses Repos
 
@@ -128,9 +145,9 @@ dieselbe Form haben: **Es sieht im HTML unauffällig aus und ist trotzdem falsch
   „zu“, „wird“, „dann“, „nach“. (In diesem Repo derzeit sauber — bitte so lassen.)
 * **Lange Bezeichner im Fließtext laufen in den Rand.** LaTeX sucht in `\texttt` keine
   Trennstelle, also bleibt `torch.backends.mps.is_available()` in einer Zeile. Das
-  Template lädt deshalb `hyphenat` mit `htt` und gibt LaTeX 3 em `emergencystretch`
-  (überlange Zeilen 21 → 9). Codeblöcke sind davon nicht betroffen, dort trennt
-  ohnehin nichts.
+  Template lädt deshalb `hyphenat` mit `htt` und gibt LaTeX 3 em `emergencystretch`; am Tag
+  der Änderung brachte das 21 → 9 überlange Zeilen, aktuell sind es 6. Codeblöcke sind davon
+  nicht betroffen, dort trennt ohnehin nichts.
 * **`?“` wird im PDF zu `?¿`.** MyST übersetzt das schließende deutsche
   Anführungszeichen in die TeX-Schreibweise mit zwei Accent-graves; direkt hinter einem
   Fragezeichen bildet XeLaTeX daraus die Ligatur `¿`. In diesem Buch neunmal, gefunden
@@ -183,13 +200,14 @@ haben bewusst keinen, weil eine schwache Übung schlechter ist als keine. Die Fo
    Lösungsvorschlägen, die damit veröffentlicht waren. Seit dem 2026-09-27 sind sie aus dem
    TOC und aus dem Repository (`uebungen-2025/`, gitignored). Ins Skript kommt statt dessen
    pro Kapitel ein kleiner Übungsabschnitt: Varianten der echten Aufgaben, mit mehr
-   Hinweisen, **ohne Lösung** — statt dessen eine nachprüfbare Antwortprobe. Der Vorschlag
-   dazu steht in `devnotes/uebungen-pro-kapitel.md` — 23 Abschnitte für 27 Kapitel; vier
-   Kapitel bekommen bewusst keinen, weil eine schwache Übung schlechter ist als keine.
+   Hinweisen, **ohne Lösung** — statt dessen eine nachprüfbare Antwortprobe. Die Form steht
+   oben unter „Übungen“; das Material von 2025, aus dem sie entstanden sind, liegt in
+   `uebungen-2025/` (gitignored).
 2. **Gliederung nach Themen, nicht nach Vorlesungswochen.** Der Wochenplan steht in
    `kurs-2026-27.md`, die Folien in `slides/`; das Skript bleibt davon unabhängig.
 3. **Die Notebooks aus 2025 sind nicht im TOC.** Ihre Inhalte sind in die Kapitel übernommen
-   (siehe `notebooks/README.md`); `latent-classifier.ipynb` hängt als Download an Blatt 11.
+   (siehe `notebooks/README.md`); `latent-classifier.ipynb` hängt seit 2026-09-27 als
+   `downloads:` am Kapitel „LLMs benutzen“ (21) und ist das einzige mit noch aktiver Rolle.
 4. **Die Kapitel sind nicht gleich lang** und sollen es nicht werden.
 5. **Das Image installiert kein einziges Python-Paket.** Der Buch-Bau braucht keines: Die
    Notebooks werden nicht ausgeführt (Outputs sind gespeichert), und minted holt sein
@@ -212,11 +230,27 @@ haben bewusst keinen, weil eine schwache Übung schlechter ist als keine. Die Fo
 ## Häufige Fehlerquellen in diesem Repository
 
 * **Eine Lösung in einen Übungsabschnitt geschrieben.** Sie steht dann im veröffentlichten
-  PDF und auf der Website — das `:class: dropdown` des HTML wirkt im LaTeX-Export nicht.
-  Gegenprobe vor dem Push: `grep -rn 'Lösungsvorschlag' part-*/` muss leer bleiben.
+  PDF und auf der Website — `:class: dropdown` wirkt im LaTeX-Export nicht. Gegenprobe vor
+  dem Push:
+
+  ```sh
+  grep -rn --include='*.md' -oE 'Lösungsvorschlag|(Übungs)?[Bb]latt ?[0-9]+' part-*
+  ```
+
+  muss leer bleiben (der zweite Teil fängt Verweise auf Blattnummern ab, die es nicht mehr
+  gibt).
+* **Eine Gegenprobe mit Kontext links und rechts geschrieben.** `grep -oE '.{25}X.{25}'`
+  findet einen Treffer **nicht**, wenn er am Zeilenende steht — die 25 Zeichen danach fehlen
+  ja. So haben drei Blatt-Verweise zwei Prüfungen überlebt und standen im veröffentlichten
+  PDF. Ohne Kontextbreite suchen, dann mit `-o` nur den Treffer ausgeben.
+* **`devnotes/build_skript_from_2025.py` laufen lassen.** Das Skript hat 2026-09-17 die erste
+  Fassung erzeugt; ein zweiter Lauf legt `part-exercises/` samt Lösungsvorschlägen neu an und
+  schreibt die Kapitel unter ihren alten Namen daneben. Es ist seit dem 2026-09-27 gesperrt
+  (Begründung im Kopf der Datei) und bleibt nur als Protokoll liegen. Dasselbe gilt für
+  `restructure.py`.
 * Eine neue Datei angelegt und den `myst.yml`-Eintrag vergessen — sie taucht dann nicht auf.
-* Einen Link auf einen Anker gesetzt, den es nicht gibt. Der Build meldet das, der Text sieht
-  trotzdem unauffällig aus.
+* **Einen relativen Link auf eine Datei gesetzt, die es nicht (mehr) gibt.** Der HTML-Build
+  meldet `Cross-reference target not found`; im PDF sieht der Text unauffällig aus.
 * **PDF-Fehler mit `grep '^! '` zählen.** Latexmk läuft mit `-file-line-error`; Fehlerzeilen
   beginnen dann mit `./datei.tex:419:`. Richtig sind
   `grep -cE '^\./[^:]+\.tex:[0-9]+: '` und `grep -c 'That makes 100 errors'` — und zur
