@@ -19,6 +19,41 @@
 # Stand 2026-09-27: Python 3.14.7, Node v26.10.0 -- derselbe Digest wie in eipy-skript.
 FROM nikolaik/python-nodejs:python3.14-nodejs26-slim@sha256:02488bd4048b3864f785dafcd549f4842a0b10d449f3cf7fa38fbcde1f35812d
 
+# Der apt-Teil **angeheftet**. Der Digest oben deckt ihn nicht ab: Die Pakete kommen erst
+# im `RUN` dazu, also holt `apt-get install texlive-latex-extra` sonst das, was Debian am
+# Bautag hat -- und genau daraus entstand in eipy-skript die Differenz zwischen minted v2
+# (lokal) und minted v3 (Image), die 745 LaTeX-Fehler und einen Tag Suche gekostet hat.
+#
+# snapshot.debian.org liefert das Archiv zu einem Zeitpunkt. Das Basis-Image nennt seinen
+# eigenen Stand als Kommentar in /etc/apt/sources.list.d/debian.sources (20260918T000000Z);
+# hier steht bewusst ein spaeterer, naemlich der, gegen den dieses Image geprueft wurde.
+#
+# Anheben: Zeitstempel unten setzen, Image bauen, `myst build --pdf` und
+# devnotes/check_pdf_build.py im Container laufen lassen, erst dann committen. Die Suiten
+# muessen zur Debian-Version des Basis-Images passen (hier trixie = Debian 13).
+#
+# Stand 2026-09-27 mit diesem Zeitstempel: texlive-latex-extra 2024.20250309-2,
+# texlive-lang-german 2024.20250309-1, poppler-utils 25.03.0-5+deb13u4,
+# minted.sty v3.6.0 (2025/03/06), latexminted 0.5.0 mit Pygments 2.19.1.
+ARG DEBIAN_SNAPSHOT=20260927T000000Z
+RUN set -eu; \
+    { \
+      echo 'Types: deb'; \
+      echo "URIs: https://snapshot.debian.org/archive/debian/${DEBIAN_SNAPSHOT}"; \
+      echo 'Suites: trixie trixie-updates'; \
+      echo 'Components: main'; \
+      echo 'Signed-By: /usr/share/keyrings/debian-archive-keyring.pgp'; \
+      echo ''; \
+      echo 'Types: deb'; \
+      echo "URIs: https://snapshot.debian.org/archive/debian-security/${DEBIAN_SNAPSHOT}"; \
+      echo 'Suites: trixie-security'; \
+      echo 'Components: main'; \
+      echo 'Signed-By: /usr/share/keyrings/debian-archive-keyring.pgp'; \
+    } > /etc/apt/sources.list.d/debian.sources; \
+    # Ein Snapshot-Release ist per Definition abgelaufen -- das ist kein Fehler, sondern
+    # der Punkt. Die Signaturpruefung bleibt unangetastet.
+    echo 'Acquire::Check-Valid-Until "false";' > /etc/apt/apt.conf.d/99snapshot
+
 # System dependencies. The TeX packages are what `myst build --pdf` needs: latexmk drives
 # xelatex, the texlive-* sets cover the packages used by templates/tex/eidl-skript
 # (fontspec, hyperref, minted, microtype, ...), texlive-lang-german the hyphenation
