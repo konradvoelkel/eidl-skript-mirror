@@ -193,7 +193,7 @@
     $A, B \subseteq \mathbb{R}^n$ heißen \emph{linear trennbar}, wenn es $w, b$ gibt mit\\[10pt]
     \Large
     $w \cdot a + b > 0$ für alle $a \in A$,\\[6pt]
-    $w \cdot c + b \le 0$ für alle $c \in B$.
+    $w \cdot a' + b \le 0$ für alle $a' \in B$.
   \end{center}
 
   \note{Ein Perzeptron kann genau die Probleme lösen, bei denen die Klassen linear
@@ -239,11 +239,11 @@
   \frametitle{Die Perzeptronregel}
 
   \begin{center}
-    \Huge $w_{\text{neu}} := w + r\,(y - f(x))\,x$
+    \Huge $w_{\text{neu}} := w + \rho\,(y - f(x))\,x$
   \end{center}
 
-  \note{$r > 0$ ist die Lernrate, ein Hyperparameter.
-    Type-Check: Was muss $r$ sein, damit die Formel Sinn ergibt? Ein Skalar.
+  \note{$\rho > 0$ ist die Lernrate, ein Hyperparameter.
+    Type-Check: Was muss $\rho$ sein, damit die Formel Sinn ergibt? Ein Skalar.
     Und $(y - f(x))$? Eine Zahl aus $\{-1, 0, 1\}$.}
 \end{frame}
 
@@ -253,11 +253,11 @@
   % description statt itemize: Beamer schneidet lange \item[...]-Labels links ab.
   \begin{description}[$y = 1,\ f(x) = 0$]\setlength{\itemsep}{10pt}
   \item[$y = f(x)$] nichts passiert
-  \item[$y = 1,\ f(x) = 0$] $w_{\text{neu}} = w + r x$, Aktivierung wächst
-  \item[$y = 0,\ f(x) = 1$] $w_{\text{neu}} = w - r x$, Aktivierung sinkt
+  \item[$y = 1,\ f(x) = 0$] $w_{\text{neu}} = w + \rho x$, Aktivierung wächst
+  \item[$y = 0,\ f(x) = 1$] $w_{\text{neu}} = w - \rho x$, Aktivierung sinkt
   \end{description}
 
-  \note{Der mittlere Fall zum Mitrechnen: $w_{\text{neu}} \cdot x = w \cdot x + r\,(x \cdot x)$,
+  \note{Der mittlere Fall zum Mitrechnen: $w_{\text{neu}} \cdot x = w \cdot x + \rho\,(x \cdot x)$,
     und $x \cdot x > 0$ für $x \neq 0$. Die Aktivierung wächst also --- in Richtung der
     richtigen Entscheidung.
     Frage in den Raum, die 2025 kam: Muss eine Änderung a priori verbessern? Nein ---
@@ -268,7 +268,7 @@
   \frametitle{Warum das funktioniert}
 
   \begin{center}
-    \Huge $w^{(k)} \cdot x = w^{(0)} \cdot x + k\,r\,\|x\|^2$
+    \Huge $w^{(k)} \cdot x = w^{(0)} \cdot x + k\,\rho\,\|x\|^2$
   \end{center}
 
   \note{\textbf{Das ist die Tafelphase, 10--15 Minuten --- der Kern der Sitzung.}
@@ -291,7 +291,7 @@
     \includegraphics[width=0.8\textwidth]{vl02-perceptron-updates.png}
   \end{center}
 
-  \note{Trenngerade nach 0, 1, 2 und 3 Epochen über 60 Datenpunkte, Lernrate $r = 0{,}05$.
+  \note{Trenngerade nach 0, 1, 2 und 3 Epochen über 60 Datenpunkte, Lernrate $\rho = 0{,}05$.
     Genau das baut das Übungsblatt nach.
     Hier den Konvergenzsatz nur beim Namen nennen (Novikoff 1962): höchstens
     $R^2/\gamma^2$ Fehler, wenn es eine Margin $\gamma$ gibt. Der Beweis steht als
