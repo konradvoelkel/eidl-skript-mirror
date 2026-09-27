@@ -88,6 +88,25 @@ project:
 #      children:
 #       - pattern: devnotes/*.*
   jupyter: true
+  settings:
+    myst_to_tex:
+      # Codebloecke im PDF mit Syntaxhervorhebung statt als nackte verbatim-Umgebung.
+      # minted bringt zugleich Zeilenumbruch mit (`breaklines`, von MyST selbst
+      # gesetzt, plus `breakanywhere` aus dem Template) -- verbatim bricht gar nicht
+      # um, lange Aufrufe liefen deshalb in den Rand.
+      #
+      # Preis: minted braucht `-shell-escape` (setzt jtex selbst) und die
+      # Hilfsanwendung `latexminted`. In Debians minted v3 ist die genau dann
+      # brauchbar, wenn sie **nicht** aus PyPI kommt und mit dem richtigen Python
+      # laeuft -- siehe den entsprechenden Block im Dockerfile.
+      code_style: minted
+  # Verlinkt das gebaute PDF im "Downloads"-Menue der Website. Bewusst als `url` und
+  # nicht als `file`: Das PDF entsteht in einem **anderen** CI-Job (`build-pdf`) und
+  # liegt beim HTML-Bau noch gar nicht vor. Der `pages`-Job legt es unter diesem Pfad
+  # ab; relativ, damit hier keine absolute Pages-URL im Repository steht.
+  downloads:
+    - url: /eidl-skript.pdf
+      title: Das ganze Skript als PDF
   exports:
     - format: pdf
       # own template (templates/tex/eidl-skript): plain_latex + amssymb, babel ngerman,

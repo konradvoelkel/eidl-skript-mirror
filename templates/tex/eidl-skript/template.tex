@@ -1,28 +1,59 @@
 \documentclass{article}
+
+% --- Gemeinsamer Block der HHU-Skripte (PLAYBOOK 3.8i) --------------------------------
+% Gehoert **direkt hinter \documentclass** und vor `datetime`/`hyperref`: Wird babel
+% erst danach geladen, steht auf der Titelseite "Saturday 26. September, 2026" statt
+% "Samstag, 26. September 2026". Genau so war es hier bis zum 2026-09-27.
+%
+% amssymb: MyST importiert von sich aus nur amsmath; das Buch benutzt \mathbb, \square, ...
+\usepackage{amssymb}
+% caption: MyST erzeugt \caption* fuer Abbildungen ohne Label, das es sonst nicht gibt
+\usepackage{caption}
+% Deutsche Trennung (texlive-lang-german liegt im CI-Image). `shorthands=off` ist Pflicht:
+% babels deutsche Kurzbefehle machen `"` aktiv, und das Buch ist voller Codebloecke.
+% microtype kostet nichts und wirkt auf jeder Seite (haengende Satzzeichen, Laufweite).
+\usepackage[shorthands=off,ngerman]{babel}
+\usepackage{microtype}
+% A4 mit massvollen Raendern statt der US-Letter-Vorgabe von `article`
+\usepackage[a4paper, margin=2.5cm]{geometry}
+% xelatex: Latin Modern fuer den Text, DejaVu Sans Mono fuer Code (fonts-dejavu-core)
+\usepackage{fontspec}
+\setmonofont{DejaVu Sans Mono}[Scale=MatchLowercase]
+% jedes Kapitel (= \section, eines je .md-Datei) beginnt auf einer neuen Seite
+\usepackage{etoolbox}
+\pretocmd{\section}{\clearpage}{}{}
+% `##` im Markdown wird in diesem Buch zu \paragraph -- und \paragraph ist in `article`
+% ein **run-in**-Titel (negativer Abstand danach): Er erscheint erst dort, wo der naechste
+% gewoehnliche Absatz beginnt. Folgt auf die Ueberschrift sofort eine Umgebung (eine
+% Merkbox, ein Codeblock, eine Liste), wandert der Titel an dieser vorbei -- im Lauf vom
+% 2026-09-27 bei **76 von 979** Ueberschriften, die dadurch *hinter* ihrem eigenen
+% Abschnitt standen (am deutlichsten in Blatt 0: "Lineare Algebra: Laenge" stand unter
+% dem Laenge-Abschnitt). Positiver Abstand danach macht daraus eine eigene Zeile.
+% Rueckgaengig: diese vier Zeilen loeschen.
+\makeatletter
+\renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}%
+  {2.5ex \@plus 1ex \@minus .2ex}{0.6ex \@plus .2ex}{\normalfont\normalsize\bfseries}}
+\renewcommand\subparagraph{\@startsection{subparagraph}{5}{\z@}%
+  {2ex \@plus 1ex \@minus .2ex}{0.5ex \@plus .2ex}{\normalfont\normalsize\bfseries\itshape}}
+\makeatother
+% --------------------------------------------------------------------------------------
+
 \usepackage{xcolor}
 \usepackage{hyperref}
 \usepackage{datetime}
 \usepackage{graphicx}
 \usepackage{natbib}
 \bibliographystyle{abbrvnat}
-% --- eidl-skript additions to the MyST plain_latex template (same approach as ds-skript) ---
-% amssymb: MyST 1.10 only auto-imports amsmath; the book uses \mathbb, \square, ...
-\usepackage{amssymb}
-% caption: MyST emits \caption* for unlabelled figures, which only exists with this package
-\usepackage{caption}
-% German hyphenation and typographic conventions (texlive-lang-german is in the CI image)
-\usepackage[ngerman]{babel}
-% A4 with moderate margins instead of the US-letter article default
-\usepackage[a4paper, margin=2.5cm]{geometry}
-% xelatex: Latin Modern for text, DejaVu Sans Mono for code (fonts-dejavu-core in the CI image)
-\usepackage{fontspec}
-\setmonofont{DejaVu Sans Mono}[Scale=MatchLowercase]
-% every chapter (= \section, one per .md file) starts on a new page
-\usepackage{etoolbox}
-\pretocmd{\section}{\clearpage}{}{}
-% ------------------------------------------------------------------------------------------
 
 [-IMPORTS-]
+
+% Codebloecke auch innerhalb langer Woerter umbrechen. MyST setzt `breaklines` selbst,
+% das bricht aber nur an Leerzeichen; lange Pfade, URLs und Aufrufe ohne Leerzeichen
+% laufen sonst in den Rand. Steht bewusst unter dem Import-Block oben, denn erst dort
+% laedt MyST minted (nur mit `code_style: minted` in myst.yml, sonst ist die Zeile ein
+% Fehler). Und nicht den Namen der jtex-Marke in einen Kommentar schreiben: jtex
+% ersetzt sie auch dort, und der ganze Import-Block landet ein zweites Mal in der .tex.
+\setminted{breakanywhere=true}
 
 % Markenfarbe des Skripts (BRANDING.md, 2026-09-22); hhuBlau bleibt fuer
 % Elemente, die das Corporate Design verlangt.

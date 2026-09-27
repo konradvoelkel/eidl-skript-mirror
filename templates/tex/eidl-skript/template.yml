@@ -28,6 +28,7 @@ packages:
   - caption
   - geometry
   - babel
+  - microtype
   - fontspec
   - etoolbox
   - xcolor
