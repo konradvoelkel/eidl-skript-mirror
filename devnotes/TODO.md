@@ -1,12 +1,14 @@
 # TODO eidl-skript
 
-Stand: 2026-09-20 (spät abends). Erledigtes steht unten unter „Erledigt“, nach Datum. Punkte mit **[Entscheidung]**
+Stand: 2026-09-27 (nachts). Erledigtes steht unten unter „Erledigt“, nach Datum. Punkte mit **[Entscheidung]**
 brauchen eine Antwort von Konrad; ein Vorschlag steht jeweils dabei. Überblick über alle Dateien in `devnotes/`:
 `devnotes/README.md`.
 
 Aktueller Stand des Skripts: 27 Kapitel (01–27) plus Glossar. HTML-Build ohne Warnungen
-(`uv run --only-group dev myst build --html`), PDF-Export ohne LaTeX-Fehler, 135 Seiten A4
-(`uv run --only-group dev myst build --pdf` → `exports/eidl-skript.pdf`, gitignored; in der CI als `build-pdf`).
+(`uv run --only-group dev myst build --html`), PDF-Export ohne LaTeX-Fehler und ohne fehlende Glyphen,
+137 Seiten A4 mit Syntaxhervorhebung (`uv run --only-group dev myst build --pdf` → `exports/eidl-skript.pdf`,
+gitignored; in der CI als `build-pdf`, dort mit `check_pdf_build.py` verifiziert). Arbeitsanweisungen für
+Agenten und Menschen stehen seit 2026-09-27 in `../CLAUDE.md`.
 
 ## Inhalt (Skript)
 
@@ -155,10 +157,97 @@ Textfassung von Seite und Objektbaum: `../ilias/` (analog zu `ds2-26/ilias/`), W
   DejaVu Sans Mono, Kapitel auf neuer Seite). Grund: `plain_latex` ignoriert die `preamble`-Option in `myst.yml`
   stillschweigend, deshalb waren `\mathbb` & Co. bisher undefiniert (248 LaTeX-Fehler, die latexmk durchwinkte).
   Jetzt 0 Fehler, 135 Seiten (A4). Ohne Docker lokal weiterhin `uv run --only-group dev myst build --pdf`.
+- [ ] **Template-Abgleich mit EiPy (2026-09-27).** Beide Bücher haben am selben Tag dasselbe Template
+  weiterentwickelt und sind jetzt fast deckungsgleich; der gemeinsame Block steht als Referenz in
+  `~/files/work/hhu/PLAYBOOK.md` §3.8i (mit Tabelle, wer was beigesteuert hat). **Von eidl stammen**
+  `amssymb`, `caption`, `geometry`/A4 und `\pretocmd{\section}{\clearpage}` — EiPy hat sie übernommen,
+  A4 hat dort 447 auf 319 Seiten und 188 auf 67 überlange Zeilen gebracht. Offen sind noch zwei
+  Kleinigkeiten in die andere Richtung:
+  - ~~`microtype`~~ **erledigt 2026-09-27**, zusammen mit `shorthands=off` an babel. Dabei fiel auf, dass
+    der gemeinsame Block bei uns **hinter** `datetime` stand: Auf der Titelseite stand deshalb
+    „Saturday 26. September, 2026“. Block nach vorn geschoben, jetzt „27. September 2026“.
+  - `\setmonofont{DejaVu Sans Mono}[Scale=0.872]` statt `MatchLowercase`. Der Faktor ist gerechnet:
+    Zeichenvorschub lmmono10 0,5250 em gegen DejaVu 0,60205 em, 0,5250/0,60205 = 0,872. Damit sind die
+    Zeichenbreiten identisch, und ein Schriftwechsel ändert keinen einzigen Zeilenumbruch. Nachrechnen
+    mit fontTools, wenn die Schrift wechselt.
+  - **[Entscheidung]** Option `preamble` im eigenen Template deklarieren (wie EiPy: `_tex/plain_latex-hhu/`),
+    dann wandert Buchspezifisches — Markenfarbe, PDF-Metadaten, `\setminted` — aus dem Template zurück in
+    die `myst.yml`, und der Template-Block bleibt zwischen den Büchern kopierbar. Vorschlag: ja, aber erst
+    nach der fachlichen Durchsicht; es ist reine Umsortierung ohne sichtbare Wirkung.
+- [ ] **Emoji im PDF prüfen (2026-09-27).** EiPy hatte 58 Emoji aus `rich`/`textual`- und black-Ausgaben, für
+  die keine Schrift im Image eine Glyphe hat; sie fehlten im PDF ersatzlos. Lösung dort: `ucharclasses` +
+  `fonts-symbola` (Playbook §3.8b). Ob eidl betroffen ist, sagt der eigene Prüfer — `check_pdf_build.py`
+  zählt fehlende Glyphen bereits mit. **Gemessen 2026-09-27: 0 fehlende Glyphen**, lokal und im CI-Image —
+  dieses Buch zeigt keine Werkzeugausgaben mit Rahmenzeichen oder Emoji. Hier ist nichts zu tun; der Prüfer
+  läuft mit `--max-missing-glyphs 0` weiter und meldet es, falls doch einmal eines dazukommt.
+- [ ] **21 überlange Zeilen im PDF** (Stand 2026-09-27, gezählt als `Overfull \hbox` im LaTeX-Log). Sie stammen
+  **nicht** aus Codeblöcken — minted bricht dank `breakanywhere` sauber um —, sondern aus langem Inline-`\texttt{}`
+  im Fließtext: `torch.backends.mps.is_available()`, `optim.Adam`, `sklearn.datasets.make_moons` und Ähnliches.
+  LaTeX kann Schreibmaschinenschrift nicht trennen. Abhilfe wäre `\usepackage[htt]{hyphenat}` oder, sauberer, die
+  längsten Aufrufe im Satz umformulieren. Kein Fehler, nur Ränder — deshalb niedrige Priorität.
+- [ ] **Der apt-Teil des Images ist ungepinnt** (gilt für alle drei Bücher, Playbook §7). `apt-get install
+  texlive-latex-extra` holt, was Debian am Bautag hat; die Digest-Anheftung des Basis-Images deckt das nicht ab,
+  weil die Pakete erst im `RUN` dazukommen. Genau daraus entstand die minted-v2-gegen-v3-Differenz. Schließen
+  ließe es sich mit `snapshot.debian.org` und datierter URL — Preis ist dieselbe Pflege-Zusage wie beim Digest.
+- [ ] **`imagemagick` ist bewusst nicht im Image.** Dieses Buch hat 45 PNG und 2 JPG und kein einziges SVG, also
+  wandelt MyST nichts. Sobald ein SVG dazukommt, meldet MyST das auf stdout, und `check_pdf_build.py --myst-log`
+  liest es mit — dann gehören `imagemagick` und `librsvg2-bin` ins Dockerfile (wie in EiPy).
 - `_site/sidebar_footer.md` leer, `navbar_end.md` nur „Inhaltsverzeichnis“ – wie bei EiPy; lassen.
 - Logo: `logo/` enthält SVGs und Exporte; für Rocket.Chat `logo/eidl-logo-512.png`.
 
 ## Erledigt
+
+### 2026-09-27, nachts (Playbook-Durchgang)
+
+Auslöser: Durchsicht von `~/Sciebo/hhu/PLAYBOOK.md` gegen dieses Repo. Protokoll mit Messwerten:
+`devnotes/build-log-2026-09-27.md`.
+
+- [x] **Übungsblatt 0 repariert.** Sechs `::: proof` (Pandoc-Stil ohne geschweifte Klammern) waren für MyST
+  **Codeblöcke**: Die Beweise standen als roher Markdown-Quelltext im Buch, in HTML wie PDF. Dazu eine
+  Schachtelung gleich tiefer `:::`, die eine `##`-Überschrift („Lineare Algebra: Länge“) und eine ganze
+  Definition in einen Codeblock verschluckt hat. Jetzt flach, mit deutschen Titeln („Beweis“,
+  „Beweisaufgabe“) statt des Konversions-Artefakts „proof“.
+- [x] **Übungsblatt 10 repariert.** Fünf Pandoc-Gitter-Tabellen, die die Konversion von 2025 nicht mitgenommen
+  hat: drei standen als Fließtext-Wüste im Buch, zwei als Codeblock. Jetzt echte Markdown-Tabellen — auch die
+  beiden leeren zum Ausfüllen. Nebenlehre: `a)` ist in CommonMark **kein** Listenmarker, alles vier Leerzeichen
+  darunter wird ein Codeblock.
+- [x] **Übungsblatt 4**: eingerückter Pseudocode-Block ohne Sprache → Fence mit Sprache `python`.
+- [x] **`code_style: minted` wieder an** (am 2026-09-20 entfernt, weil der PDF-Bau brach). Die Ursache war eine
+  andere als damals vermutet: drei Codeblöcke **ohne Sprache** ergeben `\begin{minted}[breaklines]{}`, woran
+  minted mit „Missing Pygments output“ abbricht. Die drei sind oben repariert, seither 0 Fehler. Dafür braucht
+  es im Image den `latexminted`-Helfer von Debian (nicht den aus PyPI!) mit festem Shebang — im Dockerfile
+  ausführlich begründet, mit `latexminted --version` als Selbsttest beim Image-Bau.
+- [x] **mystmd-Bindestrich-Fehler behoben** (Playbook §3.8g), `devnotes/patch_myst_tex.py`. mystmd escaped
+  Codeblöcke als Mathematik und setzte vor jeden Bindestrich ein Leerzeichen: 49 Stellen in 18 Kapiteln, aus
+  `nvidia-smi` wurde `nvidia -smi`, aus `--index-url` wurde `- -index -url`. Betrifft `verbatim` genauso wie
+  `minted` — die Stelle sitzt im gemeinsamen `code`-Handler. Der PDF-Prüfer hat jetzt zwei `--expect`-Proben
+  darauf.
+- [x] **`build-pdf` prüft das PDF wirklich** (`devnotes/check_pdf_build.py` aus EiPy): Fehler im
+  `-file-line-error`-Format, Abbruch wegen Fehlerflut, fehlende Glyphen, Seitenzahl, Stichproben aus den letzten
+  Kapiteln und das MyST-Protokoll auf verschluckte Knoten. Dafür `poppler-utils` ins Image.
+- [x] **Site-Template mitgeliefert** (`_site/vendor/`, 13 MB, `@myst-theme/book` 1.3.1 — dieselbe Version, die
+  bisher bei jedem Build von GitHub kam, das Aussehen ändert sich also nicht). Playbook §3.4.
+- [x] **CI nachgezogen** (Playbook §3.3): Basis-Image per Digest angeheftet, `.dockerignore` als Allowlist,
+  `when: never` außerhalb des Default-Branch, Kurz-SHA als zweiter Tag, kaniko-Layer-Cache,
+  `devnotes/patch_myst_tex.py` in `changes`, `retry` nur für Runner-Probleme. Dazu
+  `devnotes/check_ci_yaml.py` (und `pyyaml` in der dev-Gruppe), weil eine kaputte `.gitlab-ci.yml` sich nicht
+  selbst prüfen kann.
+- [x] **`downloads:` in `myst.yml`** — das PDF war im `pages`-Job schon dabei, aber im Buch nicht verlinkt.
+- [x] **`CLAUDE.md` angelegt**, mit Zeiger aufs Playbook und einem Abschnitt „Markup — die Fallen dieses Repos“,
+  in dem die vier Konversions-Artefakte von oben als Regeln stehen.
+- [x] **`?“` wurde im PDF zu `?¿`** (von Konrad im PDF gesehen, Seite 54: „Geht das mit neuronalen
+  Netzen¿‘). Ursache: MyST schreibt das schließende deutsche Anführungszeichen als zwei Accent-graves,
+  und XeLaTeX bildet daraus zusammen mit dem vorangehenden `?` die TeX-Ligatur `¿`. Neun Stellen im Buch.
+  `patch_myst_tex.py` klammert die Ersetzung jetzt ein; im PDF 0 Treffer.
+- [x] **76 Überschriften standen hinter ihrem eigenen Abschnitt.** `##` wird zu `\paragraph`, und das ist
+  in `article` ein run-in-Titel: Folgt eine Merkbox oder ein Codeblock statt eines Absatzes, wandert der
+  Titel bis zum nächsten echten Absatz. Am deutlichsten in Blatt 0, wo „Lineare Algebra: Länge“ unter dem
+  Länge-Abschnitt stand. `\paragraph` und `\subparagraph` sind im Template jetzt Überschriften auf
+  eigener Zeile (vier Zeilen im `\makeatletter`-Block, einzeln rückgängig zu machen). Das ändert das
+  Schriftbild aller 979 Zwischenüberschriften — **wenn das nicht gefällt, ist es eine Zeile Arbeit.**
+  137 statt 136 Seiten.
+- [x] Gegenprobe im **echten CI-Image** (lokal mit Docker gebaut, 1,13 GB): `myst build --pdf` plus Prüfer
+  laufen durch — 137 Seiten, 0 LaTeX-Fehler, 0 fehlende Glyphen.
 
 ### 2026-09-20, zweite Runde (aus der TODO-Liste selbst erledigt)
 
