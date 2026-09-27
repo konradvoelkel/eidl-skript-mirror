@@ -116,6 +116,35 @@ project:
       output: exports/eidl-skript.pdf
       options:
         link: https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de/
+        # Buchspezifisches. Im Template steht nur noch, was fuer jedes deutschsprachige
+        # Skript der Familie gilt (PLAYBOOK 3.8i) -- damit bleibt der Template-Block
+        # zwischen den Buechern kopierbar. Eingefuegt wird das hier **hinter** dem
+        # Import-Block, deshalb darf `\setminted` darin stehen.
+        preamble: |
+          % Codebloecke auch innerhalb langer Woerter umbrechen. MyST setzt `breaklines`
+          % selbst, das bricht aber nur an Leerzeichen; lange Pfade, URLs und Aufrufe
+          % ohne Leerzeichen laufen sonst in den Rand.
+          \setminted{breakanywhere=true}
+
+          % Markenfarbe des Skripts (BRANDING.md, 2026-09-22); hhuBlau bleibt fuer
+          % Elemente, die das Corporate Design verlangt.
+          \definecolor{hhuBlau}{HTML}{006AB3}
+          \definecolor{brand}{HTML}{6F59A6}
+          \hypersetup{
+            colorlinks=true,
+            linkcolor=brand,
+            citecolor=brand,
+            urlcolor=brand,
+            pdftitle={Einführung in Deep Learning},
+            pdfauthor={Dr. Konrad Völkel},
+            % Fuer ein PDF dieser Laenge der nuetzlichste Teil: nummerierte Lesezeichen,
+            % die der Betrachter gleich aufklappt, und Links, die ueber Zeilenumbrueche
+            % hinweg klickbar bleiben.
+            unicode=true,
+            bookmarksnumbered=true,
+            pdfpagemode=UseOutlines,
+            breaklinks=true
+          }
 
 site:
   domains:

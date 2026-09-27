@@ -1,9 +1,13 @@
 \documentclass{article}
 
 % --- Gemeinsamer Block der HHU-Skripte (PLAYBOOK 3.8i) --------------------------------
-% Gehoert **direkt hinter \documentclass** und vor `datetime`/`hyperref`: Wird babel
-% erst danach geladen, steht auf der Titelseite "Saturday 26. September, 2026" statt
-% "Samstag, 26. September 2026". Genau so war es hier bis zum 2026-09-27.
+% Alles hier gilt fuer *jedes* deutschsprachige Skript der Familie und ist zwischen den
+% Buechern kopierbar. Was nur diesem Buch gehoert -- Markenfarbe, PDF-Metadaten,
+% \setminted -- steht nicht hier, sondern in `options.preamble` in der myst.yml.
+%
+% Der Block gehoert **direkt hinter \documentclass** und vor `datetime`/`hyperref`: Wird
+% babel erst danach geladen, steht auf der Titelseite "Saturday 26. September, 2026"
+% statt "27. September 2026". Genau so war es hier bis zum 2026-09-27.
 %
 % amssymb: MyST importiert von sich aus nur amsmath; das Buch benutzt \mathbb, \square, ...
 \usepackage{amssymb}
@@ -16,9 +20,29 @@
 \usepackage{microtype}
 % A4 mit massvollen Raendern statt der US-Letter-Vorgabe von `article`
 \usepackage[a4paper, margin=2.5cm]{geometry}
-% xelatex: Latin Modern fuer den Text, DejaVu Sans Mono fuer Code (fonts-dejavu-core)
+% xelatex: Latin Modern fuer den Text, DejaVu Sans Mono fuer Code (fonts-dejavu-core).
+%
+% `Scale=0.872` ist nicht geraten, sondern gerechnet: Der Zeichenvorschub von lmmono10
+% ist 0.5250 em, der von DejaVu Sans Mono 0.60205 em; 0.5250/0.60205 = 0.872. Damit sind
+% die Zeichenbreiten identisch zur Schreibmaschinenschrift, die LaTeX sonst genommen
+% haette -- ein Schriftwechsel aendert dann keinen einzigen Zeilenumbruch. Wer die
+% Schrift wechselt, rechnet den Faktor neu aus (fontTools, `advanceWidth` / `unitsPerEm`).
+% `MatchLowercase` stand hier bis zum 2026-09-27; es passt die x-Hoehe an statt der
+% Breite und ist damit fuer Code die falsche Groesse.
 \usepackage{fontspec}
-\setmonofont{DejaVu Sans Mono}[Scale=MatchLowercase]
+\setmonofont{DejaVu Sans Mono}[Scale=0.872]
+% Schreibmaschinenschrift **im Fliesstext** darf trennen. Ohne das laufen lange
+% Bezeichner (`torch.backends.mps.is_available()`, `sklearn.datasets.make_moons`) in
+% den Rand, weil LaTeX in \texttt keine Trennstelle sucht: 18 ueberlange Zeilen im Lauf
+% vom 2026-09-27, alle dieser Klasse. `hyphenat` gehoert **hinter** fontspec und
+% \setmonofont, sonst greift die Umdefinition von \ttfamily an der falschen Schrift an.
+% Codebloecke sind nicht betroffen -- in Verbatim-Umgebungen wird ohnehin nicht getrennt.
+\usepackage[htt]{hyphenat}
+% Was danach noch ueberhaengt, sind URLs im Linktext (MyST setzt sie als gewoehnlichen
+% Text in \href, nicht als \url, also greift keine URL-Trennung). `emergencystretch`
+% gibt LaTeX in einem letzten Durchgang zusaetzlichen Dehnraum, statt die Zeile in den
+% Rand laufen zu lassen -- der klassische Ausweg, wenn eine Zeile keine Trennstelle hat.
+\setlength{\emergencystretch}{3em}
 % jedes Kapitel (= \section, eines je .md-Datei) beginnt auf einer neuen Seite
 \usepackage{etoolbox}
 \pretocmd{\section}{\clearpage}{}{}
@@ -29,7 +53,7 @@
 % 2026-09-27 bei **76 von 979** Ueberschriften, die dadurch *hinter* ihrem eigenen
 % Abschnitt standen (am deutlichsten in Blatt 0: "Lineare Algebra: Laenge" stand unter
 % dem Laenge-Abschnitt). Positiver Abstand danach macht daraus eine eigene Zeile.
-% Rueckgaengig: diese vier Zeilen loeschen.
+% Rueckgaengig: diesen \makeatletter-Block loeschen.
 \makeatletter
 \renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}%
   {2.5ex \@plus 1ex \@minus .2ex}{0.6ex \@plus .2ex}{\normalfont\normalsize\bfseries}}
@@ -47,26 +71,13 @@
 
 [-IMPORTS-]
 
-% Codebloecke auch innerhalb langer Woerter umbrechen. MyST setzt `breaklines` selbst,
-% das bricht aber nur an Leerzeichen; lange Pfade, URLs und Aufrufe ohne Leerzeichen
-% laufen sonst in den Rand. Steht bewusst unter dem Import-Block oben, denn erst dort
-% laedt MyST minted (nur mit `code_style: minted` in myst.yml, sonst ist die Zeile ein
-% Fehler). Und nicht den Namen der jtex-Marke in einen Kommentar schreiben: jtex
-% ersetzt sie auch dort, und der ganze Import-Block landet ein zweites Mal in der .tex.
-\setminted{breakanywhere=true}
-
-% Markenfarbe des Skripts (BRANDING.md, 2026-09-22); hhuBlau bleibt fuer
-% Elemente, die das Corporate Design verlangt.
-\definecolor{hhuBlau}{HTML}{006AB3}
-\definecolor{brand}{HTML}{6F59A6}
-\hypersetup{
-  colorlinks=true,
-  linkcolor=brand,
-  citecolor=brand,
-  urlcolor=brand,
-  pdftitle={[-doc.title-]},
-  pdfauthor={[-doc.authors|join(", ", "name")-]}
-}
+% Buchspezifisches aus `options.preamble` in der myst.yml. Die Stelle ist mit Bedacht
+% **unter** dem Import-Block: Erst dort laedt MyST minted, und `\setminted` waere darueber
+% ein Fehler. Eine Option, die das Template nicht in seiner template.yml deklariert,
+% verwirft jtex kommentarlos -- deshalb steht `preamble` dort.
+[# if options.preamble #]
+[-options.preamble-]
+[# endif #]
 
 \title{[-doc.title-]}
 

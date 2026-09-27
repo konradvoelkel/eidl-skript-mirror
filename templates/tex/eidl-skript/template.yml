@@ -21,6 +21,13 @@ options:
     type: string
     title: Footnote Link
     description: Footnote containing a link back to the online version
+  - id: preamble
+    type: string
+    title: LaTeX-Praeambel
+    description: >-
+      Buchspezifisches, wortwoertlich hinter den Import-Block gesetzt: Markenfarbe,
+      PDF-Metadaten, \setminted. Muss hier deklariert sein -- jtex verwirft
+      undeklarierte Optionen aus der myst.yml kommentarlos (PLAYBOOK 3.8c).
 files:
   - template.tex
 packages:
@@ -29,6 +36,7 @@ packages:
   - geometry
   - babel
   - microtype
+  - hyphenat
   - fontspec
   - etoolbox
   - xcolor
