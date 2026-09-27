@@ -232,5 +232,5 @@ $f = (\tfrac12, 0, -\tfrac12)$ an den Stellen $-1, 0, 1$.
 
 :::{admonition} Weiterlesen
 :class: seealso
-Prince, *UDL*, Kap. 10 (Convolutional networks) und 11 (Residual networks). Beide Bücher sind frei verfügbar, siehe [Über dieses Skript](../README.md).
+Prince, *UDL*, Kap. 10 (Convolutional networks) und 11 (Residual networks). Das Buch ist frei verfügbar, siehe [Über dieses Skript](../README.md).
 :::

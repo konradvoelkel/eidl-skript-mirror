@@ -68,5 +68,5 @@ $q \cdot k_3 = 0$ und Values $v_1 = 1$, $v_2 = 3$, $v_3 = 10$.
 
 :::{admonition} Weiterlesen
 :class: seealso
-Prince, *UDL*, Kap. 12 (Transformers). Beide Bücher sind frei verfügbar, siehe [Über dieses Skript](../README.md).
+Prince, *UDL*, Kap. 12 (Transformers). Das Buch ist frei verfügbar, siehe [Über dieses Skript](../README.md).
 :::

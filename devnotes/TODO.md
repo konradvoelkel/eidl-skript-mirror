@@ -180,6 +180,12 @@ Textfassung von Seite und Objektbaum: `~/Sciebo/hhu/eidl-26/ilias/` (analog zu
   Text in `\href`, nicht als `\url`, deshalb greift keine URL-Trennung. Die schlimmste (77 pt) ist
   `paperswithcode.com/methods/category/activation-…` in 11. Abhilfe wäre, die Linktexte zu kürzen
   („paperswithcode“ statt der vollen Adresse) — Inhaltsarbeit, keine Technik.
+- [ ] **Das HHU-Beamer-Theme fehlt auf dieser Maschine.** `slides/build.sh` scheitert mit
+  „File `beamerthemehhubeamer.sty' not found“; `slides/README.md` sagt richtig, dass es unter
+  `/usr/share/texmf/tex/latex/beamer/themes/` liegen muss, dort liegt aber nichts. Kopien gibt es
+  in `~/Sciebo/hhu/ds2026/ds-skript/slides/hhu-beamer-theme/` und in `~/Sciebo/hhu/ds2025/slides/`.
+  Am 2026-09-27 behelfsweise mit `TEXINPUTS=".:…/hhu-beamer-theme//:"` gebaut. Vor der ersten
+  Sitzung am 14.10. richtig installieren, sonst lässt sich kein Deck aktualisieren.
 - [ ] **`imagemagick` ist bewusst nicht im Image.** Dieses Buch hat 45 PNG und 2 JPG und kein einziges SVG, also
   wandelt MyST nichts. Sobald ein SVG dazukommt, meldet MyST das auf stdout, und `check_pdf_build.py --myst-log`
   liest es mit — dann gehören `imagemagick` und `librsvg2-bin` ins Dockerfile (wie in EiPy).

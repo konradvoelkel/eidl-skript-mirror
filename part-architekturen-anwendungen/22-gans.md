@@ -117,5 +117,5 @@ Tutorial time: [pytorch.org/tutorials/beginner/dcgan_faces_tutorial.html](https:
 
 :::{admonition} Weiterlesen
 :class: seealso
-Prince, *UDL*, Kap. 15 (Generative adversarial networks), inklusive Wasserstein-GAN und StyleGAN. Beide Bücher sind frei verfügbar, siehe [Über dieses Skript](../README.md).
+Prince, *UDL*, Kap. 15 (Generative adversarial networks), inklusive Wasserstein-GAN und StyleGAN. Das Buch ist frei verfügbar, siehe [Über dieses Skript](../README.md).
 :::

@@ -72,5 +72,5 @@ nur Trainingsdaten mit nichtnegativen Einträgen.
 
 :::{admonition} Weiterlesen
 :class: seealso
-Prince, *UDL*, Abschnitt 3.2 (Activation functions) und Kap. 7 (Initialization, sterbende Neuronen). Beide Bücher sind frei verfügbar, siehe [Über dieses Skript](../README.md).
+Prince, *UDL*, Abschnitt 3.2 (Activation functions) und Kap. 7 (Initialization, sterbende Neuronen). Das Buch ist frei verfügbar, siehe [Über dieses Skript](../README.md).
 :::

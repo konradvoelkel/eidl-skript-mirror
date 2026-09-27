@@ -79,5 +79,5 @@ Message Passing in einem GNN: Jeder Knoten aktualisiert seinen Vektor aus den Ve
 
 :::{admonition} Weiterlesen
 :class: seealso
-Prince, *UDL*, Kap. 13 (Graph neural networks). Beide Bücher sind frei verfügbar, siehe [Über dieses Skript](../README.md).
+Prince, *UDL*, Kap. 13 (Graph neural networks). Das Buch ist frei verfügbar, siehe [Über dieses Skript](../README.md).
 :::

@@ -59,5 +59,5 @@ Umgekehrt lässt sich jedes ReLU-Netz auch als Entscheidungsbaum schreiben: Jede
 
 :::{admonition} Weiterlesen
 :class: seealso
-Prince, *UDL*, Kap. 3 (Universal approximation theorem), Kap. 4 (Depth vs. width) und Kap. 20 (Why does deep learning work?). Beide Bücher sind frei verfügbar, siehe [Über dieses Skript](../README.md).
+Prince, *UDL*, Kap. 3 (Universal approximation theorem), Kap. 4 (Depth vs. width) und Kap. 20 (Why does deep learning work?). Das Buch ist frei verfügbar, siehe [Über dieses Skript](../README.md).
 :::
