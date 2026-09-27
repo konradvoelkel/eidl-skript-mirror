@@ -632,6 +632,7 @@ dependencies = [
 [package.dev-dependencies]
 dev = [
     { name = "mystmd" },
+    { name = "pyyaml" },
     { name = "ruff" },
 ]
 
@@ -657,6 +658,7 @@ requires-dist = [
 [package.metadata.requires-dev]
 dev = [
     { name = "mystmd", specifier = ">=1.10.1,<2" },
+    { name = "pyyaml", specifier = ">=6.0.3" },
     { name = "ruff" },
 ]
 

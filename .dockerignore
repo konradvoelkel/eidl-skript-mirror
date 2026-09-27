@@ -1,0 +1,6 @@
+# Das Dockerfile braucht aus dem Kontext genau eine Datei. Alles andere auszuschliessen
+# haelt den Build-Kontext klein -- ohne das ginge unter anderem das mitgelieferte
+# Site-Template (13 MB), die Bilder und das gebaute PDF mit, die im Image nichts zu
+# suchen haben.
+*
+!devnotes/patch_myst_tex.py

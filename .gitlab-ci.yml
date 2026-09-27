@@ -7,14 +7,36 @@ variables:
   BASE_URL: "" # "/$CI_PROJECT_NAME"
   HOST: "127.0.0.1"
 
-# Builds the CI image from the Dockerfile and pushes it to the project's
-# container registry. Runs automatically when the Dockerfile changes on the
-# default branch; can also be started manually from the pipeline view.
+# Baut das Projekt-Image neu, wenn sich sein Rezept aendert. Ohne das bleibt das Image im
+# Registry auf dem Stand seines letzten Baus stehen, waehrend das Repo etwas anderes
+# behauptet -- der haeufigste CI-Ausfall dieser Buchfamilie (siehe PLAYBOOK 3.1).
+#
+# `kaniko` statt Docker-in-Docker: braucht keinen privilegierten Runner und laeuft mit dem
+# gewoehnlichen docker-Executor. Zugangsdaten kommen aus den von GitLab selbst gesetzten
+# Variablen; hier steht kein Geheimnis im Klartext.
+#
+# Zwei Tags: `latest` benutzen die anderen Jobs, das Kurz-SHA erlaubt es, im Zweifel auf
+# ein bestimmtes Image zurueckzugehen.
 build-image:
   stage: image
   image:
+    # Version angeheftet -- ein unangehefteter `:debug`-Tag ist derselbe Fehler eine Ebene
+    # hoeher.
     name: gcr.io/kaniko-project/executor:v1.23.2-debug
     entrypoint: [""]
+  rules:
+    # Auf Branches ausserhalb des Default-Branch nie.
+    - if: $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH
+      when: never
+    # Automatisch, wenn sich das Image-Rezept aendert. `devnotes/patch_myst_tex.py` gehoert
+    # dazu: Das Dockerfile kopiert die Datei hinein und fuehrt sie aus.
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      changes:
+        - Dockerfile
+        - devnotes/patch_myst_tex.py
+    # Und von Hand ausloesbar, etwa wenn das Basis-Image angehoben wurde.
+    - when: manual
+      allow_failure: true
   script:
     - mkdir -p /kaniko/.docker
     - echo "{\"auths\":{\"${CI_REGISTRY}\":{\"auth\":\"$(printf '%s:%s' "${CI_REGISTRY_USER}" "${CI_REGISTRY_PASSWORD}" | base64 | tr -d '\n')\"}}}" > /kaniko/.docker/config.json
@@ -22,19 +44,34 @@ build-image:
       --context "${CI_PROJECT_DIR}"
       --dockerfile "${CI_PROJECT_DIR}/Dockerfile"
       --destination "${CI_REGISTRY_IMAGE}:latest"
-  rules:
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-      changes:
-        - Dockerfile
-    - when: manual
-      allow_failure: true
+      --destination "${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}"
+      --cache=true --cache-repo "${CI_REGISTRY_IMAGE}/cache"
+      --cache-ttl=336h --snapshot-mode=redo
 
-# No `needs` on build-image: when the Dockerfile is unchanged that job is
-# manual, and a `needs` dependency on a pending manual job would skip this job
-# (and the whole pipeline). Stage order already runs image builds first.
+# Kein `needs` auf build-image: Wenn das Dockerfile unveraendert ist, ist der Job manuell,
+# und eine `needs`-Abhaengigkeit auf einen wartenden manuellen Job wuerde diesen Job (und
+# damit die ganze Pipeline) ueberspringen. Die Stage-Reihenfolge baut das Image ohnehin
+# zuerst; weil die Pull-Policy des Runners `always` ist, benutzt dieser Job in derselben
+# Pipeline schon das neue Image.
+#
+# Das Site-Template liegt im Projekt (`_site/vendor/book-theme.zip`) und wird vor dem Build
+# an die Stelle entpackt, an der MyST es zwischenspeichert. Ohne das laedt `myst build` es
+# bei *jedem* Lauf von `book-theme/archive/refs/heads/main` -- von einem wandernden Branch,
+# was zweimal weh tut: Das Aussehen der Seite ist eine unversionierte Abhaengigkeit, und
+# jeder Netzausfall bricht den Build. Begruendung in `_site/vendor/README.md`.
+#
+# `retry` deckt nur Runner- und Timeout-Probleme ab, bewusst *ohne* `script_failure`: Ein
+# echter Fehler im Buch soll einmal scheitern, nicht dreimal.
 myst-build:
   stage: build
   image: $CI_REGISTRY_IMAGE:latest
+  retry:
+    max: 2
+    when:
+      - runner_system_failure
+      - stuck_or_timeout_failure
+  before_script:
+    - python3 _site/vendor/install_template.py
   script:
     - node -v
     - myst --version
@@ -43,19 +80,49 @@ myst-build:
     paths:
       - _build/html
 
-# PDF via xelatex (TeX Live is in the CI image). Allowed to fail so that a
-# LaTeX hiccup never blocks the HTML deploy; the pages job then just ships
-# without a PDF. Build locally with `uv run --only-group dev myst build --pdf`.
+# PDF via xelatex (TeX Live steckt im CI-Image). `allow_failure: true` ist eine bewusste
+# Asymmetrie: Der Web-Bau blockiert die Veroeffentlichung, der PDF-Bau nicht -- ein
+# LaTeX-Problem soll die Website nicht aufhalten. Der Fehlschlag ist in der Pipeline
+# trotzdem sichtbar.
+#
+# Wichtig: `myst build --pdf` allein genuegt **nicht** als Pruefung. Der Befehl endet auch
+# dann mit Exit-Code 0, wenn LaTeX nach hundert Fehlern abgebrochen ist und die Haelfte des
+# Buchs im PDF fehlt (in eipy-skript am 2026-09-25: 226 statt 435 Seiten, Exit 0). Deshalb
+# laeuft danach devnotes/check_pdf_build.py: Es zaehlt Fehler im `-file-line-error`-Format,
+# erkennt den Abbruch wegen Fehlerflut, zaehlt fehlende Glyphen und prueft Seitenzahl sowie
+# Stichproben aus den letzten Kapiteln.
+#
+# Die Ausgabe von MyST wird mitgeschrieben: MyST meldet **dort** (nicht im LaTeX-Log), wenn
+# es einen Knoten nicht uebersetzen kann und weglaesst -- mit Exit 0.
+#
+# Die beiden `--expect`-Kommandozeilen sind die Gegenprobe zu dem Fehler, den
+# devnotes/patch_myst_tex.py behebt: Ohne den Patch stuende dort `nvidia -smi` und
+# `- -index -url`, und dieser Job wuerde es merken.
+#
+# Lokal bauen: `uv run --only-group dev myst build --pdf` (nach `uv sync` einmal
+# `uv run devnotes/patch_myst_tex.py`).
 build-pdf:
   stage: build
   image: $CI_REGISTRY_IMAGE:latest
-  script:
-    - myst build --pdf
   allow_failure: true
+  before_script:
+    - python3 _site/vendor/install_template.py
+  script:
+    - myst build --pdf 2>&1 | tee myst-pdf.log
+    - python3 devnotes/check_pdf_build.py
+        --min-pages 120
+        --expect "Adversarial Example"
+        --expect "nvidia-smi"
+        --expect "pip install torch torchvision --index-url"
+        --myst-log myst-pdf.log
   artifacts:
     paths:
       - exports/eidl-skript.pdf
 
+# Veroeffentlicht die Website **und** das PDF. Ein Job-Artefakt allein genuegt nicht: Es
+# verfaellt und ist nur ueber die Job-Seite erreichbar, also nicht verlinkbar. Unter
+# `public/` liegt es als `<pages-url>/eidl-skript.pdf`, und `downloads:` in myst.yml
+# verlinkt genau diesen Pfad im Buch.
 pages:
   stage: deploy
   image: busybox:latest
@@ -64,7 +131,11 @@ pages:
     - build-pdf
   script:
     - mv _build/html public
-    - cp exports/eidl-skript.pdf public/ || echo "no PDF in this run"
+    # Ganze Zeile in Anfuehrungszeichen: Ein `: ` in einem unquotierten YAML-Skalar macht
+    # aus dem Listeneintrag eine Map. Die Datei bleibt dabei valides YAML, GitLab lehnt sie
+    # aber ab ("script config should be a string") -- und dann laeuft kein einziger Job.
+    # devnotes/check_ci_yaml.py prueft das vor dem Push.
+    - 'if [ -f exports/eidl-skript.pdf ]; then cp exports/eidl-skript.pdf public/; echo "PDF veroeffentlicht"; else echo "WARNUNG - kein PDF im Artefakt, Website ohne PDF"; fi'
   artifacts:
     paths:
       - public
