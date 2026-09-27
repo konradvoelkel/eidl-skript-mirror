@@ -64,7 +64,9 @@ Wichtig zur Ordnerstruktur:
 * `devnotes/` sind Arbeitsnotizen des Autors, nicht Teil des Buchs (nicht im TOC).
   `devnotes/README.md` sagt, welche Datei wofür da ist; `devnotes/TODO.md` ist die eine
   Liste offener Punkte.
-* `transcripts/` (Vorlesungsaufzeichnungen 2025/26) ist gitignored und liegt nur in Sciebo.
+* `transcripts/` (Vorlesungsaufzeichnungen 2025/26) und `loesungen/` (Lösungsvorschläge zu
+  den Übungsblättern) sind gitignored und liegen nur in Sciebo. **Das Repository ist
+  öffentlich** — was hier landet, ist im Netz.
 
 ## Aufbau
 
@@ -74,7 +76,7 @@ Wichtig zur Ordnerstruktur:
 | `part-lernen/` | Kapitel 06–13: logistische Regression, Loss und Maximum Likelihood, Gradientenabstieg, Backprop, Autograd, Aktivierungen, Netze von Hand, universelle Approximation |
 | `part-representation-learning/` | Kapitel 14–19: Autoencoder, VAE, word2vec, Graphen, RNN, Transformer |
 | `part-architekturen-anwendungen/` | Kapitel 20–27: CNN, LLMs benutzen, GANs, latente Räume, Anwendungen, Destillation, Optimierer, Adversarial Attacks |
-| `part-exercises/` | Übungsblätter 0–11 |
+| `part-exercises/` | Übungsblätter 0–11 (Fassung 2025, **ohne** Lösungen) |
 | `slides/` | Beamer-Foliensätze VL 01–15 (`build.sh`, gemeinsamer `header.tex`) |
 | `images/`, `notebooks/`, `logo/` | Abbildungen, Notebooks aus 2025, Logos |
 | `glossar.md` | Klausurbegriffe mit Link ins jeweilige Kapitel |
@@ -162,31 +164,38 @@ die eigene Pages-Domain.
 
 ## Bewusste Entscheidungen — nicht ändern
 
-1. **Gliederung nach Themen, nicht nach Vorlesungswochen.** Der Wochenplan steht in
+1. **Keine Lösungen im Skript.** Die Blätter erscheinen im Buch, also stünden
+   Lösungsvorschläge im veröffentlichten PDF und auf der Website — bis zum 2026-09-27 taten
+   sie das. Sie liegen jetzt in `loesungen/` (gitignored, Sciebo). Wer eine Aufgabe
+   bearbeitet, fasst die Lösung dort an, nicht in `part-exercises/`.
+2. **Gliederung nach Themen, nicht nach Vorlesungswochen.** Der Wochenplan steht in
    `kurs-2026-27.md`, die Folien in `slides/`; das Skript bleibt davon unabhängig.
-2. **Die Notebooks aus 2025 sind nicht im TOC.** Ihre Inhalte sind in die Kapitel übernommen
+3. **Die Notebooks aus 2025 sind nicht im TOC.** Ihre Inhalte sind in die Kapitel übernommen
    (siehe `notebooks/README.md`); `latent-classifier.ipynb` hängt als Download an Blatt 11.
-3. **Die Kapitel sind nicht gleich lang** und sollen es nicht werden.
-4. **Das Image installiert kein einziges Python-Paket.** Der Buch-Bau braucht keines: Die
+4. **Die Kapitel sind nicht gleich lang** und sollen es nicht werden.
+5. **Das Image installiert kein einziges Python-Paket.** Der Buch-Bau braucht keines: Die
    Notebooks werden nicht ausgeführt (Outputs sind gespeichert), und minted holt sein
    Pygments aus dem gebündelten Wheel des `latexminted`-Helfers. Die Projektabhängigkeiten
    in `pyproject.toml`/`uv.lock` gehören zur **Arbeit am** Buch, nicht zu seinem Bau. Wer
    sie ins Image zieht, wiederholt einen Fehler, der `eipy-skript` auf 3,5 GB gebracht hat.
-5. **Das Template trägt nur Familien-Gemeingut, `myst.yml` das Buchspezifische.** Im
+6. **Das Template trägt nur Familien-Gemeingut, `myst.yml` das Buchspezifische.** Im
    `templates/tex/eidl-skript/template.tex` steht, was für jedes deutschsprachige Skript
    der Familie gilt (Sprache, A4, Schriften, Überschriften); Markenfarbe, PDF-Metadaten
    und `\setminted` stehen in `options.preamble` in der `myst.yml`. Damit bleibt der
    Template-Block zwischen den Büchern kopierbar (PLAYBOOK §3.8i). Wer dort eine neue
    Option einführt, **deklariert sie in `template.yml`** — jtex verwirft undeklarierte
    Optionen kommentarlos, ohne Warnung und ohne Fehler.
-6. **`latexminted` kommt nicht aus PyPI.** Debians texlive liefert minted v3 samt passendem
+7. **`latexminted` kommt nicht aus PyPI.** Debians texlive liefert minted v3 samt passendem
    Helfer; die PyPI-Fassung verdeckt ihn und verlangt eine neuere `minted.sty`. Steht
    ausführlich im Dockerfile.
-7. **Markenfarbe `#6f59a6`** (violett) laut `BRANDING.md`; HHU-Hausfarben bleiben die
+8. **Markenfarbe `#6f59a6`** (violett) laut `BRANDING.md`; HHU-Hausfarben bleiben die
    Abbildungsfarben.
 
 ## Häufige Fehlerquellen in diesem Repository
 
+* **Eine Lösung in ein Übungsblatt geschrieben.** Sie steht dann im veröffentlichten PDF
+  und auf der Website. Gegenprobe vor dem Push:
+  `grep -rn 'Lösungsvorschlag' part-exercises/` muss leer bleiben.
 * Eine neue Datei angelegt und den `myst.yml`-Eintrag vergessen — sie taucht dann nicht auf.
 * Einen Link auf einen Anker gesetzt, den es nicht gibt. Der Build meldet das, der Text sieht
   trotzdem unauffällig aus.

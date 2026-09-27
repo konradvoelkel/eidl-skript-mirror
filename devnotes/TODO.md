@@ -52,6 +52,23 @@ Agenten und Menschen stehen seit 2026-09-27 in `../CLAUDE.md`.
 
 ## Übungsblätter
 
+- [x] **Lösungsvorschläge aus dem Skript heraus** (2026-09-27, auf Konrads Hinweis): 15 Blöcke aus den
+  Blättern 0, 1, 3 und 5 nach `loesungen/` verschoben — ein Ordner wie `transcripts/`, in Sciebo, aber
+  nicht im Repo. Vorher standen sie im veröffentlichten PDF (aufgeklappt, nicht einmal versteckt) und
+  auf der Website als aufklappbare Box. PDF jetzt 133 statt 137 Seiten, `grep -c Lösungsvorschlag` = 0.
+- [ ] **[Entscheidung] Die Blätter im Skript sind die falsche Fassung.** Konrad pflegt die echten Blätter
+  in TeX und gibt sie über ILIAS aus; im Skript sollen nur **einzelne, ausgewählte** Übungen stehen —
+  Varianten der echten Aufgaben, mit mehr Hinweisen, zum Mitrechnen beim Lesen. Was aus
+  `part-exercises/` (12 Blätter, Fassung 2025) wird, ist damit offen: ausdünnen, umschreiben, oder
+  ganz aus dem TOC nehmen und durch einen kleinen Satz „Übungen zum Kapitel" je Kapitel ersetzen.
+  Solange das offen ist, bleiben die Blätter unverändert im Buch — nur ohne Lösungen.
+- [ ] **[Entscheidung] Das Repository ist öffentlich** (`visibility: public` auf gitlab.cs.uni-duesseldorf.de).
+  Ab jetzt landen die Lösungen dort nicht mehr, aber **die Commits davor enthalten sie weiterhin** —
+  seit dem Import aus den 2025er-Quellen am 2026-09-17. Das zu schließen hieße, die Historie umzuschreiben
+  und einen bereits gepushten öffentlichen Branch zu ersetzen. Vorschlag: nicht umschreiben. Es sind
+  Lösungen zu Aufgaben, die ohnehin überarbeitet werden, und der Aufwand steht in keinem Verhältnis —
+  aber es ist Konrads Entscheidung.
+
 - [ ] **[Entscheidung] Punkte und Bestehensgrenzen** der Blätter 1, 3, 5 nach den neuen Aufgaben 4b, 2b, 1b
   anpassen (*Vorschlag:* je +1 Punkt, Bestehensgrenze bleibt „die Hälfte“).
 - [x] **Abgabetermine 2026/27 bestätigt (Konrad, 2026-09-24)** und in ILIAS eingetragen: Blatt 0 ohne Abgabe;

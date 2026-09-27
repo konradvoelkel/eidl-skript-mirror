@@ -18,5 +18,9 @@ Arbeitsnotizen und Prüfskripte zum Skript, nicht Teil des Buchs. Stand 2026-09-
 | `check_ci_yaml.py` | Prüft `.gitlab-ci.yml` auf die Form, die GitLab erwartet (nicht nur auf YAML) | vor jedem Push, der die CI anfasst |
 | `make_figures.py`, `embed_figures.py` | Abbildungen mit matplotlib erzeugen und einbetten | bei Bedarf erneut laufen lassen |
 
+Die Lösungsvorschläge zu den Übungsblättern liegen seit dem 2026-09-27 in `../loesungen/`
+(gitignored, nur in Sciebo) — vorher standen sie in den Blättern und damit im
+veröffentlichten PDF. `../loesungen/README.md` sagt, was dort liegt und was noch zu klären ist.
+
 Die Vorlesungsaufzeichnungen 2025/26 (Transkripte, Standbilder, Sitzungsnotizen, Übersicht, Abschlussbericht) liegen in
 `../transcripts/` (gitignored, nur in Sciebo). Der Vorlesungsplan 2026/27 steht in `../kurs-2026-27.md`.

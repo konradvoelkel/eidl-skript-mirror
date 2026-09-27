@@ -151,6 +151,12 @@ scalene-profile.json
 # Vorlesungstranskripte (Standbilder, zu groß fürs Repo)
 transcripts/
 
+# Lösungsvorschläge zu den Übungsblättern. Liegen in Sciebo, aber nicht im
+# Repository: Das Projekt ist auf gitlab.cs.uni-duesseldorf.de **public**, und die
+# Blätter erscheinen im Skript -- bis zum 2026-09-27 standen die Lösungen damit im
+# veröffentlichten PDF und auf der Website. Behandelt wie transcripts/.
+loesungen/
+
 # Beamer-Folien: TeX-Quellen sind im Repo, PDFs und LaTeX-Nebenprodukte nicht
 slides/*.pdf
 *.aux
