@@ -29,7 +29,7 @@ Surfen Sie ruhig weiter auf huggingface.co. Hier ein paar Fakten zur Einordnung:
 
 * HF verdient Geld mit gehosteter Inferenz.
 * HF lockt Entwickler an mit guter Infrastruktur: Libraries (z.B. `transformers`, `diffusers`, `gradio`), Hosting (git-Repositories für Modelle, Datensätze und „Spaces“) und Dokumentation – insbesondere für **Finetuning**, das Nachtrainieren von vortrainierten Modellen.
-* HF ist ein privates Unternehmen aus New York City, gegründet 2016, Ende 2023 mit ca. 4,5 Mrd. $ bewertet.
+* HF ist ein Unternehmen aus New York City, gegründet 2016. In der Finanzierungsrunde vom August 2023 war es 4,5 Mrd. US-Dollar wert; gut drei Jahre später, im September 2026, hat **Nvidia** den Kauf für 12,93 Mrd. US-Dollar vereinbart – der Abschluss wird für die erste Hälfte 2027 erwartet, vorbehaltlich der Freigaben. Die Plattform, auf der die offenen Gewichte liegen, gehört damit demselben Konzern wie die Hardware, auf der sie gerechnet werden.
 
 Mit anderen Worten: Der Hub ist ein kommerzielles Angebot, aber die Modelle und Libraries darauf sind größtenteils offen, und für uns ist er die bequemste Art, an Gewichte zu kommen.
 
@@ -39,12 +39,12 @@ Wenn wir für eine Aufgabe ein vortrainiertes Modell verwenden wollen, müssen w
 
 ### Tasks in Computer Vision
 
-* **Depth Estimation**: Von einem Bild für jeden Pixel bei $(x, y)$ auch eine $z$-Koordinate schätzen. Beispiel: Intels *Dense Prediction Transformer* (DPT) von 2022, ein Vision Transformer.
+* **Depth Estimation**: Von einem Bild für jeden Pixel bei $(x, y)$ auch eine $z$-Koordinate schätzen. Beispiel: Intels *Dense Prediction Transformer* (DPT) von 2021, ein Vision Transformer.
 * **Image Classification**: Von einem Bild sagen, was es ist. Beispiel: Microsofts *ResNet* (CNN, 2016), trainiert auf ImageNet – gibt zu einem Foto „Igel“ zurück.
 * **Object Detection**: Von einem Bild sagen, was drauf ist, mit Bounding Boxes. Beispiel: *YOLOS* (NeurIPS 2021), trainiert auf ImageNet und COCO – findet in Bild #7781 des COCO-Datensatzes „Cat, Banana, Chair“.
-* **Image Segmentation**: Auf einem Bild für jedes erkannte Objekt die Umrisse finden, das Bild also aufteilen. Beispiel: Nvidias *Segformer* (2021), trainiert auf ImageNet, COCO und ADE20k.
+* **Image Segmentation**: Auf einem Bild für jedes erkannte Objekt die Umrisse finden, das Bild also aufteilen. Beispiel: Nvidias *Segformer* (2021), auf ImageNet vortrainiert und auf ADE20k gefinetunt.
 * **Image-to-Image**: Ein Bild als Input, ein Bild als Output, z.B. historische Fotos einfärben. Beispiel: Renato Sortinos *ColorizeNet*, ein Finetune von ControlNet / Stable Diffusion 2.1 auf bearbeitetem COCO.
-* **Unconditional Image Generation**: Nur ein Bild als Output, z.B. ein Katzenbild (je nach Datenbasis). Beispiel: Googles *DDPM* (2020), Denoising Diffusion Probabilistic Models.
+* **Unconditional Image Generation**: Nur ein Bild als Output, z.B. ein Katzenbild (je nach Datenbasis). Beispiel: *DDPM* (Ho et al., 2020), Denoising Diffusion Probabilistic Models – auf dem Hub liegt der Checkpoint unter `google/`, das Verfahren kommt aus Berkeley.
 * **Zero-Shot Image Classification**: Von einem Bild sagen, was es ist – ohne dass für die Klassen gelabelte Daten vorlagen. Beispiel: OpenAIs *CLIP-ViT* (2021), Contrastive Language-Image Pretrained Vision Transformer, dem man die Kandidaten als Text gibt („a photo of a car“).
 
 Zur Einordnung des Vokabulars: **Zero-Shot** heißt ohne gelabelte Daten für die neue Aufgabe, **One-Shot** (oder Single-Shot) mit einem gelabelten Sample, **Few-Shot** mit einigen wenigen gelabelten Samples.
@@ -53,7 +53,7 @@ Zur Einordnung des Vokabulars: **Zero-Shot** heißt ohne gelabelte Daten für di
 
 Wir betrachten nur einen Teil der NLP-Tasks:
 
-* **Text Classification**: Texten ein Genre, eine Stimmung (Sentiment) o.ä. zuordnen. Beispiel: *DistilBERT* (2019), self-supervised trainiert mit BERT (Bidirectional Encoder Representations from Transformers) als Lehrer – zur Destillation kommen wir in VL 14.
+* **Text Classification**: Texten ein Genre, eine Stimmung (Sentiment) o.ä. zuordnen. Beispiel: *DistilBERT* (2019), self-supervised trainiert mit BERT (Bidirectional Encoder Representations from Transformers) als Lehrer – zur [Destillation](../part-architekturen-anwendungen/25-destillation.md) kommen wir gegen Ende der Vorlesung.
 * **Token Classification**: Named Entity Recognition (NER) oder Part-of-Speech (PoS) Tagging, also jedem Wort ein Label geben. Beispiel: *flair ner-german* (2020) von der HU Berlin.
 * **Summarization**: Zu einem Text (Satz oder Dokument) eine kurze Zusammenfassung schreiben. Beispiel: Facebooks *BART* (2019), Bidirectional and Auto-Regressive Transformers.
 * **Fill-Mask**: Einen Lückentext füllen. Beispiel: wieder *DistilBERT* – das ist nämlich genau die Aufgabe, mit der BERT-artige Modelle vortrainiert werden.
@@ -103,7 +103,7 @@ Alternativ kann die `accelerate`-Library von HF auch dynamisch Teile des Modells
 
 ### Was zuvor geschah: Installation
 
-`pip install 'transformers[torch]'` in der Shell (oder `!pip install ...` in einem Notebook) installiert `transformers` und PyTorch. Das allein installiert noch kein CUDA, d.h. alle Rechnungen finden auf der CPU mit dem Hauptspeicher statt – das ist intern „device 0“ vom Typ `cpu`.
+`pip install 'transformers[torch]'` in der Shell (oder `!pip install ...` in einem Notebook) installiert `transformers` und PyTorch. Das allein installiert noch kein CUDA, d.h. alle Rechnungen finden auf der CPU mit dem Hauptspeicher statt – in PyTorch ist das schlicht das Gerät `cpu`, ohne Indexnummer. In den `pipeline`-Aufrufen von `transformers` schreibt man dafür `device=-1`; `device=0` meint dort die *erste GPU*.
 
 Für CUDA (Ubuntu Linux auf NVIDIA-Hardware) prüft man zuerst, was da ist:
 
@@ -123,8 +123,8 @@ Hat es geklappt? Python-Interpreter auf und `torch.cuda.is_available()` sollte `
 Und noch davor: eine virtuelle Umgebung im Arbeitsordner anlegen, damit die Installation nicht das System-Python verändert:
 
 ```bash
-python -m venv .env
-source .env/bin/activate
+python -m venv .venv
+source .venv/bin/activate
 ```
 
 und erst *danach* mit `pip` fleißig installieren. Oder entspannt `uv` benutzen, das Umgebung und Pakete in einem Schritt verwaltet.
