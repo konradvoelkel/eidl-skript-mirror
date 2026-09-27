@@ -38,7 +38,7 @@ $$
 \tfrac12 \left( \tanh(\hat{y}) + 1 \right)
 $$
 
-nutzen. Das liefert eine S-förmige Kurve, die glatt von 0 nach 1 übergeht. Aber: Die Interpretation einer Zahl zwischen 0 und 1 als *Wahrscheinlichkeit* ist damit noch unklar. Genau das klärt das nächste Kapitel mit der logistischen Regression.
+nutzen. Das liefert eine S-förmige Kurve, die glatt von 0 nach 1 übergeht. Aber: Die Interpretation einer Zahl zwischen 0 und 1 als *Wahrscheinlichkeit* ist damit noch unklar. Genau das klären die nächsten Abschnitte dieses Kapitels, über Odds und Logit.
 
 ## Wahrscheinlichkeiten und Chancen (Odds)
 
@@ -63,10 +63,10 @@ $$
 Wahrscheinlichkeiten liegen immer in $[0, 1]$. Wie sieht die Skala für Odds aus?
 
 * Wenn $p = \tfrac12$, so ist $1 - p = \tfrac12$, also $\operatorname{odds}(p) = 1$.
-* Wenn $0 < p < \tfrac12$, so ist $1 > 1 - p > \tfrac12$, also $0 < \operatorname{odds}(p) = \frac{p}{1-p} < \frac{p}{1/2} = 2p < 1$. Damit ist $\operatorname{odds}(p) \in [0, 1)$.
+* Wenn $0 < p < \tfrac12$, so ist $1 > 1 - p > \tfrac12$, also $0 < \operatorname{odds}(p) = \frac{p}{1-p} < \frac{p}{1/2} = 2p < 1$. Damit ist $\operatorname{odds}(p) \in (0, 1)$.
 * Wenn $1 > p > \tfrac12$, so ist $0 < 1 - p < \tfrac12$, also $1 < 2p < \operatorname{odds}(p) < \frac{1}{1-p} < \infty$. Damit ist $\operatorname{odds}(p) \in (1, \infty)$.
 
-Die Fälle $p < \tfrac12$ und $p > \tfrac12$ sind symmetrisch, d.h. Erfolg und Misserfolg sind äquivalent – aber $\operatorname{odds}(p) \in [0, \infty)$ ist *nicht* symmetrisch: $[0, 1)$ ist beschränkt, $(1, \infty)$ ist unbeschränkt. Die Odds für eine 6 sind $\tfrac15$, die Odds für eine Nicht-6 sind $5$.
+Die Fälle $p < \tfrac12$ und $p > \tfrac12$ sind symmetrisch, d.h. Erfolg und Misserfolg sind äquivalent – aber $\operatorname{odds}(p) \in (0, \infty)$ ist *nicht* symmetrisch: $(0, 1)$ ist beschränkt, $(1, \infty)$ ist unbeschränkt. Die Odds für eine 6 sind $\tfrac15$, die Odds für eine Nicht-6 sind $5$.
 
 Beachte: Logarithmieren rettet die Symmetrie. Es ist
 
@@ -206,11 +206,15 @@ f(x) = \sigma(w \cdot x + b) = P(Y = 1 \mid X = x).
 $$
 :::
 
-In Scikit-Learn wird in der logistischen Regression unterschieden zwischen `predict` und `predict_proba`. Wenn $\hat{y}$ der durch lineare Regression vorhergesagte Wert an einem Punkt $x$ ist, so gilt
+In Scikit-Learn wird in der logistischen Regression unterschieden zwischen `predict` und `predict_proba`. Den Wert $\hat{y} = w \cdot x + b$ selbst liefert `decision_function`, und damit ist
 
 $$
-\texttt{predict\_proba}(x) = \sigma(\hat{y}), \qquad \texttt{predict}(x) = [\, \sigma(\hat{y}) > \tfrac12 \,].
+\texttt{decision\_function}(x) = \hat{y}, \qquad
+\texttt{predict\_proba}(x) = \bigl(1 - \sigma(\hat{y}),\; \sigma(\hat{y})\bigr), \qquad
+\texttt{predict}(x) = [\, \sigma(\hat{y}) > \tfrac12 \,].
 $$
+
+`predict_proba` gibt also **eine Spalte pro Klasse** zurück, in der Reihenfolge von `classes_`: bei Labels $0/1$ zuerst $P(Y = 0)$, dann $P(Y = 1)$. Die Wahrscheinlichkeit für Klasse 1 steht in der zweiten Spalte. Beim Softmax weiter unten begegnet uns dieselbe Form für $K$ Klassen.
 
 ### Lineare Regression in PyTorch
 
@@ -222,7 +226,7 @@ import torch.nn as nn
 
 class LinearRegression(nn.Module):
     def __init__(self, input_dim, output_dim):
-        super(LinearRegression, self).__init__()
+        super().__init__()
         self.linear = nn.Linear(input_dim, output_dim)
 
     def forward(self, x):
@@ -241,11 +245,11 @@ model = LinearRegression(1, 1)
 criterion = nn.MSELoss()
 optimizer = torch.optim.SGD(model.parameters(), lr=0.01)
 
-inputs = torch.from_numpy(x.reshape(-1, 1).astype("float32")).requires_grad_()
+inputs = torch.from_numpy(x.reshape(-1, 1).astype("float32"))
 labels = torch.from_numpy(y.reshape(-1, 1).astype("float32"))
 
 number_of_epochs = 100
-losses = np.arange(number_of_epochs, dtype="float32")
+losses = np.zeros(number_of_epochs, dtype="float32")
 
 for epoch in range(number_of_epochs):
     optimizer.zero_grad()
@@ -255,7 +259,7 @@ for epoch in range(number_of_epochs):
     optimizer.step()
     losses[epoch] = loss.item()
 
-y_pred = model(inputs).data.numpy()
+y_pred = model(inputs).detach().numpy()
 ```
 
 Die fünf Zeilen in der Schleife sind *die* Trainingsschleife von PyTorch, die uns in allen weiteren Kapiteln begleitet: Gradienten auf null setzen, Vorwärtsrechnung, Loss berechnen, Gradienten rückwärts berechnen (`backward`), Parameter anpassen (`step`). Was `criterion` (die Loss-Funktion, hier der mittlere quadratische Fehler MSE) und `optimizer` (hier stochastischer Gradientenabstieg SGD mit Lernrate $0{,}01$) genau tun, klären die nächsten beiden Kapitel.
@@ -273,7 +277,7 @@ Für die logistische Regression ändern sich genau zwei Zeilen: Die Aktivierungs
 ```python
 class LogisticRegression(nn.Module):
     def __init__(self, input_dim, output_dim):
-        super(LogisticRegression, self).__init__()
+        super().__init__()
         self.linear = nn.Linear(input_dim, output_dim)
 
     def forward(self, x):
@@ -288,7 +292,7 @@ criterion = nn.BCELoss()  # <---
 optimizer = torch.optim.SGD(model.parameters(), lr=0.01)
 ```
 
-Der Rest der Trainingsschleife bleibt identisch. `BCELoss` ist die *binäre Kreuzentropie*: die erwartete Überraschung, wenn man mit den vorhergesagten Wahrscheinlichkeiten $(\sigma(\hat{y}), 1 - \sigma(\hat{y}))$ rechnet, die Wahrheit aber $(y, 1 - y)$ ist. Sie ist bis auf eine Konstante die Kullback-Leibler-Divergenz aus dem [DS-Skript](https://voelkel.pages.cs.uni-duesseldorf.de/ds-skript/relative-entropie) (dort $H(p \Vert r)$ geschrieben); Den genauen Zusammenhang und woher diese Loss-Funktion *kommt*, klärt das nächste Kapitel.
+Der Rest der Trainingsschleife bleibt identisch. `BCELoss` ist die *binäre Kreuzentropie*: die erwartete Überraschung, wenn man mit den vorhergesagten Wahrscheinlichkeiten $(\sigma(\hat{y}), 1 - \sigma(\hat{y}))$ rechnet, die Wahrheit aber $(y, 1 - y)$ ist. Sie ist bis auf eine Konstante die Kullback-Leibler-Divergenz aus dem [DS-Skript](https://voelkel.pages.cs.uni-duesseldorf.de/ds-skript/relative-entropie) (dort $H(p \Vert r)$ geschrieben); den genauen Zusammenhang und woher diese Loss-Funktion *kommt*, klärt das nächste Kapitel.
 
 ## Weg von der 2-Klassen-Gesellschaft: Softmax
 
@@ -338,7 +342,9 @@ Abhilfe ist immer dieselbe: nie erst $e^x$ und dann $\ln$ berechnen, sondern bei
    Literatur bekannte Form $\sigma(x)(1-\sigma(x))$.*
 3. Wie groß ist $\sigma'(0)$? Und wie groß sind die Odds bei $p = 0{,}5$?
 
-*Antwortprobe: Eine der beiden Zahlen ist $1$, die andere nicht.*
+*Antwortprobe: Die Odds sind $1$. Die andere Zahl ist nach Teil 2 ein Produkt aus zwei
+gleichen Faktoren, also eine Quadratzahl; steht bei Ihnen $\tfrac12$, haben Sie $\sigma(0)$
+statt $\sigma'(0)$ ausgerechnet.*
 
 :::{admonition} Weiterlesen
 :class: seealso

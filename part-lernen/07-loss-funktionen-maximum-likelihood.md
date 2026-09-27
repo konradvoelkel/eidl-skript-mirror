@@ -29,13 +29,13 @@ L_{\text{BCE}}(x, y; w) = -\frac1N \sum_{i=1}^N \Bigl( y_i \log p_i + (1 - y_i) 
 p_i = P(x_i \text{ in Klasse } 1) = \sigma(\langle w, x_i \rangle) = \frac{e^{\langle w, x_i \rangle}}{1 + e^{\langle w, x_i \rangle}} .
 $$
 
-Für das Perzeptron (mit Labels $y_i \in \{-1, +1\}$ statt $\{0, 1\}$, das macht die Formeln kürzer) ist ein Kandidat der **Perceptron Loss**
+Für das Perzeptron (mit Labels $y_i \in \{-1, +1\}$ statt $\{0, 1\}$, das macht die Formeln kürzer) ist ein erster Kandidat der **„harte“ Perceptron Loss**
 
 $$
-L_{\text{Perc}}(x, y; w) = \sum_{i=1}^N \max\bigl(0,\, -y_i \operatorname{sign}\langle w, x_i \rangle\bigr),
+L_{\text{Perc}}^{\text{hart}}(x, y; w) = \sum_{i=1}^N \max\bigl(0,\, -y_i \operatorname{sign}\langle w, x_i \rangle\bigr),
 $$
 
-der einfach die falsch klassifizierten Samples zählt. Die Update-Regeln zu beiden Loss-Funktionen leiten wir im [nächsten Kapitel](08-gradientenabstieg.md) her.
+der einfach die falsch klassifizierten Samples zählt. Warum dieser Kandidat für den Gradientenabstieg untauglich ist – er ist stückweise konstant – und wie die *weiche* Fassung ohne $\operatorname{sign}$ daraus die Perzeptronregel macht, steht im [nächsten Kapitel](08-gradientenabstieg.md); dort leiten wir auch die Update-Regel zur BCE her.
 
 ### Woher kommt die Kreuzentropie? Maximum Likelihood
 
@@ -124,8 +124,24 @@ Training heißt: eine Loss-Funktion $L(w)$ in den Gewichten minimieren, die Date
 
 ## Übung
 
-1. Für $q = (0{,}0\ ,\ 1{,}0)$ (das wahre Label ist 1) und $p = (0{,}2\ ,\ 0{,}8)$:
-   Berechnen Sie $BCE(q,p)$ und $H(q)$.
+Seien $q$ (die wahren Labels) und $p$ (die Vorhersage) zwei Verteilungen auf $\{0, 1\}$. Dann sind
+
+$$
+BCE(q,p) = -q(0)\log p(0) - q(1)\log p(1),
+\qquad
+H(q) = -q(0)\log q(0) - q(1)\log q(1)
+$$
+
+die binäre Kreuzentropie und die Entropie von $q$, und
+
+$$
+D(q \Vert p) = q(0)\log\frac{q(0)}{p(0)} + q(1)\log\frac{q(1)}{p(1)}
+$$
+
+ist die Kullback-Leibler-Divergenz (im [DS-Skript](https://voelkel.pages.cs.uni-duesseldorf.de/ds-skript/relative-entropie) als $H(q \Vert p)$ geschrieben).
+
+1. Sei $q(0) = 0$ und $q(1) = 1$ (das wahre Label ist 1), dazu $p(0) = 0{,}2$ und
+   $p(1) = 0{,}8$. Berechnen Sie $BCE(q,p)$ und $H(q)$.
    *Tipp: $0 \log 0$ wird als $0$ gelesen. $H(q)$ ist hier besonders einfach.*
 2. Zeigen Sie allgemein $D(q \Vert p) = BCE(q,p) - H(q)$.
    *Tipp: Schreiben Sie den Logarithmus des Quotienten als Differenz von Logarithmen und
