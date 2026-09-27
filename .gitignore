@@ -169,3 +169,10 @@ slides/*.pdf
 *.fdb_latexmk
 *.synctex.gz
 *.out
+
+# Arbeitsmaterial der fachlichen Durchsicht (Befundbogen, Zwischenstände, Prüflisten).
+# Behandelt wie transcripts/ und uebungen-2025/: Das Projekt ist public, und der Bogen trägt
+# Zwischenstände und offene Entscheidungsfragen. Ins Repo kommt, was aus den Befunden folgt,
+# nicht der Weg dahin. Die Werkzeuge (devnotes/pruefliste_durchsicht.py, devnotes/check_links.py)
+# sind versioniert, ihre Ausgabe nicht.
+devnotes/durchsicht/

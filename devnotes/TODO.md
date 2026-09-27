@@ -29,7 +29,10 @@ Hintergrundrauschen.
 **Womit anfangen**, wenn nichts anderes vorgegeben ist:
 
 1. **Fachliche Durchsicht der Prosafassung** (Abschnitt „Inhalt“, erster Punkt). Der größte offene
-   Posten und der einzige, der das Buch besser macht statt nur ordentlicher.
+   Posten und der einzige, der das Buch besser macht statt nur ordentlicher. Verfahren, Übergabe und
+   Befunde stehen in `devnotes/durchsicht/durchsicht-2026-10.md` — **dort** wird gearbeitet, nicht in
+   dieser Liste; hier bleibt der Punkt als Verweis stehen, bis er erledigt ist. Der Ordner ist
+   gitignored (nur lokal und in Sciebo), die Werkzeuge dazu sind versioniert.
 2. **Die echten Übungsblätter auf 2026/27 anziehen** (Abschnitt „Übungsblätter“): Punkte und
    Bestehensgrenzen, die Kopfzeile je Blatt, Blatt 12 als Take-Home-Probeklausur. Sie werden **in
    TeX** gepflegt, nicht hier — `uebungen-2025/blaetter/` ist nur die Markdown-Konversion von 2025.
@@ -61,7 +64,9 @@ Abgabe bis …“ in den TeX-Blättern.
 
 ## Inhalt (Skript)
 
-- [ ] **Fachliche Durchsicht** der Prosafassung. Zwei Sorten von Stellen:
+- [ ] **Fachliche Durchsicht** der Prosafassung — Verfahren und Befundbogen in
+  `devnotes/durchsicht/` (gitignored, nur lokal), Werkzeuge `devnotes/pruefliste_durchsicht.py`
+  und `devnotes/check_links.py`. Zwei Sorten von Stellen:
   - *(a) Stoff, der in der Vorlesung 2026/27 vorkommen soll* (steht im Plan in `kurs-2026-27.md` oder wird in der
     Klausur gefragt): Hyperebenen-Geometrie und Abstand (02), Ein-Sample-Argument für die Perzeptronregel (03),
     Batch-Bild für Tensoren (05), Numerik-Box zu `exp`/`log` (06), Maximum Likelihood → BCE und Gradient $p - y$
@@ -72,6 +77,10 @@ Abgabe bis …“ in den TeX-Blättern.
   - *(b) Vertiefungen*, als aufklappbare Box „Vertiefung: …“ markiert und nicht Vorlesungsstoff:
     Konvergenzsatz (03), Cauchy-Schwarz (08), Spur-Trick (09), Message-Passing-Formel (17), Wasserstein-Dualität (22),
     FGSM (27). Nur auf Korrektheit prüfen, nicht auf Didaktik.
+  - Erste Befunde stehen schon im Bogen: die Lernrate heißt in 03 $r$ und ab 07/08 $\rho$ (**N1**),
+    $\sigma$ ist in 15 die Streuung statt der Sigmoidfunktion (**N2**), und der paperswithcode-Link
+    in 11 leitet heute auf eine unbezogene Seite weiter (**K1** — behebt zugleich die längste
+    überlange Zeile im PDF).
   - Konkrete Prüfaufträge: Encoder mit oder ohne Sigmoid in „Autoencoder“ (14) entscheiden (Skript: ohne, mit
     Hinweis „man kann auch“; Vorlesung 2025: mit – der Verweis auf 2025 steht seit 2026-09-21 nicht mehr im Text); die neuen Lösungsvorschläge zu Blatt 1 Aufgabe 4b, Blatt 3 Aufgabe 2b und Blatt 5
     Aufgabe 1b gegenrechnen; die „Weiterlesen“-Boxen (17 Kapitel) auf passende UDL/MML-Kapitelnummern prüfen.
@@ -166,6 +175,7 @@ Textfassung von Seite und Objektbaum: `~/Sciebo/hhu/eidl-26/ilias/` (analog zu
   wieder über Marker eingebaut werden? *Vorschlag:* behalten, bis die Abbildungsliste unter „Inhalt“
   abgearbeitet ist — dann löschen.
 - [ ] Die verbliebenen überlangen Zeilen (9 am Tag der Änderung, 6 nach dem Einbau der Übungen) sind
+  — die schlimmste davon ist Befund **K1** im Durchsichtsbogen, weil ihr Link ohnehin ins Leere führt —
   URLs im Linktext: MyST setzt sie als gewöhnlichen
   Text in `\href`, nicht als `\url`, deshalb greift keine URL-Trennung. Die schlimmste (77 pt) ist
   `paperswithcode.com/methods/category/activation-…` in 11. Abhilfe wäre, die Linktexte zu kürzen
