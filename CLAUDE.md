@@ -70,8 +70,27 @@ Zahl hier bewusst ändert, ändert sie dort mit — oder der Prüfer meldet sich
 **Vor jedem Abschluss einer inhaltlichen Änderung**: `myst build --html` laufen lassen und
 die Warnungen ansehen. Neue Warnungen sind ein Fehler in der Änderung, nicht
 Hintergrundrauschen — insbesondere `Cross-reference target not found` bedeutet einen
-kaputten Link. Und **nach dem Push die Pipeline ansehen**, bis zum `pages`-Job: „lokal grün“
-und „veröffentlicht“ sind zwei verschiedene Aussagen.
+kaputten Link. Und **nach dem Push nachsehen, dass es auch veröffentlicht wurde**: „lokal
+grün“ und „veröffentlicht“ sind zwei verschiedene Aussagen.
+
+**Wie man das nachsieht, ohne Zugang zur Pipeline.** Das GitLab-Projekt ist öffentlich
+lesbar, die Pipeline-API aber nicht (`/api/v4/projects/voelkel%2Feidl-skript/pipelines`
+antwortet mit 403), und ein Token liegt hier nicht. Wer keinen Browser-Zugang hat, prüft
+deshalb das **Ergebnis** statt des Laufs:
+
+```sh
+U=https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de
+curl -s -o /tmp/live.pdf $U/eidl-skript.pdf && pdfinfo /tmp/live.pdf | grep Pages
+curl -s $U/myst.xref.json | python3 -c 'import json,sys
+d=json.load(sys.stdin)["references"]; print(sum(1 for r in d if r.get("kind")=="page"), "Seiten")'
+```
+
+Ein Deploy braucht nach dem Push typischerweise zwei bis fünf Minuten, mit Image-Bau länger.
+**Auf einen Inhaltsmarker warten, nicht auf die Prüfsumme** — zwischendurch laufen Pipelines
+durch, die ein byte-verschiedenes, inhaltsgleiches PDF erzeugen. Und der Marker darf keinen
+Zeilenumbruch enthalten können: `pdftotext` zerlegt lange Sätze, ein Wächter auf „Praktisch
+heißt das“ wäre am 2026-09-27 nie fertig geworden. Eine Seitenzahl oder ein einzelnes Wort
+ist der bessere Marker.
 
 Wichtig zur Ordnerstruktur:
 
