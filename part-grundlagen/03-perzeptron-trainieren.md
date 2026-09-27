@@ -124,6 +124,21 @@ $$
 
 Das ist äquivalent zu einer einzigen linearen Regression mit Gewichtsvektor $u_1 v + u_2 w$. Allgemein: Ein Produkt von Matrizen ist wieder eine Matrix, mehrere lineare Schichten hintereinander sind wieder eine lineare Schicht. Ohne die Nichtlinearität $\tau$ zwischen den Schichten bringt Tiefe gar nichts. Genau deshalb heißt $\tau$ auch *Aktivierungsfunktion* und nicht Dekoration.
 
+## Übung
+
+Gegeben ein Datenpunkt $x = \binom{2}{1}$ mit Label $y = 1$ und ein Perzeptron mit
+$w^{(0)} = \binom{-3}{1}$, also $w^{(0)} \cdot x = -5 < 0$: Das Perzeptron sagt $0$, richtig
+wäre $1$.
+
+1. Führen Sie einen Schritt der Perzeptronregel $w^{(1)} = w^{(0)} + r\,(y - f(x))\,x$ mit
+   $r = 0{,}5$ aus.
+2. Berechnen Sie $w^{(1)} \cdot x$. Um wie viel hat sich die Aktivierung geändert?
+   *Tipp: Rechnen Sie die Differenz einmal allgemein mit der Bilinearität des
+   Skalarprodukts aus — Sie bekommen $r\,\|x\|^2$, unabhängig von $w^{(0)}$.*
+3. Wie viele solche Schritte braucht es mindestens, bis die Aktivierung positiv wird?
+
+*Antwortprobe: eine ganze Zahl, und Sie können sie ausrechnen, ohne zu iterieren.*
+
 :::{admonition} Weiterlesen
 :class: seealso
 Prince, *UDL*, Kap. 3 (Shallow neural networks) und 4 (Deep neural networks) für das Stapeln von Schichten. Beide Bücher sind frei verfügbar, siehe [Über dieses Skript](../README.md).

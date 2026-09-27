@@ -141,6 +141,15 @@ Das behandeln wir in dieser Vorlesung nicht mehr (sondern in den darauf aufbauen
 * **2021** Diffusionsmodelle für realistische Bildgenerierung.
 * **2022** Veröffentlichung von ChatGPT; danach RLHF, Copilot, Multimodalität, RAG, Agents, …
 
+## Übung
+
+Ein Rissdetektor findet unter 200 Bauteilen 30 als „rissig“ markierte, davon sind 24
+tatsächlich rissig; insgesamt gibt es 40 rissige Bauteile. Berechnen Sie Precision und
+Recall. Welche der beiden Zahlen würden Sie in der Qualitätssicherung höher gewichten,
+und warum?
+
+*Antwortprobe: beide Werte liegen zwischen 0,5 und 0,9, und sie sind verschieden.*
+
 :::{admonition} Weiterlesen
 :class: seealso
 Prince, *UDL*, Kap. 1 (Introduction) und 2 (Supervised learning); Deisenroth et al., *MML*, Kap. 8 (When models meet data). Beide Bücher sind frei verfügbar, siehe [Über dieses Skript](../README.md).

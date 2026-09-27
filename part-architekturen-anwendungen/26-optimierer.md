@@ -76,6 +76,20 @@ Genau genommen liegt der Gradient der Loss-Funktion an einem Punkt des Gewichtsr
 
 Adam und Muon sind in diesem Bild billige Näherungen an eine bessere Geometrie des Gewichtsraums.
 
+## Übung
+
+Eine Funktion mit Gradienten $g_1 = 1$, $g_2 = 1$, $g_3 = 1$ in drei aufeinanderfolgenden
+Schritten (ein langes, flaches Tal), Lernrate $\rho = 0{,}1$.
+
+1. Wie weit ist SGD nach drei Schritten gekommen?
+2. Wie weit kommt Momentum mit $v_t = \beta v_{t-1} + g_t$, $\beta = 0{,}9$ und
+   demselben $\rho$?
+   *Tipp: $v_1 = 1$, $v_2 = 1{,}9$, $v_3 = 2{,}71$ — Sie müssen nur noch aufsummieren.*
+3. Jetzt wechselt der Gradient das Vorzeichen: $g = (1, -1, 1)$. Was macht Momentum, und
+   warum ist das in einer engen Schlucht erwünscht?
+
+*Antwortprobe: Bei (2) ist der zurückgelegte Weg knapp doppelt so lang wie bei (1).*
+
 :::{admonition} Weiterlesen
 :class: seealso
 Prince, *UDL*, Abschnitte 6.3 und 6.4 (Momentum, Adam); Deisenroth et al., *MML*, Kap. 7 (Continuous optimization). Beide Bücher sind frei verfügbar, siehe [Über dieses Skript](../README.md).

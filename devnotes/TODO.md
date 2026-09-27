@@ -59,17 +59,16 @@ Agenten und Menschen stehen seit 2026-09-27 in `../CLAUDE.md`.
 - [x] **Entschieden am 2026-09-27: `part-exercises/` ganz aus dem TOC**, statt dessen pro Kapitel ein
   kleiner Übungsabschnitt. Die zwölf Blätter liegen in `uebungen-2025/blaetter/` (gitignored, Sciebo),
   die Lösungen daneben. PDF dadurch 110 statt 133 Seiten; `--min-pages` im `build-pdf`-Job auf 100.
-- [ ] **`notebooks/latent-classifier.ipynb` hängt in der Luft.** Es war als `downloads:` an Blatt 11
-  gehängt und damit über das Buch erreichbar; seit die Blätter draußen sind, verweisen die Kapitel 21
-  und 27 zwar darauf, aber niemand kann es herunterladen. Zwei Wege: als `downloads:`-Eintrag an
-  Kapitel 21 hängen, oder den Verweis auf ILIAS umbiegen.
-- [ ] **Die 23 Übungsabschnitte schreiben.** Der Vorschlag steht in `devnotes/uebungen-pro-kapitel.md`:
-  je ein Abschnitt `## Übung` am Kapitelende, ein bis drei Aufgaben, mehr Hinweise als auf dem Blatt,
-  **keine Lösung**, statt dessen eine nachprüfbare Antwortprobe. Der erste Entwurf hatte 27 Abschnitte
-  mit 75 Aufgaben; auf Konrads Hinweis ist ein Viertel gestrichen (56 Aufgaben, Streichliste mit
-  Gründen am Ende des Dokuments). Die Kapitel 04, 17, 21 und 22 bekommen **keinen** Abschnitt.
-  Offen sind noch zwei Punkte: ob die Antwortproben genügen oder ein Ergebnis-Anhang dazukommt, und
-  wie sich das zu einem etwaigen Kapitel-Abspann mit Kontrollfragen verhält (wie in eipy-skript).
+- [x] **`notebooks/latent-classifier.ipynb`** hängt seit 2026-09-27 als `downloads:` am Kapitel
+  „LLMs benutzen“ (21) statt am früheren Blatt 11; die Kapitel 21 und 27 verweisen darauf.
+- [x] **Die 23 Übungsabschnitte sind eingebaut** (2026-09-27): je ein `## Übung` vor der
+  „Weiterlesen“-Box, ein bis drei Aufgaben, ein `Tipp:` je Aufgabe, keine Lösung, statt dessen eine
+  Antwortprobe. 04, 17, 21 und 22 haben bewusst keinen. Das Vorschlagsdokument
+  `uebungen-pro-kapitel.md` ist damit aufgegangen und gelöscht; die Form steht jetzt in `CLAUDE.md`.
+  Kapitel 09 hatte schon eine eigene Übungsaufgabe am Ende — die ist in den Abschnitt gewandert.
+- [ ] **Offen aus dem Vorschlag:** ob die Antwortproben genügen oder ein Anhang mit den Endergebnissen
+  (nicht den Rechenwegen) dazukommt, und wie sich die Übungen zu einem etwaigen Kapitel-Abspann mit
+  Kontrollfragen verhalten (wie in eipy-skript) — sonst steht dreimal dasselbe am Kapitelende.
 - [x] **Historie umgeschrieben** (2026-09-27, Konrads Entscheidung — niemand sonst hat eine Kopie des
   Repos). `git filter-repo --path part-exercises/ --invert-paths` über alle 61 Commits, danach
   force-push auf `main`. Damit sind die Lösungsvorschläge auch aus der Vergangenheit des öffentlichen

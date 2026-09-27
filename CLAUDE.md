@@ -150,16 +150,31 @@ dieselbe Form haben: **Es sieht im HTML unauffällig aus und ist trotzdem falsch
 
 ## Querverweise
 
-Anker werden explizit gesetzt, als eigene Zeile vor der Überschrift:
+Verwiesen wird mit einem **relativen Pfad auf die Datei**, in der Form
+`[Kapitel „Neuron und Perzeptron“](../part-grundlagen/02-neuron-perzeptron.md)`. Keine
+absoluten URLs auf die eigene Pages-Domain, und keine Nummern: weder Kapitel- noch
+Blattnummern, die sich jedes Semester verschieben (dieselbe Regel hält `slides/README.md`
+für die Folien fest — beim Herausnehmen der Übungsblätter am 2026-09-27 liefen fünfzehn
+solche Verweise ins Leere).
 
-```markdown
-(backpropagation)=
-### Backpropagation
-```
+Explizite Anker (`(name)=` vor der Überschrift, Verweis mit `[Text](#name)`) benutzt dieses
+Repository **nicht** — die Überschriften bekommen ihre Anker von MyST. Wer damit anfängt,
+fängt für das ganze Buch an, nicht für ein Kapitel.
 
-Verwiesen wird mit `[Text](#backpropagation)` innerhalb des Projekts (funktioniert über
-Dateigrenzen hinweg) oder mit einem relativen Pfad auf eine Datei. Keine absoluten URLs auf
-die eigene Pages-Domain.
+## Übungen
+
+Jedes Kapitel, dem eine sinnvolle Aufgabe zuzuordnen ist, endet mit einem Abschnitt
+`## Übung` **vor** der „Weiterlesen“-Box. 23 der 27 Kapitel haben einen; 04, 17, 21 und 22
+haben bewusst keinen, weil eine schwache Übung schlechter ist als keine. Die Form:
+
+* **Ein bis drei Aufgaben**, mit Papier in fünf bis fünfzehn Minuten zu schaffen. Keine
+  Programmieraufgaben — die gehören auf die echten Übungsblätter (TeX, ILIAS).
+* **Ein `Tipp:` je Aufgabe**, der den ersten Schritt verrät. Hier liest jemand allein.
+* **Keine Lösung.** Statt dessen eine *Antwortprobe* als letzter Absatz: eine nachprüfbare
+  Zahl oder Eigenschaft („die Summe muss 1 ergeben“, „genau eine der drei Größen ändert
+  sich“), an der man selbst merkt, ob man richtig liegt.
+* **Zahlen werden nachgerechnet**, nicht geschätzt — beim ersten Entwurf stimmten fünf
+  Antwortproben nicht.
 
 ## Bewusste Entscheidungen — nicht ändern
 

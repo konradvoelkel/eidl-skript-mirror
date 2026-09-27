@@ -95,3 +95,16 @@ Problem 3 („Hund“ und „Tier“) löst word2vec, weil beide in ähnlichen K
 * Das modernste Lehrbuch ist Dan Jurafsky, James H. Martin: *Speech and Language Processing*. Es gibt einen „Third Edition Draft“ frei verfügbar: [web.stanford.edu/~jurafsky/slp3/](https://web.stanford.edu/~jurafsky/slp3/).
 * Das Python Natural Language Toolkit (NLTK), [nltk.org/book](https://www.nltk.org/book/), enthält z.B. den PunktTokenizer, der so arbeitet wie wir jetzt.
 * Radim Řehůřeks (& Koautoren) gensim-Bibliothek für Python, [radimrehurek.com/gensim](https://radimrehurek.com/gensim/auto_examples/index.html).
+
+## Übung
+
+Der Satz „der hund bellt laut im garten“ (6 Token), Fenstergröße $n = 2$.
+
+1. Wie viele (Kontext, Zielwort)-Paare erzeugt Skip-gram daraus? Schreiben Sie die Paare
+   für das Zielwort „bellt“ auf.
+   *Tipp: Am Satzanfang und -ende ist das Fenster kleiner.*
+2. Was ist bei CBOW Eingabe und was Ausgabe — und wie herum ist es bei Skip-gram?
+3. Der Embedding-Layer für ein Vokabular von 50 000 Wörtern und 300 Dimensionen: Wie viele
+   Parameter, und was steht in Zeile $i$?
+
+*Antwortprobe: Bei (3) sind es 15 Millionen.*

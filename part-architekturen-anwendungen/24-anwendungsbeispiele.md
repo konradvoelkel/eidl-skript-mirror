@@ -55,3 +55,14 @@ Die drei Beispiele oben folgen alle demselben Muster, und dasselbe Muster ist in
 6. **Was kann schiefgehen?** Datenschutz und Logging, Kosten und Latenz, Verteilungsverschiebung zwischen Trainingsdaten und Einsatz, Overfitting auf das Testset, Bias in den Labels.
 
 Wer diese sechs Punkte zu einer Aufgabe in je zwei Sätzen beantworten kann, hat ein Anwendungskonzept. Die Punkte 1 und 5 sind die, die in der Praxis am häufigsten vergessen werden.
+
+## Übung
+
+Ein Verlag möchte eingehende Leserbriefe automatisch an die richtige Redaktion leiten
+(acht Ressorts).
+Gehen Sie die sechs Punkte des Rezepts durch: Was haben wir, was soll herauskommen,
+welches Modell und woher, welcher Loss, womit messen wir Güte, was kann schiefgehen.
+*Tipp: Die Antwort auf „welches Modell und woher“ ist in diesem Kapitel nie „selbst
+trainieren“, solange es ein vortrainiertes gibt.*
+
+*Antwortprobe: Beim Loss sollte etwas mit „Kreuzentropie“ dastehen, bei der Güte etwas anderes als „Accuracy“ — die Ressorts sind ungleich häufig.*

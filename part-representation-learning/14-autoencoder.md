@@ -225,6 +225,18 @@ Frage: Welche Struktur finden wir im Latent Space bzw. in den Latent Vectors der
 
 Später werden wir das Autoencoder-Design einsetzen, um Text (Strings) natürlicher Sprache zu kodieren, sodass die latente Repräsentation interessante Struktur aufweist – das ist word2vec ([Kapitel „word2vec“](16-word2vec.md)).
 
+## Übung
+
+Ein Autoencoder für MNIST: $784 \to 128 \to 32 \to 128 \to 784$, alle Layer voll
+verbunden mit Bias.
+
+1. Wie viele Parameter hat er? Wie viele davon im Encoder?
+   *Tipp: Ein Layer $n \to m$ hat $n\cdot m + m$ Parameter.*
+2. Beim Denoising-Autoencoder: Auf welche der beiden Größen — Eingabe oder Zielbild —
+   kommt das Rauschen, und was wäre der Effekt, wenn man es auf die andere legte?
+
+*Antwortprobe: Bei (1) liegt das Ergebnis zwischen 200 000 und 250 000.*
+
 :::{admonition} Weiterlesen
 :class: seealso
 Prince, *UDL*, Kap. 14 (Unsupervised learning) als Einordnung; Deisenroth et al., *MML*, Kap. 10 (PCA) für den linearen Fall. Beide Bücher sind frei verfügbar, siehe [Über dieses Skript](../README.md).

@@ -78,6 +78,22 @@ Ein VAE ist ein Autoencoder, dessen Encoder statt eines Punkts eine Normalvertei
 Der Variational Autoencoder mit Reparametrisierungstrick: Der Encoder liefert $\mu_x$ und $\sigma_x$, das Rauschen $\varepsilon$ ist eine Konstante für die Backpropagation, der KL-Term zieht die Codes zum Prior.
 :::
 
+## Übung
+
+Der variational loss term für eine latente Dimension ist
+$\tfrac12\left(\mu^2 + \sigma^2 - \ln \sigma^2 - 1\right)$.
+
+1. Für welches Paar $(\mu, \sigma)$ wird er null? Rechnen Sie nach, dass er dort ein
+   Minimum hat.
+   *Tipp: Leiten Sie nach $\mu$ und nach $\sigma$ getrennt ab.*
+2. Berechnen Sie den Wert für $(\mu,\sigma) = (2, 1)$ und für $(0\ ,\ 0{,}5)$. Welche der
+   beiden Abweichungen bestraft der Term stärker?
+3. Der Reparametrisierungstrick schreibt $z = \mu + \sigma\varepsilon$ mit
+   $\varepsilon \sim \mathcal{N}(0,1)$. Warum lässt sich ohne ihn nicht nach $\mu$ und
+   $\sigma$ ableiten?
+
+*Antwortprobe: Bei (2) ist genau ein Wert größer als 1.*
+
 :::{admonition} Weiterlesen
 :class: seealso
 Prince, *UDL*, Kap. 17 (Variational autoencoders) mit ELBO und Reparametrisierung; Deisenroth et al., *MML*, Kap. 11 (Gaussian mixture models, EM) zum Vergleich. Beide Bücher sind frei verfügbar, siehe [Über dieses Skript](../README.md).

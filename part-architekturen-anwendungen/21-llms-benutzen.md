@@ -1,6 +1,9 @@
 ---
 title: "LLMs benutzen"
 short_title: "LLMs benutzen"
+downloads:
+  - file: ../notebooks/latent-classifier.ipynb
+    title: "latent-classifier.ipynb (Klassifikation im latenten Raum, Dreaming, Saliency)"
 ---
 
 # LLMs benutzen
@@ -14,7 +17,7 @@ Zur Erinnerung der Aufbau eines Transformers ([Kapitel „Transformer“](../par
 Wir konkretisieren anhand eines Beispiel-Tasks, z.B. „Gegeben einen Text, identifiziere, ob er emotional positiv oder negativ gefärbt ist“ (Sentiment-Analyse).
 
 1. **Wort-Vektor-Einbettungen direkt verwenden** (statt word2vec z.B. die Embedding-Schicht von Gemma) $\to$ semantische Ähnlichkeit, semantische Suche, semantisches Clustering etc. Pro: sehr billig (keine tiefen Modelle für Inferenz notwendig). Contra: Zusammenhänge über längere Texte hinweg nicht sichtbar.
-2. **Satz-Vektor-Einbettungen**, bzw. längere Texte in Vektoren umwandeln (z.B. mit BERT). Pro: sehr hohe Qualität der Repräsentationen. Contra: LLM notwendig zur Berechnung der Repräsentationen. (Ein Übungsblatt baut genau das: BERT-Embeddings als Features für einen Klassifikator.)
+2. **Satz-Vektor-Einbettungen**, bzw. längere Texte in Vektoren umwandeln (z.B. mit BERT). Pro: sehr hohe Qualität der Repräsentationen. Contra: LLM notwendig zur Berechnung der Repräsentationen. (Das Notebook `latent-classifier.ipynb` — Download oben auf dieser Seite — baut genau das: BERT-Embeddings als Features für einen Klassifikator.)
 3. **Nicht Token sampeln, sondern die Verteilung der Ausgabetoken direkt betrachten.** Pro: vollständige Information aus dem LLM, kein „zufälliges“ Sampling. Contra: weniger intuitiv zu verwenden, man arbeitet mit Verteilungen im Latent Space statt mit Text.
 4. **Fertig trainierte Transformer mit bestimmten Prompts verwenden**, z.B. „Analog zur Transformation [A] $\to$ [B] verarbeite [C]“ (*one-shot prompt*), etwa [A] = Text auf Englisch, [B] = Text auf Deutsch, [C] = neuer Text auf Englisch. Pro: extrem vielseitig und bisher sehr, sehr erfolgreich. Contra: benötigt viele Token (noch mehr für *few-shot prompts*).
 5. **Transformer von Grund auf trainieren** (eigenes Pretraining). Pro: vollständige Kontrolle über Trainingsdaten und damit prinzipiell über Outputs. Contra: extrem teuer; Llama 2 (etwa auf dem Niveau von Gemini 1 Pro / ChatGPT 3.5) kostete ca. 2–10 Mio. $.

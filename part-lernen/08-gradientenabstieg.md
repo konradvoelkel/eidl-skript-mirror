@@ -243,6 +243,20 @@ Wo steckt in diesem Verfahren überall Zufall? Im Startvektor, in den Daten, die
 
 Der Kompromiss ist **Mini-Batch SGD**: Eine kleine, handhabbare Menge von Samples (die *Batch Size*, z.B. 32 oder 64) wird gemeinsam verarbeitet und damit der Gradient approximiert. Das ist, was in der Praxis fast immer gemeint ist, wenn jemand „SGD“ sagt – auch `torch.optim.SGD` aus dem [Kapitel „Logistische Regression“](06-logistische-regression.md) weiß nichts davon, wie viele Samples im Batch waren. Ein Durchlauf durch den gesamten Datensatz heißt **Epoche**.
 
+## Übung
+
+Sei $x = (2, -1)$ fest und $L(w) := (1 - w \cdot x)^2$.
+
+1. Bestimmen Sie $\frac{\partial L}{\partial w_1}$ und $\frac{\partial L}{\partial w_2}$
+   mit der Kettenregel.
+   *Tipp: Äußere Funktion $u \mapsto u^2$, innere $w \mapsto 1 - w\cdot x$. Die Ableitung
+   von $w \cdot x$ nach $w_j$ ist $x_j$ — mehr steckt nicht dahinter.*
+2. Werten Sie den Gradienten bei $w = (0,0)$ aus und führen Sie einen Schritt mit
+   Lernrate $\rho = 0{,}1$ aus.
+3. Berechnen Sie $L$ vor und nach dem Schritt.
+
+*Antwortprobe: $L$ muss kleiner geworden sein.*
+
 :::{admonition} Weiterlesen
 :class: seealso
 Prince, *UDL*, Kap. 6 (Fitting models: Gradientenabstieg, SGD, Lernrate); Deisenroth et al., *MML*, Kap. 5 (Vector calculus) und 7 (Continuous optimization). Beide Bücher sind frei verfügbar, siehe [Über dieses Skript](../README.md).

@@ -60,6 +60,16 @@ Welche Aktivierungsfunktionen in der Praxis genutzt wurden, listete [paperswithc
 Aktivierungsfunktionen im Vergleich. ELU, Swish und GELU sind im negativen Bereich nicht konstant null.
 :::
 
+## Übung
+
+Ein Neuron $x \mapsto \mathrm{ReLU}(w \cdot x + b)$ mit $w = (-1, -1)$ und $b = -3$ sieht
+nur Trainingsdaten mit nichtnegativen Einträgen.
+
+1. Zeigen Sie: Die Ausgabe ist für **alle** diese Daten $0$.
+2. Welchen Wert hat der Gradient nach $w$ und $b$ dann? Was folgt daraus für das Training?
+
+*Antwortprobe: Bei (2) ist die Antwort für $w$ und $b$ dieselbe.*
+
 :::{admonition} Weiterlesen
 :class: seealso
 Prince, *UDL*, Abschnitt 3.2 (Activation functions) und Kap. 7 (Initialization, sterbende Neuronen). Beide Bücher sind frei verfügbar, siehe [Über dieses Skript](../README.md).

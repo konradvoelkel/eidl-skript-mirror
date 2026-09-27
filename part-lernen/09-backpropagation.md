@@ -238,7 +238,22 @@ $$
 \frac{dz}{dw} = [y > 0] \cdot x .
 $$
 
-Übungsaufgabe: Erweitern Sie den linearen Layer um ein zweites Neuron (also ein weiterer Gewichtsvektor $v \in \mathbb{R}^n$ tritt auf) und erweitern Sie die Berechnung um eine Loss-Funktion $\| z - z_{\text{ground truth}} \|^2$. (Das ist Blatt 7 in Kurzform.)
+## Übung
+
+Ein Netz $x \to y = \mathrm{ReLU}(v\,x) \to z = \mathrm{ReLU}(w\,y)$ mit $v = 2$, $w = -1$,
+Eingabe $x = 3$ und Ziel $t = 1$; Loss $L = \tfrac12 (z-t)^2$.
+
+1. Forward Pass: Berechnen Sie $y$, $z$ und $L$.
+2. Berechnen Sie $\frac{\partial L}{\partial w}$ und $\frac{\partial L}{\partial v}$.
+   *Tipp: $\frac{\partial L}{\partial z} = z - t$, die schwache Ableitung von ReLU an der
+   Stelle $a$ ist $[a > 0]$, und der Gradient eines Gewichts ist Eingabe des Neurons mal
+   Ableitung des Fehlers nach seiner Ausgabe.*
+3. Setzen Sie $w = +1$ und rechnen Sie noch einmal. Was hat sich an
+   $\frac{\partial L}{\partial v}$ qualitativ geändert, und warum?
+
+*Antwortprobe: In genau einem der beiden Fälle ist $\frac{\partial L}{\partial v} = 0$.*
+
+Und eine größere, wenn Sie Lust haben: Erweitern Sie den linearen Layer um ein zweites Neuron (also ein weiterer Gewichtsvektor $v \in \mathbb{R}^n$ tritt auf) und erweitern Sie die Berechnung um eine Loss-Funktion $\| z - z_{\text{ground truth}} \|^2$.
 
 :::{admonition} Weiterlesen
 :class: seealso

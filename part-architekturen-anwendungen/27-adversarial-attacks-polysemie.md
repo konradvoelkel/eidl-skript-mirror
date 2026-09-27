@@ -23,7 +23,7 @@ Das ist die These der Bachelorarbeit „Das Dimpled Manifold Model als Erklärun
 
 ### Wie wird's gemacht?
 
-Mit Gradientenabstiegsmethoden sucht man, ausgehend von einem Bild eines weißen Hais, Richtungen, die die Klassifikation ändern, ohne besonders viel am Bild zu ändern: ein Schritt in Richtung des Gradienten des Loss nach dem *Bild*, oder viele kleine Schritte. Anders als sonst: Gradientenabstieg im **Eingaberaum**, nicht im Gewichtsraum – Backpropagation liefert $\nabla_x$ genauso wie $\nabla_w$, denn im DAG ist $x$ nur ein weiteres Blatt. Genau das tut auch das „Dreaming“ im `latent-classifier`-Notebook zum [Kapitel „LLMs benutzen“](21-llms-benutzen.md): Es sucht per Adam im Raum der Eingabe-Embeddings nach einem Text, der den Spam-Detektor maximal triggert – ein adversarial example ohne den Anspruch, unauffällig zu sein.
+Mit Gradientenabstiegsmethoden sucht man, ausgehend von einem Bild eines weißen Hais, Richtungen, die die Klassifikation ändern, ohne besonders viel am Bild zu ändern: ein Schritt in Richtung des Gradienten des Loss nach dem *Bild*, oder viele kleine Schritte. Anders als sonst: Gradientenabstieg im **Eingaberaum**, nicht im Gewichtsraum – Backpropagation liefert $\nabla_x$ genauso wie $\nabla_w$, denn im DAG ist $x$ nur ein weiteres Blatt. Genau das tut auch das „Dreaming“ im Notebook `latent-classifier.ipynb` zum [Kapitel „LLMs benutzen“](21-llms-benutzen.md): Es sucht per Adam im Raum der Eingabe-Embeddings nach einem Text, der den Spam-Detektor maximal triggert – ein adversarial example ohne den Anspruch, unauffällig zu sein.
 
 :::{admonition} Vertiefung: Fast Gradient Sign Method
 :class: note dropdown
@@ -55,3 +55,16 @@ Die Manifold-Hypothese und ihre Grenzen: Daten nahe einer Kurve; Rauschen; zwei 
 :::
 
 Damit schließt sich der Kreis zur Kernfrage aus dem [Kapitel „Latente Räume geometrisch“](23-latente-raeume.md): Welche Struktur finden wir im Latent Space? Manchmal eine schöne Mannigfaltigkeit – und manchmal etwas Interessanteres.
+
+## Übung
+
+Ein Bildausschnitt $x = (0{,}50,\ 0{,}20,\ 0{,}90)$, der Gradient des Loss nach $x$ sei
+$(0{,}03,\ -0{,}07,\ 0{,}01)$, und $\varepsilon = 0{,}02$.
+
+1. Berechnen Sie $x' = x + \varepsilon \cdot \operatorname{sign}(\nabla_x L)$.
+2. Wie groß ist die größte Änderung eines einzelnen Pixels? Wie groß ist sie in
+   8-Bit-Stufen (also mal 255)?
+   *Tipp: Genau deshalb sieht man die Störung nicht.*
+3. Warum benutzt FGSM nur das **Vorzeichen** des Gradienten und nicht seinen Betrag?
+
+*Antwortprobe: Alle drei Pixel ändern sich um denselben Betrag.*

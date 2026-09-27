@@ -53,6 +53,19 @@ Die Vokabulargröße bei GPT-4s BPE „tiktoken“ ist z.B. 100 256; durchschnit
 
 Alexander Rush et al.: *The Annotated Transformer* (updated 2022 edition) – der Artikel „Attention is all you need“ zusammen mit Codeschnipseln und einigen Kommentaren. Für Verrückte oder sehr Interessierte: „I made a transformer by hand (no training!)“ von Theia Vogel, mit sorgfältig von Hand bestimmten Gewichten – die Fortsetzung unseres „Parameter von Hand wählen“ aus Kapitel 7.
 
+## Übung
+
+Drei Token mit Query-Key-Skalarprodukten $q \cdot k_1 = 2$, $q \cdot k_2 = 2$,
+$q \cdot k_3 = 0$ und Values $v_1 = 1$, $v_2 = 3$, $v_3 = 10$.
+
+1. Berechnen Sie die Attention-Gewichte mit Softmax (ohne Skalierung) und daraus die
+   Ausgabe.
+   *Tipp: Zwei der drei Exponenten sind gleich; $e^2 \approx 7{,}39$.*
+2. Die Gewichte müssen sich zu 1 summieren — prüfen Sie das nach.
+3. Warum braucht ein Transformer Positionsembeddings, ein RNN aber nicht?
+
+*Antwortprobe: Die Ausgabe liegt näher an 3 als an 10.*
+
 :::{admonition} Weiterlesen
 :class: seealso
 Prince, *UDL*, Kap. 12 (Transformers). Beide Bücher sind frei verfügbar, siehe [Über dieses Skript](../README.md).

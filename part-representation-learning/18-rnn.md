@@ -74,3 +74,16 @@ class MyModel(nn.Module):
 Wenn wir zwei verschiedene Eingabevektoren in einer Schicht verarbeiten wollen, ist es naheliegend, diese zu einem längeren Vektor zu konkatenieren. Oft sehen wir aber im Code stattdessen ein einfaches `+`. Wie kann das funktionieren???
 
 Eine einfachere Frage: Unter welchen Umständen lässt sich für zwei Vektoren $v, w \in \mathbb{R}^n$ aus der Summe $v + w \in \mathbb{R}^n$ wieder das Paar $(v, w)$ rekonstruieren? Probieren Sie explizite Beispiele mit $n = 2$ aus, etwa $v = (3, 0)$ und $w = (1, 1)$. Überlegen Sie hinterher, wie das bei der eigentlichen Frage weiterhilft. (Stichwort: Wenn $v$ und $w$ aus komplementären Unterräumen kommen – oder das Netz lernen kann, sie dort hinzulegen –, verliert die Summe nichts.)
+
+## Übung
+
+Ein RNN mit $h_t = \tanh(w\,x_t + u\,h_{t-1})$, $w = 1$, $u = 0{,}5$, $h_0 = 0$ und der
+Eingabefolge $x = (1, 0, 0)$.
+
+1. Berechnen Sie $h_1, h_2, h_3$ (zwei Nachkommastellen genügen).
+2. Wiederholen Sie mit $u = 0{,}1$ und mit $u = 0{,}9$. Wie lange „erinnert“ sich das Netz
+   jeweils an die 1 vom Anfang?
+   *Tipp: Nach dem ersten Schritt ist die Eingabe 0, es bleibt also eine Multiplikation
+   mit $u$ pro Schritt.*
+
+*Antwortprobe: Bei (2) fällt einer der drei Verläufe deutlich langsamer ab als die anderen.*

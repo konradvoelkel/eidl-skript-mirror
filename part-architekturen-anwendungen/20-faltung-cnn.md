@@ -214,6 +214,22 @@ Weiterführend:
 * *Universal Fourier Features Emerge* ([arXiv:2312.08550](https://arxiv.org/abs/2312.08550)): warum gelernte Filter so oft wie Fourier-Basisfunktionen aussehen.
 * Faltung und Pooling einmal von Hand zu rechnen lohnt sich; ein Übungsblatt tut genau das.
 
+## Übung
+
+Signal $g = (3, 1, 4, 1, 5)$ an den Stellen $x = 0..4$, Filter
+$f = (\tfrac12, 0, -\tfrac12)$ an den Stellen $-1, 0, 1$.
+
+1. Berechnen Sie $(g \ast f)(x)$ für $x = 1, 2, 3$ mit
+   $(g \ast f)(x) = \sum_k g(x-k) f(k)$.
+   *Tipp: Nur drei Summanden je Stelle, und einer davon fällt weg.*
+2. Berechnen Sie Max-Pooling von $g$ mit Poolgröße 2 und Stride 2.
+3. Ein $28\times28$-Bild geht durch `Conv2d(1, 16, kernel_size=5)`, dann
+   `MaxPool2d(2)`, dann `Conv2d(16, 16, kernel_size=5)`, dann `MaxPool2d(2)`. Welchen
+   Shape hat die Ausgabe, und wie viele Werte hat sie nach `Flatten`?
+   *Tipp: $\lfloor (n + 2p - k)/s \rfloor + 1$, hier ohne Padding.*
+
+*Antwortprobe: Bei (3) kommt $16 \cdot 4 \cdot 4$ heraus — die Zahl taucht in PyTorch-Beispielen ständig auf.*
+
 :::{admonition} Weiterlesen
 :class: seealso
 Prince, *UDL*, Kap. 10 (Convolutional networks) und 11 (Residual networks). Beide Bücher sind frei verfügbar, siehe [Über dieses Skript](../README.md).

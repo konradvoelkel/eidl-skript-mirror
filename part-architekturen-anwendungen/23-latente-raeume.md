@@ -87,3 +87,15 @@ Häufig wird zusätzlich zum $+\varepsilon$-Trick auch noch ein Summand zur Loss
 
 Figure 1 aus Arvanitidis, Hansen, Hauberg: *Latent Space Oddity* (ICLR 2018): Die Gerade im latenten Raum (links) und die Geodäte bezüglich der vom Decoder induzierten Metrik führen zu unterschiedlichen Interpolationen.
 :::
+
+## Übung
+
+Gegeben Embeddings $\text{KÖNIG} = (4,2)$, $\text{MANN} = (3,0)$, $\text{FRAU} = (1,1)$.
+
+1. Berechnen Sie $\text{KÖNIG} - \text{MANN} + \text{FRAU}$. Welcher der Vektoren
+   $a = (4,6)$, $b = (2,2)$, $c = (0,4)$ liegt am nächsten — gemessen mit dem Kosinus?
+   *Tipp: Kosinus heißt: normieren, dann Skalarprodukt. Die Längen unterscheiden sich hier
+   deutlich, das Ergebnis mit euklidischem Abstand wäre ein anderes.*
+2. Interpolieren Sie linear zwischen $\text{MANN}$ und $\text{FRAU}$ in drei Schritten.
+
+*Antwortprobe: Bei (1) sind die Antworten für Kosinus und euklidischen Abstand verschieden — das ist der Punkt der Aufgabe.*

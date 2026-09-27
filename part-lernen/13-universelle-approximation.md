@@ -47,6 +47,16 @@ Siehe auch arXiv:1901.10267. Die Anzahl der Gewichte wächst mit der Eingabedime
 
 Umgekehrt lässt sich jedes ReLU-Netz auch als Entscheidungsbaum schreiben: Jedes ReLU-Neuron ist eine Ja/Nein-Entscheidung „$\langle w, x \rangle + b > 0$?“, und die Regionen, in denen alle Entscheidungen feststehen, sind genau die Stücke, auf denen das Netz linear ist (Caglar Aytekin, *Neural Networks are Decision Trees*, 2022). Der Baum ist allerdings exponentiell groß.
 
+## Übung
+
+1. Geben Sie zwei ReLU-Neuronen und Ausgabegewichte an, deren Summe die Funktion
+   $f(x) = 1$ für $x \in [1,2]$ und $0$ sonst **näherungsweise** darstellt.
+   *Tipp: Zwei steile Rampen an den Stellen $1$ und $2$, die zweite mit umgekehrtem
+   Vorzeichen. Der Steilheitsparameter $h$ bestimmt, wie gut die Näherung ist.*
+2. Wie viele Neuronen brauchen Sie für eine Treppenfunktion mit $k$ Stufen?
+
+*Antwortprobe: Die Antwort auf (2) ist linear in $k$.*
+
 :::{admonition} Weiterlesen
 :class: seealso
 Prince, *UDL*, Kap. 3 (Universal approximation theorem), Kap. 4 (Depth vs. width) und Kap. 20 (Why does deep learning work?). Beide Bücher sind frei verfügbar, siehe [Über dieses Skript](../README.md).

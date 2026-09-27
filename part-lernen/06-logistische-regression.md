@@ -328,6 +328,18 @@ In `float32` ist $e^{89}$ bereits `inf`, und $\sigma(-100) = 1/(1 + e^{100})$ wi
 Abhilfe ist immer dieselbe: nie erst $e^x$ und dann $\ln$ berechnen, sondern beides algebraisch zusammenfassen. Zum Beispiel ist $\ln \sigma(z) = -\ln(1 + e^{-z})$, und für $z < 0$ schreibt man das als $z - \ln(1 + e^{z})$, dann ist der Exponent nie groß. Beim Softmax darf man von allen $v_k$ das Maximum abziehen, ohne das Ergebnis zu ändern (*log-sum-exp-Trick*). PyTorch hat das eingebaut: `nn.BCEWithLogitsLoss` und `nn.CrossEntropyLoss` nehmen die *Logits* entgegen, nicht die Wahrscheinlichkeiten, und rechnen stabil. (`nn.BCELoss` auf Wahrscheinlichkeiten fängt $\ln 0$ mit einem Trick ab, indem es den Logarithmus bei $-100$ abschneidet. Das verhindert `nan`, ist aber ein Pflaster, keine Lösung.) Praktisch heißt das: Wenn Ihr Loss `nan` wird, ist meist das die Ursache, nicht ein Fehler in Ihrer Trainingsschleife.
 :::
 
+## Übung
+
+1. Zeigen Sie $\sigma(-x) = 1 - \sigma(x)$.
+   *Tipp: Erweitern Sie $\sigma(-x) = \frac{1}{1+e^{x}}$ mit $e^{-x}$.*
+2. Zeigen Sie $\sigma'(x) = \sigma(x)\,\sigma(-x)$.
+   *Tipp: Quotientenregel, dann mit $1/\sigma(-x)$ multiplizieren und so lange umformen,
+   bis die Definition von $\sigma(x)$ dasteht. Mit Teil 1 ist das dasselbe wie die aus der
+   Literatur bekannte Form $\sigma(x)(1-\sigma(x))$.*
+3. Wie groß ist $\sigma'(0)$? Und wie groß sind die Odds bei $p = 0{,}5$?
+
+*Antwortprobe: Eine der beiden Zahlen ist $1$, die andere nicht.*
+
 :::{admonition} Weiterlesen
 :class: seealso
 Prince, *UDL*, Kap. 5 (Loss functions), dort die logistische Regression als Maximum-Likelihood-Modell; Deisenroth et al., *MML*, Kap. 6 (Probability). Beide Bücher sind frei verfügbar, siehe [Über dieses Skript](../README.md).

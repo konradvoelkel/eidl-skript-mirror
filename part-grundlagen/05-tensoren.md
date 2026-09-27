@@ -71,6 +71,17 @@ Antwort: Wegen $\mathbb{R}^n \otimes \mathbb{R}^m \cong \mathbb{R}^{nm}$ hat $\m
 
 **Das Bild, das man sich für PyTorch merken sollte.** Der Shape sagt nur, wie viele Zahlen in jede Richtung gehen, nicht, welche Richtung was bedeutet. Das muss man sich selbst merken, und genau an dieser Stelle entstehen die Fehler, die keinen Fehler werfen, sondern ohne Murren einen sinnlosen Output produzieren (der Autor hat einmal bei einem quadratischen Bild die beiden Achsen vertauscht und lange gesucht). Die Konvention, die überall in PyTorch gilt: Die *erste* Achse ist der Batch. Ein Tensor mit Shape `(32, 784)` sind 32 Datenpunkte mit je 784 Features, eine Zeile pro Datenpunkt. `(32, 28, 28)` sind 32 Bilder, also 32 Matrizen übereinandergestapelt; `(32, 3, 28, 28)` dieselben Bilder mit drei Farbkanälen. `nn.Linear` und fast alle anderen Layer wirken auf die *letzte* Achse und lassen die Batch-Achse in Ruhe. Wer einen Tensor vor sich hat, sollte als Erstes sagen können, welche Achse der Batch ist und was die übrigen Achsen bedeuten; `reshape` und `view` ändern nur die Klammerung, nicht die Bedeutung.
 
+## Übung
+
+1. Welchen Shape hat das Ergebnis? (a) `torch.zeros(4,3) @ torch.zeros(3,7)`,
+   (b) `x.sum(dim=0)` für `x` mit Shape $(8, 5)$, (c) `x.unsqueeze(1)` für `x` mit Shape
+   $(8,)$, (d) `torch.zeros(4,1) + torch.zeros(1,6)`.
+   *Tipp: Bei (d) hilft die Broadcasting-Regel: Achsen der Länge 1 werden gedehnt.*
+2. Ein Batch von 32 Graustufenbildern der Größe $28 \times 28$ liegt als Tensor vor.
+   Welchen Shape hat er in PyTorch-Konvention, und welchen nach `nn.Flatten()`?
+
+*Antwortprobe: Das Produkt der Shape-Einträge ändert sich bei (2) nicht.*
+
 :::{admonition} Weiterlesen
 :class: seealso
 Deisenroth et al., *MML*, Kap. 2 (Linear algebra) für Basen, darstellende Matrizen und Basiswechsel. Beide Bücher sind frei verfügbar, siehe [Über dieses Skript](../README.md).

@@ -115,3 +115,17 @@ Google Gemini Team: *Gemini 1.5: Unlocking multimodal understanding across milli
 2. Verstecke langwierige oder schlechte Zwischenüberlegungen und lass Schüler aus den „wohlüberlegten“ Inhalten lernen, mit Destillation.
 
 So entstehen „Reasoning“-Modelle, die kompakt das können, wofür der Lehrer viele Token gebraucht hat.
+
+## Übung
+
+Ein Lehrermodell gibt für drei Klassen die Logits $(3, 1, 0)$ aus.
+
+1. Berechnen Sie die Softmax-Ausgabe bei $T = 1$ und bei $T = 2$ (also mit $z_j / T$ im
+   Exponenten).
+   *Tipp: $e^3 \approx 20{,}1$, $e^{1{,}5} \approx 4{,}48$, $e \approx 2{,}72$,
+   $e^{0{,}5} \approx 1{,}65$.*
+2. Welche Information steckt in der Ausgabe bei $T = 2$, die bei $T = 1$ fast verschwunden
+   ist? Wie heißt sie im Kapitel?
+3. Warum wird der Distillation Loss mit $T^2$ multipliziert?
+
+*Antwortprobe: Bei beiden Temperaturen summieren sich die drei Werte zu 1, aber der größte ist bei $T=2$ deutlich kleiner.*

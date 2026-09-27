@@ -106,6 +106,18 @@ Dabei können die Schichten verschieden groß sein, manche Einträge von $W^{(k)
 
 Warum das hintereinanderschalten hilft, sehen wir am XOR-Problem: Mit zwei Perzeptrons in der ersten Schicht, die „$x_1 \lor x_2$“ und „$\lnot(x_1 \land x_2)$“ berechnen, und einem dritten Perzeptron, das deren Ausgaben mit UND verknüpft, ist XOR plötzlich linear trennbar – im Raum der Ausgaben der ersten Schicht.
 
+## Übung
+
+Sei $w = \binom{3}{4}$ und $b = -5$, also das Perzeptron $x \mapsto [w \cdot x + b > 0]$.
+
+1. Berechnen Sie für $x_1 = \binom{4}{2}$, $x_2 = \binom{-1}{0}$ und $x_3 = \binom{3}{-1}$
+   jeweils die Aktivierung $w \cdot x + b$ **und** den vorzeichenbehafteten Abstand zur Geraden.
+   *Tipp: Der Abstand ist die Aktivierung geteilt durch $\|w\|$, und $\|w\| = 5$.*
+2. Ersetzen Sie $w$ durch $10w$ und $b$ durch $10b$. Was ändert sich an der Geraden, was an
+   den Aktivierungen, was an den Abständen?
+
+*Antwortprobe: Genau eine der drei Größen ändert sich.*
+
 :::{admonition} Weiterlesen
 :class: seealso
 Prince, *UDL*, Kap. 3 (Shallow neural networks); Deisenroth et al., *MML*, Kap. 3 (Analytic geometry: Skalarprodukt, Winkel, Projektion). Beide Bücher sind frei verfügbar, siehe [Über dieses Skript](../README.md).

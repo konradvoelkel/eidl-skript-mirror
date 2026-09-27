@@ -140,3 +140,12 @@ und $x + y$ sowie $x - y$ sind lineare Schichten. Mit MUL und Addition bekommen 
 ### Take-Home Message
 
 Funktionen lassen sich mit neuronalen Netzen darstellen bzw. approximieren. Mit einer Lookup-Table (LUT) und Interpolation sind beliebig gute Näherungen auf *beschränkten* Definitionsbereichen möglich – so rechnet auch die GPU z.B. den Sinus aus. Außerhalb der Stützstellen wird die Approximation beliebig schlecht: **Neuronale Netze interpolieren gut, extrapolieren schlecht.**
+
+## Übung
+
+1. Geben Sie Gewichte und Bias für ein einzelnes Perzeptron an, das AND auf
+   $\{0,1\}^2$ berechnet. Prüfen Sie alle vier Eingaben nach.
+2. Bauen Sie NAND aus Ihrem AND, ohne neu zu rechnen.
+   *Tipp: Was macht das Vorzeichenwechseln von $w$ und $b$ mit der Entscheidungsgrenze?*
+
+*Antwortprobe: Bei (1) gibt es viele richtige Antworten; alle erfüllen dieselben vier Ungleichungen.*
