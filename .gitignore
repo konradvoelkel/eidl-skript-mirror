@@ -169,6 +169,7 @@ slides/*.pdf
 *.fdb_latexmk
 *.synctex.gz
 *.out
+*.vrb
 
 # Arbeitsmaterial der fachlichen Durchsicht (Befundbogen, Zwischenstände, Prüflisten).
 # Behandelt wie transcripts/ und uebungen-2025/: Das Projekt ist public, und der Bogen trägt

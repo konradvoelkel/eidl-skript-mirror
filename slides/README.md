@@ -56,4 +56,5 @@ aktualisiert auch diese Kopie oder löscht sie. Und ein Pfad in `TEXINPUTS`, der
   `\setbeameroption{show notes on second screen=right}` nach dem `\input{...header}`
   einkommentieren.
 * Die PDFs sind Build-Artefakte und stehen in `.gitignore`; verteilt werden sie
-  über ILIAS.
+  über ILIAS. Dasselbe gilt für alles andere, was der Bau erzeugt – `.aux`, `.nav`,
+  `.snm`, `.toc`, `.out`, `.vrb` und Verwandte gehören nicht ins Repo.
