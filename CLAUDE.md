@@ -30,14 +30,22 @@ Semesterplan steht getrennt in `kurs-2026-27.md`.
 
 ```sh
 uv sync                                   # Abhängigkeiten aus pyproject.toml/uv.lock
-uv run devnotes/patch_myst_tex.py         # **nach jedem `uv sync`**, sonst ist das PDF kaputt
-uv run _site/vendor/install_template.py   # Site-Template bereitlegen (idempotent)
+uv run --no-project devnotes/patch_myst_tex.py       # **nach jedem `uv sync`**, sonst ist das PDF kaputt
+uv run --no-project _site/vendor/install_template.py # Site-Template bereitlegen (idempotent)
 uv run --only-group dev myst build --html # Website nach _build/html
 uv run --only-group dev myst build --pdf  # PDF nach exports/eidl-skript.pdf (braucht LaTeX)
-uv run devnotes/check_pdf_build.py --min-pages 100   # prüft das gebaute PDF
-uv run devnotes/check_ci_yaml.py          # vor jedem Push, wenn .gitlab-ci.yml angefasst wurde
-uv run devnotes/check_doku.py             # prüft diese Datei und devnotes/ gegen das Repo
+uv run --no-project devnotes/check_pdf_build.py --min-pages 100  # prüft das gebaute PDF
+uv run --only-group dev devnotes/check_ci_yaml.py    # vor jedem Push, wenn .gitlab-ci.yml angefasst wurde
+uv run --no-project devnotes/check_doku.py           # prüft diese Datei und devnotes/ gegen das Repo
 ```
+
+**`--no-project` ist kein Schmuck.** Vier der fünf Skripte hier brauchen nur die
+Standardbibliothek; ohne den Schalter synchronisiert `uv run` vorher die ganze
+Default-Gruppe – torch, triton, scipy, rund ein Gigabyte – für ein Skript, das `re` und
+`pathlib` importiert. Im eingerichteten Arbeitsverzeichnis merkt man das nicht, in einem
+frischen Klon oder Worktree schon. Die CI ruft dieselben Skripte deshalb schlicht mit
+`python3` auf. Einzige Ausnahme ist `check_ci_yaml.py`: Es braucht `pyyaml` und damit die
+dev-Gruppe.
 
 Erwartung eines gesunden Laufs (Stand 2026-09-29, nach der fachlichen Durchsicht
 aller 27 Kapitel und des Glossars): HTML ohne Warnungen, PDF **112 Seiten A4**, 0 LaTeX-Fehler, 0 fehlende
@@ -328,6 +336,6 @@ haben bewusst keinen, weil eine schwache Übung schlechter ist als keine. Die Fo
 * **`.gitlab-ci.yml` geändert und nur die YAML-Syntax geprüft.** Ein `: ` in einem
   unquotierten Skalar macht aus einer Skriptzeile eine Map — die Datei bleibt **valides
   YAML**, GitLab lehnt sie aber ab (`script config should be a string`), und dann läuft
-  **kein einziger** Job, auch keine Prüfung. `uv run devnotes/check_ci_yaml.py` vor dem Push.
+  **kein einziger** Job, auch keine Prüfung. `uv run --only-group dev devnotes/check_ci_yaml.py` vor dem Push.
 * **`uv sync` gemacht und den mystmd-Patch vergessen.** Dann sind alle Kommandozeilen im
   lokal gebauten PDF falsch, und zwar unauffällig.

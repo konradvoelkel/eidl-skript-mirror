@@ -100,7 +100,7 @@ myst-build:
 # `- -index -url`, und dieser Job wuerde es merken.
 #
 # Lokal bauen: `uv run --only-group dev myst build --pdf` (nach `uv sync` einmal
-# `uv run devnotes/patch_myst_tex.py`).
+# `uv run --no-project devnotes/patch_myst_tex.py`).
 build-pdf:
   stage: build
   image: $CI_REGISTRY_IMAGE:latest

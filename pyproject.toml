@@ -4,11 +4,15 @@ version = "0.1.0"
 description = "Skript zur Vorlesung Einführung in Deep Learning an der HHU (Wintersemester 2026/27)"
 readme = "README.md"
 authors = [ { email = "konrad.voelkel@hhu.de", name = "Konrad Völkel" } ]
-requires-python = ">=3.13"
+# Obergrenze wegen gensim: Die neueste Fassung (4.4.0) liefert Wheels nur bis cp313, und
+# aus dem sdist lässt sie sich unter 3.14 nicht übersetzen – der vorgenerierte Cython-C-Code
+# greift auf CPython-Interna zu, die dort weg sind (`ob_digit`, `curexc_traceback`). Ohne
+# diese Grenze nimmt uv für eine frische `.venv` den neuesten installierten Interpreter,
+# und `uv sync` scheitert. Wenn gensim cp314 liefert, fällt die Grenze wieder.
+requires-python = ">=3.13,<3.14"
 classifiers = [
   "Programming Language :: Python :: 3 :: Only",
   "Programming Language :: Python :: 3.13",
-  "Programming Language :: Python :: 3.14",
 ]
 dependencies = [
   "numpy>=2.4,<3",
