@@ -23,13 +23,18 @@ kein Deck baute, und `latexmk` verschleierte es, weil es bei vorhandenem PDF
 sudo mktexlsr
 ```
 
-Ohne Root-Rechte behilft man sich mit einer Kopie **außerhalb** der `!!`-Bäume – ein Pfad
-in `TEXINPUTS`, der in einen `!!`-Baum zeigt, hilft nämlich nicht:
+**Ohne Root-Rechte** legt man das Theme in den eigenen Baum. `~/texmf` steht in `TEXMF`
+**ohne** `!!`, wird also live durchsucht und braucht gar keine Datenbank:
 
 ```sh
-cp -r /usr/share/texmf/tex/latex/beamer/themes/hhubeamer /tmp/
-TEXINPUTS="/tmp/hhubeamer//:" sh build.sh
+mkdir -p ~/texmf/tex/latex
+cp -r /usr/share/texmf/tex/latex/beamer/themes/hhubeamer ~/texmf/tex/latex/hhubeamer
 ```
+
+So ist es auf dieser Maschine seit dem 2026-09-29 eingerichtet. Zwei Dinge dazu: Die
+Kopie **verdeckt** eine spätere Systemversion des Themes – wer das Theme aktualisiert,
+aktualisiert auch diese Kopie oder löscht sie. Und ein Pfad in `TEXINPUTS`, der in einen
+`!!`-Baum zeigt, hilft *nicht*: Die Sperre gilt nach Pfadpräfix, nicht nach Suchreihenfolge.
 
 ## Konventionen
 
