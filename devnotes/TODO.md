@@ -29,12 +29,22 @@ Hintergrundrauschen.
 
 **Womit anfangen**, wenn nichts anderes vorgegeben ist:
 
-1. **Sprachdurchgang: Rechtschreibung, Zeichensetzung, Stil.** Der Nachfolger der fachlichen
-   Durchsicht, die am 2026-09-29 abgeschlossen wurde. Verfahren, Übergabe und Befunde stehen in
-   `devnotes/durchsicht/sprachdurchgang-2026-10.md` — **dort** wird gearbeitet, nicht in dieser
-   Liste. Der Ordner ist gitignored (nur lokal und in Sciebo), die Werkzeuge dazu sind versioniert:
-   `devnotes/sprachpruefliste.py` und `devnotes/sprachpruefliste-woerter.txt`. Größter Einzelposten
-   ist die Liste der 441 unbekannten Wörter; danach ist die Rechtschreibprüfung scharf.
+1. **Sprachdurchgang, zweiter Tag: die Foliensätze `slides/*.tex`.** Der erste Tag ist am
+   2026-09-29 gelaufen und hat **16 Befunde** behoben (R1–R13, E1–E6); Verfahren, Befunde und
+   die offenen Entscheidungen stehen in `devnotes/durchsicht/sprachdurchgang-2026-10.md` —
+   **dort** wird gearbeitet, nicht in dieser Liste. Der Ordner ist gitignored, die drei
+   Werkzeuge sind versioniert: `sprachpruefliste.py`, `sprachpruefliste-woerter.txt` und neu
+   `grammatikpruefung.py`.
+
+   Über alle 29 Buchdateien sind Rechtschreibung, Typografie, Einheitlichkeit und die langen
+   Sätze durch; die Rechtschreibprüfung meldet **0 unbekannte Wörter**, die Grammatikprüfung
+   6 geprüfte und abgelegte. **Ungeprüft sind allein die Foliensätze** — und die Erfahrung des
+   ersten Tages ist eindeutig: Die Befunde saßen in den Dateien, die nie eine Prüfung gesehen
+   hatten (`index.md` vier auf sechs Zeilen, `kurs-2026-27.md` drei). Ein Tippfehler auf einer
+   Folie steht neunzig Minuten groß an der Wand.
+
+   Danach: die Kapitel einmal am laufenden Text auf Bezüge lesen („dieses“, „das“ — worauf?),
+   was keine Maschine prüft.
 2. **Die echten Übungsblätter auf 2026/27 anziehen** (Abschnitt „Übungsblätter“): Punkte und
    Bestehensgrenzen, die Kopfzeile je Blatt, Blatt 12 als Take-Home-Probeklausur. Sie werden **in
    TeX** gepflegt, nicht hier — `uebungen-2025/blaetter/` ist nur die Markdown-Konversion von 2025.
