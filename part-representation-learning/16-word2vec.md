@@ -52,7 +52,7 @@ Verfügbare Gewichte $W$ gibt es mit Gensim (z.B. `wiki-english-20171001`) oder 
 Zutatenliste: Keine GPU oder andere Beschleuniger zur Hand? Google Colab oder CPU reicht. Input: ein Textkorpus zum Training, eine Tokenization-Strategie bzw. ein Tokenizer (darüber sprechen wir noch), die Dimension $K$ des Latent Space, CBOW oder Skip-gram (wie groß ist der Korpus?), von Grund auf trainieren (Pretraining) oder Finetuning, und welche Implementierung?
 
 * **Gensim** ([Tutorial](https://radimrehurek.com/gensim/auto_examples/tutorials/run_word2vec.html#training-your-own-model)). Pro: NLP-Gesamtlösung, gut dokumentiertes Paket. Contra: keine GPU-Beschleunigung (aber für word2vec ist das „egal“), und keine Kombination von word2vec im Training mit anderen Tasks (wie wir es beim Denoising Label Autoencoder getan haben).
-* **PyTorch**, „so richtig von Hand“: [Skip-gram implementation step by step](https://www.kaggle.com/code/karthur10/skip-gram-implementation-with-pytorch-step-by-step/notebook); oder mit dem `torch.nn.Embedding`-Layer (das ist genau die Matrix $W$, mit One-Hot-Multiplikation als Lookup implementiert): [Word Embeddings: Encoding Lexical Semantics](https://docs.pytorch.org/tutorials/beginner/nlp/word_embeddings_tutorial.html), [d2l.ai](https://d2l.ai/chapter_natural-language-processing-pretraining/word2vec-pretraining.html).
+* **PyTorch**, „so richtig von Hand“: [Skip-gram implementation step by step](https://www.kaggle.com/code/karthur10/skip-gram-implementation-with-pytorch-step-by-step/notebook); oder mit dem `torch.nn.Embedding`-Layer (das ist die Matrix $W$, allerdings **transponiert** gespeichert: `nn.Embedding(N, K).weight` hat Shape `(N, K)`, eine *Zeile* pro Wort, und die Multiplikation mit dem One-Hot-Vektor ist als Lookup implementiert): [Word Embeddings: Encoding Lexical Semantics](https://docs.pytorch.org/tutorials/beginner/nlp/word_embeddings_tutorial.html), [d2l.ai](https://d2l.ai/chapter_natural-language-processing-pretraining/word2vec-pretraining.html).
 
 Wozu? Durch Pretraining oder Finetuning von word2vec-Modellen mit PyTorch bekommt man Wortvektoren, die auf die eigene Domäne (Fachsprache, andere Sprache) passen, und kann sie als erste Schicht in ein größeres Modell einbauen.
 
@@ -98,7 +98,7 @@ Problem 3 („Hund“ und „Tier“) löst word2vec, weil beide in ähnlichen K
 
 ## Übung
 
-Der Satz „der hund bellt laut im garten“ (6 Token), Fenstergröße $n = 2$.
+Der Satz „der hund bellt laut im garten“ (6 Token), Fenstergröße $S = 2$.
 
 1. Wie viele (Kontext, Zielwort)-Paare erzeugt Skip-gram daraus? Schreiben Sie die Paare
    für das Zielwort „bellt“ auf.
@@ -107,4 +107,5 @@ Der Satz „der hund bellt laut im garten“ (6 Token), Fenstergröße $n = 2$.
 3. Der Embedding-Layer für ein Vokabular von 50 000 Wörtern und 300 Dimensionen: Wie viele
    Parameter, und was steht in Zeile $i$?
 
-*Antwortprobe: Bei (3) sind es 15 Millionen.*
+*Antwortprobe: Bei (1) liefern das erste und das letzte Token je zwei Paare, das dritte
+und das vierte je vier; bei (3) sind es 15 Millionen.*

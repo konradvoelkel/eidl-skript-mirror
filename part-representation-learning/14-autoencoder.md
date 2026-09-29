@@ -137,13 +137,13 @@ Neu gegenüber dem [Kapitel „Tensoren“](../part-grundlagen/05-tensoren.md) s
 
 ### Supervised: Klassifikator
 
-Ein „klassischer“ Klassifikator-Ansatz auf Basis des Autoencoders: Encoder vom Autoencoder, dann ein linearer Layer auf 10 Dimensionen, dann Softmax. Zur „harten“ Klassifikation noch ein $\operatorname{argmax}$ dahinter hängen.
+Ein „klassischer“ Klassifikator-Ansatz auf Basis des Autoencoders: Encoder vom Autoencoder, dann ein linearer Layer auf 10 Dimensionen. Dessen Ausgabe sind die **Logits**; erst ein Softmax darauf macht daraus Wahrscheinlichkeiten, und ein $\operatorname{argmax}$ dahinter die „harte“ Klassifikation.
 
-Loss-Funktion: **Negative Log-Likelihood** = Kreuzentropie $\mathrel{\hat=}$ Kullback-Leibler-Divergenz zwischen echten Labels und Vorhersage (siehe [Kapitel „Loss-Funktionen und Maximum Likelihood“](../part-lernen/07-loss-funktionen-maximum-likelihood.md)). Das ist der *classification loss*, im Gegensatz zum *reconstruction loss*. In PyTorch: `nn.CrossEntropyLoss()`, das Softmax und NLL in einem Schritt (numerisch stabiler) berechnet und direkt auf die Logits angewendet wird.
+Loss-Funktion: **Negative Log-Likelihood** = Kreuzentropie $\mathrel{\hat=}$ Kullback-Leibler-Divergenz zwischen echten Labels und Vorhersage (siehe [Kapitel „Loss-Funktionen und Maximum Likelihood“](../part-lernen/07-loss-funktionen-maximum-likelihood.md)). Das ist der *classification loss*, im Gegensatz zum *reconstruction loss*. In PyTorch: `nn.CrossEntropyLoss()`, das Softmax und NLL in einem Schritt (numerisch stabiler) berechnet und direkt auf die Logits angewendet wird. **Deshalb gehört das Softmax nicht ins Modell**, wenn man diese Loss-Funktion benutzt — sonst wird zweimal normiert, die Verteilung wird flach und das Training langsam. Erst bei der Inferenz, wenn man Wahrscheinlichkeiten sehen will, wendet man `torch.softmax` von Hand an.
 
 ### Label Autoencoder
 
-Warum nicht beides? Encoder vom Autoencoder, darauf ein linearer Layer auf 10 Dimensionen mit Softmax – und *daneben* der Decoder vom Autoencoder. Input ist ein Bild, Output sind Rekonstruktion und Label-Vorhersage, und die Loss-Funktion ist
+Warum nicht beides? Encoder vom Autoencoder, darauf der lineare Layer auf 10 Dimensionen (Logits) – und *daneben* der Decoder vom Autoencoder. Input ist ein Bild, Output sind Rekonstruktion und Label-Vorhersage, und die Loss-Funktion ist
 
 $$
 L = \text{reconstruction\_loss} + \text{classification\_loss}.
@@ -215,7 +215,7 @@ Dasselbe Modell: Loss-Kurve über die Epochen.
 Der latente Raum desselben Modells, per PCA auf zwei Dimensionen projiziert und nach Ziffer eingefärbt.
 :::
 
-Code angucken: `denoising-autoencoder-mnist.py` aus dem zugehörigen Übungsblatt implementiert genau das, als *Denoising Sparse Label Autoencoder* – alle Tricks auf einmal, mit SiLU, BatchNorm und Dropout.
+Die drei Abbildungen oben stammen aus einem *Denoising Sparse Label Autoencoder* – alle Tricks auf einmal, mit SiLU, BatchNorm und Dropout: verrauschte Eingabe hinein, sauberes Bild und Ziffer heraus, dazu ein Sparsity-Strafterm auf dem latenten Vektor.
 
 ### Bisher, und was es bringt
 

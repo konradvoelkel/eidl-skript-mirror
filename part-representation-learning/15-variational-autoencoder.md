@@ -9,7 +9,7 @@ short_title: "VAE"
 
 ### Motivation: probabilistische Modelle
 
-Beim klassischen Autoencoder bildet der Encoder einen Datenpunkt $x \in D$ auf einen Punkt $\operatorname{enc}(x) \in L$ im latenten Raum ab, der Decoder $y \in L$ auf $\operatorname{dec}(y) \in F$ im Feature-Raum; Ziel ist $\operatorname{MSE}(x, \operatorname{dec}(\operatorname{enc}(x)))$ möglichst klein. Die Modellannahme war aber: Die Punkte $x \in D$ sind eine Stichprobe aus einer *Verteilung*. Können wir die Verteilung direkt mit modellieren, in $\operatorname{enc}(x)$?
+Beim klassischen Autoencoder bildet der Encoder einen Datenpunkt $x$ aus dem Datenraum $\mathbb{R}^D$ auf einen Punkt $\operatorname{enc}(x)$ im latenten Raum $\mathbb{R}^L$ ab, der Decoder einen Punkt $y \in \mathbb{R}^L$ zurück in den Datenraum ($D$ und $L$ sind dieselben Dimensionen wie im [Kapitel „Autoencoder“](14-autoencoder.md)); Ziel ist $\operatorname{MSE}(x, \operatorname{dec}(\operatorname{enc}(x)))$ möglichst klein. Die Modellannahme war aber: Die Punkte $x \in D$ sind eine Stichprobe aus einer *Verteilung*. Können wir die Verteilung direkt mit modellieren, in $\operatorname{enc}(x)$?
 
 **Variation des Ziels**: Auch $\operatorname{MSE}(x, \operatorname{dec}(\operatorname{enc}(x) + \varepsilon))$ soll möglichst klein sein, für einen normalverteilten Fehler $\varepsilon \sim \mathcal{N}(0, 1)$. **Variation des Trainings**: Nach $\operatorname{enc}(x)$ ein $\varepsilon$ sampeln, addieren, dann $\operatorname{dec}$. Der Decoder muss dann nicht nur den Punkt $\operatorname{enc}(x)$, sondern eine ganze Umgebung davon auf $x$ abbilden – der latente Raum wird „glatt“.
 
@@ -21,7 +21,7 @@ $$
 
 Das gesampelte $\varepsilon$ ist im Rückwärtsdurchlauf einfach eine Konstante.
 
-**Beispiel im latenten Raum.** Mit 3 Datenpunkten: Klassisch sind das 3 Punkte. Mit $+\varepsilon$ werden es 3 Wolken gleicher Größe. Mit $+\sigma\varepsilon$ für einen Skalierungsfaktor $\sigma$ kann man die Wolkengröße steuern. Mit 300 Datenpunkten: Klassisch eine Punktwolke mit Löchern und Ausreißern; gut wäre eine Verteilung, die den latenten Raum lückenlos und gleichmäßig füllt, sodass man an *jeder* Stelle dekodieren kann.
+**Beispiel im latenten Raum.** Mit 3 Datenpunkten: Klassisch sind das 3 Punkte. Mit $+\varepsilon$ werden es 3 Wolken gleicher Größe. Mit $+\sigma\varepsilon$ für einen Skalierungsfaktor $\sigma$ kann man die Wolkengröße steuern. (In diesem Kapitel ist $\sigma$ durchgehend eine Streuung, nicht die logistische Sigmoidfunktion aus dem [Kapitel „Logistische Regression“](../part-lernen/06-logistische-regression.md).) Mit 300 Datenpunkten: Klassisch eine Punktwolke mit Löchern und Ausreißern; gut wäre eine Verteilung, die den latenten Raum lückenlos und gleichmäßig füllt, sodass man an *jeder* Stelle dekodieren kann.
 
 :::{figure} ../images/vl08-latent-3points.png
 :width: 90%
@@ -59,7 +59,7 @@ $$
 D_{KL}\bigl( \mathcal{N}(\mu, \sigma^2) \,\|\, \mathcal{N}(0, 1) \bigr) = \tfrac12 \left( \mu^2 + \sigma^2 - 1 - \ln \sigma^2 \right).
 $$
 
-Diese Loss-Funktion ist genau der negative **ELBO** (evidence lower bound) $\mathcal{L}(\theta, q)$ aus dem Kapitel „Expectation Maximization“ in Data Science.
+Diese Loss-Funktion ist der negative **ELBO** (evidence lower bound) aus dem Kapitel [Expectation Maximization](https://voelkel.pages.cs.uni-duesseldorf.de/ds-skript/expectation-maximization) in Data Science — bis auf einen Faktor und eine additive Konstante, die daher rühren, dass wir den Rekonstruktionsterm als schlichten MSE schreiben statt als negative Log-Likelihood eines gaußschen Decoders mit fester Varianz. Für die Optimierung macht das keinen Unterschied, für den Vergleich der Zahlenwerte schon.
 
 :::{admonition} Zwei Fragen, die immer kommen
 :class: note

@@ -17,7 +17,7 @@ Der **BLEU-Score** (bilingual evaluation understudy) zwischen 0 und 1 (auch skal
 
 Vaswani et al., *Attention is all you need*: „The dominant sequence transduction models are based on complex recurrent or convolutional neural networks in an encoder-decoder configuration. The best performing models also connect the encoder and decoder through an attention mechanism. We propose a new simple network architecture, the Transformer, based solely on attention mechanisms, dispensing with recurrence and convolutions entirely. […] Our model achieves 28.4 BLEU on the WMT 2014 English-to-German translation task, improving over the existing best results, including ensembles by over 2 BLEU. […] a new single-model state-of-the-art BLEU score of 41.8 after training for 3.5 days on eight GPUs.“
 
-Zur Einordnung: WMT = Workshop on Statistical Machine Translation, Task und Datensatz; aktuell WMT23 als Challenge; sacreBLEU als Standard-Implementierung; 41.8 „BLEU“ = 0,418 BLEU. Und das WMT19-Modell aus dem [Kapitel „Vortrainierte Modelle“](../part-grundlagen/04-vortrainierte-modelle.md) ist genau ein Nachfolger davon.
+Zur Einordnung: WMT = Workshop on Statistical Machine Translation, Task und Datensatz; die Challenge läuft bis heute jährlich weiter; sacreBLEU als Standard-Implementierung; 41.8 „BLEU“ = 0,418 BLEU. Und das WMT19-Modell aus dem [Kapitel „Vortrainierte Modelle“](../part-grundlagen/04-vortrainierte-modelle.md) ist genau ein Nachfolger davon.
 
 ### Transformer technisch
 
@@ -37,9 +37,10 @@ Das Architekturbild ist Figure 1 in Vaswani et al., *Attention Is All You Need* 
 
 **Byte Pair Encoding (BPE)**: ein Tokenization-Schema (Gage 1994). BPE baut auf einem Tokenizer auf, meist Token = Byte oder Character. Algorithmus:
 
-1. Sortiere alle möglichen Tokenpaare nach Häufigkeit,
-2. verschmelze die zwei häufigsten zu einem neuen Token,
-3. Ende, wenn es genug verschiedene Token gibt.
+1. Zähle, wie oft jedes benachbarte Tokenpaar im Korpus vorkommt.
+2. Nimm das **häufigste Paar** und ersetze jedes Vorkommen durch ein einzelnes neues
+   Token; das Vokabular wächst um eins.
+3. Zurück zu Schritt 1 – bis es genug verschiedene Token gibt.
 
 Die Vokabulargröße bei GPT-4s BPE „tiktoken“ ist z.B. 100 256; durchschnittlich entspricht ein Token etwa 4 Bytes. Häufige Wörter werden zu einem Token, seltene in Silben oder Buchstaben zerlegt – das ist die „flexible $n$“-Antwort auf die Tokenisierungsfrage aus dem letzten Kapitel.
 
@@ -51,7 +52,7 @@ Die Vokabulargröße bei GPT-4s BPE „tiktoken“ ist z.B. 100 256; durchschnit
 
 ### Implementierung des Transformers
 
-Alexander Rush et al.: *The Annotated Transformer* (updated 2022 edition) – der Artikel „Attention is all you need“ zusammen mit Codeschnipseln und einigen Kommentaren. Für Verrückte oder sehr Interessierte: „I made a transformer by hand (no training!)“ von Theia Vogel, mit sorgfältig von Hand bestimmten Gewichten – die Fortsetzung unseres „Parameter von Hand wählen“ aus Kapitel 7.
+Alexander Rush et al.: *The Annotated Transformer* (updated 2022 edition) – der Artikel „Attention is all you need“ zusammen mit Codeschnipseln und einigen Kommentaren. Für Verrückte oder sehr Interessierte: „I made a transformer by hand (no training!)“ von Theia Vogel, mit sorgfältig von Hand bestimmten Gewichten – die Fortsetzung unseres „Parameter von Hand wählen“ aus dem [Kapitel „Netze von Hand bauen“](../part-lernen/12-netze-von-hand.md).
 
 ## Übung
 
@@ -64,7 +65,8 @@ $q \cdot k_3 = 0$ und Values $v_1 = 1$, $v_2 = 3$, $v_3 = 10$.
 2. Die Gewichte müssen sich zu 1 summieren — prüfen Sie das nach.
 3. Warum braucht ein Transformer Positionsembeddings, ein RNN aber nicht?
 
-*Antwortprobe: Die Ausgabe liegt näher an 3 als an 10.*
+*Antwortprobe: Das dritte Gewicht ist kleiner als $\tfrac1{10}$, aber nicht null, und die
+Ausgabe bleibt trotz $v_3 = 10$ unter $2{,}6$.*
 
 :::{admonition} Weiterlesen
 :class: seealso

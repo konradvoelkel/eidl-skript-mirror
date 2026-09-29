@@ -67,7 +67,7 @@ class MyModel(nn.Module):
         return self.label(h)
 ```
 
-`nn.LSTM` bekommt eine Sequenz von Vektoren (z.B. word2vec-Embeddings der Wörter) und liefert die Sequenz der hidden states; darauf ein linearer Layer für die Vorhersage.
+`nn.LSTM` bekommt eine Sequenz von Vektoren (z.B. word2vec-Embeddings der Wörter) und liefert die Sequenz der hidden states; darauf ein linearer Layer für die Vorhersage. **Achtung bei den Achsen:** Anders als sonst in PyTorch erwartet `nn.LSTM` voreingestellt `(seq, batch, feature)`, der Batch liegt also auf der *zweiten* Achse (siehe [Kapitel „Tensoren“](../part-grundlagen/05-tensoren.md)). Mit `batch_first=True` im Konstruktor gilt wieder die gewohnte Reihenfolge.
 
 ### Am Rande: Konkatenieren vs. Summe
 
