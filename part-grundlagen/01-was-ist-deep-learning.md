@@ -17,7 +17,7 @@ Wir setzen voraus, dass Sie die folgenden Begriffe schon einmal gesehen haben un
 
 Begriffe wie Gradientenabstieg, Loss-Funktion, Matrizen- und Tensorkalkül, latenter Raum, logistische Regression. Die Grundlagen von PyTorch. Was ein neuronales Netz ist, wie man fertige Modelle benutzt, wie man fertige Modelle verändert, und was die Besonderheiten bei Text und bei Bildern sind.
 
-Der grobe Plan in Stichworten: Geschichte (Perzeptron) – HuggingFace (fertige Modelle) – PyTorch (eigene Modelle) – logistische Regression (Softmax) – Gradientenabstieg und Backpropagation – Sparse Autoencoder und VAE für die Klassifikation von MNIST-Ziffern – NLP mit word2vec und Tokenizern – CNNs für MNIST – LLMs benutzen – GANs (wie DALL-E mini).
+Der grobe Plan in Stichworten: Geschichte (Perzeptron) – Hugging Face (fertige Modelle) – PyTorch (eigene Modelle) – logistische Regression (Softmax) – Gradientenabstieg und Backpropagation – Sparse Autoencoder und VAE für die Klassifikation von MNIST-Ziffern – NLP mit word2vec und Tokenizern – CNNs für MNIST – LLMs benutzen – GANs (wie DALL-E mini).
 
 ## Wieso Python eine Katastrophe ist
 

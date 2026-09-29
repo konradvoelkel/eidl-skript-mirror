@@ -99,7 +99,7 @@ Die Begriffe, die in Klausuraufgaben vorkommen, je in ein bis drei Sätzen, mit 
 
 **Weight Decay, L2-Regularisierung.** $\lambda \|W\|^2$ zum Loss, zieht Gewichte Richtung null; in PyTorch ein Parameter des Optimierers. [Autoencoder](part-representation-learning/14-autoencoder.md)
 
-**Early Stopping, Data Augmentation.** Aufhören, wenn der Testloss wieder steigt; Trainingsdaten durch labelerhaltende Transformationen vervielfachen. [Autoencoder](part-representation-learning/14-autoencoder.md)
+**Early Stopping, Data Augmentation.** Aufhören, wenn der Test-Loss wieder steigt; Trainingsdaten durch labelerhaltende Transformationen vervielfachen. [Autoencoder](part-representation-learning/14-autoencoder.md)
 
 **Reparametrisierungstrick.** Statt aus $\mathcal{N}(\mu_x, \sigma_x^2)$ zu samplen, sample $\varepsilon \sim \mathcal{N}(0, 1)$ und setze $y = \mu_x + \sigma_x \varepsilon$; dann ist $\varepsilon$ eine Konstante und der Gradient fließt durch $\mu_x$ und $\sigma_x$. [Variational Autoencoder](part-representation-learning/15-variational-autoencoder.md)
 

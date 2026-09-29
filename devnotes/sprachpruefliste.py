@@ -44,6 +44,12 @@ WURZEL = Path(__file__).resolve().parent.parent
 WORTLISTE = Path(__file__).resolve().parent / "sprachpruefliste-woerter.txt"
 PLATZ = ""  # Platzhalter für Code/Mathe: ein Wortzeichen, erzeugt keine Lücken
 
+# Lateinische Buchstaben mit Diakritika gehören ins Wortmuster: sonst zerfällt ein
+# zitierter Name wie „Buciluă“ in „Bucilu“ und „Řehůřeks“ in „eks“ — beides Wörter,
+# die es im Buch nicht gibt, die aber jede Rechtschreibliste anführen. Ausgenommen
+# sind U+00D7 (×) und U+00F7 (÷), die in den Bereichen liegen, aber keine Buchstaben sind.
+WORTZEICHEN = "A-Za-z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u024f"
+
 LANGER_SATZ = 35  # Wörter; darüber wird gelistet, nicht bewertet
 
 
@@ -68,6 +74,15 @@ def waehle(muster: str | None) -> list[Path]:
 
 
 # ----------------------------------------------------------------------------- Prosa
+def ist_adresse(text: str) -> bool:
+    """Ist dieser Linktext selbst eine Adresse oder ein Dateiname, keine Prosa?"""
+    t = text.strip()
+    if not t or " " in t:
+        return False
+    return bool(re.match(r"(?i)^(https?://|www\.)", t)
+                or re.match(r"(?i)^[\w~.-]+\.[a-z]{2,}(/|$)", t))
+
+
 def prosa_zeilen(text: str) -> list[str]:
     """Zeilenweise Prosa; Code, Mathe und Directives werden zu Platzhaltern.
 
@@ -106,7 +121,12 @@ def prosa_zeilen(text: str) -> list[str]:
         s = re.sub(r"\$\$.*?\$\$", PLATZ, s)         # einzeiliges $$…$$
         s = re.sub(r"(?<!\$)\$[^$]+\$(?!\$)", PLATZ, s)
         s = re.sub(r"`[^`]+`", PLATZ, s)
-        s = re.sub(r"\[([^\]]*)\]\([^)]*\)", r"\1", s)   # Linktext behalten, Ziel weg
+        # Linktext behalten, Ziel weg — aber ein Linktext, der selbst eine Adresse ist
+        # („[web.stanford.edu/~jurafsky/slp3/](…)“), wird Platzhalter. Sonst überlebt er
+        # die URL-Regel darunter (die braucht ein Schema) und zerfällt in „web“,
+        # „stanford“, „edu“, „jurafsky“ — Treffer, die keine Prosa sind.
+        s = re.sub(r"\[([^\]]*)\]\([^)]*\)",
+                   lambda m: PLATZ if ist_adresse(m.group(1)) else m.group(1), s)
         s = re.sub(r"https?://\S+", PLATZ, s)
         raus.append(s)
     return raus
@@ -225,7 +245,10 @@ def rechtschreibung(zeilen_je_datei: dict[str, list[str]]) -> dict[str, list[tup
         for nr, z in enumerate(zeilen, 1):
             # Ohne Bindestrich im Muster: aspell trennt „ASML-Aktienkurs“ ebenfalls in
             # zwei Token, und beide Seiten müssen dieselben Wörter sehen.
-            for m in re.finditer(r"[A-Za-zÄÖÜäöüß]+", z.replace(PLATZ, " ")):
+            # „$i$-te Komponente“: eine kleingeschriebene Endung direkt hinter Mathe
+            # oder Code ist eine Flexionsendung am Symbol, kein eigenes Wort.
+            z = re.sub(PLATZ + r"-[a-zäöüß]+", PLATZ, z)
+            for m in re.finditer(f"[{WORTZEICHEN}]+", z.replace(PLATZ, " ")):
                 vorkommen.setdefault(m.group(0), []).append((name, nr))
     woerter = sorted(vorkommen)
 

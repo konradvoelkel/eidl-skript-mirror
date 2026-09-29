@@ -35,7 +35,7 @@ Drei Datenpunkte im latenten Raum – klassisch, mit gleichem Rauschen $+\vareps
 300 Datenpunkte – ein klassischer Autoencoder lässt Löcher und Ausreißer, ein VAE zieht die Codes zur Standardnormalverteilung.
 :::
 
-Modelliere die Verteilung also mit einer Gaußschen Mischung im latenten Raum, in der die Störung $\varepsilon$ von den Daten abhängt: Zu jedem Datenpunkt $x \in D$ brauchen wir zusätzlich zu $\operatorname{enc}(x) \in L$ auch eine Standardabweichung $\sigma_x$ (bzw. besser noch eine Kovarianzmatrix $\operatorname{cov}(x)$), dann $\operatorname{dec}(\operatorname{enc}(x) + \varepsilon)$ mit $\varepsilon \sim \mathcal{N}(0, \sigma_x^2)$. Aber Sampling aus einer Verteilung, deren Parameter $\sigma_x$ von den Gewichten abhängen, lässt sich nicht ableiten. **Reparametrisierungstrick**: statt $\varepsilon \sim \mathcal{N}(0, \sigma_x^2)$ besser
+Modelliere die Verteilung also mit einer gaußschen Mischung im latenten Raum, in der die Störung $\varepsilon$ von den Daten abhängt: Zu jedem Datenpunkt $x \in D$ brauchen wir zusätzlich zu $\operatorname{enc}(x) \in L$ auch eine Standardabweichung $\sigma_x$ (bzw. besser noch eine Kovarianzmatrix $\operatorname{cov}(x)$), dann $\operatorname{dec}(\operatorname{enc}(x) + \varepsilon)$ mit $\varepsilon \sim \mathcal{N}(0, \sigma_x^2)$. Aber Sampling aus einer Verteilung, deren Parameter $\sigma_x$ von den Gewichten abhängen, lässt sich nicht ableiten. **Reparametrisierungstrick**: statt $\varepsilon \sim \mathcal{N}(0, \sigma_x^2)$ besser
 
 $$
 y := \operatorname{enc}(x) + \sigma_x \varepsilon, \qquad \varepsilon \sim \mathcal{N}(0, 1),
