@@ -11,11 +11,11 @@ Autoencoder, VAE, word2vec, GANs – alle diese Modelle haben einen *latenten Ra
 
 ### Arithmetik im Latent Space
 
-Der Klassiker bei word2vec: KING − MAN + WOMAN = QUEEN. Also ist WOMAN − MAN die Richtung „feminin“. Auch:
+Der Klassiker bei word2vec: $\text{KING} - \text{MAN} + \text{WOMAN} = \text{QUEEN}$. Also ist $\text{WOMAN} - \text{MAN}$ die Richtung „feminin“. Auch:
 
-* PARIS − FRANCE + ITALY = ROME (also PARIS − FRANCE die Richtung „Hauptstadt“),
-* WALKING − WALK + SWIMMING = SWAM (also WALKING − WALK die Richtung „Vergangenheit“ bzw. Flexion),
-* BIGGER − BIG = BIGGEST − BIGGER (also Steigerung der Intensität als Richtung).
+* $\text{PARIS} - \text{FRANCE} + \text{ITALY} = \text{ROME}$ (also $\text{PARIS} - \text{FRANCE}$ die Richtung „Hauptstadt“),
+* $\text{WALKED} - \text{WALK} + \text{SWIM} = \text{SWAM}$ (also $\text{WALKED} - \text{WALK}$ die Richtung „Vergangenheit“),
+* $\text{BIGGER} - \text{BIG} = \text{BIGGEST} - \text{BIGGER}$ (also Steigerung der Intensität als Richtung).
 
 Analog, aber in allen LLMs: Semantische Beziehungen werden zu *Richtungen* im latenten Raum, und Richtungen kann man addieren. Das ist keine Eigenschaft, auf die word2vec trainiert wurde, sie entsteht von selbst aus dem Kontext-Vorhersage-Training.
 
@@ -31,7 +31,7 @@ Beziehungen zwischen Wörtern als parallele Richtungen im Vektorraum (schematisc
 Figure 7 aus Bolukbasi et al. 2016 – Berufe, projiziert auf die Gender-Richtung.
 :::
 
-**Bolukbasi et al. 2016, *Man is to Computer Programmer as Woman is to Homemaker? Debiasing Word Embeddings***: Dieselbe Arithmetik findet auch MAN − WOMAN ≈ COMPUTER PROGRAMMER − HOMEMAKER. Die Embeddings enthalten die Stereotype des Trainingskorpus als Richtungen, und man kann sie messen – und, das ist der Beitrag des Papers, durch Projektion auf das orthogonale Komplement der Gender-Richtung teilweise entfernen (Abbildung oben).
+**Bolukbasi et al. 2016, *Man is to Computer Programmer as Woman is to Homemaker? Debiasing Word Embeddings***: Dieselbe Arithmetik findet auch $\text{MAN} - \text{WOMAN} \approx \text{COMPUTER PROGRAMMER} - \text{HOMEMAKER}$. Die Embeddings enthalten die Stereotype des Trainingskorpus als Richtungen, und man kann sie messen – und, das ist der Beitrag des Papers, durch Projektion auf das orthogonale Komplement der Gender-Richtung teilweise entfernen (Abbildung oben).
 
 ### Interpolation und Superposition
 
@@ -74,7 +74,7 @@ Der Generator eines GANs ist typischerweise gegeben durch eine Verteilung auf ei
 
 ### Autoencoder vs. VAE
 
-Der Encoder eines VAE kodiert ein Eingabebild $x$ als Paar $(v_x, \sigma_x)$, wobei $v_x \in \mathbb{R}^n$ ein latenter Vektor wie beim Autoencoder ist. Der Unterschied vom VAE zum AE liegt im Training: Statt $\operatorname{decode}(v_x)$ mit $x$ zu vergleichen, wird $\operatorname{decode}(v_x + \varepsilon)$ mit $x$ verglichen, wobei $\varepsilon$ Varianz $\sigma_x^2$ hat. Nach erfolgreichem Training ist dann auch $\operatorname{decode}(v_x) \approx x$, aber der Latent Space bzw. Decoder sieht anders aus als beim AE: Um jeden Code herum gibt es eine Umgebung, die ebenfalls zu einem ähnlichen Bild dekodiert.
+Der Encoder eines VAE kodiert ein Eingabebild $x$ als Paar $(\mu_x, \sigma_x)$, wobei $\mu_x \in \mathbb{R}^n$ ein latenter Vektor wie beim Autoencoder ist. Der Unterschied vom VAE zum AE liegt im Training: Statt $\operatorname{decode}(\mu_x)$ mit $x$ zu vergleichen, wird $\operatorname{decode}(\mu_x + \varepsilon)$ mit $x$ verglichen, wobei $\varepsilon$ Varianz $\sigma_x^2$ hat. Nach erfolgreichem Training ist dann auch $\operatorname{decode}(\mu_x) \approx x$, aber der Latent Space bzw. Decoder sieht anders aus als beim AE: Um jeden Code herum gibt es eine Umgebung, die ebenfalls zu einem ähnlichen Bild dekodiert.
 
 Häufig wird zusätzlich zum $+\varepsilon$-Trick auch noch ein Summand zur Loss-Funktion hinzugefügt, damit die Codes der Trainingsdaten im Latent Space ungefähr standardnormalverteilt sind (Variational Loss, siehe [Kapitel „Variational Autoencoder“](../part-representation-learning/15-variational-autoencoder.md)). So kann man später aus der Standardnormalverteilung im Latent Space sampeln und bleibt in der gelernten Verteilung.
 

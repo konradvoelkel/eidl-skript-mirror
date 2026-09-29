@@ -38,17 +38,17 @@ mit $g_t$ dem Gradienten des aktuellen Batches und typischerweise $\beta_1 = 0{,
 
 ### Idee: Adaptive Lernrate
 
-Der zweite Bestandteil von **Adam** (= Adaptive Moment Estimation) ist der adaptive Teil: Zusätzlich zu einer Heuristik zur besseren Schätzung der Gradienten der Loss-Funktion berechne die Quadrate – die Varianz des Gradienten, ebenfalls als exponentiell gewichtetes Mittel, komponentenweise:
+Der zweite Bestandteil von **Adam** (= Adaptive Moment Estimation) ist der adaptive Teil: Zusätzlich zu einer Heuristik zur besseren Schätzung der Gradienten der Loss-Funktion berechne die Quadrate – das mittlere Gradientenquadrat, also das *zweite Moment* (nicht die Varianz; dafür müsste man noch $m_t^2$ abziehen), ebenfalls als exponentiell gewichtetes Mittel, komponentenweise:
 
 $$
 v_t := \beta_2 v_{t-1} + (1 - \beta_2)\, g_t^2, \qquad w_{t+1} := w_t - \rho\, \frac{m_t}{\sqrt{v_t} + \epsilon},
 $$
 
-mit typischerweise $\beta_2 = 0{,}999$ und $\epsilon = 10^{-8}$ gegen Division durch null. Ändert sich der Gradient stark, gehe kleine Schritte (das Loss Landscape ist steil). Ändert sich der Gradient wenig, gehe große Schritte (das Loss Landscape ist flach). Diese Technik kommt von RMSProp (Root Mean Square Propagation). Der Effekt ist eine **Lernrate pro Gewicht**: Gewichte mit selten großen Gradienten (z.B. Embeddings seltener Wörter) bekommen größere Schritte.
+mit typischerweise $\beta_2 = 0{,}999$ und $\epsilon = 10^{-8}$ gegen Division durch null. Sind die Gradienten einer Koordinate durchweg groß, wird der Schritt dort gedämpft; sind sie durchweg klein, wird er verstärkt. Im Ergebnis ist $m_t / \sqrt{v_t}$ von der Größenordnung $1$, jeder Parameter macht also Schritte der Größenordnung $\rho$ – unabhängig davon, wie groß seine Gradienten absolut sind. Diese Technik kommt von RMSProp (Root Mean Square Propagation). Der Effekt ist eine **Lernrate pro Gewicht**: Gewichte mit selten großen Gradienten (z.B. Embeddings seltener Wörter) bekommen dadurch relativ größere Schritte.
 
 ### Adam oder was?
 
-Dahinter steckt also eine adaptive Lernrate, abhängig von der Varianz der Gradienten, einzeln für jedes Gewicht, sowie die Impuls-Heuristik zur verbesserten Gradientenschätzung. (Adam korrigiert außerdem die Schätzungen $m_t$, $v_t$ in den ersten Schritten für den Bias durch die Initialisierung mit null.) Wo geht das schief? Wenn die Lernrate nicht stark genug abgesenkt wird, findet die Optimierung nie das lokale Optimum und oszilliert darum herum. Deshalb kombiniert man Adam in der Praxis mit einem *Learning Rate Schedule*, der $\rho$ im Laufe des Trainings verkleinert.
+Dahinter steckt also eine adaptive Lernrate, abhängig von der bisherigen Größe der Gradienten, einzeln für jedes Gewicht, sowie die Impuls-Heuristik zur verbesserten Gradientenschätzung. (Adam korrigiert außerdem die Schätzungen $m_t$, $v_t$ in den ersten Schritten für den Bias durch die Initialisierung mit null.) Wo geht das schief? Wenn die Lernrate nicht stark genug abgesenkt wird, findet die Optimierung nie das lokale Optimum und oszilliert darum herum. Deshalb kombiniert man Adam in der Praxis mit einem *Learning Rate Schedule*, der $\rho$ im Laufe des Trainings verkleinert.
 
 ### Adam oder Muon?
 
@@ -72,7 +72,7 @@ Genau genommen liegt der Gradient der Loss-Funktion an einem Punkt des Gewichtsr
 
 * Die **euklidische Geometrie**, einfach $\mathbb{R}^n$ mit dem Standardskalarprodukt; dann kann man die Zahlen, die man ausrechnet, wie gehabt als Vektor in $\mathbb{R}^n$ auffassen. Das ist SGD.
 * Die **Riemannsche Geometrie**, die durch die Fisher-Informationsmatrix gegeben ist – der *Natural Gradient* (Amari). Die Fisher-Matrix ist die zweite Ableitung der relativen Entropie; Schritte werden so gemessen, wie stark sich die *Ausgabeverteilung* des Modells ändert, nicht die Gewichte.
-* Verschiedene andere sogenannte affine Geometrien; das ist ein aktives Forschungsgebiet in der Optimierungstheorie, Stichwort **Informationsgeometrie**. Z.B. Derun Zhou, Keisuke Yano, Mahito Sugiyama: *Dual Riemannian Newton Method on Statistical Manifolds* (2025), [arXiv:2511.11318](https://arxiv.org/pdf/2511.11318).
+* Verschiedene andere sogenannte affine Geometrien; das ist ein aktives Forschungsgebiet in der Optimierungstheorie, Stichwort **Informationsgeometrie**. Z.B. Derun Zhou, Keisuke Yano, Mahito Sugiyama: *Dual Riemannian Newton Method on Statistical Manifolds* (2025), [arXiv:2511.11318](https://arxiv.org/abs/2511.11318).
 
 Adam und Muon sind in diesem Bild billige Näherungen an eine bessere Geometrie des Gewichtsraums.
 
@@ -83,7 +83,9 @@ Schritten (ein langes, flaches Tal), Lernrate $\rho = 0{,}1$.
 
 1. Wie weit ist SGD nach drei Schritten gekommen?
 2. Wie weit kommt Momentum mit $v_t = \beta v_{t-1} + g_t$, $\beta = 0{,}9$ und
-   demselben $\rho$?
+   demselben $\rho$? Das ist die Form, die `torch.optim.SGD(momentum=0.9)` benutzt; sie
+   unterscheidet sich von der Fassung oben im Kapitel um den Faktor $(1 - \beta)$, der
+   dort das Mittel normiert. Mit der Kapitelfassung käme entsprechend ein Zehntel heraus.
    *Tipp: $v_1 = 1$, $v_2 = 1{,}9$, $v_3 = 2{,}71$ — Sie müssen nur noch aufsummieren.*
 3. Jetzt wechselt der Gradient das Vorzeichen: $g = (1, -1, 1)$. Was macht Momentum, und
    warum ist das in einer engen Schlucht erwünscht?
