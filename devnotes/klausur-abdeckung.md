@@ -13,7 +13,9 @@ Seit 2026-09-20 gibt es zusätzlich „Loss-Funktionen und Maximum Likelihood“
 die Kapitel*namen* in der Tabelle gelten unverändert, die Dateinummern ab „Backpropagation“ sind um eins höher.
 
 Die vier beim ersten Abgleich fehlenden Begriffe (Perzeptron ohne Bias, Early Stopping/Data Augmentation,
-Precision/Recall, `logvar`) wurden am 2026-09-17 in die Kapitel eingearbeitet.
+Precision/Recall, `logvar`) wurden am 2026-09-17 in die Kapitel eingearbeitet — **in der Tabelle unten stand
+trotzdem bis zum 2026-09-29 viermal „fehlt“**; nachgezogen bei der fachlichen Durchsicht, samt Nachprüfung im
+heutigen Text. Einzig `mAP` kommt im Buch tatsächlich nicht vor.
 
 | Klausurbegriff | Kapitel |
 |---|---|
@@ -26,7 +28,7 @@ Precision/Recall, `logvar`) wurden am 2026-09-17 in die Kapitel eingearbeitet.
 | Reparametrisierungstrick | VAE |
 | ReLU-Ableitung | Aktivierung/Univ. |
 | Sterbende Neuronen / Swish | Aktivierung/Univ. |
-| Perzeptron ohne Bias nur durch Ursprung | **fehlt** |
+| Perzeptron ohne Bias nur durch Ursprung | Neuron und Perzeptron, Glossar |
 | Wasserstein / Mode Collapse | GANs |
 | CBOW vs Skip-gram Richtung | word2vec |
 | Parameter Sharing | CNN |
@@ -58,13 +60,13 @@ Precision/Recall, `logvar`) wurden am 2026-09-17 in die Kapitel eingearbeitet.
 | Positionsembedding (gelernt oder fest) | RNN/Transformer |
 | Denoising AE: Rauschen auf Input, nicht Loss | Autoencoder |
 | L2-Regularisierung / Weight Decay | Autoencoder |
-| Early Stopping | **fehlt** |
+| Early Stopping | Autoencoder, Glossar |
 | Data Augmentation | LLMs |
 | Batch Normalization | Aktivierung/Univ., Autoencoder |
 | Sattelpunkt | Gradientenabstieg |
 | Lernrate zu groß / zu klein | Gradientenabstieg, Autoencoder |
 | Object Detection / YOLO / Segmentierung | Was ist DL, Vortrainierte |
-| Precision / Recall / mAP | **fehlt** |
+| Precision / Recall / mAP | Was ist DL, Anwendungsbeispiele, Glossar (**mAP** kommt im Buch nicht vor) |
 | COCO / ImageNet Pretraining | Was ist DL, Vortrainierte |
 | Kombinierter Loss (CE + Box-Regression) | Vortrainierte |
 | GRU / LSTM | RNN/Transformer |
@@ -72,7 +74,7 @@ Precision/Recall, `logvar`) wurden am 2026-09-17 in die Kapitel eingearbeitet.
 | Multimodal / Encoder-Decoder | Destillation, Was ist DL |
 | Finetuning | LLMs, GANs, Destillation, Vortrainierte, word2vec |
 | Conv2d/MaxPool2d Shapes (16*6*6) | CNN |
-| logvar im VAE | **fehlt** |
+| logvar im VAE | VAE, Glossar |
 | Hinge Loss | Gradientenabstieg |
 | Kreuzentropie = NLL = KL (bis auf Entropie) | LogReg, Autoencoder |
 | Sequenzielle Daten: RNN speichert vorherige Schritte | RNN/Transformer |
