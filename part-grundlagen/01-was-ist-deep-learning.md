@@ -38,7 +38,7 @@ Für maschinelles Lernen ist Python perfekt, weil
 * man damit alle **Prinzipien** schnell lernen kann, die man später immer noch in anderen Sprachen implementieren könnte;
 * damit trainierte Modelle (die **Gewichte**) unabhängig von Python zur Inferenz verwendet werden können.
 
-Der scheinbare Widerspruch löst sich auf, wenn man Python als *Steuersprache* betrachtet: Die eigentliche Arbeit – Matrixmultiplikationen auf Millionen von Zahlen – passiert in kompiliertem Code, oft auf der GPU. Python sagt nur, welche Operation als nächstes dran ist. Genau das ist die Idee der vektorisierten Programmierung mit NumPy, und PyTorch treibt sie weiter.
+Der scheinbare Widerspruch löst sich auf, wenn man Python als *Steuersprache* betrachtet: Die eigentliche Arbeit – Matrixmultiplikationen auf Millionen von Zahlen – passiert in kompiliertem Code, oft auf der GPU. Python sagt nur, welche Operation als Nächstes dran ist. Genau das ist die Idee der vektorisierten Programmierung mit NumPy, und PyTorch treibt sie weiter.
 
 :::{admonition} Lesetext zum Einstieg
 :class: tip

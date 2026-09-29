@@ -50,7 +50,7 @@ $$
 \tau(y) := y\,\Phi(y) \quad \text{(GELU, Gaussian Error Linear Unit)},
 $$
 
-wobei $\Phi$ die Verteilungsfunktion der Standardnormalverteilung ist. Beide sind im negativen Bereich nicht strikt null, sondern haben eine kleine Delle unter der Achse, und die Ableitung verschwindet nur asymptotisch. GELU steht in den Transformern der BERT- und GPT-2-Generation und in Vision Transformern; die heutigen großen Sprachmodelle (Llama, Mistral, Qwen) nehmen statt dessen Swish/SiLU, eingebaut in einen *gated* Feed-Forward-Block, den man SwiGLU nennt.
+wobei $\Phi$ die Verteilungsfunktion der Standardnormalverteilung ist. Beide sind im negativen Bereich nicht strikt null, sondern haben eine kleine Delle unter der Achse, und die Ableitung verschwindet nur asymptotisch. GELU steht in den Transformern der BERT- und GPT-2-Generation und in Vision Transformern; die heutigen großen Sprachmodelle (Llama, Mistral, Qwen) nehmen stattdessen Swish/SiLU, eingebaut in einen *gated* Feed-Forward-Block, den man SwiGLU nennt.
 
 Welche Aktivierungsfunktionen in der Praxis genutzt wurden, listete [paperswithcode](https://web.archive.org/web/20250716173325/https://paperswithcode.com/methods/category/activation-functions) – die Seite gibt es nicht mehr, der Link führt auf den Schnappschuss vom Juli 2025 im Internet Archive.
 

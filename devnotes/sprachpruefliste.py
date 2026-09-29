@@ -161,6 +161,9 @@ PRUEFUNGEN = [
     ("gerades Anführungszeichen (deutsch sind „ und “)", r'"'),
     ("Geviertstrich — (im Buch sonst der Halbgeviertstrich –)", r"—"),
     ("Bindestrich zwischen Leerzeichen (als Gedankenstrich gehört – hin)", r"(?<= )-(?= )"),
+    # „--“ ist der ASCII-Notbehelf für den Gedankenstrich. Die Regel darüber findet
+    # ihn nicht: Sie verlangt ein Leerzeichen *direkt* hinter dem Bindestrich.
+    ("doppelter Bindestrich als Gedankenstrich (– gehört hin)", r"(?<= )--+(?= )"),
     ("doppeltes Leerzeichen", r"(?<=\S)  +(?=\S)"),
     ("Leerzeichen vor Satzzeichen", r" [,.;:!?](?=\s|$)"),
     ("drei Punkte als … statt ...", r"\.\.\."),

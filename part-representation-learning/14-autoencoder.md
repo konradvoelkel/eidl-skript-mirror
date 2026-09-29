@@ -60,7 +60,7 @@ MNIST besteht aus $28 \times 28$ Graustufen-Bildern handgeschriebener Ziffern 0�
 
 Zunächst: Kompression und Klassifikation, mit den Zielen *Accuracy erhöhen* und *Overfitten vermeiden*. Variationsmöglichkeiten dafür gibt es an drei Stellen: die Daten modifizieren (putzen?), die Modellarchitektur (tiefer?), und die Trainings-Hyperparameter (wie genau wird gelernt?).
 
-### Code-Beispiel: Modell-Architektur
+### Code-Beispiel: Modellarchitektur
 
 Ein Autoencoder in PyTorch ist ein `nn.Module` mit zwei `nn.Sequential`-Blöcken. Schematisch:
 

@@ -23,7 +23,7 @@ Die Task-Seite gruppiert nach Modalität. Zur Orientierung, in der Reihenfolge v
 
 Die Namen sind das Vokabular, in dem Modellkarten, Papers und Stellenanzeigen reden.
 
-### Hugging Face … ?
+### Hugging Face …?
 
 Surfen Sie ruhig weiter auf huggingface.co. Hier ein paar Fakten zur Einordnung:
 

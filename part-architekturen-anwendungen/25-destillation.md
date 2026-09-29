@@ -118,7 +118,7 @@ So entstehen „Reasoning“-Modelle, die kompakt das können, wofür der Lehrer
 
 ## Übung
 
-Ein Lehrermodell gibt für drei Klassen die Logits $(3, 1, 0)$ aus.
+Ein Lehrer-Modell gibt für drei Klassen die Logits $(3, 1, 0)$ aus.
 
 1. Berechnen Sie die Softmax-Ausgabe bei $T = 1$ und bei $T = 2$ (also mit $z_j / T$ im
    Exponenten).

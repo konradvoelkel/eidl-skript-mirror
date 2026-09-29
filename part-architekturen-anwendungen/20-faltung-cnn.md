@@ -101,7 +101,7 @@ Was man dabei beobachtet: Ein Faltungslayer, den man auf solchen Zeitreihen *ler
 
 ### Das Faltungstheorem
 
-Für zwei stetige Funktionen $f, g$ und die stetige Faltung (Integral statt Summe) gilt für die Fouriertransformation $\mathcal{F}$:
+Für zwei stetige Funktionen $f, g$ und die stetige Faltung (Integral statt Summe) gilt für die Fourier-Transformation $\mathcal{F}$:
 
 $$
 \mathcal{F}(f \ast g) = \mathcal{F}(f) \cdot \mathcal{F}(g),
