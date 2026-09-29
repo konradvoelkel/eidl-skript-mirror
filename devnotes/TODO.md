@@ -44,8 +44,13 @@ Hintergrundrauschen.
      war sechs Wochen älter als das installierte Theme — **kein Deck baute**. `latexmk`
      meldet bei vorhandenem PDF „up-to-date“, deshalb gab `slides/build.sh` 15-mal `ok`
      aus und einmal `FEHLER`. Einmal `sudo mktexlsr` genügt (steht in
-     `slides/README.md`). *Offen:* `build.sh` sollte einen ausgefallenen Bau erkennen
-     statt „ok“ zu melden.
+     `slides/README.md`); auf dieser Maschine liegt das Theme seit dem 2026-09-29 in
+     `~/texmf/tex/latex/hhubeamer/`, weil `mktexlsr` Root braucht. Danach bauen alle
+     Decks von Null, 0 zu volle Rahmen, Seitenzahlen unverändert.
+     ***Offen, zwei kleine Sachen an `slides/build.sh`:*** (a) Der Default-Glob `*VL*.tex`
+     trifft das Vorstellungs-Deck nicht — dort saßen drei der acht Folienbefunde, und es
+     ist das, was Studierende vor der Anmeldung sehen. (b) Ein ausgefallener Bau meldet
+     `ok`, weil `latexmk` bei vorhandenem PDF „up-to-date“ sagt.
    * **Kapitelfehler wandern in die Decks.** Drei der acht Folienbefunde waren
      Durchreichungen aus dem Buch (dieselben Stellen wie R7, R12, E2). Wer am Buch
      korrigiert, sucht es in `slides/` gleich mit.

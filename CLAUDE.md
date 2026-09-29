@@ -145,9 +145,17 @@ Der Ton ist knapp und präzise:
   `labeln`/`gelabelte`, `overfittet`, `flippen`, `quantisierte`, `Tokenisiere`. Gezählt am
   2026-09-29: 300 Vorkommen in 54 Formen. Eine Eindeutschung („feinabstimmen“) wäre
   schlechter, und `sampeln` ist die Form, die der Duden führt. **Nicht neu verhandeln.**
-* **Der Gedankenstrich ist der Halbgeviertstrich `–` mit Spatien, ausnahmslos.** Der
-  Geviertstrich `—` ist die englische Form; die letzten 14 sind am 2026-09-29 ersetzt
-  worden. `devnotes/sprachpruefliste.py` hält das auf null — samt `--`, dem ASCII-Notbehelf.
+* **Der Gedankenstrich ist der Halbgeviertstrich `–` mit Spatien.** Der Geviertstrich `—`
+  ist die englische Form. **Gilt für alles, was veröffentlicht wird:** die Kapitel,
+  `glossar.md`, `index.md` und die Foliensätze (dort ist `--` der Halbgeviertstrich und
+  `---` der Geviertstrich), dazu `BRANDING.md` und `slides/README.md`. Am 2026-09-29
+  ersetzt: 14 im Buch, 316 in den Decks. `sprachpruefliste.py` und `folienpruefliste.py`
+  halten Buch und Folien auf null, samt `--` als ASCII-Notbehelf im Fließtext.
+
+  **Nicht** betroffen sind die Arbeitsnotizen: diese Datei und `devnotes/` benutzen den
+  Geviertstrich seit Anfang an (59 Stellen am 2026-09-29) und behalten ihn. Wer das
+  ändern will, ändert es als eigene Entscheidung, nicht als Nebenwirkung — und dann in
+  einem Rutsch.
 * **Vor „und“ und „oder“ steht in einer Aufzählung kein Komma.** Auch nicht bei
   nachgetragenen Gliedern („… sein oder ReLU.“) — am 2026-09-29 für alle zehn Stellen so
   entschieden. `devnotes/grammatikpruefung.py` meldet Rückfälle (`KOMMA_VOR_UND_ODER`).
