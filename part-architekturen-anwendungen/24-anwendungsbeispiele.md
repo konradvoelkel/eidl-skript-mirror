@@ -15,7 +15,7 @@ Drei Beispiele, wie sich die Bausteine aus den vorigen Kapiteln zu Anwendungen z
 
 Wir überlegen gemeinsam: Wie implementiert man eine semantische Suche im Gewand eines Chatbots?
 
-**Vorbereitung**: Wandle die vorhandene HTML-FAQ um in JSON (`beautifulsoup`). Tokenisiere die Fragen und wandle sie in Vektoren um mit einem LLM (jede Frage ein Vektor, Weg 2 aus Kapitel 11).
+**Vorbereitung**: Wandle die vorhandene HTML-FAQ um in JSON (`beautifulsoup`). Tokenisiere die Fragen und wandle sie in Vektoren um mit einem LLM (jede Frage ein Vektor, Weg 2 aus dem [Kapitel „LLMs benutzen“](21-llms-benutzen.md)).
 
 **Anwendung**: Tokenisiere den Nutzerinput und wandle ihn in einen Vektor um mit demselben LLM. Vergleiche mit Kosinus-Ähnlichkeit den Inputvektor zu den Fragenvektoren aus der Datenbank, zeige die Top-3-Treffer an. Zeige zum Top-Treffer die Antwort aus der Datenbank.
 
