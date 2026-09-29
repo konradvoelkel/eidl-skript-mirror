@@ -39,8 +39,8 @@ uv run devnotes/check_ci_yaml.py          # vor jedem Push, wenn .gitlab-ci.yml 
 uv run devnotes/check_doku.py             # prüft diese Datei und devnotes/ gegen das Repo
 ```
 
-Erwartung eines gesunden Laufs (Stand 2026-09-27, nach der fachlichen Durchsicht der
-Kapitel 01–05): HTML ohne Warnungen, PDF **113 Seiten A4**, 0 LaTeX-Fehler, 0 fehlende
+Erwartung eines gesunden Laufs (Stand 2026-09-29, nach der fachlichen Durchsicht der
+Kapitel 01–09 und 11–13): HTML ohne Warnungen, PDF **113 Seiten A4**, 0 LaTeX-Fehler, 0 fehlende
 Glyphen, 5 überlange Zeilen. Die `--min-pages`-Untergrenze
 soll einen *abgebrochenen* Lauf fangen, nicht eine gewollte Kürzung — sie steht deshalb
 deutlich unter der tatsächlichen Seitenzahl, in der CI auf demselben Wert.
