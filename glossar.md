@@ -29,13 +29,13 @@ Die Begriffe, die in Klausuraufgaben vorkommen, je in ein bis drei Sätzen, mit 
 
 **Linear trennbar.** Zwei Klassen, die eine Hyperebene trennt. Nur solche kann ein einzelnes Perzeptron lernen; XOR ist das Gegenbeispiel. [Neuron und Perzeptron](part-grundlagen/02-neuron-perzeptron.md)
 
-**Perzeptronregel und Konvergenz.** $w_{\text{neu}} = w + r\,(y - f(x))\,x$. Bei linear trennbaren Daten findet die Regel nach endlich vielen Fehlern eine trennende Hyperebene; sonst terminiert sie nie. [Das Perzeptron trainieren](part-grundlagen/03-perzeptron-trainieren.md)
+**Perzeptronregel und Konvergenz.** $w_{\text{neu}} = w + \rho\,(y - f(x))\,x$. Bei linear trennbaren Daten findet die Regel nach endlich vielen Fehlern eine trennende Hyperebene; sonst terminiert sie nie. [Das Perzeptron trainieren](part-grundlagen/03-perzeptron-trainieren.md)
 
 **Verallgemeinertes Perzeptron.** Skalarprodukt, dann Aktivierungsfunktion $\tau$: lineare Regression ($\tau = \operatorname{id}$), Perzeptron (Sprung), logistische Regression ($\tau = \sigma$). [Das Perzeptron trainieren](part-grundlagen/03-perzeptron-trainieren.md)
 
 **Warum Schichten ohne Nichtlinearität nichts bringen.** Ein Produkt von Matrizen ist eine Matrix; gestapelte lineare Regressionen sind eine lineare Regression. [Das Perzeptron trainieren](part-grundlagen/03-perzeptron-trainieren.md)
 
-**Tensor.** Für uns ein mehrdimensionales Array. Rang 0 ist ein Skalar, Rang 1 ein Vektor, Rang 2 eine Matrix. Die erste Achse ist in PyTorch der Batch; `reshape` ändert nur die Klammerung, nicht die Daten. [Tensoren](part-grundlagen/05-tensoren.md)
+**Tensor.** Für uns ein mehrdimensionales Array. Die Zahl der Achsen heißt *Stufe* oder, englisch, *rank*: Rang 0 ist ein Skalar, Rang 1 ein Vektor, Rang 2 eine Matrix (nicht zu verwechseln mit dem Rang einer Matrix aus der linearen Algebra). Die erste Achse ist in PyTorch fast immer der Batch – außer bei `nn.RNN`, `nn.LSTM`, `nn.GRU` und `nn.Transformer`, die voreingestellt `(seq, batch, feature)` erwarten. `reshape` ändert nur die Klammerung, nicht die Daten. [Tensoren](part-grundlagen/05-tensoren.md)
 
 ## Logistische Regression und Loss
 
@@ -63,7 +63,7 @@ Die Begriffe, die in Klausuraufgaben vorkommen, je in ein bis drei Sätzen, mit 
 
 **Sattelpunkt.** Ein Punkt mit Gradient null, der in einer Richtung Minimum und in einer anderen Maximum ist. In hohen Dimensionen häufiger als lokale Minima; Momentum hilft, ihn zu verlassen. [Optimierer](part-architekturen-anwendungen/26-optimierer.md)
 
-**Momentum, Adam.** Momentum mittelt Gradienten über Schritte, Adam passt zusätzlich die Lernrate pro Gewicht an die Varianz der Gradienten an. Faustregel im Kurs: Adam statt SGD. [Optimierer](part-architekturen-anwendungen/26-optimierer.md)
+**Momentum, Adam.** Momentum mittelt Gradienten über Schritte, Adam passt zusätzlich die Lernrate pro Gewicht an die bisherige Größe der Gradienten an (mittleres Gradientenquadrat). Faustregel im Kurs: Adam statt SGD. [Optimierer](part-architekturen-anwendungen/26-optimierer.md)
 
 ## Backpropagation und Autograd
 
