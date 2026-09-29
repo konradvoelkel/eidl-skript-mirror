@@ -12,6 +12,25 @@ latexmk -lualatex "Einführung in Deep Learning 2026 VL 01 Was ist Deep Learning
 Gebraucht wird das HHU-Beamer-Theme (`hhubeamer`) unter
 `/usr/share/texmf/tex/latex/beamer/themes/` und die Schrift Source Sans Pro.
 
+**Wenn der Bau „File `beamerthemehhubeamer.sty' not found“ meldet, obwohl die Datei da
+liegt**, ist die kpathsea-Datenbank älter als das Theme. `/usr/share/texmf` ist in `TEXMF`
+mit `!!` eingetragen, und das heißt: nur die Datenbank befragen, nie die Platte ansehen.
+Am 2026-09-29 war `/var/lib/texmf/ls-R-TEXMFMAIN` vom 31. März, das Theme vom 11. Mai –
+kein Deck baute, und `latexmk` verschleierte es, weil es bei vorhandenem PDF
+„up-to-date“ meldet statt neu zu bauen. Abhilfe:
+
+```sh
+sudo mktexlsr
+```
+
+Ohne Root-Rechte behilft man sich mit einer Kopie **außerhalb** der `!!`-Bäume – ein Pfad
+in `TEXINPUTS`, der in einen `!!`-Baum zeigt, hilft nämlich nicht:
+
+```sh
+cp -r /usr/share/texmf/tex/latex/beamer/themes/hhubeamer /tmp/
+TEXINPUTS="/tmp/hhubeamer//:" sh build.sh
+```
+
 ## Konventionen
 
 * `Einführung in Deep Learning 2026 header.tex` ist der gemeinsame Header

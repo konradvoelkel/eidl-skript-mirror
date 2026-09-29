@@ -29,7 +29,7 @@
       68--85 & Folie 15      & \textbf{Notebook: Faltung live}\\
       85--90 & Folie 16      & Ausblick\\
     \end{tabular}\\[4pt]
-    Das Notebook \texttt{VL\_10\_convolutions.ipynb} zeigen, nicht vorlesen --- 2025 hat
+    Das Notebook \texttt{VL\_10\_convolutions.ipynb} zeigen, nicht vorlesen -- 2025 hat
     es 26 Minuten gekostet. Die Live-Änderung am 2D-Filter ist der Höhepunkt.}
 \end{frame}
 
@@ -43,7 +43,7 @@
 
   \note{Das Übungsblatt aus der Zeit vor der Pause (Faltung) ist erst nächsten Mittwoch fällig;
     das nächste Blatt kommt dann heraus.
-    Kurzer Rückblick: Wir haben Sequenzen gemacht, heute Bilder --- und am Ende sehen wir,
+    Kurzer Rückblick: Wir haben Sequenzen gemacht, heute Bilder -- und am Ende sehen wir,
     dass beides dasselbe Prinzip ist, nur mit anderer Nachbarschaft.
     AlexNet aus VL 1 ist genau das hier.}
 \end{frame}
@@ -55,7 +55,7 @@
     \includegraphics[width=0.78\textwidth]{vl10-blur-edges.png}
   \end{center}
 
-  \note{Jeder Pixel wird durch einen gewichteten Mittelwert seiner Nachbarn ersetzt ---
+  \note{Jeder Pixel wird durch einen gewichteten Mittelwert seiner Nachbarn ersetzt --
     das ist eine Faltung. Original minus weichgezeichnet lässt genau die Kanten übrig
     („make a difference“).
     Wer GIMP oder Photoshop benutzt hat, kennt das Ergebnis, ohne den Namen zu kennen.}
@@ -71,11 +71,11 @@
     einer \emph{bestimmten Orientierung} antworten.
   \end{center}
 
-  \note{Lokale Kantendetektoren --- und genau die kommen in den ersten Schichten eines
+  \note{Lokale Kantendetektoren -- und genau die kommen in den ersten Schichten eines
     trainierten CNN von selbst heraus. Das ist eine der schönsten Übereinstimmungen
     zwischen Biologie und Deep Learning.
     Das klassische Bild dazu steht im Wikipedia-Artikel „Orientation column“ (CC-BY-SA),
-    im Skript verlinkt --- bei Bedarf im Browser zeigen.}
+    im Skript verlinkt -- bei Bedarf im Browser zeigen.}
 \end{frame}
 
 \begin{frame}
@@ -109,7 +109,7 @@
 
   \note{Das Flippen ist der einzige Unterschied zwischen Faltung und Korrelation, und für
     symmetrische Filter gibt es gar keinen.
-    Pointe, die später wichtig wird: PyTorch lässt das Flippen weg --- und weil die Filter
+    Pointe, die später wichtig wird: PyTorch lässt das Flippen weg -- und weil die Filter
     \emph{gelernt} werden, ist das völlig egal. Das Netz lernt eben den gespiegelten
     Filter.}
 \end{frame}
@@ -125,11 +125,11 @@
 
   \bigskip
   \begin{center}
-    \normalsize Wenige Parameter --- und Translationsäquivarianz.
+    \normalsize Wenige Parameter -- und Translationsäquivarianz.
   \end{center}
 
   \note{Zwei Konsequenzen: Die Schicht hat nur $2n+1$ Parameter, egal wie lang das Signal
-    ist --- ein MLP bräuchte eine Gewichtsmatrix in Signallänge. Und: Verschiebt man das
+    ist -- ein MLP bräuchte eine Gewichtsmatrix in Signallänge. Und: Verschiebt man das
     Signal, verschiebt sich die Antwort mit.
     Das ist der Grund, warum CNNs mit Bildern so viel besser umgehen als MLPs.}
 \end{frame}
@@ -143,7 +143,7 @@
 
   \note{ASML-Schlusskurse 2020--2025. Delta lässt das Signal unverändert, Kasten und Gauß
     glätten (gleitender Mittelwert), die Difference of Gaussians hebt Änderungen hervor
-    --- das ist ein Kantendetektor in 1D.
+    -- das ist ein Kantendetektor in 1D.
     Wer mag, kann hier schon fragen: Was wäre der Filter, der Kanten in einem Bild findet?}
 \end{frame}
 
@@ -157,7 +157,7 @@
     \normalsize Average-Pooling, Max-Pooling
   \end{center}
 
-  \note{Pooling ist Dimensionsreduktion \emph{ohne Parameter} --- stumpfes Downsampling.
+  \note{Pooling ist Dimensionsreduktion \emph{ohne Parameter} -- stumpfes Downsampling.
     Max-Pooling macht das Netz ein Stück weit translationsinvariant: Es ist egal, wo genau
     im Pool das Maximum lag.
     Alternativ kann man den Stride direkt in der Faltung verwenden (strided convolution),
@@ -175,7 +175,7 @@
     $\longrightarrow [\max(a,b,c), \max(b,c,d)]$
   \end{center}
 
-  \note{An der Tafel oder im Dialog durchspielen --- aus vier Werten werden zwei oder drei,
+  \note{An der Tafel oder im Dialog durchspielen -- aus vier Werten werden zwei oder drei,
     je nach Größe und Stride. Mehr ist an Pooling wirklich nicht dran.}
 \end{frame}
 
@@ -194,7 +194,7 @@
 
   \note{Hier lohnt eine kleine Tafelskizze: das Filterfenster über dem Bild, das an jeder
     Position dasselbe Skalarprodukt bildet.
-    Und dann GIMP: Filter $\to$ Allgemein $\to$ Faltungsmatrix --- dort trägt man die
+    Und dann GIMP: Filter $\to$ Allgemein $\to$ Faltungsmatrix -- dort trägt man die
     neun Werte selbst ein und sieht das Ergebnis sofort.}
 \end{frame}
 
@@ -205,7 +205,7 @@
     \includegraphics[width=0.66\textwidth]{vl10-faltungsmatrix.png}
   \end{center}
 
-  \note{Identität, Weichzeichnen (Mittelwert), Schärfen, Kanten --- dieselben vier, die
+  \note{Identität, Weichzeichnen (Mittelwert), Schärfen, Kanten -- dieselben vier, die
     man in GIMP eintippen kann.
     Frage in den Raum: Welche neun Zahlen stehen wohl im Kanten-Filter? Die Antwort
     (Mitte positiv, Rand negativ, Summe null) kann man gemeinsam finden.}
@@ -221,11 +221,11 @@
     $C_{\text{out}}$ Filter $\to$ $C_{\text{out}}$ Feature Maps
   \end{center}
 
-  \note{Der Filter summiert über alle Eingabekanäle --- das ist wichtig und wird oft
+  \note{Der Filter summiert über alle Eingabekanäle -- das ist wichtig und wird oft
     falsch gedacht.
     Ein $1\times1$-Filter schaut nur auf einen Pixel, aber über alle Kanäle: eine lineare
     Umrechnung im Kanalraum.
-    Hier den Rückbezug zu VL 3 machen: \texttt{(32, 3, 28, 28)} --- Batch, Kanäle, Höhe,
+    Hier den Rückbezug zu VL 3 machen: \texttt{(32, 3, 28, 28)} -- Batch, Kanäle, Höhe,
     Breite.}
 \end{frame}
 
@@ -243,7 +243,7 @@
     \normalsize $28 \to 24 \to 12 \to 8 \to 4$, \quad $16 \cdot 4 \cdot 4 = 256$
   \end{center}
 
-  \note{Die Zahl im \texttt{nn.Linear} muss man ausrechnen --- das ist der häufigste
+  \note{Die Zahl im \texttt{nn.Linear} muss man ausrechnen -- das ist der häufigste
     Shape-Fehler beim Bau eines CNN. Mit \texttt{kernel\_size=3} statt 5 wären es
     $28 \to 26 \to 13 \to 11 \to 5$, also $16 \cdot 5 \cdot 5$.
     Nachgerechnet: Das Netz aus dem Skript liefert für einen $1\times1\times28\times28$-Batch
@@ -272,7 +272,7 @@
   \frametitle{Bis nächste Woche}
 
   \begin{center}
-    \Large Nächste Woche: Autograd --- und LLMs praktisch benutzen.
+    \Large Nächste Woche: Autograd -- und LLMs praktisch benutzen.
   \end{center}
 
   \note{Das nächste Übungsblatt (LLMs benutzen) kommt nächste Woche raus; das laufende Blatt

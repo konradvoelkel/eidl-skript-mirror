@@ -30,7 +30,7 @@
       85--90 & Folie 19      & Übungsblatt\\
     \end{tabular}\\[4pt]
     Der Ausflug ist der anspruchsvollste Teil der Sitzung und lebt von der Tafel.
-    2025 war der Stoff nach gut einer Stunde durch und der Rest wurde Vorgriff ---
+    2025 war der Stoff nach gut einer Stunde durch und der Rest wurde Vorgriff --
     lieber den Ausflug langsamer machen als vorzugreifen.}
 \end{frame}
 
@@ -40,7 +40,7 @@
   \begin{center}
     \Large
     Bisher: ein Neuron, das wir selbst trainieren.\\[14pt]
-    Heute: Modelle, die \emph{andere} trainiert haben --- und die Datenstruktur dahinter.
+    Heute: Modelle, die \emph{andere} trainiert haben -- und die Datenstruktur dahinter.
   \end{center}
 
   \note{Das Perzeptron-Blatt ist abgegeben, das nächste kommt raus.
@@ -64,7 +64,7 @@
   \end{itemize}
 
   \note{Der Hub ist ein kommerzielles Angebot, aber die Modelle und Libraries darauf sind
-    größtenteils offen --- und für uns die bequemste Art, an Gewichte zu kommen.
+    größtenteils offen -- und für uns die bequemste Art, an Gewichte zu kommen.
     Ende 2023 mit etwa 4,5 Mrd. \$ bewertet.
     2025 hat hier der Vergleich Likes gegen Downloads gut funktioniert: Likes sagen, was
     die Community feiert, Downloads, was tatsächlich benutzt wird.}
@@ -83,7 +83,7 @@
   \end{center}
 
   \note{Jetzt in den Browser: huggingface.co/tasks. Der Rundgang dient nicht dem
-    Verständnis der Modelle, sondern dem \emph{Vokabular} --- das ist die Sprache, in der
+    Verständnis der Modelle, sondern dem \emph{Vokabular} -- das ist die Sprache, in der
     Modellkarten, Papers und Stellenanzeigen reden.
     Audio, Tabular und Reinforcement Learning klammern wir im Kurs aus, das hier ansagen.}
 \end{frame}
@@ -101,7 +101,7 @@
   \item[Zero-Shot] Klassen als Text \hfill {\small CLIP-ViT}
   \end{description}
 
-  \note{Im Browser jeweils ein Beispiel live zeigen --- die Task-Seiten haben Widgets.
+  \note{Im Browser jeweils ein Beispiel live zeigen -- die Task-Seiten haben Widgets.
     Vokabel erklären: \emph{Zero-Shot} heißt ohne gelabelte Daten für die neue Aufgabe,
     \emph{One-Shot} mit einem Sample, \emph{Few-Shot} mit einigen wenigen.
     2025 kam die Frage, ob Object Detection ein Spezialfall von Image Classification sei.
@@ -119,7 +119,7 @@
   \end{description}
 
   \note{Fill-Mask ist die interessanteste Zeile: Das ist genau die Aufgabe, mit der
-    BERT-artige Modelle \emph{vortrainiert} werden --- Lücke rein, vorhersagen lassen.
+    BERT-artige Modelle \emph{vortrainiert} werden -- Lücke rein, vorhersagen lassen.
     Diese Idee kommt bei word2vec (VL 9) wieder.
     DistilBERT ist ein destilliertes Modell; Destillation ist VL 15.}
 \end{frame}
@@ -145,7 +145,7 @@ print(tokenizer.decode(outputs[0], skip_special_tokens=True))
     Das ist nachgerechnet, der Satz stimmt wörtlich.
     WMT19 ist nach der Konferenz benannt (Workshop on Machine Translation).
     \texttt{from\_pretrained} lädt beim ersten Aufruf die Gewichte aus dem Hub und cached
-    sie lokal --- das erste Mal dauert.}
+    sie lokal -- das erste Mal dauert.}
 \end{frame}
 
 \begin{frame}
@@ -161,7 +161,7 @@ print(tokenizer.decode(outputs[0], skip_special_tokens=True))
   \end{center}
 
   \note{Das Modell rechnet nur mit Zahlen; der Tokenizer ist die Übersetzung in beide
-    Richtungen. \texttt{return\_tensors="pt"} heißt: gib mir PyTorch-Tensoren --- damit
+    Richtungen. \texttt{return\_tensors="pt"} heißt: gib mir PyTorch-Tensoren -- damit
     sind wir beim zweiten Thema.
     Kurzer Ausblick, falls die Frage kommt: Warum nicht Wörter als Atome? Weil das
     Vokabular explodiert und unbekannte Wörter keine Repräsentation hätten. Details in VL 10.}
@@ -183,10 +183,10 @@ input_ids = input_ids.to(device)
     Modell \emph{und} Daten müssen auf dasselbe Gerät.
   \end{center}
 
-  \note{Der häufigste Anfängerfehler ist, nur eines von beiden zu verschieben --- die
+  \note{Der häufigste Anfängerfehler ist, nur eines von beiden zu verschieben -- die
     Fehlermeldung dazu ist aber eindeutig.
     Auf AMD heißt es ROCm, der Python-Befehl bleibt derselbe; auf macOS gibt es MPS.
-    Wir programmieren kein CUDA, nur den Wrapper PyTorch --- das 2025 ausdrücklich
+    Wir programmieren kein CUDA, nur den Wrapper PyTorch -- das 2025 ausdrücklich
     versprochen.}
 \end{frame}
 
@@ -205,7 +205,7 @@ pip install 'transformers[torch]'
   \end{center}
 
   \note{Handzeichen einsammeln: Wer bekommt lokal \texttt{import torch} zum Laufen?
-    2025 waren es zwei Personen --- deshalb Colab ausdrücklich als gleichwertigen Weg
+    2025 waren es zwei Personen -- deshalb Colab ausdrücklich als gleichwertigen Weg
     anbieten, es gibt dort begrenzte GPU-Zeit im Browser.
     Wer \texttt{uv} kennt: erledigt Umgebung und Pakete in einem Schritt.
     Für CUDA: \texttt{nvidia-smi} zeigt Treiber und maximale CUDA-Version, dann den
@@ -224,8 +224,8 @@ pip install 'transformers[torch]'
   \end{itemize}
 
   \note{Array: Daten gleichen Typs, fortlaufend im Speicher.
-    Tensor, je nachdem wen man fragt: Physiker --- etwas, das sich tensoriell
-    transformiert; Mathematiker --- Element eines Tensorproduktraums; Informatiker ---
+    Tensor, je nachdem wen man fragt: Physiker -- etwas, das sich tensoriell
+    transformiert; Mathematiker -- Element eines Tensorproduktraums; Informatiker --
     ein fancy Wort für Array.
     Torch-Tensor: Daten gleichen \texttt{dtype}, fortlaufend, potentiell im GPU-Speicher,
     optimiert für Gradientenabstieg (Attribut \texttt{grad}).}
@@ -243,7 +243,7 @@ pip install 'transformers[torch]'
     teilt sich den Speicher mit dem NumPy-Array.
   \end{center}
 
-  \note{Kein Kopieren, kein zusätzlicher Speicher --- eine Änderung am einen ist eine
+  \note{Kein Kopieren, kein zusätzlicher Speicher -- eine Änderung am einen ist eine
     Änderung am anderen. Das ist Segen und Falle zugleich.
     Empfehlung: das PyTorch-Tutorial „Tensors“ einmal durchklicken, steht im Skript verlinkt.}
 \end{frame}
@@ -264,7 +264,7 @@ pip install 'transformers[torch]'
   \end{center}
 
   \note{\textbf{Tafelphase.} Ankündigen, dass jetzt ein Ausflug kommt, den man überspringen
-    darf --- und wofür er gut ist: um zu verstehen, was \texttt{shape} und \texttt{reshape}
+    darf -- und wofür er gut ist: um zu verstehen, was \texttt{shape} und \texttt{reshape}
     eigentlich tun.
     An der Tafel: Skalare im Tensorprodukt hin- und herschieben, damit die Bilinearität
     anschaulich wird. Basen $v_i \otimes w_j$ zählen.
@@ -283,7 +283,7 @@ pip install 'transformers[torch]'
   \end{center}
 
   \note{An der Tafel: der Kovektor als „liegender Vektor“, geschrieben als
-    $a x + b y + c z$ --- eine Maschine, die einen Vektor frisst und eine Zahl ausspuckt.
+    $a x + b y + c z$ -- eine Maschine, die einen Vektor frisst und eine Zahl ausspuckt.
     Kovariant und kontravariant nur benennen, nicht vertiefen; in Einstein-Notation stehen
     die Indizes oben oder unten. Die Physiker im Deep Learning bringen diese Sprache mit.}
 \end{frame}
@@ -295,7 +295,7 @@ pip install 'transformers[torch]'
     \Huge Was macht \texttt{reshape}?
   \end{center}
 
-  \note{Sammeln, nicht sofort auflösen. 2025 kamen Transponieren und lineare Abbildung ---
+  \note{Sammeln, nicht sofort auflösen. 2025 kamen Transponieren und lineare Abbildung --
     beides aufgreifen und abgrenzen.
     Auflösung: $\mathbb{R}^4 \otimes \mathbb{R}^{10} \cong \mathbb{R}^{40}$, also ist
     \texttt{a.reshape(-1, 2)} derselbe Tensor mit anderer Klammerung der Faktoren.
@@ -328,12 +328,12 @@ pip install 'transformers[torch]'
   \frametitle{Warum das wichtig ist}
 
   \begin{center}
-    \Large Der Shape sagt, \emph{wie viele} Zahlen in jede Richtung gehen ---\\[8pt]
+    \Large Der Shape sagt, \emph{wie viele} Zahlen in jede Richtung gehen --\\[8pt]
     nicht, \emph{was} die Richtung bedeutet.
   \end{center}
 
   \note{Das ist die Take-Home-Message der Sitzung. Die Anekdote erzählen: einmal bei einem
-    \emph{quadratischen} Bild die beiden Achsen vertauscht --- kein Fehler, keine Warnung,
+    \emph{quadratischen} Bild die beiden Achsen vertauscht -- kein Fehler, keine Warnung,
     nur wochenlang sinnloser Output.
     Wer einen Tensor vor sich hat, sollte als Erstes sagen können: Welche Achse ist der
     Batch, was bedeuten die übrigen?}
@@ -343,7 +343,7 @@ pip install 'transformers[torch]'
   \frametitle{Übungsblatt}
 
   \begin{itemize}\setlength{\itemsep}{8pt}
-  \item Ableitungen wiederholen --- und an einer Stelle verallgemeinern
+  \item Ableitungen wiederholen -- und an einer Stelle verallgemeinern
   \item Die Betragsfunktion ist banal, aber wichtig
   \item Die Integrale dürfen Sie ignorieren
   \end{itemize}
@@ -354,7 +354,7 @@ pip install 'transformers[torch]'
   \end{center}
 
   \note{Zur Betragsfunktion: Man soll verstehen, dass die an der Null umdefinierte
-    Vorzeichenfunktion ebenfalls eine schwache Ableitung ist --- daher kommt später ReLU
+    Vorzeichenfunktion ebenfalls eine schwache Ableitung ist -- daher kommt später ReLU
     davon, obwohl sie in 0 nicht differenzierbar ist.
     Warum man die Integrale ignorieren darf, besprechen wir in der Übung.}
 \end{frame}

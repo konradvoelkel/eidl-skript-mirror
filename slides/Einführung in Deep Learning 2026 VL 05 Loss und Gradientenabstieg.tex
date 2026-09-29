@@ -32,7 +32,7 @@
       85--90 & Folien 20--21 & Take-Home, wo steckt der Zufall, Übungsblatt\\
     \end{tabular}\\[4pt]
     \textbf{Die Zufalls-Klammer}: Die Frage „wo steckt hier eigentlich Zufall?“ beim
-    Tafelbeispiel aufwerfen und erst nach dem Take-Home-Slide auflösen --- das waren
+    Tafelbeispiel aufwerfen und erst nach dem Take-Home-Slide auflösen -- das waren
     2025 gut zwanzig Minuten Spannung und hat gut funktioniert.}
 \end{frame}
 
@@ -53,7 +53,7 @@
     Und wird beim Perzeptron etwas minimiert?
   \end{center}
 
-  \note{Diese beiden Fragen sind die Dramaturgie der Sitzung --- am Ende sind beide
+  \note{Diese beiden Fragen sind die Dramaturgie der Sitzung -- am Ende sind beide
     beantwortet, und es stellt sich heraus, dass es dasselbe Verfahren ist.}
 \end{frame}
 
@@ -86,7 +86,7 @@
   \end{center}
 
   \note{Erstmal hinschreiben, dann fragen: Warum \emph{diese} Formel? Warum nicht MSE?
-    Die Antwort kommt auf den nächsten Folien über Maximum Likelihood --- und sie ist
+    Die Antwort kommt auf den nächsten Folien über Maximum Likelihood -- und sie ist
     der Grund, warum BCE nicht willkürlich ist.}
 \end{frame}
 
@@ -124,7 +124,7 @@
   \note{Ein Produkt aus $N$ Faktoren zwischen 0 und 1 ist numerisch schnell 0; $\ln$ macht
     daraus eine Summe, ohne die Lage des Maximums zu ändern (streng monoton).
     Dasselbe Argument mit Gauß-Rauschen liefert den MSE als Loss der linearen Regression
-    --- das ist eine schöne Übungsaufgabe.
+    -- das ist eine schöne Übungsaufgabe.
     Damit ist die BCE keine willkürliche Wahl, sondern folgt aus „das Modell sagt
     Wahrscheinlichkeiten voraus, und wir glauben den Daten“.}
 \end{frame}
@@ -139,7 +139,7 @@
     $\dfrac{2}{p} - \dfrac{1}{1-p} = 0 \;\Longrightarrow\; p = \tfrac23$
   \end{center}
 
-  \note{Das an der Tafel mitrechnen lassen --- es ist die kleinste Maximum-Likelihood-Rechnung,
+  \note{Das an der Tafel mitrechnen lassen -- es ist die kleinste Maximum-Likelihood-Rechnung,
     die es gibt, und das Ergebnis ist genau der Anteil der Köpfe.
     Pointe: Das ist zugleich der Wert, an dem die BCE dieser drei Datenpunkte minimal ist.}
 \end{frame}
@@ -180,7 +180,7 @@
   \end{center}
 
   \note{Erst die ganz dumme Variante hinschreiben (zufälliges $w$), dann fragen: Wie macht
-    man Schritt 1 besser? Antwort: in der Nähe der bisher besten Schätzung suchen ---
+    man Schritt 1 besser? Antwort: in der Nähe der bisher besten Schätzung suchen --
     lokale Suche. Bleibt die Frage: in welche Richtung?}
 \end{frame}
 
@@ -198,7 +198,7 @@
 
   \note{\textbf{Tafelphase.} Die $w$-Ebene zeichnen, den Gradientenvektor und seine
     Komponenten; den Einheitskreis dazu und fragen, welche Richtung die Richtungsableitung
-    maximiert. Über den Kosinus: maximal, wenn der Winkel null ist --- also in Richtung
+    maximiert. Über den Kosinus: maximal, wenn der Winkel null ist -- also in Richtung
     $\nabla L$. (Im Skript steht dasselbe Argument mit Cauchy-Schwarz.)
     2025 kam die Antwort $L'(w)$ aus dem Hörsaal, bevor sie auf der Folie stand.}
 \end{frame}
@@ -212,13 +212,13 @@
 
   \bigskip
   \begin{center}
-    \normalsize Minus: Gradient\emph{ab}stieg, nicht -anstieg.
+    \normalsize Minus: Gradienten\emph{ab}stieg, nicht -anstieg.
   \end{center}
 
-  \note{Das Minus erst hier einführen --- 2025 kam genau an dieser Stelle der Einwand aus
+  \note{Das Minus erst hier einführen -- 2025 kam genau an dieser Stelle der Einwand aus
     dem Hörsaal, und daran lässt sich Descent gegen Ascent gut erklären. Den Einwand
     ruhig provozieren, indem man auf der Folie vorher vom \emph{Anstieg} spricht.
-    $\rho$ ist die Lernrate --- dieselbe wie beim Perzeptron.}
+    $\rho$ ist die Lernrate -- dieselbe wie beim Perzeptron.}
 \end{frame}
 
 \begin{frame}
@@ -229,10 +229,10 @@
   \end{center}
 
   \note{Das ist das Tafelbild aus 2025, hier als Foto. Wer selbst an die Tafel geht,
-    kann die Folie überspringen --- dann aber dieselben Zahlen verwenden wie auf den
+    kann die Folie überspringen -- dann aber dieselben Zahlen verwenden wie auf den
     Folien, es sollen keine neuen Zahlen an der Tafel stehen.
     \textbf{Hier die Klammer aufmachen:} „Wo steckt in diesem Verfahren eigentlich der
-    Zufall?“ --- Frage stellen, Antworten sammeln, \emph{offen lassen}. Auflösung erst
+    Zufall?“ -- Frage stellen, Antworten sammeln, \emph{offen lassen}. Auflösung erst
     nach dem Take-Home-Slide.}
 \end{frame}
 
@@ -251,7 +251,7 @@
   \end{columns}
 
   \note{Loss-Landschaften echter Netze sind nicht konvex, haben viele lokale Minima,
-    Sattelpunkte und Plateaus --- und trotzdem funktioniert das Verfahren erstaunlich gut.
+    Sattelpunkte und Plateaus -- und trotzdem funktioniert das Verfahren erstaunlich gut.
     Bild nach Li et al., \emph{Visualizing the loss landscape of neural nets} (2017).}
 \end{frame}
 
@@ -261,9 +261,9 @@
   \begin{center}
     \Large Drei Lernraten:\\[12pt]
     \normalsize
-    zu klein --- bleibt im ersten Hang\\[6pt]
-    mittel --- findet ins Tal\\[6pt]
-    zu groß --- springt zwischen den Wänden
+    zu klein -- bleibt im ersten Hang\\[6pt]
+    mittel -- findet ins Tal\\[6pt]
+    zu groß -- springt zwischen den Wänden
   \end{center}
 
   \note{\textbf{Browser-Block, gut zehn Minuten.} Den Pfad selbst starten lassen.
@@ -289,7 +289,7 @@
     \normalsize Für $N = 1$: \quad $w_{\text{neu}} = w_{\text{alt}} \pm \rho\,x$
   \end{center}
 
-  \note{Der „harte“ Perceptron Loss mit \texttt{sign} hätte fast überall Gradient null ---
+  \note{Der „harte“ Perceptron Loss mit \texttt{sign} hätte fast überall Gradient null --
     deshalb die weiche Variante ohne \texttt{sign}: proportional dazu, \emph{wie weit} auf
     der falschen Seite der Punkt liegt. Die schwache Ableitung war eine Übungsaufgabe.
     Und damit ist die Perzeptronregel genau ein Gradientenschritt.
@@ -311,7 +311,7 @@
 
   \note{Die Rechnung an der Tafel: $L(z) = -y\ln\sigma(z) - (1-y)\ln(1-\sigma(z))$,
     mit $\sigma' = \sigma(1-\sigma)$ und Kettenregel bleibt $p - y$ übrig.
-    Übrig bleibt der \emph{Vorhersagefehler} --- und mit $\partial z/\partial w = x$ ist
+    Übrig bleibt der \emph{Vorhersagefehler} -- und mit $\partial z/\partial w = x$ ist
     der Gradient $(p-y)x$. Also dieselbe Gestalt wie die Perzeptronregel.
     Das ist ein Ergebnis, das man sich merkt: Bei Sigmoid plus BCE ist der Gradient
     einfach „Vorhersage minus Wahrheit“.}
@@ -326,7 +326,7 @@
 
   \note{Für ein Sample mit $y = 1$, aufgetragen gegen $f(x) = \langle w,x\rangle$:
     Perceptron Loss ist null, sobald $f(x) > 0$. Hinge Loss verlangt einen
-    Sicherheitsabstand, erst ab $f(x) \ge 1$ null --- das ist der Loss der Support Vector
+    Sicherheitsabstand, erst ab $f(x) \ge 1$ null -- das ist der Loss der Support Vector
     Machine. BCE ist glatt und wird nie exakt null, bestraft also auch richtig
     klassifizierte Samples nahe der Grenze noch ein bisschen.}
 \end{frame}
@@ -348,7 +348,7 @@
 
   \note{Eine Lernrate, die in der einen Richtung vernünftig vorankommt, springt in der
     anderen heraus. Ausweg: alle Features auf Mittelwert 0 und Standardabweichung 1
-    (\texttt{StandardScaler}) --- und das Testset mit den Werten des \emph{Trainingssets}
+    (\texttt{StandardScaler}) -- und das Testset mit den Werten des \emph{Trainingssets}
     skalieren.
     Dieselbe Idee \emph{innerhalb} des Netzes heißt Batch bzw. Layer Normalization; dass
     Adam die Lernrate pro Parameter anpasst, hat denselben Grund. Kommt später.}
@@ -392,7 +392,7 @@
   \note{\textbf{Jetzt die Klammer schließen}, die beim Tafelbeispiel aufgemacht wurde.
     Begriffe sauber trennen: \emph{Gradientenabstieg} (Batch) wertet den ganzen Datensatz
     aus; \emph{SGD} schätzt den Gradienten aus einem Teildatensatz, meist einem einzelnen
-    Sample. Die Schätzung ist verrauscht, aber im Mittel korrekt --- und man kommt viel
+    Sample. Die Schätzung ist verrauscht, aber im Mittel korrekt -- und man kommt viel
     häufiger zu einem Update.
     Eine Epoche ist ein Durchlauf durch den ganzen Datensatz.}
 \end{frame}
@@ -407,10 +407,10 @@
 
   \bigskip
   \begin{center}
-    Nächste Woche: Backpropagation --- und danach verstehen Sie den Playground.
+    Nächste Woche: Backpropagation -- und danach verstehen Sie den Playground.
   \end{center}
 
-  \note{Beides ist keine Abgabe, sondern Spielaufgabe --- aber das Ziel für nächste Woche
+  \note{Beides ist keine Abgabe, sondern Spielaufgabe -- aber das Ziel für nächste Woche
     ist ausdrücklich, den Playground lesen zu können.
     Auf dem Übungsblatt: Ableitung des Sigmoids mit der Quotientenregel, Softmax für $K = 2$,
     Kreuzentropie und Kullback-Leibler-Divergenz.}

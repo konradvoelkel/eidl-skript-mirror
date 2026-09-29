@@ -38,7 +38,7 @@
 
   \begin{center}
     \Large
-    Autoencoder, VAE, word2vec, GAN ---\\
+    Autoencoder, VAE, word2vec, GAN --\\
     alle haben einen latenten Raum.\\[16pt]
     Heute: Was ist das eigentlich für ein Raum?
   \end{center}
@@ -70,7 +70,7 @@
   \end{center}
 
   \note{Semantische Beziehungen werden zu Richtungen, und Richtungen kann man addieren.
-    Das gilt nicht nur für word2vec, sondern für alle LLM-Embeddings --- und ist die
+    Das gilt nicht nur für word2vec, sondern für alle LLM-Embeddings -- und ist die
     Grundlage der semantischen Suche, die wir gleich in der Anwendung sehen.}
 \end{frame}
 
@@ -83,7 +83,7 @@
 
   \note{Bolukbasi et al. 2016: \emph{Man is to Computer Programmer as Woman is to
     Homemaker?} Berufe, projiziert auf die Gender-Richtung.
-    Die Embeddings enthalten die Stereotype des Trainingskorpus als Richtungen --- und
+    Die Embeddings enthalten die Stereotype des Trainingskorpus als Richtungen -- und
     weil es Richtungen sind, kann man sie messen und teilweise herausrechnen.
     Das ist eine gute Stelle für zwei Minuten Diskussion: Ist Debiasing die Lösung, oder
     versteckt es nur das Problem?}
@@ -114,10 +114,10 @@
     \includegraphics[width=0.78\textwidth]{vl13-latent-interpolation.png}
   \end{center}
 
-  \note{Lineare Interpolation zwischen den Codes einer 3 und einer 8 --- jeder
+  \note{Lineare Interpolation zwischen den Codes einer 3 und einer 8 -- jeder
     Zwischenpunkt ist ein Bild.
     Bei Bildern ist der latente Raum \emph{kontinuierlich}: Jeder Vektor lässt sich
-    dekodieren. Bei Text ist das anders --- nächste Folie.}
+    dekodieren. Bei Text ist das anders -- nächste Folie.}
 \end{frame}
 
 \begin{frame}
@@ -129,7 +129,7 @@
     Was macht man mit allen anderen?
   \end{center}
 
-  \note{Das ist die Frage, die zur Sampling-Strategie führt --- und damit zu dem, was
+  \note{Das ist die Frage, die zur Sampling-Strategie führt -- und damit zu dem, was
     ChatGPT tatsächlich tut.
     Antworten sammeln lassen: nächstgelegenes Token nehmen? Das wäre greedy decoding.}
 \end{frame}
@@ -145,7 +145,7 @@
   \end{itemize}
 
   \note{Abstand meist im Kosinus-Abstand.
-    Das ist genau die Verteilung, die wir in VL 12 ausgelesen haben --- hier wird
+    Das ist genau die Verteilung, die wir in VL 12 ausgelesen haben -- hier wird
     entschieden, was daraus wird.}
 \end{frame}
 
@@ -178,7 +178,7 @@
 
   \note{Alle drei haben einen latenten Raum, aber mit unterschiedlicher Struktur.
     Beim GAN ist die Verteilung im latenten Raum \emph{vorgegeben} (Standardnormal), beim
-    VAE wird sie hingezogen, beim AE ergibt sie sich einfach --- mit Löchern.
+    VAE wird sie hingezogen, beim AE ergibt sie sich einfach -- mit Löchern.
     Deshalb kann man aus GAN und VAE sampeln, aus dem AE nur schlecht.}
 \end{frame}
 
@@ -193,7 +193,7 @@
     flach aus, aber der Decoder verzerrt ihn. Die euklidische Gerade zwischen zwei Codes
     ist nicht der kürzeste Weg im \emph{Bildraum}.
     \textbf{Take-Home:} Die gerade Linie zwischen zwei Codes läuft oft außerhalb der
-    latenten Mannigfaltigkeit --- dann ist es keine Interpolation mehr, sondern
+    latenten Mannigfaltigkeit -- dann ist es keine Interpolation mehr, sondern
     Extrapolation. Und die können Netze schlecht (VL 7).}
 \end{frame}
 
@@ -223,7 +223,7 @@
     Aufgabe: Interface zu einer Wissensdatenbank aus Frage-Antwort-Paaren.
     Erwartete Schritte: FAQ nach JSON, Fragen mit einem LLM in Vektoren (Weg 2 aus VL 12),
     Nutzereingabe ebenso, Kosinus-Ähnlichkeit, Top-3 anzeigen.
-    Pointe zum Schluss: Das läuft vollständig im Browser (ONNX, 20 MB Modell) --- kein
+    Pointe zum Schluss: Das läuft vollständig im Browser (ONNX, 20 MB Modell) -- kein
     Server sieht die Fragen, also kein Logging-Problem. 2025 hat das 26 Minuten getragen.}
 \end{frame}
 
@@ -237,7 +237,7 @@
 
   \note{Wieder erst fragen: Woher kommen hier die Label?
     Antwort, auf die man kommen soll: aus dem Ordner „Gesendet“ über den
-    \texttt{In-Reply-To}-Header --- wer beantwortet wurde, hat Label 1.
+    \texttt{In-Reply-To}-Header -- wer beantwortet wurde, hat Label 1.
     Dann: IMAP zum Download, Spam ausschließen, Text per LLM in Vektoren, MLP darauf,
     BCE-Loss. Alles Bausteine, die wir haben.}
 \end{frame}
@@ -251,7 +251,7 @@
   \end{center}
 
   \note{Das ist die Pointe, auf die der Hörsaal kommen soll: word2vec (Skip-gram) auf
-    Kauflisten, oder node2vec auf dem bipartiten Nutzer-Item-Graphen --- beides aus VL 9.
+    Kauflisten, oder node2vec auf dem bipartiten Nutzer-Item-Graphen -- beides aus VL 9.
     Danach Nachbarsuche im latenten Raum.
     \textbf{Klausurrelevant:} „Wie trainiert man das Netz für das Empfehlungssystem?“ ist
     genau eine Frage vom Typ Anwendungskonzept.}
@@ -268,11 +268,11 @@
   \item Wie messen wir Güte?
   \end{enumerate}
 
-  \note{Das ist der Aufgabentyp „Anwendungskonzept“ in der Klausur --- und die Struktur,
+  \note{Das ist der Aufgabentyp „Anwendungskonzept“ in der Klausur -- und die Struktur,
     die eine gute Antwort haben muss.
     Punkt 3 ist der, an dem die meisten zu viel wollen: ein vortrainiertes Modell
     einfrieren und einen kleinen Kopf trainieren ist fast immer die richtige erste Antwort.
-    Nächste Woche: Destillation --- und Vibecoding, also wie man so etwas mit generiertem
+    Nächste Woche: Destillation -- und Vibecoding, also wie man so etwas mit generiertem
     Code tatsächlich baut.}
 \end{frame}
 

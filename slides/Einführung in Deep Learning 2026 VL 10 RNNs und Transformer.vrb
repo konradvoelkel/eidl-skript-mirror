@@ -15,5 +15,5 @@ class MyModel(nn.Module):
   \note{\texttt{nn.LSTM} bekommt eine Sequenz von Vektoren (z.B. die word2vec-Embeddings
     aus der letzten Woche) und liefert die Sequenz der hidden states; darauf ein linearer
     Layer für die Vorhersage.
-    $h_n$ und $c_n$ sind der \emph{letzte} Zustand --- für eine Klassifikation des ganzen
+    $h_n$ und $c_n$ sind der \emph{letzte} Zustand -- für eine Klassifikation des ganzen
     Satzes würde man die nehmen.}

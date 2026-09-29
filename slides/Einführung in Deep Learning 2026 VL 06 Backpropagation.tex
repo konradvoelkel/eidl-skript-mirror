@@ -18,12 +18,12 @@
   \titlepage
 
   \note{\textbf{Ablauf, 90 Minuten.} 2025 hat Backpropagation allein 70 Minuten gebraucht,
-    deshalb ist diese Sitzung dieses Jahr \emph{nur} Backpropagation --- Aktivierungsfunktionen
+    deshalb ist diese Sitzung dieses Jahr \emph{nur} Backpropagation -- Aktivierungsfunktionen
     und Autoencoder stehen jetzt in VL 7 und VL 8, wo sie hingehören.\\[2pt]
     \begin{tabular}{@{}rll@{}}
       0--6   & Folien 2--3   & Ziel: den Playground verstehen\\
       6--20  & Folien 4--6   & Setup 1: zwei Neuronen, Update-Regeln von Hand\\
-      20--28 & Folien 7--8   & Mehr Dimensionen, mehr Neuronen --- Layer\\
+      20--28 & Folien 7--8   & Mehr Dimensionen, mehr Neuronen -- Layer\\
       28--40 & Folien 9--10  & Beispiel 4: Vorwärtsrechnung schichtweise\\
       40--62 & Folien 11--14 & \textbf{Rückwärts differenzieren}\\
       62--72 & Folie 15      & Das Muster: Fehlersignal $\delta_k$\\
@@ -31,7 +31,7 @@
       80--90 & Folien 17--18 & Aufwand, Take-Home, Übungsblatt\\
     \end{tabular}\\[4pt]
     2025 ging es an zwei Stellen zu schnell (Ableitung des Skalarprodukts, Reihenfolge
-    beim Transponieren). Beides ist hier eine eigene Folie --- lieber die Beispielsetups
+    beim Transponieren). Beides ist hier eine eigene Folie -- lieber die Beispielsetups
     straffen als hier hetzen.}
 \end{frame}
 
@@ -48,7 +48,7 @@
   \end{center}
 
   \note{Wer die Spielaufgabe von letzter Woche gemacht hat, weiß: Die sechs Gewichte für
-    XOR von Hand zu setzen, geht --- aber es ist mühsam.
+    XOR von Hand zu setzen, geht -- aber es ist mühsam.
     Genau das Mühsame soll der Gradientenabstieg übernehmen. Dafür brauchen wir den
     Gradienten nach \emph{allen} Gewichten \emph{aller} Schichten. Das ist die Aufgabe
     der Sitzung.}
@@ -65,7 +65,7 @@
 
   \note{Die Perzeptronregel sagte nichts darüber, wie die vordere Schicht angepasst wird
     (VL 2). Genau diese Lücke schließen wir heute.
-    Rahmen, falls jemand fragt, wo das herkommt: differenzierbare Programmierung ---
+    Rahmen, falls jemand fragt, wo das herkommt: differenzierbare Programmierung --
     alles, was aus differenzierbaren Bausteinen zusammengesetzt ist, lässt sich so
     trainieren.}
 \end{frame}
@@ -88,7 +88,7 @@
     Die Frage ist nur: Was ist $\partial y_{\text{pred}} / \partial W$?
     2025 kam hier die Frage, ob am Ausgang nicht ein Sigmoid fehlt. Gute Gelegenheit für
     die Diskussion: Die Architektur am Ausgang richtet sich nach dem \emph{Wertebereich}
-    der Zielfunktion --- bei Regression will man keinen Squeeze auf $(0,1)$.}
+    der Zielfunktion -- bei Regression will man keinen Squeeze auf $(0,1)$.}
 \end{frame}
 
 \begin{frame}
@@ -101,7 +101,7 @@
     $\dfrac{d}{dw}\,\langle v, f(w)\rangle = \langle v, f'(w)\rangle$
   \end{center}
 
-  \note{\textbf{Hier nicht hetzen} --- 2025 kam die Skalarproduktableitung zu kurz, der
+  \note{\textbf{Hier nicht hetzen} -- 2025 kam die Skalarproduktableitung zu kurz, der
     Dozent hat es selbst eingeräumt und empfohlen, sie in $\mathbb{R}^3$ selbst
     nachzurechnen. Das kann man hier auch gemeinsam tun.
     Die Kettenregel oben aus dem Hörsaal abfragen, nicht vorsagen.}
@@ -119,12 +119,12 @@
 
   \bigskip
   \begin{center}
-    \normalsize Funktioniert --- aber unübersichtlich.
+    \normalsize Funktioniert -- aber unübersichtlich.
   \end{center}
 
   \note{In die Gradientenabstiegsregel eingesetzt, stehen da zwei lange Formeln. Die muss
     man nicht auswendig können; wichtig ist die Beobachtung:
-    \emph{Teilausdrücke kommen mehrfach vor} --- das Residuum $y_i - y_{\text{pred},i}$ und
+    \emph{Teilausdrücke kommen mehrfach vor} -- das Residuum $y_i - y_{\text{pred},i}$ und
     die Aktivierung der ersten Schicht. Das ist der Keim der ganzen Idee: einmal rechnen,
     mehrfach benutzen.}
 \end{frame}
@@ -134,13 +134,13 @@
 
   \begin{center}
     \Large
-    Setup 2: $x \in \mathbb{R}^2$ --- die Skalarprodukte werden länger.\\[14pt]
-    Setup 3: mehrere Neuronen pro Schicht --- aus $w$ wird $W$.
+    Setup 2: $x \in \mathbb{R}^2$ -- die Skalarprodukte werden länger.\\[14pt]
+    Setup 3: mehrere Neuronen pro Schicht -- aus $w$ wird $W$.
   \end{center}
 
   \note{An den Formeln ändert sich strukturell nichts. Das ist die beruhigende Nachricht,
     und sie rechtfertigt, gleich zur Matrixschreibweise zu wechseln.
-    2025 kam hier die Frage nach der Dimension des Gewichts „in einem Kreis“ --- die
+    2025 kam hier die Frage nach der Dimension des Gewichts „in einem Kreis“ -- die
     Notation ein Kreis je Dimension einmal ausdrücklich klären.}
 \end{frame}
 
@@ -152,7 +152,7 @@
   \end{center}
 
   \note{Ab jetzt in Matrixschreibweise. Grundphilosophie, die man einmal sagen sollte:
-    \emph{Alles ist elementweise, was nicht ausdrücklich anders dasteht} --- $\sigma$ wirkt
+    \emph{Alles ist elementweise, was nicht ausdrücklich anders dasteht} -- $\sigma$ wirkt
     komponentenweise, $W_k z_k$ ist das Matrixprodukt.
     Die Eingabeschicht ist dabei nur ein Name für $z_1 = x$; dort passiert nichts.}
 \end{frame}
@@ -165,7 +165,7 @@
     $f(x) = b_3 + W_3 \tanh\bigl(b_2 + W_2 \tanh(b_1 + W_1 x)\bigr)$
   \end{center}
 
-  \note{Dieses Beispiel begleitet uns durch den Rest der Sitzung --- und ein Rechenbeispiel
+  \note{Dieses Beispiel begleitet uns durch den Rest der Sitzung -- und ein Rechenbeispiel
     dieser Bauart kommt auf den Übungszettel \emph{und} kann in der Klausur drankommen
     (Aufgabentyp 4). Das ausdrücklich sagen.}
 \end{frame}
@@ -186,7 +186,7 @@
   \end{center}
 
   \note{Das ist der \emph{Berechnungsgraph}: nicht die Formel, sondern die Festlegung der
-    Rechenreihenfolge --- der Unterschied ist wichtig und kommt in VL 12 wieder.
+    Rechenreihenfolge -- der Unterschied ist wichtig und kommt in VL 12 wieder.
     Der Faktor $\frac12$ ist reine Bequemlichkeit, er kürzt sich gleich gegen die 2 aus
     der Ableitung des Quadrats.
     Jede Zeile speichert ein Zwischenergebnis. Das brauchen wir gleich alles noch.}
@@ -205,7 +205,7 @@
     Die Notation $d$ als Platzhalter erklären: die lineare Änderung bei infinitesimaler
     Änderung der Parameter.
     \textbf{Die Reihenfolge beim Transponieren} ist die Stelle, an der 2025 eine Frage kam
-    und vertagt wurde. Kurzfassung: $\nabla_{W_3}E$ ist ein \emph{äußeres Produkt} ---
+    und vertagt wurde. Kurzfassung: $\nabla_{W_3}E$ ist ein \emph{äußeres Produkt} --
     Fehler mal Eingabe der Schicht. Wer es genau will: Spur-Trick, steht als Vertiefung
     im Skript; oder komponentenweise
     $\partial E/\partial (W_3)_{jk} = r_j (z_3)_k$, dasselbe Ergebnis.}
@@ -243,7 +243,7 @@
   \end{center}
 
   \note{Jetzt sind $b_3$ und $W_3$ Konstanten. Die Ableitung von $\tanh$ lässt sich aus
-    dem gespeicherten $z_3$ berechnen --- genau wie bei $\sigma' = \sigma(1-\sigma)$ in
+    dem gespeicherten $z_3$ berechnen -- genau wie bei $\sigma' = \sigma(1-\sigma)$ in
     VL 4. Deshalb lohnt es sich, die Zwischenergebnisse zu speichern.
     Wer mag, kann hier das \emph{Recyceln} betonen: $\sigma(Ax)$ und $Ax$ werden beide
     weiterverwendet.}
@@ -263,7 +263,7 @@
   \note{\textbf{Das ist die Folie, die hängen bleiben soll.} Das Fehlersignal wird
     rückwärts propagiert: mit der \emph{transponierten} Gewichtsmatrix multipliziert und
     mit der Ableitung der Aktivierungsfunktion gewichtet.
-    Man kann den Graphen an jeder Stelle durchschneiden --- was davor liegt, interessiert
+    Man kann den Graphen an jeder Stelle durchschneiden -- was davor liegt, interessiert
     den Rückwärtsschritt nicht.
     Beobachtung, die 2025 gut ankam: Rückwärts trifft man zuerst das \emph{letzte} Gewicht.}
 \end{frame}
@@ -278,7 +278,7 @@
   \end{center}
 
   \note{Beim Vorwärtsrechnen merkt sich jeder Tensor mit \texttt{requires\_grad}, aus
-    welcher Operation er entstanden ist --- der Berechnungsgraph. \texttt{backward} läuft
+    welcher Operation er entstanden ist -- der Berechnungsgraph. \texttt{backward} läuft
     ihn rückwärts ab.
     Das ist genau die Trainingsschleife aus VL 4, jetzt versteht man, was die beiden
     Zeilen tun. Die Details (Graph, Zyklen, gelogene Ableitungen) kommen in VL 12.}
@@ -290,15 +290,15 @@
   \begin{center}
     \Large
     ein Vorwärtsdurchlauf\\[8pt] ein Rückwärtsdurchlauf\\[14pt]
-    \normalsize $\approx$ das Doppelte einer Inferenz ---\\
+    \normalsize $\approx$ das Doppelte einer Inferenz --\\
     unabhängig von der Zahl der Parameter.
   \end{center}
 
   \note{Das ist der Grund, warum Deep Learning überhaupt praktikabel ist. Naiv, mit
-    finiten Differenzen, bräuchte man eine Auswertung \emph{pro Parameter} --- bei
+    finiten Differenzen, bräuchte man eine Auswertung \emph{pro Parameter} -- bei
     Milliarden Parametern undenkbar.
     Take-Home: Backpropagation ist keine neue Mathematik, sondern Kettenregel plus
-    Buchführung. In diese Rechnung fließt null Kreativität --- das kann der Computer,
+    Buchführung. In diese Rechnung fließt null Kreativität -- das kann der Computer,
     sobald man ihm für jede Operation die Ableitung nennt.}
 \end{frame}
 
@@ -306,19 +306,19 @@
   \frametitle{Zur Übung}
 
   \begin{itemize}\setlength{\itemsep}{8pt}
-  \item Ein Rechenbeispiel wie Beispiel 4 --- von Hand, auf einem Übungsblatt
+  \item Ein Rechenbeispiel wie Beispiel 4 -- von Hand, auf einem Übungsblatt
   \item Klausurrelevant (Aufgabentyp 4)
   \item Bitte ohne generative KI
   \end{itemize}
 
   \bigskip
   \begin{center}
-    Nächste Woche: Aktivierungsfunktionen --- und Netze von Hand bauen.
+    Nächste Woche: Aktivierungsfunktionen -- und Netze von Hand bauen.
   \end{center}
 
   \note{Die Rechnung einmal selbst gemacht zu haben, ist der Unterschied zwischen
     „verstanden“ und „zugehört“. In der Klausur kommt sie mit kleinen Zahlen.
-    Wer noch Zeit hat: XOR im Playground von Hand lösen bleibt offen --- nächste Woche
+    Wer noch Zeit hat: XOR im Playground von Hand lösen bleibt offen -- nächste Woche
     machen wir genau das systematisch.}
 \end{frame}
 

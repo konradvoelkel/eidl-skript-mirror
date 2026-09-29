@@ -32,7 +32,7 @@
       82--88 & Folien 18--19 & Mehrere Schichten, warum die Regel nicht reicht\\
       88--90 & Folie 20      & Übungsblatt\\
     \end{tabular}\\[4pt]
-    Die Tafelphase ist der Kern der Sitzung --- 2025 war das Ein-Sample-Argument das,
+    Die Tafelphase ist der Kern der Sitzung -- 2025 war das Ein-Sample-Argument das,
     was der Dozent am Ende „das Wichtigste“ genannt hat. Wenn die Zeit knapp wird:
     Konvergenzsatz (Folie 16) weglassen, er steht als Vertiefung im Skript.}
 \end{frame}
@@ -43,7 +43,7 @@
 
   \begin{center}
     \Large Letzte Woche: \emph{was} Deep Learning ist.\\[12pt]
-    Heute: das kleinste Netz --- ein einziges Neuron.
+    Heute: das kleinste Netz -- ein einziges Neuron.
   \end{center}
 
   \note{Zwei Sätze Rückblick, mehr nicht. Ansagen: das erste Blatt war heute 12:00 fällig,
@@ -85,7 +85,7 @@
   \end{center}
 
   \note{Diese Folie ist die Take-Home-Message des Semesters, nicht nur der Sitzung.
-    Alles, was wir bauen --- logistische Regression, MLP, CNN, Transformer --- ist eine
+    Alles, was wir bauen -- logistische Regression, MLP, CNN, Transformer -- ist eine
     Variation davon. Und am Ende der Sitzung sehen wir: ohne das Nichtlineare bringt
     Stapeln gar nichts.}
 \end{frame}
@@ -105,7 +105,7 @@
   \item $[\cdot]$ ist die Iverson-Klammer
   \end{itemize}
 
-  \note{Rosenblatts Beitrag war weniger das Neuron als der \emph{Lernalgorithmus} dafür ---
+  \note{Rosenblatts Beitrag war weniger das Neuron als der \emph{Lernalgorithmus} dafür --
     dazu kommen wir in der zweiten Hälfte.
     Wichtig hier: $f$ ist \emph{nichtlinear}, obwohl innen nur ein Skalarprodukt steht.
     Das ist ein beliebter Denkfehler.}
@@ -123,7 +123,7 @@
   \note{Ab jetzt schreiben wir kurz $f(x) = [\,w \cdot x > 0\,]$ und denken uns den Bias
     als nulltes Gewicht. Diesen Trick sehen wir noch öfter.
     Rückfrage in den Raum: Was kann ein Perzeptron \emph{ohne} Bias nicht?
-    Antwort: nur Hyperebenen durch den Ursprung --- zwei Klassen, die eine verschobene
+    Antwort: nur Hyperebenen durch den Ursprung -- zwei Klassen, die eine verschobene
     Gerade brauchen, bleiben ihm verschlossen. 2025 kam dazu das Tafelbild mit den zwei
     Clustern.}
 \end{frame}
@@ -181,7 +181,7 @@
   \note{Für das Perzeptron ist die Länge egal. Sobald die Aktivierungsfunktion glatt ist,
     ist sie es nicht mehr: $\sigma(10 \cdot 20)$ ist praktisch 1, $\sigma(0{,}01 \cdot 20)$
     nur knapp über $\frac12$. Dieselbe Trenngerade, ganz andere „Sicherheit“.
-    Das kommt in VL 4 wieder, wenn aus der Aktivierung eine Wahrscheinlichkeit wird ---
+    Das kommt in VL 4 wieder, wenn aus der Aktivierung eine Wahrscheinlichkeit wird --
     hier nur ankündigen.}
 \end{frame}
 
@@ -197,7 +197,7 @@
   \end{center}
 
   \note{Ein Perzeptron kann genau die Probleme lösen, bei denen die Klassen linear
-    trennbar sind --- nicht mehr.}
+    trennbar sind -- nicht mehr.}
 \end{frame}
 
 \begin{frame}
@@ -209,7 +209,7 @@
     \normalsize Keine Gerade trennt diese beiden Paare.
   \end{center}
 
-  \note{An die Tafel zeichnen, vier Punkte, zwei Farben --- dann versuchen zu trennen.
+  \note{An die Tafel zeichnen, vier Punkte, zwei Farben -- dann versuchen zu trennen.
     Das ist die mathematische Substanz hinter dem AI Winter aus der letzten Woche,
     und der Grund, warum wir Neuronen hintereinanderschalten werden.
     Auflösung kommt am Ende der Sitzung.}
@@ -223,7 +223,7 @@
   \item Was sind die freien Parameter?
   \item Wie läuft die Inferenz?
   \item Wie funktioniert das Training?
-  \item Was ist die Zielgröße --- wann ist genug trainiert?
+  \item Was ist die Zielgröße -- wann ist genug trainiert?
   \item Welche Hyperparameter gibt es?
   \end{enumerate}
 
@@ -258,9 +258,9 @@
   \end{description}
 
   \note{Der mittlere Fall zum Mitrechnen: $w_{\text{neu}} \cdot x = w \cdot x + \rho\,(x \cdot x)$,
-    und $x \cdot x > 0$ für $x \neq 0$. Die Aktivierung wächst also --- in Richtung der
+    und $x \cdot x > 0$ für $x \neq 0$. Die Aktivierung wächst also -- in Richtung der
     richtigen Entscheidung.
-    Frage in den Raum, die 2025 kam: Muss eine Änderung a priori verbessern? Nein ---
+    Frage in den Raum, die 2025 kam: Muss eine Änderung a priori verbessern? Nein --
     für \emph{dieses} Sample ja, für andere kann sie es verschlechtern.}
 \end{frame}
 
@@ -271,7 +271,7 @@
     \Huge $w^{(k)} \cdot x = w^{(0)} \cdot x + k\,\rho\,\|x\|^2$
   \end{center}
 
-  \note{\textbf{Das ist die Tafelphase, 10--15 Minuten --- der Kern der Sitzung.}
+  \note{\textbf{Das ist die Tafelphase, 10--15 Minuten -- der Kern der Sitzung.}
     Die Formel steht hier, hergeleitet wird sie an der Tafel aus der Bilinearität des
     Skalarprodukts. Für großes $k$ wird der Ausdruck positiv, egal wie schlecht
     $w^{(0)}$ war.
@@ -281,7 +281,7 @@
     Ausdrücklich sagen: Das ist die eine Rechnung, die man einmal selbst auf Papier
     gemacht haben sollte (steht auf einem Übungsblatt).
     Einschränkung nennen: Ein Update für $x$ kann ein anderes $x'$ auf die falsche Seite
-    schieben --- dass das endet, ist der Konvergenzsatz.}
+    schieben -- dass das endet, ist der Konvergenzsatz.}
 \end{frame}
 
 \begin{frame}
@@ -340,11 +340,11 @@
   \end{columns}
 
   \note{Die $i$-te Komponente von $Wx$ ist das Skalarprodukt der $i$-ten \emph{Zeile} mit $x$.
-    Also: $m$ Aktivierungen auf einmal --- mit der Geometrie von vorhin: $m$ skalierte
+    Also: $m$ Aktivierungen auf einmal -- mit der Geometrie von vorhin: $m$ skalierte
     Abstände zu $m$ Hyperebenen. Jedes Neuron zeichnet eine Gerade in die Eingabeebene.
     In PyTorch: \texttt{nn.Linear(n, m)} hat \texttt{weight} mit Shape \texttt{(m, n)}.
     Jetzt XOR auflösen: zwei Geraden in der ersten Schicht ($x_1 \lor x_2$ und
-    $\lnot(x_1 \land x_2)$), ein UND darüber --- im Raum der Seiten-Informationen ist XOR
+    $\lnot(x_1 \land x_2)$), ein UND darüber -- im Raum der Seiten-Informationen ist XOR
     linear trennbar.}
 \end{frame}
 
@@ -358,11 +358,11 @@
     {\small $u_1 (v \cdot x) + u_2 (w \cdot x) = (u_1 v + u_2 w) \cdot x$}
   \end{itemize}
 
-  \note{Der zweite Punkt kurz vorrechnen --- er ist der Grund, warum $\tau$
+  \note{Der zweite Punkt kurz vorrechnen -- er ist der Grund, warum $\tau$
     \emph{Aktivierungsfunktion} heißt und nicht Dekoration. Ein Produkt von Matrizen ist
     wieder eine Matrix.
     Der erste Punkt ist die Motivation für die nächsten Wochen: Backpropagation
-    funktioniert nur für differenzierbare $\tau$ --- deshalb verabschieden wir uns von
+    funktioniert nur für differenzierbare $\tau$ -- deshalb verabschieden wir uns von
     der Sprungfunktion.}
 \end{frame}
 
@@ -378,7 +378,7 @@
 
   \bigskip
   \begin{center}
-    Nächste Woche: fertige Modelle benutzen --- und Tensoren.
+    Nächste Woche: fertige Modelle benutzen -- und Tensoren.
   \end{center}
 
   \note{Ausdrücklich ansagen (hat 2025 Rückfragen erspart): mit \texttt{make\_blobs}

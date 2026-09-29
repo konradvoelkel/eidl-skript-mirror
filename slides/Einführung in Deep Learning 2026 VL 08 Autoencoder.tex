@@ -30,7 +30,7 @@
       75--88 & Folien 15--17 & Sparse und Denoising\\
       88--90 & Folie 18      & Übungsblatt\\
     \end{tabular}\\[4pt]
-    Der Autoencoder ist das erste Modell, das nicht klassifiziert --- den Perspektivwechsel
+    Der Autoencoder ist das erste Modell, das nicht klassifiziert -- den Perspektivwechsel
     („die Label sind die Eingaben selbst“) langsam machen.}
 \end{frame}
 
@@ -52,12 +52,12 @@
 
   \begin{center}
     \Large
-    $f$ unbekannt --- aber $g(f(x)) = x$ bekannt.\\[16pt]
+    $f$ unbekannt -- aber $g(f(x)) = x$ bekannt.\\[16pt]
     \normalsize $f$ = Encoder, \quad $g$ = Decoder
   \end{center}
 
   \note{Ziel: die Eingabe in ein anderes Koordinatensystem transformieren und wieder
-    zurück --- und messen, wie gut das klappt.
+    zurück -- und messen, wie gut das klappt.
     Sofortiger Einwand, den man selbst bringen sollte, wenn er nicht kommt: Das ist
     trivial, nimm $f = g = \operatorname{id}$.}
 \end{frame}
@@ -74,7 +74,7 @@
     \normalsize Der Encoder muss lernen, was \emph{wesentlich} ist.
   \end{center}
 
-  \note{Dimensionsreduktion ohne Informationsverlust --- das ist der Flaschenhals.
+  \note{Dimensionsreduktion ohne Informationsverlust -- das ist der Flaschenhals.
     Wer Data Science gehört hat, denkt an PCA. Der Vergleich kommt gleich.}
 \end{frame}
 
@@ -89,7 +89,7 @@
     \includegraphics[height=0.42\textheight]{vl06-autoencoder-schema.png}
   \end{center}
 
-  \note{MSE zwischen Ein- und Ausgabe, die Label sind die Eingaben selbst ---
+  \note{MSE zwischen Ein- und Ausgabe, die Label sind die Eingaben selbst --
     \emph{self-supervised}.
     Nebenbemerkung, die 2025 gut ankam: Der Autoencoder ist eigentlich gar kein Deep
     Learning im engeren Sinn, die Idee ist viel älter.}
@@ -103,7 +103,7 @@
   \end{center}
 
   \note{Ein \emph{linearer} Autoencoder findet denselben Unterraum wie PCA. Mit
-    Nichtlinearitäten erfasst er gekrümmte Strukturen, die PCA verfehlt --- bei gleicher
+    Nichtlinearitäten erfasst er gekrümmte Strukturen, die PCA verfehlt -- bei gleicher
     Dimension des Flaschenhalses deutlich bessere Rekonstruktion.
     Das ist das Argument, warum sich der Aufwand lohnt.}
 \end{frame}
@@ -135,7 +135,7 @@
   \begin{center}
     \Large
     Encoder: $D \to L$ \qquad Decoder: $L \to D$\\[16pt]
-    \normalsize Datenraum (Pixel) --- latenter Raum --- Datenraum
+    \normalsize Datenraum (Pixel) -- latenter Raum -- Datenraum
   \end{center}
 
   \note{Der Begriff \emph{latenter Raum} fällt hier zum ersten Mal richtig und trägt den
@@ -169,7 +169,7 @@ class Autoencoder(nn.Module):
     Frage, die kommen wird: Warum am Encoder kein Sigmoid? Antwort: nötig erst beim
     Sparse Autoencoder, dessen Strafterm latente Werte in $[0,1]$ voraussetzt. Man
     \emph{kann} es setzen.
-    \texttt{forward} gibt beides zurück --- den latenten Vektor braucht man später.}
+    \texttt{forward} gibt beides zurück -- den latenten Vektor braucht man später.}
 \end{frame}
 
 \begin{frame}[fragile]
@@ -190,9 +190,9 @@ for epoch in range(15):
   \note{Neu gegenüber VL 3 sind \texttt{Dataset} und \texttt{DataLoader}: Der Datensatz
     liefert einzelne Samples (mit einer \texttt{transform}, die das Bild zu einem Vektor
     der Länge 784 macht), der Loader mischt und bündelt zu Mini-Batches.
-    Die Schleife selbst ist dieselbe wie immer --- nur dass das Label das Bild ist.
+    Die Schleife selbst ist dieselbe wie immer -- nur dass das Label das Bild ist.
     \textbf{Ehrlich sein:} Mit diesen Werten (SGD, \texttt{lr=1e-2}, 15 Epochen) sinkt der
-    MSE nur von 0,231 auf 0,228 --- man sieht Matsch. Das ist Absicht und die Überleitung
+    MSE nur von 0,231 auf 0,228 -- man sieht Matsch. Das ist Absicht und die Überleitung
     zur nächsten Folie. Zum Vergleich gemessen: Adam mit \texttt{lr=1e-3} kommt auf 0,019.}
 \end{frame}
 
@@ -200,7 +200,7 @@ for epoch in range(15):
   \frametitle{Tricks beim Training}
 
   \begin{itemize}\setlength{\itemsep}{6pt}
-  \item Mehr Epochen --- aber Early Stopping
+  \item Mehr Epochen -- aber Early Stopping
   \item Data Augmentation
   \item Lernrate anpassen
   \item Weight Decay ($L^2$-Regularisierung)
@@ -208,9 +208,9 @@ for epoch in range(15):
   \end{itemize}
 
   \note{Die Liste räumt auf, was die vorige Folie angerichtet hat. Faustregel für den Rest
-    des Kurses: Adam statt SGD, ohne dass wir Optimierer vertiefen --- was Adam tut, steht
+    des Kurses: Adam statt SGD, ohne dass wir Optimierer vertiefen -- was Adam tut, steht
     im Kapitel „Optimierer“.
-    Early Stopping: aufhören, wenn der Testloss wieder steigt, während der Trainingsloss
+    Early Stopping: aufhören, wenn der Test-Loss wieder steigt, während der Trainings-Loss
     weiter sinkt.}
 \end{frame}
 
@@ -228,9 +228,9 @@ for epoch in range(15):
   \end{center}
 
   \note{Kreuzentropie $=$ negative Log-Likelihood $\mathrel{\hat=}$ KL-Divergenz zwischen
-    echten Labels und Vorhersage --- das war eine Übungsaufgabe.
+    echten Labels und Vorhersage -- das war eine Übungsaufgabe.
     \texttt{CrossEntropyLoss} macht Softmax und NLL in einem Schritt, numerisch stabil
-    (VL 4!) --- deshalb bekommt es die Logits, nicht die Wahrscheinlichkeiten.}
+    (VL 4!) -- deshalb bekommt es die Logits, nicht die Wahrscheinlichkeiten.}
 \end{frame}
 
 \begin{frame}
@@ -247,7 +247,7 @@ for epoch in range(15):
 
   \note{Ein Encoder, zwei Köpfe, zwei Loss-Terme. Der Encoder muss jetzt einen latenten
     Raum finden, der \emph{beides} kann.
-    Die Rekonstruktion wirkt dabei wie eine Regularisierung des Klassifikators --- der
+    Die Rekonstruktion wirkt dabei wie eine Regularisierung des Klassifikators -- der
     latente Raum darf nichts Wichtiges wegwerfen. Das ist die Pointe.}
 \end{frame}
 
@@ -261,7 +261,7 @@ for epoch in range(15):
   \item \textbf{BatchNorm}: pro Batch normieren, Skalierung lernbar
   \end{itemize}
 
-  \note{Dropout verhindert, dass sich das Netz auf einzelne Neuronen verlässt --- wirkt
+  \note{Dropout verhindert, dass sich das Netz auf einzelne Neuronen verlässt -- wirkt
     gegen Overfitting.
     BatchNorm: Mittelwert abziehen, durch Standardabweichung teilen, beides über den
     Batch. Warum das hilft, ist theoretisch kompliziert; praktisch hilft es. Der
@@ -281,11 +281,11 @@ for epoch in range(15):
     \normalsize mit $\varrho = 0{,}1$: jede Dimension im Mittel zu 10\,\% „an“.
   \end{center}
 
-  \note{Die Loss-Funktion um einen \emph{Strafterm} ergänzen --- das ist das Muster, das
+  \note{Die Loss-Funktion um einen \emph{Strafterm} ergänzen -- das ist das Muster, das
     nächste Woche beim VAE wiederkommt.
     \textbf{Praktischer Hinweis, der Zeit spart:} Der Term muss im Code ausdrücklich
     addiert werden, \texttt{loss = reconstruction\_loss + beta * sparsity\_loss}. Eine
-    Funktion, die ihn nur berechnet, ändert am Training gar nichts --- ein Fehler, den
+    Funktion, die ihn nur berechnet, ändert am Training gar nichts -- ein Fehler, den
     man einmal macht.}
 \end{frame}
 
@@ -298,7 +298,7 @@ for epoch in range(15):
 
   \note{Fünf Datenpunkte (Zeilen), 16 latente Dimensionen (Spalten).
     Dense nutzt alle Dimensionen für jeden Punkt; sparse verteilt die Punkte auf wenige
-    aktive Dimensionen --- das macht die einzelnen Dimensionen interpretierbarer. Genau
+    aktive Dimensionen -- das macht die einzelnen Dimensionen interpretierbarer. Genau
     deshalb sind Sparse Autoencoder gerade in der Interpretierbarkeitsforschung populär.}
 \end{frame}
 
@@ -316,7 +316,7 @@ for epoch in range(15):
     \includegraphics[width=0.5\textwidth]{vl08-denoising-example.png}
   \end{center}
 
-  \note{Daten nicht putzen, sondern verschmutzen --- und das Netz lernt, den Schmutz zu
+  \note{Daten nicht putzen, sondern verschmutzen -- und das Netz lernt, den Schmutz zu
     entfernen. Der latente Raum muss dann das Wesentliche behalten.
     Das ist dieselbe Idee wie beim Lückentext in BERT (VL 3) und bei word2vec (nächste
     Woche): kaputt machen, wiederherstellen lassen.}
@@ -331,7 +331,7 @@ for epoch in range(15):
 
   \bigskip
   \begin{center}
-    Nächste Woche: den latenten Raum \emph{sampeln} --- VAE und word2vec.
+    Nächste Woche: den latenten Raum \emph{sampeln} -- VAE und word2vec.
   \end{center}
 
   \note{Tipp fürs Blatt: erst zum Laufen bringen, dann hübsch machen. Adam nehmen, sonst

@@ -12,6 +12,6 @@ print(person)   # name='Sabine' age=29 occupation='doctor' location='Munich'
 
   \note{Auch das ist nachgerechnet und kommt genau so heraus.
     Der Punkt: Statt in Prompts um ein Format zu \emph{betteln}, zwingt man das Sampling
-    in ein Schema --- beim Generieren werden nur Token zugelassen, die das JSON gültig
+    in ein Schema -- beim Generieren werden nur Token zugelassen, die das JSON gültig
     halten.
     Das ist der Baustein, auf dem agentische Workflows aufbauen.}

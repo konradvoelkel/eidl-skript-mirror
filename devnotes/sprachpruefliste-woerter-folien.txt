@@ -1,0 +1,73 @@
+# Projektwortliste für devnotes/folienpruefliste.py — nur die Beamer-Folien
+#
+# Ein Wort pro Zeile; alles ab `#` ist Kommentar. Gelesen werden **beide** Listen: diese
+# und `sprachpruefliste-woerter.txt` vom Buch. Eingetragen wird hier nur, was in den
+# Folien steht und im Buch nicht vorkommt.
+#
+# **Warum getrennt?** Die Buchliste ist das Gedächtnis der Buchprüfung. Kippt man das
+# Folienvokabular hinein (`Tafelanschriebe`, `Labelphase`, die Namen aus den
+# Dozentennotizen), wird die Prüfung des Buchs stumpfer, ohne dass die der Folien
+# schärfer wird. Dieselbe Überlegung wie bei den 34 Scheintreffern in C1.
+#
+# **Ein Wort kommt erst hierher, wenn jemand es angesehen hat.** Angelegt am 2026-09-29
+# mit den 54 Wörtern, die nach den vier Filterstufen und der Buchliste übrig blieben.
+# Keines war ein Tippfehler — der eine echte Rechtschreibbefund der Folien
+# („Gradientabstieg“ statt „Gradientenabstieg“, VL 05) war schon behoben, als diese
+# Liste entstand, und steht deshalb nicht drin.
+#
+# Reihenfolge: alphabetisch nach Codepoint, damit ein Diff lesbar bleibt.
+
+Abb
+DL
+EiDL
+GMM
+Gefittetes
+Harleys
+ILIAS
+Interpretierbarkeitsforschung
+Kidger
+Kovariant
+Kovektor
+Labelphase
+Lernziele
+Matplotlib
+Ong
+Originalpaper
+Perspektivwechsel
+Pinkus
+Regularisierungsterm
+Rückbezug
+Saliency
+Shader
+Sigmoids
+Skalarproduktableitung
+Subwords
+Tafelanschriebe
+Testcases
+Tokenisierung
+Trenngeraden
+VL
+Yarotsky
+bbycroft
+bert
+bipartiter
+conv
+dialogischste  # „der dialogischste Moment der Sitzung“ (VL 01) — Stimme des Autors
+dtype
+ganlab
+geclustert
+gelabelt
+insb  # „insb.“ steht nur in der Modulvorstellung; das Buch kürzt so nicht
+io
+konzepte  # aus „Grundbegriffe und -konzepte“ — dito
+labelt
+lernbar
+llm
+losslandscape
+nd  # aus „2nd layer“ (VL 06), englische Ordnungszahl
+poloclub
+quantisiert
+rastern
+synthese  # aus „Sprach-erkennung und -synthese“ — Bindestrich-Anschluss
+tanh
+tensorflow

@@ -11,7 +11,7 @@ criterion = nn.BCELoss()                       # <---
     \includegraphics[width=0.46\textwidth]{vl04-lin-vs-log-regression.png}
   \end{center}
 
-  \note{Zwei Zeilen Unterschied --- das ist die Pointe. Sigmoid im \texttt{forward},
+  \note{Zwei Zeilen Unterschied -- das ist die Pointe. Sigmoid im \texttt{forward},
     BCE statt MSE als Loss.
     Das Bild zeigt dieselben 0/1-Daten, einmal mit MSE, einmal mit BCE gefittet.
     Warum BCE und nicht MSE, kommt in VL 5. Wer jetzt schon fragt: MSE auf 0/1-Daten

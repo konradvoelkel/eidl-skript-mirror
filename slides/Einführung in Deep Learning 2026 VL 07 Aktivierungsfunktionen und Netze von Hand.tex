@@ -30,13 +30,13 @@
       68--82 & Folien 16--18 & Universelle Approximation\\
       82--90 & Folien 19--20 & Take-Home, Übungsblatt\\
     \end{tabular}\\[4pt]
-    \textbf{Diese Sitzung lebt vom Hörsaaldialog} --- die Booleschen Netze und $x^2$
+    \textbf{Diese Sitzung lebt vom Hörsaaldialog} -- die Booleschen Netze und $x^2$
     gemeinsam bauen, nicht vortragen. 2025 war „geometrisch programmieren“ die Formel,
     die gezündet hat. Drei Viertelstunden dafür einplanen.}
 \end{frame}
 
 \begin{frame}
-  \frametitle{Was wir haben --- und was fehlt}
+  \frametitle{Was wir haben -- und was fehlt}
 
   \begin{columns}[t]
     \begin{column}{0.48\textwidth}
@@ -58,7 +58,7 @@
 
   \note{Die zweite Frage ist die interessantere und der rote Faden heute: Bevor wir einem
     Optimierer zutrauen, Gewichte zu \emph{finden}, überzeugen wir uns, dass es sie
-    \emph{gibt} --- indem wir sie von Hand hinschreiben.}
+    \emph{gibt} -- indem wir sie von Hand hinschreiben.}
 \end{frame}
 
 % ------------------------------------------------------------------ ReLU
@@ -68,7 +68,7 @@
   \begin{center}
     \Large
     Bisher: Klassifikation.\\[12pt]
-    Jetzt: eine Funktion lernen --- stückweise linear.
+    Jetzt: eine Funktion lernen -- stückweise linear.
   \end{center}
 
   \bigskip
@@ -95,7 +95,7 @@
   \note{Dass man die Ableitung an einer Stelle einfach festlegen darf, ist genau der
     Inhalt einer Übungsaufgabe: schwache Ableitungen dürfen an einzelnen Punkten beliebig sein.
     Die Wahl 0 statt 1 spart Rechnungen.
-    Name: \emph{Rectified} Linear Unit --- Gleichrichter, wie in der Elektrotechnik.}
+    Name: \emph{Rectified} Linear Unit -- Gleichrichter, wie in der Elektrotechnik.}
 \end{frame}
 
 \begin{frame}
@@ -117,7 +117,7 @@
     Hyperebene und steigt linear auf der anderen. Die Knickstelle \emph{ist} die
     Hyperebene.
     Summiert man solche Knickfunktionen mit Gewichten, bekommt man stückweise lineare
-    Funktionen --- und damit lässt sich jede stetige Funktion approximieren. Das bauen
+    Funktionen -- und damit lässt sich jede stetige Funktion approximieren. Das bauen
     wir gleich.}
 \end{frame}
 
@@ -156,7 +156,7 @@
   \note{GELU ist heute die Standardwahl in Transformern.
     Am Plot diskutieren, was man eigentlich will: das Signal im Negativen \emph{behalten},
     ohne die Nichtlinearität zu verlieren. Die kleine Delle unter der Achse ist gewollt.
-    Swish sieht aus wie das Nike-Logo --- das merkt sich der Hörsaal.}
+    Swish sieht aus wie das Nike-Logo -- das merkt sich der Hörsaal.}
 \end{frame}
 
 % ------------------------------------------------------------------ Boolesche Netze
@@ -188,7 +188,7 @@
     \Huge $\operatorname{ReLU}(x) + \operatorname{ReLU}(y)$
   \end{center}
 
-  \note{Den ersten Ansatz bewusst scheitern lassen --- der Hörsaal findet den Fehler
+  \note{Den ersten Ansatz bewusst scheitern lassen -- der Hörsaal findet den Fehler
     sofort, und das ist der beste Einstieg.
     ReLU schneidet Negatives sauber ab, deshalb die letzte Variante.
     Frage: Was macht diese Funktion bei $(-1, 2)$? Das ist Extrapolation, und wir
@@ -205,7 +205,7 @@
   \note{Die vier Booleschen Ecken sind markiert, die schwarze Linie ist die
     Nullstellenmenge.
     NOR ist NOT OR, also einfach hintereinandergesetzt:
-    $g(x,y) = 1 - (\operatorname{ReLU}(x) + \operatorname{ReLU}(y))$ --- erste Schicht
+    $g(x,y) = 1 - (\operatorname{ReLU}(x) + \operatorname{ReLU}(y))$ -- erste Schicht
     ReLU, zweite Schicht Gewicht $-1$, Bias 1.
     \emph{Geometrisch programmieren}: Man legt Hyperebenen in die Ebene und kombiniert
     die Seiten. Das ist die Formel, die 2025 gezündet hat.}
@@ -224,7 +224,7 @@
     \end{column}
   \end{columns}
 
-  \note{Die XOR-Region ist der Schnitt der NAND-Region mit der OR-Region --- zwei
+  \note{Die XOR-Region ist der Schnitt der NAND-Region mit der OR-Region -- zwei
     Halbebenen schneiden.
     Setzt man das mit unseren Bausteinen zusammen, käme man auf 4 versteckte Schichten zu
     je 4 Neuronen. Der Gradientenabstieg findet es mit weniger.}
@@ -242,7 +242,7 @@
     \end{column}
   \end{columns}
 
-  \note{Links drei versteckte Schichten, rechts zwei --- beides Approximationen, die der
+  \note{Links drei versteckte Schichten, rechts zwei -- beides Approximationen, die der
     Gradientenabstieg im Playground gefunden hat.
     Take-Home: Der Optimierer findet meist \emph{krumme} Gewichte, die trotzdem
     funktionieren, nimmt Abkürzungen und verschwendet Platz (überflüssige Neuronen).
@@ -277,7 +277,7 @@
   \end{center}
 
   \note{\textbf{Gemeinsam entwickeln, nicht vorlesen.} Die Interpolation durch $(k, k^2)$
-    hat auf $[k, k+1]$ die Steigung $2k+1$ --- an jeder Stützstelle wächst die Steigung
+    hat auf $[k, k+1]$ die Steigung $2k+1$ -- an jeder Stützstelle wächst die Steigung
     um 2, und jeder Knick ist eine ReLU.
     Das ist ein Netz mit einer versteckten Schicht aus 6 ReLU-Neuronen und einer linearen
     Ausgabeschicht.}
@@ -292,8 +292,8 @@
 
   \note{Symmetrie nutzen: $|x| = \operatorname{ReLU}(x) + \operatorname{ReLU}(-x)$ ist
     selbst ein kleines Netz, und dann reicht die Interpolation auf $[0,3]$ mit nur drei
-    Neuronen --- dafür ist das Netz tiefer.
-    \emph{Weniger Neuronen pro Schicht gegen mehr Schichten} --- diesen Tausch sehen wir
+    Neuronen -- dafür ist das Netz tiefer.
+    \emph{Weniger Neuronen pro Schicht gegen mehr Schichten} -- diesen Tausch sehen wir
     noch öfter.}
 \end{frame}
 
@@ -309,10 +309,10 @@
     \normalsize $x+y$ und $x-y$ sind lineare Schichten.
   \end{center}
 
-  \note{Die Polarisationsidentität --- kurz nachrechnen lassen.
+  \note{Die Polarisationsidentität -- kurz nachrechnen lassen.
     Mit MUL und Addition bekommt man alle Polynome, und mit Weierstraß alle stetigen
     Funktionen auf beschränkten Bereichen. Damit ist die Frage „geht das?“ beantwortet.
-    Nebenbei: PyTorch könnte $x^2$ auch exakt rechnen (Gates, etwa in LSTMs) --- aber man
+    Nebenbei: PyTorch könnte $x^2$ auch exakt rechnen (Gates, etwa in LSTMs) -- aber man
     weiß vorher nicht, ob man gerade $x^2$ braucht.}
 \end{frame}
 
@@ -346,7 +346,7 @@
 
   \note{Zwei steile Sigmoide, Ausgabegewichte $+h$ und $-h$: eine Stufe der Höhe $h$.
     Aus Stufen baut man Stufenfunktionen, daraus approximiert man alles Messbare.
-    Konstruktion von Michael Nielsen, Kapitel 4 seines Buchs --- frei online.}
+    Konstruktion von Michael Nielsen, Kapitel 4 seines Buchs -- frei online.}
 \end{frame}
 
 \begin{frame}
@@ -359,11 +359,11 @@
     Yarotsky (2017): $c\log(1/\varepsilon)$ Schichten, $c\,\varepsilon^{-d/k}$ Gewichte
   \end{center}
 
-  \note{Die Zahl der Gewichte wächst exponentiell in der Eingabedimension --- der Fluch
+  \note{Die Zahl der Gewichte wächst exponentiell in der Eingabedimension -- der Fluch
     der Dimensionalität. Aber: glattere Funktionen (größeres $k$) brauchen weniger, und
     die \emph{Tiefe} wächst nur logarithmisch in der Genauigkeit.
     Am Rande, wenn Zeit ist: Jedes ReLU-Netz lässt sich auch als Entscheidungsbaum
-    schreiben (Aytekin 2022) --- der Baum ist allerdings exponentiell groß.}
+    schreiben (Aytekin 2022) -- der Baum ist allerdings exponentiell groß.}
 \end{frame}
 
 \begin{frame}
@@ -371,13 +371,13 @@
 
   \begin{center}
     \Large
-    Die Gewichte \emph{existieren} --- wir haben sie hingeschrieben.\\[16pt]
+    Die Gewichte \emph{existieren} -- wir haben sie hingeschrieben.\\[16pt]
     Also kann der Optimierer sie auch finden.\\[16pt]
     \normalsize Aber: Netze interpolieren gut und extrapolieren schlecht.
   \end{center}
 
   \note{Der letzte Satz ist die wichtigste Warnung des Kapitels: Außerhalb der Stützstellen
-    wird die Approximation beliebig schlecht. So rechnet auch die GPU den Sinus --- per
+    wird die Approximation beliebig schlecht. So rechnet auch die GPU den Sinus -- per
     Lookup-Table mit Interpolation, und nur im vorgesehenen Bereich.}
 \end{frame}
 

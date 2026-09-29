@@ -17,7 +17,7 @@
 \begin{frame}
   \titlepage
 
-  \note{\textbf{Ablauf, 90 Minuten.} Drei Kapitel --- das ist viel, deshalb ist der
+  \note{\textbf{Ablauf, 90 Minuten.} Drei Kapitel -- das ist viel, deshalb ist der
     Graphenteil bewusst kurz (node2vec und Message Passing als Idee, keine Vertiefung):\\[2pt]
     \begin{tabular}{@{}rll@{}}
       0--6   & Folie 2       & Rückblick Autoencoder, Löcher im latenten Raum\\
@@ -30,7 +30,7 @@
       70--84 & Folien 17--19 & node2vec, Message Passing\\
       84--90 & Folie 20      & Übungsblatt\\
     \end{tabular}\\[4pt]
-    2025 gab es nach dem VAE eine siebenminütige Fragerunde --- die Zeit einplanen,
+    2025 gab es nach dem VAE eine siebenminütige Fragerunde -- die Zeit einplanen,
     der Reparametrisierungstrick braucht sie.}
 \end{frame}
 
@@ -44,7 +44,7 @@
   \note{300 Datenpunkte im latenten Raum eines klassischen Autoencoders: Löcher und
     Ausreißer.
     Frage in den Raum: Was passiert, wenn ich an einer Stelle dekodiere, an der kein
-    Datenpunkt liegt? Antwort: Matsch. Genau das wollen wir reparieren --- wir hätten
+    Datenpunkt liegt? Antwort: Matsch. Genau das wollen wir reparieren -- wir hätten
     gern einen Raum, in dem man \emph{überall} dekodieren kann.}
 \end{frame}
 
@@ -65,7 +65,7 @@
   \note{Aus jedem Punkt wird eine Wolke. Der latente Raum wird glatt.
     Sofort die Frage stellen, die kommen muss: \emph{Wie geht Backpropagation durch ein
     Sampling?} Antwort: $\varepsilon$ hängt nicht von den Gewichten ab, ist im
-    Rückwärtsdurchlauf also eine Konstante --- ganz normale Kettenregel.
+    Rückwärtsdurchlauf also eine Konstante -- ganz normale Kettenregel.
     Das ist die Stelle, an der 2025 die meisten Fragen kamen.}
 \end{frame}
 
@@ -76,8 +76,8 @@
     \includegraphics[width=0.78\textwidth]{vl08-latent-3points.png}
   \end{center}
 
-  \note{Links klassisch: drei Punkte. Mitte: mit gleichem Rauschen $+\varepsilon$ ---
-    drei gleich große Wolken. Rechts: mit datenabhängigem $\sigma_x$ --- die Wolkengröße
+  \note{Links klassisch: drei Punkte. Mitte: mit gleichem Rauschen $+\varepsilon$ --
+    drei gleich große Wolken. Rechts: mit datenabhängigem $\sigma_x$ -- die Wolkengröße
     wird pro Datenpunkt gelernt.
     Das dritte Bild ist der VAE.}
 \end{frame}
@@ -87,7 +87,7 @@
 
   \begin{center}
     \Large
-    Problem: $\varepsilon \sim \mathcal{N}(0, \sigma_x^2)$ --- $\sigma_x$ hängt an den Gewichten.\\[16pt]
+    Problem: $\varepsilon \sim \mathcal{N}(0, \sigma_x^2)$ -- $\sigma_x$ hängt an den Gewichten.\\[16pt]
     \Huge $y = \mu_x + \sigma_x\,\varepsilon$, \quad $\varepsilon \sim \mathcal{N}(0,1)$
   \end{center}
 
@@ -95,7 +95,7 @@
     abhängen, lässt sich nicht ableiten. Nach dem Umschreiben ist $\varepsilon$ wieder
     eine Konstante und $\sigma_x$ ein ganz normaler Ausgang des Encoders, durch den
     Gradienten fließen.
-    Das ist die Stelle, an der der VAE steht und fällt --- langsam machen, notfalls an
+    Das ist die Stelle, an der der VAE steht und fällt -- langsam machen, notfalls an
     der Tafel.}
 \end{frame}
 
@@ -131,10 +131,10 @@
     \normalsize Das ist genau der negative ELBO aus Data Science.
   \end{center}
 
-  \note{Für Normalverteilungen gibt es die geschlossene Form --- deshalb ist der Term
+  \note{Für Normalverteilungen gibt es die geschlossene Form -- deshalb ist der Term
     billig.
     Wer nach dem Zusammenhang zu EM fragt: Ein GMM fittet \emph{wenige} Cluster und ordnet
-    jeden Punkt einem zu. Der VAE geht umgekehrt vor --- \emph{jeder} Datenpunkt bekommt
+    jeden Punkt einem zu. Der VAE geht umgekehrt vor -- \emph{jeder} Datenpunkt bekommt
     seine eigene Normalverteilung, und der KL-Term sorgt dafür, dass alle zusammen
     ungefähr eine Standardnormalverteilung ergeben.}
 \end{frame}
@@ -149,7 +149,7 @@
   \note{Recap: Encoder gibt eine Normalverteilung aus, Decoder rekonstruiert aus einer
     Stichprobe, Loss ist Rekonstruktion plus KL zum Prior.
     Und dann kann man \emph{generieren}: $y \sim \mathcal{N}(0,1)$ sampeln und dekodieren.
-    VAEs stecken heute noch in Bildgeneratoren --- bei Stable Diffusion findet die
+    VAEs stecken heute noch in Bildgeneratoren -- bei Stable Diffusion findet die
     Diffusion im latenten Raum eines VAE statt.}
 \end{frame}
 
@@ -163,7 +163,7 @@
     sodass ähnliche Wörter nah beieinander liegen.
   \end{center}
 
-  \note{One-Hot-Vektoren sind alle gleich weit voneinander entfernt --- ein Autoencoder
+  \note{One-Hot-Vektoren sind alle gleich weit voneinander entfernt -- ein Autoencoder
     darauf lernt nichts über Bedeutung. Das ist der Punkt, an dem word2vec ansetzt.
     Vorverarbeitung: zählen, Stopwords raus, die häufigsten $N$ (etwa 5000) behalten,
     One-Hot kodieren, und eine Abbildung $\mathbb{R}^N \to \mathbb{R}^K$ mit $K \approx 200$
@@ -183,9 +183,9 @@
   \end{center}
 
   \note{Distributional hypothesis. Der Task ist ein Denoising Autoencoder, bei dem das
-    Rauschen im \emph{Löschen} eines Wortes besteht --- die Brücke zu letzter Woche
+    Rauschen im \emph{Löschen} eines Wortes besteht -- die Brücke zu letzter Woche
     ausdrücklich schlagen. Und zu Fill-Mask aus VL 3.
-    Den Hörsaal raten lassen, was [MASK] ist: Katze, Hündin --- und genau deshalb liegen
+    Den Hörsaal raten lassen, was [MASK] ist: Katze, Hündin -- und genau deshalb liegen
     die beiden im latenten Raum nah beieinander.}
 \end{frame}
 
@@ -233,7 +233,7 @@
   \note{Das sind die Probleme des klassischen Bag-of-Words-Ansatzes, dazu noch die
     bedeutungslosen häufigen Wörter.
     Klassische Antworten: $n$-Gramme, Lemmatisierung, Ontologien, Stopwords.
-    Moderne Antwort: nicht Wörter, sondern \emph{Token} als Atome --- Zeichen-$n$-Gramme
+    Moderne Antwort: nicht Wörter, sondern \emph{Token} als Atome -- Zeichen-$n$-Gramme
     oder gelernte Subwords. „schwimm!“ und „schwimmen“ teilen dann Trigramme.
     Details zur Tokenisierung kommen in VL 10 bei BPE.}
 \end{frame}
@@ -262,7 +262,7 @@
 
   \bigskip
   \begin{center}
-    \normalsize Ziele: bessere Performance, Generalisierung --- und \emph{Transfer}.
+    \normalsize Ziele: bessere Performance, Generalisierung -- und \emph{Transfer}.
   \end{center}
 
   \note{Zwei Mechanismen kennen wir schon: Dimensionsreduktion (Autoencoder) und
@@ -288,7 +288,7 @@
   \end{center}
 
   \note{Feature Engineering ist die Handarbeit, Representation Learning die Automatik.
-    Das Spektrogramm macht aus einer Waveform ein Bild --- Grundlage für Spracherkennung
+    Das Spektrogramm macht aus einer Waveform ein Bild -- Grundlage für Spracherkennung
     und -synthese.}
 \end{frame}
 
@@ -300,7 +300,7 @@
     \includegraphics[width=0.72\textwidth]{vl09-sentence-graph.png}
   \end{center}
 
-  \note{Zwei Sätze teilen sich den Knoten „frisst“ --- und erzeugen dadurch Pfade, die
+  \note{Zwei Sätze teilen sich den Knoten „frisst“ -- und erzeugen dadurch Pfade, die
     keine ursprünglichen Sätze sind.
     Das ist die Beobachtung, aus der node2vec entsteht: Wenn Sätze Pfade in einem Graphen
     sind, kann man umgekehrt aus einem Graphen Sätze machen.}
@@ -321,11 +321,11 @@
 
   \note{Grover \& Leskovec 2016. Schritt 1 ist teuer, aber parallelisierbar.
     Beispiel, das gut zieht: ein bipartiter Graph Titel $\to$ Genre aus einem
-    Netflix-Datensatz --- nach node2vec sucht man im latenten Raum nach ähnlichen Titeln.
+    Netflix-Datensatz -- nach node2vec sucht man im latenten Raum nach ähnlichen Titeln.
     Take-Home: word2vec braucht nur Sätze, also läuft es auf allem, woraus man Sätze
     sampeln kann.
     \emph{Wenn Zeit ist}, die Frage stellen: Wie sähe wav2vec aus? Was sind die „Wörter“,
-    was der „Kontext“? 2025 waren das elf Minuten Brainstorming --- dieses Jahr nur, wenn
+    was der „Kontext“? 2025 waren das elf Minuten Brainstorming -- dieses Jahr nur, wenn
     die Zeit reicht.}
 \end{frame}
 
@@ -339,7 +339,7 @@
   \note{Nur die Idee: Jeder Knoten sammelt Informationen von seinen Nachbarn, mischt sie
     mit seinem eigenen Zustand, und das mehrfach. Nach $k$ Runden weiß ein Knoten etwas
     über seine $k$-Nachbarschaft.
-    Die Formel steht als Vertiefung im Skript --- hier nicht vertiefen, das ist Stoff für
+    Die Formel steht als Vertiefung im Skript -- hier nicht vertiefen, das ist Stoff für
     andere Module.}
 \end{frame}
 
@@ -352,12 +352,12 @@
 
   \bigskip
   \begin{center}
-    Nächste Woche: Sequenzen --- RNNs und Transformer.
+    Nächste Woche: Sequenzen -- RNNs und Transformer.
   \end{center}
 
   \note{Tipp: den KL-Term wirklich addieren (derselbe Fehler wie beim Sparse Autoencoder),
     \texttt{logvar} statt $\sigma$ ausgeben, und am Ende aus $\mathcal{N}(0,1)$ sampeln
-    und dekodieren --- erst dann sieht man, ob der latente Raum lückenlos ist.}
+    und dekodieren -- erst dann sieht man, ob der latente Raum lückenlos ist.}
 \end{frame}
 
 \end{document}

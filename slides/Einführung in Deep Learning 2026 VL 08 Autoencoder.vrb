@@ -15,7 +15,7 @@ for epoch in range(15):
   \note{Neu gegenüber VL 3 sind \texttt{Dataset} und \texttt{DataLoader}: Der Datensatz
     liefert einzelne Samples (mit einer \texttt{transform}, die das Bild zu einem Vektor
     der Länge 784 macht), der Loader mischt und bündelt zu Mini-Batches.
-    Die Schleife selbst ist dieselbe wie immer --- nur dass das Label das Bild ist.
+    Die Schleife selbst ist dieselbe wie immer -- nur dass das Label das Bild ist.
     \textbf{Ehrlich sein:} Mit diesen Werten (SGD, \texttt{lr=1e-2}, 15 Epochen) sinkt der
-    MSE nur von 0,231 auf 0,228 --- man sieht Matsch. Das ist Absicht und die Überleitung
+    MSE nur von 0,231 auf 0,228 -- man sieht Matsch. Das ist Absicht und die Überleitung
     zur nächsten Folie. Zum Vergleich gemessen: Adam mit \texttt{lr=1e-3} kommt auf 0,019.}

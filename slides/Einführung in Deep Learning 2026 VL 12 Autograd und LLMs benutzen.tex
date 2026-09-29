@@ -17,7 +17,7 @@
 \begin{frame}
   \titlepage
 
-  \note{\textbf{Ablauf, 90 Minuten} (2025: 46 Min. Wiederholung, 50 Min. LLM-Praxis ---
+  \note{\textbf{Ablauf, 90 Minuten} (2025: 46 Min. Wiederholung, 50 Min. LLM-Praxis --
     und 7 Min. Überzug, den wir uns dieses Jahr sparen):\\[2pt]
     \begin{tabular}{@{}rll@{}}
       0--4   & Folie 2       & Rückblick, heute zwei Hälften\\
@@ -31,7 +31,7 @@
       84--90 & Folie 17      & Übungsblatt\\
     \end{tabular}\\[4pt]
     Zwei Notebooks: \texttt{VL\_11\_backprop.ipynb} und \texttt{VL\_11\_llamacpp.ipynb}.
-    Beide zeigen, nicht vorlesen. 2025 hat der Dozent hier überzogen --- notfalls die
+    Beide zeigen, nicht vorlesen. 2025 hat der Dozent hier überzogen -- notfalls die
     Wege-Liste kürzen.}
 \end{frame}
 
@@ -44,7 +44,7 @@
     Dann: ein LLM ohne API benutzen.
   \end{center}
 
-  \note{Die erste Hälfte ist Wiederholung von VL 6 --- diesmal aber im Code statt auf
+  \note{Die erste Hälfte ist Wiederholung von VL 6 -- diesmal aber im Code statt auf
     Papier. Das ist die Gelegenheit, Backpropagation ein zweites Mal zu sehen, wenn es
     beim ersten Mal zu schnell ging.}
 \end{frame}
@@ -65,7 +65,7 @@ L = y ** 2    # 49
 
   \note{\texttt{requires\_grad} ist die ganze Magie: Damit merkt sich PyTorch, dass dieser
     Tensor beobachtet wird.
-    Der Berechnungsgraph (ein DAG) entsteht \emph{beim Ausführen}, nicht beim Schreiben ---
+    Der Berechnungsgraph (ein DAG) entsteht \emph{beim Ausführen}, nicht beim Schreiben --
     das ist der Unterschied zwischen Formel und Rechenreihenfolge, den wir in VL 6 hatten.}
 \end{frame}
 
@@ -79,13 +79,13 @@ print(L.grad_fn.next_functions[0][0])  # <AddBackward0>
 
   \bigskip
   \begin{center}
-    \normalsize Jede \texttt{grad\_fn} weiß, wie man ihre Operation ableitet ---\\
+    \normalsize Jede \texttt{grad\_fn} weiß, wie man ihre Operation ableitet --\\
     und hält die \emph{saved tensors}.
   \end{center}
 
   \note{Das sind genau die $z_k$ aus VL 6, die wir im Forward Pass gespeichert haben.
     \texttt{AccumulateGrad} sind die Blätter des Graphen, also die Parameter.
-    Im Notebook zeigen und einmal den Graphen entlanglaufen --- das macht die Sache
+    Im Notebook zeigen und einmal den Graphen entlanglaufen -- das macht die Sache
     greifbar.}
 \end{frame}
 
@@ -103,7 +103,7 @@ print(w.grad, b.grad)   # tensor(42.), tensor(14.)
   \end{lstlisting}
 
   \note{\texttt{backward()} ist der rekursive Aufruf der Kettenregel, initial mit
-    $dL/dL = 1$. Die Zahlen stimmen --- nachgerechnet.
+    $dL/dL = 1$. Die Zahlen stimmen -- nachgerechnet.
     Das ist derselbe Rückwärtsdurchlauf wie in VL 6, nur dass ihn niemand von Hand
     aufschreiben muss.}
 \end{frame}
@@ -125,7 +125,7 @@ with torch.no_grad():     # sonst wird der Update Teil des Graphen
   \end{center}
 
   \note{Zwei Fallen auf einer Folie: \texttt{no\_grad}, sonst landet das Update selbst im
-    Graphen --- und \texttt{zero\_()}, sonst summiert PyTorch die Gradienten auf.
+    Graphen -- und \texttt{zero\_()}, sonst summiert PyTorch die Gradienten auf.
     Das erklärt die Zeile \texttt{optimizer.zero\_grad()} aus VL 4, über die sich alle
     wundern.
     Übrigens ist das Akkumulieren kein Bug: Man nutzt es für große Batches, die nicht in
@@ -141,7 +141,7 @@ with torch.no_grad():     # sonst wird der Update Teil des Graphen
 
   \bigskip
   \begin{center}
-    \normalsize Der Graph ist an dieser Stelle abgeschnitten --- der Optimizer
+    \normalsize Der Graph ist an dieser Stelle abgeschnitten -- der Optimizer
     ändert $w$ nicht mehr.
   \end{center}
 
@@ -170,7 +170,7 @@ print(k.grad)     # tensor([6.])
 
   \note{Das ist die „Summe über alle Pfade“ aus VL 5, jetzt im Code: Im Graphen führen
     mehrere Kanten zu demselben Blatt, und die Beiträge addieren sich.
-    Genau so funktioniert Backprop durch eine Faltungsschicht --- ein Kernel wird an jeder
+    Genau so funktioniert Backprop durch eine Faltungsschicht -- ein Kernel wird an jeder
     Position benutzt.}
 \end{frame}
 
@@ -185,7 +185,7 @@ print(k.grad)     # tensor([6.])
       \item Satzvektoren
       \item die Verteilung auslesen
       \item Prompting
-      \item selbst pretrainieren
+      \item selbst vortrainieren
       \end{enumerate}
     \end{column}
     \begin{column}{0.48\textwidth}
@@ -236,7 +236,7 @@ ollama run llama3.2:1b "Explain how LLMs work"
     \normalsize Baut auf llama.cpp / \texttt{ggml} auf.
   \end{center}
 
-  \note{\textbf{Live im Terminal zeigen} --- das dauert zwei Minuten und beeindruckt mehr
+  \note{\textbf{Live im Terminal zeigen} -- das dauert zwei Minuten und beeindruckt mehr
     als jede Folie. Ein 1B-Modell läuft auf jedem Laptop.
     Danach im Browser das Chat-Interface zeigen.
     Wer es nachbauen will: Für die Übung reicht ein kleines Modell wie
@@ -256,7 +256,7 @@ print(vector.shape, np.linalg.norm(vector))    # (896,)  ~300
   \end{lstlisting}
 
   \note{Nachgerechnet: Shape $(896,)$, Norm etwa 297.
-    Das ist word2vec aus VL 9, nur mit einem viel größeren Modell --- und mit Kontext,
+    Das ist word2vec aus VL 9, nur mit einem viel größeren Modell -- und mit Kontext,
     weil der ganze Satz eingeht.
     Damit kann man semantisch suchen und clustern, ohne je Text zu generieren.}
 \end{frame}
@@ -278,7 +278,7 @@ print(f"{probs[red]:.2%}")  # 0.72%
   \end{center}
 
   \note{Das ist die Take-Home-Message der zweiten Hälfte. Der Text entsteht erst durch
-    Sampling aus dieser Verteilung --- und was man statt \texttt{argmax} nimmt
+    Sampling aus dieser Verteilung -- und was man statt \texttt{argmax} nimmt
     (Temperatur, Top-$k$, Top-$p$), ist eine eigene Entscheidung.
     Die Zahlen sind mit Qwen2.5-0.5B-Instruct Q4\_K\_M nachgerechnet; mit anderem Modell
     oder anderer Quantisierung sehen sie anders aus.
@@ -300,7 +300,7 @@ print(person)   # name='Sabine' age=29 occupation='doctor' location='Munich'
 
   \note{Auch das ist nachgerechnet und kommt genau so heraus.
     Der Punkt: Statt in Prompts um ein Format zu \emph{betteln}, zwingt man das Sampling
-    in ein Schema --- beim Generieren werden nur Token zugelassen, die das JSON gültig
+    in ein Schema -- beim Generieren werden nur Token zugelassen, die das JSON gültig
     halten.
     Das ist der Baustein, auf dem agentische Workflows aufbauen.}
 \end{frame}

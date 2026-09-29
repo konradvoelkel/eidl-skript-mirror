@@ -9,7 +9,7 @@
 
 \graphicspath{{../images/}}
 
-\title[GANs (VL 13)]{GANs --- und Backpropagation als Induktion\\\large Einführung in Deep Learning, VL 13}
+\title[GANs (VL 13)]{GANs -- und Backpropagation als Induktion\\\large Einführung in Deep Learning, VL 13}
 \date{20.01.2027}
 
 \begin{document}
@@ -18,7 +18,7 @@
   \titlepage
 
   \note{\textbf{Ablauf, 90 Minuten} (2025 hat die GAN-Sitzung 60 Min. gebraucht und
-    bewusst früher geschlossen --- die frei werdende Zeit geht dieses Jahr in die
+    bewusst früher geschlossen -- die frei werdende Zeit geht dieses Jahr in die
     Backprop-Wiederholung, die klausurrelevant ist):\\[2pt]
     \begin{tabular}{@{}rll@{}}
       0--4   & Folie 2       & Probeklausur, Ablauf bis zur Klausur\\
@@ -41,12 +41,12 @@
   \begin{center}
     \Large
     Heute: das letzte neue Modell des Semesters.\\[16pt]
-    Und danach: Backpropagation noch einmal --- klausurrelevant.
+    Und danach: Backpropagation noch einmal -- klausurrelevant.
   \end{center}
 
   \note{Die Probeklausur kommt heute raus, Abgabe nächste Woche. Das letzte
     reguläre Blatt ist abgegeben.
-    Die Wiederholung in der zweiten Hälfte ist ausdrücklich Klausurvorbereitung ---
+    Die Wiederholung in der zweiten Hälfte ist ausdrücklich Klausurvorbereitung --
     Aufgabentyp 4 ist die Backprop-Rechnung.}
 \end{frame}
 
@@ -56,7 +56,7 @@
   \begin{center}
     \Large
     Goodfellow et al., \emph{Generative Adversarial Nets}\\[16pt]
-    \normalsize kein Markov-Chain-Sampling,\\ keine Variationsrechnung ---\\
+    \normalsize kein Markov-Chain-Sampling,\\ keine Variationsrechnung --\\
     nur zwei Netze und Backpropagation.
   \end{center}
 
@@ -73,7 +73,7 @@
   \end{center}
 
   \note{Der \emph{Generator} bekommt Rauschen $z \sim \mathcal{N}(0,I)$ und macht daraus
-    ein Bild. Der \emph{Diskriminator} bekommt ein Bild --- echt oder generiert --- und
+    ein Bild. Der \emph{Diskriminator} bekommt ein Bild -- echt oder generiert -- und
     soll sagen, was es ist.
     \textbf{Die Pointe, die man betonen sollte:} Der Generator sieht \emph{nie} echte
     Daten. Er sieht nur den Gradienten, der durch den Diskriminator zurückfließt.}
@@ -90,7 +90,7 @@
 
   \note{Das ist die Take-Home-Message der Sitzung: Ein GAN ist nichts Neues, sondern zwei
     Netze, die wir schon kennen, mit Backpropagation gegeneinander trainiert.
-    Der Generator kann sogar der Decoder eines vortrainierten Autoencoders sein --- dann
+    Der Generator kann sogar der Decoder eines vortrainierten Autoencoders sein -- dann
     hat man schon einen brauchbaren latenten Raum.}
 \end{frame}
 
@@ -108,7 +108,7 @@
     \normalsize Das ist die BCE des Diskriminators.
   \end{center}
 
-  \note{\textbf{Diese Formel gehört auf die Folie} --- 2025 fehlte sie und wurde vermisst.
+  \note{\textbf{Diese Formel gehört auf die Folie} -- 2025 fehlte sie und wurde vermisst.
     Label 1 für echt, 0 für generiert. $D$ will maximieren (gut klassifizieren), $G$ will
     minimieren ($D$ täuschen).
     Also: dieselbe binäre Kreuzentropie wie in VL 5, nur mit zwei Parteien, die in
@@ -125,8 +125,8 @@
   \end{center}
 
   \note{Der Diskriminator wird für falsch positive \emph{und} falsch negative bestraft.
-    Der Generator kann vorher als Decoder eines Autoencoders pretrainiert werden, damit
-    er die Verteilung grob kennt --- dann ist das GAN-Training Finetuning.
+    Der Generator kann vorher als Decoder eines Autoencoders vortrainiert werden, damit
+    er die Verteilung grob kennt -- dann ist das GAN-Training Finetuning.
     Frage in den Raum: Was passiert, wenn einer von beiden zu gut wird?}
 \end{frame}
 
@@ -142,7 +142,7 @@
     \normalsize Wenn $G$ die Datenverteilung trifft, kann $D$ nur noch raten.
   \end{center}
 
-  \note{Das ist das Ziel --- und eine hübsche Umkehrung der üblichen Logik: Ein
+  \note{Das ist das Ziel -- und eine hübsche Umkehrung der üblichen Logik: Ein
     Klassifikator, der nur noch rät, ist normalerweise ein schlechtes Ergebnis. Hier ist
     er der Beweis, dass der Generator gut ist.
     Verallgemeinerung, die 2025 gut ankam: Jeden Klassifikator, der echt von generiert
@@ -159,10 +159,10 @@
 
   \bigskip
   \begin{center}
-    \normalsize Generator-Verteilung, Gradientenfeld, Loss-Kurven --- live.
+    \normalsize Generator-Verteilung, Gradientenfeld, Loss-Kurven -- live.
   \end{center}
 
-  \note{\textbf{Browser-Block, etwa zehn Minuten --- und dann aufhören.} Das ist die Regel
+  \note{\textbf{Browser-Block, etwa zehn Minuten -- und dann aufhören.} Das ist die Regel
     aus 2025: Bei der Ring- oder Gauß-Wolke wandert die Generator-Verteilung erst schön
     hin, danach kippt es meist in Mode Collapse.
     Genau diesen Moment kann man zeigen und dann zur nächsten Folie gehen: Man hat gerade
@@ -182,7 +182,7 @@
     \normalsize Jetzt kann man sagen, \emph{welche} Ziffer gezeichnet werden soll.
   \end{center}
 
-  \note{Zusatzinformation für beide --- meistens das Klassenlabel.
+  \note{Zusatzinformation für beide -- meistens das Klassenlabel.
     Das ist der Schritt von „irgendein Gesicht“ zu „ein Gesicht mit Brille“, und der
     Vorläufer von Text-zu-Bild.}
 \end{frame}
@@ -199,7 +199,7 @@
   \note{Mode Collapse: Die Verteilung kollabiert auf wenige Punkte, die $D$ gerade nicht
     erkennt. Genau das hat man im GAN Lab gesehen.
     Vanishing Gradients: Ist $D(G(z)) \approx 0$ überall, dann ist $\log(1 - D(G(z)))$
-    flach und der Generator lernt nichts mehr --- dasselbe Phänomen wie bei den sterbenden
+    flach und der Generator lernt nichts mehr -- dasselbe Phänomen wie bei den sterbenden
     Neuronen in VL 7.}
 \end{frame}
 
@@ -213,7 +213,7 @@
   \end{center}
 
   \note{Die Wasserstein-Distanz (earth mover's distance) gibt auch dann noch einen
-    brauchbaren Gradienten, wenn der Diskriminator sicher ist --- deshalb hilft sie gegen
+    brauchbaren Gradienten, wenn der Diskriminator sicher ist -- deshalb hilft sie gegen
     beide Probleme.
     Der Kritiker gibt eine reelle Zahl aus, keine Wahrscheinlichkeit; der Wertebereich ist
     nicht $[0,1]$. Die Dualität steht als Vertiefung im Skript und ist nicht
@@ -231,7 +231,7 @@
 
   \note{Übergang ansagen: Der Rest der Sitzung ist Wiederholung und Klausurvorbereitung.
     In VL 6 haben wir es an einem Beispiel gerechnet. Jetzt die Formulierung, mit der man
-    \emph{jede} Architektur erschlägt --- als Induktion.}
+    \emph{jede} Architektur erschlägt -- als Induktion.}
 \end{frame}
 
 \begin{frame}
@@ -245,7 +245,7 @@
     worauf sie zurückgreift.
   \end{center}
 
-  \note{Das ist der Aufbau des DAG. Mehr passiert im Vorwärtsdurchlauf nicht --- und genau
+  \note{Das ist der Aufbau des DAG. Mehr passiert im Vorwärtsdurchlauf nicht -- und genau
     das haben wir in VL 12 im Code gesehen: \texttt{grad\_fn} und saved tensors.}
 \end{frame}
 
@@ -266,7 +266,7 @@
   \note{$Y$ sind „die bisherigen Rechenoperationen“, $Z$ ist „die nächste“. Mehr braucht
     die Kettenregel nicht.
     Mit vollständiger Induktion folgt: \emph{Ein} Durchlauf durch den DAG liefert alle
-    Ableitungen --- insbesondere den Loss nach allen Gewichten.
+    Ableitungen -- insbesondere den Loss nach allen Gewichten.
     In diese Rechnung fließt null Kreativität. Das ist der Grund, warum es ein Computer
     kann.}
 \end{frame}
@@ -287,7 +287,7 @@
 
   \note{Aufgabentyp 4 aus dem Aufgabenschatz. Das Rechenbeispiel vom Übungsblatt ist die
     Blaupause.
-    Der häufigste Fehler bleibt derselbe: nicht dazuschreiben, wonach abgeleitet wird ---
+    Der häufigste Fehler bleibt derselbe: nicht dazuschreiben, wonach abgeleitet wird --
     das kostet jedes Jahr Punkte.
     Wenn Zeit bleibt: das Faltungsbeispiel aus VL 12 als zweite Übung rechnen, da kommt
     das Summieren geteilter Gewichte dazu.}
@@ -308,7 +308,7 @@
 
   \note{Die Probeklausur ersetzt das letzte Übungsblatt. Ernst nehmen: Sie ist im Format der
     echten Klausur, sechs Aufgaben, 90 Minuten.
-    Wer mag, schreibt sie unter Prüfungsbedingungen --- das ist die beste Vorbereitung.}
+    Wer mag, schreibt sie unter Prüfungsbedingungen -- das ist die beste Vorbereitung.}
 \end{frame}
 
 \end{document}

@@ -18,7 +18,7 @@
   \titlepage
 
   \note{\textbf{Ablauf, 90 Minuten.} 2025 war der Transformer ein Nachtrag am Anfang von
-    VL 10 (22 Min.) plus 7 Min. am Ende von VL 9 --- dieses Jahr gehört ihm die halbe
+    VL 10 (22 Min.) plus 7 Min. am Ende von VL 9 -- dieses Jahr gehört ihm die halbe
     Sitzung:\\[2pt]
     \begin{tabular}{@{}rll@{}}
       0--6   & Folie 2       & Sequenzen: was ist neu?\\
@@ -31,7 +31,7 @@
       72--84 & Folien 16--17 & BERT, ViT\\
       84--90 & Folie 18      & Letzte Sitzung vor Weihnachten, Übungsblatt\\
     \end{tabular}\\[4pt]
-    \textbf{Letzte Sitzung vor der Winterpause} --- das Übungsblatt hat bis 13.01. Zeit,
+    \textbf{Letzte Sitzung vor der Winterpause} -- das Übungsblatt hat bis 13.01. Zeit,
     das ausdrücklich ansagen.}
 \end{frame}
 
@@ -51,7 +51,7 @@
 
   \note{Frage in den Raum: Wie würden Sie einen Satz variabler Länge in ein MLP stecken?
     Antworten sammeln (padding, Mittelwert, …) und dann zeigen, dass die Reihenfolge dabei
-    verloren geht --- „Katze isst Maus“ aus der letzten Woche.}
+    verloren geht -- „Katze isst Maus“ aus der letzten Woche.}
 \end{frame}
 
 \begin{frame}
@@ -70,7 +70,7 @@
   \note{Drei Matrizen: $W$ für die neue Eingabe, $U$ für den alten Zustand, $V$ für die
     Ausgabe. Mehr ist es nicht.
     Begriff: Im Gegensatz zum CNN (nächste Woche, Finite Impulse Response) ist ein RNN ein
-    \emph{Infinite Impulse Response}-Signalverarbeiter --- eine Eingabe kann den Zustand
+    \emph{Infinite Impulse Response}-Signalverarbeiter -- eine Eingabe kann den Zustand
     prinzipiell für immer beeinflussen.}
 \end{frame}
 
@@ -82,7 +82,7 @@
   \end{center}
 
   \note{Über $T$ Zeitschritte entfaltet: ein Netz mit $T$ Schichten, die sich alle
-    \emph{dieselben} Gewichte teilen. Backpropagation funktioniert dann ganz normal ---
+    \emph{dieselben} Gewichte teilen. Backpropagation funktioniert dann ganz normal --
     das heißt backpropagation through time.
     Und damit auch das bekannte Problem: Gradienten über viele Zeitschritte werden
     exponentiell klein oder groß.}
@@ -97,7 +97,7 @@
 
   \bigskip
   \begin{center}
-    \normalsize Jede Schicht ist nah an „nichts ändern“ ---\\
+    \normalsize Jede Schicht ist nah an „nichts ändern“ --\\
     und der Gradient hat einen Weg \emph{an} der Schicht vorbei.
   \end{center}
 
@@ -117,7 +117,7 @@
     drei Gates: forget, input, output
   \end{center}
 
-  \note{Die Gates sind Sigmoide mit Werten in $(0,1)$, die elementweise multiplizieren ---
+  \note{Die Gates sind Sigmoide mit Werten in $(0,1)$, die elementweise multiplizieren --
     also genau die stetigen Bitmasken aus VL 7. Diesen Rückbezug machen, dann ist das
     nichts Neues mehr.
     Der cell state wird nur durch Addition und elementweise Multiplikation verändert:
@@ -143,7 +143,7 @@ class MyModel(nn.Module):
   \note{\texttt{nn.LSTM} bekommt eine Sequenz von Vektoren (z.B. die word2vec-Embeddings
     aus der letzten Woche) und liefert die Sequenz der hidden states; darauf ein linearer
     Layer für die Vorhersage.
-    $h_n$ und $c_n$ sind der \emph{letzte} Zustand --- für eine Klassifikation des ganzen
+    $h_n$ und $c_n$ sind der \emph{letzte} Zustand -- für eine Klassifikation des ganzen
     Satzes würde man die nehmen.}
 \end{frame}
 
@@ -156,7 +156,7 @@ class MyModel(nn.Module):
     2014 GRU \; 2017 Transformer
   \end{center}
 
-  \note{Bill Gates 2018: „huge milestone in advancing artificial intelligence“ --- weil
+  \note{Bill Gates 2018: „huge milestone in advancing artificial intelligence“ -- weil
     OpenAI mit LSTMs Dota 2 gewann. AlphaStar (StarCraft 2, 2019) war auch LSTM-basiert.
     Und dann kam etwas, das gar keine Rekurrenz mehr hat.}
 \end{frame}
@@ -180,7 +180,7 @@ class MyModel(nn.Module):
     Wichtig für die Einordnung: 41.8 „BLEU“ heißt 0,418. sacreBLEU ist die
     Standard-Implementierung. Und das WMT19-Modell aus VL 3 ist ein Nachfolger genau
     dieser Linie.
-    Ohne so ein Maß hätte es das Paper von 2017 nicht gegeben --- man konnte plötzlich
+    Ohne so ein Maß hätte es das Paper von 2017 nicht gegeben -- man konnte plötzlich
     Architekturen vergleichen.}
 \end{frame}
 
@@ -198,7 +198,7 @@ class MyModel(nn.Module):
     gewichtete Summe der Values ein.
     Das Kochrezept aus VL 2 ist immer noch dasselbe: Skalarprodukt, dann etwas
     Nichtlineares.
-    $\sqrt{d_k}$ ist Numerik --- ohne die Skalierung werden die Skalarprodukte in hohen
+    $\sqrt{d_k}$ ist Numerik -- ohne die Skalierung werden die Skalarprodukte in hohen
     Dimensionen zu groß und der Softmax zu spitz.}
 \end{frame}
 
@@ -214,7 +214,7 @@ class MyModel(nn.Module):
   \end{center}
 
   \note{Encoder-Stapel und Decoder-Stapel, beide aus identischen Blöcken dieser Bauart.
-    Alles darin kennen wir schon --- Skalarprodukt, MLP, Skip Connections, Normalisierung.
+    Alles darin kennen wir schon -- Skalarprodukt, MLP, Skip Connections, Normalisierung.
     Neu ist nur, \emph{wer} mit \emph{wem} redet.
     Wer das Bild will: Figure 1 in Vaswani et al. Eine annotierte, ausführbare Fassung ist
     \emph{The Annotated Transformer}.}
@@ -230,7 +230,7 @@ class MyModel(nn.Module):
   \end{center}
 
   \note{Das ist die Frage, die man selbst stellen sollte, wenn sie nicht kommt: Wenn jedes
-    Token mit jedem redet --- woher weiß das Modell, was vorne und hinten ist?
+    Token mit jedem redet -- woher weiß das Modell, was vorne und hinten ist?
     Antwort: Jedes Token bekommt eine Positionskodierung addiert. Bei GPT ist sie gelernt,
     im Originalpaper sind es Sinus- und Kosinusfunktionen.}
 \end{frame}
@@ -247,8 +247,8 @@ class MyModel(nn.Module):
 
   \note{Generative Pretrained Transformer. Varianten: GPT-2, GPT-J, GPT-NeoX, Llama.
     \emph{Self}-supervised ist der präzisere Begriff: Das Label ist das nächste Token,
-    also steckt es schon in den Daten --- dieselbe Idee wie beim Autoencoder.
-    Visualisierung Layer für Layer: bbycroft.net/llm --- das lohnt sich im Browser, wenn
+    also steckt es schon in den Daten -- dieselbe Idee wie beim Autoencoder.
+    Visualisierung Layer für Layer: bbycroft.net/llm -- das lohnt sich im Browser, wenn
     Zeit ist.}
 \end{frame}
 
@@ -282,7 +282,7 @@ class MyModel(nn.Module):
     \normalsize Kontext in \emph{beide} Richtungen
   \end{center}
 
-  \note{Masked Language Modeling ist word2vec mit Transformer --- die Lücke wird
+  \note{Masked Language Modeling ist word2vec mit Transformer -- die Lücke wird
     vorhergesagt, aber mit Kontext von links \emph{und} rechts. Deshalb das B für
     bidirectional.
     Bei gleicher Größe besser als GPT für Klassifikationsaufgaben; nicht zwangsläufig
@@ -306,7 +306,7 @@ class MyModel(nn.Module):
   \end{center}
 
   \note{Ansonsten ein ganz normaler Transformer. Für Klassifikation manchmal besser als
-    CNNs --- was die Frage aufwirft, wozu man CNNs noch braucht. Antwort nächste Woche.}
+    CNNs -- was die Frage aufwirft, wozu man CNNs noch braucht. Antwort nächste Woche.}
 \end{frame}
 
 \begin{frame}
@@ -324,7 +324,7 @@ class MyModel(nn.Module):
 
   \note{Ausdrücklich sagen, dass das Übungsblatt über die Winterpause läuft und niemand in den
     Ferien arbeiten muss.
-    Die erste Übung im Januar ist eine Fragestunde --- Fragen dafür kann man vorab in der
+    Die erste Übung im Januar ist eine Fragestunde -- Fragen dafür kann man vorab in der
     ILIAS-Umfrage sammeln, die dafür freigeschaltet ist.}
 \end{frame}
 
