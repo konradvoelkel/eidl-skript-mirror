@@ -19,6 +19,7 @@ Arbeitsnotizen und Prüfskripte zum Skript, nicht Teil des Buchs. Stand 2026-09-
 | `check_doku.py` | Prüft die Doku gegen das Repo: Pfade, Zahlen, `--min-pages`, Vollständigkeit dieses Index, und die Regeln, die im Buch gelten | vor jedem Push, der Doku oder Struktur anfasst |
 | `sprachpruefliste.py` | Erzeugt die Atome des **Sprachdurchgangs**: Typografie (Anführungszeichen, Striche, Leerzeichen, Wortdoppelungen), Abkürzungsvarianten, lange Sätze und eine gefilterte Rechtschreibliste. Prüft nur Prosa — Code, Mathe und Directives werden vorher herausgenommen | für den Sprachdurchgang; liest nur, Ausgabe in den Scratchpad. Braucht `aspell` mit deutschem Wörterbuch |
 | `sprachpruefliste-woerter.txt` | Die Projektwortliste dazu: was hier steht, meldet die Rechtschreibprüfung nicht mehr. Wächst mit jedem Durchgang; ein Wort kommt erst hinein, wenn jemand es angesehen hat | wird von `sprachpruefliste.py` gelesen |
+| `grammatikpruefung.py` | Prüft die Prosa mit **LanguageTool** auf das, was `aspell` prinzipiell nicht sieht: Kongruenz, Zusammenschreibung und — der eigentliche Ertrag — uneinheitlich gekoppelte Komposita (`Lehrermodell` neben `Lehrer-Modell`). Gefiltert auf die zwölf Regeln, die im Buch je etwas Echtes gefunden haben; ungefiltert sind es 1 930 Treffer auf 6 Befunde | einmal je größerem Umbau, **nicht** in der CI. Ephemer aufrufen (`uv run --no-project --with language-tool-python …`), braucht Java und ~260 MB; Ablage über `LTP_PATH` steuern |
 | `check_links.py` | Prüft interne Linkziele auf Existenz und externe auf Erreichbarkeit (braucht Netz, urteilt nie nach einem HEAD) | vor dem Semesterstart und bei der Durchsicht; **nicht** in der CI |
 | `check_ci_yaml.py` | Prüft `.gitlab-ci.yml` auf die Form, die GitLab erwartet (nicht nur auf YAML) | vor jedem Push, der die CI anfasst |
 | `make_figures.py`, `embed_figures.py` | Abbildungen mit matplotlib erzeugen und einbetten | bei Bedarf erneut laufen lassen |
@@ -33,9 +34,9 @@ schnitt) sind am 2026-09-27 **gelöscht** worden. Sie hätten das Repo zurückdr
 Der Befundbogen der **fachlichen Durchsicht** liegt in `devnotes/durchsicht/` und ist **gitignored** —
 `devnotes/durchsicht/durchsicht-2026-10.md` trägt Verfahren, Übergabe, Fortschritt je Kapitel und die
 Befunde des Durchgangs, also Zwischenstände und offene Entscheidungsfragen. Das Projekt ist
-öffentlich; ins Repo kommt, was aus den Befunden folgt, nicht der Weg dahin. Die beiden
-Werkzeuge dazu (`pruefliste_durchsicht.py`, `sprachpruefliste.py`, `check_links.py`) stehen oben im Index und sind
-versioniert.
+öffentlich; ins Repo kommt, was aus den Befunden folgt, nicht der Weg dahin. Die
+Werkzeuge dazu (`pruefliste_durchsicht.py`, `sprachpruefliste.py`, `grammatikpruefung.py`,
+`check_links.py`) stehen oben im Index und sind versioniert.
 
 Die Übungsblätter von 2025 samt Lösungsvorschlägen liegen seit dem 2026-09-27 in
 `../uebungen-2025/` (gitignored, nur in Sciebo) und sind aus der git-Historie entfernt —

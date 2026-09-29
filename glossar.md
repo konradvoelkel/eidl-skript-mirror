@@ -19,7 +19,7 @@ Die Begriffe, die in Klausuraufgaben vorkommen, je in ein bis drei Sätzen, mit 
 
 **Over- und Underfitting.** Overfitting: gut auf Trainings-, schlecht auf Testdaten, das Modell hat auswendig gelernt. Underfitting: schon auf Trainingsdaten schlecht. Gegenmittel gegen Overfitting sind Regularisierung, Early Stopping, Data Augmentation, Dropout. [Autoencoder](part-representation-learning/14-autoencoder.md)
 
-**Generatives Modell.** Ein Modell für eine Wahrscheinlichkeitsverteilung, als Dichte oder als Sampler. Generieren heißt aus dieser Verteilung samplen. [Was ist Deep Learning?](part-grundlagen/01-was-ist-deep-learning.md)
+**Generatives Modell.** Ein Modell für eine Wahrscheinlichkeitsverteilung, als Dichte oder als Sampler. Generieren heißt aus dieser Verteilung sampeln. [Was ist Deep Learning?](part-grundlagen/01-was-ist-deep-learning.md)
 
 ## Neuron, Perzeptron, Netz
 
@@ -91,7 +91,7 @@ Die Begriffe, die in Klausuraufgaben vorkommen, je in ein bis drei Sätzen, mit 
 
 **Autoencoder.** Encoder von $D$ auf $L \ll D$ Dimensionen, Decoder zurück, Loss ist die Rekonstruktion (MSE). Approximiert die Identität durch einen Flaschenhals, braucht keine Label, komprimiert. Der Decoder erhöht die Dimension. Linear ist er PCA. [Autoencoder](part-representation-learning/14-autoencoder.md)
 
-**Standard-AE ist nicht generativ, VAE schon.** Der klassische Autoencoder lässt Löcher im latenten Raum; der VAE zwingt die Codes zur Standardnormalverteilung, danach kann man samplen und dekodieren. [Variational Autoencoder](part-representation-learning/15-variational-autoencoder.md)
+**Standard-AE ist nicht generativ, VAE schon.** Der klassische Autoencoder lässt Löcher im latenten Raum; der VAE zwingt die Codes zur Standardnormalverteilung, danach kann man sampeln und dekodieren. [Variational Autoencoder](part-representation-learning/15-variational-autoencoder.md)
 
 **Denoising AE.** Rauschen auf die *Eingabe*, Loss gegen das *saubere* Bild. [Autoencoder](part-representation-learning/14-autoencoder.md)
 
@@ -101,7 +101,7 @@ Die Begriffe, die in Klausuraufgaben vorkommen, je in ein bis drei Sätzen, mit 
 
 **Early Stopping, Data Augmentation.** Aufhören, wenn der Test-Loss wieder steigt; Trainingsdaten durch labelerhaltende Transformationen vervielfachen. [Autoencoder](part-representation-learning/14-autoencoder.md)
 
-**Reparametrisierungstrick.** Statt aus $\mathcal{N}(\mu_x, \sigma_x^2)$ zu samplen, sample $\varepsilon \sim \mathcal{N}(0, 1)$ und setze $y = \mu_x + \sigma_x \varepsilon$; dann ist $\varepsilon$ eine Konstante und der Gradient fließt durch $\mu_x$ und $\sigma_x$. [Variational Autoencoder](part-representation-learning/15-variational-autoencoder.md)
+**Reparametrisierungstrick.** Statt aus $\mathcal{N}(\mu_x, \sigma_x^2)$ zu sampeln, sample $\varepsilon \sim \mathcal{N}(0, 1)$ und setze $y = \mu_x + \sigma_x \varepsilon$; dann ist $\varepsilon$ eine Konstante und der Gradient fließt durch $\mu_x$ und $\sigma_x$. [Variational Autoencoder](part-representation-learning/15-variational-autoencoder.md)
 
 **`logvar`.** Der Encoder gibt $\ln \sigma_x^2$ aus statt $\sigma_x$, damit kein Ausgang auf positive Werte eingeschränkt werden muss. [Variational Autoencoder](part-representation-learning/15-variational-autoencoder.md)
 
@@ -113,7 +113,7 @@ Die Begriffe, die in Klausuraufgaben vorkommen, je in ein bis drei Sätzen, mit 
 
 **Embedding-Layer.** Eine Lookup-Tabelle, die einer ID (Wort, Item, Nutzer) einen gelernten Vektor zuordnet, `nn.Embedding`. [word2vec](part-representation-learning/16-word2vec.md)
 
-**Temperatur- und Top-k-Sampling.** Beim Generieren die Logits durch $T$ teilen (klein: gieriger, groß: zufälliger) oder nur unter den $k$ wahrscheinlichsten Token samplen. [Latente Räume geometrisch](part-architekturen-anwendungen/23-latente-raeume.md)
+**Temperatur- und Top-k-Sampling.** Beim Generieren die Logits durch $T$ teilen (klein: gieriger, groß: zufälliger) oder nur unter den $k$ wahrscheinlichsten Token sampeln. [Latente Räume geometrisch](part-architekturen-anwendungen/23-latente-raeume.md)
 
 **node2vec.** Random Walks auf einem Graphen erzeugen „Sätze“, darauf word2vec. So bekommen Knoten Vektoren, etwa Items eines Empfehlungssystems. [Representation Learning und Graphen](part-representation-learning/17-representation-learning-graphen.md)
 
