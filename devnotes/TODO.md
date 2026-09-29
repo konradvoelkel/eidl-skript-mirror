@@ -29,22 +29,29 @@ Hintergrundrauschen.
 
 **Womit anfangen**, wenn nichts anderes vorgegeben ist:
 
-1. **Sprachdurchgang, zweiter Tag: die Foliensätze `slides/*.tex`.** Der erste Tag ist am
-   2026-09-29 gelaufen und hat **16 Befunde** behoben (R1–R13, E1–E6); Verfahren, Befunde und
-   die offenen Entscheidungen stehen in `devnotes/durchsicht/sprachdurchgang-2026-10.md` —
-   **dort** wird gearbeitet, nicht in dieser Liste. Der Ordner ist gitignored, die drei
-   Werkzeuge sind versioniert: `sprachpruefliste.py`, `sprachpruefliste-woerter.txt` und neu
-   `grammatikpruefung.py`.
+1. **Der Sprachdurchgang ist durch — Buch *und* Folien** (2026-09-29, 24 Befunde:
+   R1–R13, E1–E6, dazu 8 in den Decks). Verfahren, Befunde und Entscheidungen stehen in
+   `devnotes/durchsicht/sprachdurchgang-2026-10.md`; die Konventionen D1–D6 sind in
+   `CLAUDE.md` unter „Schreibstil“ festgeschrieben, damit kein späterer Durchgang sie neu
+   verhandelt. Vier versionierte Werkzeuge: `sprachpruefliste.py` (+ Wortliste),
+   `grammatikpruefung.py`, `folienprosa.py`, `folienpruefliste.py` (+ Folienwortliste).
+   Alle Prüfungen melden **null**.
 
-   Über alle 29 Buchdateien sind Rechtschreibung, Typografie, Einheitlichkeit und die langen
-   Sätze durch; die Rechtschreibprüfung meldet **0 unbekannte Wörter**, die Grammatikprüfung
-   6 geprüfte und abgelegte. **Ungeprüft sind allein die Foliensätze** — und die Erfahrung des
-   ersten Tages ist eindeutig: Die Befunde saßen in den Dateien, die nie eine Prüfung gesehen
-   hatten (`index.md` vier auf sechs Zeilen, `kurs-2026-27.md` drei). Ein Tippfehler auf einer
-   Folie steht neunzig Minuten groß an der Wand.
+   **Zwei Dinge, die dabei aufgefallen sind und nicht Sprache sind:**
 
-   Danach: die Kapitel einmal am laufenden Text auf Bezüge lesen („dieses“, „das“ — worauf?),
-   was keine Maschine prüft.
+   * **Der Folienbau war kaputt und hat es verschwiegen.** `/usr/share/texmf` steht in
+     `TEXMF` mit `!!` (nur Datenbank, nie Platte), und `/var/lib/texmf/ls-R-TEXMFMAIN`
+     war sechs Wochen älter als das installierte Theme — **kein Deck baute**. `latexmk`
+     meldet bei vorhandenem PDF „up-to-date“, deshalb gab `slides/build.sh` 15-mal `ok`
+     aus und einmal `FEHLER`. Einmal `sudo mktexlsr` genügt (steht in
+     `slides/README.md`). *Offen:* `build.sh` sollte einen ausgefallenen Bau erkennen
+     statt „ok“ zu melden.
+   * **Kapitelfehler wandern in die Decks.** Drei der acht Folienbefunde waren
+     Durchreichungen aus dem Buch (dieselben Stellen wie R7, R12, E2). Wer am Buch
+     korrigiert, sucht es in `slides/` gleich mit.
+
+   **Was ein dritter Durchgang täte:** die Kapitel am laufenden Text auf Bezüge lesen
+   („dieses“, „das“ — worauf?), was keine Maschine prüft. Alles Mechanische ist erledigt.
 2. **Die echten Übungsblätter auf 2026/27 anziehen** (Abschnitt „Übungsblätter“): Punkte und
    Bestehensgrenzen, die Kopfzeile je Blatt, Blatt 12 als Take-Home-Probeklausur. Sie werden **in
    TeX** gepflegt, nicht hier — `uebungen-2025/blaetter/` ist nur die Markdown-Konversion von 2025.
