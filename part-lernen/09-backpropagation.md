@@ -32,7 +32,7 @@ $$
 Beispielsetup 1: zwei Neuronen hintereinander.
 :::
 
-Wir planen eine Regression mit $x, y \in \mathbb{R}$, daher nehmen wir den quadratischen Fehler — hier als reine Summe, ohne den Faktor $\frac1N$ des MSE aus dem [Kapitel „Gradientenabstieg“](08-gradientenabstieg.md). Der Faktor verschiebt das Minimum nicht, nur die Größe des Gradienten und damit die passende Lernrate:
+Wir planen eine Regression mit $x, y \in \mathbb{R}$, daher nehmen wir den quadratischen Fehler – hier als reine Summe, ohne den Faktor $\frac1N$ des MSE aus dem [Kapitel „Gradientenabstieg“](08-gradientenabstieg.md). Der Faktor verschiebt das Minimum nicht, nur die Größe des Gradienten und damit die passende Lernrate:
 
 $$
 L(x, y; W) = \sum_{i=1}^N (y_i - y_{\text{pred}, i})^2

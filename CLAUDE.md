@@ -45,6 +45,16 @@ Glyphen, 5 überlange Zeilen. Die `--min-pages`-Untergrenze
 soll einen *abgebrochenen* Lauf fangen, nicht eine gewollte Kürzung — sie steht deshalb
 deutlich unter der tatsächlichen Seitenzahl, in der CI auf demselben Wert.
 
+**Lokal und CI weichen seit dem 2026-09-29 um eine Seite ab**: Hier sind es 112, das
+veröffentlichte PDF hat 113. Die erste Abweichung steht auf Seite 29, mitten in einem
+Codeblock — es ist also der *Satz*, nicht der Inhalt (alle Inhaltsmarker des Deploys
+stimmen). Ursache ist mit hoher Wahrscheinlichkeit die Toolchain: Das CI-Image heftet
+texlive über einen Debian-Snapshot an, diese Maschine hat, was Debian gerade liefert, und
+`minted` bricht eine Codezeile eine Spalte anders um. `check_doku.py` prüft die Zahl
+gegen das **lokale** PDF, deshalb steht hier 112. Wer die veröffentlichte Zahl braucht,
+holt sie mit dem `curl`-Rezept weiter unten; wer die Abweichung loswerden will, baut im
+Container (PLAYBOOK §3.2).
+
 `patch_myst_tex.py` repariert zwei Fehler im LaTeX-Export von mystmd. Der erste: Codeblöcke werden
 dort als Mathematik escaped, wodurch **vor jedem Bindestrich ein Leerzeichen** landet — aus
 `nvidia-smi` wird `nvidia -smi`, aus `--index-url` wird `- -index -url`. Im HTML passiert

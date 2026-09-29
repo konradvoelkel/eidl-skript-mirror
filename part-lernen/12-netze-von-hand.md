@@ -63,7 +63,7 @@ $$
 g(x, y) := 1 - \bigl(\operatorname{ReLU}(x) + \operatorname{ReLU}(y)\bigr).
 $$
 
-Als Netz: erste Schicht mit **zwei** ReLU-Neuronen, eines pro Eingabe (Gewicht $1$, Bias $0$), zweite Schicht mit Gewichtsvektor $(-1, -1)$, Bias $1$ und $\operatorname{id}$. Ein *einzelnes* Neuron mit Gewichtsvektor $(1,1)$ täte es nicht: Das berechnet $\operatorname{ReLU}(x + y)$, und das ist etwas anderes als $\operatorname{ReLU}(x) + \operatorname{ReLU}(y)$ — bei $(1, -1)$ etwa $0$ gegen $1$. Auf den vier Booleschen Ecken fällt der Unterschied nicht auf, außerhalb schon, und genau darum geht es in diesem Kapitel.
+Als Netz: erste Schicht mit **zwei** ReLU-Neuronen, eines pro Eingabe (Gewicht $1$, Bias $0$), zweite Schicht mit Gewichtsvektor $(-1, -1)$, Bias $1$ und $\operatorname{id}$. Ein *einzelnes* Neuron mit Gewichtsvektor $(1,1)$ täte es nicht: Das berechnet $\operatorname{ReLU}(x + y)$, und das ist etwas anderes als $\operatorname{ReLU}(x) + \operatorname{ReLU}(y)$ – bei $(1, -1)$ etwa $0$ gegen $1$. Auf den vier Booleschen Ecken fällt der Unterschied nicht auf, außerhalb schon, und genau darum geht es in diesem Kapitel.
 
 ### Weiter so? XOR
 

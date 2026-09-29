@@ -10,6 +10,21 @@ Datierte Protokolle größerer Umbauten liegen daneben als `build-log-<datum>.md
 
 ### Inhalt (Skript)
 
+- [x] **Fachliche Durchsicht der Prosafassung**, abgeschlossen am 2026-09-29: alle 27 Kapitel und das
+  Glossar auf den drei Achsen A1 (stimmt es), A2 (passt es zu Plan, Folien, Klausur) und A3 (trägt es
+  beim Lesen). **Alle 126 Formelblöcke nachgerechnet**, jede Bibliotheksaussage gegen die `.venv`
+  geprüft, jede Quelle gegen Modellkarte, arXiv-API oder Verlagsscan. Gefunden und behoben: 31 F,
+  8 N, 30 K. Die schwersten waren die, die beim Nachbauen zubeißen und nichts melden — zwei ReLUs,
+  die keinen Buckel ergeben können (Kap. 13); `ReLU(x)+ReLU(y)` gegen `ReLU(x+y)` (12); Softmax
+  zweimal, im Modell *und* in `CrossEntropyLoss` (14); der DoG-Filter als erste statt zweiter
+  Ableitung (20); `nn.Embedding` transponiert (16); BPE ohne Iterationsschritt (19). Dazu die
+  Lernrate auf ein Symbol vereinheitlicht (Skript *und* VL-02-Folie) und zwei Markup-Fallen neu in
+  `CLAUDE.md`. Protokoll mit Gegenrechnung je Befund: `devnotes/durchsicht/durchsicht-2026-10.md`
+  (gitignored). Nachfolger ist der Sprachdurchgang, siehe `TODO.md`.
+- [x] **Die Antwortenbox in Kapitel 01** (drei Fragen zum HPCwire-Artikel, im PDF offen): Entscheidung
+  Konrad 2026-09-27 — **so lassen**. Es ist kein Vertraulichkeitsproblem, nur ein didaktisches, und die
+  Fragen stehen ohnehin direkt darüber.
+
 - [x] Termine, Räume und Verteilung geklärt am 2026-09-24 (Quelle LSF 278733): Vorlesung Mi 12:30–14:00 in
   HS 5E (25.21), 14.10.2026–03.02.2027; Übung Do 10:30–12:00 in 25.22.U1.52, ab der ersten Woche. Material und
   Abgaben über **ILIAS** (Kurs 2165367); Fragen laufen über den Rocket.Chat-Kanal `#eidl-2026` (angelegt

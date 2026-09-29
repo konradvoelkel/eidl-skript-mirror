@@ -1,0 +1,95 @@
+# Projektwortliste für devnotes/sprachpruefliste.py
+#
+# Ein Wort pro Zeile; alles ab `#` ist Kommentar. Die Liste ist die *vierte* und letzte
+# Stufe der Rechtschreibprüfung: Was hier steht, meldet das Skript nicht mehr.
+#
+# **Ein Wort kommt erst hierher, wenn jemand es angesehen hat.** Die Liste ist kein
+# Mülleimer für alles, was aspell nicht kennt — sie ist das Gedächtnis darüber, was schon
+# geprüft wurde. Wer sie blind füllt, schaltet die Prüfung ab.
+#
+# Angelegt am 2026-09-29 mit den 78 Wörtern, die im Buch **fünfmal oder häufiger**
+# vorkommen: Bei dieser Häufigkeit ist ein Tippfehler praktisch ausgeschlossen, und alle
+# 78 sind Fachvokabular, Abkürzungen oder Eigennamen, die im Buch erklärt oder zitiert
+# werden. Die 441 selteneren Wörter stehen bewusst **nicht** hier — dort verstecken sich
+# die Tippfehler, und sie durchzugehen ist die erste Aufgabe des Sprachdurchgangs.
+#
+# Reihenfolge: alphabetisch, damit ein Diff lesbar bleibt.
+
+AE
+Autoencoder
+Autoencoders
+BCE
+BLEU
+Backpropagation
+CBOW
+CNNs
+CUDA
+Convolutional
+DS
+Deisenroth
+Denoising
+Diskriminator
+DistilBERT
+DoG
+Embeddings
+Finetuning
+GAN
+GANs
+GPT
+Gauß
+Gaußfunktion
+Hyperebene
+Hyperparameter
+ImageNet
+Klassifikator
+LLM
+LLMs
+LSTM
+Lernrate
+Logit
+Logits
+MLP
+MML
+MNIST
+MSE
+McCulloch
+Multilayer
+Muon
+NLL
+NLP
+NumPy
+Ollama
+Optimierer
+Overfitting
+PCA
+Perceptron
+Perzeptron
+Perzeptronregel
+Perzeptrons
+Polysemie
+Pretraining
+RNN
+RNNs
+ROCm
+ReLU
+Regressor
+Regularisierung
+SGD
+SIMD
+Sigmoid
+Sigmoidfunktion
+Skalarprodukt
+Tensoren
+Tokenization
+Tokenizer
+UDL
+VAE
+Variational
+WMT
+al
+arXiv
+bzw
+github
+huggingface
+sampeln
+vec

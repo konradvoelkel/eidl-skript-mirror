@@ -59,7 +59,7 @@ $$
 D_{KL}\bigl( \mathcal{N}(\mu, \sigma^2) \,\|\, \mathcal{N}(0, 1) \bigr) = \tfrac12 \left( \mu^2 + \sigma^2 - 1 - \ln \sigma^2 \right).
 $$
 
-Diese Loss-Funktion ist der negative **ELBO** (evidence lower bound) aus dem Kapitel [Expectation Maximization](https://voelkel.pages.cs.uni-duesseldorf.de/ds-skript/expectation-maximization) in Data Science — bis auf einen Faktor und eine additive Konstante, die daher rühren, dass wir den Rekonstruktionsterm als schlichten MSE schreiben statt als negative Log-Likelihood eines gaußschen Decoders mit fester Varianz. Für die Optimierung macht das keinen Unterschied, für den Vergleich der Zahlenwerte schon.
+Diese Loss-Funktion ist der negative **ELBO** (evidence lower bound) aus dem Kapitel [Expectation Maximization](https://voelkel.pages.cs.uni-duesseldorf.de/ds-skript/expectation-maximization) in Data Science – bis auf einen Faktor und eine additive Konstante, die daher rühren, dass wir den Rekonstruktionsterm als schlichten MSE schreiben statt als negative Log-Likelihood eines gaußschen Decoders mit fester Varianz. Für die Optimierung macht das keinen Unterschied, für den Vergleich der Zahlenwerte schon.
 
 :::{admonition} Zwei Fragen, die immer kommen
 :class: note

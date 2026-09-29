@@ -41,7 +41,7 @@ $$
 \min_G \max_D \; V(D, G) = \mathbb{E}_{x \sim p_{\text{data}}}\bigl[\log D(x)\bigr] + \mathbb{E}_{z \sim \mathcal{N}(0, I)}\bigl[\log\bigl(1 - D(G(z))\bigr)\bigr].
 $$
 
-Das ist die **negative** binäre Kreuzentropie des Diskriminators mit Label 1 für echt und 0 für generiert — in der Schreibweise aus dem [Kapitel „Loss-Funktionen und Maximum Likelihood“](../part-lernen/07-loss-funktionen-maximum-likelihood.md) also $-L_{\text{BCE}}$, ohne den Faktor $\tfrac1N$. Deshalb *maximiert* $D$ sie — gut klassifizieren heißt ja, die Kreuzentropie klein zu machen —, und $G$ minimiert sie ($D$ täuschen). In der Praxis werden beide abwechselnd mit Gradientenabstieg trainiert:
+Das ist die **negative** binäre Kreuzentropie des Diskriminators mit Label 1 für echt und 0 für generiert – in der Schreibweise aus dem [Kapitel „Loss-Funktionen und Maximum Likelihood“](../part-lernen/07-loss-funktionen-maximum-likelihood.md) also $-L_{\text{BCE}}$, ohne den Faktor $\tfrac1N$. Deshalb *maximiert* $D$ sie – gut klassifizieren heißt ja, die Kreuzentropie klein zu machen –, und $G$ minimiert sie ($D$ täuschen). In der Praxis werden beide abwechselnd mit Gradientenabstieg trainiert:
 
 **Diskriminator**: Er bekommt eine Penalty in der Loss-Funktion für die Fehlklassifikation eines Eingabebildes, also sowohl für falsch positive („echt“ behauptet, war aber generiert) als auch falsch negative („generiert“ behauptet, war aber echt). Ein Schritt: ein Batch echter Bilder mit Label 1, ein Batch generierter Bilder mit Label 0, BCE-Loss, `backward`, `step` – nur die Parameter von $D$.
 

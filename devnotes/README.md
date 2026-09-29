@@ -17,6 +17,8 @@ Arbeitsnotizen und Prüfskripte zum Skript, nicht Teil des Buchs. Stand 2026-09-
 | `check_pdf_build.py` | Prüft das gebaute PDF: LaTeX-Fehler, Abbruch, fehlende Glyphen, Seitenzahl, Stichproben | läuft im CI-Job `build-pdf`, lokal vor jedem PDF-Commit |
 | `pruefliste_durchsicht.py` | Erzeugt die Prüfliste der fachlichen Durchsicht: Formelblöcke, Zahlen, Jahre, Quellen, Bibliotheksangaben, Antwortproben, Boxen und Links je Kapitel, in Vorlesungsreihenfolge | für die Durchsicht; liest nur, Ausgabe in den Scratchpad |
 | `check_doku.py` | Prüft die Doku gegen das Repo: Pfade, Zahlen, `--min-pages`, Vollständigkeit dieses Index, und die Regeln, die im Buch gelten | vor jedem Push, der Doku oder Struktur anfasst |
+| `sprachpruefliste.py` | Erzeugt die Atome des **Sprachdurchgangs**: Typografie (Anführungszeichen, Striche, Leerzeichen, Wortdoppelungen), Abkürzungsvarianten, lange Sätze und eine gefilterte Rechtschreibliste. Prüft nur Prosa — Code, Mathe und Directives werden vorher herausgenommen | für den Sprachdurchgang; liest nur, Ausgabe in den Scratchpad. Braucht `aspell` mit deutschem Wörterbuch |
+| `sprachpruefliste-woerter.txt` | Die Projektwortliste dazu: was hier steht, meldet die Rechtschreibprüfung nicht mehr. Wächst mit jedem Durchgang; ein Wort kommt erst hinein, wenn jemand es angesehen hat | wird von `sprachpruefliste.py` gelesen |
 | `check_links.py` | Prüft interne Linkziele auf Existenz und externe auf Erreichbarkeit (braucht Netz, urteilt nie nach einem HEAD) | vor dem Semesterstart und bei der Durchsicht; **nicht** in der CI |
 | `check_ci_yaml.py` | Prüft `.gitlab-ci.yml` auf die Form, die GitLab erwartet (nicht nur auf YAML) | vor jedem Push, der die CI anfasst |
 | `make_figures.py`, `embed_figures.py` | Abbildungen mit matplotlib erzeugen und einbetten | bei Bedarf erneut laufen lassen |
@@ -32,7 +34,7 @@ Der Befundbogen der **fachlichen Durchsicht** liegt in `devnotes/durchsicht/` un
 `devnotes/durchsicht/durchsicht-2026-10.md` trägt Verfahren, Übergabe, Fortschritt je Kapitel und die
 Befunde des Durchgangs, also Zwischenstände und offene Entscheidungsfragen. Das Projekt ist
 öffentlich; ins Repo kommt, was aus den Befunden folgt, nicht der Weg dahin. Die beiden
-Werkzeuge dazu (`pruefliste_durchsicht.py`, `check_links.py`) stehen oben im Index und sind
+Werkzeuge dazu (`pruefliste_durchsicht.py`, `sprachpruefliste.py`, `check_links.py`) stehen oben im Index und sind
 versioniert.
 
 Die Übungsblätter von 2025 samt Lösungsvorschlägen liegen seit dem 2026-09-27 in

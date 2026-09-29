@@ -1,7 +1,7 @@
 # TODO eidl-skript
 
-Stand: 2026-09-27, nach dem Umbau der Übungen. **Hier stehen nur offene Punkte** (24 Stück); was
-erledigt ist, steht in [`erledigt.md`](erledigt.md). Punkte mit **[Entscheidung]** brauchen eine
+Stand: 2026-09-29, nach der fachlichen Durchsicht. **Hier stehen nur offene Punkte**; was erledigt ist,
+steht in [`erledigt.md`](erledigt.md). Punkte mit **[Entscheidung]** brauchen eine
 Antwort von Konrad; ein Vorschlag steht jeweils dabei.
 
 ## Einstieg
@@ -22,17 +22,19 @@ uv run devnotes/check_pdf_build.py --min-pages 100
 uv run devnotes/check_doku.py           # stimmt die Doku noch mit dem Repo überein?
 ```
 
-Erwartung: **27 Kapitel plus Glossar, 112 Seiten A4**, 0 LaTeX-Fehler, 0 fehlende Glyphen,
+Erwartung: **27 Kapitel plus Glossar, 112 Seiten A4** (das veröffentlichte PDF hat 113 — die
+Abweichung ist bekannt und in `../CLAUDE.md` erklärt), 0 LaTeX-Fehler, 0 fehlende Glyphen,
 5 überlange Zeilen, 23 Übungsabschnitte. Weicht etwas davon ab, ist das der erste Befund, nicht
 Hintergrundrauschen.
 
 **Womit anfangen**, wenn nichts anderes vorgegeben ist:
 
-1. **Fachliche Durchsicht der Prosafassung** (Abschnitt „Inhalt“, erster Punkt). Der größte offene
-   Posten und der einzige, der das Buch besser macht statt nur ordentlicher. Verfahren, Übergabe und
-   Befunde stehen in `devnotes/durchsicht/durchsicht-2026-10.md` — **dort** wird gearbeitet, nicht in
-   dieser Liste; hier bleibt der Punkt als Verweis stehen, bis er erledigt ist. Der Ordner ist
-   gitignored (nur lokal und in Sciebo), die Werkzeuge dazu sind versioniert.
+1. **Sprachdurchgang: Rechtschreibung, Zeichensetzung, Stil.** Der Nachfolger der fachlichen
+   Durchsicht, die am 2026-09-29 abgeschlossen wurde. Verfahren, Übergabe und Befunde stehen in
+   `devnotes/durchsicht/sprachdurchgang-2026-10.md` — **dort** wird gearbeitet, nicht in dieser
+   Liste. Der Ordner ist gitignored (nur lokal und in Sciebo), die Werkzeuge dazu sind versioniert:
+   `devnotes/sprachpruefliste.py` und `devnotes/sprachpruefliste-woerter.txt`. Größter Einzelposten
+   ist die Liste der 441 unbekannten Wörter; danach ist die Rechtschreibprüfung scharf.
 2. **Die echten Übungsblätter auf 2026/27 anziehen** (Abschnitt „Übungsblätter“): Punkte und
    Bestehensgrenzen, die Kopfzeile je Blatt, Blatt 12 als Take-Home-Probeklausur. Sie werden **in
    TeX** gepflegt, nicht hier — `uebungen-2025/blaetter/` ist nur die Markdown-Konversion von 2025.
@@ -64,33 +66,6 @@ Abgabe bis …“ in den TeX-Blättern.
 
 ## Inhalt (Skript)
 
-- [ ] **Fachliche Durchsicht** der Prosafassung — Verfahren und Befundbogen in
-  `devnotes/durchsicht/` (gitignored, nur lokal), Werkzeuge `devnotes/pruefliste_durchsicht.py`
-  und `devnotes/check_links.py`. Zwei Sorten von Stellen:
-  - *(a) Stoff, der in der Vorlesung 2026/27 vorkommen soll* (steht im Plan in `kurs-2026-27.md` oder wird in der
-    Klausur gefragt): Hyperebenen-Geometrie und Abstand (02), Ein-Sample-Argument für die Perzeptronregel (03),
-    Batch-Bild für Tensoren (05), Numerik-Box zu `exp`/`log` (06), Maximum Likelihood → BCE und Gradient $p - y$
-    (07/08), Summe über Pfade und numerische Probe (08), Feature-Skalierung (08), Erwartungswert-Absatz zu SGD (08),
-    Playground-Box (09), VAE-Fragenbox (15), GAN-Lab-Box mit Regel „früh aufhören“ (22), CBOW-Formel (16),
-    Ausgabegrößen-Formel und Shape-Beispiel (20), Minimax-Formel (22), Reparametrisierung (15), $T^2$-Faktor (25),
-    Antwortbox zu GPU/SIMD, PyTorch, CUDA/ROCm (01), Rezept Anwendungskonzept (24), Glossar (`glossar.md`).
-  - *(b) Vertiefungen*, als aufklappbare Box „Vertiefung: …“ markiert und nicht Vorlesungsstoff:
-    Konvergenzsatz (03), Cauchy-Schwarz (08), Spur-Trick (09), Message-Passing-Formel (17), Wasserstein-Dualität (22),
-    FGSM (27). Nur auf Korrektheit prüfen, nicht auf Didaktik.
-  - Erste Befunde stehen schon im Bogen: die Lernrate heißt in 03 $r$ und ab 07/08 $\rho$ (**N1**),
-    $\sigma$ ist in 15 die Streuung statt der Sigmoidfunktion (**N2**), und der paperswithcode-Link
-    in 11 leitet heute auf eine unbezogene Seite weiter (**K1** — behebt zugleich die längste
-    überlange Zeile im PDF).
-  - Konkrete Prüfaufträge: Encoder mit oder ohne Sigmoid in „Autoencoder“ (14) entscheiden (Skript: ohne, mit
-    Hinweis „man kann auch“; Vorlesung 2025: mit – der Verweis auf 2025 steht seit 2026-09-21 nicht mehr im Text); die neuen Lösungsvorschläge zu Blatt 1 Aufgabe 4b, Blatt 3 Aufgabe 2b und Blatt 5
-    Aufgabe 1b gegenrechnen; die „Weiterlesen“-Boxen (17 Kapitel) auf passende UDL/MML-Kapitelnummern prüfen.
-- [ ] **Die Antwortenbox in Kapitel 01 steht im PDF offen da.** „Antworten zum Lesetext“ (drei Fragen zum
-  HPCwire-Artikel) ist eine `dropdown`-Box — im HTML zugeklappt, im PDF nicht, weil `dropdown` im
-  LaTeX-Export keine Wirkung hat. Wer das PDF liest, sieht die Antworten direkt unter den Fragen. Dieselbe
-  Mechanik hat bis zum 2026-09-27 die Lösungsvorschläge der Übungsblätter veröffentlicht; hier ist es kein
-  Vertraulichkeitsproblem, nur ein didaktisches. Optionen: so lassen, in einen Anhang verschieben, oder wie
-  bei den Übungen auf eine Antwortprobe eindampfen. Die sechs `Vertiefung:`-Boxen sind davon nicht betroffen
-  — sie sollen gelesen werden.
 - [ ] **Abbildungen**, verbleibende Wünsche (alle `<!-- TODO Abbildung -->`-Marker sind seit 2026-09-20 aufgelöst,
   entweder durch eigene Bilder, Bilder aus den Musterlösungen 2025 oder Links): Hubel & Wiesel und GRU/LSTM sind
   nur verlinkt (Wikipedia, CC-BY-SA); wer sie einbetten will, lädt die Dateien nach `images/` und ergänzt den
@@ -180,6 +155,12 @@ Textfassung von Seite und Objektbaum: `~/Sciebo/hhu/eidl-26/ilias/` (analog zu
   Text in `\href`, nicht als `\url`, deshalb greift keine URL-Trennung. Die schlimmste (77 pt) ist
   `paperswithcode.com/methods/category/activation-…` in 11. Abhilfe wäre, die Linktexte zu kürzen
   („paperswithcode“ statt der vollen Adresse) — Inhaltsarbeit, keine Technik.
+- [ ] **Lokales PDF und veröffentlichtes PDF sind eine Seite auseinander** (seit
+  2026-09-29: lokal 112, live 113). Die erste Abweichung liegt auf Seite 29 in einem
+  Codeblock, der Inhalt ist identisch — vermutlich bricht `minted` unter dem texlive des
+  CI-Images anders um als unter dem lokalen. Einmal im Container bauen und vergleichen
+  (PLAYBOOK §3.2), dann entweder die Ursache benennen oder die Abweichung als normal
+  dokumentieren. Nicht dringend: `--min-pages 100` fängt beide Fälle.
 - [ ] **Das HHU-Beamer-Theme fehlt auf dieser Maschine.** `slides/build.sh` scheitert mit
   „File `beamerthemehhubeamer.sty' not found“; `slides/README.md` sagt richtig, dass es unter
   `/usr/share/texmf/tex/latex/beamer/themes/` liegen muss, dort liegt aber nichts. Kopien gibt es
