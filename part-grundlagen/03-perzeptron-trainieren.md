@@ -110,7 +110,7 @@ $$
 h(x) = [\, u \cdot z > 0 \,].
 $$
 
-Das ist ein Multilayer Perceptron mit einer versteckten Schicht. Die Perzeptronregel sagt uns, wie wir $u$ anpassen, wenn $h(x)$ falsch liegt – aber sie sagt nichts darüber, wie $v$ und $w$ angepasst werden sollten. Welches der beiden Perzeptrons in der ersten Schicht war „schuld“? Die Antwort auf diese Frage heißt **Backpropagation**, und sie funktioniert nur für differenzierbare $\tau$. Das machen wir noch.
+Das ist ein Multilayer Perceptron mit einer versteckten Schicht. Die Perzeptronregel sagt uns, wie wir $u$ anpassen, wenn $h(x)$ falsch liegt – aber sie sagt nichts darüber, wie $v$ und $w$ angepasst werden sollten. Welches der beiden Perzeptrons in der ersten Schicht war „schuld“? Die Antwort auf diese Frage heißt **Backpropagation**, und sie braucht ein $\tau$, das sich ableiten lässt. Die Sprungfunktion des Perzeptrons tut das nicht; ReLU dagegen wird überall benutzt, obwohl sie bei $0$ einen Knick hat (siehe [Kapitel „Aktivierungsfunktionen“](../part-lernen/11-aktivierungsfunktionen.md)). Das machen wir noch.
 
 ### Warum lineare Regression keine Schichten braucht
 

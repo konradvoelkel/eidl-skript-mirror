@@ -7,7 +7,7 @@ short_title: "Aktivierungsfunktionen"
 
 ## Aktivierungsfunktionen und weitere Layer
 
-Ein Neuron „forward“ ist $\tau\langle w, x \rangle$. Beim Perzeptron ist $\tau = \operatorname{sign}$, bei der logistischen Regression $\tau = \sigma$. Allgemein ist $\tau$ beliebig – aber differenzierbar, sonst funktioniert Backpropagation nicht.
+Ein Neuron „forward“ ist $\tau(\langle w, x \rangle)$. Beim Perzeptron ist $\tau = \operatorname{sign}$, bei der logistischen Regression $\tau = \sigma$. Allgemein ist $\tau$ beliebig – aber ableitbar, sonst funktioniert Backpropagation nicht. *Überall* differenzierbar muss es dafür nicht sein: ReLU hat bei $0$ einen Knick und ist trotzdem die meistbenutzte Aktivierungsfunktion überhaupt. Wie das zusammengeht, klärt der nächste Abschnitt.
 
 ### Neues Ziel: Funktionen lernen
 
@@ -50,7 +50,7 @@ $$
 \tau(y) := y\,\Phi(y) \quad \text{(GELU, Gaussian Error Linear Unit)},
 $$
 
-wobei $\Phi$ die Verteilungsfunktion der Standardnormalverteilung ist. Beide sind im negativen Bereich nicht strikt null, sondern haben eine kleine Delle unter der Achse, und die Ableitung verschwindet nur asymptotisch. GELU ist heute die Standardwahl in Transformern.
+wobei $\Phi$ die Verteilungsfunktion der Standardnormalverteilung ist. Beide sind im negativen Bereich nicht strikt null, sondern haben eine kleine Delle unter der Achse, und die Ableitung verschwindet nur asymptotisch. GELU steht in den Transformern der BERT- und GPT-2-Generation und in Vision Transformern; die heutigen großen Sprachmodelle (Llama, Mistral, Qwen) nehmen statt dessen Swish/SiLU, eingebaut in einen *gated* Feed-Forward-Block, den man SwiGLU nennt.
 
 Welche Aktivierungsfunktionen in der Praxis genutzt wurden, listete [paperswithcode](https://web.archive.org/web/20250716173325/https://paperswithcode.com/methods/category/activation-functions) – die Seite gibt es nicht mehr, der Link führt auf den Schnappschuss vom Juli 2025 im Internet Archive.
 
@@ -72,5 +72,5 @@ nur Trainingsdaten mit nichtnegativen Einträgen.
 
 :::{admonition} Weiterlesen
 :class: seealso
-Prince, *UDL*, Abschnitt 3.2 (Activation functions) und Kap. 7 (Initialization, sterbende Neuronen). Das Buch ist frei verfügbar, siehe [Über dieses Skript](../README.md).
+Prince, *UDL*: Die Aktivierungsfunktionen stehen in Kap. 3 (Abbildung 3.13 und der Abschnitt *Notes* am Kapitelende) und in Abschnitt 20.2.5 (Activation functions); zu Initialisierung und sterbenden Neuronen Kap. 7 (Gradients and initialization). Das Buch ist frei verfügbar, siehe [Über dieses Skript](../README.md).
 :::

@@ -43,7 +43,7 @@ erfüllt die Eigenschaft, NOT zu inter- und extrapolieren. Als neuronales Netz: 
 
 ### Zurück zu OR
 
-Ansatz: $f(x, y) = x + y$. Leider ist $f(1, 1) = 2 \neq 1$. Besser: $f(x, y) = [x + y > 0]$ – ein Neuron mit Gewichtsvektor $(1, 1)$, Bias $b = 0$ und Aktivierungsfunktion $[\,\cdot > 0]$ mit Werten in $\{0, 1\}$. Dafür ändern wir die Interpretation leicht zu $(x \le 0) = \text{F}$, $(x > 0) = \text{T}$. Softere Varianten sind $f(x, y) := x + y$ oder $\sigma(x + y)$; und noch besser, weil es Negatives sauber abschneidet:
+Ansatz: $f(x, y) = x + y$. Leider ist $f(1, 1) = 2 \neq 1$. Besser: $f(x, y) = [x + y > 0]$ – ein Neuron mit Gewichtsvektor $(1, 1)$, Bias $b = 0$ und Aktivierungsfunktion $[\,\cdot > 0]$ mit Werten in $\{0, 1\}$. Dafür ändern wir die Interpretation leicht zu $(x \le 0) = \text{F}$, $(x > 0) = \text{T}$. Damit ist der erste Ansatz wieder brauchbar: Dass $f(1,1) = 2$ herauskommt, stört nun nicht mehr, weil alles über null TRUE heißt. Softere Varianten sind also $f(x, y) := x + y$ oder $\sigma(x + y)$; und noch besser, weil es Negatives sauber abschneidet:
 
 $$
 f(x, y) := \operatorname{ReLU}(x) + \operatorname{ReLU}(y).
@@ -63,7 +63,7 @@ $$
 g(x, y) := 1 - \bigl(\operatorname{ReLU}(x) + \operatorname{ReLU}(y)\bigr).
 $$
 
-Als Netz: erste Schicht mit Gewichten $(1, 1)$, Bias $0$ und ReLU (zwei Neuronen, eines pro Eingabe – oder eines mit Gewichtsvektor $(1,1)$, wenn man die ReLU vor die Summe zieht), zweite Schicht mit Gewicht $-1$, Bias $1$ und $\operatorname{id}$.
+Als Netz: erste Schicht mit **zwei** ReLU-Neuronen, eines pro Eingabe (Gewicht $1$, Bias $0$), zweite Schicht mit Gewichtsvektor $(-1, -1)$, Bias $1$ und $\operatorname{id}$. Ein *einzelnes* Neuron mit Gewichtsvektor $(1,1)$ täte es nicht: Das berechnet $\operatorname{ReLU}(x + y)$, und das ist etwas anderes als $\operatorname{ReLU}(x) + \operatorname{ReLU}(y)$ — bei $(1, -1)$ etwa $0$ gegen $1$. Auf den vier Booleschen Ecken fällt der Unterschied nicht auf, außerhalb schon, und genau darum geht es in diesem Kapitel.
 
 ### Weiter so? XOR
 
@@ -73,7 +73,7 @@ $$
 \text{XOR}(x, y) = \text{AND}\bigl(\text{NAND}(x, y),\ \text{OR}(x, y)\bigr).
 $$
 
-Setzt man das mit den obigen Bausteinen zusammen, so müsste es mit 4 Hidden Layers zu je 4 Neuronen klappen. Gradientenabstieg mit Backpropagation findet allerdings auch Approximationen mit 3 Hidden Layers – und mit 2 Hidden Layers (siehe die Bilder `krude-xor-approximation.png` aus dem TensorFlow Playground).
+Setzt man das mit den obigen Bausteinen zusammen, so müsste es mit 4 Hidden Layers zu je 4 Neuronen klappen. Gradientenabstieg mit Backpropagation findet allerdings auch Approximationen mit 3 Hidden Layers – und mit 2 Hidden Layers (siehe die beiden Abbildungen unten aus dem TensorFlow Playground).
 
 :::{figure} ../images/vl07-xor-region.png
 :width: 90%
