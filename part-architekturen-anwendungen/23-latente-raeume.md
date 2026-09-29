@@ -31,7 +31,7 @@ Beziehungen zwischen Wörtern als parallele Richtungen im Vektorraum (schematisc
 Figure 7 aus Bolukbasi et al. 2016 – Berufe, projiziert auf die Gender-Richtung.
 :::
 
-**Bolukbasi et al. 2016, *Man is to Computer Programmer as Woman is to Homemaker? Debiasing Word Embeddings***: Dieselbe Arithmetik findet auch MAN − WOMAN ≈ COMPUTER PROGRAMMER − HOMEMAKER. Die Embeddings enthalten die Stereotype des Trainingskorpus als Richtungen, und man kann sie messen – und, das ist der Beitrag des Papers, durch Projektion auf das orthogonale Komplement der Gender-Richtung teilweise entfernen (`bolukbasi16-man-is-to-computer-programmer-figure7.png`).
+**Bolukbasi et al. 2016, *Man is to Computer Programmer as Woman is to Homemaker? Debiasing Word Embeddings***: Dieselbe Arithmetik findet auch MAN − WOMAN ≈ COMPUTER PROGRAMMER − HOMEMAKER. Die Embeddings enthalten die Stereotype des Trainingskorpus als Richtungen, und man kann sie messen – und, das ist der Beitrag des Papers, durch Projektion auf das orthogonale Komplement der Gender-Richtung teilweise entfernen (Abbildung oben).
 
 ### Interpolation und Superposition
 
@@ -80,7 +80,7 @@ Häufig wird zusätzlich zum $+\varepsilon$-Trick auch noch ein Summand zur Loss
 
 ### Arvanitidis et al. 2017: Latent Space Oddity
 
-*Latent Space Oddity: on the Curvature of Deep Generative Models* (ICLR 2018): Der latente Raum eines VAE sieht flach aus, aber der Decoder verzerrt ihn – die euklidische Gerade zwischen zwei Codes ist nicht der kürzeste Weg im *Bildraum*. Die richtige Geometrie ist die durch den Decoder induzierte Riemannsche Metrik, und Geodäten darin laufen um Regionen herum, in denen der Decoder unsicher ist (`arvanitidis2021-latent-space-oddity-figure1.png`). Praktisch: Interpolationen entlang Geodäten sehen besser aus als lineare.
+*Latent Space Oddity: on the Curvature of Deep Generative Models* (ICLR 2018): Der latente Raum eines VAE sieht flach aus, aber der Decoder verzerrt ihn – die euklidische Gerade zwischen zwei Codes ist nicht der kürzeste Weg im *Bildraum*. Die richtige Geometrie ist die durch den Decoder induzierte Riemannsche Metrik, und Geodäten darin laufen um Regionen herum, in denen der Decoder unsicher ist (Abbildung unten). Praktisch: Interpolationen entlang Geodäten sehen besser aus als lineare.
 
 :::{figure} ../images/vl13-arvanitidis-fig1.png
 :width: 90%
