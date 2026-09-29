@@ -31,12 +31,12 @@ Wir konkretisieren anhand eines Beispiel-Tasks, z.B. „Gegeben einen Text, iden
 
 ### Rechnung mit der Parametermenge
 
-Hugging Face Transformers ist die Standardbibliothek; die Dokumentation rechnet vor: Llama 2 7B benötigt bei voller Präzision (32 Bit pro Parameter, etwa zum Training) ca. $7 \cdot 4 \text{ GB} = 28$ GB VRAM, aber bei halber Präzision (16 Bit) ca. $7 \cdot 2 \text{ GB} = 14$ GB VRAM, passt also auf eine 16-GB-Consumer-GPU. Für Inferenz benötigt man keine Gradienten und keine Optimizer-Zustände $\to$ halber Platzbedarf, und mit 4-Bit-**Quantisierung** nochmal weniger: 8 GB oder darunter. Aber: Llama 2 70B ist erst in einer Liga mit GPT-4 $\to$ 80 bis 280 GB.
+Hugging Face Transformers ist die Standardbibliothek; die Faustrechnung geht so. Allein die **Gewichte** von Llama 2 7B belegen bei 32 Bit pro Parameter $7 \cdot 4 \text{ GB} = 28$ GB, bei 16 Bit $7 \cdot 2 \text{ GB} = 14$ GB und mit 4-Bit-**Quantisierung** noch $7 \cdot \tfrac12 \text{ GB} \approx 3{,}5$ GB. Für **Inferenz** kommt darüber hinaus nur wenig dazu (Aktivierungen und der KV-Cache), 16 Bit passen also auf eine 16-GB-Consumer-GPU und 4 Bit auf fast alles. Beim **Training** dagegen braucht jeder Parameter zusätzlich einen Gradienten und die Zustände des Optimierers — bei Adam zwei Momente, zusammen grob das Vierfache der Gewichte. Nicht die Inferenz ist also das Problem auf Consumer-Hardware, sondern das Training. Llama 2 70B ist erst in einer Liga mit GPT-4, und dessen Gewichte allein sind 35 GB (4 Bit) bis 280 GB (32 Bit).
 
 ### Llamas & Co
 
 * Llama (1, 2, 3) sind *open-weight*-Modelle mit verschiedenen Lizenzen – die Gewichte sind frei verfügbar, die Trainingsdaten nicht.
-* Llama2-7B ist etwa 8,6 GB groß, passt also auf eine einfache Consumer-Grafikkarte.
+* Llama 2 7B ist als fp16-Download 13,5 GB groß (das sind die $7 \cdot 2$ GB von oben); als 4-Bit-GGUF sind es gut 4 GB, und damit passt es auf eine einfache Consumer-Grafikkarte.
 * Llama3.3-70B braucht sehr viel VRAM oder rechnet langsam, ist dafür „in derselben Liga“ wie GPT-4.
 * Llama3.1-405B verteilt man eher auf mehrere GPUs (vgl. auch GPT-3 mit ca. 175B Parametern).
 
@@ -53,7 +53,7 @@ Das ist kein Deep Learning, das ist „Deep-Learning-Produkte benutzen“ – tr
 
 ### Lokale LLMs benutzen: Wege 2, 3 und 10 in Code
 
-Wir probieren die Wege 2, 3 und 10 mit `qwen2.5:0.5b` aus – nur ~300 MB, läuft auf der Laptop-CPU. Vorbereitung im Terminal:
+Wir probieren die Wege 2, 3 und 10 mit `qwen2.5:0.5b` aus – knapp 400 MB, läuft auf der Laptop-CPU. Vorbereitung im Terminal:
 
 ```bash
 ollama pull qwen2.5:0.5b

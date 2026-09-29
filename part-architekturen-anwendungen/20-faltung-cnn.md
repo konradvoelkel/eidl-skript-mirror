@@ -113,7 +113,7 @@ $$
 \frac{d}{dx}(f \ast g) = f' \ast g = f \ast g',
 $$
 
-d.h. „glätten und dann ableiten“ ist dasselbe wie „mit dem abgeleiteten Filter falten“ – genau das ist der DoG-Kantendetektor, näherungsweise die Ableitung der Gaußfunktion. Das Faltungstheorem erklärt auch, warum die Gaußfunktion glättet: Ihre Fouriertransformierte ist wieder eine Gaußfunktion, die hohe Frequenzen (= schnelle Änderungen, Rauschen) dämpft. Kurzer Ausflug in die Fourier-Transformation? Andrew Zisserman, [Lecture 2](https://www.robots.ox.ac.uk/~az/lectures/ia/lect2.pdf).
+d.h. „glätten und dann ableiten“ ist dasselbe wie „mit dem abgeleiteten Filter falten“ – man faltet also gleich mit der *Ableitung* der Gaußfunktion, statt erst zu glätten. Der DoG-Filter gehört eine Stufe höher: Die Differenz zweier Gaußfunktionen verschiedener Breite nähert die **zweite** Ableitung an (es ist $\partial G/\partial\sigma = \sigma \nabla^2 G$), und Kanten sind dort die Nulldurchgänge. Die erste Ableitung der Gaußfunktion ist eine *ungerade* Funktion, der DoG-Filter eine *gerade* – ähnlich sehen sie nur auf den ersten Blick aus. Das Faltungstheorem erklärt auch, warum die Gaußfunktion glättet: Ihre Fouriertransformierte ist wieder eine Gaußfunktion, die hohe Frequenzen (= schnelle Änderungen, Rauschen) dämpft. Kurzer Ausflug in die Fourier-Transformation? Andrew Zisserman, [Lecture 2](https://www.robots.ox.ac.uk/~az/lectures/ia/lect2.pdf).
 
 ## Eindimensionales Pooling
 

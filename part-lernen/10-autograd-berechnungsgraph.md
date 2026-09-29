@@ -108,8 +108,9 @@ $$
 1. Ein Modell hat drei Layer. Vor dem Training wird für Layer 1 und 2
    `requires_grad = False` gesetzt. Welche Tensoren bekommen im Backward Pass einen
    `.grad`, welche nicht — und wo wird trotzdem noch gerechnet?
-   *Tipp: Der Gradient muss durch Layer 2 hindurch, damit Layer 3 … nein, andersherum.
-   Zeichnen Sie den Graphen und verfolgen Sie die Pfeile rückwärts.*
+   *Tipp: Zeichnen Sie den Graphen und verfolgen Sie die Pfeile rückwärts, von der
+   Loss-Funktion zu den Blättern. Fragen Sie sich bei jedem Layer: Muss der Gradient hier
+   überhaupt noch hindurch, damit weiter vorne etwas ankommt?*
 2. Ein Gewicht $k$ wird an drei Stellen im Graphen benutzt (geteilte Gewichte, wie bei
    einer Faltung). Wie viele Beiträge hat $\frac{\partial L}{\partial k}$, und wie werden
    sie verrechnet?
