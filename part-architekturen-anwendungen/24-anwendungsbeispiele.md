@@ -48,8 +48,8 @@ Wir schauen uns praktisch an, wie man mit generiertem Code arbeiten kann. Beispi
 Die drei Beispiele oben folgen alle demselben Muster, und dasselbe Muster ist in der Klausur der Aufgabentyp „Anwendungskonzept“: Zu einer Aufgabenstellung aus der Praxis (Müll auf Fotos erkennen, Lagerbestände vorhersagen, Produktbeschreibungen erzeugen) soll man skizzieren, wie man sie mit Deep Learning angeht. Was dabei immer beantwortet werden muss, in dieser Reihenfolge:
 
 1. **Was haben wir?** Welche Daten liegen vor, in welcher Modalität (Bild, Text, Tabelle, Zeitreihe, Graph), mit welchen Labels, wie viele. Was fehlt, und was können wir uns beschaffen oder selbst labeln.
-2. **Was soll rauskommen?** Klassifikation, Regression, Ranking, Generierung, oder nur eine Repräsentation für die Nachbarsuche. Damit steht die Ausgabeschicht fest: Sigmoid, Softmax, linear, oder gar keine.
-3. **Welches Modell, und woher?** Fast nie selbst von null trainieren: ein vortrainiertes Modell als Feature-Extraktor einfrieren und einen kleinen Kopf trainieren, oder finetunen, oder ein fertiges Modell nur benutzen. Erst wenn das nicht reicht, eigene Architektur.
+2. **Was soll rauskommen?** Klassifikation, Regression, Ranking, Generierung oder nur eine Repräsentation für die Nachbarsuche. Damit steht die Ausgabeschicht fest: Sigmoid, Softmax, linear oder gar keine.
+3. **Welches Modell, und woher?** Fast nie selbst von null trainieren: ein vortrainiertes Modell als Feature-Extraktor einfrieren und einen kleinen Kopf trainieren oder finetunen oder ein fertiges Modell nur benutzen. Erst wenn das nicht reicht, eigene Architektur.
 4. **Welcher Loss?** Er folgt aus Punkt 2: BCE für binär, Kreuzentropie für Klassen, MSE für Zahlen, Rekonstruktion für Autoencoder, kontrastiv für Paare. Wer zwei Ziele hat, addiert zwei Terme.
 5. **Womit messen wir Güte?** Train-Test-Split, und eine Metrik, die zur Aufgabe passt: Accuracy nur bei balancierten Klassen, sonst Precision und Recall; bei Rankings Top-k; bei Generierung ein Mensch. Ohne diesen Punkt weiß man nicht, ob es funktioniert.
 6. **Was kann schiefgehen?** Datenschutz und Logging, Kosten und Latenz, Verteilungsverschiebung zwischen Trainingsdaten und Einsatz, Overfitting auf das Testset, Bias in den Labels.
@@ -65,4 +65,4 @@ welches Modell und woher, welcher Loss, womit messen wir Güte, was kann schiefg
 *Tipp: Die Antwort auf „welches Modell und woher“ ist in diesem Kapitel nie „selbst
 trainieren“, solange es ein vortrainiertes gibt.*
 
-*Antwortprobe: Beim Loss sollte etwas mit „Kreuzentropie“ dastehen, bei der Güte etwas anderes als „Accuracy“ — die Ressorts sind ungleich häufig.*
+*Antwortprobe: Beim Loss sollte etwas mit „Kreuzentropie“ dastehen, bei der Güte etwas anderes als „Accuracy“ – die Ressorts sind ungleich häufig.*

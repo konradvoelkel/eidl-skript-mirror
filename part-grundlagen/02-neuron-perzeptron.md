@@ -21,7 +21,7 @@ $$
 y = \tau(\zeta)
 $$
 
-für eine nichtlineare *Aktivierungsfunktion* $\tau \colon \mathbb{R} \to \mathbb{R}$. Bei McCulloch und Pitts ist $\tau$ eine Schwellenwertfunktion, die $0$ oder $1$ ausgibt; später wird $\tau$ die logistische Sigmoidfunktion $\sigma$ sein, oder ReLU. Diese Rollenverteilung gilt im ganzen Buch: $\tau$ ist eine beliebige Aktivierungsfunktion, $\sigma$ immer die logistische Sigmoidfunktion. Die Struktur „Skalarprodukt, gefolgt von einer nichtlinearen Funktion“ ist das Kochrezept, das uns durch die gesamte Vorlesung begleiten wird.
+für eine nichtlineare *Aktivierungsfunktion* $\tau \colon \mathbb{R} \to \mathbb{R}$. Bei McCulloch und Pitts ist $\tau$ eine Schwellenwertfunktion, die $0$ oder $1$ ausgibt; später wird $\tau$ die logistische Sigmoidfunktion $\sigma$ sein oder ReLU. Diese Rollenverteilung gilt im ganzen Buch: $\tau$ ist eine beliebige Aktivierungsfunktion, $\sigma$ immer die logistische Sigmoidfunktion. Die Struktur „Skalarprodukt, gefolgt von einer nichtlinearen Funktion“ ist das Kochrezept, das uns durch die gesamte Vorlesung begleiten wird.
 
 :::{figure} ../images/vl01-neuron.png
 :width: 90%

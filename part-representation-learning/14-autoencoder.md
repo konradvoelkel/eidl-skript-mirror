@@ -232,7 +232,7 @@ verbunden mit Bias.
 
 1. Wie viele Parameter hat er? Wie viele davon im Encoder?
    *Tipp: Ein Layer $n \to m$ hat $n\cdot m + m$ Parameter.*
-2. Beim Denoising-Autoencoder: Auf welche der beiden Größen — Eingabe oder Zielbild —
+2. Beim Denoising-Autoencoder: Auf welche der beiden Größen – Eingabe oder Zielbild –
    kommt das Rauschen, und was wäre der Effekt, wenn man es auf die andere legte?
 
 *Antwortprobe: Bei (1) liegt das Ergebnis zwischen 200 000 und 250 000.*

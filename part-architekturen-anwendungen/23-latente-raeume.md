@@ -35,7 +35,7 @@ Figure 7 aus Bolukbasi et al. 2016 – Berufe, projiziert auf die Gender-Richtun
 
 ### Interpolation und Superposition
 
-Ein Vektor im Latent Space ist ausdrucksstärker als ein Token, er kann interpolieren und Superposition ausdrücken: Statt „Katze“ oder „Hund“ geht auch $\tfrac12 \text{Katze} + \tfrac12 \text{Hund}$, oder auch $t \cdot \text{Katze} + (1 - t) \cdot \text{Hund}$. Aber: $\operatorname{decode}(t \cdot \text{Katze} + (1 - t) \cdot \text{Hund})$ ist entweder Katze oder Hund, es gibt kein „dazwischen“-Token außerhalb des Vokabulars.
+Ein Vektor im Latent Space ist ausdrucksstärker als ein Token, er kann interpolieren und Superposition ausdrücken: Statt „Katze“ oder „Hund“ geht auch $\tfrac12 \text{Katze} + \tfrac12 \text{Hund}$ oder auch $t \cdot \text{Katze} + (1 - t) \cdot \text{Hund}$. Aber: $\operatorname{decode}(t \cdot \text{Katze} + (1 - t) \cdot \text{Hund})$ ist entweder Katze oder Hund, es gibt kein „dazwischen“-Token außerhalb des Vokabulars.
 
 ### Diskreter Latent Space
 
@@ -93,9 +93,9 @@ Figure 1 aus Arvanitidis, Hansen, Hauberg: *Latent Space Oddity* (ICLR 2018): Di
 Gegeben Embeddings $\text{KÖNIG} = (4,2)$, $\text{MANN} = (3,0)$, $\text{FRAU} = (1,1)$.
 
 1. Berechnen Sie $\text{KÖNIG} - \text{MANN} + \text{FRAU}$. Welcher der Vektoren
-   $a = (4,6)$, $b = (2,2)$, $c = (0,4)$ liegt am nächsten — gemessen mit dem Kosinus?
+   $a = (4,6)$, $b = (2,2)$, $c = (0,4)$ liegt am nächsten – gemessen mit dem Kosinus?
    *Tipp: Kosinus heißt: normieren, dann Skalarprodukt. Die Längen unterscheiden sich hier
    deutlich, das Ergebnis mit euklidischem Abstand wäre ein anderes.*
 2. Interpolieren Sie linear zwischen $\text{MANN}$ und $\text{FRAU}$ in drei Schritten.
 
-*Antwortprobe: Bei (1) sind die Antworten für Kosinus und euklidischen Abstand verschieden — das ist der Punkt der Aufgabe.*
+*Antwortprobe: Bei (1) sind die Antworten für Kosinus und euklidischen Abstand verschieden – das ist der Punkt der Aufgabe.*

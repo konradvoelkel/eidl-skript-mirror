@@ -103,7 +103,7 @@ Der Satz „der hund bellt laut im garten“ (6 Token), Fenstergröße $S = 2$.
 1. Wie viele (Kontext, Zielwort)-Paare erzeugt Skip-gram daraus? Schreiben Sie die Paare
    für das Zielwort „bellt“ auf.
    *Tipp: Am Satzanfang und -ende ist das Fenster kleiner.*
-2. Was ist bei CBOW Eingabe und was Ausgabe — und wie herum ist es bei Skip-gram?
+2. Was ist bei CBOW Eingabe und was Ausgabe – und wie herum ist es bei Skip-gram?
 3. Der Embedding-Layer für ein Vokabular von 50 000 Wörtern und 300 Dimensionen: Wie viele
    Parameter, und was steht in Zeile $i$?
 

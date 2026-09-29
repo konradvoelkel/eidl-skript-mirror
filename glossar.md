@@ -139,7 +139,7 @@ Die Begriffe, die in Klausuraufgaben vorkommen, je in ein bis drei Sätzen, mit 
 
 ## Vortrainierte Modelle, LLMs, Destillation
 
-**Transfer Learning, Finetuning.** Ein auf großen Daten (ImageNet, COCO) vortrainiertes Modell als Startpunkt: Features einfrieren und nur den Kopf trainieren, oder alle Gewichte mit kleiner Lernrate nachtrainieren. [Vortrainierte Modelle](part-grundlagen/04-vortrainierte-modelle.md), [LLMs benutzen](part-architekturen-anwendungen/21-llms-benutzen.md)
+**Transfer Learning, Finetuning.** Ein auf großen Daten (ImageNet, COCO) vortrainiertes Modell als Startpunkt: Features einfrieren und nur den Kopf trainieren oder alle Gewichte mit kleiner Lernrate nachtrainieren. [Vortrainierte Modelle](part-grundlagen/04-vortrainierte-modelle.md), [LLMs benutzen](part-architekturen-anwendungen/21-llms-benutzen.md)
 
 **Object Detection, Segmentierung.** Detection liefert Klassen mit Bounding Boxes, der Loss kombiniert Klassifikation und Box-Regression; Segmentierung liefert pro Pixel eine Klasse. [Vortrainierte Modelle](part-grundlagen/04-vortrainierte-modelle.md)
 

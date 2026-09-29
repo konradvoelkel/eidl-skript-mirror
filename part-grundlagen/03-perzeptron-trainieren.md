@@ -134,7 +134,7 @@ wäre $1$.
    $\rho = 0{,}5$ aus.
 2. Berechnen Sie $w^{(1)} \cdot x$. Um wie viel hat sich die Aktivierung geändert?
    *Tipp: Rechnen Sie die Differenz einmal allgemein mit der Bilinearität des
-   Skalarprodukts aus — Sie bekommen $\rho\,\|x\|^2$, unabhängig von $w^{(0)}$.*
+   Skalarprodukts aus – Sie bekommen $\rho\,\|x\|^2$, unabhängig von $w^{(0)}$.*
 3. Wie viele solche Schritte braucht es mindestens, bis die Aktivierung positiv wird?
 
 *Antwortprobe: eine ganze Zahl, ohne Iteration ausrechenbar. Machen Sie die Gegenprobe mit

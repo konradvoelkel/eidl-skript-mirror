@@ -250,7 +250,7 @@ Sei $x = (2, -1)$ fest und $L(w) := (1 - w \cdot x)^2$.
 1. Bestimmen Sie $\frac{\partial L}{\partial w_1}$ und $\frac{\partial L}{\partial w_2}$
    mit der Kettenregel.
    *Tipp: Äußere Funktion $u \mapsto u^2$, innere $w \mapsto 1 - w\cdot x$. Die Ableitung
-   von $w \cdot x$ nach $w_j$ ist $x_j$ — mehr steckt nicht dahinter.*
+   von $w \cdot x$ nach $w_j$ ist $x_j$ – mehr steckt nicht dahinter.*
 2. Werten Sie den Gradienten bei $w = (0,0)$ aus und führen Sie einen Schritt mit
    Lernrate $\rho = 0{,}1$ aus.
 3. Berechnen Sie $L$ vor und nach dem Schritt.

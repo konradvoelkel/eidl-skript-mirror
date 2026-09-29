@@ -62,7 +62,7 @@ $q \cdot k_3 = 0$ und Values $v_1 = 1$, $v_2 = 3$, $v_3 = 10$.
 1. Berechnen Sie die Attention-Gewichte mit Softmax (ohne Skalierung) und daraus die
    Ausgabe.
    *Tipp: Zwei der drei Exponenten sind gleich; $e^2 \approx 7{,}39$.*
-2. Die Gewichte müssen sich zu 1 summieren — prüfen Sie das nach.
+2. Die Gewichte müssen sich zu 1 summieren – prüfen Sie das nach.
 3. Warum braucht ein Transformer Positionsembeddings, ein RNN aber nicht?
 
 *Antwortprobe: Das dritte Gewicht ist kleiner als $\tfrac1{10}$, aber nicht null, und die

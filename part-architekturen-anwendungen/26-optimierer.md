@@ -86,7 +86,7 @@ Schritten (ein langes, flaches Tal), Lernrate $\rho = 0{,}1$.
    demselben $\rho$? Das ist die Form, die `torch.optim.SGD(momentum=0.9)` benutzt; sie
    unterscheidet sich von der Fassung oben im Kapitel um den Faktor $(1 - \beta)$, der
    dort das Mittel normiert. Mit der Kapitelfassung käme entsprechend ein Zehntel heraus.
-   *Tipp: $v_1 = 1$, $v_2 = 1{,}9$, $v_3 = 2{,}71$ — Sie müssen nur noch aufsummieren.*
+   *Tipp: $v_1 = 1$, $v_2 = 1{,}9$, $v_3 = 2{,}71$ – Sie müssen nur noch aufsummieren.*
 3. Jetzt wechselt der Gradient das Vorzeichen: $g = (1, -1, 1)$. Was macht Momentum, und
    warum ist das in einer engen Schlucht erwünscht?
 

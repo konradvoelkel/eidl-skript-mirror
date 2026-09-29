@@ -107,7 +107,7 @@ $$
 
 1. Ein Modell hat drei Layer. Vor dem Training wird für Layer 1 und 2
    `requires_grad = False` gesetzt. Welche Tensoren bekommen im Backward Pass einen
-   `.grad`, welche nicht — und wo wird trotzdem noch gerechnet?
+   `.grad`, welche nicht – und wo wird trotzdem noch gerechnet?
    *Tipp: Zeichnen Sie den Graphen und verfolgen Sie die Pfeile rückwärts, von der
    Loss-Funktion zu den Blättern. Fragen Sie sich bei jedem Layer: Muss der Gradient hier
    überhaupt noch hindurch, damit weiter vorne etwas ankommt?*

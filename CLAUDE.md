@@ -140,6 +140,19 @@ Der Ton ist knapp und präzise:
 
 * **Deutsch**, Fachbegriffe englisch, wo sie englisch gebräuchlich sind (*Loss*, *Embedding*,
   *Stride*). Keine Eindeutschung um jeden Preis.
+* **Englische Stämme mit deutscher Flexion bleiben stehen** — das ist entschieden, nicht
+  Versehen: `sampeln` (nicht *samplen*), `finetunen`/`gefinetunt`, `fittet`/`gefittet`,
+  `labeln`/`gelabelte`, `overfittet`, `flippen`, `quantisierte`, `Tokenisiere`. Gezählt am
+  2026-09-29: 300 Vorkommen in 54 Formen. Eine Eindeutschung („feinabstimmen“) wäre
+  schlechter, und `sampeln` ist die Form, die der Duden führt. **Nicht neu verhandeln.**
+* **Der Gedankenstrich ist der Halbgeviertstrich `–` mit Spatien, ausnahmslos.** Der
+  Geviertstrich `—` ist die englische Form; die letzten 14 sind am 2026-09-29 ersetzt
+  worden. `devnotes/sprachpruefliste.py` hält das auf null — samt `--`, dem ASCII-Notbehelf.
+* **Vor „und“ und „oder“ steht in einer Aufzählung kein Komma.** Auch nicht bei
+  nachgetragenen Gliedern („… sein oder ReLU.“) — am 2026-09-29 für alle zehn Stellen so
+  entschieden. `devnotes/grammatikpruefung.py` meldet Rückfälle (`KOMMA_VOR_UND_ODER`).
+* **`z.B.`, `d.h.`, `i.d.R.` ohne Leerzeichen**, wie im ganzen Buch (94 Stellen). Und die
+  vier Stellen mit `?!?`, `??`, `!!`, `???` sind Absicht — dort soll der Text wachrütteln.
 * **Keine Adjektiv-Inflation.** Nicht „ein extrem mächtiges, unglaublich flexibles
   Verfahren“, sondern was es tut und wann man es nimmt.
 * **Jede Behauptung belegbar.** Formeln nachrechnen, Paper mit Jahr und Titel nennen,

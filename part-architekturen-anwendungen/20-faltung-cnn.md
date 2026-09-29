@@ -228,7 +228,7 @@ $f = (\tfrac12, 0, -\tfrac12)$ an den Stellen $-1, 0, 1$.
    Shape hat die Ausgabe, und wie viele Werte hat sie nach `Flatten`?
    *Tipp: $\lfloor (n + 2p - k)/s \rfloor + 1$, hier ohne Padding.*
 
-*Antwortprobe: Bei (3) kommt $16 \cdot 4 \cdot 4$ heraus — die Zahl taucht in PyTorch-Beispielen ständig auf.*
+*Antwortprobe: Bei (3) kommt $16 \cdot 4 \cdot 4$ heraus – die Zahl taucht in PyTorch-Beispielen ständig auf.*
 
 :::{admonition} Weiterlesen
 :class: seealso
