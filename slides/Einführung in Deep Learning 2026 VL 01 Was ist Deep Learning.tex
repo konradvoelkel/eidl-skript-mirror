@@ -27,17 +27,18 @@
       0--5   & Folien 2--3   & Organisatorisches, Material\\
       5--12  & Folien 4--5   & Voraussetzungen, Lernziele (Handzeichen)\\
       12--23 & Folie 6       & \textbf{Umfrage live in ILIAS}\\
-      23--35 & Folie 7       & Semesterplan -- der lange Block, lebt von Rückfragen\\
-      35--38 & Folie 8       & Definition\\
+      23--26 & Folie 7       & Definition\\
+      26--38 & Folie 8       & Semesterplan -- der lange Block, lebt von Rückfragen\\
       38--44 & Folien 9--10  & Python: Provokation und Auflösung\\
       44--52 & Folien 11--12 & Daten, erzeugende Verteilung, GMM\\
       52--59 & Folien 13--15 & Supervised, Regression, Klassifikation\\
-      59--70 & Folien 16--17 & Modellgüte, \textbf{Quizfrage} (Dialog)\\
-      70--78 & Folie 18      & \textbf{HPCwire im Browser}\\
-      78--87 & Folien 19--22 & Kurzgeschichte\\
-      87--90 & Folie 23      & In die Praxis
+      59--70 & Folien 16--18 & Modellgüte, \textbf{Quizfrage} (Dialog), Auflösung\\
+      70--78 & Folie 19      & \textbf{HPCwire im Browser}\\
+      78--86 & Folien 20--23 & Kurzgeschichte\\
+      86--88 & Folie 24      & Take-Home\\
+      88--90 & Folie 25      & In die Praxis
     \end{tabular}\\[4pt]
-    \textbf{Wenn die Zeit knapp wird}, in dieser Reihenfolge kürzen: Lesetext (Folie 18) nur
+    \textbf{Wenn die Zeit knapp wird}, in dieser Reihenfolge kürzen: Lesetext (Folie 19) nur
     als Hausaufgabe ansagen statt im Browser zu zeigen; Python auf eine Folie zusammenziehen;
     Kurzgeschichte ab 2015 überspringen (steht im Skript).
     \textbf{Wenn Zeit übrig ist}: Quizfrage und Semesterplan vertragen beliebig viel Dialog.}
@@ -52,6 +53,7 @@
   \item Blätter wöchentlich, Abgabe Mi 12:00
   \item Zulassung: 8 bestandene Blätter
   \item Klausur: 11.02.2027
+  \item Note: nur die Klausur, ohne Hilfsmittel
   \item Fragen in den Chat: \texttt{\#eidl-2026}
   \end{itemize}
 
@@ -61,7 +63,8 @@
     dann haben alle etwas davon. Der Einladungslink steht auf der ILIAS-Kursseite;
     hier kurz zeigen, wie man beitritt. „Bestanden“ heißt mindestens die Hälfte der
     Punkte; statt eines letzten Blatts gibt es eine Probeklausur. Zweitklausur ist
-    am 15.03.2027.}
+    am 15.03.2027. Die Blätter sind Studienleistung und werden von Elisa Kleinfeld
+    korrigiert; die Note kommt allein aus der Klausur.}
 \end{frame}
 
 \begin{frame}
@@ -107,7 +110,7 @@
 
   \begin{itemize}\setlength{\itemsep}{6pt}
   \item Wie ein neuronales Netz lernt
-  \item \texttt{PyTorch}
+  \item PyTorch
   \item Fertige Modelle benutzen -- und verändern
   \item Text und Bilder
   \end{itemize}
@@ -184,7 +187,7 @@
       \item Autograd, LLMs benutzen
       \item GANs
       \item Latente Räume, Anwendungen
-      \item Destillation, Vibe-Coding
+      \item Destillation, Vibecoding
       \end{enumerate}
     \end{column}
   \end{columns}
@@ -205,7 +208,7 @@
     \Large
     single-threaded, GIL\\[6pt]
     interpretiert\\[6pt]
-    dynamisch gebunden\\[6pt]
+    dynamisch typisiert\\[6pt]
     nicht maschinennah
   \end{center}
 
@@ -372,6 +375,24 @@
     Erst dann die Pointe: Validation-Split -- und das Stichwort Spillover.}
 \end{frame}
 
+\begin{frame}
+  \frametitle{Training, Validation, Test}
+
+  \begin{center}
+    \Large
+    Training \qquad Validation \qquad Test\\[14pt]
+    \normalsize
+    Modelle vergleichen, Hyperparameter wählen: am \emph{Validation}-Set.\\[6pt]
+    Das Testset \emph{einmal} anfassen -- ganz am Ende.
+  \end{center}
+
+  \note{Erst umblättern, wenn die Pointe im Hörsaal gefallen ist. Wer die Hyperparameter
+    nach dem Testergebnis wählt, lässt das Testset indirekt ins Modell einfließen
+    (Spillover), und die gemessene Güte ist zu optimistisch. Deshalb vom Trainingsset ein
+    drittes Stück abspalten, daran vergleichen und wählen; das Testset bleibt für die eine
+    Zahl am Ende. Steht im Skript direkt hinter der Quizfrage, und im Glossar.}
+\end{frame}
+
 % ------------------------------------------------------------------ Lesetext
 \begin{frame}
   \frametitle{Lesetext: AMD und der CUDA-Graben}
@@ -427,19 +448,20 @@
       \includegraphics[height=0.58\textheight]{vl01-mark-i-perceptron.jpg}
     \end{column}
     \begin{column}{0.48\textwidth}
-      \footnotesize
-      The Mark I Perceptron, an early pattern recognition system,\\
-      at the Cornell Aeronautical Laboratory.\\[14pt]
-      \normalsize
+      Der Mark I Perceptron am Cornell Aeronautical Laboratory in Buffalo.\\[14pt]
       Fotozellen als Eingabe,\\
       Potentiometer als Gewichte,\\
-      Elektromotoren zum Nachstellen.
+      Elektromotoren zum Nachstellen.\\[14pt]
+      {\footnotesize Foto: Cornell Aeronautical Laboratory / Cornell University Library.}
     \end{column}
   \end{columns}
 
   \note{Das ist der Aufhänger für nächste Woche: die Gewichte waren Drehwiderstände,
     das Training war ein Motor, der sie verstellt. Wer das Bild einmal gesehen hat,
     versteht „Gewicht“ nicht mehr als abstrakte Zahl.
+    Im Bild: in der Mitte das Steckbrett, das die Fotozellen mit den
+    Assoziationseinheiten verdrahtet, rechts die Reihen von Potentiometern, also die
+    Gewichte. Bildnachweis in \texttt{slides/README.md}.
     Wer mehr will: Olazaran, M. (1996), \emph{A Sociological Study of the Official History
     of the Perceptrons Controversy} -- zeigt, dass die Erzählung vom AI Winter durch
     Minsky und Papert so glatt nicht stimmt. Steht im Skript.}
@@ -448,29 +470,26 @@
 \begin{frame}
   \frametitle{Kurzgeschichte: 2010--2015}
 
-  \begin{itemize}\setlength{\itemsep}{6pt}
-  \item[\textbf{2012}] AlexNet \hfill {\small kommt wieder in VL 11}
-  \item[\textbf{2013}] word2vec \hfill {\small VL 9}
-  \item[\textbf{2014}] GANs \hfill {\small VL 13}
-  \end{itemize}
-
-  \bigskip
   \begin{columns}[c]
-    \begin{column}{0.32\textwidth}
-      \centering\includegraphics[height=0.22\textheight]{vl10-faltungsmatrix.png}
+    \begin{column}{0.56\textwidth}
+      \begin{itemize}\setlength{\itemsep}{10pt}
+      \item[\textbf{2012}] AlexNet: ein CNN gewinnt ImageNet \hfill {\small VL 11}
+      \item[\textbf{2013}] word2vec: Wörter als Vektoren \hfill {\small VL 9}
+      \item[\textbf{2014}] GANs: zwei Netze im Wettstreit \hfill {\small VL 13}
+      \end{itemize}
     \end{column}
-    \begin{column}{0.32\textwidth}
-      \centering\includegraphics[height=0.22\textheight]{vl13-word-arithmetic.png}
-    \end{column}
-    \begin{column}{0.32\textwidth}
-      \centering\includegraphics[height=0.22\textheight]{vl12-gan-schema.png}
+    \begin{column}{0.42\textwidth}
+      \includegraphics[width=\textwidth]{vl13-word-arithmetic.png}
     \end{column}
   \end{columns}
 
   \note{AlexNet: „the paper that sparked the field of Deep Learning“ -- ein CNN
     gewinnt ImageNet mit großem Abstand, trainiert auf GPUs.
-    word2vec: Wörter als Vektoren in einem latenten Raum.
-    GANs: erstmals „realistische“ Bildgenerierung.
+    word2vec: Wörter als Vektoren in einem latenten Raum; das Bild ist die
+    Wortarithmetik aus VL 9 (king $-$ man $+$ woman $\approx$ queen), hier nur als
+    Appetithappen. Bis zum 2026-10-02 standen hier drei Briefmarken, von denen keine
+    lesbar war.
+    GANs: zwei Netze im Wettstreit, erstmals „realistische“ Bildgenerierung.
     Alle drei kommen wieder, deshalb die VL-Nummern daneben.
     Lesetipp: „The Decade of Deep Learning“ von Leo Gao.}
 \end{frame}
@@ -481,18 +500,35 @@
   \begin{itemize}\setlength{\itemsep}{10pt}
   \item[\textbf{2017}] Transformer \hfill {\small VL 10, aber wir trainieren keine}
   \item[\textbf{2020}] AlphaFold 2
-  \item[\textbf{2021}] Diffusionsmodelle
+  \item[\textbf{2021}] Diffusionsmodelle schlagen GANs
   \item[\textbf{2022}] ChatGPT
   \end{itemize}
 
   \note{Transformer: „Attention is all you need“, Grundlage für GPT -- wir schauen
     sie in VL 10 an, trainieren aber keine.
     AlphaFold 2 „löst“ das Proteinfaltungsproblem, Nobelpreis Chemie 2024.
+    Diffusion: das Verfahren (DDPM) ist von 2020; 2021 schlägt es die GANs bei der
+    Bildqualität (Dhariwal und Nichol, „Diffusion Models Beat GANs on Image Synthesis“).
     Nach ChatGPT: RLHF, Copilot, Multimodalität, RAG, Agents.
     Ehrlich bleiben: das meiste davon ist Stoff der aufbauenden Module im Master.}
 \end{frame}
 
 % ------------------------------------------------------------------ Abschluss
+\begin{frame}
+  \frametitle{Take-Home}
+
+  \begin{center}
+    \Large
+    Deep Learning = Machine Learning mit \emph{tiefen} Netzen.\\[14pt]
+    Ein generatives Modell ist ein Modell einer \emph{Verteilung}.\\[14pt]
+    Supervised: eine Spalte, die ich später \emph{nicht mehr bekomme}.
+  \end{center}
+
+  \note{Zwei Minuten, die drei Take-Home-Sätze der Sitzung 2025. Der erste nimmt dem
+    Begriff die Magie, der zweite ist der Haken für Autoencoder, VAE und GANs, der dritte
+    für alles, was Regression oder Klassifikation heißt.}
+\end{frame}
+
 \begin{frame}
   \frametitle{In die Praxis}
 
@@ -507,10 +543,11 @@
     Nächste Woche: \emph{Neuron und Perzeptron}.
   \end{center}
 
-  \note{Drei Minuten. Ausdrücklich ansagen, was auf dem ersten Abgabeblatt steht (lineare
+  \note{Zwei Minuten. Ausdrücklich ansagen, was auf dem ersten Abgabeblatt steht (lineare
     Algebra, dazu kleine NumPy- und Matplotlib-Aufgaben) und dass das Perzeptron erst auf dem
     nächsten Blatt programmiert wird -- das hat 2025 Rückfragen erspart.
-    Und: wer die Eingangsumfrage noch nicht ausgefüllt hat, bitte bis morgen.}
+    Und: Die Eingangsumfrage schließt in ILIAS um 13:55, also mit dieser Sitzung -- wer
+    sie noch nicht ausgefüllt hat, tut es jetzt, nicht morgen.}
 \end{frame}
 
 \end{document}

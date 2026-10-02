@@ -15,7 +15,14 @@
 \else
  \usepackage[utf8]{inputenc}
 \fi
-\usepackage{german}
+% Sprache: Bis zum 2026-10-02 stand hier das veraltete german.sty. Es sucht \l@german,
+% findet es im LuaTeX-Format nicht und meldet "\language number for German undefined,
+% default 255 used": kein Deck trennte deutsche Silben. Jetzt babel wie im tex-Template
+% des Buchs, shorthands=off, damit das Anführungszeichen nicht aktiv wird. LuaTeX lädt
+% die Trennmuster beim ersten Gebrauch aus hyph-utf8 (im Log: "German Hyphenation
+% Patterns (Reformed Orthography, 2006)"); fehlen sie, warnt babel ("No hyphenation
+% patterns were preloaded for the language 'ngerman'") und trennt ebenfalls nicht.
+\usepackage[shorthands=off,ngerman]{babel}
 \usepackage{newunicodechar}
 \newunicodechar{€}{\texteuro}
 \newunicodechar{ß}{\ss}
@@ -38,7 +45,10 @@
 \newcommand{\E}{\ensuremath{\mathbb{E}}}
 \newcommand{\V}{\ensuremath{\mathbb{V}}}
 
-\setbeamercolor{emph}{fg=purple}
+% Hervorhebungen in der Markenfarbe des Buchs (BRANDING.md), nicht in xcolor-purple.
+% Das Theme bleibt HHU-Blau; die Markenfarbe ist nur der Akzent.
+\definecolor{eidlbrand}{HTML}{6F59A6}
+\setbeamercolor{emph}{fg=eidlbrand}
 \renewcommand<>{\emph}[1]{%
   {\usebeamercolor[fg]{emph}\only#2{\itshape}#1}%
 }
@@ -49,7 +59,7 @@
             breaklinks=true,bookmarksnumbered=true,pdfborder=0 0 0,
             pdftitle={Einführung in Deep Learning WiSe 2026/27 HHU},
             pdfauthor={Konrad Voelkel},
-            pdfsubject={data science}}
+            pdfsubject={deep learning}}
 
 %\documentclass[aspectratio=169,t]{beamer}
 \usetheme{hhubeamer} % put the hhu-beamer-theme in /usr/share/texmf/tex/latex/beamer/themes/
@@ -98,6 +108,14 @@
 \ifLuaTeX
   \setsansfont[Ligatures=TeX]{Source Sans Pro}
 \fi
+
+% Notizseite (Deck mit `show notes on second screen=right`): Beamer paginiert Notizen
+% nicht. Mit dem Standard-Layout (Vorschaubild der Folie oben) passte die Titelnotiz von
+% VL 1 (Ablaufplan plus Kürzungsregeln) nicht auf die Seite und brach mitten im Satz ab.
+% Ohne Vorschaubild und in \scriptsize passt sie (Befund A5 der Durchsicht vom 2026-09-25,
+% umgesetzt 2026-10-02). Auf die Folien selbst hat das keine Wirkung.
+\setbeamertemplate{note page}[plain]
+\setbeamerfont{note page}{size=\scriptsize}
 
 % -------------------- Code listings config --------------------
 % Define custom colors for syntax highlighting

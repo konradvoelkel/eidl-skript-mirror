@@ -25,7 +25,7 @@ Für maschinelles Lernen ist Python eigentlich völlig ungeeignet, denn es ist
 
 * **single-threaded by default**, mit Garbage Collection und GIL (global interpreter lock), was Multithreading eher erschwert als erleichtert;
 * **interpretiert**, nicht direkt auf die Maschine kompiliert, und daher etwas langsam;
-* **dynamisch gebunden**, d.h. nicht typesafe, und Typen sind erst zur Laufzeit bekannt, daher aufwändiges Typechecking;
+* **dynamisch typisiert**, d.h. Typen sind erst zur Laufzeit bekannt, daher aufwändiges Typechecking;
 * **nicht maschinennah**, daher ist es schwierig, SIMD-Register und Cachegrößen der spezifischen Hardware zur Optimierung zu nutzen.
 
 ## Wieso Python ganz toll ist
@@ -115,6 +115,8 @@ Und was misst man auf dem Testset? Bei Klassifikation naheliegend die **Accuracy
 Was kann beim Vergleich verschiedener Modelle und der Optimierung von Hyperparametern mit dem Testset passieren?
 :::
 
+Antwort: Wer Modelle vergleicht und Hyperparameter nach dem Testergebnis wählt, lässt das Testset *indirekt* ins Modell einfließen – die gemessene Güte ist dann zu optimistisch. Deshalb spaltet man vom Trainingsset ein **Validation-Set** ab (**Validation-Split**), trifft daran alle Entscheidungen und fasst das Testset genau einmal an, ganz am Ende.
+
 ## Kurzgeschichte
 
 ### Bis 2010
@@ -142,7 +144,7 @@ Das meiste davon ist Stoff der aufbauenden Module. Die Transformer sind die Ausn
   [„LLMs benutzen“](../part-architekturen-anwendungen/21-llms-benutzen.md) – trainieren
   werden wir aber keine.
 * **2020** AlphaFold 2 „löst“ das Proteinfaltungsproblem – Nobelpreis für Chemie 2024.
-* **2021** Diffusionsmodelle für realistische Bildgenerierung.
+* **2021** Diffusionsmodelle schlagen GANs bei der Bildgenerierung (Dhariwal und Nichol, *Diffusion Models Beat GANs on Image Synthesis*); das Verfahren selbst, DDPM, ist von 2020.
 * **2022** Veröffentlichung von ChatGPT; danach RLHF, Copilot, Multimodalität, RAG, Agents, …
 
 ## Übung

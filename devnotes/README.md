@@ -1,6 +1,6 @@
 # devnotes
 
-Arbeitsnotizen und Prüfskripte zum Skript, nicht Teil des Buchs. Stand 2026-09-27.
+Arbeitsnotizen und Prüfskripte zum Skript, nicht Teil des Buchs. Stand 2026-10-02.
 
 | Datei | Was | Status |
 |---|---|---|
@@ -11,7 +11,8 @@ Arbeitsnotizen und Prüfskripte zum Skript, nicht Teil des Buchs. Stand 2026-09-
 | `diskussion-vorlesung-vs-skript.md` | Was die Aufzeichnungen 2025/26 über das Skript sagen: neun Thesen, Konrads Entscheidungen, Umsetzung | abgeschlossen, Entscheidungen umgesetzt |
 | `vorschlag-grundlagen.md` | Zwölf Grundlagen-Snippets und wo sie eingebaut wurden | abgeschlossen, umgesetzt |
 | `codecheck-2026-09-24.md` | Alle 24 Python-Blöcke der Kapitel ausgeführt: was lief, was nicht, mit Umgebung | Referenz (Stand 2026-09-24) |
-| `folien-review-2026-09-25.md` | Durchsicht der 15 Beamer-Decks: Schriftbild, Titel/Labels, Ablaufplan-Nummern, Blatt-Zuordnung, fachliche Unschärfen, fehlende Bilder | A1–A3, Blatt-Verweise, VL-3-Code erledigt (2026-09-25); Rest offen |
+| `folien-review-2026-09-25.md` | Durchsicht der 15 Beamer-Decks: Schriftbild, Titel/Labels, Ablaufplan-Nummern, Blatt-Zuordnung, fachliche Unschärfen, fehlende Bilder | A1–A3, Blatt-Verweise, VL-3-Code erledigt (2026-09-25); A5 und alles zu VL 1 erledigt (2026-10-02); Rest offen |
+| `folien-review-vl01-2026-10-02.md` | Durchsicht des VL-1-Decks vor der ersten Sitzung: Umfrage-Fenster, Ablaufplan, Notizseite, Auflösung der Quizfrage, Take-Home, Bilder, Bildnachweis, Header (babel statt `german.sty`, Markenfarbe) — mit Gegenprobe nach dem Umbau | abgeschlossen, alles umgesetzt (2026-10-02); Muster für die übrigen 14 Decks |
 | `build-log-2026-09-27.md` | Playbook-Durchgang: Messwerte vorher/nachher, die zwei Konversions-Fehlerklassen, minted zurück, Gegenprobe im Image | Protokoll, abgeschlossen |
 | `patch_myst_tex.py` | Repariert den mystmd-Fehler, der vor jeden Bindestrich in Codeblöcken ein Leerzeichen setzt | **nach jedem `uv sync`** laufen lassen; im CI-Image automatisch |
 | `check_pdf_build.py` | Prüft das gebaute PDF: LaTeX-Fehler, Abbruch, fehlende Glyphen, Seitenzahl, Stichproben | läuft im CI-Job `build-pdf`, lokal vor jedem PDF-Commit |

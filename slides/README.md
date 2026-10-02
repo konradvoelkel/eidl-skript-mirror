@@ -10,7 +10,11 @@ latexmk -lualatex "Einführung in Deep Learning 2026 VL 01 Was ist Deep Learning
 ```
 
 Gebraucht wird das HHU-Beamer-Theme (`hhubeamer`) unter
-`/usr/share/texmf/tex/latex/beamer/themes/` und die Schrift Source Sans Pro.
+`/usr/share/texmf/tex/latex/beamer/themes/` und die Schrift Source Sans Pro. Die deutsche
+Silbentrennung kommt über `babel` (Header); LuaTeX lädt die Trennmuster beim ersten Gebrauch
+aus `hyph-utf8`, das zu jedem texlive gehört. Bis zum 2026-10-02 lud der Header das veraltete
+`german.sty`, das im LuaTeX-Format keine deutsche Sprache fand – kein Deck trennte Silben, und
+das Log sagte es nur in einer Zeile („\language number for German undefined“).
 
 **Wenn der Bau „File `beamerthemehhubeamer.sty' not found“ meldet, obwohl die Datei da
 liegt**, ist die kpathsea-Datenbank älter als das Theme. `/usr/share/texmf` ist in `TEXMF`
@@ -55,6 +59,19 @@ aktualisiert auch diese Kopie oder löscht sie. Und ein Pfad in `TEXINPUTS`, der
 * Fassung mit Notizen für den zweiten Schirm: im Deck die Zeile
   `\setbeameroption{show notes on second screen=right}` nach dem `\input{...header}`
   einkommentieren.
+* Fassung mit Notizen: Die Notizseite ist im Header ohne Vorschaubild und in `\scriptsize`
+  eingestellt, weil Beamer Notizen nicht paginiert und die Titelnotiz von VL 1 (Ablaufplan
+  plus Kürzungsregeln) sonst mitten im Satz abbricht. Wer eine Notiz schreibt, die länger ist
+  als die von VL 1, baut die Notizenfassung einmal und sieht nach.
+* **Bildnachweise** für Fotos, die nicht aus `devnotes/make_figures.py` stammen: Das Foto des
+  Mark I Perceptron (`images/vl01-mark-i-perceptron.jpg`, VL 1, 1024 × 1352 px) stammt vom
+  Cornell Aeronautical Laboratory; die Vorlage liegt in den Digital Collections der Cornell
+  University Library, Katalognummer `ss:550351`
+  (<https://digital.library.cornell.edu/catalog/ss:550351>). Die englische Wikipedia nutzt
+  eine kleine Fassung desselben Fotos als `File:Mark_I_perceptron.jpeg` **unter Fair Use**
+  und führt es als urheberrechtlich geschützt. Das Foto war schon in den Folien 2023 und
+  2025; die Herkunft stand bis zum 2026-10-02 nirgends, und die Rechtefrage für das
+  öffentliche Repository ist offen (`devnotes/TODO.md`).
 * Die PDFs sind Build-Artefakte und stehen in `.gitignore`; verteilt werden sie
   über ILIAS. Dasselbe gilt für alles andere, was der Bau erzeugt – `.aux`, `.nav`,
   `.snm`, `.toc`, `.out`, `.vrb` und Verwandte gehören nicht ins Repo.

@@ -513,3 +513,5 @@ wav
 Ähnlichkeitsmaß
 Überlapp
 Řehůřeks
+Dhariwal
+Nichol

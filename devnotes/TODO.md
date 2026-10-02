@@ -72,6 +72,8 @@ Hintergrundrauschen.
 | Blatt 6 kommt vor der Autoencoder-Vorlesung | „Übungsblätter“ | vertagt bis zur Blatt-Überarbeitung |
 | Antwortenbox in Kapitel 01 steht im PDF offen | „Inhalt“ | in einen Anhang oder auf eine Antwortprobe eindampfen |
 | Anhang mit den Endergebnissen der Übungen? | „Übungsblätter“ | erst, wenn die Antwortproben sich als zu dünn erweisen |
+| Eingangsumfrage schließt am 14.10. um 13:55, also mit der ersten Sitzung | „Beamer-Folien“ | so lassen; die Notiz in VL 1 sagt seit 2026-10-02 „jetzt, nicht morgen“. Alternative: Fenster in ILIAS bis 15.10. verlängern, dann die Notiz zurückdrehen |
+| Mark-I-Foto (`images/vl01-mark-i-perceptron.jpg`) im öffentlichen Repo, Rechte ungeklärt: Wikipedia nutzt dieselbe Aufnahme nur unter Fair Use | „Beamer-Folien“, `folien-review-vl01-2026-10-02.md` | Rechteangabe bei Cornell (`ss:550351`) im Browser nachsehen; wenn nicht frei, durch das US-Navy-Foto bei Wikimedia Commons ersetzen (Public Domain) |
 
 Der erste Punkt ist der einzige, der jemanden blockiert: An ihm hängt die Kopfzeile „N Punkte,
 Abgabe bis …“ in den TeX-Blättern.
@@ -139,11 +141,17 @@ Abgabe bis …“ in den TeX-Blättern.
 
 ## Beamer-Folien (Schritt 4 des Migrationsplans)
 
-- [ ] Rest aus der Durchsicht: Notizseite (`note page` plain + `\scriptsize`, sonst läuft die Titelnotiz
-  über), Ablaufplan-Foliennummern in 10 Decks, fachliche Punkte in VL 5/7/9/14 (siehe Abschnitt B),
-  Bilder für VL 10/13/15 und neun zu kleine Bilder (Abschnitt C).
+- [ ] Rest aus der Durchsicht vom 25.09. (`folien-review-2026-09-25.md`): Ablaufplan-Foliennummern in
+  9 Decks (VL 1 ist am 2026-10-02 nachgezogen), fachliche Punkte in VL 5/7/9/14 (Abschnitt B), Bilder
+  für VL 10/13/15 und acht zu kleine Bilder (Abschnitt C; die Briefmarken-Folie in VL 1 ist erledigt).
+  Die Notizseite ist seit dem 2026-10-02 im Header geregelt (`note page` plain + `\scriptsize`) und
+  gilt für alle Decks.
 - [ ] Decks inhaltlich gegenlesen und im Hörsaal erproben; Folien-PDFs in ILIAS hochladen (die kopierten
-  Dateien dort sind noch die von 2025/26).
+  Dateien dort sind noch die von 2025/26). **VL 1 ist gegengelesen und umgebaut**
+  (`folien-review-vl01-2026-10-02.md`); die übrigen 14 nach demselben Muster: Ablaufplan gegen die
+  Frame-Reihenfolge, Notizenfassung bauen, Termine und Ansagen gegen `kurs-2026-27.md` und die
+  ILIAS-Konfiguration (`../../ilias/runs/ws2026-27.yaml`, der Schwesterordner neben dem Repo),
+  Kapitelfehler mitsuchen.
 
 ## ILIAS (Kurs 2026/27, ref_id 2165367)
 

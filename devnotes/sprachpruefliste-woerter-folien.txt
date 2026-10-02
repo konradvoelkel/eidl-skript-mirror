@@ -71,3 +71,6 @@ rastern
 synthese  # aus „Sprach-erkennung und -synthese“ — Bindestrich-Anschluss
 tanh
 tensorflow
+Appetithappen
+Dhariwal
+Nichol

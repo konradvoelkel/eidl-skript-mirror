@@ -101,6 +101,18 @@ Datierte Protokolle größerer Umbauten liegen daneben als `build-log-<datum>.md
   (Source Sans Pro statt Serifen-Fallback, Mathe kursiv), Frametitle mit Breitenbegrenzung, drei Titel
   gekürzt, Item-Labels als `description`, Blatt-Verweise ohne Nummern („Übungsblatt“), Codezeile VL 3,
   `build.sh`-Glob.
+- [x] **VL 1 gegengelesen und nachgezogen** (2026-10-02, `folien-review-vl01-2026-10-02.md`): Ablaufplan in
+  Deck-Reihenfolge (Definition vor Semesterplan; Befund A4 für dieses Deck), Notizseite ohne Vorschaubild in
+  `\scriptsize` (Befund A5, im Header, gilt für alle Decks), Auflösung der Quizfrage als Folie „Training,
+  Validation, Test“ und als Absatz im Kapitel (das Glossar verwies dafür auf ein Kapitel, in dem das Wort
+  nicht vorkam), Take-Home-Folie, „Note: nur die Klausur, ohne Hilfsmittel“ auf der Organisatorisches-Folie,
+  Folie 2010–2015 mit Halbsätzen und einem lesbaren Bild statt drei Briefmarken, Mark-I-Foto mit deutscher
+  Unterschrift und Bildnachweis (`slides/README.md`), „2021 Diffusionsmodelle schlagen GANs“ mit DDPM 2020
+  in Notiz und Kapitel, Vibecoding, PyTorch ohne `\texttt`, „dynamisch typisiert“. Im Header `german.sty`
+  durch babel ersetzt – vorher trennte kein Deck Silben, das Log sagte es in einer Zeile –, `\emph` in der
+  Markenfarbe `#6f59a6`, `pdfsubject`. Die Umfrage-Ansage war falsch: Das ILIAS-Fenster schließt um 13:55,
+  die Notiz sagte „bis morgen“. Gegenprobe: 16 Decks bauen, Seitenzahlen unverändert (VL 1: 23 → 25), 0 zu
+  volle Rahmen, Sprachprüfungen null, HTML-Bau ohne Warnungen.
 - [x] Dozentennotizen sind in den Decks (2026-09-25): je Folie ein `\note{}` mit den Dialogmustern aus
   `transcripts/*/notiz.md`, dazu auf jeder Titelfolie ein Minuten-Ablaufplan aus der jeweiligen Aufzeichnung.
   Drin sind u.a. der Type-Check (VL 2), die offen gehaltene Zufalls-Frage (VL 5), „Quizfrage nicht auflösen“
@@ -166,6 +178,13 @@ Datierte Protokolle größerer Umbauten liegen daneben als `build-log-<datum>.md
   Kommentar im Dockerfile; Anheben heißt: Zeitstempel setzen, Image bauen, PDF im Container prüfen, committen.
 
 ## Nach Datum
+
+### 2026-10-02 (VL-1-Durchsicht vor der ersten Sitzung)
+
+Auslöser: „Sieh die Folien für die erste Sitzung durch.“ Befunde und Umsetzung in
+`folien-review-vl01-2026-10-02.md`; die Liste oben unter „Beamer-Folien“ fasst sie zusammen. Zwei
+Befunde waren keine Folienfrage: die Umfrage-Ansage gegen das ILIAS-Fenster, und der fehlende
+Validation-Split im Kapitel, auf den das Glossar schon verwies.
 
 ### 2026-09-27, nachts (Playbook-Durchgang)
 
