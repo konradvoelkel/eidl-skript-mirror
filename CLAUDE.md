@@ -16,7 +16,9 @@ liegt.
 die für alle drei Bücher (`eipy-skript`, `eidl-skript`, `ds-skript`) gelten — Anheften,
 Image-Bau, mitgeliefertes Site-Template, PDF-Verifikation. Diese Datei bleibt beim Buch,
 das Playbook bei der Familie. Eine Lehre aus diesem Repo wird am selben Tag dort
-eingetragen.
+eingetragen. **Für die Foliensätze gilt dasselbe mit `~/Sciebo/hhu/PLAYBOOK-folien.md`**
+(seit 2026-10-02): Header, Bau, Notizenfassung, Prüfliste vor dem Upload nach ILIAS; was
+nur dieses Repo betrifft, steht in `slides/README.md`.
 
 ## Was dieses Projekt ist
 

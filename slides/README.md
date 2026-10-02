@@ -1,7 +1,9 @@
 # Beamer-Folien 2026/27
 
 Ein Deck pro Vorlesungswoche, gebaut aus den Kapiteln des Skripts. Die Zuordnung
-Woche → Kapitel steht in [`../kurs-2026-27.md`](../kurs-2026-27.md).
+Woche → Kapitel steht in [`../kurs-2026-27.md`](../kurs-2026-27.md). Was für die Decks
+*aller* HHU-Kurse gilt (Header, Bau, Notizenfassung, Prüfliste vor dem Upload), steht in
+`~/Sciebo/hhu/PLAYBOOK-folien.md`; hier steht, was nur dieses Repo betrifft.
 
 ## Bauen
 
