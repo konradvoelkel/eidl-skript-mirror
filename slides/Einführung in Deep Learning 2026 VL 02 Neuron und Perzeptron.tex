@@ -28,9 +28,10 @@
       45--52 & Folie 12      & Die fünf Fragen an jedes Modell\\
       52--62 & Folien 13--14 & Perzeptronregel\\
       62--75 & Folie 15      & \textbf{Tafel: warum sie für ein Sample funktioniert}\\
-      75--82 & Folien 16--17 & Verallgemeinertes Perzeptron\\
-      82--88 & Folien 18--19 & Mehrere Schichten, warum die Regel nicht reicht\\
-      88--90 & Folie 20      & Übungsblatt\\
+      75--82 & Folien 16--17 & Regel bei der Arbeit, verallgemeinertes Perzeptron\\
+      82--87 & Folien 18--20 & MLP, XOR aufgelöst, warum die Regel nicht reicht\\
+      87--89 & Folie 21      & Die fünf Antworten (Take-Home)\\
+      89--90 & Folie 22      & Übungsblatt\\
     \end{tabular}\\[4pt]
     Die Tafelphase ist der Kern der Sitzung -- 2025 war das Ein-Sample-Argument das,
     was der Dozent am Ende „das Wichtigste“ genannt hat. Wenn die Zeit knapp wird:
@@ -48,7 +49,8 @@
 
   \note{Zwei Sätze Rückblick, mehr nicht. Ansagen: das erste Blatt war heute 12:00 fällig,
     das nächste kommt raus und implementiert die Perzeptronregel.
-    Wer letzte Woche nicht da war: Kapitel 1 im Skript, zehn Minuten Lesezeit.}
+    Wer letzte Woche nicht da war: das Kapitel „Was ist Deep Learning?“ im Skript,
+    zehn Minuten Lesezeit.}
 \end{frame}
 
 % ------------------------------------------------------------------ Neuron
@@ -60,7 +62,7 @@
       \begin{center}
         \Large
         $\zeta = \sum_{j=1}^n w_j x_j = w \cdot x$\\[16pt]
-        $y = \sigma(\zeta)$
+        $y = \tau(\zeta)$
       \end{center}
     \end{column}
     \begin{column}{0.48\textwidth}
@@ -70,10 +72,11 @@
 
   \note{Von der Biologie geborgt: Dendriten liefern Signale, das Neuron summiert sie
     gewichtet und feuert, wenn eine Schwelle überschritten wird.
-    Bei McCulloch und Pitts ist $\sigma$ eine Schwellenwertfunktion mit Ausgabe 0 oder 1;
-    später wird daraus Sigmoid oder ReLU.
+    Bei McCulloch und Pitts ist $\tau$ eine Schwellenwertfunktion mit Ausgabe 0 oder 1;
+    später wird daraus die Sigmoidfunktion $\sigma$ oder ReLU. Konvention wie im Skript:
+    $\tau$ ist irgendeine Aktivierungsfunktion, $\sigma$ immer die logistische.
     \textbf{Type-Check als Stilmittel} (hat 2025 gut getragen): Was für ein Objekt ist $w$,
-    was $x$, was $\zeta$? Aus den Typen folgt, dass $\sigma$ von $\mathbb{R}$ nach
+    was $x$, was $\zeta$? Aus den Typen folgt, dass $\tau$ von $\mathbb{R}$ nach
     $\mathbb{R}$ geht.}
 \end{frame}
 
@@ -244,7 +247,10 @@
 
   \note{$\rho > 0$ ist die Lernrate, ein Hyperparameter.
     Type-Check: Was muss $\rho$ sein, damit die Formel Sinn ergibt? Ein Skalar.
-    Und $(y - f(x))$? Eine Zahl aus $\{-1, 0, 1\}$.}
+    Und $(y - f(x))$? Eine Zahl aus $\{-1, 0, 1\}$.
+    Frage 2025: Kann man die rückblickend perfekte Lernrate ausrechnen? Für ein einzelnes
+    Sample ja (bei $y = 1$ reicht $\rho > -\,w \cdot x / \|x\|^2$), für alle zusammen
+    nicht -- in der Praxis wird $\rho$ im Lauf des Trainings variiert.}
 \end{frame}
 
 \begin{frame}
@@ -257,7 +263,14 @@
   \item[$y = 0,\ f(x) = 1$] $w_{\text{neu}} = w - \rho x$, Aktivierung sinkt
   \end{description}
 
-  \note{Der mittlere Fall zum Mitrechnen: $w_{\text{neu}} \cdot x = w \cdot x + \rho\,(x \cdot x)$,
+  \bigskip
+  \begin{center}
+    Mit $x_0 = 1$ lernt die Regel den Bias mit: $b_{\text{neu}} = b + \rho\,(y - f(x))$.
+  \end{center}
+
+  \note{Der Bias ist das nullte Gewicht, also bekommt er dasselbe Update, mit $x_0 = 1$ --
+    Type-Check: $b$ ist eine Zahl, $\rho\,(y - f(x)) \cdot 1$ auch.
+    Der mittlere Fall zum Mitrechnen: $w_{\text{neu}} \cdot x = w \cdot x + \rho\,(x \cdot x)$,
     und $x \cdot x > 0$ für $x \neq 0$. Die Aktivierung wächst also -- in Richtung der
     richtigen Entscheidung.
     Frage in den Raum, die 2025 kam: Muss eine Änderung a priori verbessern? Nein --
@@ -288,11 +301,16 @@
   \frametitle{Die Regel bei der Arbeit}
 
   \begin{center}
-    \includegraphics[width=0.8\textwidth]{vl02-perceptron-updates.png}
+    \includegraphics[width=0.7\textwidth]{vl02-perceptron-updates-folie.png}
   \end{center}
 
-  \note{Trenngerade nach 0, 1, 2 und 3 Epochen über 60 Datenpunkte, Lernrate $\rho = 0{,}05$.
-    Genau das baut das Übungsblatt nach.
+  \note{Links der Start, rechts nach drei Epochen (60 Datenpunkte, Lernrate
+    $\rho = 0{,}05$, Fehlerrate von 60 auf 5 Prozent, und zwar schon nach der ersten Epoche);
+    das Skript zeigt alle vier Stufen. Genau das baut das Übungsblatt nach.
+    Initialisierung (Frage 2025): Der Nullvektor hat keine Richtung, dann entscheidet das
+    erste falsch klassifizierte Sample, wohin $w$ zeigt; $(1,\dots,1)$ ist willkürlich, aber
+    eine Richtung. Wichtig ist die Größenordnung relativ zu den Daten, Normieren schadet
+    nicht. Der Konvergenzsatz rechnet übrigens mit Start $0$.
     Hier den Konvergenzsatz nur beim Namen nennen (Novikoff 1962): höchstens
     $R^2/\gamma^2$ Fehler, wenn es eine Margin $\gamma$ gibt. Der Beweis steht als
     Vertiefung im Skript.}
@@ -333,7 +351,7 @@
     \end{column}
     \begin{column}{0.5\textwidth}
       \Large
-      $h = \sigma(W x + b)$\\[14pt]
+      $h = \tau(W x + b)$\\[14pt]
       \normalsize
       Zeile $i$ von $W$ = Gewichte von Neuron $i$
     \end{column}
@@ -343,9 +361,30 @@
     Also: $m$ Aktivierungen auf einmal -- mit der Geometrie von vorhin: $m$ skalierte
     Abstände zu $m$ Hyperebenen. Jedes Neuron zeichnet eine Gerade in die Eingabeebene.
     In PyTorch: \texttt{nn.Linear(n, m)} hat \texttt{weight} mit Shape \texttt{(m, n)}.
-    Jetzt XOR auflösen: zwei Geraden in der ersten Schicht ($x_1 \lor x_2$ und
-    $\lnot(x_1 \land x_2)$), ein UND darüber -- im Raum der Seiten-Informationen ist XOR
-    linear trennbar.}
+    MLP gegen neuronales Netz (Frage 2025): MLP ist der Spezialfall -- jede Schicht voll
+    mit der nächsten verbunden, nur vorwärts; neuronales Netz ist der Oberbegriff, auch für
+    CNN, RNN und Transformer. Die XOR-Auflösung kommt auf der nächsten Folie.}
+\end{frame}
+
+\begin{frame}
+  \frametitle{XOR, aufgelöst: zwei Geraden und ein UND}
+
+  \begin{center}
+    \includegraphics[width=0.9\textwidth]{vl07-xor-region.png}
+  \end{center}
+
+  \begin{center}
+    $g(x) = [\,x_1 + x_2 - \tfrac12 > 0\,]$ \qquad
+    $f(x) = [\,\tfrac32 - x_1 - x_2 > 0\,]$ \qquad
+    $h = [\,g + f - \tfrac32 > 0\,]$
+  \end{center}
+
+  \note{Das Versprechen von Folie 11 einlösen. Erste Schicht: zwei Perzeptrons, OR und
+    NAND, je eine Gerade in der Eingabeebene. Zweite Schicht: ein UND auf den beiden
+    Seiten-Informationen. Im Raum $(g, f) \in \{0,1\}^2$ liegen die XOR-Punkte bei
+    $(1,1)$, die anderen bei $(0,1)$ und $(1,0)$ -- linear trennbar. Prüfen lassen:
+    $(0,0)$, $(1,1)$ und $(0,1)$ in die drei Formeln einsetzen. Dasselbe Bild kommt in
+    VL 7 wieder, wenn wir Netze von Hand bauen.}
 \end{frame}
 
 \begin{frame}
@@ -368,12 +407,36 @@
 
 % ------------------------------------------------------------------ Abschluss
 \begin{frame}
+  \frametitle{Die fünf Antworten für das Perzeptron}
+
+  \begin{enumerate}\setlength{\itemsep}{5pt}
+  \item Parameter: $w \in \mathbb{R}^n$ und $b \in \mathbb{R}$
+  \item Inferenz: $f(x) = [\, w \cdot x + b > 0 \,]$
+  \item Training: Perzeptronregel, Start z.B. bei $w = (1, \dots, 1)$
+  \item Zielgröße: Fehlerrate auf dem Testset
+  \item Hyperparameter: Lernrate $\rho$; die Dimension $n$ geben die Daten vor
+  \end{enumerate}
+
+  \bigskip
+  \begin{center}
+    Und das Kochrezept: \emph{Skalarprodukt, dann etwas Nichtlineares.}
+  \end{center}
+
+  \note{Zwei Minuten, die Take-Home-Folie: die fünf Fragen von Folie 12, für das
+    Perzeptron beantwortet -- so sieht die Antwort für jedes Modell des Semesters aus.
+    Dazu die drei Sätze aus 2025: Inferenz mit dem Gewichtsvektor; eine Update-Regel, die
+    $w$ bei jedem Fehler ein Stück zu $x$ hin oder von $x$ weg schubst, und einmal im
+    Leben hat man am Winkel nachvollzogen, warum das für ein Sample funktioniert; ohne
+    die Nichtlinearität bringt Stapeln nichts.}
+\end{frame}
+
+\begin{frame}
   \frametitle{Übungsblatt}
 
   \begin{itemize}\setlength{\itemsep}{8pt}
   \item Perzeptronregel selbst implementieren (NumPy, nicht das verallgemeinerte Perzeptron)
-  \item Zweidimensionale Daten wählen und \emph{plotten}
-  \item Mehrere Epochen laufen lassen
+  \item Zweidimensionale Daten wählen und \emph{plotten}: erst \texttt{make\_blobs}, dann Iris
+  \item Mehrere Epochen laufen lassen, Fehler auf Train und Test zählen
   \end{itemize}
 
   \bigskip
@@ -383,8 +446,12 @@
 
   \note{Ausdrücklich ansagen (hat 2025 Rückfragen erspart): mit \texttt{make\_blobs}
     anfangen, das ist der einfachste Fall; plotten, sonst sieht man nichts; mehrere
-    Epochen. Der verlinkte Code ist Ugly Code und nur für den Notfall.
-    Und: ChatGPT liefert hier Lehrbuchzeug, das nicht zur Aufgabe passt.}
+    Epochen; Iris mit zwei Arten als echter Datensatz. Falls das Blatt den Ugly-Code-Link
+    von 2025 noch hat: nur für den Notfall (vorher am TeX-Blatt nachsehen).
+    Und: ChatGPT liefert hier Lehrbuchzeug, das nicht zur Aufgabe passt.
+    Ausblick in einem Satz, wie der Plan es will: Hugging Face ist der Hub, von dem
+    nächste Woche die fertigen Modelle kommen -- Tasks, Modelle, Gewichte zum
+    Herunterladen.}
 \end{frame}
 
 \end{document}

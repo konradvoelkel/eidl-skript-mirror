@@ -149,7 +149,7 @@ def vl01_neuron():
         arrow(ax, (0.85, y), (2.9, 0.15 * (y)), text=f"$w_{i}$")
     ax.add_patch(Circle((3.6, 0), 0.75, fc="white", ec=HHU_BLUE, lw=2))
     ax.text(3.6, 0.2, r"$\zeta=\sum_j w_j x_j$", ha="center", va="center", fontsize=10)
-    ax.text(3.6, -0.3, r"$y=\sigma(\zeta)$", ha="center", va="center", fontsize=10)
+    ax.text(3.6, -0.3, r"$y=\tau(\zeta)$", ha="center", va="center", fontsize=10)  # tau: beliebige Aktivierung, sigma ist im Buch die logistische
     arrow(ax, (4.4, 0), (6.5, 0))
     ax.add_patch(Circle((7.0, 0), 0.3, fc=HHU_ICE, ec=HHU_BLUE))
     ax.text(7.0, 0, "$y$", ha="center", va="center")
@@ -192,6 +192,31 @@ def vl02_perceptron_updates():
         ax.set_xlim(-5, 5)
         ax.set_ylim(-4, 4)
     save(fig, "vl02-perceptron-updates")
+
+
+def vl02_perceptron_updates_folie():
+    """Zwei Stufen statt vier, für die Folie: ein 1x4-Streifen ist auf 16:9 unlesbar (2026-10-02)."""
+    from sklearn.datasets import make_blobs
+
+    X, y = make_blobs(60, centers=[(-2, -1), (2, 1)], cluster_std=1.0, random_state=3)
+    Xb = np.hstack([np.ones((len(X), 1)), X])
+    w = np.array([0.0, -1.0, 1.0])
+    r = 0.05
+    start = w.copy()
+    for epoch in range(3):
+        for xi, yi in zip(Xb, y):
+            f = float(w @ xi > 0)
+            w = w + r * (yi - f) * xi
+    fig, axs = plt.subplots(1, 2, figsize=(7.5, 3.4), sharey=True)
+    xs = np.linspace(-5, 5, 2)
+    for ax, ws, t in zip(axs, [start, w], ["Start $w=(0,-1,1)$", "nach 3 Epochen"]):
+        ax.scatter(X[:, 0], X[:, 1], c=y, cmap="viridis", s=22)
+        ax.plot(xs, -(ws[0] + ws[1] * xs) / ws[2], color=HHU_RED, lw=2)
+        err = np.mean((Xb @ ws > 0) != y)
+        ax.set_title(f"{t}, Fehlerrate {err:.0%}", fontsize=11)
+        ax.set_xlim(-5, 5)
+        ax.set_ylim(-4, 4)
+    save(fig, "vl02-perceptron-updates-folie")
 
 
 # ----------------------------------------------------------------------------

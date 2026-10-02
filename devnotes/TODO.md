@@ -147,11 +147,14 @@ Abgabe bis …“ in den TeX-Blättern.
   Die Notizseite ist seit dem 2026-10-02 im Header geregelt (`note page` plain + `\scriptsize`) und
   gilt für alle Decks.
 - [ ] Decks inhaltlich gegenlesen und im Hörsaal erproben; Folien-PDFs in ILIAS hochladen (die kopierten
-  Dateien dort sind noch die von 2025/26). **VL 1 ist gegengelesen und umgebaut**
-  (`folien-review-vl01-2026-10-02.md`); die übrigen 14 nach demselben Muster: Ablaufplan gegen die
+  Dateien dort sind noch die von 2025/26). **VL 1 und VL 2 sind gegengelesen und umgebaut**
+  (`folien-review-vl01-2026-10-02.md`, `folien-review-vl02-2026-10-02.md`); die übrigen 13 nach
+  demselben Muster (Prüfliste: `~/Sciebo/hhu/PLAYBOOK-folien.md` §3): Ablaufplan gegen die
   Frame-Reihenfolge, Notizenfassung bauen, Termine und Ansagen gegen `kurs-2026-27.md` und die
   ILIAS-Konfiguration (`../../ilias/runs/ws2026-27.yaml`, der Schwesterordner neben dem Repo),
   Kapitelfehler mitsuchen.
+- [ ] **Vor VL 2 am TeX-Blatt nachsehen, ob der Ugly-Code-Link von 2025 noch drin ist.** Die Notiz
+  zur letzten Folie von VL 2 verweist bedingt darauf; die Markdown-Fassung von 2025 hat ihn nicht.
 
 ## ILIAS (Kurs 2026/27, ref_id 2165367)
 

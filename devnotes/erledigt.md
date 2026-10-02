@@ -113,6 +113,12 @@ Datierte Protokolle größerer Umbauten liegen daneben als `build-log-<datum>.md
   Markenfarbe `#6f59a6`, `pdfsubject`. Die Umfrage-Ansage war falsch: Das ILIAS-Fenster schließt um 13:55,
   die Notiz sagte „bis morgen“. Gegenprobe: 16 Decks bauen, Seitenzahlen unverändert (VL 1: 23 → 25), 0 zu
   volle Rahmen, Sprachprüfungen null, HTML-Bau ohne Warnungen.
+- [x] **VL 2 gegengelesen und nachgezogen** (2026-10-02, `folien-review-vl02-2026-10-02.md`): σ gegen τ auf
+  zwei Folien und in der Neuron-Abbildung (Wurzel `make_figures.py`, das Bild steht auch im Kapitel und in
+  VL 1), neue Folien „XOR, aufgelöst“ (mit dem VL-7-Bild) und „Die fünf Antworten für das Perzeptron“ als
+  Take-Home, Bias-Update auf der Drei-Fälle-Folie, Zwei-Panel-Abbildung für die Regel bei der Arbeit, die
+  drei Hörsaalfragen von 2025 in den Notizen, Hugging-Face-Ausblick, Iris auf der Blattfolie. Gegenprobe:
+  20 → 22 Folien, 0 zu volle Rahmen, Notizenfassung passt, Sprachprüfung null, HTML-Bau ohne Warnungen.
 - [x] Dozentennotizen sind in den Decks (2026-09-25): je Folie ein `\note{}` mit den Dialogmustern aus
   `transcripts/*/notiz.md`, dazu auf jeder Titelfolie ein Minuten-Ablaufplan aus der jeweiligen Aufzeichnung.
   Drin sind u.a. der Type-Check (VL 2), die offen gehaltene Zufalls-Frage (VL 5), „Quizfrage nicht auflösen“
@@ -184,7 +190,9 @@ Datierte Protokolle größerer Umbauten liegen daneben als `build-log-<datum>.md
 Auslöser: „Sieh die Folien für die erste Sitzung durch.“ Befunde und Umsetzung in
 `folien-review-vl01-2026-10-02.md`; die Liste oben unter „Beamer-Folien“ fasst sie zusammen. Zwei
 Befunde waren keine Folienfrage: die Umfrage-Ansage gegen das ILIAS-Fenster, und der fehlende
-Validation-Split im Kapitel, auf den das Glossar schon verwies.
+Validation-Split im Kapitel, auf den das Glossar schon verwies. Abends VL 2 nach derselben
+Prüfliste (`folien-review-vl02-2026-10-02.md`); der Befund, der über das Deck hinausging, war die
+Notation der Neuron-Abbildung (σ statt τ) aus `make_figures.py`.
 
 ### 2026-09-27, nachts (Playbook-Durchgang)
 
