@@ -1,8 +1,19 @@
 #!/usr/bin/env python3
 """Erzeugt die Abbildungen für das Skript in ../images/ (matplotlib, deterministisch).
 
-Aufruf aus dem Projektverzeichnis:  python3 devnotes/make_figures.py
-Benötigt: numpy, matplotlib, scipy, scikit-learn, pandas, pillow (System-Python reicht).
+Aufruf aus dem Projektverzeichnis:  uv run --only-group figures devnotes/make_figures.py
+
+**Nicht mit dem System-Python aufrufen.** Die erzeugten PNGs sind versioniert, und
+matplotlib ändert zwischen Minor-Fassungen den Satz: Schriftmetrik, Tick-Wahl,
+Leinwandgröße um ein Pixel. Bis zum 2026-10-14 stand hier `python3 …`; dessen matplotlib
+(3.10.9) war eine andere Fassung als die angeheftete (3.11.2), und ein unveränderter
+Komplettlauf änderte zwei Abbildungen, an denen niemand etwas getan hatte. Wer die echte
+Änderung von diesem Rauschen trennen will, braucht beide Male dieselbe Fassung – die
+Gruppe `figures` in pyproject.toml heftet sie an. In dieser Gruppe steckt kein torch,
+der Lauf kostet also keine Gigabyte.
+
+Gegenprobe: zweimal hintereinander laufen lassen, `git status images/` muss danach
+dasselbe zeigen wie nach dem ersten Lauf.
 """
 
 from pathlib import Path
@@ -98,19 +109,27 @@ def vl01_gmm_segmentation():
     from sklearn.mixture import GaussianMixture
 
     n = 128
-    img = ndimage.gaussian_filter(rng.normal(size=(n, n)), sigma=3)
-    img = (img > 0.03).astype(float) * 1.0 + 0.4 * ndimage.gaussian_filter(rng.normal(size=(n, n)), 1)
+    # Grauwerte in echten 8-Bit-Einheiten: Hinter- und Vordergrund als zwei Niveaus,
+    # dazu Rauschen, danach auf 0..255 beschnitten. Bis zum 2026-10-14 standen hier
+    # 0 und 1 plus Rauschen – die Achse hieß "Pixelwert" und lief von -0,5 bis 1,5.
+    blobs = ndimage.gaussian_filter(rng.normal(size=(n, n)), sigma=3)
+    noise = ndimage.gaussian_filter(rng.normal(size=(n, n)), sigma=1)
+    img = np.clip(np.where(blobs > 0.03, 170.0, 70.0) + noise / noise.std() * 18.0, 0, 255)
     gmm = GaussianMixture(2, random_state=0).fit(img.reshape(-1, 1))
     labels = gmm.predict(img.reshape(-1, 1)).reshape(n, n)
     fig, axs = plt.subplots(1, 3, figsize=(10, 3.3))
-    axs[0].imshow(img, cmap="gray")
+    axs[0].imshow(img, cmap="gray", vmin=0, vmax=255)
     axs[0].set_title("verrauschtes Bild")
-    xs = np.linspace(img.min(), img.max(), 300)
+    xs = np.linspace(0, 255, 300)
     axs[1].hist(img.ravel(), bins=60, density=True, color=HHU_ICE)
     for m, v, w in zip(gmm.means_.ravel(), gmm.covariances_.ravel(), gmm.weights_):
         axs[1].plot(xs, w * np.exp(-(xs - m) ** 2 / (2 * v)) / np.sqrt(2 * np.pi * v), lw=2)
     axs[1].set_title("Histogramm + 2 Gaußkurven")
-    axs[1].set_xlabel("Pixelwert")
+    axs[1].set_xlabel("Pixelwert (0–255)")
+    axs[1].set_xlim(0, 255)
+    axs[1].set_xticks([0, 64, 128, 192, 255])
+    axs[1].set_ylabel("Dichte")
+    axs[1].set_yticks([])
     axs[2].imshow(labels, cmap="gray")
     axs[2].set_title("Segmentierung (GMM)")
     for a in (axs[0], axs[2]):

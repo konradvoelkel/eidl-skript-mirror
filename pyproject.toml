@@ -16,7 +16,11 @@ classifiers = [
 ]
 dependencies = [
   "numpy>=2.4,<3",
-  "matplotlib>=3.9",
+  # Eng angeheftet, weil die Abbildungen in images/ versioniert sind: Ein Minor-Sprung
+  # von matplotlib ändert den Satz (Schriftmetrik, Tick-Wahl) und damit jede PNG, die
+  # neu erzeugt wird – ohne dass sich am Code etwas geändert hätte. Siehe die
+  # Abbildungsgruppe unten und devnotes/README.md.
+  "matplotlib>=3.11.2,<3.12",
   "pandas>=3",
   "scikit-learn>=1.9,<2",
   "torch",
@@ -37,6 +41,20 @@ dev = [
  "mystmd>=1.10.1,<2",
  "pyyaml>=6.0.3",
  "ruff",
+]
+# Alles, was devnotes/make_figures.py braucht – ohne torch, das in den Hauptabhängigkeiten
+# steckt und für eine Abbildung ein Gigabyte nachzieht. Aufruf:
+#   uv run --only-group figures devnotes/make_figures.py
+# Bis zum 2026-10-14 lief das Skript gegen das System-Python; dessen matplotlib (3.10.9)
+# war eine andere Fassung als die angeheftete, und ein unveränderter Komplettlauf änderte
+# Abbildungen, an denen niemand etwas getan hatte.
+figures = [
+ "matplotlib>=3.11.2,<3.12",
+ "numpy>=2.4,<3",
+ "scipy>=1.18,<2",
+ "scikit-learn>=1.9,<2",
+ "pandas>=3,<4",
+ "pillow>=11",
 ]
 
 [tool.uv]

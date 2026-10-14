@@ -27,7 +27,7 @@ Arbeitsnotizen und Prüfskripte zum Skript, nicht Teil des Buchs. Stand 2026-10-
 | `sprachpruefliste-woerter-folien.txt` | Die Wortliste der Folien. Getrennt von der des Buchs, damit Folienvokabular die Buchprüfung nicht stumpf macht; gelesen werden beide | wird von `folienpruefliste.py` gelesen |
 | `check_links.py` | Prüft interne Linkziele auf Existenz und externe auf Erreichbarkeit (braucht Netz, urteilt nie nach einem HEAD) | vor dem Semesterstart und bei der Durchsicht; **nicht** in der CI |
 | `check_ci_yaml.py` | Prüft `.gitlab-ci.yml` auf die Form, die GitLab erwartet (nicht nur auf YAML) | vor jedem Push, der die CI anfasst |
-| `make_figures.py`, `embed_figures.py` | Abbildungen mit matplotlib erzeugen und einbetten | bei Bedarf erneut laufen lassen |
+| `make_figures.py`, `embed_figures.py` | Abbildungen mit matplotlib erzeugen und einbetten | bei Bedarf erneut laufen lassen — **nur** mit `uv run --only-group figures`, nie mit dem System-Python (sonst ändern sich Abbildungen allein durch die matplotlib-Fassung) |
 
 Die beiden einmaligen Umbau-Skripte von 2026-09-17 (`build_skript_from_2025.py`, das die erste
 Prosafassung aus den Folien-PDFs erzeugte, und `restructure.py`, das daraus die Themen-Kapitel
