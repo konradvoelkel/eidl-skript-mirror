@@ -22,27 +22,29 @@
   \titlepage
 
   \note{\textbf{Ablauf, 90 Minuten.} Die Zahlen sind \emph{Seiten} wie in der Fußzeile,
-    nicht Rahmen: Eine Frage steht seit 2026-10-14 auf zwei Seiten (Frage, Antwort).\\[2pt]
+    nicht Rahmen: Mehrere Folien bauen sich schrittweise auf (im Quelltext
+    \texttt{\% Transition}).\\[2pt]
     \begin{tabular}{@{}rll@{}}
       0--5   & Seiten 1--3   & Organisatorisches, Material\\
-      5--12  & Seiten 4--5   & Voraussetzungen, Lernziele (Handzeichen)\\
+      5--12  & Seiten 4--6   & Voraussetzungen, Lernziele (Handzeichen)\\
       12--23 & Seite 6       & \textbf{Umfrage live in ILIAS}\\
-      23--26 & Seite 7       & Definition\\
-      26--37 & Seite 8       & Semesterplan -- der lange Block, lebt von Rückfragen\\
-      37--43 & Seiten 9--10  & Python: Provokation und Auflösung\\
-      43--51 & Seiten 11--12 & Daten, erzeugende Verteilung, GMM\\
-      51--57 & Seiten 13--15 & Supervised, Regression, Klassifikation\\
-      57--62 & Seiten 16--17 & Modellgüte: Split, die vier Maße\\
-      62--68 & Seiten 18--21 & \textbf{Zwei Prüfungsfragen} (Peer Instruction, je 3 Min.)\\
-      68--76 & Seiten 22--23 & \textbf{Quizfrage} (Dialog), Auflösung\\
-      76--81 & Seiten 24--27 & \textbf{Lesetext}: Zitat, eine Frage, Leseauftrag\\
-      81--88 & Seiten 28--31 & Kurzgeschichte\\
-      88--90 & Seiten 32--33 & Take-Home, In die Praxis
+      23--26 & Seiten 7--8   & Definition\\
+      26--37 & Seite 9       & Semesterplan -- der lange Block, lebt von Rückfragen\\
+      37--43 & Seiten 10--11 & Python: Provokation und Auflösung\\
+      43--51 & Seiten 12--15 & Daten, erzeugende Verteilung, GMM\\
+      51--57 & Seiten 16--19 & Supervised, Regression, Klassifikation\\
+      57--62 & Seiten 20--21 & Modellgüte: Split, die vier Maße\\
+      62--68 & Seiten 22--25 & \textbf{Zwei Prüfungsfragen} (Peer Instruction, je 3 Min.)\\
+      68--76 & Seiten 26--27 & \textbf{Quizfrage} (Dialog), Auflösung\\
+      76--81 & Seiten 28--31 & \textbf{Lesetext}: Zitat, eine Frage, Leseauftrag\\
+      81--86 & Seiten 32--35 & Kurzgeschichte\\
+      86--88 & Seiten 36--39 & Take-Home, Themenfelder A/B/C\\
+      88--90 & Seiten 40--41 & In die Praxis, Danke und Fragen
     \end{tabular}\\[4pt]
     \textbf{Enger als 2025}: Definitionsfolie und zwei Prüfungsfragen kosten rund fünf
     Minuten. Bezahlt aus je einer Minute bei Semesterplan, Python und Supervised und aus
-    der \emph{Kurzgeschichte} (8 auf 7 Min.). Der Lesetext ist dabei \emph{billiger}
-    geworden als 2025: statt acht Minuten im Browser jetzt fünf auf drei Folien.
+    der \emph{Kurzgeschichte} (8 auf 5 Min.); der Lesetext ist dafür \emph{billiger}
+    als 2025 (fünf statt acht Minuten, ohne Browser).
     \textbf{Gerechnet, nicht gemessen} -- an der Aufzeichnung nachjustieren.\\[2pt]
     \textbf{Wenn die Zeit knapp wird}, in dieser Reihenfolge kürzen: den Leseauftrag
     (27) nur ansagen statt vorzulesen; die zweite Prüfungsfrage (20--21) überspringen,
@@ -159,6 +161,7 @@
       \Large
       \emph{deep} = viele Ebenen (Layer)\\[10pt]
       \emph{learning} = Training\\[18pt]
+      \pause % Transition 2026-10-14: erst fragen lassen, dann zusammensetzen
       \normalsize Training künstlicher neuronaler Netze\\mit vielen Ebenen.
     \end{column}
     \begin{column}{0.44\textwidth}
@@ -265,12 +268,26 @@
     die wir nicht kennen.
   \end{center}
 
+  \pause % Transition 2026-10-14
   \bigskip
   \begin{center}
     Ein \textbf{Modell} beschreibt sie: als Dichte $p(x)$ -- oder als \emph{Sampler}.
   \end{center}
 
-  \note{Die Komponenten von $x_i$ heißen Features; die Grundannahme des maschinellen
+  \pause % Transition 2026-10-14: die Warnung zuletzt, sie widerspricht dem eben Gesagten
+  \bigskip
+  \begin{center}
+    \small
+    \emph{Achtung}: „Modell“ ist auch ein gängiger Name für konkrete neuronale Netze.
+  \end{center}
+
+  \note{\textbf{Die Warnung am Ende ernst nehmen, sie ist der häufigste stille
+    Stolperstein des Semesters.} „Modell“ heißt hier die Beschreibung einer Verteilung --
+    und zwei Folien später heißt „Modell“ das trainierte Netz, also einfach ein Satz
+    Gewichte. Beides ist üblich, beides bleibt, und niemand sagt dazu, welches gemeint
+    ist. Wer im Zweifel ist, fragt: Beschreibt das Ding eine Verteilung, oder rechnet es
+    eine Vorhersage aus?
+    Die Komponenten von $x_i$ heißen Features; die Grundannahme des maschinellen
     Lernens ist, dass die Daten eine Stichprobe aus einer Population sind.
     Ein Modell mit Sampler heißt \textbf{generativ}.
     Frage in den Raum, die 2025 gut lief: Ich habe eine Dichte -- wie komme ich
@@ -301,6 +318,7 @@
     ohne Labels \quad$\longrightarrow$\quad unsupervised
   \end{center}
 
+  \pause % Transition 2026-10-14
   \bigskip
   \begin{center}
     \normalsize
@@ -698,13 +716,44 @@
   \begin{center}
     \Large
     Deep Learning = Machine Learning mit \emph{tiefen} Netzen.\\[14pt]
+    \pause % Transition 2026-10-14: die drei Sätze einzeln landen lassen
     Ein generatives Modell ist ein Modell einer \emph{Verteilung}.\\[14pt]
+    \pause
     Supervised: eine Spalte, die ich später \emph{nicht mehr bekomme}.
   \end{center}
 
   \note{Zwei Minuten, die drei Take-Home-Sätze der Sitzung 2025. Der erste nimmt dem
     Begriff die Magie, der zweite ist der Haken für Autoencoder, VAE und GANs, der dritte
     für alles, was Regression oder Klassifikation heißt.}
+\end{frame}
+
+
+% ------------------------------------------------------------------ Themenfelder
+\begin{frame}
+  \frametitle{Drei Fragen für dieses Semester}
+
+  \begin{itemize}\setlength{\itemsep}{14pt}
+  \item[\textbf{A}] Wie \emph{arbeitet} ein Neuron, wie ein neuronales Netz?
+  \item[\textbf{B}] Wie \emph{trainiert} man ein neuronales Netz?
+  \item[\textbf{C}] Wie \emph{setzt} man neuronale Netze \emph{ein}?
+  \end{itemize}
+
+  \bigskip
+  \begin{center}
+    Wir behandeln die drei verschränkt -- angefangen mit \textbf{A}.
+  \end{center}
+
+  \note{Die Folie ist der Kompass für das Semester: Wer sich später fragt, wozu eine
+    Sitzung gut ist, sortiert sie hier ein.
+    Grobe Zuordnung, falls jemand nachfragt -- \textbf{A} ist VL 2--4 (Neuron, Perzeptron,
+    vortrainierte Modelle, Tensoren), \textbf{B} ist der lange Mittelteil VL 4--9
+    (logistische Regression, Loss, Gradientenabstieg, Backpropagation, Autograd, Netze von
+    Hand), \textbf{C} ist VL 10--15 (CNN, Transformer, LLMs benutzen, GANs, latente Räume,
+    Destillation).
+    \textbf{Warum verschränkt und nicht der Reihe nach}: Ohne ein trainiertes Netz kann man
+    nichts einsetzen, aber ohne etwas Eingesetztes bleibt das Training abstrakt. Deshalb
+    kommen vortrainierte Modelle schon in VL 3 -- da ist von B noch nichts behandelt, und
+    trotzdem tut das Netz etwas Sichtbares. Das ist Absicht, keine Unordnung.}
 \end{frame}
 
 \begin{frame}
@@ -726,6 +775,32 @@
     nächsten Blatt programmiert wird -- das hat 2025 Rückfragen erspart.
     Und: Die Eingangsumfrage schließt in ILIAS um 13:55, also mit dieser Sitzung -- wer
     sie noch nicht ausgefüllt hat, tut es jetzt, nicht morgen.}
+\end{frame}
+
+% ------------------------------------------------------------------ Schluss
+\begin{frame}
+  \frametitle{Danke für Ihre Aufmerksamkeit}
+  \framesubtitle{Fragen?}
+
+  \textbf{Weiterlesen} -- beides frei verfügbar und im Skript pro Kapitel verlinkt:
+  \begin{itemize}\setlength{\itemsep}{4pt}
+  \item Prince, \emph{Understanding Deep Learning}
+  \item Deisenroth, Faisal, Ong, \emph{Mathematics for Machine Learning}
+  \end{itemize}
+
+  \bigskip
+  \begin{itemize}\setlength{\itemsep}{4pt}
+  \item Skript: {\small\url{voelkel.pages.cs.uni-duesseldorf.de/eidl-skript/}}
+  \item Fragen außerhalb der Vorlesung: Rocket.Chat \texttt{\#eidl-2026}
+  \end{itemize}
+
+  \note{Die Schlussfolie bleibt stehen, solange Fragen kommen -- deshalb steht alles
+    darauf, was jemand nach der Sitzung braucht.
+    Die Umfrage steht bewusst \emph{nicht} mehr hier: Sie schließt mit dieser Sitzung
+    (ILIAS-Run-Datei \texttt{ilias/runs/ws2026-27.yaml}, \texttt{survey-entry}:
+    bis 14.10.2026 13:55), die Ansage dazu gehört auf die Folien
+    \emph{Eingangsumfrage} und \emph{In die Praxis}, nicht auf eine Folie, die ein
+    Semester lang im Netz steht.}
 \end{frame}
 
 \end{document}

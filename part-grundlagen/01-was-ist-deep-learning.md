@@ -146,6 +146,11 @@ Das meiste davon ist Stoff der aufbauenden Module. Die Transformer sind die Ausn
 * **2020** AlphaFold 2 „löst“ das Proteinfaltungsproblem – Nobelpreis für Chemie 2024.
 * **2021** Diffusionsmodelle schlagen GANs bei der Bildgenerierung (Dhariwal und Nichol, *Diffusion Models Beat GANs on Image Synthesis*); das Verfahren selbst, DDPM, ist von 2020.
 * **2022** Veröffentlichung von ChatGPT; danach RLHF, Copilot, Multimodalität, RAG, Agents, …
+* **2024/25** *Agentic Coding*: Modelle bearbeiten echte GitHub-Issues selbstständig – Code lesen, ändern, Tests laufen lassen, nachbessern. Gemessen wird das auf **SWE-bench Verified**, 500 von Menschen geprüften Aufgaben aus zwölf Python-Projekten; bestanden ist eine Aufgabe erst, wenn die Tests des Projekts durchlaufen. Innerhalb von zwei Jahren ging das von wenigen Prozent auf über die Hälfte.
+
+Diese Prozentzahlen sind die unzuverlässigsten in diesem Kapitel, und zwar aus einem Grund, der über den Benchmark hinausgeht: **Ein Modell wird hier nie allein gemessen, sondern immer zusammen mit seinem *Harness*.** Das Harness ist das Programm drumherum – es entscheidet, welche Dateien das Modell zu sehen bekommt, welche Werkzeuge es aufrufen darf, was passiert, wenn ein Test fehlschlägt und was aus dem Verlauf weggeworfen wird, wenn der Kontext voll ist. Lewis (2026, *Same Model, Different Harness: Different Coding-Agent Results*) hält die Gewichte fest und ändert nur, wie das Harness ältere Werkzeugausgaben kürzt: Der Anteil reparierter Tests steigt von 28 % auf 49 %. Einundzwanzig Prozentpunkte, ohne dass am Modell etwas geändert wurde.
+
+Daraus folgen zwei Dinge. Erstens ist die Frage „welches Modell ist besser?“ in dieser Disziplin schlecht gestellt – gemessen wird das Paar aus Modell und Harness. Zweitens sind Zahlen aus verschiedenen Quellen nur dann vergleichbar, wenn dasselbe Harness benutzt wurde; selbst der Benchmark-Betreiber Epoch AI hat sein Standard-Scaffold im Februar 2026 ausgetauscht, worauf die Werte aller Modelle sprangen. Wer eine solche Zahl zitiert, nennt das Harness dazu – sonst ist sie ungefähr so aussagekräftig wie eine Laufzeit ohne Angabe des Rechners.
 
 ## Übung
 
