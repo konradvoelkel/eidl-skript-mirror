@@ -22,8 +22,8 @@ uv run devnotes/check_pdf_build.py --min-pages 100
 uv run devnotes/check_doku.py           # stimmt die Doku noch mit dem Repo überein?
 ```
 
-Erwartung: **27 Kapitel plus Glossar, 112 Seiten A4** (das veröffentlichte PDF hat 113 — die
-Abweichung ist bekannt und in `../CLAUDE.md` erklärt), 0 LaTeX-Fehler, 0 fehlende Glyphen,
+Erwartung: **27 Kapitel plus Glossar, 113 Seiten A4** (lokal und veröffentlicht seit dem
+2026-10-14 gleich, siehe `../CLAUDE.md`), 0 LaTeX-Fehler, 0 fehlende Glyphen,
 5 überlange Zeilen, 23 Übungsabschnitte. Weicht etwas davon ab, ist das der erste Befund, nicht
 Hintergrundrauschen.
 
@@ -188,12 +188,6 @@ Textfassung von Seite und Objektbaum: `~/Sciebo/hhu/eidl-26/ilias/` (analog zu
   Text in `\href`, nicht als `\url`, deshalb greift keine URL-Trennung. Die schlimmste (77 pt) ist
   `paperswithcode.com/methods/category/activation-…` in 11. Abhilfe wäre, die Linktexte zu kürzen
   („paperswithcode“ statt der vollen Adresse) — Inhaltsarbeit, keine Technik.
-- [ ] **Lokales PDF und veröffentlichtes PDF sind eine Seite auseinander** (seit
-  2026-09-29: lokal 112, live 113). Die erste Abweichung liegt auf Seite 29 in einem
-  Codeblock, der Inhalt ist identisch — vermutlich bricht `minted` unter dem texlive des
-  CI-Images anders um als unter dem lokalen. Einmal im Container bauen und vergleichen
-  (PLAYBOOK §3.2), dann entweder die Ursache benennen oder die Abweichung als normal
-  dokumentieren. Nicht dringend: `--min-pages 100` fängt beide Fälle.
 - [ ] **Das HHU-Beamer-Theme fehlt auf dieser Maschine.** `slides/build.sh` scheitert mit
   „File `beamerthemehhubeamer.sty' not found“; `slides/README.md` sagt richtig, dass es unter
   `/usr/share/texmf/tex/latex/beamer/themes/` liegen muss, dort liegt aber nichts. Kopien gibt es

@@ -141,6 +141,19 @@ Datierte Protokolle größerer Umbauten liegen daneben als `build-log-<datum>.md
 
 ### Infrastruktur
 
+- [x] **Abbildungen hingen am System-Python** (2026-10-14). `make_figures.py` lief laut eigenem
+  Skriptkopf gegen das System-Python; dessen matplotlib (3.10.9) war eine andere Fassung als die
+  in `uv.lock` angeheftete (3.11.2), und ein *unveränderter* Komplettlauf schrieb Abbildungen neu,
+  an denen niemand etwas getan hatte — die echte Änderung war vom Fassungsrauschen nicht mehr zu
+  trennen. Behoben mit einer Abhängigkeitsgruppe `figures` in `pyproject.toml` (ohne torch, 18
+  Pakete) und `matplotlib>=3.11.2,<3.12` auch in den Hauptabhängigkeiten. Aufruf jetzt
+  `uv run --only-group figures devnotes/make_figures.py`. Einmalige Neubasierung aller 34 PNGs
+  unter der angehefteten Fassung; Gegenprobe: zwei Läufe hintereinander sind byte-gleich.
+  Gefunden beim Beschriftungsfehler der GMM-Abbildung (Achse „Pixelwert“, die von −0,5 bis 1,5 lief).
+- [x] **Lokales und veröffentlichtes PDF sind wieder gleich** (2026-10-14, von selbst). Die seit
+  dem 2026-09-29 notierte Abweichung (lokal 112, live 113) war, wie vermutet, der texlive-Stand:
+  Debian ist nachgezogen, lokal sind es jetzt ebenfalls 113 Seiten. Gemessen in einem `git worktree`
+  auf unverändertem HEAD, damit die Zahl nicht der gleichzeitigen Abbildungsänderung zugeschrieben wird.
 - [x] GitLab Pages auf „Everyone“ (Konrad, 2026-09-20); aktiv seit dem nächsten Pages-Deploy, geprüft 2026-09-21
   (`curl` → 200, PDF unter `/eidl-skript.pdf` erreichbar).
 - [x] PDF-Export in der CI wie bei DS-/EiPy-Skript (2026-09-20): Job `build-pdf` mit `allow_failure`, PDF landet

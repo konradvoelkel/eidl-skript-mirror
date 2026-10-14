@@ -39,6 +39,7 @@ uv run --only-group dev myst build --pdf  # PDF nach exports/eidl-skript.pdf (br
 uv run --no-project devnotes/check_pdf_build.py --min-pages 100  # prüft das gebaute PDF
 uv run --only-group dev devnotes/check_ci_yaml.py    # vor jedem Push, wenn .gitlab-ci.yml angefasst wurde
 uv run --no-project devnotes/check_doku.py           # prüft diese Datei und devnotes/ gegen das Repo
+uv run --only-group figures devnotes/make_figures.py # Abbildungen nach images/ (nie mit System-Python)
 ```
 
 **`--no-project` ist kein Schmuck.** Vier der fünf Skripte hier brauchen nur die
@@ -49,21 +50,38 @@ frischen Klon oder Worktree schon. Die CI ruft dieselben Skripte deshalb schlich
 `python3` auf. Einzige Ausnahme ist `check_ci_yaml.py`: Es braucht `pyyaml` und damit die
 dev-Gruppe.
 
-Erwartung eines gesunden Laufs (Stand 2026-09-29, nach der fachlichen Durchsicht
-aller 27 Kapitel und des Glossars): HTML ohne Warnungen, PDF **112 Seiten A4**, 0 LaTeX-Fehler, 0 fehlende
+**Für `make_figures.py` gilt das Gegenteil, und zwar aus demselben Grund.** Es braucht
+matplotlib, numpy, scipy, scikit-learn — und weil seine Ausgabe, die PNGs in `images/`,
+**versioniert** ist, braucht es jedes Mal *dieselbe* Fassung davon. matplotlib ändert
+zwischen Minor-Fassungen den Satz; ein Komplettlauf mit einer anderen Fassung schreibt alle
+34 Abbildungen neu, ohne dass sich an einer einzigen etwas Inhaltliches geändert hätte, und
+die echte Änderung ist dann nicht mehr von der Fassungsdifferenz zu unterscheiden. Bis zum
+2026-10-14 stand im Skriptkopf „System-Python reicht“; dessen matplotlib (3.10.9) war eine
+andere als die angeheftete (3.11.2), und genau das ist passiert. Die Gruppe `figures` in
+`pyproject.toml` heftet die Fassungen an und enthält **kein** torch, der Lauf kostet also
+trotzdem keine Gigabyte. Gegenprobe: zweimal laufen lassen, der zweite Lauf muss
+byte-gleich sein.
+
+Erwartung eines gesunden Laufs (Stand 2026-10-14, nach der fachlichen Durchsicht
+aller 27 Kapitel und des Glossars): HTML ohne Warnungen, PDF **113 Seiten A4**, 0 LaTeX-Fehler, 0 fehlende
 Glyphen, 5 überlange Zeilen. Die `--min-pages`-Untergrenze
 soll einen *abgebrochenen* Lauf fangen, nicht eine gewollte Kürzung — sie steht deshalb
 deutlich unter der tatsächlichen Seitenzahl, in der CI auf demselben Wert.
 
-**Lokal und CI weichen seit dem 2026-09-29 um eine Seite ab**: Hier sind es 112, das
-veröffentlichte PDF hat 113. Die erste Abweichung steht auf Seite 29, mitten in einem
-Codeblock — es ist also der *Satz*, nicht der Inhalt (alle Inhaltsmarker des Deploys
-stimmen). Ursache ist mit hoher Wahrscheinlichkeit die Toolchain: Das CI-Image heftet
-texlive über einen Debian-Snapshot an, diese Maschine hat, was Debian gerade liefert, und
-`minted` bricht eine Codezeile eine Spalte anders um. `check_doku.py` prüft die Zahl
-gegen das **lokale** PDF, deshalb steht hier 112. Wer die veröffentlichte Zahl braucht,
-holt sie mit dem `curl`-Rezept weiter unten; wer die Abweichung loswerden will, baut im
-Container (PLAYBOOK §3.2).
+**Die Abweichung zwischen lokal und CI ist weg (2026-10-14).** Vom 2026-09-29 bis dahin
+stand hier: lokal 112 Seiten, veröffentlicht 113, erste Abweichung auf Seite 29 mitten in
+einem Codeblock — also der *Satz*, nicht der Inhalt. Als Ursache war die Toolchain
+vermutet: Das CI-Image heftet texlive über einen Debian-Snapshot an, diese Maschine hat,
+was Debian gerade liefert, und `minted` brach eine Codezeile eine Spalte anders um. Das
+hat sich bestätigt — Debian ist nachgezogen, und der lokale Bau liefert jetzt dieselben
+**113 Seiten** wie die CI. Nachgemessen am 2026-10-14 in einem `git worktree` auf
+unverändertem HEAD, eben damit die Zahl nicht einer gleichzeitigen Änderung zugeschrieben
+wird. Wer die veröffentlichte Zahl braucht, holt sie mit dem `curl`-Rezept weiter unten.
+
+Die Lehre daran ist nicht die Zahl, sondern die Methode: **Eine Seitenzahl, die sich
+„von selbst“ ändert, gehört gegen einen unveränderten Baum gemessen, bevor man sie der
+eigenen Änderung zuschreibt** — oder man schreibt eine Toolchain-Bewegung in die
+Änderungsnotiz und sucht den Fehler später an der falschen Stelle.
 
 `patch_myst_tex.py` repariert zwei Fehler im LaTeX-Export von mystmd. Der erste: Codeblöcke werden
 dort als Mathematik escaped, wodurch **vor jedem Bindestrich ein Leerzeichen** landet — aus
