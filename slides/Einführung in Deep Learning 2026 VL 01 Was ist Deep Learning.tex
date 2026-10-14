@@ -21,27 +21,35 @@
 \begin{frame}
   \titlepage
 
-  \note{\textbf{Ablauf, 90 Minuten} (Minutenwerte aus der Aufzeichnung 2025, 87 Min.
-    für dieselben Inhalte ohne Perzeptron):\\[2pt]
+  \note{\textbf{Ablauf, 90 Minuten.} Die Zahlen sind \emph{Seiten} wie in der Fußzeile,
+    nicht Rahmen: Eine Frage steht seit 2026-10-14 auf zwei Seiten (Frage, Antwort).\\[2pt]
     \begin{tabular}{@{}rll@{}}
-      0--5   & Folien 2--3   & Organisatorisches, Material\\
-      5--12  & Folien 4--5   & Voraussetzungen, Lernziele (Handzeichen)\\
-      12--23 & Folie 6       & \textbf{Umfrage live in ILIAS}\\
-      23--26 & Folie 7       & Definition\\
-      26--38 & Folie 8       & Semesterplan -- der lange Block, lebt von Rückfragen\\
-      38--44 & Folien 9--10  & Python: Provokation und Auflösung\\
-      44--52 & Folien 11--12 & Daten, erzeugende Verteilung, GMM\\
-      52--59 & Folien 13--15 & Supervised, Regression, Klassifikation\\
-      59--70 & Folien 16--18 & Modellgüte, \textbf{Quizfrage} (Dialog), Auflösung\\
-      70--78 & Folie 19      & \textbf{HPCwire im Browser}\\
-      78--86 & Folien 20--23 & Kurzgeschichte\\
-      86--88 & Folie 24      & Take-Home\\
-      88--90 & Folie 25      & In die Praxis
+      0--5   & Seiten 1--3   & Organisatorisches, Material\\
+      5--12  & Seiten 4--5   & Voraussetzungen, Lernziele (Handzeichen)\\
+      12--23 & Seite 6       & \textbf{Umfrage live in ILIAS}\\
+      23--26 & Seite 7       & Definition\\
+      26--37 & Seite 8       & Semesterplan -- der lange Block, lebt von Rückfragen\\
+      37--43 & Seiten 9--10  & Python: Provokation und Auflösung\\
+      43--51 & Seiten 11--12 & Daten, erzeugende Verteilung, GMM\\
+      51--57 & Seiten 13--15 & Supervised, Regression, Klassifikation\\
+      57--62 & Seiten 16--17 & Modellgüte: Split, die vier Maße\\
+      62--68 & Seiten 18--21 & \textbf{Zwei Prüfungsfragen} (Peer Instruction, je 3 Min.)\\
+      68--76 & Seiten 22--23 & \textbf{Quizfrage} (Dialog), Auflösung\\
+      76--81 & Seiten 24--27 & \textbf{Lesetext}: Zitat, eine Frage, Leseauftrag\\
+      81--88 & Seiten 28--31 & Kurzgeschichte\\
+      88--90 & Seiten 32--33 & Take-Home, In die Praxis
     \end{tabular}\\[4pt]
-    \textbf{Wenn die Zeit knapp wird}, in dieser Reihenfolge kürzen: Lesetext (Folie 19) nur
-    als Hausaufgabe ansagen statt im Browser zu zeigen; Python auf eine Folie zusammenziehen;
-    Kurzgeschichte ab 2015 überspringen (steht im Skript).
-    \textbf{Wenn Zeit übrig ist}: Quizfrage und Semesterplan vertragen beliebig viel Dialog.}
+    \textbf{Enger als 2025}: Definitionsfolie und zwei Prüfungsfragen kosten rund fünf
+    Minuten. Bezahlt aus je einer Minute bei Semesterplan, Python und Supervised und aus
+    der \emph{Kurzgeschichte} (8 auf 7 Min.). Der Lesetext ist dabei \emph{billiger}
+    geworden als 2025: statt acht Minuten im Browser jetzt fünf auf drei Folien.
+    \textbf{Gerechnet, nicht gemessen} -- an der Aufzeichnung nachjustieren.\\[2pt]
+    \textbf{Wenn die Zeit knapp wird}, in dieser Reihenfolge kürzen: den Leseauftrag
+    (27) nur ansagen statt vorzulesen; die zweite Prüfungsfrage (20--21) überspringen,
+    sie wiederholt die erste rechnerisch; Python auf eine Seite zusammenziehen;
+    Kurzgeschichte ab 2015 überspringen.
+    \textbf{Wenn Zeit übrig ist}: Quizfrage, Semesterplan und die beiden Prüfungsfragen
+    vertragen beliebig viel Dialog.}
 \end{frame}
 
 % ------------------------------------------------------------------ Formalia
@@ -49,7 +57,7 @@
   \frametitle{Organisatorisches}
 
   \begin{itemize}\setlength{\itemsep}{6pt}
-  \item Übung: \emph{morgen} 10:30, 25.22.U1.52
+  \item Übung: \emph{15.10.2026} um 10:30 (morgen), 25.22.U1.52
   \item Blätter wöchentlich, Abgabe Mi 12:00
   \item Zulassung: 8 bestandene Blätter
   \item Klausur: 11.02.2027
@@ -76,6 +84,7 @@
   \item Folien vorab in ILIAS
   \item Lösungshinweise nach Abgabeschluss
   \item Aufzeichnungen aus 2025/26 in der Mediathek
+  \item \emph{Neu}: Aufzeichnungen aus 2026/27 -- mit diesem Foliensatz
   \end{itemize}
 
   \note{Das Skript ist die Neuerung gegenüber den Vorjahren: es deckt den Stoff ab und
@@ -109,10 +118,12 @@
   \frametitle{Was wir zusammen lernen}
 
   \begin{itemize}\setlength{\itemsep}{6pt}
+  \item Wie ein neuronales Netz arbeitet
   \item Wie ein neuronales Netz lernt
   \item PyTorch
   \item Fertige Modelle benutzen -- und verändern
   \item Text und Bilder
+  \item Wie man Katzen von Hunden unterscheidet
   \end{itemize}
 
   \note{Die Begriffe dahinter: Gradientenabstieg, Loss-Funktion, Matrizen- und
@@ -349,12 +360,94 @@
   \end{center}
 
   \note{Testset zurückhalten, nur zum Testen benutzen; aufwändiger: $k$-fold
-    cross validation.
-    Accuracy ist irreführend bei unbalancierten Klassen -- 99\,\% Nicht-Spam, ein
-    Modell das immer „kein Spam“ sagt, hat 99\,\% Accuracy. Das Beispiel in den Raum
-    werfen und fragen, was man stattdessen misst: Precision (wie viele der als positiv
-    vorhergesagten sind wirklich positiv?) und Recall (wie viele der wirklich positiven
-    wurden gefunden?). Bei Regression der mittlere quadratische Fehler.}
+    cross validation. Die vier Maße stehen hier nur als Ankündigung; die Definitionen
+    kommen auf der nächsten Folie, und danach zwei Fragen in den Raum.}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Die vier Maße\pruefungsfrage}
+
+  \begin{columns}[t]
+    \begin{column}{0.54\textwidth}
+      \textbf{Klassifikation}\\[4pt]
+      {\footnotesize Vier Fälle, je nach Wahrheit und Vorhersage:}\\[4pt]
+      {\footnotesize
+      \begin{tabular}{l|cc}
+        & \textbf{sagt positiv} & \textbf{sagt negativ}\\\hline
+        \textbf{ist positiv} & TP & FN\\
+        \textbf{ist negativ} & FP & TN\\
+      \end{tabular}}\\[10pt]
+      {\small
+      $\text{Accuracy} = \dfrac{\mathrm{TP} + \mathrm{TN}}{\mathrm{TP} + \mathrm{TN} + \mathrm{FP} + \mathrm{FN}}$\\[8pt]
+      $\text{Precision} = \dfrac{\mathrm{TP}}{\mathrm{TP} + \mathrm{FP}}$ \quad {\footnotesize\emph{von den gemeldeten}}\\[8pt]
+      $\text{Recall} = \dfrac{\mathrm{TP}}{\mathrm{TP} + \mathrm{FN}}$ \quad {\footnotesize\emph{von den vorhandenen}}}
+    \end{column}
+    \begin{column}{0.44\textwidth}
+      \textbf{Regression}\\[4pt]
+      {\footnotesize Kein richtig oder falsch, sondern ein Abstand:}\\[10pt]
+      {\small $\text{MSE} = \dfrac{1}{N}\displaystyle\sum_{i=1}^{N}\left(y_i - \hat{y}_i\right)^2$}\\[10pt]
+      {\footnotesize Quadriert: große Fehler zählen überproportional, das Vorzeichen fällt weg.
+      Die Einheit ist die \emph{quadrierte} Zielgröße -- deshalb zieht man oft die Wurzel (RMSE).}
+    \end{column}
+  \end{columns}
+
+  \note{Die Merkhilfe für die beiden Brüche, die in der Klausur zählt: \textbf{Precision
+    hat die Vorhersage im Nenner} (alles, was das Modell gemeldet hat), \textbf{Recall hat
+    die Wahrheit im Nenner} (alles, was es hätte finden sollen). Der Zähler ist beide Male
+    derselbe, $TP$. Wer das weiß, braucht die Formeln nicht auswendig.
+    $TN$ taucht nur in der Accuracy auf -- genau deshalb ist sie bei unbalancierten Klassen
+    irreführend: die vielen leichten Negativen dominieren den Bruch.}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Prüfungsfrage: 99\,\% und trotzdem wertlos}
+
+  \begin{mitmachfrage}
+    Ein Spamfilter sieht 1000 Mails, davon sind 10 Spam. Er sagt bei \emph{jeder}
+    Mail „kein Spam“.\\[6pt]
+    Welche Werte hat es?
+    \optionen{Accuracy 99\,\%, Recall 0\,\%}{Accuracy 0\,\%, Recall 99\,\%}%
+             {beide 99\,\%}{beide 0\,\%}
+  \end{mitmachfrage}
+  \pause
+  \vfill
+  \antwort A. 990 von 1000 richtig, das sind 99\,\% Accuracy -- ohne dass das Modell
+  irgendetwas gelernt hat. Gefunden hat es von den 10 Spam-Mails keine einzige:
+  $\mathrm{TP} = 0$, also Recall $= 0/10 = 0\,\%$. Die Precision ist hier nicht einmal definiert
+  ($0/0$): Das Modell meldet nichts, worüber man urteilen könnte.
+
+  \note{Das ist der Klassiker, und er lohnt die zwei Minuten. Pointe: \emph{Eine einzelne
+    Zahl kann ein Modell nicht beschreiben.} Accuracy allein sagt bei unbalancierten Klassen
+    nichts; deshalb nennt man Precision und Recall immer als Paar.
+    Wenn jemand fragt, warum Precision undefiniert ist und nicht null: Der Nenner $\mathrm{TP}+\mathrm{FP}$
+    ist null, es gibt keine Meldung. In sklearn kommt per Konvention 0 heraus, mit Warnung.}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Prüfungsfrage: nachrechnen\pruefungsfrage}
+
+  \begin{mitmachfrage}
+    Ein Rissdetektor prüft 200 Bauteile. Er meldet 30 als „rissig“, davon sind 24
+    tatsächlich rissig. Insgesamt gibt es 40 rissige Bauteile.\\[6pt]
+    Precision und Recall?
+    \optionen{$0{,}80$ und $0{,}60$}{$0{,}60$ und $0{,}80$}%
+             {$0{,}80$ und $0{,}12$}{$0{,}12$ und $0{,}60$}
+  \end{mitmachfrage}
+  \pause
+  \vfill
+  \antwort A. $\mathrm{TP} = 24$, gemeldet $= 30$, vorhanden $= 40$.
+  Precision $= 24/30 = 0{,}80$, Recall $= 24/40 = 0{,}60$.
+  Die 200 braucht man für beides \emph{nicht} -- sie steht nur da, um zu prüfen, ob man
+  den richtigen Nenner nimmt.
+
+  \note{Dieselben Zahlen stehen als Übungsaufgabe im Kapitel, dort ohne Lösung mit
+    Antwortprobe („die beiden Werte verhalten sich wie 4 zu 3“).
+    Die Nachfrage, die sich lohnt: \emph{Welche der beiden Zahlen gewichten Sie in der
+    Qualitätssicherung höher?} Recall -- ein übersehener Riss geht ins Produkt, ein
+    Fehlalarm kostet nur eine zweite Prüfung. In der Spam-Erkennung ist es umgekehrt:
+    Dort tut ein Fehlalarm weh, weil eine echte Mail im Spam-Ordner landet.
+    Das ist der Übergang zur nächsten Folie: Es gibt keine Güte an sich, nur Güte für
+    einen Zweck.}
 \end{frame}
 
 \begin{frame}
@@ -394,26 +487,100 @@
 \end{frame}
 
 % ------------------------------------------------------------------ Lesetext
+% Umgebaut am 2026-10-14. Vorher: drei Peer-Instruction-Fragen zu einem Artikel, den
+% im Hörsaal noch niemand gelesen hatte -- ein Quiz über unbekannten Stoff, und die
+% „Fragen" waren Themen („GPU oder SIMD?"), keine Fragen. Jetzt drei Takte:
+% zitierter Absatz (der Gegenstand), eine daraus beantwortbare Frage, Leseauftrag.
 \begin{frame}
   \frametitle{Lesetext: AMD und der CUDA-Graben}
 
+  {\small Doug Eadline, \emph{How AMD May Get Across the CUDA Moat}, HPCwire,
+  5.\,Oktober 2023 -- der erste Absatz:}
+
+  \medskip
+  \begin{beamerboxesrounded}[upper=mitmachtitel,lower=mitmachkoerper,shadow=false]{Zitat}
+    \small
+    When discussing GenAI, the term ``GPU'' almost always enters the conversation and the
+    topic often moves toward performance and access. Interestingly, the word ``GPU'' is
+    assumed to mean ``Nvidia'' products. (As an aside, the popular Nvidia hardware used in
+    GenAI are not technically Graphical Processing Units. I prefer SIMD units.)
+  \end{beamerboxesrounded}
+
+  \medskip
+  {\footnotesize\url{https://www.hpcwire.com/2023/10/05/how-amd-may-get-across-the-cuda-moat/}}
+
+  \note{\textbf{Eine Minute: vorlesen oder lesen lassen, nicht kommentieren.} Der Absatz
+    ist der Gegenstand der nächsten Folie, nicht Dekoration.
+    Worauf man zeigen kann, wenn jemand stockt: Der Autor behauptet zweierlei. Erstens,
+    dass „GPU“ im GenAI-Gespräch stillschweigend „Nvidia“ heißt. Zweitens -- im Nebensatz,
+    fast beiläufig -- dass die Dinger gar keine Grafikprozessoren seien.
+    Genau dieser Nebensatz ist die Aufgabe auf der nächsten Folie.
+    Zitiert mit Quelle und Link (Zitatrecht, §51 UrhG: der Absatz ist Gegenstand der
+    Erörterung, nicht Schmuck). Der Rest des Artikels bleibt Hausaufgabe.}
+\end{frame}
+
+\begin{frame}
+  \frametitle{``I prefer SIMD units'' -- warum?\pruefungsfrage}
+
+  \begin{mitmachfrage}
+    Warum ist die Nvidia-Hardware im Rechenzentrum \emph{technisch} keine
+    \emph{Graphics} Processing Unit?
+    \optionen{Marketing: „GPU“ klingt nur besser}%
+             {SIMD ist das Prinzip, GPU das Produkt -- diese Chips geben nie ein Bild aus}%
+             {SIMD ist Nvidias interner Produktname}%
+             {Die Karten können gar keine Grafik}
+  \end{mitmachfrage}
+  \pause
+  \vfill
+  {\small
+  \antwort B. \textbf{SIMD} (\emph{single instruction, multiple data}) ist ein
+  \emph{Rechenprinzip}: dieselbe Operation gleichzeitig auf vielen Datenelementen. Die
+  \textbf{GPU} ist ein \emph{Produkt}, das es mit tausenden kleinen Kernen umsetzt --
+  ursprünglich, um Bildpunkte parallel zu berechnen.\\[4pt]
+  Fürs Deep Learning zählt nur das Prinzip, denn Matrixmultiplikation \emph{ist}
+  SIMD-Arbeit. Deshalb trainiert auch eine Gaming-Karte -- und deshalb sind die Chips im
+  Rechenzentrum, die nie ein Bild ausgeben, keine \emph{Graphics} Processing Units mehr.}
+
+  \note{\textbf{Drei bis vier Minuten.} Das ist die einzige Frage des Blocks, die der
+    Hörsaal \emph{beantworten kann} -- die Antwort steht im Absatz der vorigen Folie, man
+    muss sie nur ausbuchstabieren. Genau deshalb steht sie hier und die anderen beiden
+    Fragen nicht: Die bräuchten den ganzen Artikel.
+    D ist der lehrreiche Falschanker: Die Karten \emph{können} Grafik, sie tun es im
+    Rechenzentrum nur nie. 2025 kam aus dem Hörsaal eine gute Antwort über Raster und
+    Shader gegen Rechenzentrum -- die lohnt sich abzuwarten, bevor man weiterklickt.
+    Merksatz, der bleiben soll: \emph{SIMD ist das Prinzip, die GPU das Produkt.}}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Leseauftrag bis nächste Woche}
+
   \begin{center}
-    \emph{How AMD May Get Across the CUDA Moat} -- HPCwire, 2023
+    {\small Doug Eadline, \emph{How AMD May Get Across the CUDA Moat} (HPCwire, 2023)}\\[4pt]
+    {\footnotesize\url{https://www.hpcwire.com/2023/10/05/how-amd-may-get-across-the-cuda-moat/}}
   \end{center}
 
   \bigskip
-  \begin{enumerate}\setlength{\itemsep}{8pt}
-  \item GPU oder SIMD?
-  \item Wer entwickelt PyTorch?
-  \item CUDA oder ROCm?
+  Zwei Fragen, die der Artikel beantwortet:
+  \medskip
+  \begin{enumerate}\setlength{\itemsep}{6pt}
+  \item Wer entwickelt \textbf{PyTorch} -- und warum steht das in einem Artikel über AMD?
+  \item Was ist der \emph{moat}, der Burggraben, aus dem Titel: \textbf{CUDA} oder \textbf{ROCm}?
   \end{enumerate}
 
-  \note{Browser-Block, acht Minuten: den Artikel (HPCwire, 2023) kurz zeigen.
-    Fragen 1 und 2 im Hörsaal beantworten lassen -- 2025 kam eine gute Antwort über
-    Raster und Shader versus Rechenzentrum. SIMD ist das Prinzip, die GPU das Produkt.
-    PyTorch: Facebook AI Research, heute Meta, seit 2022 unter der Linux Foundation.
-    Frage 3 ausdrücklich als Hausaufgabe offen lassen -- die Antwort steht im Skript
-    in der Antwortbox zum Aufklappen.}
+  \bigskip
+  {\small Antworten zum Selbstkontrollieren: im Skript, Kapitel 1, Box
+  \emph{„Antworten zum Lesetext“}.}
+
+  \note{\textbf{Eine Minute, am Stück ansagen.} Das ist der Leseauftrag, nicht noch eine
+    Quizrunde -- die beiden Fragen setzen den ganzen Artikel voraus.
+    Kurz dazusagen, worauf die Antworten hinauslaufen, damit das Lesen eine Richtung hat:
+    PyTorch gehört \emph{nicht} Nvidia (Facebook AI Research, heute Meta, seit 2022 unter
+    der Linux Foundation) -- deshalb kann es überhaupt ein anderes Backend ansprechen, und
+    genau das ist AMDs Hebel. Und der Graben ist \emph{nicht die Hardware, sondern die
+    Software drumherum}: CUDA ist seit 2007 der De-facto-Standard, ROCm kam später und hat
+    weniger fertige Bibliotheken.
+    Wer mehr will: Die Antwortbox im Skript ist ausführlicher als alles, was hier in drei
+    Minuten ginge.}
 \end{frame}
 
 % ------------------------------------------------------------------ Geschichte
@@ -497,11 +664,14 @@
 \begin{frame}
   \frametitle{Kurzgeschichte: nach 2015}
 
-  \begin{itemize}\setlength{\itemsep}{10pt}
+  \begin{itemize}\setlength{\itemsep}{8pt}
   \item[\textbf{2017}] Transformer \hfill {\small VL 10, aber wir trainieren keine}
   \item[\textbf{2020}] AlphaFold 2
   \item[\textbf{2021}] Diffusionsmodelle schlagen GANs
   \item[\textbf{2022}] ChatGPT
+  \item[\textbf{2024/25}] Agentic Coding \hfill {\small VL 15}\\[3pt]
+    {\footnotesize Claude 3.5 Sonnet, GPT-4.1, Gemini 2.5 Pro, Qwen3-Coder, Kimi K2:\\
+    je $\gtrsim 50\,\%$ auf SWE-bench Verified}
   \end{itemize}
 
   \note{Transformer: „Attention is all you need“, Grundlage für GPT -- wir schauen
@@ -510,6 +680,14 @@
     Diffusion: das Verfahren (DDPM) ist von 2020; 2021 schlägt es die GANs bei der
     Bildqualität (Dhariwal und Nichol, „Diffusion Models Beat GANs on Image Synthesis“).
     Nach ChatGPT: RLHF, Copilot, Multimodalität, RAG, Agents.
+    \textbf{Agentic Coding}: SWE-bench Verified ist die von OpenAI 2024 geprüfte
+    500-Aufgaben-Teilmenge von SWE-bench -- echte GitHub-Issues aus Python-Projekten,
+    bestanden ist eine Aufgabe erst, wenn die Tests des Projekts durchlaufen. Der Sprung
+    ist der eigentliche Punkt: 2023 lagen die besten Systeme im niedrigen einstelligen
+    Bereich, binnen zwei Jahren liegt ein halbes Dutzend Modelle darüber -- offene
+    (Qwen3-Coder, Kimi K2) wie geschlossene. \emph{Die Prozentzahlen vor der Sitzung
+    nachsehen, sie altern schneller als jede andere Zahl im Deck}; die Rangfolge wechselt
+    monatlich, die Größenordnung nicht. Anschluss an VL 15 (Vibecoding).
     Ehrlich bleiben: das meiste davon ist Stoff der aufbauenden Module im Master.}
 \end{frame}
 

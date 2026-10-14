@@ -35,6 +35,7 @@
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{amsthm}
+\usepackage{tabularx} % für \optionen (Antwortgitter der mitmachfrage)
 \usepackage{fancyhdr}
 \usepackage{graphicx}
 
@@ -52,6 +53,42 @@
 \renewcommand<>{\emph}[1]{%
   {\usebeamercolor[fg]{emph}\only#2{\itshape}#1}%
 }
+
+% --- Mitmachfrage (Peer Instruction): Kasten mit Frage und Optionen, danach \pause und
+%     \antwort mit Begründung. Übernommen am 2026-10-14 aus ds2-26 (`ds2figures.tex`),
+%     wo sich das Format bewährt hat; absichtlich zeilengleich, damit die Kursfamilie
+%     nicht auseinanderläuft (PLAYBOOK-folien.md §2.1).
+%     \begin{mitmachfrage}[Titel] ... \end{mitmachfrage}
+\setbeamercolor{mitmachtitel}{fg=white,bg=hhuorange}
+\setbeamercolor{mitmachkoerper}{fg=black,bg=hhuorange!8}
+\newenvironment{mitmachfrage}[1][Frage an Sie]{%
+  \begin{beamerboxesrounded}[upper=mitmachtitel,lower=mitmachkoerper,shadow=false]{#1\hfill
+    {\normalfont\tiny Aufzeichnung: anhalten, selbst antworten}}}{%
+  \end{beamerboxesrounded}}
+\newcommand{\antwort}{\textcolor{hhuorange}{\textbf{Antwort:}}\ }
+
+% --- Antwortoptionen als 2x2-Gitter statt als Fließtext mit \quad und \\.
+%     Eingeführt 2026-10-14: Im Fließtext richten sich A--D nicht aneinander aus, der
+%     Umbruch hängt an der Länge der vorigen Option, und bei vier langen Optionen sieht
+%     die Folie zerfasert aus. Das Gitter gibt feste Spalten und gleiche Grundlinien.
+%     \optionen{...}{...}{...}{...}  -- immer genau vier, in der Reihenfolge A B C D.
+\newcommand{\optlabel}[1]{\textcolor{hhuorange}{\textbf{#1}}\,}
+%     Das Gitter steht eine Stufe kleiner als der Fragetext: Es sind Wahlmöglichkeiten,
+%     keine Aussagen, und bei vier langen Optionen liefe der Rahmen sonst über (am
+%     2026-10-14 an den drei Lesetext-Folien von VL 1 gemessen, 6 bis 14 pt).
+\newcommand{\optionen}[4]{%
+  \par\smallskip
+  {\small
+  \begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}X@{\hspace{1.5em}}>{\raggedright\arraybackslash}X@{}}
+    \optlabel{A} #1 & \optlabel{B} #2\\[4pt]
+    \optlabel{C} #3 & \optlabel{D} #4
+  \end{tabularx}\par}}
+
+% --- Marker im Folientitel für klausurnahe Stellen:
+%     \frametitle{Die Google-Matrix\pruefungsfrage}
+\newcommand{\pruefungsfrage}{%
+  \ \raisebox{1.5pt}{\rotatebox{3}{\colorbox{hhuorange}{%
+    \textcolor{white}{\normalfont\tiny\bfseries Gute Prüfungsfrage}}}}}
 
 
 

@@ -74,3 +74,17 @@ tensorflow
 Appetithappen
 Dhariwal
 Nichol
+TP  # Konfusionsmatrix, VL 01: true positive
+FP  # dito: false positive
+FN  # dito: false negative
+RMSE  # Wurzel des MSE, VL 01
+quadrierte
+Quadriert
+Backends  # Plural zu Backend (CUDA/ROCm unter PyTorch)
+sklearn  # nur in einer Dozentennotiz, VL 01
+Agentic  # „Agentic Coding“, VL 01 Kurzgeschichte — englischer Eigenbegriff
+Kimi  # Kimi K2, Modellname (Moonshot AI)
+SWE  # SWE-bench Verified, Benchmarkname
+Eadline  # Doug Eadline, Autor des HPCwire-Lesetexts (Byline am Original geprüft)
+GenAI  # im wörtlichen Zitat aus dem HPCwire-Artikel
+UrhG  # Zitatrecht §51, nur in einer Dozentennotiz
