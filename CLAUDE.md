@@ -62,21 +62,36 @@ andere als die angeheftete (3.11.2), und genau das ist passiert. Die Gruppe `fig
 trotzdem keine Gigabyte. Gegenprobe: zweimal laufen lassen, der zweite Lauf muss
 byte-gleich sein.
 
-Erwartung eines gesunden Laufs (Stand 2026-10-14, nach der fachlichen Durchsicht
-aller 27 Kapitel und des Glossars): HTML ohne Warnungen, PDF **113 Seiten A4**, 0 LaTeX-Fehler, 0 fehlende
+Erwartung eines gesunden Laufs (Stand 2026-10-15, nach der fachlichen Durchsicht
+aller 27 Kapitel und des Glossars): HTML ohne Warnungen, PDF **112 Seiten A4** lokal
+(veröffentlicht 113, siehe unten), 0 LaTeX-Fehler, 0 fehlende
 Glyphen, 5 überlange Zeilen. Die `--min-pages`-Untergrenze
 soll einen *abgebrochenen* Lauf fangen, nicht eine gewollte Kürzung — sie steht deshalb
 deutlich unter der tatsächlichen Seitenzahl, in der CI auf demselben Wert.
 
-**Die Abweichung zwischen lokal und CI ist weg (2026-10-14).** Vom 2026-09-29 bis dahin
-stand hier: lokal 112 Seiten, veröffentlicht 113, erste Abweichung auf Seite 29 mitten in
-einem Codeblock — also der *Satz*, nicht der Inhalt. Als Ursache war die Toolchain
-vermutet: Das CI-Image heftet texlive über einen Debian-Snapshot an, diese Maschine hat,
-was Debian gerade liefert, und `minted` brach eine Codezeile eine Spalte anders um. Das
-hat sich bestätigt — Debian ist nachgezogen, und der lokale Bau liefert jetzt dieselben
-**113 Seiten** wie die CI. Nachgemessen am 2026-10-14 in einem `git worktree` auf
-unverändertem HEAD, eben damit die Zahl nicht einer gleichzeitigen Änderung zugeschrieben
-wird. Wer die veröffentlichte Zahl braucht, holt sie mit dem `curl`-Rezept weiter unten.
+**Lokal und CI weichen um eine Seite ab, und das bleibt so**: hier 112 Seiten, das
+veröffentlichte PDF hat 113. Die erste Abweichung steht auf Seite 28 in einem Codeblock,
+der eine Zeile anders bricht — es ist der *Satz*, nicht der Inhalt. Die Ursache ist am
+2026-10-15 gemessen worden, und sie ist nicht die, die hier vom 2026-09-29 bis dahin stand:
+
+* **Diese Maschine benutzt nicht Debians texlive.** `xelatex` kommt aus einer eigenen
+  TeX-Live-2024-Installation unter `/usr/local/texlive/2024`, und die ist seit dem
+  2024-06-08 unangetastet; `texlive-latex-extra` steht in `dpkg` auf `rc`. Der Satz
+  „diese Maschine hat, was Debian gerade liefert“ war hier nie richtig.
+* **minted v2 gegen minted v3.** Lokal lädt der Lauf `minted 2023/12/18 v2.9`, das
+  CI-Image Debian trixies minted v3 samt `latexminted`-Helfer (siehe Dockerfile). Die
+  beiden brechen `breaklines` verschieden — genau das sieht man auf Seite 28.
+* Die Abweichung **verschwindet daher nicht von selbst**. Der Eintrag vom 2026-10-14
+  („Debian ist nachgezogen, lokal jetzt ebenfalls 113“) ist am 2026-10-15 nicht
+  reproduzierbar gewesen: Derselbe Baum (`2c6984a`) baut mit demselben mystmd 1.10.1
+  wieder 112 Seiten, und an der lokalen TeX-Installation hat sich in der Zwischenzeit
+  nichts bewegt. Wer die Abweichung loswerden will, baut im Container (PLAYBOOK §3.2).
+
+`check_doku.py` prüft die Zahl gegen das **lokale** PDF, deshalb steht hier 112. Wer die
+veröffentlichte Zahl braucht, holt sie mit dem `curl`-Rezept weiter unten.
+
+Beides ist unabhängig von mystmd: 1.10.1 und 1.11.0 liefern auf demselben Baum dieselbe
+Seitenzahl (gemessen am 2026-10-15 beim Upgrade, `devnotes/build-log-2026-10-15.md`).
 
 Die Lehre daran ist nicht die Zahl, sondern die Methode: **Eine Seitenzahl, die sich
 „von selbst“ ändert, gehört gegen einen unveränderten Baum gemessen, bevor man sie der

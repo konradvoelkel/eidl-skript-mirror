@@ -23,7 +23,7 @@ die falsch dastehen.
 
 Die betroffene Stelle sitzt im **gemeinsamen `code`-Handler** von myst-to-tex, also vor
 der Verzweigung nach `verbatim`, `lstlisting` und `minted`: Der Fehler trifft jeden
-`code_style`. Nachgewiesen mit mystmd 1.10.1 (dieses Repo) und 1.11.0 (eipy-skript);
+`code_style`. Nachgewiesen mit mystmd 1.10.1 und 1.11.0 (dieses Repo wie eipy-skript);
 minimal reproduzierbar mit einem Codeblock, der `a-b` enthält. Nur der Bindestrich ist
 betroffen, die übrigen ASCII-Sonderzeichen gehen unverändert durch.
 

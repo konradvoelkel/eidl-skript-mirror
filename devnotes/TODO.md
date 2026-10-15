@@ -22,8 +22,8 @@ uv run devnotes/check_pdf_build.py --min-pages 100
 uv run devnotes/check_doku.py           # stimmt die Doku noch mit dem Repo überein?
 ```
 
-Erwartung: **27 Kapitel plus Glossar, 113 Seiten A4** (lokal und veröffentlicht seit dem
-2026-10-14 gleich, siehe `../CLAUDE.md`), 0 LaTeX-Fehler, 0 fehlende Glyphen,
+Erwartung: **27 Kapitel plus Glossar, 112 Seiten A4 lokal** (veröffentlicht 113 — die
+Abweichung ist seit dem 2026-10-15 erklärt, siehe `../CLAUDE.md`), 0 LaTeX-Fehler, 0 fehlende Glyphen,
 5 überlange Zeilen, 23 Übungsabschnitte. Weicht etwas davon ab, ist das der erste Befund, nicht
 Hintergrundrauschen.
 
@@ -112,7 +112,12 @@ Abgabe bis …“ in den TeX-Blättern.
 - [ ] **[Entscheidung] Punkte und Bestehensgrenzen** der Blätter 1, 3, 5 nach den neuen Aufgaben 4b, 2b, 1b
   anpassen (*Vorschlag:* je +1 Punkt, Bestehensgrenze bleibt „die Hälfte“).
 - [ ] Die Zeile „N Punkte, Abgabe bis …“ je Blatt eintragen — **in den TeX-Quellen**, nicht mehr im Skript;
-  die Termine stehen fest, die Punkte hängen an der Entscheidung oben.
+  die Termine stehen fest, die Punkte hängen an der Entscheidung oben. **Die TeX-Quellen 2026/27 liegen
+  seit dem 2026-10-12 in `../../exercises/`** (Sciebo, kein Repo, wie bei ds2-26 und eipy-26): Header,
+  Blatt 0 und Blatt 1 mit `build.sh` und `ILIAS-UPLOAD-CHECKLISTE.md`; Blatt 1 trägt 11 Punkte und
+  den 21.10.2026 (Vorschlag umgesetzt, Grenze bleibt die Hälfte). Blätter 2 bis 11 stehen noch aus;
+  Vorlage ist `~/Sciebo/hhu/eidl-25/exercises/`, die Nachträge 2b und 1b stehen in `../uebungen-2025/blaetter/`.
+  **In ILIAS hängen an den Übungseinheiten noch die 2025er PDFs** (nachgesehen 2026-10-12), siehe Checkliste.
 - [ ] **[Entscheidung vertagt]** Blatt 6 (Iris-Autoencoder) wird nach dem neuen Wochenplan eine Woche *vor* der
   Autoencoder-Vorlesung ausgegeben (AE ist jetzt VL 8 statt VL 7, CNNs VL 11, LLMs VL 12). Optionen: Blätter 6/7
   in der Ausgabe tauschen, Blatt 6 anpassen, oder so lassen (Skript-Kapitel steht online). Bei der
@@ -188,12 +193,33 @@ Textfassung von Seite und Objektbaum: `~/Sciebo/hhu/eidl-26/ilias/` (analog zu
   Text in `\href`, nicht als `\url`, deshalb greift keine URL-Trennung. Die schlimmste (77 pt) ist
   `paperswithcode.com/methods/category/activation-…` in 11. Abhilfe wäre, die Linktexte zu kürzen
   („paperswithcode“ statt der vollen Adresse) — Inhaltsarbeit, keine Technik.
+- [ ] **Lokales und veröffentlichtes PDF bleiben eine Seite auseinander** (lokal 112,
+  live 113). Ursache am 2026-10-15 gemessen und in `../CLAUDE.md` festgehalten: lokal
+  minted v2.9 aus einer eigenen TeX-Live-2024-Installation, in der CI Debian trixies
+  minted v3. Damit ist es keine Unklarheit mehr, sondern eine Entscheidung: entweder so
+  lassen (`--min-pages 100` fängt beide Fälle) oder lokal im Container bauen
+  (PLAYBOOK §3.2) und damit dieselbe Zahl bekommen. *Vorschlag:* so lassen, und bei einer
+  Zahl, die im Buch oder in der Doku steht, immer dazuschreiben, welcher der beiden
+  Bäume gemeint ist.
+- [ ] **`make_figures.py` kommt nur bis Abbildung 29 von 34.** Es liest `ASML.csv` aus
+  `SRC = ROOT.parent / "from_2025" / "slides"`, und dieses Verzeichnis gibt es nicht mehr
+  (der Pfad stammt aus der Zeit vor der Umbenennung des 2025er Ordners). Die Datei liegt
+  zweimal da: `notebooks/ASML.csv` im Repo und `~/Sciebo/hhu/eidl-25/slides/ASML.csv`.
+  Gefunden am 2026-10-15 bei der Gegenprobe zum Upgrade — die ersten 29 Abbildungen kamen
+  dabei byte-gleich wieder heraus, die letzten fünf hat das Skript nie erreicht.
+  *Vorschlag:* auf `notebooks/ASML.csv` zeigen, dann läuft der Lauf ohne Sciebo-Pfad durch.
 - [ ] **Das HHU-Beamer-Theme fehlt auf dieser Maschine.** `slides/build.sh` scheitert mit
   „File `beamerthemehhubeamer.sty' not found“; `slides/README.md` sagt richtig, dass es unter
   `/usr/share/texmf/tex/latex/beamer/themes/` liegen muss, dort liegt aber nichts. Kopien gibt es
   in `~/Sciebo/hhu/ds2026/ds-skript/slides/hhu-beamer-theme/` und in `~/Sciebo/hhu/ds2025/slides/`.
   Am 2026-09-27 behelfsweise mit `TEXINPUTS=".:…/hhu-beamer-theme//:"` gebaut. Vor der ersten
   Sitzung am 14.10. richtig installieren, sonst lässt sich kein Deck aktualisieren.
+- [ ] **`scipy` fehlt in den Hauptabhängigkeiten.** Das CNN-Kapitel schreibt
+  `from scipy.signal import convolve`; in `pyproject.toml` steht scipy seit dem 2026-10-14
+  nur in der Gruppe `figures`, für den Code *im Buch* kommt es weiter bloß als
+  Abhängigkeit von gensim und scikit-learn mit (gefunden beim Upgrade am 2026-10-15).
+  *Vorschlag:* eine Zeile `"scipy>=1.18,<2"` zu den Hauptabhängigkeiten, mit Kommentar auf
+  das Kapitel — dieselbe Form wie bei `sacremoses` und `ollama`.
 - [ ] **`imagemagick` ist bewusst nicht im Image.** Dieses Buch hat 45 PNG und 2 JPG und kein einziges SVG, also
   wandelt MyST nichts. Sobald ein SVG dazukommt, meldet MyST das auf stdout, und `check_pdf_build.py --myst-log`
   liest es mit — dann gehören `imagemagick` und `librsvg2-bin` ins Dockerfile (wie in EiPy).
