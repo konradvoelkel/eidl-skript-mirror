@@ -147,13 +147,45 @@ Datierte Protokolle größerer Umbauten liegen daneben als `build-log-<datum>.md
   an denen niemand etwas getan hatte — die echte Änderung war vom Fassungsrauschen nicht mehr zu
   trennen. Behoben mit einer Abhängigkeitsgruppe `figures` in `pyproject.toml` (ohne torch, 18
   Pakete) und `matplotlib>=3.11.2,<3.12` auch in den Hauptabhängigkeiten. Aufruf jetzt
-  `uv run --only-group figures devnotes/make_figures.py`. Einmalige Neubasierung aller 34 PNGs
+  `uv run --only-group figures devnotes/make_figures.py`. Einmalige Neubasierung aller PNGs
   unter der angehefteten Fassung; Gegenprobe: zwei Läufe hintereinander sind byte-gleich.
+  (Es waren 29 von 36 — der Lauf brach damals an einem veralteten Pfad ab und erreichte die
+  letzten fünf nicht, siehe den Eintrag vom 2026-10-16.)
   Gefunden beim Beschriftungsfehler der GMM-Abbildung (Achse „Pixelwert“, die von −0,5 bis 1,5 lief).
-- [x] **Lokales und veröffentlichtes PDF sind wieder gleich** (2026-10-14, von selbst). Die seit
-  dem 2026-09-29 notierte Abweichung (lokal 112, live 113) war, wie vermutet, der texlive-Stand:
-  Debian ist nachgezogen, lokal sind es jetzt ebenfalls 113 Seiten. Gemessen in einem `git worktree`
-  auf unverändertem HEAD, damit die Zahl nicht der gleichzeitigen Abbildungsänderung zugeschrieben wird.
+- [x] **Die Seitenzahl-Abweichung ist erklärt, nicht verschwunden** (2026-10-16). Am 2026-10-14
+  stand hier, sie sei „von selbst“ weg (lokal wie live 113, Debian habe bei texlive nachgezogen).
+  Das war falsch, und `check_doku.py` hat es am Tag darauf gemeldet: Lokal sind es wieder 112.
+  Nachgemessen in einem `git worktree` mit eigener `.venv` — derselbe Baum baut mit mystmd 1.10.1
+  wie mit 1.11.0 112 Seiten, und auch der Baum vom 2026-10-02, der am 14.10. mit 113 gemessen
+  wurde, baut heute 112. Die Ursache ist nicht der Debian-Stand: Diese Maschine benutzt Debians
+  texlive überhaupt nicht, sondern eine eigene TeX-Live-2024-Installation unter
+  `/usr/local/texlive/2024` (unangetastet seit 2024-06-08, `texlive-latex-extra` steht auf `rc`)
+  mit **minted v2.9**, während das Image Debian trixies **minted v3** benutzt. `breaklines` bricht
+  dort anders; sichtbar als ein Codeblock der Trainingsschleife auf Seite 28. Die Abweichung
+  bleibt also bestehen und ist dokumentiert statt offen: `../CLAUDE.md`, PLAYBOOK §3.8m,
+  Messwerte in `build-log-2026-10-15.md`. Was am 14.10. zu der 113 geführt hat, ließ sich nicht
+  rekonstruieren — festgehalten ist, was reproduzierbar ist.
+- [x] **Abhängigkeiten angehoben** (2026-10-15): mystmd 1.10.1 auf 1.11.0 an **beiden**
+  Anheftungen (dev-Gruppe und Dockerfile), dazu numpy, torch, transformers, huggingface-hub 2.x
+  und 47 weitere Pakete im Lock. Gleiche Quelle, neue Toolchain, nichts verschoben; die drei
+  Patchstellen von `patch_myst_tex.py` gibt es in 1.11.0 noch. Nach dem Push geprüft, dass das
+  Image wirklich neu gebaut wurde: `myst.xref.json` der veröffentlichten Seite meldet 1.11.0.
+  Protokoll: `build-log-2026-10-15.md`.
+- [x] **`make_figures.py` lief nur bis Abbildung 29 von 36** (2026-10-16). `SRC` zeigte auf
+  `from_2025/slides` neben dem Buch — ein Ordner aus der Zeit vor den Jahresordnern, der nicht
+  mehr existiert. Weil `vl10_asml_convolutions` alphabetisch die dreißigste Abbildung ist, brach
+  der Lauf dort mit einem `FileNotFoundError` ab und erreichte die letzten fünf nie; aufgefallen
+  ist es erst bei der Gegenprobe zum Upgrade. Jetzt sucht das Skript den Ordner unter beiden
+  Namen (`eidl-25/slides` zuerst), liest die Kurstabelle aus dem versionierten
+  `notebooks/ASML.csv` statt aus Sciebo (byte-gleich geprüft) und läuft bei fehlendem Material
+  **weiter**, nennt am Ende, was fehlte, und endet trotzdem mit Exit 1 — eine Fremddatei
+  verschluckt nicht mehr die Abbildungen danach. Gegenprobe: voller Lauf, 36 Abbildungen und
+  6 Kopien, `git status images/` leer.
+- [x] **`scipy` steht in den Hauptabhängigkeiten** (2026-10-16). Das CNN-Kapitel schreibt
+  `from scipy.signal import convolve`; scipy kam nur als Abhängigkeit von gensim und
+  scikit-learn mit, in der Gruppe `figures` stand es seit dem 2026-10-14. Jetzt
+  `scipy>=1.18,<2` mit Kommentar auf das Kapitel — dieselbe Form wie bei `sacremoses`. An der
+  Auflösung ändert sich nichts (1.18.1 war schon installiert).
 - [x] GitLab Pages auf „Everyone“ (Konrad, 2026-09-20); aktiv seit dem nächsten Pages-Deploy, geprüft 2026-09-21
   (`curl` → 200, PDF unter `/eidl-skript.pdf` erreichbar).
 - [x] PDF-Export in der CI wie bei DS-/EiPy-Skript (2026-09-20): Job `build-pdf` mit `allow_failure`, PDF landet
@@ -197,6 +229,15 @@ Datierte Protokolle größerer Umbauten liegen daneben als `build-log-<datum>.md
   Kommentar im Dockerfile; Anheben heißt: Zeitstempel setzen, Image bauen, PDF im Container prüfen, committen.
 
 ## Nach Datum
+
+### 2026-10-15/16 (Abhängigkeits-Upgrade)
+
+Auslöser: „Ich denke, wir können mystmd und numpy und ggf. noch mehr updaten.“ Protokoll mit
+allen Messwerten: `build-log-2026-10-15.md`. Der Ertrag war nicht das Upgrade — das war
+unauffällig —, sondern was beim Prüfen auffiel: eine falsche Erklärung der Seitenzahl-Abweichung
+(§3.8m im Playbook), ein Abbildungslauf, der seit der Umbenennung der Jahresordner fünf
+Abbildungen nie erreichte, und ein `scipy`, das das Buch benutzt und das Projekt nicht
+deklarierte.
 
 ### 2026-10-02 (VL-1-Durchsicht vor der ersten Sitzung)
 

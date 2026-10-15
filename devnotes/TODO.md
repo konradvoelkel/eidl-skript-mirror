@@ -193,21 +193,6 @@ Textfassung von Seite und Objektbaum: `~/Sciebo/hhu/eidl-26/ilias/` (analog zu
   Text in `\href`, nicht als `\url`, deshalb greift keine URL-Trennung. Die schlimmste (77 pt) ist
   `paperswithcode.com/methods/category/activation-…` in 11. Abhilfe wäre, die Linktexte zu kürzen
   („paperswithcode“ statt der vollen Adresse) — Inhaltsarbeit, keine Technik.
-- [ ] **Lokales und veröffentlichtes PDF bleiben eine Seite auseinander** (lokal 112,
-  live 113). Ursache am 2026-10-15 gemessen und in `../CLAUDE.md` festgehalten: lokal
-  minted v2.9 aus einer eigenen TeX-Live-2024-Installation, in der CI Debian trixies
-  minted v3. Damit ist es keine Unklarheit mehr, sondern eine Entscheidung: entweder so
-  lassen (`--min-pages 100` fängt beide Fälle) oder lokal im Container bauen
-  (PLAYBOOK §3.2) und damit dieselbe Zahl bekommen. *Vorschlag:* so lassen, und bei einer
-  Zahl, die im Buch oder in der Doku steht, immer dazuschreiben, welcher der beiden
-  Bäume gemeint ist.
-- [ ] **`make_figures.py` kommt nur bis Abbildung 29 von 34.** Es liest `ASML.csv` aus
-  `SRC = ROOT.parent / "from_2025" / "slides"`, und dieses Verzeichnis gibt es nicht mehr
-  (der Pfad stammt aus der Zeit vor der Umbenennung des 2025er Ordners). Die Datei liegt
-  zweimal da: `notebooks/ASML.csv` im Repo und `~/Sciebo/hhu/eidl-25/slides/ASML.csv`.
-  Gefunden am 2026-10-15 bei der Gegenprobe zum Upgrade — die ersten 29 Abbildungen kamen
-  dabei byte-gleich wieder heraus, die letzten fünf hat das Skript nie erreicht.
-  *Vorschlag:* auf `notebooks/ASML.csv` zeigen, dann läuft der Lauf ohne Sciebo-Pfad durch.
 - [ ] **Das HHU-Beamer-Theme fehlt auf dieser Maschine.** `slides/build.sh` scheitert mit
   „File `beamerthemehhubeamer.sty' not found“; `slides/README.md` sagt richtig, dass es unter
   `/usr/share/texmf/tex/latex/beamer/themes/` liegen muss, dort liegt aber nichts. Kopien gibt es

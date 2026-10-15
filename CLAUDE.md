@@ -54,7 +54,8 @@ dev-Gruppe.
 matplotlib, numpy, scipy, scikit-learn — und weil seine Ausgabe, die PNGs in `images/`,
 **versioniert** ist, braucht es jedes Mal *dieselbe* Fassung davon. matplotlib ändert
 zwischen Minor-Fassungen den Satz; ein Komplettlauf mit einer anderen Fassung schreibt alle
-34 Abbildungen neu, ohne dass sich an einer einzigen etwas Inhaltliches geändert hätte, und
+36 Abbildungen neu (dazu 6 Kopien aus dem Material von 2025), ohne dass sich an einer
+einzigen etwas Inhaltliches geändert hätte, und
 die echte Änderung ist dann nicht mehr von der Fassungsdifferenz zu unterscheiden. Bis zum
 2026-10-14 stand im Skriptkopf „System-Python reicht“; dessen matplotlib (3.10.9) war eine
 andere als die angeheftete (3.11.2), und genau das ist passiert. Die Gruppe `figures` in

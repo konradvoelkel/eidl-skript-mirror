@@ -14,6 +14,10 @@ der Lauf kostet also keine Gigabyte.
 
 Gegenprobe: zweimal hintereinander laufen lassen, `git status images/` muss danach
 dasselbe zeigen wie nach dem ersten Lauf.
+
+Acht Dateien kommen aus dem Material von 2025 und liegen in **Sciebo**, nicht im Repo
+(siehe `SRC_KANDIDATEN` unten). Fehlt der Ordner, läuft alles andere trotzdem durch; das
+Skript nennt am Ende, was fehlte, und endet mit einem Fehlercode.
 """
 
 from pathlib import Path
@@ -27,7 +31,24 @@ from matplotlib.patches import Circle, FancyArrowPatch, FancyBboxPatch, Rectangl
 
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "images"
-SRC = ROOT.parent / "from_2025" / "slides"
+
+# Acht Fremddateien kommen nicht aus diesem Skript, sondern aus dem Material von 2025
+# (ein Foto, ein Tafelbild, zwei Playground-Bilder, zwei Paper-Abbildungen, ein
+# Notebook-Bild, eine Kurstabelle): Sie liegen in Sciebo, nicht im Repo. Der Ordner hieß
+# `from_2025/slides` neben dem Buch; seit der Umstellung auf Jahresordner heißt er
+# `eidl-25/slides` eine Ebene höher. Bis zum 2026-10-16 stand hier nur der alte Name, und
+# weil `vl10_asml_convolutions` alphabetisch die dreißigste Abbildung ist, brach der Lauf
+# dort ab -- die letzten fünf Abbildungen hat er nie erreicht.
+SRC_KANDIDATEN = [
+    ROOT.parent.parent / "eidl-25" / "slides",
+    ROOT.parent / "from_2025" / "slides",
+]
+SRC = next((p for p in SRC_KANDIDATEN if p.is_dir()), SRC_KANDIDATEN[0])
+
+# Die Kurstabelle ist die einzige der acht, die auch **versioniert** vorliegt; sie wird
+# deshalb aus dem Repo gelesen und nicht aus Sciebo (byte-gleich geprüft am 2026-10-16).
+ASML_CSV = ROOT / "notebooks" / "ASML.csv"
+
 OUT.mkdir(exist_ok=True)
 
 HHU_BLUE = "#006AB3"
@@ -730,7 +751,7 @@ def vl10_asml_convolutions():
     import pandas as pd
     from scipy.signal import convolve
 
-    df = pd.read_csv(SRC / "ASML.csv", parse_dates=["Date"]).sort_values("Date")
+    df = pd.read_csv(ASML_CSV, parse_dates=["Date"]).sort_values("Date")
     df = df[(df["Date"] >= "2020-12-15") & (df["Date"] <= "2025-12-15")]
     data = df["Close"].to_numpy()
     n = 30
@@ -892,6 +913,25 @@ def copy_existing():
 
 
 if __name__ == "__main__":
+    # Eine fehlende Fremddatei darf nicht die Abbildungen danach verschlucken: Der Lauf
+    # macht weiter, nennt am Ende, was fehlte, und endet trotzdem mit einem Fehlercode.
+    fehlt: list[str] = []
     for fn in [v for k, v in sorted(globals().items()) if k.startswith("vl") and callable(v)]:
-        fn()
-    copy_existing()
+        try:
+            fn()
+        except FileNotFoundError as e:
+            fehlt.append(f"{fn.__name__}: {e.filename}")
+            print(f"ÜBERSPRUNGEN {fn.__name__}: {e.filename} fehlt")
+    try:
+        copy_existing()
+    except FileNotFoundError as e:
+        fehlt.append(f"copy_existing: {e.filename}")
+        print(f"ÜBERSPRUNGEN copy_existing: {e.filename} fehlt")
+
+    if fehlt:
+        print(f"\n{len(fehlt)} Schritt(e) ohne Material, gesucht in:")
+        for kandidat in SRC_KANDIDATEN:
+            print(f"  {kandidat}{'' if kandidat.is_dir() else '   (nicht da)'}")
+        for z in fehlt:
+            print(f"  - {z}")
+        raise SystemExit(1)
