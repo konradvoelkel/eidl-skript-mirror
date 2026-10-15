@@ -106,6 +106,23 @@ das nicht, nur im PDF, und es traf 49 Stellen in 18 Kapiteln. Im CI-Image geschi
 Patch automatisch (Dockerfile), in einer frisch synchronisierten `.venv` nicht. Das Skript
 ist idempotent und scheitert laut, wenn mystmd sich bewegt hat.
 
+**Der Patch trifft über den Hardlink den uv-Cache mit — und das verfälscht seine eigene
+Meldung.** uv verlinkt Paketdateien aus dem Cache in die `.venv`; `patch_myst_tex.py`
+schreibt an Ort und Stelle, also ändert es dieselben Blöcke im Cache. Auf dieser Maschine
+liefert deshalb eine **frisch synchronisierte** `.venv` ein schon gepatchtes mystmd, und das
+Skript meldet dreimal „bereits gepatcht“ (nachgemessen am 2026-10-16 mit einem Wegwerf-Projekt
+auf `mystmd==1.11.0`). Zwei Folgerungen: Der Aufruf bleibt Pflicht — nach einem
+`uv cache clean`, in der CI und auf jeder anderen Maschine ist er wieder nötig —, und
+**„bereits gepatcht“ ist kein Beleg, dass mystmd den Fehler behoben hat.** Das prüft man
+gegen einen frischen Cache, nicht gegen diese `.venv`.
+
+Seit dem 2026-10-16 liegen Cache und venv dieses Projekts auf der zweiten SSD:
+`/media/konrad/xtraspace/uv/cache` (global in `~/.config/uv/uv.toml`) und
+`/media/konrad/xtraspace/uv/venvs/eidl-skript`, auf das `.venv` als **Symlink** zeigt. Beides
+muss auf *derselben* Platte liegen, sonst kann uv nicht mehr hardlinken und kopiert — dann
+kostet jede venv ihre volle Größe. `uv run` und `myst` merken davon nichts; wer die Platte
+nicht gemountet hat, hat kein Python.
+
 Das Site-Template ist **mitgeliefert** (`_site/vendor/book-theme.zip`) und wird von
 `install_template.py` an die Stelle entpackt, an der MyST es zwischenspeichert. Ohne diesen
 Schritt lädt `myst build` es bei jedem Lauf von einem *wandernden Branch* bei GitHub — das
