@@ -193,6 +193,14 @@ Textfassung von Seite und Objektbaum: `~/Sciebo/hhu/eidl-26/ilias/` (analog zu
   Text in `\href`, nicht als `\url`, deshalb greift keine URL-Trennung. Die schlimmste (77 pt) ist
   `paperswithcode.com/methods/category/activation-…` in 11. Abhilfe wäre, die Linktexte zu kürzen
   („paperswithcode“ statt der vollen Adresse) — Inhaltsarbeit, keine Technik.
+- [ ] **ruff-Befunde in den übrigen `devnotes/`-Skripten** (Inventar vom 2026-10-16, nachdem
+  `make_figures.py` sauber ist): 7 FURB167, 5 EXE001 (dieselbe Sache — Shebang ohne x-Bit, in
+  `check_doku.py`, `check_links.py`, `embed_figures.py`, `folienpruefliste.py`,
+  `pruefliste_durchsicht.py`), 4 RUF100, 3 ISC004, 2 B023, je eines UP031, I001, BLE001.
+  *Vorschlag:* die fünf `EXE001` mit einem `chmod +x` erledigen (die Shebang-Zeile behauptet
+  es ohnehin), den Rest einmal durchgehen, wenn sowieso jemand in den Skripten arbeitet.
+  **Nicht** `ruff format`: alle zwölf Skripte würden umgeschrieben, und Formatierung ist in
+  diesem Repo keine Konvention.
 - [ ] **Das HHU-Beamer-Theme fehlt auf dieser Maschine.** `slides/build.sh` scheitert mit
   „File `beamerthemehhubeamer.sty' not found“; `slides/README.md` sagt richtig, dass es unter
   `/usr/share/texmf/tex/latex/beamer/themes/` liegen muss, dort liegt aber nichts. Kopien gibt es

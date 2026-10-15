@@ -27,7 +27,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
-from matplotlib.patches import Circle, FancyArrowPatch, FancyBboxPatch, Rectangle
+from matplotlib.patches import Circle, FancyArrowPatch, FancyBboxPatch
 
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "images"
@@ -449,14 +449,14 @@ def vl06_activations():
 
 def vl06_autoencoder_schema():
     fig, ax = plt.subplots(figsize=(8, 3.6))
-    pos = draw_layers(ax, [8, 5, 3, 5, 8], dx=1.8, r=0.22,
-                      colors=[HHU_RED, HHU_BLUE, HHU_GREEN, HHU_BLUE, HHU_ORANGE])
+    draw_layers(ax, [8, 5, 3, 5, 8], dx=1.8, r=0.22,
+                colors=[HHU_RED, HHU_BLUE, HHU_GREEN, HHU_BLUE, HHU_ORANGE])
     ax.text(0, 4.6, "Input $x\\in\\mathbb{R}^D$", ha="center")
     ax.text(3.6, 4.6, "latenter Vektor $\\in\\mathbb{R}^L$", ha="center")
     ax.text(7.2, 4.6, "Rekonstruktion $\\hat x$", ha="center")
-    ax.annotate("", xy=(3.2, -4.5), xytext=(0.2, -4.5), arrowprops=dict(arrowstyle="->", color=HHU_DARK))
+    ax.annotate("", xy=(3.2, -4.5), xytext=(0.2, -4.5), arrowprops={"arrowstyle": "->", "color": HHU_DARK})
     ax.text(1.7, -4.9, "Encoder", ha="center")
-    ax.annotate("", xy=(7.0, -4.5), xytext=(4.0, -4.5), arrowprops=dict(arrowstyle="->", color=HHU_DARK))
+    ax.annotate("", xy=(7.0, -4.5), xytext=(4.0, -4.5), arrowprops={"arrowstyle": "->", "color": HHU_DARK})
     ax.text(5.5, -4.9, "Decoder", ha="center")
     ax.set_xlim(-0.8, 8)
     ax.set_ylim(-5.4, 5.2)
@@ -887,7 +887,7 @@ def vl15_manifolds():
     axs[3].plot(x, 0.3 * np.sin(2 * x), color=HHU_ICE, lw=8, alpha=0.7, label="Datenmannigfaltigkeit")
     axs[3].plot(x, 0.3 * np.sin(2 * x) + 0.25 - 0.2 * np.exp(-((x - 0.8) ** 2) * 6), color=HHU_RED, lw=1.5, label="Entscheidungsgrenze")
     axs[3].scatter([0.8], [0.3 * np.sin(1.6)], color="k", zorder=3)
-    axs[3].annotate("adversarial:\nwinziger Schritt\nüber die Grenze", (0.8, 0.3 * np.sin(1.6)), (1.6, 0.9), fontsize=8, arrowprops=dict(arrowstyle="->"))
+    axs[3].annotate("adversarial:\nwinziger Schritt\nüber die Grenze", (0.8, 0.3 * np.sin(1.6)), (1.6, 0.9), fontsize=8, arrowprops={"arrowstyle": "->"})
     axs[3].legend(fontsize=7, loc="lower left")
     axs[3].set_title("Dimpled Manifold Model", fontsize=9)
     for a in axs:

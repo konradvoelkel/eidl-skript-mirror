@@ -181,6 +181,22 @@ Datierte Protokolle größerer Umbauten liegen daneben als `build-log-<datum>.md
   **weiter**, nennt am Ende, was fehlte, und endet trotzdem mit Exit 1 — eine Fremddatei
   verschluckt nicht mehr die Abbildungen danach. Gegenprobe: voller Lauf, 36 Abbildungen und
   6 Kopien, `git status images/` leer.
+- [x] **`make_figures.py` ist ruff-sauber** (2026-10-16): der ungenutzte `Rectangle`-Import, die
+  ungenutzte Rückgabe von `draw_layers` (der andere Aufrufer verwirft sie auch), drei
+  `dict()`-Aufrufe als Literale, und das x-Bit gesetzt, weil die Shebang-Zeile es behauptete.
+  Gegenprobe: voller Lauf, `git status images/` leer — keine Abbildung ändert sich dadurch.
+  **Nicht** `ruff format` laufen lassen: Das ist in diesem Repo keine Konvention (alle zwölf
+  Skripte in `devnotes/` würden umgeschrieben, hier allein 474 Zeilen), und eine einzelne
+  formatierte Datei macht die Sammlung uneinheitlicher, nicht einheitlicher. Offen bleiben
+  dieselben `EXE001` in fünf Geschwisterskripten und ein Dutzend Befunde anderer Klassen,
+  siehe `TODO.md`.
+- [x] **Der verwaiste Worktree ist weg** (2026-10-16). `.claude/worktrees/silly-archimedes-470c08`
+  stand seit dem 2026-10-02 auf `c7db5c4` (detached), 75 MB. Nachgesehen, bevor er gelöscht wurde:
+  nichts Geändertes, nichts Unversioniertes, HEAD und Branch `claude/silly-archimedes-470c08`
+  vollständig in `main`; an Eigenem lagen dort nur Artefakte — eine `.venv`, `__pycache__` und
+  die Beamer-Ausgaben von VL 01 (23 Seiten, Stand 2026-09-30, inzwischen 25) und VL 03, deren
+  `.tex` seither um 523 Zeilen weiter ist. Der Branch war merged und ist mit entfernt; zurück
+  holen ließe er sich mit `git branch claude/silly-archimedes-470c08 c7db5c4`.
 - [x] **`scipy` steht in den Hauptabhängigkeiten** (2026-10-16). Das CNN-Kapitel schreibt
   `from scipy.signal import convolve`; scipy kam nur als Abhängigkeit von gensim und
   scikit-learn mit, in der Gruppe `figures` stand es seit dem 2026-10-14. Jetzt
