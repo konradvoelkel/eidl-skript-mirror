@@ -27,11 +27,8 @@
       "Book",
       "LearningResource"
     ],
-    "@id": "https://voelkel.pages.cs.uni-duesseldorf.de/eipy-skript/#work",
+    "@id": "https://eipy-skript-7dd28c.pages.cs.uni-duesseldorf.de/#work",
     "url": "https://eipy-skript-7dd28c.pages.cs.uni-duesseldorf.de/",
-    "sameAs": [
-      "https://voelkel.pages.cs.uni-duesseldorf.de/eipy-skript/"
-    ],
     "name": "Einführung in Python",
     "inLanguage": "de",
     "isAccessibleForFree": true,

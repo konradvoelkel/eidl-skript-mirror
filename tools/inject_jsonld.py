@@ -56,21 +56,28 @@ von dreien ist eine Behauptung über den Inhalt einer Seite, drei Knoten mit dem
 Die `@id`s und die zwei Adressen dieser Seite
 ----------------------------------------------
 
-Der `@id` des Buchs ist `https://voelkel.pages.cs.uni-duesseldorf.de/eidl-skript/#work`
-und **nicht** `__SITE__/#work`. Das ist Absicht und der eine Punkt, an dem dieses Repo
-von der Vorlage abweicht:
+Diese Seite ist unter zwei Adressen erreichbar: Die lesbare Namensraum-URL
+`https://voelkel.pages.cs.uni-duesseldorf.de/eidl-skript/` antwortet mit **308** auf
+`https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de/` -- GitLabs „unique domain" ist
+in diesem Projekt eingeschaltet (in `eipy-skript` auch, in `ds-skript` nicht).
 
-* `voelkel.pages.cs.uni-duesseldorf.de/eidl-skript/` antwortet mit **308** auf
-  `eidl-skript-131e30.pages.cs.uni-duesseldorf.de` (am 2026-10-19 gemessen). Die Seite
-  hat also zwei Adressen, von denen nur die zweite 200 liefert -- und `url`, `canonical`
-  und jede `<loc>` nennen deshalb die zweite.
-* `@id` ist aber kein Abruf, sondern ein Bezeichner, und ds-ens
-  `tools/sibling-works.json` behauptet für dieses Buch bereits **genau diesen** `@id`.
-  Hielte dieses Repo einen anderen, beschrieben die beiden Seiten zwei Dinge statt eines.
+**Konrad hat das am 2026-10-19 entschieden: Der generierte Host ist der kanonische.**
+Ein Canonical, der weiterleitet, ist keiner. Also nennt alles den generierten Host --
+`canonical`, `og:url`, jede `<loc>`, `url` **und der `@id`**. Der `@id` steht deshalb als
+`__SITE__/#work` in der Vorlage und nicht als feste Zeichenkette: Er kann dann nicht von
+`SITE_ORIGIN` abdriften.
 
-Die jeweils andere Schreibweise steht in `sameAs`, in beide Richtungen. Wer den `@id`
-ändert, ändert ihn in ds-en mit -- sonst zerfällt die Identität wieder in zwei.
+Die erste Fassung dieses Repos hielt den `@id` auf der lesbaren URL fest, weil ds-ens
+`sibling-works.json` ihn so behauptete. Das war dieselbe Spaltung von der anderen Seite:
+`eipy-skript` leitete seinen `@id` vom generierten Host ab, dieses Repo schrieb die
+lesbare URL hart hinein, und der Graph beschrieb zwei Werke statt eines. ds-en,
+ds-skript, eipy-skript und `konradvoelkel.com` sind seither alle auf die generierten
+Hosts umgestellt (ds-en `SEO-NOTES.md` §21a).
 
+**Der Preis, und er gehört genannt:** Der Bezeichner ist jetzt ein undurchsichtiger
+Hostname, den GitLab vergibt. Wird „unique domain" je abgeschaltet, wandern alle diese
+Dateien mit -- in vier Repositorien. Die lesbare Adresse bleibt als `sameAs` am
+Buchknoten stehen, damit die zweite Schreibweise nicht verlorengeht.
 
 Das Datum kommt aus `git log`, nicht von der Uhr
 --------------------------------------------------

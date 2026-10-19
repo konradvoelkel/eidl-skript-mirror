@@ -4,7 +4,7 @@
     "Book",
     "LearningResource"
   ],
-  "@id": "https://voelkel.pages.cs.uni-duesseldorf.de/eidl-skript/#work",
+  "@id": "__SITE__/#work",
   "url": "__SITE__/",
   "sameAs": [
     "https://voelkel.pages.cs.uni-duesseldorf.de/eidl-skript/"

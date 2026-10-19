@@ -187,14 +187,16 @@ Karten-URL und den Kapiteltitel aus der Seite zurück), dann `publish_urls.py --
 Lokal prüfen heißt: `myst build --html`, dann dieselben vier Aufrufe gegen eine **Kopie**
 von `_build/html` — sie schreiben in das Verzeichnis hinein.
 
-**Diese Seite hat zwei Adressen.** Die Namensraum-URL
+**Diese Seite hat zwei Adressen.** Die lesbare Namensraum-URL
 https://voelkel.pages.cs.uni-duesseldorf.de/eidl-skript/ antwortet mit 308 auf
-https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de/ (2026-10-19
-gemessen). Alles, was abgerufen wird — `SITE_ORIGIN`, Canonical, `og:url`, jede `<loc>`,
-`url` im JSON-LD —, nennt die zweite, weil nur sie 200 liefert. Der `@id` des Buchknotens
-nennt dagegen die **erste**: Er ist ein Bezeichner, kein Abruf, und das englische
-Data-Science-Skript behauptet für dieses Buch bereits genau diesen `@id`. Wer ihn ändert,
-ändert ihn dort mit, sonst zerfällt die Identität in zwei.
+https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de/ — GitLabs „unique domain" ist in
+diesem Projekt eingeschaltet. **Der generierte Host ist der kanonische** (Konrads
+Entscheidung vom 2026-10-19, familienweit): `SITE_ORIGIN`, Canonical, `og:url`, jede
+`<loc>`, `url` und der `@id` im JSON-LD nennen ihn. Der `@id` steht als `__SITE__/#work`
+in `tools/structured-data.json` und nicht als feste Zeichenkette, damit er nicht von
+`SITE_ORIGIN` abdriften kann; die lesbare Adresse bleibt als `sameAs` stehen. Preis:
+Der Bezeichner ist ein Hostname, den GitLab vergibt — wird „unique domain" abgeschaltet,
+ändern sich die entsprechenden Dateien in vier Repositorien zugleich.
 
 Warum das alles überhaupt nachgerüstet wurde, mit Messwerten:
 `devnotes/build-log-2026-10-19.md`. Die Regeln dahinter gelten für alle drei Bücher und
@@ -434,7 +436,9 @@ haben bewusst keinen, weil eine schwache Übung schlechter ist als keine. Die Fo
   ist ein eingechecktes PNG; sie zeigt den alten Titel weiter, bis jemand sie neu
   erzeugt. `tools/social_card.py --verify` meldet das (es liest den Titel aus dem
   tEXt-Block der PNG) und läuft deshalb im `myst-build`-Job.
-* **`SITE_ORIGIN` geändert und den `@id` mitgeändert.** Die beiden sind absichtlich
-  verschieden, siehe oben.
+* **`SITE_ORIGIN` geändert und die Schwesterrepos vergessen.** Der `@id` folgt
+  `SITE_ORIGIN` von selbst — aber `ds-en`, `ds-skript` und `konradvoelkel.com` nennen
+  dieses Buch bei demselben `@id`, und der muss derselbe bleiben, sonst beschreiben die
+  vier Seiten zwei Werke statt eines.
 * **`uv sync` gemacht und den mystmd-Patch vergessen.** Dann sind alle Kommandozeilen im
   lokal gebauten PDF falsch, und zwar unauffällig.
