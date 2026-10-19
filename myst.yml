@@ -40,6 +40,7 @@ project:
     - title: Grundlagen
       children:
        - file: part-grundlagen/00-hintergrundwissen-lineare-algebra.md
+       - file: part-grundlagen/00-hintergrundwissen-analysis.md
        - file: part-grundlagen/01-was-ist-deep-learning.md
        - file: part-grundlagen/02-neuron-perzeptron.md
        - file: part-grundlagen/03-perzeptron-trainieren.md
