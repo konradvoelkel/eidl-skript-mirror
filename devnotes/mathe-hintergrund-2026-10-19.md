@@ -1,9 +1,12 @@
 # Was das Skript an Mathematik still voraussetzt (2026-10-19)
 
 Befundnotiz, kein Plan. Entstanden aus Konrads Frage, worauf das Skript stillschweigend
-aufbaut; das Ergebnis ist das Kapitel „Hintergrundwissen Lineare Algebra“
-(`part-grundlagen/00-hintergrundwissen-lineare-algebra.md`). Ein zweites Kapitel
-„Hintergrundwissen Analysis“ ist angekündigt und **nicht** geschrieben.
+aufbaut; das Ergebnis sind die beiden Kapitel
+`part-grundlagen/hintergrundwissen-lineare-algebra.md` und
+`part-grundlagen/hintergrundwissen-analysis.md`, beide am selben Tag geschrieben. Sie
+stehen **nach** Kapitel 01 und tragen deshalb keine Nummer: Die erste Vorlesung braucht
+keine Mathematik, ab der zweiten wird sie gebraucht, und dort laufen die ersten beiden
+Übungsblätter.
 
 ## Methode
 

@@ -39,9 +39,13 @@ project:
        - file: README.md
     - title: Grundlagen
       children:
-       - file: part-grundlagen/00-hintergrundwissen-lineare-algebra.md
-       - file: part-grundlagen/00-hintergrundwissen-analysis.md
        - file: part-grundlagen/01-was-ist-deep-learning.md
+       # Nach der ersten Vorlesung: VL 1 ist Kapitel 01 und braucht keine Mathematik,
+       # ab VL 2 (Neuron und Perzeptron) schon -- und genau dort laufen die ersten
+       # beiden Uebungsblaetter. Ohne Nummer im Dateinamen, weil die beiden Kapitel
+       # nicht in der Vorlesungsreihenfolge stehen.
+       - file: part-grundlagen/hintergrundwissen-lineare-algebra.md
+       - file: part-grundlagen/hintergrundwissen-analysis.md
        - file: part-grundlagen/02-neuron-perzeptron.md
        - file: part-grundlagen/03-perzeptron-trainieren.md
        - file: part-grundlagen/04-vortrainierte-modelle.md

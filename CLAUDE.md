@@ -224,7 +224,7 @@ Wichtig zur Ordnerstruktur:
 
 | Ordner | Inhalt |
 |---|---|
-| `part-grundlagen/` | Kapitel 00–05: Hintergrundwissen Lineare Algebra und Analysis, Was ist Deep Learning, Neuron/Perzeptron, Training, vortrainierte Modelle, Tensoren |
+| `part-grundlagen/` | Kapitel 01–05: Was ist Deep Learning, Neuron/Perzeptron, Training, vortrainierte Modelle, Tensoren; dazu die zwei Hintergrundkapitel (Lineare Algebra, Analysis) **hinter** Kapitel 01, ohne Nummer im Dateinamen, weil sie nicht in der Vorlesungsreihenfolge stehen |
 | `part-lernen/` | Kapitel 06–13: logistische Regression, Loss und Maximum Likelihood, Gradientenabstieg, Backprop, Autograd, Aktivierungen, Netze von Hand, universelle Approximation |
 | `part-representation-learning/` | Kapitel 14–19: Autoencoder, VAE, word2vec, Graphen, RNN, Transformer |
 | `part-architekturen-anwendungen/` | Kapitel 20–27: CNN, LLMs benutzen, GANs, latente Räume, Anwendungen, Destillation, Optimierer, Adversarial Attacks |

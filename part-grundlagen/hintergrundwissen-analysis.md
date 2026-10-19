@@ -10,7 +10,7 @@ Kettenregel verteilt ihn über die Schichten. Dieses Kapitel stellt die Begriffe
 die dafür gebraucht werden, von der partiellen Ableitung bis zur Jacobi-Matrix, und
 erklärt, was man tut, wenn eine Funktion einen Knick hat.
 
-Wie das [Kapitel zur linearen Algebra](00-hintergrundwissen-lineare-algebra.md) ein
+Wie das [Kapitel zur linearen Algebra](hintergrundwissen-lineare-algebra.md) ein
 Nachschlagekapitel. Wie der Gradient *benutzt* wird, steht im
 [Kapitel „Gradientenabstieg“](../part-lernen/08-gradientenabstieg.md); hier steht, was er
 ist.
