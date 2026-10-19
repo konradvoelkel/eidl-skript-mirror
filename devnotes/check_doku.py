@@ -99,15 +99,15 @@ def fehler_sammeln() -> list[str]:
         elif int(m.group(1)) != ist:
             fehler.append(f"{name}: behauptet {m.group(1)}, tatsächlich {ist}")
 
-    behauptet(claude, r"(\d+) der 27 Kapitel haben einen", "CLAUDE.md/Übungsabschnitte", len(uebungen))
+    behauptet(claude, r"(\d+) der 28 Kapitel haben einen", "CLAUDE.md/Übungsabschnitte", len(uebungen))
     behauptet(todo, r"(\d+) Übungsabschnitte", "TODO.md/Übungsabschnitte", len(uebungen))
     if dropdowns != 7:
         fehler.append(
             f"CLAUDE.md nennt sieben `dropdown`-Boxen, im Buch sind es {dropdowns} — "
             "und `dropdown` versteckt im PDF nichts, also nachsehen, was da offen steht"
         )
-    if len(kapitel) != 27:
-        fehler.append(f"Doku spricht von 27 Kapiteln, gefunden: {len(kapitel)}")
+    if len(kapitel) != 28:
+        fehler.append(f"Doku spricht von 28 Kapiteln, gefunden: {len(kapitel)}")
 
     # ── 3. --min-pages hier und in der CI ───────────────────────────────────────
     ci = (WURZEL / ".gitlab-ci.yml").read_text(encoding="utf-8")
@@ -161,7 +161,7 @@ def fehler_sammeln() -> list[str]:
         if m:
             seiten = int(m.group(1))
             behauptet(claude, r"PDF \*\*(\d+) Seiten", "CLAUDE.md/Seitenzahl", seiten)
-            behauptet(todo, r"\*\*27 Kapitel plus Glossar, (\d+) Seiten", "TODO.md/Seitenzahl", seiten)
+            behauptet(todo, r"\*\*28 Kapitel plus Glossar, (\d+) Seiten", "TODO.md/Seitenzahl", seiten)
             untergrenze = int(m_ci.group(1)) if m_ci else 0
             if seiten < untergrenze:
                 fehler.append(f"PDF hat {seiten} Seiten, unter der CI-Untergrenze {untergrenze}")

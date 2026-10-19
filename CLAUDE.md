@@ -65,15 +65,17 @@ andere als die angeheftete (3.11.2), und genau das ist passiert. Die Gruppe `fig
 trotzdem keine Gigabyte. Gegenprobe: zweimal laufen lassen, der zweite Lauf muss
 byte-gleich sein.
 
-Erwartung eines gesunden Laufs (Stand 2026-10-15, nach der fachlichen Durchsicht
-aller 27 Kapitel und des Glossars): HTML ohne Warnungen, PDF **112 Seiten A4** lokal
-(veröffentlicht 113, siehe unten), 0 LaTeX-Fehler, 0 fehlende
-Glyphen, 5 überlange Zeilen. Die `--min-pages`-Untergrenze
+Erwartung eines gesunden Laufs (Stand 2026-10-19, nach dem Kapitel „Hintergrundwissen
+Lineare Algebra“; die fachliche Durchsicht vom 2026-10-15 deckte die 27 Kapitel davor
+und das Glossar ab): HTML ohne Warnungen, PDF **115 Seiten A4** lokal, 0 LaTeX-Fehler,
+0 fehlende Glyphen, 5 überlange Zeilen. Das veröffentlichte PDF hatte bis zum 2026-10-19
+stets **eine Seite mehr** als das lokale (siehe unten); für den neuen Stand ist das noch
+nicht nachgemessen. Die `--min-pages`-Untergrenze
 soll einen *abgebrochenen* Lauf fangen, nicht eine gewollte Kürzung — sie steht deshalb
 deutlich unter der tatsächlichen Seitenzahl, in der CI auf demselben Wert.
 
-**Lokal und CI weichen um eine Seite ab, und das bleibt so**: hier 112 Seiten, das
-veröffentlichte PDF hat 113. Die erste Abweichung steht auf Seite 28 in einem Codeblock,
+**Lokal und CI weichen um eine Seite ab, und das bleibt so**: hier 115 Seiten, das
+veröffentlichte PDF hatte am 2026-10-19 vor dem neuen Kapitel 113 gegen lokal 112. Die erste Abweichung steht auf Seite 28 in einem Codeblock,
 der eine Zeile anders bricht — es ist der *Satz*, nicht der Inhalt. Die Ursache ist am
 2026-10-15 gemessen worden, und sie ist nicht die, die hier vom 2026-09-29 bis dahin stand:
 
@@ -222,7 +224,7 @@ Wichtig zur Ordnerstruktur:
 
 | Ordner | Inhalt |
 |---|---|
-| `part-grundlagen/` | Kapitel 01–05: Was ist Deep Learning, Neuron/Perzeptron, Training, vortrainierte Modelle, Tensoren |
+| `part-grundlagen/` | Kapitel 00–05: Hintergrundwissen Lineare Algebra, Was ist Deep Learning, Neuron/Perzeptron, Training, vortrainierte Modelle, Tensoren |
 | `part-lernen/` | Kapitel 06–13: logistische Regression, Loss und Maximum Likelihood, Gradientenabstieg, Backprop, Autograd, Aktivierungen, Netze von Hand, universelle Approximation |
 | `part-representation-learning/` | Kapitel 14–19: Autoencoder, VAE, word2vec, Graphen, RNN, Transformer |
 | `part-architekturen-anwendungen/` | Kapitel 20–27: CNN, LLMs benutzen, GANs, latente Räume, Anwendungen, Destillation, Optimierer, Adversarial Attacks |
@@ -349,8 +351,9 @@ fängt für das ganze Buch an, nicht für ein Kapitel.
 ## Übungen
 
 Jedes Kapitel, dem eine sinnvolle Aufgabe zuzuordnen ist, endet mit einem Abschnitt
-`## Übung` **vor** der „Weiterlesen“-Box. 23 der 27 Kapitel haben einen; 04, 17, 21 und 22
-haben bewusst keinen, weil eine schwache Übung schlechter ist als keine. Die Form:
+`## Übung` **vor** der „Weiterlesen“-Box. 23 der 28 Kapitel haben einen; 04, 17, 21 und 22
+haben bewusst keinen, weil eine schwache Übung schlechter ist als keine, und das
+Hintergrundkapitel 00 keinen, weil seine Aufgaben auf dem ersten Übungsblatt stehen. Die Form:
 
 * **Ein bis drei Aufgaben**, mit Papier in fünf bis fünfzehn Minuten zu schaffen. Keine
   Programmieraufgaben — die gehören auf die echten Übungsblätter (TeX, ILIAS).

@@ -515,3 +515,7 @@ wav
 Řehůřeks
 Dhariwal
 Nichol
+Definitheit
+Hadamard
+Trennebene
+bilinear
