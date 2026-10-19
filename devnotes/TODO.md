@@ -1,6 +1,6 @@
 # TODO eidl-skript
 
-Stand: 2026-09-29, nach der fachlichen Durchsicht. **Hier stehen nur offene Punkte**; was erledigt ist,
+Stand: 2026-10-19, nach dem Nachrüsten der Veröffentlichungs-Metadaten. **Hier stehen nur offene Punkte**; was erledigt ist,
 steht in [`erledigt.md`](erledigt.md). Punkte mit **[Entscheidung]** brauchen eine
 Antwort von Konrad; ein Vorschlag steht jeweils dabei.
 
@@ -216,6 +216,28 @@ Textfassung von Seite und Objektbaum: `~/Sciebo/hhu/eidl-26/ilias/` (analog zu
 - [ ] **`imagemagick` ist bewusst nicht im Image.** Dieses Buch hat 45 PNG und 2 JPG und kein einziges SVG, also
   wandelt MyST nichts. Sobald ein SVG dazukommt, meldet MyST das auf stdout, und `check_pdf_build.py --myst-log`
   liest es mit — dann gehören `imagemagick` und `librsvg2-bin` ins Dockerfile (wie in EiPy).
+- [ ] **Nach dem ersten Deploy mit den Veröffentlichungs-Metadaten nachsehen** (2026-10-19
+  gebaut, noch nicht veröffentlicht): `curl` auf `/sitemap.xml` (kein `localhost`, 30 echte
+  URLs), auf `/` (`og:image` absolut, ein `rel="canonical"`, ein `ld+json`-Block) und die
+  Karte einmal in einem Link-Vorschau-Dienst ansehen. „Lokal grün“ und „veröffentlicht“ sind
+  zwei verschiedene Aussagen; Rezept in `../CLAUDE.md`.
+- [ ] **29-mal dieselbe `og:description`.** Keine Kapiteldatei hat eine eigene
+  `description:` im Frontmatter, also tragen alle 29 Kapitelseiten die Beschreibung des
+  Projekts — als Suchergebnis-Text 29-mal derselbe Satz, und im JSON-LD dieselbe
+  `description` je Kapitel. *Vorschlag:* je Kapitel ein Satz im Frontmatter, beim nächsten
+  inhaltlichen Durchgang mitgeschrieben. Inhaltsarbeit, kein Werkzeug.
+- [ ] **`freshness.py` aus ds-skript portieren** (sichtbares Datum auf der Landingpage,
+  `article:modified_time` je Seite, `<lastmod>` je Sitemap-Eintrag). `inject_jsonld.py`
+  liest sein Datum einstweilen selbst aus `git log`; `<lastmod>` fehlt noch ganz, und das
+  ist das Signal, an dem ein Crawler entscheidet, wann er wiederkommt.
+- [ ] **`vendor_assets.py` aus ds-skript portieren.** Das Theme holt KaTeX, Font-Awesome und
+  das Matplotlib-Widget-CSS weiterhin von zwei CDN — drei render-blockierende Stylesheets
+  von fremden Servern, und das Buch zu lesen kontaktiert damit Dritte. Dort gelöst samt
+  Prüfung (`check_css_assets.py`) und Herkunftsnachweis.
+- [ ] **Bildmaße und Gliederungsreservierung** (ds-en `head_meta.py`, Abschnitte 7 und 9):
+  `width`/`height` je Abbildung im Markup *und* im Stylesheet, dazu eine reservierte Höhe
+  für die Gliederung. Beides senkt CLS; beides hängt dort an Messungen, die hier erst
+  gemacht werden müssten, bevor man Zahlen behauptet.
 - `_site/sidebar_footer.md` leer, `navbar_end.md` nur „Inhaltsverzeichnis“ – wie bei EiPy; lassen.
 - Logo: `logo/` enthält SVGs und Exporte; für Rocket.Chat `logo/eidl-logo-512.png`.
 

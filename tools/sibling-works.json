@@ -1,0 +1,45 @@
+[
+  {
+    "@type": [
+      "Book",
+      "LearningResource"
+    ],
+    "@id": "https://voelkel.pages.cs.uni-duesseldorf.de/ds-skript/#work",
+    "url": "https://voelkel.pages.cs.uni-duesseldorf.de/ds-skript/",
+    "name": "Data Science: von der Stochastik zum Machine Learning mit Python",
+    "inLanguage": "de",
+    "isAccessibleForFree": true,
+    "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "learningResourceType": "Vorlesungsskript",
+    "educationalLevel": "Bachelor",
+    "workTranslation": {
+      "@type": "Book",
+      "name": "Data Science: from stochastics to machine learning with Python",
+      "inLanguage": "en",
+      "url": "https://datascience.konradvoelkel.com/"
+    },
+    "author": {
+      "@id": "__SITE__/#author"
+    }
+  },
+  {
+    "@type": [
+      "Book",
+      "LearningResource"
+    ],
+    "@id": "https://voelkel.pages.cs.uni-duesseldorf.de/eipy-skript/#work",
+    "url": "https://eipy-skript-7dd28c.pages.cs.uni-duesseldorf.de/",
+    "sameAs": [
+      "https://voelkel.pages.cs.uni-duesseldorf.de/eipy-skript/"
+    ],
+    "name": "Einführung in Python",
+    "inLanguage": "de",
+    "isAccessibleForFree": true,
+    "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "learningResourceType": "Vorlesungsskript",
+    "educationalLevel": "Bachelor",
+    "author": {
+      "@id": "__SITE__/#author"
+    }
+  }
+]

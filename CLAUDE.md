@@ -40,6 +40,8 @@ uv run --no-project devnotes/check_pdf_build.py --min-pages 100  # prüft das ge
 uv run --only-group dev devnotes/check_ci_yaml.py    # vor jedem Push, wenn .gitlab-ci.yml angefasst wurde
 uv run --no-project devnotes/check_doku.py           # prüft diese Datei und devnotes/ gegen das Repo
 uv run --only-group figures devnotes/make_figures.py # Abbildungen nach images/ (nie mit System-Python)
+python3 tools/social_card.py --verify                # Vorschaukarte: Maß und Titel (stdlib)
+uv run --only-group figures python tools/social_card.py  # Karte neu erzeugen (nur bei Titel-/Farbwechsel)
 ```
 
 **`--no-project` ist kein Schmuck.** Vier der fünf Skripte hier brauchen nur die
@@ -164,12 +166,49 @@ Zeilenumbruch enthalten können: `pdftotext` zerlegt lange Sätze, ein Wächter 
 heißt das“ wäre am 2026-09-27 nie fertig geworden. Eine Seitenzahl oder ein einzelnes Wort
 ist der bessere Marker.
 
+## Veröffentlichungs-Metadaten
+
+Was eine Suchmaschine oder eine Antwortmaschine über dieses Buch erfährt, entsteht
+**nicht** beim Bauen, sondern danach: MyST kennt die Adresse der Seite nicht und schreibt
+die seines eigenen Dev-Servers in `sitemap.xml` und `robots.txt`, emittiert keinen
+Canonical und keine strukturierten Daten. Vier Skripte in `tools/` tragen das nach; sie
+laufen im `pages`-Job und brauchen **kein einziges Python-Paket**.
+
+| Skript | Was |
+|---|---|
+| `tools/social_card.py` | Erzeugt und prüft `images/social-card.png` (1200×630). Die Karte ist eingecheckt und steht als `thumbnail:` in `myst.yml` |
+| `tools/publish_urls.py` | Echte Adresse in Sitemap und `robots.txt`, jede `<loc>` mit Schrägstrich, `og:image` absolut, ein Canonical je Seite; `--check` prüft das am Artefakt nach |
+| `tools/head_meta.py` | `og:url`, `og:site_name`, `og:type`, `og:locale`, `twitter:card`; `lang="de"` samt Wächter gegen die Hydration; zu kleine Abbildungen als Vorschaukarte ersetzen; Abbildungen unter der Falz verzögert laden |
+| `tools/inject_jsonld.py` | JSON-LD: ein Buchknoten samt den zwei anderen Skripten desselben Autors auf der Landingpage, je ein Kapitelknoten mit Brotkrume auf den 29 übrigen Seiten. Daten in `tools/structured-data.json` und `tools/sibling-works.json` |
+
+**Die Reihenfolge ist nicht beliebig**: `publish_urls.py`, dann `head_meta.py` (og:url
+bekommt dieselbe URL wie der Canonical), dann `inject_jsonld.py` (liest die absolute
+Karten-URL und den Kapiteltitel aus der Seite zurück), dann `publish_urls.py --check`.
+Lokal prüfen heißt: `myst build --html`, dann dieselben vier Aufrufe gegen eine **Kopie**
+von `_build/html` — sie schreiben in das Verzeichnis hinein.
+
+**Diese Seite hat zwei Adressen.** Die Namensraum-URL
+https://voelkel.pages.cs.uni-duesseldorf.de/eidl-skript/ antwortet mit 308 auf
+https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de/ (2026-10-19
+gemessen). Alles, was abgerufen wird — `SITE_ORIGIN`, Canonical, `og:url`, jede `<loc>`,
+`url` im JSON-LD —, nennt die zweite, weil nur sie 200 liefert. Der `@id` des Buchknotens
+nennt dagegen die **erste**: Er ist ein Bezeichner, kein Abruf, und das englische
+Data-Science-Skript behauptet für dieses Buch bereits genau diesen `@id`. Wer ihn ändert,
+ändert ihn dort mit, sonst zerfällt die Identität in zwei.
+
+Warum das alles überhaupt nachgerüstet wurde, mit Messwerten:
+`devnotes/build-log-2026-10-19.md`. Die Regeln dahinter gelten für alle drei Bücher und
+stehen in den Schwesterrepos, aus denen die Skripte stammen (`~/Sciebo/hhu/ds2026/ds-en`,
+dort `SEO-NOTES.md`, und `~/Sciebo/hhu/ds2026/ds-skript`).
+
 Wichtig zur Ordnerstruktur:
 
 * `_site/` ist **Quellcode** (eigenes CSS, Navbar-Fragmente, und unter `_site/vendor/` das
   mitgelieferte Site-Template).
 * `_build/`, `exports/` und `public/` sind **Artefakte** — nie von Hand bearbeiten,
   gitignored.
+* `tools/` sind die Skripte der **Veröffentlichung** (siehe oben) — sie laufen in der
+  CI und schreiben am gebauten HTML, nicht am Buch.
 * `devnotes/` sind Arbeitsnotizen des Autors, nicht Teil des Buchs (nicht im TOC).
   `devnotes/README.md` sagt, welche Datei wofür da ist; `devnotes/TODO.md` ist die eine
   Liste offener Punkte.
@@ -186,7 +225,8 @@ Wichtig zur Ordnerstruktur:
 | `part-representation-learning/` | Kapitel 14–19: Autoencoder, VAE, word2vec, Graphen, RNN, Transformer |
 | `part-architekturen-anwendungen/` | Kapitel 20–27: CNN, LLMs benutzen, GANs, latente Räume, Anwendungen, Destillation, Optimierer, Adversarial Attacks |
 | `slides/` | Beamer-Foliensätze VL 01–15 (`build.sh`, gemeinsamer `header.tex`) |
-| `images/`, `logo/` | Abbildungen, Logos |
+| `images/`, `logo/` | Abbildungen, Logos; dazu `images/social-card.png`, die Vorschaukarte |
+| `tools/` | Skripte der Veröffentlichung: Vorschaukarte, Sitemap-URLs, Kopf-Tags, JSON-LD |
 | `notebooks/` | Notebooks aus 2025; nur `latent-classifier.ipynb` hat noch eine Funktion — es hängt als `downloads:` am Kapitel 21 |
 | `glossar.md` | Klausurbegriffe mit Link ins jeweilige Kapitel (im TOC, Abschnitt „Anhang“) |
 | `kurs-2026-27.md` | Semesterplan, Termine, Organisatorisches — **nicht im TOC**, also nicht Teil des Buchs |
@@ -390,5 +430,11 @@ haben bewusst keinen, weil eine schwache Übung schlechter ist als keine. Die Fo
   unquotierten Skalar macht aus einer Skriptzeile eine Map — die Datei bleibt **valides
   YAML**, GitLab lehnt sie aber ab (`script config should be a string`), und dann läuft
   **kein einziger** Job, auch keine Prüfung. `uv run --only-group dev devnotes/check_ci_yaml.py` vor dem Push.
+* **Den Buchtitel in `myst.yml` geändert und die Vorschaukarte vergessen.** Die Karte
+  ist ein eingechecktes PNG; sie zeigt den alten Titel weiter, bis jemand sie neu
+  erzeugt. `tools/social_card.py --verify` meldet das (es liest den Titel aus dem
+  tEXt-Block der PNG) und läuft deshalb im `myst-build`-Job.
+* **`SITE_ORIGIN` geändert und den `@id` mitgeändert.** Die beiden sind absichtlich
+  verschieden, siehe oben.
 * **`uv sync` gemacht und den mystmd-Patch vergessen.** Dann sind alle Kommandozeilen im
   lokal gebauten PDF falsch, und zwar unauffällig.

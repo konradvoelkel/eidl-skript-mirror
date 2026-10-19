@@ -1,0 +1,80 @@
+{
+  "@context": "https://schema.org",
+  "@type": [
+    "Book",
+    "LearningResource"
+  ],
+  "@id": "https://voelkel.pages.cs.uni-duesseldorf.de/eidl-skript/#work",
+  "url": "__SITE__/",
+  "sameAs": [
+    "https://voelkel.pages.cs.uni-duesseldorf.de/eidl-skript/"
+  ],
+  "name": "Einführung in Deep Learning",
+  "description": "Vorlesungsskript Deep Learning: vom Perzeptron über Backpropagation und Autoencoder bis zu Transformern und großen Sprachmodellen, nachgerechnet und in PyTorch.",
+  "inLanguage": "de",
+  "isAccessibleForFree": true,
+  "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+  "learningResourceType": "Vorlesungsskript",
+  "educationalLevel": "Bachelor",
+  "datePublished": "2026-09-17",
+  "copyrightYear": 2026,
+  "teaches": [
+    "Neuron, Perzeptron und das Training eines linearen Klassifikators",
+    "Loss-Funktionen und Maximum Likelihood",
+    "Gradientenabstieg, Backpropagation und automatisches Differenzieren",
+    "Aktivierungsfunktionen und universelle Approximation",
+    "Autoencoder, Variational Autoencoder und latente Räume",
+    "Wortvektoren, Graphen und rekurrente Netze",
+    "Transformer und der Umgang mit großen Sprachmodellen",
+    "Faltungsnetze, Generative Adversarial Networks und Destillation",
+    "Optimierer und Adversarial Attacks",
+    "Arbeiten mit Tensoren und vortrainierten Modellen in PyTorch"
+  ],
+  "about": [
+    {
+      "@type": "Thing",
+      "name": "Deep Learning"
+    },
+    {
+      "@type": "Thing",
+      "name": "Künstliche neuronale Netze"
+    },
+    {
+      "@type": "Thing",
+      "name": "Maschinelles Lernen"
+    },
+    {
+      "@type": "Thing",
+      "name": "Große Sprachmodelle"
+    },
+    {
+      "@type": "Thing",
+      "name": "PyTorch"
+    }
+  ],
+  "author": {
+    "@type": "Person",
+    "@id": "__SITE__/#author",
+    "name": "Konrad Völkel",
+    "alternateName": "Konrad Voelkel",
+    "honorificPrefix": "Dr.",
+    "jobTitle": "Academic Teacher",
+    "url": "https://www.konradvoelkel.com/",
+    "mainEntityOfPage": "https://www.konradvoelkel.com/",
+    "affiliation": {
+      "@type": "CollegeOrUniversity",
+      "name": "Heinrich-Heine-Universität Düsseldorf",
+      "url": "https://www.hhu.de"
+    },
+    "sameAs": [
+      "https://www.konradvoelkel.com/",
+      "https://orcid.org/0000-0002-4144-4199",
+      "https://arxiv.org/a/0000-0002-4144-4199.html",
+      "https://www.cs.hhu.de/lehrstuehle-und-arbeitsgruppen/dialog-systems-and-machine-learning/unser-team/voelkel",
+      "https://scholar.google.de/citations?user=94jR8gUAAAAJ",
+      "https://www.linkedin.com/in/konradvoelkel/",
+      "https://github.com/konradvoelkel",
+      "https://gitlab.cs.uni-duesseldorf.de/voelkel"
+    ]
+  }
+}

@@ -1,6 +1,9 @@
 # devnotes
 
-Arbeitsnotizen und Prüfskripte zum Skript, nicht Teil des Buchs. Stand 2026-10-15.
+Arbeitsnotizen und Prüfskripte zum Skript, nicht Teil des Buchs. Stand 2026-10-19.
+Die Skripte der **Veröffentlichung** liegen dagegen in `../tools/` (Vorschaukarte,
+Sitemap-URLs, Kopf-Tags, JSON-LD) — sie laufen im Deploy und gehören nicht zu den
+Arbeitsnotizen; `build-log-2026-10-19.md` erklärt sie.
 
 | Datei | Was | Status |
 |---|---|---|
@@ -16,6 +19,7 @@ Arbeitsnotizen und Prüfskripte zum Skript, nicht Teil des Buchs. Stand 2026-10-
 | `folien-review-vl02-2026-10-02.md` | Durchsicht des VL-2-Decks nach der Playbook-Prüfliste: σ gegen τ (Wurzel in `make_figures.py`), fünf Fragen ohne Antworten, XOR ohne Auflösung, Bias-Update, Bildbreiten — mit Gegenprobe | abgeschlossen, alles umgesetzt (2026-10-02) |
 | `build-log-2026-09-27.md` | Playbook-Durchgang: Messwerte vorher/nachher, die zwei Konversions-Fehlerklassen, minted zurück, Gegenprobe im Image | Protokoll, abgeschlossen |
 | `build-log-2026-10-15.md` | Abhängigkeiten angehoben: mystmd 1.10.1 auf 1.11.0 (beide Anheftungen), numpy, torch, transformers, huggingface-hub 2.x; Messwerte des Baus vorher/nachher, zwei Randbefunde (`scipy` undeklariert, torch cu130 gegen Treiber 12.9) | Protokoll, abgeschlossen |
+| `build-log-2026-10-19.md` | Veröffentlichungs-Metadaten nachgerüstet: Vorschaukarte, Sitemap ohne `localhost`, Canonical, JSON-LD mit den drei Werken desselben Autors; Messwerte, die zwei Adressen dieser Seite, was aus den Schwesterbüchern nicht portiert wurde | Protokoll, abgeschlossen |
 | `patch_myst_tex.py` | Repariert den mystmd-Fehler, der vor jeden Bindestrich in Codeblöcken ein Leerzeichen setzt | **nach jedem `uv sync`** laufen lassen; im CI-Image automatisch |
 | `check_pdf_build.py` | Prüft das gebaute PDF: LaTeX-Fehler, Abbruch, fehlende Glyphen, Seitenzahl, Stichproben | läuft im CI-Job `build-pdf`, lokal vor jedem PDF-Commit |
 | `pruefliste_durchsicht.py` | Erzeugt die Prüfliste der fachlichen Durchsicht: Formelblöcke, Zahlen, Jahre, Quellen, Bibliotheksangaben, Antwortproben, Boxen und Links je Kapitel, in Vorlesungsreihenfolge | für die Durchsicht; liest nur, Ausgabe in den Scratchpad |

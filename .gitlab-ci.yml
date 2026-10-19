@@ -6,6 +6,14 @@ stages:
 variables:
   BASE_URL: "" # "/$CI_PROJECT_NAME"
   HOST: "127.0.0.1"
+  # Die Adresse, unter der das Buch wirklich steht. MyST kennt sie beim Bauen nicht und
+  # schreibt statt dessen die seines eigenen Dev-Servers in sitemap.xml und robots.txt;
+  # der pages-Job traegt sie nach (tools/publish_urls.py).
+  #
+  # Bewusst der 131e30-Host und nicht "voelkel.pages.cs.uni-duesseldorf.de/eidl-skript":
+  # Diese zweite Schreibweise antwortet mit 308 auf die erste (am 2026-10-19 gemessen).
+  # Canonical, og:url und jede <loc> muessen die URL nennen, die 200 liefert.
+  SITE_ORIGIN: "https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de"
 
 # Baut das Projekt-Image neu, wenn sich sein Rezept aendert. Ohne das bleibt das Image im
 # Registry auf dem Stand seines letzten Baus stehen, waehrend das Repo etwas anderes
@@ -72,6 +80,10 @@ myst-build:
       - stuck_or_timeout_failure
   before_script:
     - python3 _site/vendor/install_template.py
+    # Die Vorschaukarte ist eingecheckt und steht als `thumbnail:` in myst.yml. Geprueft
+    # wird die Form (1200x630) und, aus dem tEXt-Block der PNG, ob sie noch den Titel
+    # aus myst.yml zeigt -- erzeugt wird sie nie in der CI. Nur Standardbibliothek.
+    - python3 tools/social_card.py --verify
   script:
     - node -v
     - myst --version
@@ -125,17 +137,49 @@ build-pdf:
 # verlinkt genau diesen Pfad im Buch.
 pages:
   stage: deploy
-  image: busybox:latest
+  # Frueher busybox:latest. Jetzt Alpine mit Python, weil die drei Nachbearbeitungen
+  # unten Python brauchen; installiert wird dabei **kein** Paket, sie kommen mit der
+  # Standardbibliothek aus (CLAUDE.md, bewusste Entscheidung 5).
+  image: python:3.13-alpine
   needs:
     - myst-build
     - build-pdf
+  variables:
+    # tools/inject_jsonld.py liest das Aenderungsdatum je Kapitel aus "git log" der
+    # Quelldatei. GitLab klont flach (GIT_DEPTH 20); gegen einen Commit ohne Eltern
+    # meldet git *jede* Datei als von ihm geaendert, und dann traegt jede Seite die
+    # Sekunde des Deploys statt ihres echten Datums. Also volle Historie fuer diesen Job.
+    GIT_DEPTH: "0"
   script:
+    # git nachinstallieren: python:3.13-alpine bringt keins mit, und ohne git bricht
+    # inject_jsonld.py ab (absichtlich -- es raet kein Datum).
+    - apk add --no-cache git >/dev/null
     - mv _build/html public
     # Ganze Zeile in Anfuehrungszeichen: Ein `: ` in einem unquotierten YAML-Skalar macht
     # aus dem Listeneintrag eine Map. Die Datei bleibt dabei valides YAML, GitLab lehnt sie
     # aber ab ("script config should be a string") -- und dann laeuft kein einziger Job.
     # devnotes/check_ci_yaml.py prueft das vor dem Push.
     - 'if [ -f exports/eidl-skript.pdf ]; then cp exports/eidl-skript.pdf public/; echo "PDF veroeffentlicht"; else echo "WARNUNG - kein PDF im Artefakt, Website ohne PDF"; fi'
+    # --- Veroeffentlichungs-Metadaten ---------------------------------------------------
+    # 1. Die echte Adresse in sitemap.xml und robots.txt, jede <loc> mit Schraegstrich,
+    #    og:image absolut, Canonical je Seite. Ohne diesen Schritt nennt die Sitemap
+    #    30-mal "http://localhost:3000" und die Vorschaukarte bleibt in jedem geteilten
+    #    Link leer. Begruendung im Docstring des Skripts.
+    - python3 tools/publish_urls.py "$SITE_ORIGIN$BASE_URL" public --base "$BASE_URL"
+    # 2. og:url, og:site_name, og:type, og:locale, twitter:card; lang="de" samt Waechter
+    #    gegen die Hydration; zu kleine Abbildungen als Vorschaukarte durch die echte
+    #    Karte ersetzen; Abbildungen unter der Falz verzoegert laden. **Nach** Schritt 1:
+    #    og:url bekommt dieselbe URL wie der Canonical.
+    - python3 tools/head_meta.py "$SITE_ORIGIN$BASE_URL" public --lang de
+    # 3. JSON-LD: ein Buchknoten mit den zwei anderen Skripten desselben Autors auf der
+    #    Landingpage, je ein Kapitelknoten mit Brotkrume auf den 29 uebrigen Seiten.
+    #    **Nach** 1 und 2: Es liest die absolute Karten-URL und den Kapiteltitel zurueck.
+    - python3 tools/inject_jsonld.py "$SITE_ORIGIN$BASE_URL" public
+    # Und danach am fertigen Artefakt nachzaehlen statt dem Protokoll zu glauben: kein
+    # localhost, je genau ein Canonical, Sitemap-Eintraege gleich gebaute Seiten, keine
+    # relative Bild-URL. Ein fehlendes Stueck davon ist im Browser unsichtbar und nur
+    # von aussen zu messen -- derselbe Fehlertyp wie die localhost-Sitemap selbst.
+    - python3 tools/publish_urls.py "$SITE_ORIGIN$BASE_URL" public --check
   artifacts:
     paths:
       - public

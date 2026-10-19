@@ -5,7 +5,12 @@ project:
   short_title: EiDL
   title: Einführung in Deep Learning
   subtitle: Skript zur Vorlesung im Bachelor Informatik
-  description: Skript zur Vorlesung+Übung an der HHU Wintersemester 2026/27
+  description: "Vorlesungsskript Deep Learning: vom Perzeptron über Backpropagation und Autoencoder bis zu Transformern und großen Sprachmodellen, nachgerechnet und in PyTorch."
+  # Vorschaukarte für jede Seite ohne eigene Abbildung. Ohne diese Zeile emittiert MyST
+  # gar kein og:image -- dieses Buch hatte keines --, und eine Antwortmaschine, die die
+  # Seite zitiert, sucht sich dann ein fremdes Bild dazu. Erzeugt und geprüft von
+  # tools/social_card.py, 1200x630.
+  thumbnail: images/social-card.png
   subject: Deep Learning
   keywords: [deep learning, neural networks, pytorch, course]
   authors:
