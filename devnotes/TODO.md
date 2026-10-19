@@ -221,6 +221,14 @@ Textfassung von Seite und Objektbaum: `~/Sciebo/hhu/eidl-26/ilias/` (analog zu
   URLs), auf `/` (`og:image` absolut, ein `rel="canonical"`, ein `ld+json`-Block) und die
   Karte einmal in einem Link-Vorschau-Dienst ansehen. „Lokal grün“ und „veröffentlicht“ sind
   zwei verschiedene Aussagen; Rezept in `../CLAUDE.md`.
+- [ ] **Die Karten-URL wechselt bei jedem Deploy.** MyST vergibt den Fingerabdruck nicht
+  nach dem Inhalt: Dieselbe, byte-gleiche PNG hieß in drei Läufen `3fd4fb7a…`,
+  `1b231dd7…` und `130ef50e…`, und die URL des vorigen Laufs antwortet mit 404. Eine
+  Plattform, die ihre zwischengespeicherte Vorschau erneuert, greift also ins Leere, bis
+  sie die Seite neu liest. *Vorschlag:* die Karte im `pages`-Job zusätzlich unter einem
+  festen Namen neben die Seite kopieren (aus dem Unterordner build/ des Artefakts in
+  dessen Wurzel) und `og:image` darauf zeigen lassen — eine Zeile im Job und eine in
+  `tools/head_meta.py`.
 - [ ] **29-mal dieselbe `og:description`.** Keine Kapiteldatei hat eine eigene
   `description:` im Frontmatter, also tragen alle 29 Kapitelseiten die Beschreibung des
   Projekts — als Suchergebnis-Text 29-mal derselbe Satz, und im JSON-LD dieselbe
