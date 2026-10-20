@@ -160,6 +160,19 @@ pages:
     # aber ab ("script config should be a string") -- und dann laeuft kein einziger Job.
     # devnotes/check_ci_yaml.py prueft das vor dem Push.
     - 'if [ -f exports/eidl-skript.pdf ]; then cp exports/eidl-skript.pdf public/; echo "PDF veroeffentlicht"; else echo "WARNUNG - kein PDF im Artefakt, Website ohne PDF"; fi'
+    # Google Search Console, Datei-Methode. Die Datei aus der Search Console liegt in
+    # `_site/` und wird hier nach `public/` kopiert; sie ist dann unter
+    # `<pages-url>/google<token>.html` abrufbar. Kein Geheimnis -- oeffentlich abrufbar
+    # zu sein ist ja gerade der Eigentumsnachweis.
+    #
+    # Die Meta-Tag-Methode waere seit tools/head_meta.py ebenfalls billig (das Skript
+    # patcht den <head> ohnehin). Die Datei bleibt trotzdem die Wahl: Sie haengt an
+    # keiner Annahme ueber das erzeugte HTML und ueberlebt damit jedes MyST-Update.
+    #
+    # Die drei Nachbearbeitungen unten fassen sie nicht an -- alle drei laufen ueber
+    # `index.html`, und `--check` prueft Canonicals nur dort. Fehlt die Datei, laeuft
+    # der Job trotzdem durch.
+    - 'if ls _site/google*.html >/dev/null 2>&1; then cp _site/google*.html public/; echo "Google-Verifikationsdatei veroeffentlicht"; else echo "Hinweis - keine Google-Verifikationsdatei in _site/"; fi'
     # --- Veroeffentlichungs-Metadaten ---------------------------------------------------
     # 1. Die echte Adresse in sitemap.xml und robots.txt, jede <loc> mit Schraegstrich,
     #    og:image absolut, Canonical je Seite. Ohne diesen Schritt nennt die Sitemap
