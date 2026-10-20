@@ -198,3 +198,67 @@ pages:
       - public
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+# Spiegelt dieses Repository nach github.com/konradvoelkel/eidl-skript-mirror -- nach dem
+# Vorbild des gleichnamigen Jobs in ds-skript, der dort seit dem 2026-10-15 laeuft. Die
+# Kommentare halten fest, woran dessen erste Anlaeufe gescheitert sind, damit das hier nicht
+# ein zweites Mal durchgespielt wird.
+#
+# Zwei Gruende fuer den Spiegel: Die HHU-GitLab laesst `git` ueber HTTP nur mit Zugangsdaten
+# zu (die Projektseite antwortet 200, `info/refs` antwortet 401), ein fremder Runner kommt
+# also nicht an dieses Repo heran; und Fehlermeldungen sind auf GitHub leichter einzureichen.
+# **GitLab bleibt die Quelle.** In den Spiegel schreibt nichts ausser diesem Job.
+#
+# **Kein `allow_failure`, mit Absicht.** Ein still scheiternder Spiegel sieht von aussen genau
+# so aus wie "hier hat sich nichts geaendert", und diese Stille ist die eigentliche Gefahr.
+mirror-to-github:
+  stage: deploy
+  # `entrypoint: [""]` ist noetig, nicht Kosmetik: alpine/git setzt `git` selbst als
+  # Entrypoint, der Runner haengt seinen Shell-Aufruf hinten an, und der Job stirbt sofort
+  # mit "git: 'sh' is not a git command". Genau so ist der erste Versuch in ds-skript
+  # gescheitert.
+  #
+  # Fassung angeheftet, wie beim kaniko-Image oben -- ein wanderndes `latest` ist dieselbe
+  # unversionierte Abhaengigkeit eine Ebene tiefer. Das ist der einzige bewusste Unterschied
+  # zum Job in ds-skript, der dort auf `latest` steht.
+  image:
+    name: alpine/git:v2.54.0
+    entrypoint: [""]
+  variables:
+    # Dieser Job macht seinen eigenen Spiegelklon; der gewoehnliche Checkout von GitLab waere
+    # ein flacher Baum mit einem Branch und damit genau das Falsche.
+    GIT_STRATEGY: none
+  # Ohne das zieht der Job die Artefakte der build-Stage -- Website und PDF, zweistellige
+  # Megabyte -- fuer nichts: Er klont ja selbst.
+  dependencies: []
+  script:
+    # Frueh und verstaendlich abbrechen, statt in einen anonymen Push zu laufen, der mit
+    # "Authentication failed" endet und wie ein GitHub-Problem aussieht.
+    - test -n "$GITHUB_MIRROR_TOKEN" || { echo "FEHLER - CI-Variable GITHUB_MIRROR_TOKEN fehlt"; exit 1; }
+    # Das Token steht bewusst **nicht** in der Push-URL. GitLab maskiert es zwar im Log, aber
+    # die Maskierung greift nur auf exakte Treffer, und eine Remote-URL taucht in git-Fehlern,
+    # in Trace-Ausgaben und in Fremdwerkzeugen an Stellen auf, die man nicht alle kennt. Der
+    # Credential-Store liegt im Container und verschwindet mit ihm.
+    - git config --global credential.helper store
+    - printf 'https://x-access-token:%s@github.com\n' "$GITHUB_MIRROR_TOKEN" > ~/.git-credentials
+    - chmod 600 ~/.git-credentials
+    # Spiegelklon, damit die echte Historie mitkommt und nicht nur eine Spitze: Wer spaeter
+    # gegen diesen Spiegel rechnet, loest beliebige Commits darin auf.
+    - git clone --mirror "$CI_REPOSITORY_URL" repo.git
+    # Explizite Refspecs statt `--mirror`. `--mirror` schickt *jede* Ref, die der Klon kennt,
+    # und ein Klon ueber CI_REPOSITORY_URL kennt auch GitLabs interne `refs/pipelines/<id>`
+    # -- eine pro Lauf, die sich drueben ewig ansammeln wuerden. Der erste erfolgreiche Lauf
+    # in ds-skript hat genau das getan. Heads und Tags sind, was ein Spiegel braucht;
+    # `--prune` raeumt drueben auf, was hier geloescht wurde, bleibt dabei aber innerhalb
+    # dieser beiden Refspecs.
+    - |
+      git -C repo.git push --prune https://github.com/konradvoelkel/eidl-skript-mirror.git \
+        "+refs/heads/*:refs/heads/*" "+refs/tags/*:refs/tags/*"
+    - git -C repo.git rev-parse HEAD
+  # Die Strecke zwischen HHU und der Aussenwelt flattert, in beide Richtungen (in ds-skript
+  # am 2026-10-15 gemessen: drei Anlaeufe auf demselben Runner, 12 s Ablehnung, 133 s
+  # Connect-Timeout, dann 25 s Erfolg). Ein Netzaussetzer darf nicht wie ein kaputtes Token
+  # aussehen. Ein 401 bleibt auch beim dritten Versuch ein 401.
+  retry: 2
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
