@@ -114,19 +114,20 @@ Abgabe bis …“ in den TeX-Blättern.
 - [ ] **Offen aus dem Vorschlag:** ob die Antwortproben genügen oder ein Anhang mit den Endergebnissen
   (nicht den Rechenwegen) dazukommt, und wie sich die Übungen zu einem etwaigen Kapitel-Abspann mit
   Kontrollfragen verhalten (wie in eipy-skript) — sonst steht dreimal dasselbe am Kapitelende.
-- [ ] **[Entscheidung] Punkte und Bestehensgrenzen** der Blätter 1, 3, 5 nach den neuen Aufgaben 4b, 2b, 1b
-  anpassen (*Vorschlag:* je +1 Punkt, Bestehensgrenze bleibt „die Hälfte“).
 - [ ] Die Zeile „N Punkte, Abgabe bis …“ je Blatt eintragen — **in den TeX-Quellen**, nicht mehr im Skript;
   die Termine stehen fest, die Punkte hängen an der Entscheidung oben. **Die TeX-Quellen 2026/27 liegen
-  seit dem 2026-10-12 in `../../exercises/`** (Sciebo, kein Repo, wie bei ds2-26 und eipy-26): Header,
-  Blatt 0 und Blatt 1 mit `build.sh` und `ILIAS-UPLOAD-CHECKLISTE.md`; Blatt 1 trägt 11 Punkte und
-  den 21.10.2026 (Vorschlag umgesetzt, Grenze bleibt die Hälfte). Blätter 2 bis 11 stehen noch aus;
-  Vorlage ist `~/Sciebo/hhu/eidl-25/exercises/`, die Nachträge 2b und 1b stehen in `../uebungen-2025/blaetter/`.
-  **In ILIAS hängen an den Übungseinheiten noch die 2025er PDFs** (nachgesehen 2026-10-12), siehe Checkliste.
+  seit dem 2026-10-12 in `../../exercises/`** (Sciebo, kein Repo, wie bei ds2-26 und eipy-26).
+  **Blätter 0 bis 11 sind gebaut** (3 bis 11 am 2026-10-21 aus den 2025er TeX-Quellen, mit den
+  Nachträgen 2b/1b und den Hinweise-Blöcken aus `../uebungen-2025/blaetter/`); es fehlt nur noch
+  Blatt 12, die Take-Home-Probeklausur (eigener Punkt unten). **In ILIAS hängen an den
+  Übungseinheiten 3 bis 11 weiterhin die 2025er PDFs** — hochgeladen sind bisher Blatt 0, 1 und 2
+  (Blatt 2 am 2026-10-21). Erkennungsmerkmal der alten Dateien: „Erstellt am 24.09.2026“, das
+  Kopierdatum. Alles Weitere in `../../exercises/ILIAS-UPLOAD-CHECKLISTE.md`.
 - [ ] **[Entscheidung vertagt]** Blatt 6 (Iris-Autoencoder) wird nach dem neuen Wochenplan eine Woche *vor* der
   Autoencoder-Vorlesung ausgegeben (AE ist jetzt VL 8 statt VL 7, CNNs VL 11, LLMs VL 12). Optionen: Blätter 6/7
   in der Ausgabe tauschen, Blatt 6 anpassen, oder so lassen (Skript-Kapitel steht online). Bei der
-  Blatt-Überarbeitung ansehen; in ILIAS ist vorerst die unveränderte Reihenfolge eingetragen.
+  Blatt-Überarbeitung ansehen; in ILIAS ist vorerst die unveränderte Reihenfolge eingetragen — und so sind die Blätter am
+  2026-10-21 auch gebaut worden. Ein Tausch von 6 und 7 betrifft jetzt Abgabetermine *und* Dateien.
 - [ ] Blatt 12 = Take-Home-Probeklausur anlegen (Grundlage: `~/Sciebo/hhu/eidl-25/exam/`, Probeklausur 2025).
 - [ ] Lösungen: Die 15 Textlösungen von 2025 liegen in `uebungen-2025/loesungen/`, Notebook- und
   Skriptlösungen in `~/Sciebo/hhu/eidl-25/exercises/blattNN-solution/`. Beides gitignored bzw. außerhalb.

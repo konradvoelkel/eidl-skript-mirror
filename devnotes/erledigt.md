@@ -63,6 +63,12 @@ Datierte Protokolle größerer Umbauten liegen daneben als `build-log-<datum>.md
   **Zu beachten:** GitLab hält die alten Objekte noch eine Weile vor — sie sind über ihre SHA
   erreichbar, bis die Housekeeping-Läufe sie einsammeln. Wer sicher gehen will, stößt in den
   Projekteinstellungen unter *Settings → Repository → Housekeeping* einen Lauf an.
+- [x] **Punkte und Bestehensgrenzen der Blätter 1, 3 und 5** nach den neuen Aufgaben 4b, 2b und 1b
+  angepasst: je +1 Punkt, Bestehensgrenze bleibt „die Hälfte“. Blatt 1 hatte Konrad am 2026-10-12 schon
+  so gebaut (11 Punkte); Blatt 3 und 5 stehen seit dem 2026-10-21 auf 9 Punkten, also 4,5 zum Bestehen.
+  Die Punktzahl steht an zwei Stellen je Blatt in seiner `blattNN.tex` unter `../../exercises/`:
+  in `\Punktegesamt` und im Punktesatz über der ersten Aufgabe.
+
 - [x] **Abgabetermine 2026/27 bestätigt (Konrad, 2026-09-24)** und in ILIAS eingetragen: Blatt 0 ohne Abgabe;
   1: 21.10., 2: 28.10., 3: 04.11., 4: 11.11., 5: 18.11., 6: 25.11., 7: 02.12., 8: 09.12., 9: 16.12.2026,
   10: 13.01., 11: 20.01.2027, Probeklausur als Take-Home mit Abgabe 27.01.2027 — jeweils Mittwoch 12:00.
