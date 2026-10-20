@@ -99,6 +99,11 @@ Abgabe bis …“ in den TeX-Blättern.
 - [ ] Zeitreihen / Aktienkurs-Beispiel (2025 gewünscht, nicht geliefert): bewusst zurückgestellt, sprengt den Rahmen.
   `notebooks/ASML.csv` liegt bereit, falls „RNNs“ (18) später ein Beispiel bekommen soll.
 
+- [ ] **Aufzeichnungslinks je Kapitel nachtragen, VL 2 an.** VL 1 steht seit 2026-10-20 unter der Überschrift von
+  Kapitel 01; die übrigen kommen eine je Sitzung dazu, sobald die Aufzeichnung in der Playlist 2026/27 auftaucht.
+  Adressform, Zuordnung Kapitel ↔ Sitzung und die zwei Fallen der Mediathek stehen in `../CLAUDE.md`
+  („Vorlesungsaufzeichnungen“); dieselbe Adresse gehört in die Wochentabelle in `../../ilias/runs/ws2026-27.yaml`.
+
 ## Vorlesungsplan (`kurs-2026-27.md`)
 
 - [ ] **[Entscheidung]** Die Reserve-Kapitel 26/27 ganz aus dem Plan nehmen oder als 16. Termin (Fragestunde vor

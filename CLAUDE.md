@@ -348,6 +348,37 @@ Explizite Anker (`(name)=` vor der Überschrift, Verweis mit `[Text](#name)`) be
 Repository **nicht** — die Überschriften bekommen ihre Anker von MyST. Wer damit anfängt,
 fängt für das ganze Buch an, nicht für ein Kapitel.
 
+## Vorlesungsaufzeichnungen
+
+Die Aufzeichnungen liegen in der HHU-Mediathek, **eine Playlist je Durchgang**. Der Kanal
+„Einführung in Deep Learning“ (Kanal 194) mischt die Jahrgänge und wird nirgends mehr verlinkt
+(Entscheidung Konrad, 2026-10-20 — dieselbe im Skript, in ILIAS und auf der Website);
+2024/25 wird nicht mehr beworben. Verlinkt sind genau zwei Playlists, der laufende
+Durchgang zuerst: `README.md` (Abschnitt „Vorlesungsaufzeichnungen“) und
+`kurs-2026-27.md` nennen sie, dieselben Adressen stehen in `../ilias/runs/ws2026-27.yaml`
+unter `external:`.
+
+**Je Vorlesung eine Zeile im Kapitel**, direkt unter der `#`-Überschrift, nach dem Muster
+des Data-Science-Skripts (`~/Sciebo/hhu/ds2026/ds-skript`, dort `erwartungswert.md`):
+
+```markdown
+[Vorlesungsaufzeichnung VL 1: Überblick](https://media.hhu.de/video/einfuehrung-in-deep-learning-202627-vl-1-ueberblick/<hash>)
+```
+
+* Welches Kapitel zu welcher Sitzung gehört, sagt die Tabelle in `kurs-2026-27.md`. Deckt
+  eine Sitzung zwei Kapitel ab, bekommt jedes seine Zeile; beginnt das Thema mitten im
+  Video, kommt `?t=<sekunden>` an die Adresse (so macht es das DS-Skript).
+* **Nachgetragen wird, sobald die Aufzeichnung in der Playlist auftaucht**, in der Regel in
+  der Woche nach der Sitzung. Dieselbe Adresse gehört in die Wochentabelle in ILIAS
+  (`../ilias/runs/ws2026-27.yaml`, `schedule.weeks[].material`) — ein Arbeitsschritt, zwei
+  Stellen.
+* **Die Adresse wird nicht geraten.** Sie steht in der Playlist selbst oder in der
+  Titelsuche <https://media.hhu.de/search/title/Einf%C3%BChrung+in+Deep+Learning+2026/>.
+  Zwei Eigenheiten der Mediathek: Playlist-Adressen antworten mit **302** und landen beim
+  ersten Video der Liste, eine Prüfung läuft also mit `curl -sIL` und nicht ohne `-L`; und
+  Playlists sind nirgends auffindbar (die Kanalseite verlinkt keine, die Titelsuche liefert
+  nur einzelne Videos) — eine weitere Playlist-Adresse muss Konrad schicken.
+
 ## Übungen
 
 Jedes Kapitel, dem eine sinnvolle Aufgabe zuzuordnen ist, endet mit einem Abschnitt
