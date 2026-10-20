@@ -63,7 +63,9 @@ $$
 :::
 
 Beide Begriffe hängen zusammen: Ist $f$ differenzierbar, so gilt
-$D_u f(a) = \nabla f(a) \cdot u$. Die Richtungsableitung ist also ein Skalarprodukt, und
+$D_u f(a) = \nabla f(a) \cdot u$ – bewiesen unten im Abschnitt „Die Kettenregel“, sobald
+der dafür nötige Ableitungsbegriff da ist. Die Richtungsableitung ist also ein
+Skalarprodukt, und
 damit ist sofort klar, welche Richtung die steilste ist. Nach Cauchy-Schwarz ist
 $|D_u f(a)| \leq \|\nabla f(a)\|$, mit Gleichheit genau für
 $u = \nabla f(a) / \|\nabla f(a)\|$:
@@ -120,10 +122,117 @@ $$
 $$
 :::
 
-Die Kettenregel in dieser Sprache – die Ableitung einer Verkettung ist das Matrixprodukt
-der Ableitungen – steht im
-[Kapitel „Gradientenabstieg“](../part-lernen/08-gradientenabstieg.md) und ist der Kern der
-Backpropagation.
+## Die Kettenregel
+
+In dieser Sprache ist die Kettenregel ein Matrixprodukt.
+
+:::{prf:theorem} Kettenregel
+Sei $g \colon \mathbb{R}^n \to \mathbb{R}^m$ differenzierbar in $a$ und
+$f \colon \mathbb{R}^m \to \mathbb{R}^k$ differenzierbar in $g(a)$. Dann ist $f \circ g$
+differenzierbar in $a$, und
+
+$$
+D(f \circ g)(a) = (Df)\bigl(g(a)\bigr) \cdot (Dg)(a) .
+$$
+
+Die Ableitung einer Verkettung ist das Produkt der Ableitungen, ausgewertet an den
+richtigen Stellen. Die Formate passen: $(Df)(g(a))$ ist $k \times m$, $(Dg)(a)$ ist
+$m \times n$, das Produkt $k \times n$.
+:::
+
+Für $n = m = k = 1$ sind alle drei Matrizen Zahlen, und übrig bleibt die Kettenregel aus
+der Schule, $(f \circ g)'(a) = f'(g(a)) \, g'(a)$. Warum das Matrixprodukt die richtige
+Verallgemeinerung ist, wird im
+[Kapitel „Gradientenabstieg“](../part-lernen/08-gradientenabstieg.md) hergeleitet: Man
+setzt die beiden linearen Näherungen ineinander ein. Dort steht auch der Fall, der beim
+Rechnen von Hand am häufigsten schiefgeht – eine Variable, die auf mehreren Wegen ins
+Ergebnis eingeht. Die Kettenregel ist der Kern der Backpropagation.
+
+### Die Richtungsableitung ist ein Skalarprodukt
+
+Damit lässt sich die Behauptung von oben beweisen. Der Trick ist, die Richtung zu einer
+Funktion *einer* Variablen zu machen. Statt $f$ auf ganz $\mathbb{R}^n$ zu betrachten,
+läuft man die Gerade durch $a$ in Richtung $u$ entlang und leitet nach dem Laufparameter
+ab.
+
+:::{prf:theorem} Richtungsableitung und Gradient
+Ist $f \colon \mathbb{R}^n \to \mathbb{R}$ differenzierbar in $a$, so existiert für jeden
+Einheitsvektor $u$ die Richtungsableitung $D_u f(a)$, und es gilt
+
+$$
+D_u f(a) = \nabla f(a) \cdot u .
+$$
+:::
+
+:::{prf:proof}
+Sei $\gamma \colon \mathbb{R} \to \mathbb{R}^n$ die Gerade durch $a$ in Richtung $u$,
+
+$$
+\gamma(h) := a + h u .
+$$
+
+$\gamma$ ist affin, ihre beste lineare Näherung ist sie selbst, also ist
+$(D\gamma)(h) = u$ für jedes $h$ – eine $n \times 1$-Matrix, nämlich die Spalte $u$.
+
+Setze $\varphi := f \circ \gamma \colon \mathbb{R} \to \mathbb{R}$, also
+$\varphi(h) = f(a + hu)$ und $\varphi(0) = f(a)$. Die Richtungsableitung ist nach
+Definition nichts anderes als die gewöhnliche Ableitung von $\varphi$ an der Stelle $0$:
+
+$$
+D_u f(a) = \lim_{h \to 0} \frac{f(a + hu) - f(a)}{h}
+         = \lim_{h \to 0} \frac{\varphi(h) - \varphi(0)}{h}
+         = \varphi'(0) .
+$$
+
+Nun ist $\gamma$ differenzierbar in $0$ mit $\gamma(0) = a$ und $f$ differenzierbar in $a$,
+die Kettenregel ist also anwendbar und liefert
+
+$$
+\varphi'(h) = (Df)\bigl(\gamma(h)\bigr) \cdot (D\gamma)(h)
+            = \nabla f\bigl(\gamma(h)\bigr)^\top u .
+$$
+
+Dabei wurde benutzt, dass die Ableitung einer Funktion nach $\mathbb{R}$ die Zeile
+$\nabla f^\top$ ist. An der Stelle $h = 0$ steht damit
+
+$$
+D_u f(a) = \varphi'(0) = \nabla f(a)^\top u = \nabla f(a) \cdot u ,
+$$
+
+und das war die Behauptung. Nebenbei ist mitbewiesen, dass die Richtungsableitung
+überhaupt existiert: Sie ist die Ableitung einer nach der Kettenregel differenzierbaren
+Funktion einer Variablen.
+:::
+
+**Die Voraussetzung ist keine Zierde.** Dass die partiellen Ableitungen existieren,
+genügt *nicht* – dann steht zwar ein Gradient da, aber die Formel kann falsch sein. Für
+
+$$
+f(x, y) := \frac{x^2 y}{x^4 + y^2} \quad \text{für } (x,y) \neq (0,0), \qquad f(0,0) := 0
+$$
+
+rechnet man für einen Einheitsvektor $u = (\alpha, \beta)^\top$ und $h \neq 0$ nach:
+
+$$
+\frac{f(h\alpha, h\beta) - f(0,0)}{h}
+= \frac{1}{h} \cdot \frac{h^3 \alpha^2 \beta}{h^4\alpha^4 + h^2\beta^2}
+= \frac{\alpha^2 \beta}{h^2 \alpha^4 + \beta^2} .
+$$
+
+Für $\beta \neq 0$ geht das gegen $\alpha^2/\beta$, für $\beta = 0$ ist der Bruch konstant
+null. *Alle* Richtungsableitungen existieren also. Insbesondere ist
+$\frac{\partial f}{\partial x}(0,0) = 0$ (das ist $\alpha = 1, \beta = 0$) und
+$\frac{\partial f}{\partial y}(0,0) = 0$ (das ist $\alpha = 0$), also
+$\nabla f(0,0) = (0,0)^\top$. Für $u = \tfrac{1}{\sqrt2}(1,1)^\top$ ist aber
+
+$$
+D_u f(0,0) = \frac{\alpha^2}{\beta} = \frac{1/2}{1/\sqrt2} = \frac{1}{\sqrt2}
+\neq 0 = \nabla f(0,0) \cdot u .
+$$
+
+Die Formel gilt also wirklich erst, wenn $f$ im Sinne der obigen Definition
+differenzierbar ist – und das ist mehr, als die Existenz der partiellen Ableitungen
+hergibt.
 
 ## Zweite Ableitungen: die Hesse-Matrix
 

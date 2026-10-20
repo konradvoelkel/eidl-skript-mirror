@@ -65,16 +65,16 @@ andere als die angeheftete (3.11.2), und genau das ist passiert. Die Gruppe `fig
 trotzdem keine Gigabyte. Gegenprobe: zweimal laufen lassen, der zweite Lauf muss
 byte-gleich sein.
 
-Erwartung eines gesunden Laufs (Stand 2026-10-19, nach dem Kapitel „Hintergrundwissen
-Lineare Algebra“; die fachliche Durchsicht vom 2026-10-15 deckte die 27 Kapitel davor
-und das Glossar ab): HTML ohne Warnungen, PDF **118 Seiten A4** lokal, 0 LaTeX-Fehler,
+Erwartung eines gesunden Laufs (Stand 2026-10-20, nach dem Kettenregel-Abschnitt im
+Kapitel „Hintergrundwissen Analysis“; die fachliche Durchsicht vom 2026-10-15 deckte die
+27 Kapitel davor und das Glossar ab): HTML ohne Warnungen, PDF **120 Seiten A4** lokal, 0 LaTeX-Fehler,
 0 fehlende Glyphen, 5 überlange Zeilen. Das veröffentlichte PDF hatte bis zum 2026-10-19
 stets **eine Seite mehr** als das lokale (siehe unten); für den neuen Stand ist das noch
 nicht nachgemessen. Die `--min-pages`-Untergrenze
 soll einen *abgebrochenen* Lauf fangen, nicht eine gewollte Kürzung — sie steht deshalb
 deutlich unter der tatsächlichen Seitenzahl, in der CI auf demselben Wert.
 
-**Lokal und CI weichen um eine Seite ab, und das bleibt so**: hier 118 Seiten, das
+**Lokal und CI weichen um eine Seite ab, und das bleibt so**: hier 120 Seiten, das
 veröffentlichte PDF hatte am 2026-10-19 vor dem neuen Kapitel 113 gegen lokal 112. Die erste Abweichung steht auf Seite 28 in einem Codeblock,
 der eine Zeile anders bricht — es ist der *Satz*, nicht der Inhalt. Die Ursache ist am
 2026-10-15 gemessen worden, und sie ist nicht die, die hier vom 2026-09-29 bis dahin stand:
