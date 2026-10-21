@@ -88,3 +88,4 @@ SWE  # SWE-bench Verified, Benchmarkname
 Eadline  # Doug Eadline, Autor des HPCwire-Lesetexts (Byline am Original geprüft)
 GenAI  # im wörtlichen Zitat aus dem HPCwire-Artikel
 UrhG  # Zitatrecht §51, nur in einer Dozentennotiz
+weiterzuklicken  # Dozentennotiz VL 02, Transitions parallel zur Tafel

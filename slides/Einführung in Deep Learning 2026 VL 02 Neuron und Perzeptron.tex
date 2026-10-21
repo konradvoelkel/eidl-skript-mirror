@@ -18,24 +18,28 @@
 \begin{frame}
   \titlepage
 
-  \note{\textbf{Ablauf, 90 Minuten} (2025: 60 Min. Folien, 15 Min. Tafel, 13 Min. Dialog):\\[2pt]
+  \note{\textbf{Ablauf, 90 Minuten} (2025: 60 Min. Folien, 15 Min. Tafel, 13 Min. Dialog).
+    Die Zahlen sind \emph{Seiten} wie in der Fußzeile, nicht Rahmen: Vier Folien bauen
+    sich seit 2026-10-21 schrittweise auf (im Quelltext \texttt{\% Transition}).\\[2pt]
     \begin{tabular}{@{}rll@{}}
-      0--5   & Folie 2       & Rückblick, erstes Blatt ist abgegeben\\
-      5--15  & Folien 3--4   & McCulloch-Pitts-Neuron, Kochrezept\\
-      15--28 & Folien 5--7   & Perzeptron, Bias-Trick, Geometrie \textbf{(Tafel)}\\
-      28--35 & Folien 8--9   & Abstand, Skalierung von $w$\\
-      35--45 & Folien 10--11 & Linear trennbar, XOR\\
-      45--52 & Folie 12      & Die fünf Fragen an jedes Modell\\
-      52--62 & Folien 13--14 & Perzeptronregel\\
-      62--75 & Folie 15      & \textbf{Tafel: warum sie für ein Sample funktioniert}\\
-      75--82 & Folien 16--17 & Regel bei der Arbeit, verallgemeinertes Perzeptron\\
-      82--87 & Folien 18--20 & MLP, XOR aufgelöst, warum die Regel nicht reicht\\
-      87--89 & Folie 21      & Die fünf Antworten (Take-Home)\\
-      89--90 & Folie 22      & Übungsblatt\\
+      0--5   & Seite 2       & Rückblick, erstes Blatt ist abgegeben\\
+      5--15  & Seiten 3--4   & McCulloch-Pitts-Neuron, Kochrezept\\
+      15--28 & Seiten 5--8   & Perzeptron, Bias-Trick, Geometrie \textbf{(Tafel)}\\
+      28--35 & Seiten 9--10  & Abstand, Skalierung von $w$\\
+      35--45 & Seiten 11--13 & Linear trennbar, XOR\\
+      45--52 & Seite 14      & Die fünf Fragen an jedes Modell\\
+      52--62 & Seiten 15--18 & Perzeptronregel, drei Fälle\\
+      62--75 & Seiten 19--22 & \textbf{Tafel: warum sie für ein Sample funktioniert}\\
+      75--82 & Seiten 23--24 & Regel bei der Arbeit, verallgemeinertes Perzeptron\\
+      82--87 & Seiten 25--27 & MLP, XOR aufgelöst, warum die Regel nicht reicht\\
+      87--89 & Seite 28      & Die fünf Antworten (Take-Home)\\
+      89--90 & Seite 29      & Übungsblatt\\
     \end{tabular}\\[4pt]
     Die Tafelphase ist der Kern der Sitzung -- 2025 war das Ein-Sample-Argument das,
-    was der Dozent am Ende „das Wichtigste“ genannt hat. Wenn die Zeit knapp wird:
-    Konvergenzsatz (Folie 16) weglassen, er steht als Vertiefung im Skript.}
+    was der Dozent am Ende „das Wichtigste“ genannt hat. Die vier Stufen auf 19--22
+    sind dafür gedacht, parallel zur Tafelrechnung weiterzuklicken, nicht vorab.
+    Wenn die Zeit knapp wird: Konvergenzsatz (Seite 23) weglassen, er steht als
+    Vertiefung im Skript.}
 \end{frame}
 
 % ------------------------------------------------------------------ Rückblick
@@ -120,6 +124,7 @@
   \begin{center}
     \Large
     $w_0 := b$, \quad $x_0 := 1$\\[14pt]
+    \pause % Transition 2026-10-21: erst die Setzung, dann die Folgerung
     $\Rightarrow\quad w \cdot x + b = \sum_{j=0}^n w_j x_j$
   \end{center}
 
@@ -206,6 +211,7 @@
   \begin{center}
     \Large
     $(0,0), (1,1) \quad\longleftrightarrow\quad (0,1), (1,0)$\\[18pt]
+    \pause % Transition 2026-10-21: an der Tafel probieren lassen, dann auflösen
     \normalsize Keine Gerade trennt diese beiden Paare von Punkten in der Ebene.
   \end{center}
 
@@ -260,7 +266,8 @@ $\rho > 0$ ist die Lernrate, ein Hyperparameter.
   \begin{center}
  $w_{\text{neu}} := w + \rho\,(y - f(x))\,x$
   \end{center}
-  
+
+  \pause % Transition 2026-10-21: Regel stehen lassen, Fälle einzeln
   % description statt itemize: Beamer schneidet lange \item[...]-Labels links ab.
   \begin{description}[$y = 1,\ f(x) = 0$]\setlength{\itemsep}{10pt}
   \item[$y = f(x)$] $w_{\text{neu}} = w$, nichts passiert
@@ -268,6 +275,7 @@ $\rho > 0$ ist die Lernrate, ein Hyperparameter.
   \item[$y = 0,\ f(x) = 1$] $w_{\text{neu}} = w - \rho x$, Aktivierung sinkt
   \end{description}
 
+  \pause
   \bigskip
   \begin{center}
     Mit $x_0 = 1$ lernt die Regel den Bias mit: $b_{\text{neu}} = b + \rho\,(y - f(x))$.
@@ -289,14 +297,17 @@ $\rho > 0$ ist die Lernrate, ein Hyperparameter.
   \begin{center}
  $w^{(i+1)} := w^{(i)} + \rho\,(y - f(x))\,x = w^{(i)} + \rho\, x$
 \end{center}
+\pause % Transition 2026-10-21: die Kette parallel zur Tafelrechnung aufbauen
 und damit auch
 \begin{center}
   $w^{(k)} = w^{(k-1)} + \rho\, x = w^{(0)} + k\,\rho\, x$
 \end{center}
+\pause
 und somit wächst die Aktivierung
   \begin{center}
     \Huge $w^{(k)} \cdot x = w^{(0)} \cdot x + k\,\rho\,\|x\|^2$.
   \end{center}
+  \pause
   Für hinreichend großes $k$ ist also $f^{(k)}(x) = 1$.
 
   \note{\textbf{Das ist die Tafelphase, 10--15 Minuten -- der Kern der Sitzung.}
