@@ -9,8 +9,16 @@
 \usepackage{ifthen}
 \usepackage[T1]{fontenc}
 \usepackage{iftex}
+% `no-math` ist nicht optional. Ohne die Option übernimmt fontspec die Mathe-Schrift
+% teilweise: Operatoren, Ziffern, Klammern und Funktionsnamen wie \tanh kommen dann aus
+% Source Sans Pro, die Variablen weiter aus Computer Modern -- zwei Schriftbilder in
+% einer Formel, dasselbe Übel wie in PLAYBOOK-folien.md §2.3, nur eine Ebene tiefer.
+% Sichtbar wurde es am 2026-10-21 an \Longrightarrow: Der Pfeil wird aus \Relbar und
+% \Rightarrow zusammengesetzt, das `=` kam aus Source Sans Pro und der Schaft aus CMSY,
+% die Balken trafen sich nicht, und der Pfeil fiel auseinander. Mit `no-math` kommt das
+% `=` aus CMR und alles passt. Gegenprobe: pdffonts an einem formelreichen Deck.
 \ifLuaTeX
- \usepackage{fontspec}
+ \usepackage[no-math]{fontspec}
  \setmainfont[Ligatures=TeX]{Source Sans Pro}
 \else
  \usepackage[utf8]{inputenc}
