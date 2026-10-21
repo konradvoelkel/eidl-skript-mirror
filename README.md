@@ -39,7 +39,7 @@ Nach erfolgreicher Teilnahme können die Studierenden:
 Die Sitzungen werden in der HHU-Mediathek veröffentlicht, eine Playlist je Durchgang:
 
 * [Aufzeichnungen des laufenden Durchgangs 2026/27](https://media.hhu.de/media/playlist/id/6f9c1e8f413b615ef5627399e08df43a)
-* [Aufzeichnungen des Durchgangs 2025/26](https://media.uni-duesseldorf.de/media/playlist/id/c64b63cc9b08ea92042eafc410b399ed)
+* [Aufzeichnungen des Durchgangs 2025/26](https://media.hhu.de/media/playlist/id/c64b63cc9b08ea92042eafc410b399ed)
 
 Jedes Kapitel verlinkt unter seiner Überschrift die Sitzung, in der das Thema behandelt wurde, sobald die Aufzeichnung in der Playlist steht. Aufgezeichnet wird voraussichtlich nicht durchgängig; die Übung wird nicht aufgezeichnet.
 
