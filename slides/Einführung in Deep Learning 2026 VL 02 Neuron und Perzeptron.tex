@@ -120,7 +120,7 @@
   \begin{center}
     \Large
     $w_0 := b$, \quad $x_0 := 1$\\[14pt]
-    $\Longrightarrow\quad w \cdot x + b = \sum_{j=0}^n w_j x_j$
+    $\Rightarrow\quad w \cdot x + b = \sum_{j=0}^n w_j x_j$
   \end{center}
 
   \note{Ab jetzt schreiben wir kurz $f(x) = [\,w \cdot x > 0\,]$ und denken uns den Bias
@@ -132,15 +132,12 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{$w$ steht senkrecht auf der Trenngeraden}
+  \frametitle{$w$ steht senkrecht auf der Trennung}
 
+  Für alle $x, x'$ auf der trennenden Hyperebene $H = \{ w \cdot x + b = 0\}$ ist
+  
   \begin{center}
-    \Large $w \cdot (x - x') = (w \cdot x + b) - (w \cdot x' + b) = 0$
-  \end{center}
-
-  \bigskip
-  \begin{center}
-    für alle $x, x'$ auf der Hyperebene $H = \{ w \cdot x + b = 0\}$.
+    \Large $w \cdot (x - x') = (w \cdot x + b) - (w \cdot x' + b) = 0$.
   \end{center}
 
   \note{\textbf{Tafel.} Gerade zeichnen, $w$ als Pfeil senkrecht darauf, einen Punkt
@@ -150,7 +147,7 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Die Aktivierung ist der Abstand}
+  \frametitle{Die Aktivierung ist der Abstand zur Trennung}
 
   \begin{center}
     \Large
@@ -209,7 +206,7 @@
   \begin{center}
     \Large
     $(0,0), (1,1) \quad\longleftrightarrow\quad (0,1), (1,0)$\\[18pt]
-    \normalsize Keine Gerade trennt diese beiden Paare.
+    \normalsize Keine Gerade trennt diese beiden Paare von Punkten in der Ebene.
   \end{center}
 
   \note{An die Tafel zeichnen, vier Punkte, zwei Farben -- dann versuchen zu trennen.
@@ -245,7 +242,11 @@
     \Huge $w_{\text{neu}} := w + \rho\,(y - f(x))\,x$
   \end{center}
 
-  \note{$\rho > 0$ ist die Lernrate, ein Hyperparameter.
+\bigskip
+  
+$\rho > 0$ ist die Lernrate, ein Hyperparameter.
+  
+  \note{
     Type-Check: Was muss $\rho$ sein, damit die Formel Sinn ergibt? Ein Skalar.
     Und $(y - f(x))$? Eine Zahl aus $\{-1, 0, 1\}$.
     Frage 2025: Kann man die rückblickend perfekte Lernrate ausrechnen? Für ein einzelnes
@@ -256,9 +257,13 @@
 \begin{frame}
   \frametitle{Drei Fälle}
 
+  \begin{center}
+ $w_{\text{neu}} := w + \rho\,(y - f(x))\,x$
+  \end{center}
+  
   % description statt itemize: Beamer schneidet lange \item[...]-Labels links ab.
   \begin{description}[$y = 1,\ f(x) = 0$]\setlength{\itemsep}{10pt}
-  \item[$y = f(x)$] nichts passiert
+  \item[$y = f(x)$] $w_{\text{neu}} = w$, nichts passiert
   \item[$y = 1,\ f(x) = 0$] $w_{\text{neu}} = w + \rho x$, Aktivierung wächst
   \item[$y = 0,\ f(x) = 1$] $w_{\text{neu}} = w - \rho x$, Aktivierung sinkt
   \end{description}
@@ -280,9 +285,19 @@
 \begin{frame}
   \frametitle{Warum das funktioniert}
 
+  Wenn $y=1$ aber $f(x)=0$ (false negative), dann ist
   \begin{center}
-    \Huge $w^{(k)} \cdot x = w^{(0)} \cdot x + k\,\rho\,\|x\|^2$
+ $w^{(i+1)} := w^{(i)} + \rho\,(y - f(x))\,x = w^{(i)} + \rho\, x$
+\end{center}
+und damit auch
+\begin{center}
+  $w^{(k)} = w^{(k-1)} + \rho\, x = w^{(0)} + k\,\rho\, x$
+\end{center}
+und somit wächst die Aktivierung
+  \begin{center}
+    \Huge $w^{(k)} \cdot x = w^{(0)} \cdot x + k\,\rho\,\|x\|^2$.
   \end{center}
+  Für hinreichend großes $k$ ist also $f^{(k)}(x) = 1$.
 
   \note{\textbf{Das ist die Tafelphase, 10--15 Minuten -- der Kern der Sitzung.}
     Die Formel steht hier, hergeleitet wird sie an der Tafel aus der Bilinearität des

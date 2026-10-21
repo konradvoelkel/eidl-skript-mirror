@@ -177,3 +177,6 @@ slides/*.pdf
 # nicht der Weg dahin. Die Werkzeuge (devnotes/pruefliste_durchsicht.py, devnotes/check_links.py)
 # sind versioniert, ihre Ausgabe nicht.
 devnotes/durchsicht/
+
+# AUCTeX legt neben den Decks ein auto/ mit .el-Dateien an -- Editorkram, kein Inhalt.
+slides/auto/
