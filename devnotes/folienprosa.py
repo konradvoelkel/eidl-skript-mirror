@@ -41,7 +41,12 @@ CODE = ("texttt", "url", "path", "lstinline", "href")
 WEG = ("setcounter", "addtocounter", "includegraphics", "graphicspath", "input", "usepackage", "documentclass",
        "setbeameroption", "setbeamertemplate", "setlength", "newcommand",
        "renewcommand", "label", "hypersetup", "titlepage", "tableofcontents",
-       "lstset", "definecolor", "hspace", "vspace", "raisebox", "colorbox")
+       "lstset", "definecolor", "hspace", "vspace", "raisebox", "colorbox",
+       # \color{name} ist ein Schalter, sein Argument ist ein Farbname, keine Prosa.
+       # Fehlte bis 2026-10-28; `eidlbrand` aus VL 03 landete dadurch als "unbekanntes
+       # Wort" in der Rechtschreibprüfung. \textcolor gehört NICHT hierher, sein
+       # zweites Argument ist Text -- in den Decks kommt es derzeit nicht vor.
+       "color")
 
 
 def _kommentar_weg(z: str) -> str:
