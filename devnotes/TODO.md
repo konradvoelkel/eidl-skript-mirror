@@ -158,12 +158,18 @@ Abgabe bis …“ in den TeX-Blättern.
   Die Notizseite ist seit dem 2026-10-02 im Header geregelt (`note page` plain + `\scriptsize`) und
   gilt für alle Decks.
 - [ ] Decks inhaltlich gegenlesen und im Hörsaal erproben; Folien-PDFs in ILIAS hochladen (die kopierten
-  Dateien dort sind noch die von 2025/26). **VL 1 und VL 2 sind gegengelesen und umgebaut**
-  (`folien-review-vl01-2026-10-02.md`, `folien-review-vl02-2026-10-02.md`); die übrigen 13 nach
+  Dateien dort sind noch die von 2025/26). **VL 1, VL 2 und VL 3 sind gegengelesen und umgebaut**
+  (`folien-review-vl01-2026-10-02.md`, `folien-review-vl02-2026-10-02.md`,
+  `folien-review-vl03-2026-10-28.md`); die übrigen 12 nach
   demselben Muster (Prüfliste: `~/Sciebo/hhu/PLAYBOOK-folien.md` §3): Ablaufplan gegen die
   Frame-Reihenfolge, Notizenfassung bauen, Termine und Ansagen gegen `kurs-2026-27.md` und die
   ILIAS-Konfiguration (`../../ilias/runs/ws2026-27.yaml`, der Schwesterordner neben dem Repo),
   Kapitelfehler mitsuchen.
+- [ ] **Eingerücktes `\end{lstlisting}` erzeugt eine leere Schlusszeile im Listing.** Am 2026-10-28 in
+  VL 3 auf Folie 8 aufgefallen (Konrad sah die elfte, leere Zeile) und dort behoben, indem
+  `\end{lstlisting}` auf Spalte 0 steht; dieselbe Einrückung steht in weiteren Listings dieses und
+  der übrigen Decks. Einmal über alle Decks gehen, dann die Regel ins Folien-Playbook.
+
 - [ ] **Vor VL 2 am TeX-Blatt nachsehen, ob der Ugly-Code-Link von 2025 noch drin ist.** Die Notiz
   zur letzten Folie von VL 2 verweist bedingt darauf; die Markdown-Fassung von 2025 hat ihn nicht.
 

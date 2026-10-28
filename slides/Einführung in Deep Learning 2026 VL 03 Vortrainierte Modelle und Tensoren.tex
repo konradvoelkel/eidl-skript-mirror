@@ -24,10 +24,10 @@
       12--30 & Folien 5--7   & \textbf{Task-Rundgang} (Browser), Vokabular\\
       30--42 & Folien 8--9   & WMT19-Beispiel, das Muster Tokenizer--Modell--Tokenizer\\
       42--50 & Folien 10--11 & GPU, Installation, Colab\\
-      50--56 & Folien 12--13 & Tensor $\approx$ Array\\
-      56--75 & Folien 14--16 & \textbf{Ausflug Tensorprodukt (Tafel)}, Reshape-Quiz\\
-      75--85 & Folien 17--18 & Das Batch-Bild, Shape-Fehler\\
-      85--90 & Folie 19      & Übungsblatt\\
+      50--58 & Folien 12--14 & Tensor $\approx$ Array, und was er mehr hat\\
+      58--75 & Folien 15--17 & \textbf{Ausflug Tensorprodukt (Tafel)}, Reshape-Quiz\\
+      75--85 & Folien 18--19 & Das Batch-Bild, Shape-Fehler\\
+      85--90 & Folie 20      & Übungsblatt\\
     \end{tabular}\\[4pt]
     Der Ausflug ist der anspruchsvollste Teil der Sitzung und lebt von der Tafel.
     2025 war der Stoff nach gut einer Stunde durch und der Rest wurde Vorgriff --
@@ -40,7 +40,7 @@
   \begin{center}
     \Large
     Bisher: ein Neuron, das wir selbst trainieren.\\[14pt]
-    Heute: Modelle, die \emph{andere} trainiert haben -- und die Datenstruktur dahinter.
+    Heute: Modelle, die \emph{andere} trainiert haben.
   \end{center}
 
   \note{Das Perzeptron-Blatt ist abgegeben, das nächste kommt raus.
@@ -53,7 +53,9 @@
   \frametitle{Hugging Face}
 
   \begin{center}
-    \Large huggingface.co/models\\[6pt] huggingface.co/tasks
+    \Large
+    \href{https://huggingface.co/models}{\color{eidlbrand}huggingface.co/models}\\[6pt]
+    \href{https://huggingface.co/tasks}{\color{eidlbrand}huggingface.co/tasks}
   \end{center}
 
   \bigskip
@@ -61,11 +63,18 @@
   \item Firma aus New York, 2016 gegründet
   \item verdient Geld mit gehosteter Inferenz
   \item lockt mit Infrastruktur: \texttt{transformers}, \texttt{diffusers}, Hosting, Doku
+  \item September 2026: Nvidia kauft Hugging Face für fast 13 Mrd. \$ (ca. 11,6 Mrd. €)
   \end{itemize}
 
-  \note{Der Hub ist ein kommerzielles Angebot, aber die Modelle und Libraries darauf sind
+  \note{\textbf{Beide Adressen sind anklickbar} -- hier in den Browser wechseln und ein paar
+    Minuten herumklicken, der Rundgang ab Folie 5 lebt davon.
+    Der Hub ist ein kommerzielles Angebot, aber die Modelle und Libraries darauf sind
     größtenteils offen -- und für uns die bequemste Art, an Gewichte zu kommen.
-    Ende 2023 mit etwa 4,5 Mrd. \$ bewertet.
+    In der Finanzierungsrunde vom August 2023 war die Firma 4,5 Mrd. \$ wert; im September 2026
+    hat Nvidia den Kauf für 12,93 Mrd. \$ vereinbart -- der Abschluss wird für die erste
+    Hälfte 2027 erwartet, vorbehaltlich der Freigaben. Also knapp das Dreifache in drei Jahren,
+    und die Plattform mit den offenen Gewichten gehört künftig demselben Konzern wie die
+    Hardware, auf der sie gerechnet werden. Das ist die Einordnung, nicht nur die Zahl.
     2025 hat hier der Vergleich Likes gegen Downloads gut funktioniert: Likes sagen, was
     die Community feiert, Downloads, was tatsächlich benutzt wird.}
 \end{frame}
@@ -124,6 +133,24 @@
     DistilBERT ist ein destilliertes Modell; Destillation ist VL 15.}
 \end{frame}
 
+\begin{frame}
+  \frametitle{Multimodal}
+
+  \begin{description}[Document Question Answering]\setlength{\itemsep}{6pt}
+  \item[Image-to-Text] Bildbeschreibung \hfill {\small BLIP}
+  \item[Visual Question Answering] Frage zum Bild \hfill {\small ViLT}
+  \item[Document Question Answering] Frage ans Formular \hfill {\small LayoutLM}
+  \item[Feature Extraction] Vektor statt Antwort \hfill {\small CLIP}
+  \end{description}
+
+  \note{Multimodal heißt: mehr als eine Sorte Eingabe. Das ist die Schublade, in der die
+    Modelle liegen, die Bild und Text zugleich sehen -- CLIP kam auf der Vision-Folie schon
+    als Zero-Shot-Klassifikator vor, hier steht dasselbe Modell als Merkmalsextraktor.
+    \emph{Feature Extraction} ist die Zeile, auf die es ankommt: Das Modell gibt keine
+    Antwort, sondern einen Vektor -- Repräsentationen, der rote Faden ab VL 9.
+    Audio, Tabular und Reinforcement Learning lassen wir aus, wie auf der Übersicht angesagt.}
+\end{frame}
+
 % ------------------------------------------------------------------ Praxis
 \begin{frame}[fragile]
   \frametitle{Praktisch: Übersetzen}
@@ -139,29 +166,53 @@ input = "I am not sure if deep learning is really for me."
 input_ids = tokenizer.encode(input, return_tensors="pt")
 outputs = model.generate(input_ids)
 print(tokenizer.decode(outputs[0], skip_special_tokens=True))
-  \end{lstlisting}
+\end{lstlisting}
 
-  \note{Ausgabe: „Ich bin mir nicht sicher, ob Deep Learning wirklich etwas für mich ist.“
-    Das ist nachgerechnet, der Satz stimmt wörtlich.
+  \begin{center}
+    \footnotesize\texttt{Ich bin mir nicht sicher, ob Deep Learning wirklich etwas für mich ist.}
+  \end{center}
+
+  \begin{lstlisting}
+uv run --with 'transformers[torch]' --with sacremoses uebersetzen.py
+\end{lstlisting}
+
+  \note{Die Ausgabe steht auf der Folie und ist am 2026-10-28 nachgefahren worden, der Satz
+    stimmt wörtlich.
+    \texttt{sacremoses} gehört dazu: Der FSMT-Tokenizer bricht ohne das Paket mit einem
+    \texttt{ImportError} ab, und \texttt{transformers[torch]} zieht es nicht mit -- das Paket
+    steht nur in den Extras \texttt{testing} und \texttt{dev}, also muss man es nennen.
+    Nachgefahren am 2026-10-28 mit transformers 5.21.0, torch 2.14.1, huggingface\_hub 2.3.0.
     WMT19 ist nach der Konferenz benannt (Workshop on Machine Translation).
     \texttt{from\_pretrained} lädt beim ersten Aufruf die Gewichte aus dem Hub und cached
-    sie lokal -- das erste Mal dauert.}
+    sie lokal -- das erste Mal dauert.
+    Die zweite Zeile ist der kürzeste Weg zum Ausprobieren: \texttt{uv run -{}-with} legt die
+    Umgebung für diesen einen Lauf an und wirft sie danach weg -- kein venv, kein
+    \texttt{pip install}. Der dauerhafte Weg steht auf Folie 11.}
 \end{frame}
 
 \begin{frame}
-  \frametitle{Das Muster hinter allen Hub-Modellen}
+  \frametitle{Das Muster hinter jedem Hub-Modell}
 
   \begin{center}
-    \Huge Text $\to$ Zahlen $\to$ Zahlen $\to$ Text
+    \setlength{\tabcolsep}{4pt}
+    \begin{tabular}{@{}ccccccc@{}}
+      {\LARGE Daten} & {\LARGE $\to$}   & {\LARGE Zahlen} & {\LARGE $\to$} & {\LARGE Zahlen} & {\LARGE $\to$}   & {\LARGE Daten}\\[4pt]
+                    & \small Tokenizer &                & \small Modell &                & \small Tokenizer &
+    \end{tabular}
   \end{center}
 
-  \bigskip
+  \medskip
   \begin{center}
-    \normalsize Tokenizer \qquad Modell \qquad Tokenizer
+    \small Bei Bild und Audio heißt der erste Schritt nicht Tokenizer, sondern \emph{Prozessor}.
   \end{center}
 
   \note{Das Modell rechnet nur mit Zahlen; der Tokenizer ist die Übersetzung in beide
-    Richtungen. \texttt{return\_tensors="pt"} heißt: gib mir PyTorch-Tensoren -- damit
+    Richtungen. Das gilt für jede Eingabe, nicht nur für Text -- deshalb steht oben
+    \emph{Daten} und nicht \emph{Text}: Ein Bild wird zu Pixelwerten, Audio zu einem
+    Spektrogramm, und in \texttt{transformers} heißt das Gegenstück zum Tokenizer dann
+    \texttt{AutoProcessor} oder \texttt{FeatureExtractor}. Gemeinsam ist allen drei Fällen:
+    kodieren, rechnen, dekodieren.
+    \texttt{return\_tensors="pt"} heißt: gib mir PyTorch-Tensoren -- damit
     sind wir beim zweiten Thema.
     Kurzer Ausblick, falls die Frage kommt: Warum nicht Wörter als Atome? Weil das
     Vokabular explodiert und unbekannte Wörter keine Repräsentation hätten. Details in VL 10.}
@@ -193,13 +244,22 @@ input_ids = input_ids.to(device)
 \begin{frame}[fragile]
   \frametitle{Installation}
 
+  \textbf{Ohne uv}
   \begin{lstlisting}
 python -m venv .env
 source .env/bin/activate
 pip install 'transformers[torch]'
-  \end{lstlisting}
+\end{lstlisting}
 
-  \bigskip
+  \smallskip
+  \textbf{Mit uv}
+  \begin{lstlisting}
+uv init
+uv add 'transformers[torch]'
+uv sync
+\end{lstlisting}
+
+  \smallskip
   \begin{center}
     Ohne GPU? \quad Google Colab.
   \end{center}
@@ -207,7 +267,13 @@ pip install 'transformers[torch]'
   \note{Handzeichen einsammeln: Wer bekommt lokal \texttt{import torch} zum Laufen?
     2025 waren es zwei Personen -- deshalb Colab ausdrücklich als gleichwertigen Weg
     anbieten, es gibt dort begrenzte GPU-Zeit im Browser.
-    Wer \texttt{uv} kennt: erledigt Umgebung und Pakete in einem Schritt.
+    Der Unterschied: Links legt man die Umgebung selbst an und muss sie vor jedem Start
+    aktivieren. Rechts schreibt \texttt{uv add} das Paket in die \texttt{pyproject.toml} und
+    hält es in \texttt{uv.lock} auf einer festen Fassung fest; \texttt{uv sync} baut die
+    Umgebung daraus -- deshalb bekommt ein zweiter Rechner mit denselben zwei Dateien
+    dieselbe Umgebung, und \texttt{uv run} aktiviert nichts von Hand.
+    Das \texttt{uv run -{}-with} von Folie 8 ist der dritte Fall: kein Projekt, nur einmal
+    ausprobieren.
     Für CUDA: \texttt{nvidia-smi} zeigt Treiber und maximale CUDA-Version, dann den
     passenden torch-Build installieren; \texttt{torch.cuda.is\_available()} muss True sagen.}
 \end{frame}
@@ -246,6 +312,40 @@ pip install 'transformers[torch]'
   \note{Kein Kopieren, kein zusätzlicher Speicher -- eine Änderung am einen ist eine
     Änderung am anderen. Das ist Segen und Falle zugleich.
     Empfehlung: das PyTorch-Tutorial „Tensors“ einmal durchklicken, steht im Skript verlinkt.}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Was ein Torch-Tensor mehr hat}
+
+  \begin{center}
+    \begin{tabular}{@{}lll@{}}
+                            & NumPy            & PyTorch\\[4pt]
+      \texttt{dtype}, \texttt{shape} & ja        & ja\\[4pt]
+      \texttt{device}       & immer \texttt{cpu} & \texttt{cpu}, \texttt{cuda}, \texttt{mps}\\[4pt]
+      \texttt{requires\_grad} & --             & wird nach mir abgeleitet?\\[4pt]
+      \texttt{grad}         & --               & hier landet die Ableitung\\[4pt]
+      \texttt{grad\_fn}     & --               & woraus ich entstanden bin\\
+    \end{tabular}
+  \end{center}
+
+  \bigskip
+  \begin{center}
+    Dieselben Daten, mehr Buchhaltung: Der Tensor merkt sich seine Herkunft.
+  \end{center}
+
+  \note{Das ist die Antwort auf die vierte der vier Fragen, und sie ist der Grund, warum es
+    Torch-Tensoren überhaupt gibt -- die Daten könnte NumPy auch halten.
+    Vorführen, wenn Zeit ist: \texttt{w = torch.tensor([2.0], requires\_grad=True)},
+    \texttt{y = (w * 3).sum()}. Dann ist \texttt{w.grad} noch \texttt{None} und
+    \texttt{y.grad\_fn} ein \texttt{SumBackward0}; nach \texttt{y.backward()} steht in
+    \texttt{w.grad} der Wert \texttt{tensor([3.])}. Am 2026-10-28 mit torch 2.14.1 so
+    nachgefahren.
+    Die drei Spalten unten sind der rote Faden des Semesters: \texttt{grad} ist der
+    Gradientenabstieg (VL 5), \texttt{grad\_fn} der Berechnungsgraph hinter Backpropagation
+    (VL 6) und Autograd (VL 12). Hier nur zeigen, dass es die Felder gibt -- nicht erklären,
+    wie sie gefüllt werden.
+    \texttt{device} steht übrigens auch in NumPy, seit es dem Array-API-Standard folgt, dort
+    aber immer auf \texttt{cpu}. Die Wahl des Geräts ist der zweite Unterschied, siehe Folie 10.}
 \end{frame}
 
 \begin{frame}
@@ -297,10 +397,13 @@ pip install 'transformers[torch]'
 
   \note{Sammeln, nicht sofort auflösen. 2025 kamen Transponieren und lineare Abbildung --
     beides aufgreifen und abgrenzen.
-    Auflösung: $\mathbb{R}^4 \otimes \mathbb{R}^{10} \cong \mathbb{R}^{40}$, also ist
-    \texttt{a.reshape(-1, 2)} derselbe Tensor mit anderer Klammerung der Faktoren.
+    Auflösung am Beispiel des Kapitels: $a \in \mathbb{R}^4 \otimes \mathbb{R}^{10} \otimes
+    \mathbb{R}^2$, das sind achtzig Zahlen. Wegen
+    $\mathbb{R}^4 \otimes \mathbb{R}^{10} \cong \mathbb{R}^{40}$ ist
+    \texttt{a.reshape(-1, 2)} dasselbe wie \texttt{a.reshape(40, 2)} -- derselbe Tensor,
+    nur mit anderer Klammerung der Faktoren.
     \emph{Reshape ändert keine Daten, nur die Interpretation des Speichers.}
-    An der Tafel: das Beispiel mit achtzig Zahlen durchspielen.}
+    An der Tafel die achtzig Zahlen anders umbrechen.}
 \end{frame}
 
 \begin{frame}
@@ -308,20 +411,40 @@ pip install 'transformers[torch]'
 
   \begin{center}
     \Large
-    \texttt{(32, 784)} \quad 32 Datenpunkte, 784 Features\\[10pt]
-    \texttt{(32, 28, 28)} \quad 32 Bilder\\[10pt]
-    \texttt{(32, 3, 28, 28)} \quad dieselben mit Farbkanälen
+    \texttt{(784,)} \quad \emph{ein} Datenpunkt, 784 Features\\[8pt]
+    \texttt{(16, 784)} \quad ein Batch aus 16 Datenpunkten\\[8pt]
+    \texttt{(16, 28, 28)} \quad dieselben 16 als Bilder\\[8pt]
+    \texttt{(16, 3, 28, 28)} \quad dieselben mit Farbkanälen
   \end{center}
 
-  \bigskip
+  \medskip
   \begin{center}
-    Die \emph{erste} Achse ist der Batch.
+    Die \emph{erste} Achse ist der Batch.\\[6pt]
+    \small 32 Bilder bei \texttt{batch\_size=16}: \emph{zwei} Tensoren \texttt{(16, 28, 28)}.\\[4pt]
+    \small PIL, matplotlib: \texttt{(H, W, C)} \qquad PyTorch: \texttt{(N, C, H, W)}
   \end{center}
 
   \note{Das ist das mentale Bild: gestapelte Matrizen, und der vorderste Index sagt,
-    das wievielte Bild es ist.
+    das wievielte Bild im \emph{Batch} es ist.
+    \textbf{Der Punkt, an dem es klemmt:} Die erste Zahl ist nicht die Größe des Datensatzes,
+    sondern wie viele Beispiele \emph{gerade zusammen} durch das Netz gehen. 32 Bilder bei
+    \texttt{batch\_size=16} sind also keine \texttt{(32, …)}, sondern zwei Tensoren
+    \texttt{(16, 28, 28)}, die der \texttt{DataLoader} nacheinander ausgibt. Bei 30 Bildern
+    wäre der zweite \texttt{(14, 28, 28)} -- der letzte Batch darf kleiner sein, es sei
+    denn, man setzt \texttt{drop\_last=True}. Den ganzen Datensatz als einen Tensor gibt es
+    auch, man füttert das Modell aber nicht damit.
+    \textbf{Der Kanalvergleich unten:} Ein Bild aus PIL, matplotlib oder \texttt{skimage}
+    liegt als $(H, W, C)$ vor, Kanäle hinten; PyTorch erwartet $(N, C, H, W)$, Kanäle vorn.
+    Deshalb steht in jedem zweiten Bildskript ein \texttt{permute(2, 0, 1)}. Dass Zeilen die
+    Datenpunkte sind, ist dagegen in beiden Welten gleich (NumPy, scikit-learn:
+    \texttt{(n\_samples, n\_features)}) -- daran liegt der Unterschied also nicht.
     \texttt{nn.Linear} und fast alle Layer wirken auf die \emph{letzte} Achse und lassen
-    den Batch in Ruhe.}
+    den Batch in Ruhe. Das „fast“ sind die rekurrenten Schichten: \texttt{nn.RNN},
+    \texttt{nn.LSTM}, \texttt{nn.GRU} und \texttt{nn.Transformer} erwarten voreingestellt
+    \texttt{(seq, batch, feature)}, legen den Batch also auf die \emph{zweite} Achse;
+    \texttt{batch\_first=True} stellt die Regel wieder her. Falls gefragt wird, warum hier
+    \texttt{(32, 3, 28, 28)} und nicht \texttt{(32, 28, 28, 3)}: Die Faltungsschichten (VL 11)
+    verlangen die Kanalachse vorn, $(N, C, H, W)$.}
 \end{frame}
 
 \begin{frame}
@@ -345,7 +468,7 @@ pip install 'transformers[torch]'
   \begin{itemize}\setlength{\itemsep}{8pt}
   \item Ableitungen wiederholen -- und an einer Stelle verallgemeinern
   \item Die Betragsfunktion ist banal, aber wichtig
-  \item Die Integrale dürfen Sie ignorieren
+  \item Die Integrale dürfen Sie beim ersten Lesen ignorieren
   \end{itemize}
 
   \bigskip

@@ -62,7 +62,7 @@ Wir betrachten nur einen Teil der NLP-Tasks:
 
 ### Beispiel: Übersetzen mit WMT19
 
-Wir übersetzen von Englisch nach Deutsch mit Facebooks WMT19-Modell, nach der Anleitung von Hugging Face:
+Wir übersetzen von Englisch nach Deutsch mit Facebooks WMT19-Modell, nach der Anleitung von Hugging Face. Dieses Beispiel braucht ein Paket mehr als die Installation weiter unten: Der FSMT-Tokenizer bricht ohne `sacremoses` mit einem `ImportError` ab, und `transformers[torch]` zieht es nicht mit. Also `pip install 'transformers[torch]' sacremoses` – oder, ohne vorher etwas einzurichten, `uv run --with 'transformers[torch]' --with sacremoses uebersetzen.py`.
 
 ```python
 from transformers import FSMTForConditionalGeneration, FSMTTokenizer
@@ -79,7 +79,7 @@ print(decoded)
 # Ich bin mir nicht sicher, ob Deep Learning wirklich etwas für mich ist.
 ```
 
-Das Muster ist typisch für alle Modelle auf dem Hub: Ein **Tokenizer** verwandelt Text in Zahlen (`input_ids`, als PyTorch-Tensor, daher `return_tensors="pt"`), das **Modell** verwandelt Zahlen in Zahlen, und der Tokenizer verwandelt das Ergebnis zurück in Text. `from_pretrained` lädt die Gewichte beim ersten Aufruf aus dem Hub herunter und cached sie lokal.
+Das Muster ist typisch für alle Modelle auf dem Hub: Ein **Tokenizer** verwandelt Text in Zahlen (`input_ids`, als PyTorch-Tensor, daher `return_tensors="pt"`), das **Modell** verwandelt Zahlen in Zahlen, und der Tokenizer verwandelt das Ergebnis zurück in Text. Für Bild- und Audiomodelle gilt dasselbe Muster, nur heißt der erste Schritt dort nicht Tokenizer: Ein Bild wird zu Pixelwerten, Audio zu einem Spektrogramm, und das Gegenstück heißt in `transformers` `AutoProcessor` oder `FeatureExtractor`. Kodieren, rechnen, dekodieren. `from_pretrained` lädt die Gewichte beim ersten Aufruf aus dem Hub herunter und cached sie lokal.
 
 ### Auf der GPU rechnen
 

@@ -89,3 +89,10 @@ Eadline  # Doug Eadline, Autor des HPCwire-Lesetexts (Byline am Original geprüf
 GenAI  # im wörtlichen Zitat aus dem HPCwire-Artikel
 UrhG  # Zitatrecht §51, nur in einer Dozentennotiz
 weiterzuklicken  # Dozentennotiz VL 02, Transitions parallel zur Tafel
+ViLT  # Modellname auf der Multimodal-Folie VL 03 (dandelin/vilt-b32-finetuned-vqa, 2026-10-28 geprüft)
+LayoutLM  # Modellname auf der Multimodal-Folie VL 03 (impira/layoutlm-document-qa, von huggingface.co/tasks)
+venv  # Dozentennotiz VL 03 zu uv run --with; der Befehl steht als Code auf Folie 11
+FSMT  # FairSeq Machine Translation, die Modellklasse des WMT19-Beispiels in VL 03
+uv  # das Paketwerkzeug; Zwischenüberschriften "Ohne uv"/"Mit uv" auf Folie 11 in VL 03
+PIL  # Pillow/PIL in der Notiz zur Kanalachse, VL 03 Folie 17
+matplotlib  # dito, VL 03 Folie 17
