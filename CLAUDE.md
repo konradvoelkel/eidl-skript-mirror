@@ -168,6 +168,15 @@ Zeilenumbruch enthalten können: `pdftotext` zerlegt lange Sätze, ein Wächter 
 heißt das“ wäre am 2026-09-27 nie fertig geworden. Eine Seitenzahl oder ein einzelnes Wort
 ist der bessere Marker.
 
+**Und der Wächter braucht `-L`.** Die Kapitelseiten antworten mit **302** auf ihre Adresse ohne
+Schrägstrich am Ende und leiten auf die mit weiter — die Regel aus `tools/publish_urls.py`, nach
+der jede `<loc>` einen Schrägstrich trägt. Ein `curl -s` ohne `-L` bekommt 94 Byte Weiterleitung, findet den
+Marker nie und meldet nach zehn Minuten „nicht veröffentlicht“, obwohl der Deploy längst
+durch ist — so am 2026-10-28 geschehen. Also `curl -sL`, und im Zweifel die Bytezahl ansehen:
+Eine Seite hat sechsstellig viele, eine Weiterleitung zweistellig. Die Rezepte oben
+(`eidl-skript.pdf`, `myst.xref.json`) sind davon nicht betroffen, das sind Dateien.
+Dieselbe Falle wie bei den Playlists der Mediathek (Abschnitt „Vorlesungsaufzeichnungen“).
+
 ## Veröffentlichungs-Metadaten
 
 Was eine Suchmaschine oder eine Antwortmaschine über dieses Buch erfährt, entsteht
