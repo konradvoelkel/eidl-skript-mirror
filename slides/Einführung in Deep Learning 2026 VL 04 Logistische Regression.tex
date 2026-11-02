@@ -161,9 +161,12 @@
     $H'(p) = -\operatorname{logit}(p)$
   \end{center}
 
-  \note{Interpretation: Beim Erhöhen von $p$ ist die Abnahme an Informationsgewinn durch
-    $\operatorname{logit}(p)$ gegeben. Entropie misst man in bit ($\log_2$) oder nat ($\ln$),
-    die Ableitung in Logit. $H(0{,}5) = 1$ bit $= 0{,}69$ nat.
+  \note{Interpretation: Mit der Überraschung $I(A) = -\ln P(A)$ ist der Logit eine Differenz,
+    $\operatorname{logit}(p) = I(\text{Misserfolg}) - I(\text{Erfolg})$, gemessen in nat ($\ln$)
+    oder bit ($\log_2$). Also ist $H'(p) = I(\text{Erfolg}) - I(\text{Misserfolg})$: Für
+    $p < \tfrac12$ wächst die Entropie, für $p > \tfrac12$ sinkt sie, am Maximum
+    $H(0{,}5) = 1$ bit $\approx 0{,}69$ nat ist die Steigung 0. Und Logits addieren Evidenz
+    (Bayes in Odds-Form) -- genau die Form von $w \cdot x + b$.
     \textbf{Achtung, Stolperstelle aus 2025:} Wenn hier ein Plot mit beiden Kurven kommt --
     die Ableitung ist $-\operatorname{logit}$, also an der $x$-Achse gespiegelt. 2025 kam
     aus dem Hörsaal genau diese Korrektur.}
