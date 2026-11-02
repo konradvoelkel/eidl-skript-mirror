@@ -228,8 +228,6 @@ def vl02_perceptron_achsenabschnitt():
     for k, c in [(0, HHU_BLUE), (1, HHU_ORANGE)]:
         ax.scatter(X[y == k, 0], X[y == k, 1], s=20, color=c, label=f"Klasse {k}", zorder=3)
     xs = np.array([-4, 4])
-    ax.plot(xs, -(start[0] + start[1] * xs) / start[2], color=GREY, lw=1, ls="--",
-            label="vor dem Training")
     ax.plot(xs, -(b + w1 * xs) / w2, color=HHU_RED, lw=2, label=r"$w \cdot x + b = 0$")
     ax.axhline(0, color=GREY, lw=0.6)
     ax.axvline(0, color=GREY, lw=0.6)
@@ -245,7 +243,7 @@ def vl02_perceptron_achsenabschnitt():
     ax.set_aspect("equal")
     ax.set_xlabel("$x_1$")
     ax.set_ylabel("$x_2$")
-    ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.13), ncol=2, fontsize=9, frameon=False)
+    ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.13), ncol=3, fontsize=9, frameon=False)
     save(fig, "vl02-perceptron-achsenabschnitt")
 
 

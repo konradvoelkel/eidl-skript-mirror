@@ -94,7 +94,7 @@ Normiert mit $c = 1/0{,}49$ (hier $c > 0$, also ändert sich nicht einmal die Kl
 :::{figure} ../images/vl02-perceptron-achsenabschnitt.png
 :width: 60%
 
-Das Perzeptron aus dem Beispiel: Die Trenngerade $w \cdot x + b = 0$ schneidet die $x_2$-Achse bei $-b/w_2 \approx 2{,}04$. Der Gewichtsvektor $w$, dort angetragen, steht senkrecht auf ihr und zeigt zur Klasse $1$. Gestrichelt die Gerade vor dem Training ($w = (1, 1)$, $b = 1$).
+Das Perzeptron aus dem Beispiel: Die Trenngerade $w \cdot x + b = 0$ schneidet die $x_2$-Achse bei $-b/w_2 \approx 2{,}04$. Der Gewichtsvektor $w$, dort angetragen, steht senkrecht auf ihr und zeigt zur Klasse $1$.
 :::
 
 :::{prf:definition} Linear trennbar
