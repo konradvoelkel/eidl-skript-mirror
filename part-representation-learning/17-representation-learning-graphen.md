@@ -44,7 +44,7 @@ Beispiel mit einem Graphen aus der Wikipedia: Von „Katze“ führen Links zu �
 
 ### node2vec praktisch
 
-Bei **node2vec** ([Grover & Leskovec, 2016](https://doi.org/10.1145/2939672.2939754)) haben wir zwei Schritte:
+Bei **node2vec** ([Grover & Leskovec, 2016](https://hdl.handle.net/10.1145/2939672.2939754)) haben wir zwei Schritte:
 
 1. Generiere „Sätze“ (Knoten, [Kontext]) durch Random Walks auf dem Graphen.
 2. Benutze word2vec-Skip-gram-Training auf den Sätzen.
@@ -83,6 +83,6 @@ Prince, [*UDL*](https://udlbook.github.io/udlbook/), Kap. 13 (Graph neural netwo
 
 **Im Kapitel zitiert:**
 
-* Grover, Leskovec: [*node2vec: Scalable Feature Learning for Networks*](https://doi.org/10.1145/2939672.2939754), KDD 2016; frei: [arXiv:1607.00653](https://arxiv.org/abs/1607.00653).
+* Grover, Leskovec: [*node2vec: Scalable Feature Learning for Networks*](https://hdl.handle.net/10.1145/2939672.2939754), KDD 2016; frei: [arXiv:1607.00653](https://arxiv.org/abs/1607.00653).
 * Zhou, Niu, Chen: [*Efficient Graph Computation for Node2Vec*](https://arxiv.org/abs/1805.00280), 2018.
 :::

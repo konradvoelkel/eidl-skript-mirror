@@ -17,7 +17,8 @@ Es liest die drei Dokumentationsdateien (`CLAUDE.md`, `devnotes/TODO.md`,
 5. **Die Regeln, die im Buch gelten:** keine Verweise auf nummerierte Übungsblätter, keine
    Lösungsvorschläge, keine Unicode-Pfeile im Fließtext. Und Literatur ist anklickbar: kein
    `et al.` und kein `arXiv:…` ohne Link in derselben Zeile, und jedes Werk, das ein Kapitel
-   über DOI oder arXiv verlinkt, steht auch in dessen „Weiterlesen“-Box (seit 2026-11-02).
+   über DOI oder arXiv verlinkt, steht auch in dessen „Weiterlesen“-Box, und DOI-Links gehen
+   über `hdl.handle.net`, nicht über `doi.org` (seit 2026-11-02).
 
 Aufruf:
 
@@ -172,9 +173,15 @@ def fehler_sammeln() -> list[str]:
                 fehler.append(f"{p.name}: Literaturverweis ohne Link: „{zeile.strip()[:70]}…“")
         box = re.search(r":::\{admonition\} Weiterlesen\n(.*?)\n:::", ohne_code, re.S)
         box_text = box.group(1) if box else ""
-        for url in sorted(set(re.findall(r"https://(?:doi\.org|arxiv\.org/abs)/[^)\s]+", ohne_code))):
+        for url in sorted(set(re.findall(r"https://(?:hdl\.handle\.net|arxiv\.org/abs)/[^)\s]+", ohne_code))):
             if url not in box_text:
                 fehler.append(f"{p.name}: {url} steht im Text, aber nicht in „Weiterlesen“")
+        # Kein doi.org: mystmd macht aus jedem Link dorthin ein Zitat, holt die Metadaten beim
+        # Bauen aus dem Netz und ersetzt im PDF den Linktext durch "Autor [Jahr]" samt
+        # angehängter Literaturliste -- ohne Netz steht "?" da (2026-11-02: 24 Stellen lokal,
+        # drei Seiten mehr in der CI). hdl.handle.net löst dieselbe DOI auf, unberührt.
+        for treffer in sorted(set(re.findall(r"https?://(?:dx\.|www\.)?doi\.org/[^)\s]+", ohne_code))):
+            fehler.append(f"{p.name}: {treffer} -- DOI-Links als https://hdl.handle.net/<DOI>, siehe CLAUDE.md „Literatur“")
 
     # ── 6. Das gebaute PDF, falls vorhanden ─────────────────────────────────────
     pdf = WURZEL / "exports/eidl-skript.pdf"

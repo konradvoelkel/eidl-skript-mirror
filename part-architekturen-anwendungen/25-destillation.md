@@ -41,7 +41,7 @@ Das legt nahe: erst mit einem großen Netz suchen, dann das Ergebnis in ein klei
 
 ### Vorläufer: Ensemble Model Compression
 
-Buciluă, Caruana, Niculescu-Mizil: [*Model Compression*](https://doi.org/10.1145/1150402.1150464) (KDD 2006):
+Buciluă, Caruana, Niculescu-Mizil: [*Model Compression*](https://hdl.handle.net/10.1145/1150402.1150464) (KDD 2006):
 
 1. Trainiere ein großes Ensemble-Modell (z.B. Random Forest, XGBoost) auf den Daten,
 2. generiere synthetische Eingabedaten,
@@ -134,7 +134,7 @@ Ein Lehrer-Modell gibt für drei Klassen die Logits $(3, 1, 0)$ aus.
 :class: seealso
 **Im Kapitel zitiert:**
 
-* Buciluă, Caruana, Niculescu-Mizil: [*Model Compression*](https://doi.org/10.1145/1150402.1150464), KDD 2006.
+* Buciluă, Caruana, Niculescu-Mizil: [*Model Compression*](https://hdl.handle.net/10.1145/1150402.1150464), KDD 2006.
 * Ba, Caruana: [*Do Deep Nets Really Need to be Deep?*](https://arxiv.org/abs/1312.6184), NeurIPS 2014.
 * Hinton, Vinyals, Dean: [*Distilling the Knowledge in a Neural Network*](https://arxiv.org/abs/1503.02531), 2015.
 * Furlanello et al.: [*Born Again Neural Networks*](https://arxiv.org/abs/1805.04770), ICML 2018.

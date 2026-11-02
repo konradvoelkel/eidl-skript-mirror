@@ -36,7 +36,7 @@ $$
 ein Bild, das sich in jedem Pixel um höchstens $\epsilon$ vom Original unterscheidet und den Loss in erster Näherung maximal vergrößert. Gezielt auf eine Wunschklasse $y_{\text{Ziel}}$: Minus statt Plus und $y_{\text{Ziel}}$ statt $y$. Ein einziger Gradientenschritt genügt oft, weil das Modell in der Umgebung des Bildes fast linear ist; die iterative Variante (PGD) macht viele kleine Schritte und projiziert nach jedem zurück in den $\epsilon$-Würfel um $x$.
 :::
 
-Dass das nicht nur mit Pixeln funktioniert: Sharif et al. 2016, [*Accessorize to a Crime: Real and Stealthy Attacks on State-of-the-Art Face Recognition*](https://doi.org/10.1145/2976749.2978392) (CCS 2016) – eine bedruckte Brillenfassung lässt ein Gesichtserkennungssystem eine andere Person erkennen. Und aus dem Heise-Newsticker vom 2.2.2026: [Manipulierte Straßenschilder: Wenn das autonome Auto Fußgänger umfährt](https://www.heise.de/news/Manipulierte-Strassenschilder-Wenn-das-autonome-Auto-Fussgaenger-umfaehrt-11162744.html).
+Dass das nicht nur mit Pixeln funktioniert: Sharif et al. 2016, [*Accessorize to a Crime: Real and Stealthy Attacks on State-of-the-Art Face Recognition*](https://hdl.handle.net/10.1145/2976749.2978392) (CCS 2016) – eine bedruckte Brillenfassung lässt ein Gesichtserkennungssystem eine andere Person erkennen. Und aus dem Heise-Newsticker vom 2.2.2026: [Manipulierte Straßenschilder: Wenn das autonome Auto Fußgänger umfährt](https://www.heise.de/news/Manipulierte-Strassenschilder-Wenn-das-autonome-Auto-Fussgaenger-umfaehrt-11162744.html).
 
 ## Polysemie und die Manifold-Hypothese
 
@@ -75,5 +75,5 @@ $(0{,}03,\ -0{,}07,\ 0{,}01)$, und $\varepsilon = 0{,}02$.
 
 * Shamir, Melamed, BenShmuel: [*The Dimpled Manifold Model of Adversarial Examples in Machine Learning*](https://arxiv.org/abs/2106.10151), 2021.
 * Goodfellow, Shlens, Szegedy: [*Explaining and Harnessing Adversarial Examples*](https://arxiv.org/abs/1412.6572), ICLR 2015.
-* Sharif et al.: [*Accessorize to a Crime: Real and Stealthy Attacks on State-of-the-Art Face Recognition*](https://doi.org/10.1145/2976749.2978392), CCS 2016.
+* Sharif et al.: [*Accessorize to a Crime: Real and Stealthy Attacks on State-of-the-Art Face Recognition*](https://hdl.handle.net/10.1145/2976749.2978392), CCS 2016.
 :::

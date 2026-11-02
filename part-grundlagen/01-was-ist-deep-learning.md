@@ -123,9 +123,9 @@ Antwort: Wer Modelle vergleicht und Hyperparameter nach dem Testergebnis wählt,
 
 ### Bis 2010
 
-* **1943**: [McCulloch und Pitts](https://doi.org/10.1007/BF02478259) modellieren ein menschliches Hirnneuron mit elektrischen Schaltkreisen.
-* **1958**: [Rosenblatt](https://doi.org/10.1037/h0042519) entwirft das **Perzeptron** – und es wurde tatsächlich gebaut: Der *Mark I Perceptron* am Cornell Aeronautical Laboratory war ein frühes System zur Mustererkennung, mit Fotozellen als Eingabe und Potentiometern als Gewichten, die von Elektromotoren nachgestellt wurden.
-* Das Perzeptron kann nur linear trennbare Klassen unterscheiden lernen (dazu gleich mehr). Diese Einsicht, prominent im Buch [*Perceptrons*](https://doi.org/10.7551/mitpress/11301.001.0001) von Minsky und Papert (1969), gilt als Auslöser des ersten **AI Winter**. Wie viel an dieser offiziellen Geschichte dran ist, untersucht lesenswert: Olazaran, M. (1996). [*A Sociological Study of the Official History of the Perceptrons Controversy*](https://doi.org/10.1177/030631296026003005). Social Studies of Science, 26(3), 611–659.
+* **1943**: [McCulloch und Pitts](https://hdl.handle.net/10.1007/BF02478259) modellieren ein menschliches Hirnneuron mit elektrischen Schaltkreisen.
+* **1958**: [Rosenblatt](https://hdl.handle.net/10.1037/h0042519) entwirft das **Perzeptron** – und es wurde tatsächlich gebaut: Der *Mark I Perceptron* am Cornell Aeronautical Laboratory war ein frühes System zur Mustererkennung, mit Fotozellen als Eingabe und Potentiometern als Gewichten, die von Elektromotoren nachgestellt wurden.
+* Das Perzeptron kann nur linear trennbare Klassen unterscheiden lernen (dazu gleich mehr). Diese Einsicht, prominent im Buch [*Perceptrons*](https://hdl.handle.net/10.7551/mitpress/11301.001.0001) von Minsky und Papert (1969), gilt als Auslöser des ersten **AI Winter**. Wie viel an dieser offiziellen Geschichte dran ist, untersucht lesenswert: Olazaran, M. (1996). [*A Sociological Study of the Official History of the Perceptrons Controversy*](https://hdl.handle.net/10.1177/030631296026003005). Social Studies of Science, 26(3), 611–659.
 * **1986**: Backpropagation wird (wieder-)erfunden bzw. populär, mehr Schichten werden verwendet.
 
 ### 2010–2015
@@ -170,10 +170,10 @@ Prince, [*UDL*](https://udlbook.github.io/udlbook/), Kap. 1 (Introduction) und 2
 
 **Im Kapitel zitiert:**
 
-* McCulloch, Pitts: [*A logical calculus of the ideas immanent in nervous activity*](https://doi.org/10.1007/BF02478259), Bulletin of Mathematical Biophysics 1943.
-* Rosenblatt: [*The perceptron: A probabilistic model for information storage and organization in the brain*](https://doi.org/10.1037/h0042519), Psychological Review 1958.
-* Minsky, Papert: [*Perceptrons*](https://doi.org/10.7551/mitpress/11301.001.0001), MIT Press 1969 (Neuausgabe 2017).
-* Olazaran: [*A Sociological Study of the Official History of the Perceptrons Controversy*](https://doi.org/10.1177/030631296026003005), Social Studies of Science 1996.
+* McCulloch, Pitts: [*A logical calculus of the ideas immanent in nervous activity*](https://hdl.handle.net/10.1007/BF02478259), Bulletin of Mathematical Biophysics 1943.
+* Rosenblatt: [*The perceptron: A probabilistic model for information storage and organization in the brain*](https://hdl.handle.net/10.1037/h0042519), Psychological Review 1958.
+* Minsky, Papert: [*Perceptrons*](https://hdl.handle.net/10.7551/mitpress/11301.001.0001), MIT Press 1969 (Neuausgabe 2017).
+* Olazaran: [*A Sociological Study of the Official History of the Perceptrons Controversy*](https://hdl.handle.net/10.1177/030631296026003005), Social Studies of Science 1996.
 * Dhariwal, Nichol: [*Diffusion Models Beat GANs on Image Synthesis*](https://arxiv.org/abs/2105.05233), NeurIPS 2021.
 * [*How AMD May Get Across the CUDA Moat*](https://www.hpcwire.com/2023/10/05/how-amd-may-get-across-the-cuda-moat/), HPCwire 2023.
 :::

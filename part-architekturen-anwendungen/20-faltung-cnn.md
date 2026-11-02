@@ -19,7 +19,7 @@ Faltung in der Bildverarbeitung: Original, mit einer Gaußfunktion weichgezeichn
 
 ### Das menschliche Auge erkennt Kanten(orientierung)
 
-[Hubel & Wiesel (1959)](https://doi.org/10.1113/jphysiol.1959.sp006308) haben in der Sehrinde von Katzen Neuronen gefunden, die auf Balken einer bestimmten *Orientierung* antworten – und auf andere Orientierungen nicht (Reproduktion von Wurtz 1969, in Robert H. Wurtz: [„Recounting the impact of Hubel and Wiesel“](https://doi.org/10.1113/jphysiol.2009.170209), J Physiol 2009). Solche Neuronen sind lokale Kantendetektoren: Sie schauen auf einen kleinen Ausschnitt des Gesichtsfelds und reagieren auf ein bestimmtes Muster darin. CNNs sind die technische Umsetzung dieser Idee, und die ersten Schichten eines trainierten CNN sehen tatsächlich aus wie Kantendetektoren verschiedener Orientierung.
+[Hubel & Wiesel (1959)](https://hdl.handle.net/10.1113/jphysiol.1959.sp006308) haben in der Sehrinde von Katzen Neuronen gefunden, die auf Balken einer bestimmten *Orientierung* antworten – und auf andere Orientierungen nicht (Reproduktion von Wurtz 1969, in Robert H. Wurtz: [„Recounting the impact of Hubel and Wiesel“](https://hdl.handle.net/10.1113/jphysiol.2009.170209), J Physiol 2009). Solche Neuronen sind lokale Kantendetektoren: Sie schauen auf einen kleinen Ausschnitt des Gesichtsfelds und reagieren auf ein bestimmtes Muster darin. CNNs sind die technische Umsetzung dieser Idee, und die ersten Schichten eines trainierten CNN sehen tatsächlich aus wie Kantendetektoren verschiedener Orientierung.
 
 Das klassische Bild dazu zeigt ein Neuron, das nur bei einer Balkenorientierung feuert:
 
@@ -242,7 +242,7 @@ Prince, [*UDL*](https://udlbook.github.io/udlbook/), Kap. 10 (Convolutional netw
 
 **Im Kapitel zitiert:**
 
-* Hubel, Wiesel: [*Receptive fields of single neurones in the cat's striate cortex*](https://doi.org/10.1113/jphysiol.1959.sp006308), J Physiol 1959.
-* Wurtz: [*Recounting the impact of Hubel and Wiesel*](https://doi.org/10.1113/jphysiol.2009.170209), J Physiol 2009.
+* Hubel, Wiesel: [*Receptive fields of single neurones in the cat's striate cortex*](https://hdl.handle.net/10.1113/jphysiol.1959.sp006308), J Physiol 1959.
+* Wurtz: [*Recounting the impact of Hubel and Wiesel*](https://hdl.handle.net/10.1113/jphysiol.2009.170209), J Physiol 2009.
 * Marchetti et al.: [*Harmonics of Learning: Universal Fourier Features Emerge in Invariant Networks*](https://arxiv.org/abs/2312.08550), 2023.
 :::

@@ -301,11 +301,22 @@ Transformer-Kapitel ein Artikel nur mit Titel und Autorin genannt war – und so
 Werke im ganzen Buch.
 
 * **Im Text** wird der Titel zum Link (bei Kurzzitaten die Angabe „Autor Jahr“). Ziel ist
-  die **DOI** (`https://doi.org/…`), wenn das Werk eine hat; sonst die Adresse, unter der es
+  die **DOI**, wenn das Werk eine hat – geschrieben als `https://hdl.handle.net/<DOI>`, nicht
+  als `doi.org` (Begründung unten); sonst die Adresse, unter der es
   frei abrufbar ist (arXiv-Abstract, Blog, Projektseite). Liegt die DOI-Fassung hinter
   einer Bezahlschranke und gibt es eine freie, kommt sie als „frei: arXiv:…“ dazu.
 * **In „Weiterlesen“** steht unter **„Im Kapitel zitiert:“** jedes Werk mit Autoren,
   verlinktem Titel, Ort und Jahr. Ein Kapitel ohne Box bekommt eine, am Ende.
+* **Warum nicht `doi.org`:** mystmd macht aus *jedem* Link auf `doi.org` ein Zitat. Es holt
+  die Metadaten beim Bauen aus dem Netz, ersetzt im PDF den Linktext durch „Autor [Jahr]“
+  und hängt eine Literaturliste an; im HTML bleibt der Text stehen. Am 2026-11-02 stand
+  deshalb im veröffentlichten PDF „Hochreiter, Schmidhuber: Hochreiter and Schmidhuber
+  [1997]“, im RNN-Zeitstrahl „Hochreiter and Schmidhuber [1997]“ statt „LSTM“, und es war
+  drei Seiten länger als lokal – wo das Netz fehlte und 24-mal „?“ stand. Einen Schalter
+  dagegen gibt es nicht (`transformLinkedDOIs` in mystmd 1.11). DOIs sind Handles:
+  `hdl.handle.net` leitet auf dasselbe Ziel weiter, und mystmd lässt den Link in Ruhe.
+  Wer das Zitatsystem von MyST doch will, entscheidet das für das ganze Buch – und macht
+  den Bau von `doi.org` abhängig.
 * **Kennungen werden nicht aus dem Gedächtnis eingetragen**, sondern gegen den Titel
   geprüft: arXiv über `export.arxiv.org/api/query?id_list=…`, DOIs über `doi.org` mit
   `Accept: application/vnd.citationstyles.csl+json`. Am 2026-11-02 so für 50 Kennungen.

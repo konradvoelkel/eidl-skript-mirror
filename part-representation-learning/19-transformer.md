@@ -9,7 +9,7 @@ short_title: "Transformer"
 
 ### Historie: BLEU (2001)
 
-Um Übersetzungsmodelle zu vergleichen, braucht man ein Maß. Papineni et al., [*BLEU: a Method for Automatic Evaluation of Machine Translation*](https://doi.org/10.3115/1073083.1073135) (2001 als IBM-Bericht, ACL 2002): „Human evaluations of machine translation are extensive but expensive. […] We propose a method of automatic machine translation evaluation that is quick, inexpensive, and language-independent, that correlates highly with human evaluation.“ Die Grundidee: „The closer a machine translation is to a professional human translation, the better it is.“
+Um Übersetzungsmodelle zu vergleichen, braucht man ein Maß. Papineni et al., [*BLEU: a Method for Automatic Evaluation of Machine Translation*](https://hdl.handle.net/10.3115/1073083.1073135) (2001 als IBM-Bericht, ACL 2002): „Human evaluations of machine translation are extensive but expensive. […] We propose a method of automatic machine translation evaluation that is quick, inexpensive, and language-independent, that correlates highly with human evaluation.“ Die Grundidee: „The closer a machine translation is to a professional human translation, the better it is.“
 
 Der **BLEU-Score** (bilingual evaluation understudy) zwischen 0 und 1 (auch skaliert 0–10 oder 0–100) ist das geometrische Mittel aus den $n$-Gramm-Präzisionsscores der Maschinenübersetzung relativ zu einer menschlichen Referenzübersetzung, multipliziert mit einem Strafterm für abweichende Übersetzungslänge (*brevity penalty*). Die $n$-Gramm-Präzision ist die Anzahl (mit Mehrfachzählung, aber gedeckelt durch die Referenz) der $n$-Gramme, die in der Maschinenübersetzung vorkommen und in der Referenzübersetzung, normiert mit der Anzahl der $n$-Gramme der Maschinenübersetzung. Für BLEU ist $n = 1, 2, 3, 4$ üblich.
 
@@ -75,7 +75,7 @@ Prince, [*UDL*](https://udlbook.github.io/udlbook/), Kap. 12 (Transformers). Das
 **Im Kapitel zitiert:**
 
 * Vaswani et al.: [*Attention Is All You Need*](https://arxiv.org/abs/1706.03762), NeurIPS 2017.
-* Papineni, Roukos, Ward, Zhu: [*BLEU: a Method for Automatic Evaluation of Machine Translation*](https://doi.org/10.3115/1073083.1073135), ACL 2002.
+* Papineni, Roukos, Ward, Zhu: [*BLEU: a Method for Automatic Evaluation of Machine Translation*](https://hdl.handle.net/10.3115/1073083.1073135), ACL 2002.
 * Gage: [*A New Algorithm for Data Compression*](https://jacobfilipp.com/DrDobbs/articles/CUJ/1994/9402/gage/gage.htm), C Users Journal 12(2), 1994.
 * Sennrich, Haddow, Birch: [*Neural Machine Translation of Rare Words with Subword Units*](https://arxiv.org/abs/1508.07909), ACL 2016.
 * Dosovitskiy et al.: [*An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale*](https://arxiv.org/abs/2010.11929), ICLR 2021.

@@ -41,7 +41,7 @@ Also: schmale, aber tiefe Netze reichen. Und noch präziser, mit Aussage über d
 Es gibt eine Konstante $c$, sodass gilt: Zu jeder $k$-fach stetig differenzierbaren Funktion $f \colon E \to \mathbb{R}^D$ und jedem $\varepsilon > 0$ gibt es ein neuronales Netz $n$ mit ReLU-Aktivierungen und $c \log(1/\varepsilon)$ vielen hidden Layers, insgesamt etwa $c\, \varepsilon^{-d/k}$ Gewichten und $\sup_{x \in E} \| n(x) - f(x) \| < \varepsilon$.
 :::
 
-Der Satz steht in Yarotsky, [*Error bounds for approximations with deep ReLU networks*](https://doi.org/10.1016/j.neunet.2017.07.002) (Neural Networks 2017). Siehe auch Andreas Thom, *Approximation of functions by neural networks* ([arXiv:1901.10267](https://arxiv.org/abs/1901.10267), 2019). Die Anzahl der Gewichte wächst mit der Eingabedimension $d$ exponentiell (der Fluch der Dimensionalität), aber glattere Funktionen (größeres $k$) brauchen weniger – und die Tiefe wächst nur logarithmisch in der Genauigkeit.
+Der Satz steht in Yarotsky, [*Error bounds for approximations with deep ReLU networks*](https://hdl.handle.net/10.1016/j.neunet.2017.07.002) (Neural Networks 2017). Siehe auch Andreas Thom, *Approximation of functions by neural networks* ([arXiv:1901.10267](https://arxiv.org/abs/1901.10267), 2019). Die Anzahl der Gewichte wächst mit der Eingabedimension $d$ exponentiell (der Fluch der Dimensionalität), aber glattere Funktionen (größeres $k$) brauchen weniger – und die Tiefe wächst nur logarithmisch in der Genauigkeit.
 
 ### Neuronale Netze vs. Bäume und Wälder
 
@@ -68,7 +68,7 @@ Prince, [*UDL*](https://udlbook.github.io/udlbook/), Kap. 3 (Universal approxima
 
 **Im Kapitel zitiert:**
 
-* Yarotsky: [*Error bounds for approximations with deep ReLU networks*](https://doi.org/10.1016/j.neunet.2017.07.002), Neural Networks 2017; frei: [arXiv:1610.01145](https://arxiv.org/abs/1610.01145).
+* Yarotsky: [*Error bounds for approximations with deep ReLU networks*](https://hdl.handle.net/10.1016/j.neunet.2017.07.002), Neural Networks 2017; frei: [arXiv:1610.01145](https://arxiv.org/abs/1610.01145).
 * Thom: [*Approximation of functions by neural networks*](https://arxiv.org/abs/1901.10267), 2019.
 * Aytekin: [*Neural Networks are Decision Trees*](https://arxiv.org/abs/2210.05189), 2022.
 :::
