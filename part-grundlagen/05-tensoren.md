@@ -5,6 +5,8 @@ short_title: "Tensoren"
 
 # Tensoren
 
+[Vorlesungsaufzeichnung VL 3: Tensoren (ab Minute 64)](https://media.hhu.de/video/einfuehrung-in-deep-learning-202627-vl-3-vortrainierte-modelle/d3e7f42de07bc308ea159007e607285e?t=3860)
+
 ## Tensoren in PyTorch
 
 ### Tensoren ≈ Arrays

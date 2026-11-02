@@ -5,6 +5,8 @@ short_title: "Vortrainierte Modelle"
 
 # Vortrainierte Modelle verwenden
 
+[Vorlesungsaufzeichnung VL 3: Vortrainierte Modelle](https://media.hhu.de/video/einfuehrung-in-deep-learning-202627-vl-3-vortrainierte-modelle/d3e7f42de07bc308ea159007e607285e)
+
 ## Orientierung
 
 ### Was tun mit Deep Learning?
