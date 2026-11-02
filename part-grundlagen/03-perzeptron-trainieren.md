@@ -5,7 +5,7 @@ short_title: "Perzeptron trainieren"
 
 # Das Perzeptron trainieren
 
-[Vorlesungsaufzeichnung VL 2: Perzeptron (ab Minute 54)](https://media.hhu.de/video/einfuehrung-in-deep-learning-202627-vl-2-perzeptron/51e599cac1fd865687fc6599e7879f4d?t=3290)
+[Vorlesungsaufzeichnung VL 2: Perzeptron (ab Minute 55)](https://media.hhu.de/video/einfuehrung-in-deep-learning-202627-vl-2-perzeptron/51e599cac1fd865687fc6599e7879f4d?t=3300)
 
 ## Das Perzeptron trainieren
 
