@@ -204,7 +204,9 @@ und das war die Behauptung. Nebenbei ist mitbewiesen, dass die Richtungsableitun
 Funktion einer Variablen.
 :::
 
-**Die Voraussetzung ist keine Zierde.** Dass die partiellen Ableitungen existieren,
+:::{admonition} Vertiefung: Die Voraussetzung ist keine Zierde
+:class: note dropdown
+Dass die partiellen Ableitungen existieren,
 genügt *nicht* – dann steht zwar ein Gradient da, aber die Formel kann falsch sein. Für
 
 $$
@@ -233,6 +235,7 @@ $$
 Die Formel gilt also wirklich erst, wenn $f$ im Sinne der obigen Definition
 differenzierbar ist – und das ist mehr, als die Existenz der partiellen Ableitungen
 hergibt.
+:::
 
 ## Zweite Ableitungen: die Hesse-Matrix
 

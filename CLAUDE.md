@@ -286,8 +286,8 @@ Der Ton ist knapp und präzise:
 * Rechenbeispiele werden **durchgerechnet**, nicht behauptet. Wer eine Zahl ändert, rechnet
   die Folgezahlen nach.
 * Vertiefungen, die nicht Vorlesungsstoff sind, stehen in einer Box
-  `:::{admonition} Vertiefung: …` mit `:class: note dropdown` (derzeit sechs; dazu eine
-  Antwortenbox in Kapitel 01, zusammen sieben `dropdown`-Boxen).
+  `:::{admonition} Vertiefung: …` mit `:class: note dropdown` (derzeit sieben; dazu eine
+  Antwortenbox in Kapitel 01, zusammen acht `dropdown`-Boxen).
   **Aufgeklappt wird nur im HTML**: `dropdown` hat im LaTeX-Export keine Wirkung, im PDF
   steht der Inhalt offen da. Für Vertiefungen ist das in Ordnung — für alles, was erst nach
   eigenem Nachdenken gelesen werden soll, ist `dropdown` kein Versteck. Genau daran hingen
