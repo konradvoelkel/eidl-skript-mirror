@@ -52,6 +52,12 @@ FEHLENDE_GLYPHE = re.compile(r"^Missing character: There is no (.) \(U\+([0-9A-F
 # hinterliess (2026-09-27). Deshalb liest der Pruefer auf Wunsch auch das MyST-Protokoll.
 VERSCHLUCKTER_KNOTEN = re.compile(r"Unhandled LaTeX conversion for node of \"([^\"]+)\"")
 
+# Ausnahme mit Absicht: Ein `{anywidget}` ist ein interaktives Bild fuer die Website und hat im
+# PDF kein Gegenstueck. Er steht deshalb nur direkt unter einer statischen Abbildung, die dasselbe
+# zeigt (seit 2026-11-02 `widgets/drehung.mjs` unter `la-drehung.png`). Gezaehlt und gemeldet
+# wird er trotzdem, damit die Zahl sichtbar bleibt.
+NUR_WEB = {"anywidget"}
+
 # Kein Fehler, sondern eine bewusste Entscheidung (Playbook 3.8d): Ohne `inkscape` rastert
 # MyST SVG nach PNG. Wird gezaehlt und gemeldet, damit die Entscheidung sichtbar bleibt.
 SVG_FALLBACK = re.compile(r"To convert .svg images to .pdf, you must install inkscape")
@@ -169,7 +175,11 @@ def main(argv: list[str] | None = None) -> int:
             fehler.append(f"MyST-Protokoll {args.myst_log} fehlt")
         else:
             myst_text = args.myst_log.read_text(encoding="utf-8", errors="replace")
-            knoten = VERSCHLUCKTER_KNOTEN.findall(myst_text)
+            alle_knoten = VERSCHLUCKTER_KNOTEN.findall(myst_text)
+            knoten = [k for k in alle_knoten if k not in NUR_WEB]
+            nur_web = len(alle_knoten) - len(knoten)
+            if nur_web:
+                print(f"Hinweis: {nur_web}x anywidget nur im HTML (im PDF steht die Abbildung darueber)")
             if knoten:
                 knotenliste = ", ".join(sorted({f"{k} ({knoten.count(k)}x)" for k in knoten}))
                 fehler.append(

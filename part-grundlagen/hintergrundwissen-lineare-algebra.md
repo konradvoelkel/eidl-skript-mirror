@@ -320,6 +320,10 @@ Eine Drehung $A$ bringt $v$ auf die positive $x$-Achse. Der Winkel $\theta$ zwis
 beiden Vektoren bleibt derselbe, und mit ihm das Skalarprodukt.
 :::
 
+:::{anywidget} ../widgets/drehung.mjs
+{v: [1.6, 1.9], w: [-1.2, 1.5]}
+:::
+
 :::{prf:example} Eine Ebene im Raum flachlegen
 Die Vektoren $v = (1, 2, 2)^\top$ und $w = (5, 4, -2)^\top$ spannen eine Ebene im
 $\mathbb{R}^3$ auf. Gesucht ist eine orthogonale Matrix, die diese Ebene auf die

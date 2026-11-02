@@ -246,6 +246,7 @@ Wichtig zur Ordnerstruktur:
 | `slides/` | Beamer-Foliensätze VL 01–15 (`build.sh`, gemeinsamer `header.tex`) |
 | `images/`, `logo/` | Abbildungen, Logos; dazu `images/social-card.png`, die Vorschaukarte |
 | `tools/` | Skripte der Veröffentlichung: Vorschaukarte, Sitemap-URLs, Kopf-Tags, JSON-LD |
+| `widgets/` | interaktive Abbildungen für die Website (`{anywidget}`, ein ES-Modul ohne Abhängigkeiten je Widget); im PDF fehlen sie, deshalb steht jedes direkt unter einer statischen Abbildung, die dasselbe zeigt. Bisher `drehung.mjs` im Kapitel „Hintergrundwissen Lineare Algebra“ |
 | `notebooks/` | Notebooks aus 2025; nur `latent-classifier.ipynb` hat noch eine Funktion — es hängt als `downloads:` am Kapitel 21 |
 | `glossar.md` | Klausurbegriffe mit Link ins jeweilige Kapitel (im TOC, Abschnitt „Anhang“) |
 | `kurs-2026-27.md` | Semesterplan, Termine, Organisatorisches — **nicht im TOC**, also nicht Teil des Buchs |
