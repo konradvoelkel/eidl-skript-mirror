@@ -456,7 +456,11 @@ des Data-Science-Skripts (`~/Sciebo/hhu/ds2026/ds-skript`, dort `erwartungswert.
   und Zeiten und Anzahl erhält — geprüft per Skript, Änderungen als Vorher-nachher-Liste
   an Konrad, hochgeladen erst nach seinem Ja über `/webPlayerSubtitles/upload/key/<hash>`
   (`.srt` oder `.vtt`, Sprache Deutsch). Die Mediathek bricht die Zeilen selbst neu um.
-  Die Whisper-GPU teilt sich die Maschine mit Ollama; ist sie belegt, warten.
+  Die Whisper-GPU teilt sich die Maschine mit Ollama; ist sie belegt, warten. **Und die
+  Gegenrichtung:** In der Beschreibung des Videos je behandeltes Kapitel ein Link auf die
+  Kapitelseite (beim zweiten Kapitel einer Sitzung mit „ab Minute n“), im Autorenfeld der
+  Name als Link auf `https://www.konradvoelkel.com`; dazu Thumbnail im Kursdesign. Der
+  ganze Ablauf, für alle Kurse: `~/Sciebo/hhu/PLAYBOOK.md` §3.13.
 * **Die Adresse wird nicht geraten.** Sie steht in der Playlist selbst oder in der
   Titelsuche <https://media.hhu.de/search/title/Einf%C3%BChrung+in+Deep+Learning+2026/>.
   Zwei Eigenheiten der Mediathek: Playlist-Adressen antworten mit **302** und landen beim
