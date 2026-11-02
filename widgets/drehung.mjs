@@ -230,7 +230,7 @@ function render({ model, el: wurzel }) {
     g.addEventListener("pointerdown", (ev) => {
       ev.preventDefault();
       g.setPointerCapture(ev.pointerId);
-      g.focus();
+      g.focus({ preventScroll: true });
       const weiter = (e) => setze(welcher, punkt(e));
       const ende = () => {
         g.removeEventListener("pointermove", weiter);

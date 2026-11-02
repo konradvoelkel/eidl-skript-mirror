@@ -71,6 +71,10 @@ Beweisidee: Bei jedem Fehler wächst $w \cdot w^*$ um mindestens $\rho\gamma$, n
 Die Perzeptronregel bei der Arbeit: Trenngerade $w \cdot x + b = 0$ nach 0, 1, 2 und 3 Epochen über 60 Datenpunkte, Lernrate $\rho = 0{,}05$.
 :::
 
+:::{anywidget} ../widgets/perzeptron.mjs
+{w: [0, -1, 1], rho: 0.05}
+:::
+
 ## Zurück in die Theorie: Wozu das olle Perzeptron?
 
 Moderne neuronale Netze verwenden meist keine Perzeptrons mehr. Beliebter ist die multiple lineare oder die logistische Regression, die ebenfalls gleich strukturierte Eingabedaten annimmt und sehr ähnlich verarbeitet: *Skalarprodukt, gefolgt von einer nichtlinearen Funktion.* Dieses Kochrezept – die gemeinsame Verallgemeinerung – heißt manchmal auch einfach „Perzeptron“.
