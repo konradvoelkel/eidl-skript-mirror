@@ -88,19 +88,29 @@ $$
 
 Schon mal irgendwo gesehen? Im Data-Science-Skript haben wir den *Informationsgehalt* (die Überraschung) eines Ereignisses mit Wahrscheinlichkeit $p$ als $-\log p$ definiert und die *Entropie* als erwartete Überraschung ([Informationsgehalt](https://voelkel.pages.cs.uni-duesseldorf.de/ds-skript/erwartungswert#informationsgehalt), [Entropie](https://voelkel.pages.cs.uni-duesseldorf.de/ds-skript/erwartungswert#entropie)). Der Logarithmus steht dort aus einem Grund, der uns noch oft nützen wird: Für unabhängige Ereignisse multiplizieren sich die Wahrscheinlichkeiten, und $\log$ macht daraus eine Summe. Zwei Überraschungen addieren sich. Ein fairer Münzwurf ist $1$ bit Überraschung, eine 6 beim Würfeln $\log_2 6 \approx 2{,}58$ bit, beides zusammen $3{,}58$ bit.
 
-Für das Bernoulli-Experiment ist die Entropie
+Der Logit selbst ist eine Differenz zweier Überraschungen: Mit $I(A) := -\ln P(A)$ ist
 
 $$
-H(p) = -p \ln p - (1 - p) \ln(1 - p),
+\operatorname{logit}(p) = I(\text{Misserfolg}) - I(\text{Erfolg}),
 $$
 
-und ihre Ableitung nach $p$ ist
+gemessen in nat (mit $\log_2$: bit). Für eine 6 beim Würfeln ist das $\ln \tfrac65 - \ln 6 \approx 0{,}18 - 1{,}79 = -1{,}61 = \ln \tfrac15$: Der Erfolg ist das überraschendere Ergebnis, der Logit negativ.
+
+Die Entropie des Bernoulli-Experiments ist die erwartete Überraschung, $H(p) = -p \ln p - (1-p) \ln(1-p)$, und
 
 $$
-H'(p) = -\ln p - 1 + \ln(1-p) + 1 = -\operatorname{logit}(p)
+H'(p) = -\ln p - 1 + \ln(1-p) + 1 = -\operatorname{logit}(p).
 $$
 
-(im DS-Skript: [Die binäre Entropiefunktion](https://voelkel.pages.cs.uni-duesseldorf.de/ds-skript/wichtigste-diskrete-verteilungen#die-bin-re-entropiefunktion), dort mit $\log_2$ und kleinem $h$). Interpretation: Bei Erhöhen von $p$ ist die Abnahme an Informationsgewinn durch $\operatorname{logit}(p)$ gegeben. Entropie misst man in bit ($\log_2$) oder nat ($\ln$), die Ableitung in *logit*. Zum Beispiel ist $H(0{,}5) = 1 \text{ bit} = 0{,}69 \text{ nat}$.
+Verschiebt man also Wahrscheinlichkeit zum Erfolg, ändert sich die Entropie um die Differenz der beiden Überraschungen. Für $p < \tfrac12$ wächst sie, für $p > \tfrac12$ sinkt sie, und am Maximum $H(\tfrac12) = 1 \text{ bit} \approx 0{,}69 \text{ nat}$ ist die Steigung $0$ (im DS-Skript: [Die binäre Entropiefunktion](https://voelkel.pages.cs.uni-duesseldorf.de/ds-skript/wichtigste-diskrete-verteilungen#die-bin-re-entropiefunktion)).
+
+Vor allem addieren sich Logits. Die Bayes-Formel in Odds-Form lautet logarithmiert
+
+$$
+\operatorname{logit} P(\text{Erfolg} \mid x) = \operatorname{logit} P(\text{Erfolg}) + \ln \frac{P(x \mid \text{Erfolg})}{P(x \mid \text{Misserfolg})},
+$$
+
+und jede Beobachtung verschiebt den Logit um ihr *Evidenzgewicht* (I. J. Good, 1950), ebenfalls in nat. Genau diese Form hat $w \cdot x + b$ unten: $b$ ist der Logit bei $x = 0$, jeder Summand $w_j x_j$ ein additiver Evidenzbeitrag.
 
 ## Logistische Sigmoidfunktion
 
