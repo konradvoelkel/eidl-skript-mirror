@@ -967,8 +967,13 @@ def la_einheitskreis():
     _la_pfeil(ax, v, HHU_BLUE, r"$v$")
     ax.plot([v[0], v[0]], [0, v[1]], color=GREY, ls="--", lw=1)
     ax.plot([0, v[0]], [-0.06, -0.06], color=HHU_RED, lw=3, solid_capstyle="butt")
-    ax.text(v[0] / 2, -0.2, r"$\cos\theta = v \cdot e_1$", color=HHU_RED, ha="center", fontsize=12)
-    ax.text(v[0] + 0.05, v[1] / 2, r"$\sin\theta$", color=GREY, fontsize=12)
+    q = 0.07  # rechter Winkel am Lotfußpunkt
+    ax.plot([v[0] - q, v[0] - q, v[0]], [0, q, q], color=GREY, lw=0.8)
+    ax.text(v[0] / 2, -0.17, "Ankathete", color=HHU_RED, ha="center", va="top", fontsize=10)
+    ax.text(v[0] / 2, -0.33, r"$\cos\theta = v \cdot e_1$", color=HHU_RED, ha="center", va="top", fontsize=12)
+    ax.text(v[0] + 0.05, v[1] / 2, "Gegenkathete\n" + r"$\sin\theta$", color=GREY, fontsize=10, va="center")
+    ax.text(v[0] / 2 - 0.05, v[1] / 2 + 0.04, "Hypotenuse", color=HHU_BLUE, fontsize=10,
+            rotation=np.degrees(th), rotation_mode="anchor", ha="center", va="bottom")
     _la_winkel(ax, np.array([1, 0]), v, 0.3)
     save(fig, "la-einheitskreis")
 

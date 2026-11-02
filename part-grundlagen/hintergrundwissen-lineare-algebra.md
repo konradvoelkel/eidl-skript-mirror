@@ -130,15 +130,26 @@ $$
 $$
 :::
 
-Für Einheitsvektoren ist der Nenner $1$, und mit $w = e_1$ wird die Definition zur
-Schulgeometrie: $\cos \theta = v \cdot e_1 = v_1$ ist die $x$-Koordinate des Punktes $v$
-auf dem Einheitskreis.
+Mit $w = e_1$ wird die Definition zur Schulgeometrie. Der Nullpunkt, der Punkt $v$ und
+sein Lotfußpunkt $v_1 e_1$ auf der $x$-Achse bilden ein rechtwinkliges Dreieck. Seine
+Hypotenuse ist $v$ selbst, mit Länge $\|v\|$. Die Ankathete an $\theta$ liegt auf der
+$x$-Achse und hat (für spitzes $\theta$) die Länge $v_1$. Also ist
+
+$$
+\cos \theta = \frac{\text{Ankathete}}{\text{Hypotenuse}} = \frac{v_1}{\|v\|}
+= \frac{v \cdot e_1}{\|v\| \, \|e_1\|},
+$$
+
+genau die Definition oben. Für Einheitsvektoren ist der Nenner $1$, und
+$\cos \theta = v \cdot e_1 = v_1$ ist die $x$-Koordinate des Punktes $v$ auf dem
+Einheitskreis; in der Ebene ist $\sin \theta = v_2$ die Länge der Gegenkathete.
 
 :::{figure} ../images/la-einheitskreis.png
 :width: 50%
 
-Für einen Einheitsvektor $v$ ist $\cos \theta = v \cdot e_1$ seine erste Komponente: die
-Strecke, die $v$ auf die $x$-Achse wirft.
+Für einen Einheitsvektor $v$ hat die Hypotenuse die Länge $1$, und $\cos \theta = v \cdot e_1$
+ist die Länge der Ankathete: die erste Komponente von $v$, die Strecke, die $v$ auf die
+$x$-Achse wirft.
 :::
 
 Dass der Bruch zwischen $-1$ und $1$ liegt, also überhaupt ein Kosinus sein kann, ist die
@@ -350,7 +361,7 @@ flach zeichnen.
 Für Embeddings heißt das: Dreht man alle Embeddings mit derselben orthogonalen Matrix,
 ändern sich weder Längen noch Kosinusähnlichkeiten. Ein Verfahren, das nur Skalarprodukte
 von Embeddings benutzt – das [Kapitel „word2vec“](../part-representation-learning/16-word2vec.md)
-beschreibt eines –, kann zwei solche Lösungen nicht auseinanderhalten.
+beschreibt eines –, ist invariant unter solchen Transformationen.
 
 :::{admonition} Weiterlesen
 :class: seealso
