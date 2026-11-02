@@ -528,6 +528,122 @@ def vl06_ae_vs_pca():
     save(fig, "vl06-ae-vs-pca")
 
 
+# Kleine Netze R^2 -> R als Fläche im R^3: der Graph eines ReLU-Netzes ist ein Polyeder.
+# Farben sind Aktivierungsmuster (welche Neuronen an sind), nicht Höhen. Keine Zufallszahlen
+# aus dem globalen `rng`: Die Reihenfolge der vl06-Funktionen ist alphabetisch, und ein
+# Verbrauch hier würde vl06_relu_sum und vl06_two_neurons verschieben.
+_POLY_PAL = ["#9cc3e4", "#f6c48f", "#c5dc86", "#e8a0aa", "#b7a8d6", "#9fd8cf", "#f1dd8a",
+             "#c9c9c9", "#d9b48f", "#a9cfa0", "#f0b8d8", "#8fb3c9", "#e2c6a0", "#bfe0f0"]
+
+
+def _poly_netz(X, Y, schichten, beta=None):
+    """Wertet ein Netz mit ReLU (beta=None) oder SiLU_beta(z) = z*sigma(beta z) aus.
+    Gibt den Funktionswert und die Vor-Aktivierungen aller versteckten Neuronen zurück."""
+    h = np.stack([X, Y], axis=-1)
+    vor = []
+    for W, b in schichten[:-1]:
+        z = h @ W.T + b
+        vor.append(z)
+        h = np.maximum(z, 0) if beta is None else z * sigmoid(beta * z)
+    W, b = schichten[-1]
+    return (h @ W.T + b)[..., 0], np.concatenate(vor, axis=-1)
+
+
+def _poly_stuecke(z):
+    """Nummer des Aktivierungsmusters je Gitterpunkt und die passende Farbtabelle."""
+    from matplotlib.colors import ListedColormap
+
+    muster = (z > 0).astype(int) @ (1 << np.arange(z.shape[-1]))
+    codes, idx = np.unique(muster, return_inverse=True)
+    cmap = ListedColormap([_POLY_PAL[k % len(_POLY_PAL)] for k in range(len(codes))])
+    return idx.reshape(muster.shape), cmap
+
+
+def _poly_flaeche(ax, X, Y, f, farben, g):
+    """3D-Fläche mit sanfter Schattierung von Hand (matplotlibs `shade` dunkelt zu stark)."""
+    fy, fx = np.gradient(f, g, g)
+    nrm = np.stack([-fx, -fy, np.ones_like(f)], -1)
+    nrm /= np.linalg.norm(nrm, axis=-1, keepdims=True)
+    hell = 0.7 + 0.3 * np.clip(nrm @ (np.array([-1.0, -1.0, 2.0]) / np.sqrt(6)), 0, 1)
+    farben = farben.copy()
+    farben[..., :3] *= hell[..., None]
+    s = 3
+    ax.plot_surface(X[::s, ::s], Y[::s, ::s], f[::s, ::s], facecolors=farben[::s, ::s],
+                    linewidth=0, antialiased=False, shade=False, rstride=1, cstride=1)
+    ax.view_init(elev=28, azim=-55)
+    ax.set_xticks([]); ax.set_yticks([]); ax.set_zticks([])
+
+
+def _poly_winkel(grad, abstand):
+    """Erste Schicht aus Normalenrichtungen (in Grad) und Abständen zum Nullpunkt."""
+    phi = np.radians(grad)
+    return np.c_[np.cos(phi), np.sin(phi)], -np.array(abstand)
+
+
+_POLY_EINE = [_poly_winkel([10, 70, 130, 200, 290], [1.3, -0.9, 0.5, -1.6, 1.1]),
+              (np.array([[1.0, -1.4, 0.9, 1.2, -0.8]]), np.array([0.0]))]
+
+
+def vl06_relu_polyeder():
+    r = np.random.default_rng(187)  # eigener Generator, ausgesucht: keine winzigen Splitter
+    W1, b1 = _poly_winkel([20, 100, 160, 250], [0.5, -0.4, 0.3, -0.7])
+    zwei = [(W1, b1), (r.normal(0, 1, (3, 4)), r.normal(0, 0.8, 3)),
+            (r.normal(0, 1, (1, 3)), np.array([0.0]))]
+    lim = 3.0
+    g = np.linspace(-lim, lim, 301)
+    X, Y = np.meshgrid(g, g)
+    fig = plt.figure(figsize=(11, 9))
+    for zeile, (netz, titel) in enumerate([(_POLY_EINE, r"eine Schicht: $2 \to 5 \to 1$"),
+                                           (zwei, r"zwei Schichten: $2 \to 4 \to 3 \to 1$")]):
+        f, z = _poly_netz(X, Y, netz)
+        idx, cmap = _poly_stuecke(z)
+        n1 = netz[0][0].shape[0]
+        ax2 = fig.add_subplot(2, 2, 2 * zeile + 2)
+        ax2.imshow(idx, origin="lower", extent=(-lim, lim, -lim, lim), cmap=cmap, interpolation="nearest")
+        linien = []
+        for k in range(z.shape[-1]):
+            c = HHU_RED if k < n1 else HHU_DARK
+            cs = ax2.contour(X, Y, z[..., k], levels=[0], colors=c, linewidths=1.2)
+            linien += [(seg, c) for seg in cs.allsegs[0]]
+        ax2.set_xticks([]); ax2.set_yticks([])
+        ax2.set_title(f"{idx.max() + 1} lineare Stücke", fontsize=10)
+        ax = fig.add_subplot(2, 2, 2 * zeile + 1, projection="3d")
+        _poly_flaeche(ax, X, Y, f, cmap(idx), g)
+        for seg, c in linien:
+            fz, _ = _poly_netz(seg[:, 0], seg[:, 1], netz)
+            ax.plot(seg[:, 0], seg[:, 1], fz + 0.02, color=c, lw=1.0, zorder=10)
+        ax.set_title(titel, fontsize=11)
+    save(fig, "vl06-relu-polyeder")
+
+
+def vl06_silu_vs_relu():
+    lim = 3.0
+    g = np.linspace(-lim, lim, 301)
+    X, Y = np.meshgrid(g, g)
+    _, z_relu = _poly_netz(X, Y, _POLY_EINE)
+    idx, cmap = _poly_stuecke(z_relu)
+    fig = plt.figure(figsize=(9.5, 8.4))
+    for j, (beta, titel) in enumerate([(1.0, "SiLU"), (None, "ReLU")]):
+        f, z = _poly_netz(X, Y, _POLY_EINE, beta)
+        farben = cmap(idx)
+        if beta is not None:
+            # aufhellen, wo ein Neuron im Übergang ist: 4 sigma (1 - sigma) ist 1 auf der
+            # Knickgeraden des ReLU-Netzes und fällt weit weg davon auf 0
+            s = sigmoid(beta * z)
+            u = np.max(4 * s * (1 - s), axis=-1)[..., None]
+            farben[..., :3] = farben[..., :3] * (1 - 0.75 * u) + 0.75 * u
+        ax = fig.add_subplot(2, 2, j + 1, projection="3d")
+        _poly_flaeche(ax, X, Y, f, farben, g)
+        ax.set_title(titel, fontsize=11)
+        ax = fig.add_subplot(2, 2, j + 3)
+        ax.imshow(farben, origin="lower", extent=(-lim, lim, -lim, lim), interpolation="nearest")
+        for k in range(z_relu.shape[-1]):
+            ax.contour(X, Y, z_relu[..., k], levels=[0], colors=HHU_RED, linewidths=0.9,
+                       linestyles="-" if beta is None else "--")
+        ax.set_xticks([]); ax.set_yticks([])
+    save(fig, "vl06-silu-vs-relu")
+
+
 # ----------------------------------------------------------------------------
 # VL 07
 # ----------------------------------------------------------------------------

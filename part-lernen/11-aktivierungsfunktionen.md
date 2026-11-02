@@ -33,6 +33,14 @@ Ein Neuron mit $\tau = \operatorname{ReLU}$ heißt ReLU-Neuron.
 Links die ReLU, rechts eine gewichtete Summe von drei verschobenen ReLUs: eine stückweise lineare Funktion mit Knicken an den Verschiebungen.
 :::
 
+In zwei Dimensionen sieht man, was „stückweise linear“ heißt. Ein ReLU-Netz $f \colon \mathbb{R}^2 \to \mathbb{R}$ ist auf jedem Bereich, in dem dieselben Neuronen an sind, eine affine Funktion. Sein Graph im $\mathbb{R}^3$ ist also eine Fläche aus ebenen Polygonen, ein *Polyeder*. Bei einer versteckten Schicht liegen die Kanten über den Geraden $\langle w_j, x \rangle + b_j = 0$, und die Stücke sind die Zellen dieser Geradenanordnung: $n$ Geraden zerlegen die Ebene in höchstens $1 + n + \binom{n}{2}$ Zellen. Ab der zweiten Schicht ist jedes Neuron selbst schon stückweise linear in $x$. Seine Knicklinie ist deshalb ein Streckenzug, der genau dort abknickt, wo er eine Gerade der ersten Schicht kreuzt, und so entstehen mit wenigen Neuronen viele Stücke.
+
+:::{figure} ../images/vl06-relu-polyeder.png
+:width: 90%
+
+Zwei kleine ReLU-Netze $\mathbb{R}^2 \to \mathbb{R}$, oben mit einer versteckten Schicht, unten mit zweien. Links der Graph im $\mathbb{R}^3$, rechts die Draufsicht. Jede Farbe ist ein Bereich, in dem dieselben Neuronen an sind; dort ist das Netz linear. Rot die Knickgeraden der ersten Schicht, dunkelblau die geknickten Knicklinien der zweiten. Gezählt sind die Stücke im gezeigten Ausschnitt.
+:::
+
 ### Layer, nochmal
 
 Mehrere Neuronen, die parallel verarbeitet werden, bilden eine Schicht. Ein **Linear Layer** ist eine Matrix (Zeilen = Gewichtsvektoren) plus Bias. Ein **ReLU Layer** ist eine Schicht, in der jedes Neuron die Aktivierungsfunktion ReLU nutzt, also Linear Layer + komponentenweises ReLU. In PyTorch: `nn.Sequential(nn.Linear(n, m), nn.ReLU())`.
@@ -58,6 +66,14 @@ Welche Aktivierungsfunktionen in der Praxis genutzt wurden, listete [paperswithc
 :width: 90%
 
 Aktivierungsfunktionen im Vergleich. ELU, Swish und GELU sind im negativen Bereich nicht konstant null.
+:::
+
+Ein Netz mit SiLU hat keine ebenen Stücke mehr. Es ist aber eine geglättete Fassung des ReLU-Netzes mit denselben Gewichten: Wo alle Vor-Aktivierungen betragsmäßig groß sind, ist $y\,\sigma(y)$ fast $\max(0, y)$ und die Fläche fast eben. Nur entlang der Knickgeraden ist sie über einen Streifen gekrümmt. Wie breit dieser Streifen ist, hängt von der Skala ab. Skaliert man die Gewichte vor einem SiLU-Neuron mit $\beta$ und die dahinter mit $1/\beta$, rechnet das Neuron $y\,\sigma(\beta y)$, und das geht für $\beta \to \infty$ gegen $\max(0, y)$. Mit großen Gewichten sieht ein SiLU-Netz also polyedrisch aus, mit kleinen glatt.
+
+:::{figure} ../images/vl06-silu-vs-relu.png
+:width: 80%
+
+Das Netz mit einer versteckten Schicht aus der Polyeder-Abbildung, einmal mit SiLU und einmal mit ReLU. Die Farben sind die linearen Stücke des ReLU-Netzes, gestrichelt seine Knickgeraden. Aufgehellt ist, wo ein SiLU-Neuron im Übergang ist ($4\,\sigma(y)\,(1 - \sigma(y))$ nahe $1$). Bei diesen Gewichten ist das fast überall: Die SiLU-Fläche ist eine glatt gebügelte Fassung des Polyeders.
 :::
 
 ## Übung

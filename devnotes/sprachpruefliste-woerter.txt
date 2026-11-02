@@ -524,3 +524,7 @@ Schulgeometrie
 Schulform
 logarithmiert
 überraschendere
+Polyeder
+Polyeders
+polyedrisch
+zweien
