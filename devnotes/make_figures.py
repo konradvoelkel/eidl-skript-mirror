@@ -15,6 +15,13 @@ der Lauf kostet also keine Gigabyte.
 Gegenprobe: zweimal hintereinander laufen lassen, `git status images/` muss danach
 dasselbe zeigen wie nach dem ersten Lauf.
 
+**Jede Abbildung wird beim Speichern geprüft** (`text_kollisionen` in `save`): Texte mit
+Mindestabstand, kein Pfeil durch einen Text, Text passt in seine Form, Panel-Titel nicht
+Kante an Kante. Ein Befund schreibt die PNG trotzdem, damit man sie ansehen kann, lässt den
+Lauf aber mit Fehlercode enden. Entstanden am 2026-11-02, nachdem das Autoencoder-Schema
+sieben Wochen lang unlesbar im Buch stand. Was die Prüfung nicht sieht -- Beschriftungen in
+Markern, Legenden über Kurven, falsche Inhalte --, sieht nur, wer jede geänderte PNG öffnet.
+
 Acht Dateien kommen aus dem Material von 2025 und liegen in **Sciebo**, nicht im Repo
 (siehe `SRC_KANDIDATEN` unten). Fehlt der Ordner, läuft alles andere trotzdem durch; das
 Skript nennt am Ende, was fehlte, und endet mit einem Fehlercode.
@@ -73,7 +80,139 @@ plt.rcParams.update(
 rng = np.random.default_rng(0)
 
 
+# Was `save` an Kollisionen findet, sammelt sich hier; der Lauf endet dann mit Fehlercode.
+# Entstanden am 2026-11-02: Das Autoencoder-Schema hatte seit dem 2026-09-17 drei
+# übereinanderliegende Überschriften und Pfeile durch "Encoder"/"Decoder" -- unlesbar, aber
+# weder der Buchbau noch ein PDF-Check noch der Byte-Vergleich sehen Bildinhalte.
+KOLLISIONEN: list[str] = []
+
+
+def _text_umriss(t, r, rand):
+    """Umriss eines Texts in Pixeln als geschlossener Pfad, um `rand` geschrumpft.
+
+    Für gedrehte Texte ist der achsenparallele Rahmen aus `get_window_extent` viel zu groß
+    (eine schräge Beschriftung längs eines Pfeils "überlappt" sonst den Pfeil); der Umriss
+    ist dann das gedrehte Rechteck. Ein Rechteck hat denselben Mittelpunkt wie sein
+    achsenparalleler Rahmen, also genügen Mittelpunkt, Breite, Höhe und Winkel.
+    """
+    from matplotlib.path import Path
+    from mpl_toolkits.mplot3d import art3d, proj3d
+
+    if isinstance(t, art3d.Text3D):
+        # Text3D projiziert seine Position nur während draw() und meldet danach die rohe
+        # 2D-Position -- alle "z"-Beschriftungen lägen scheinbar an derselben Stelle.
+        # Dieselbe Projektion wie in Text3D.draw, vorübergehend eingesetzt.
+        xs, ys, _ = proj3d.proj_transform(t._x, t._y, t._z, t.axes.get_proj())
+        alt = t._x, t._y
+        t._x, t._y = xs, ys
+        try:
+            bb = t.get_window_extent(r)
+        finally:
+            t._x, t._y = alt
+    else:
+        bb = t.get_window_extent(r)
+    phi = np.radians(t.get_rotation())
+    if abs(np.sin(phi)) < 1e-6:
+        w, h = bb.width, bb.height
+    else:
+        s, ismath = t._preprocess_math(t.get_text())
+        w, h, _ = r.get_text_width_height_descent(s, t.get_fontproperties(), ismath=ismath)
+    w, h = w - 2 * rand, h - 2 * rand
+    if w <= 0 or h <= 0:
+        return None
+    ecken = np.array([[-w, -h], [w, -h], [w, h], [-w, h], [-w, -h]]) / 2
+    c, si = np.cos(phi), np.sin(phi)
+    ecken = ecken @ np.array([[c, si], [-si, c]]) + [(bb.x0 + bb.x1) / 2, (bb.y0 + bb.y1) / 2]
+    return Path(ecken, closed=True)
+
+
+def text_kollisionen(fig, abstand=3.0, titelabstand=20.0):
+    """Findet Texte, die sich überlappen, und Pfeile, die durch einen Text laufen.
+
+    Drei Prüfungen, alle in Pixeln der gespeicherten Abbildung:
+
+    * Zwei Texte (Titel, Achsen- und Tickbeschriftungen, Legenden, ax.text, Annotationen)
+      halten mindestens `abstand` Pixel Abstand. Ein Überlappungstest allein reicht nicht:
+      Zwei Panel-Titel, die Kante an Kante stehen, lesen sich als ein Satz.
+    * Kein Pfeil (`annotate`, `FancyArrowPatch` aus `arrow()`) läuft durch einen Text; den
+      eigenen Text einer Annotation darf er berühren.
+    * Ein Text, dessen Mitte in einer Form steht (Kreis, Ellipse, Kasten aus `box()`), passt
+      ganz hinein, mit `abstand` Pixeln Luft zum Rand.
+    * Panel-Titel, die nebeneinander in einer Zeile stehen, halten `titelabstand` Pixel
+      Abstand. Zwei überbreite Titel mit einem Wortabstand dazwischen überlappen nicht, lesen
+      sich aber als ein Satz.
+
+    Linien aus `plot` prüft das nicht -- eine Legende über einer Kurve ist oft gewollt, und
+    ob sie eine wichtige Stelle verdeckt, sieht nur ein Mensch.
+    """
+    from matplotlib.patches import Circle, Ellipse, FancyBboxPatch, Rectangle
+    from matplotlib.patches import FancyArrowPatch
+    from matplotlib.text import Annotation, Text
+
+    rand = -abstand / 2  # jeder Umriss wächst um die Hälfte des Abstands
+    fig.canvas.draw()
+    r = fig.canvas.get_renderer()
+    # Tickbeschriftungen ausserhalb des sichtbaren Bereichs legt matplotlib an, zeichnet sie
+    # aber nicht; sie stehen trotzdem mit Text und Position im Baum und dürfen nicht zählen.
+    ungezeichnet = set()
+    for ax in fig.axes:
+        for achse in (ax.xaxis, ax.yaxis):
+            lo, hi = sorted(achse.get_view_interval())
+            for tick in achse.get_major_ticks() + achse.get_minor_ticks():
+                if not lo - 1e-9 * (hi - lo) <= tick.get_loc() <= hi + 1e-9 * (hi - lo):
+                    ungezeichnet |= {id(tick.label1), id(tick.label2)}
+    texte = []
+    for t in fig.findobj(Text):
+        if not t.get_visible() or not t.get_text().strip() or id(t) in ungezeichnet:
+            continue
+        umriss = _text_umriss(t, r, rand)
+        if umriss is not None:
+            texte.append((t, umriss))
+    befunde = []
+    for i, (t1, u1) in enumerate(texte):
+        for t2, u2 in texte[i + 1:]:
+            if u1.intersects_path(u2, filled=True):
+                befunde.append(f"Text {t1.get_text()!r} überlappt {t2.get_text()!r}")
+    pfeile = [(t.arrow_patch, t) for t in fig.findobj(Annotation) if t.arrow_patch is not None]
+    pfeile += [(p, None) for p in fig.findobj(FancyArrowPatch)]
+    for p, eigener in pfeile:
+        for poly in p.get_path().to_polygons(p.get_transform(), closed_only=False):
+            punkte = np.concatenate([np.linspace(a, b, 20) for a, b in zip(poly[:-1], poly[1:])])
+            for t, umriss in texte:
+                if t is not eigener and umriss.contains_points(punkte).any():
+                    befunde.append(f"Pfeil läuft durch Text {t.get_text()!r}")
+    titel = [(t, t.get_window_extent(r)) for ax in fig.axes
+             for t in (ax.title, ax._left_title, ax._right_title)
+             if t.get_visible() and t.get_text().strip()]
+    for i, (t1, b1) in enumerate(titel):
+        for t2, b2 in titel[i + 1:]:
+            gleiche_zeile = min(b1.y1, b2.y1) > max(b1.y0, b2.y0)
+            luecke = max(b1.x0, b2.x0) - min(b1.x1, b2.x1)
+            if gleiche_zeile and luecke < titelabstand:
+                befunde.append(f"Titel {t1.get_text()!r} und {t2.get_text()!r} zu dicht")
+    formen = [p for ax in fig.axes for p in ax.patches
+              if isinstance(p, (Circle, Ellipse, FancyBboxPatch, Rectangle)) and p.get_visible()]
+    for t, umriss in texte:
+        ecken = umriss.vertices[:4]
+        mitte = ecken.mean(axis=0)
+        for p in formen:
+            rand_form = p.get_transform().transform_path(p.get_path())
+            if not rand_form.contains_point(mitte):
+                continue
+            # Luft zum Rand: `abstand` plus die halbe Strichstärke der Form, denn der Strich
+            # liegt je zur Hälfte innen. Ohne das "passte" "Mühle" mit 0,4 Pixeln in seinen
+            # Kreis und klebte sichtbar an der Linie.
+            extra = abstand + p.get_linewidth() * fig.dpi / 72 / 2
+            richtung = (ecken - mitte) / np.linalg.norm(ecken - mitte, axis=1, keepdims=True)
+            if not rand_form.contains_points(ecken + extra * richtung).all():
+                befunde.append(f"Text {t.get_text()!r} ragt aus seiner Form")
+    return sorted(set(befunde))
+
+
 def save(fig, name):
+    for b in text_kollisionen(fig):
+        KOLLISIONEN.append(f"{name}: {b}")
+        print(f"KOLLISION {name}: {b}")
     fig.savefig(OUT / f"{name}.png")
     plt.close(fig)
     print("wrote", name)
@@ -166,10 +305,10 @@ def vl01_blobs_linreg():
     lr = LinearRegression().fit(X, y)
     fig, axs = plt.subplots(1, 2, figsize=(9, 3.8))
     axs[0].scatter(X[:, 0], X[:, 1], c=y, cmap="viridis", s=12)
-    axs[0].set_title("Zwei Klassen, Label als Farbe")
+    axs[0].set_title("zwei Klassen (Farbe = Label)")
     pred = lr.predict(X)
     sc = axs[1].scatter(X[:, 0], X[:, 1], c=pred, cmap="viridis", s=12)
-    axs[1].set_title("Lineare Regression: Vorhersage $f(x)$ als Farbe")
+    axs[1].set_title("lineare Regression (Farbe = $f(x)$)")
     fig.colorbar(sc, ax=axs[1])
     for a in axs:
         a.set_xlabel("$x_1$")
@@ -186,11 +325,17 @@ def vl01_neuron():
     for i, y in enumerate(ys, 1):
         ax.add_patch(Circle((0.5, y), 0.3, fc=HHU_ICE, ec=HHU_BLUE))
         ax.text(0.5, y, f"$x_{i}$", ha="center", va="center")
-        arrow(ax, (0.85, y), (2.9, 0.15 * (y)), text=f"$w_{i}$")
-    ax.add_patch(Circle((3.6, 0), 0.75, fc="white", ec=HHU_BLUE, lw=2))
+        arrow(ax, (0.85, y), (2.6, 0.15 * y))
+        # Beschriftung auf ein Drittel des Pfeils, senkrecht darüber versetzt: in der Mitte
+        # lief der steile erste und letzte Pfeil durch sein "w"
+        p, q = np.array([0.85, y]), np.array([2.6, 0.15 * y])
+        n = np.array([-(q - p)[1], (q - p)[0]]) / np.linalg.norm(q - p)
+        m = p + 0.4 * (q - p) + 0.22 * n * (1 if y >= 0 else -1) * (1 if n[1] >= 0 else -1)
+        ax.text(*m, f"$w_{i}$", ha="center", va="center", fontsize=9, color=HHU_DARK)
+    ax.add_patch(Circle((3.6, 0), 0.95, fc="white", ec=HHU_BLUE, lw=2))
     ax.text(3.6, 0.2, r"$\zeta=\sum_j w_j x_j$", ha="center", va="center", fontsize=10)
     ax.text(3.6, -0.3, r"$y=\tau(\zeta)$", ha="center", va="center", fontsize=10)  # tau: beliebige Aktivierung, sigma ist im Buch die logistische
-    arrow(ax, (4.4, 0), (6.5, 0))
+    arrow(ax, (4.6, 0), (6.6, 0))
     ax.add_patch(Circle((7.0, 0), 0.3, fc=HHU_ICE, ec=HHU_BLUE))
     ax.text(7.0, 0, "$y$", ha="center", va="center")
     save(fig, "vl01-neuron")
@@ -270,6 +415,7 @@ def vl02_perceptron_updates():
         ax.set_title(f"{t}\nFehlerrate {err:.0%}", fontsize=10)
         ax.set_xlim(-5, 5)
         ax.set_ylim(-4, 4)
+        ax.set_xticks([-4, -2, 0, 2, 4])
     save(fig, "vl02-perceptron-updates")
 
 
@@ -323,7 +469,7 @@ def vl03_linreg_classification():
     axs[1].plot(xs, yhat, color=HHU_DARK, lw=1, alpha=0.4)
     axs[1].plot(xs, (yhat > 0.5).astype(float), color=HHU_RED, lw=2, label=r"$[\hat y > 1/2]$")
     axs[1].axvline(xstar, color=GREY, ls="--")
-    axs[1].set_title("harte Klassifikation, Entscheidungsgrenze $x^*$")
+    axs[1].set_title("harte Klassifikation, Grenze $x^*$")
     axs[2].plot(xs, yhat, color=HHU_DARK, lw=1, alpha=0.4)
     axs[2].plot(xs, 0.5 * (np.tanh(yhat - 0.5) + 1), color=HHU_GREEN, lw=2, label=r"$\frac{1}{2}(\tanh(\hat y - \frac{1}{2})+1)$")
     axs[2].set_title("S-förmig gemacht")
@@ -367,7 +513,7 @@ def vl04_sigmoid():
     ax.plot(xs, sigmoid(xs) * (1 - sigmoid(xs)), lw=1.5, ls=":", label=r"$\sigma'(x)$")
     ax.axhline(0.5, color=GREY, lw=0.6)
     ax.axvline(0, color=GREY, lw=0.6)
-    ax.legend(loc="upper left")
+    ax.legend(loc="lower right")
     ax.set_xlabel("$x$")
     save(fig, "vl04-sigmoid")
 
@@ -413,6 +559,7 @@ def vl05_loss_landscape():
         ax.plot(path[:, 0], path[:, 1], "o-", color=c, ms=3, lw=1.2, label=f"Gradientenabstieg ab {start}")
     ax.set_xlabel("$w_1$")
     ax.set_ylabel("$w_2$")
+    ax.set_xticks([-2, -1, 0, 1, 2, 3])
     ax.legend(fontsize=8, loc="lower left")
     ax.set_title("Loss-Gebirge über der $w$-Ebene")
     save(fig, "vl05-loss-landscape")
@@ -462,7 +609,8 @@ def vl06_relu_sum():
     for a, b in terms:
         y = a * relu(xs - b)
         total += y
-        axs[1].plot(xs, y, lw=1, ls="--", label=f"${a:g}\\,\\mathrm{{ReLU}}(x - {b:g})$")
+        arg = "x" if b == 0 else f"x {'+' if b < 0 else '-'} {abs(b):g}"  # nicht "x - -2"
+        axs[1].plot(xs, y, lw=1, ls="--", label=f"${a:g}\\,\\mathrm{{ReLU}}({arg})$")
     axs[1].plot(xs, total, lw=2.5, color=HHU_DARK, label="Summe")
     axs[1].set_title("Summe von drei ReLUs: stückweise linear")
     axs[1].legend(fontsize=8)
@@ -487,18 +635,21 @@ def vl06_activations():
 
 
 def vl06_autoencoder_schema():
-    fig, ax = plt.subplots(figsize=(8, 3.6))
-    draw_layers(ax, [8, 5, 3, 5, 8], dx=1.8, r=0.22,
+    # draw_layers setzt aspect="equal": Die Zeichenfläche richtet sich nach dem Netz, nicht
+    # nach figsize. Bis zum 2026-11-02 stand hier dx=1.8 -- ein schmales Hochformat, in dem die
+    # drei Überschriften übereinanderlagen und die Pfeile durch "Encoder"/"Decoder" liefen.
+    fig, ax = plt.subplots(figsize=(8, 5.2))
+    draw_layers(ax, [8, 5, 3, 5, 8], dx=2.8, r=0.22,
                 colors=[HHU_RED, HHU_BLUE, HHU_GREEN, HHU_BLUE, HHU_ORANGE])
-    ax.text(0, 4.6, "Input $x\\in\\mathbb{R}^D$", ha="center")
-    ax.text(3.6, 4.6, "latenter Vektor $\\in\\mathbb{R}^L$", ha="center")
-    ax.text(7.2, 4.6, "Rekonstruktion $\\hat x$", ha="center")
-    ax.annotate("", xy=(3.2, -4.5), xytext=(0.2, -4.5), arrowprops={"arrowstyle": "->", "color": HHU_DARK})
-    ax.text(1.7, -4.9, "Encoder", ha="center")
-    ax.annotate("", xy=(7.0, -4.5), xytext=(4.0, -4.5), arrowprops={"arrowstyle": "->", "color": HHU_DARK})
-    ax.text(5.5, -4.9, "Decoder", ha="center")
-    ax.set_xlim(-0.8, 8)
-    ax.set_ylim(-5.4, 5.2)
+    ax.text(0, 4.3, "Input\n$x\\in\\mathbb{R}^D$", ha="center", va="bottom")
+    ax.text(5.6, 4.3, "latenter Vektor\n$z\\in\\mathbb{R}^L$", ha="center", va="bottom")
+    ax.text(11.2, 4.3, "Rekonstruktion\n$\\hat x\\in\\mathbb{R}^D$", ha="center", va="bottom")
+    ax.annotate("", xy=(5.2, -4.5), xytext=(0.4, -4.5), arrowprops={"arrowstyle": "->", "color": HHU_DARK})
+    ax.text(2.8, -4.8, "Encoder", ha="center", va="top")
+    ax.annotate("", xy=(10.8, -4.5), xytext=(6.0, -4.5), arrowprops={"arrowstyle": "->", "color": HHU_DARK})
+    ax.text(8.4, -4.8, "Decoder", ha="center", va="top")
+    ax.set_xlim(-1.4, 12.6)
+    ax.set_ylim(-5.8, 5.6)
     save(fig, "vl06-autoencoder-schema")
 
 
@@ -658,11 +809,14 @@ def vl07_or_heatmap():
         for (px, py) in [(0, 0), (0, 1), (1, 0), (1, 1)]:
             ax.plot(px, py, "o", color="white", mec="k", ms=8)
             ax.text(px + 0.07, py + 0.07, f"({px},{py})", fontsize=8)
-        ax.set_title(t)
+        ax.set_title(t, fontsize=10)
         ax.set_xlabel("$x$")
         ax.set_ylabel("$y$")
+        ax.set_xticks([-1, 0, 1, 2])
+        ax.set_yticks([0, 1, 2])  # ohne -1: in der Ecke stiessen x- und y-Beschriftung zusammen
         ax.set_aspect("equal")
         fig.colorbar(im, ax=ax)
+    fig.subplots_adjust(wspace=0.45)  # sonst klebt das y des rechten Panels an der linken Farbskala
     save(fig, "vl07-or-nor-heatmap")
 
 
@@ -675,8 +829,8 @@ def vl07_xor_region():
     for ax, Z, t in [(axs[0], OR, "OR $>0$"), (axs[1], NAND, "NAND $>0$"), (axs[2], OR * NAND, "XOR = AND(NAND, OR)")]:
         ax.pcolormesh(X, Y, Z, cmap="Blues", vmin=0, vmax=1.4, shading="auto")
         for (px, py), lab in zip([(0, 0), (0, 1), (1, 0), (1, 1)], ["F", "T", "T", "F"]):
-            ax.plot(px, py, "o", color="white", mec="k", ms=9)
-            ax.text(px, py, lab, ha="center", va="center", fontsize=7)
+            ax.plot(px, py, "o", color="white", mec="k", ms=15)
+            ax.text(px, py, lab, ha="center", va="center", fontsize=9, fontweight="bold")
         ax.set_title(t)
         ax.set_aspect("equal")
     save(fig, "vl07-xor-region")
@@ -704,7 +858,7 @@ def vl07_label_autoencoder():
     box(ax, (3.0, 1.7), 2.0, 1.0, "Encoder")
     box(ax, (5.9, 1.7), 1.4, 1.0, "latent\n$\\mathbb{R}^L$", fc="#fff3e0", ec=HHU_ORANGE)
     box(ax, (8.4, 2.9), 2.0, 1.0, "Decoder")
-    box(ax, (8.4, 0.5), 2.0, 1.0, "Linear (10)\n+ Softmax")
+    box(ax, (8.4, 0.5), 2.0, 1.2, "Linear (10)\n+ Softmax", fontsize=9)
     arrow(ax, (2.1, 2.2), (3.0, 2.2))
     arrow(ax, (5.0, 2.2), (5.9, 2.2))
     arrow(ax, (7.3, 2.4), (8.4, 3.4))
@@ -796,11 +950,18 @@ def vl08_word2vec():
         ys = np.linspace(1.8, -1.8, left) if left > 1 else [0]
         for y in ys:
             box(ax, (0.2, y - 0.35), 1.6, 0.7, "one-hot\n$\\mathbb{R}^N$", fc=HHU_ICE, fontsize=8)
-            arrow(ax, (1.8, y), (3.6, 0), text="$W$" if y == ys[0] else None)
+            arrow(ax, (1.8, y), (3.6, 0))
+            if y == ys[0]:
+                # Der Pfeil fällt nach rechts ab: Beschriftung rechts darüber, nicht auf ihn
+                ax.text(2.9 if left > 1 else 2.7, y / 2 + 0.25, "$W$", ha="left" if left > 1 else "center",
+                        va="bottom", fontsize=9, color=HHU_DARK)
         box(ax, (3.6, -0.4), 1.6, 0.8, "$\\mathbb{R}^K$", ec=HHU_ORANGE)
         ys2 = np.linspace(1.8, -1.8, right) if right > 1 else [0]
         for y in ys2:
-            arrow(ax, (5.2, 0), (7.0, y), text="$W'$" if y == ys2[0] else None)
+            arrow(ax, (5.2, 0), (7.0, y))
+            if y == ys2[0]:
+                ax.text(6.1, y / 2 + 0.25, "$W'$", ha="right" if right > 1 else "center",
+                        va="bottom", fontsize=9, color=HHU_DARK)
             box(ax, (7.0, y - 0.35), 2.2, 0.7, "Softmax $\\mathbb{R}^N$", fontsize=8)
         ax.set_title(t)
     save(fig, "vl08-cbow-skipgram")
@@ -836,14 +997,14 @@ def vl09_message_passing():
             ax.plot(*zip(nodes[a], nodes[b]), color=GREY, lw=1.2, zorder=1)
         for n, (x, y) in nodes.items():
             c = HHU_ORANGE if n == hl else HHU_ICE
-            ax.add_patch(Circle((x, y), 0.45, fc=c, ec=HHU_BLUE, zorder=2))
+            ax.add_patch(Circle((x, y), 0.62, fc=c, ec=HHU_BLUE, zorder=2))
             ax.text(x, y, n, ha="center", va="center", fontsize=8, zorder=3)
         if hl:
             for nb in ["Kaffee", "Tee", "Tasse"]:
                 pa, pb = np.array(nodes[nb]), np.array(nodes[hl])
                 d = (pb - pa) / np.linalg.norm(pb - pa)
-                arrow(ax, pa + 0.5 * d, pb - 0.5 * d, color=HHU_ORANGE)
-        ax.set_xlim(-3, 5)
+                arrow(ax, pa + 0.66 * d, pb - 0.66 * d, color=HHU_ORANGE)
+        ax.set_xlim(-2.8, 4.8)
         ax.set_ylim(-1.8, 1.8)
         ax.set_aspect("equal")
         ax.axis("off")
@@ -917,7 +1078,8 @@ def vl10_asml_convolutions():
         "Gauß ($\\sigma=5$)": np.exp(-t ** 2 / 50) / np.exp(-t ** 2 / 50).sum(),
         "DoG ($\\sigma=3$ − $\\sigma=8$)": np.exp(-t ** 2 / 18) / np.exp(-t ** 2 / 18).sum() - np.exp(-t ** 2 / 128) / np.exp(-t ** 2 / 128).sum(),
     }
-    fig, axs = plt.subplots(len(filters), 2, figsize=(11, 8), gridspec_kw={"width_ratios": [1, 3]})
+    fig, axs = plt.subplots(len(filters), 2, figsize=(11, 9),
+                            gridspec_kw={"width_ratios": [1, 3], "hspace": 0.55})
     for i, (name, f) in enumerate(filters.items()):
         axs[i, 0].plot(t, f, lw=1.5)
         axs[i, 0].set_title(name, fontsize=9)
@@ -949,7 +1111,8 @@ def vl11_step_from_sigmoids():
     axs[0].legend(fontsize=8)
     axs[0].set_title("zwei steile Sigmoide")
     axs[1].plot(xs, h * s1 - h * s2, color=HHU_DARK, lw=2)
-    axs[1].set_title(r"$0{,}8\cdot\sigma_1 - 0{,}8\cdot\sigma_2$: eine Stufe der Höhe 0,8 auf $[0{,}3, 0{,}6]$")
+    axs[1].set_title("$0{,}8\\cdot\\sigma_1 - 0{,}8\\cdot\\sigma_2$:\n"
+                     "eine Stufe der Höhe 0,8 auf $[0{,}3;\\,0{,}6]$")
     axs[1].set_ylim(-0.1, 1)
     save(fig, "vl11-step-from-sigmoids")
 
@@ -966,16 +1129,19 @@ def vl12_gan_schema():
     box(ax, (2.8, 0.4), 1.8, 0.9, "Generator $G$")
     box(ax, (5.5, 0.4), 1.6, 0.9, "$G(z)$\n(generiert)", fc="#fff3e0", ec=HHU_ORANGE, fontsize=9)
     box(ax, (5.5, 2.6), 1.6, 0.9, "$x$\n(echt)", fc="#e8f5e9", ec=HHU_GREEN, fontsize=9)
-    box(ax, (8.4, 1.5), 2.0, 0.9, "Diskriminator $D$")
-    box(ax, (11.0, 1.5), 0.9, 0.9, "echt?", fontsize=9)
+    box(ax, (8.4, 1.5), 2.4, 0.9, "Diskriminator $D$")
+    box(ax, (11.3, 1.5), 0.9, 0.9, "echt?", fontsize=9)
     arrow(ax, (1.9, 0.85), (2.8, 0.85))
     arrow(ax, (4.6, 0.85), (5.5, 0.85))
     arrow(ax, (7.1, 0.85), (8.4, 1.7))
     arrow(ax, (7.1, 3.05), (8.4, 2.2))
-    arrow(ax, (10.4, 1.95), (11.0, 1.95))
-    ax.text(9.4, 0.5, "Backprop durch $D$ bis in $G$", fontsize=8, color=HHU_RED, ha="center")
-    ax.add_patch(FancyArrowPatch((9.4, 1.4), (3.7, 0.3), connectionstyle="arc3,rad=0.25", arrowstyle="-|>", mutation_scale=12, color=HHU_RED, lw=1, ls="--"))
-    ax.set_xlim(0, 12.2)
+    arrow(ax, (10.8, 1.95), (11.3, 1.95))
+    # Der Bogen läuft unter den Kästen entlang; bis zum 2026-11-02 lief er quer durch
+    # "Generator G" und über zwei Pfeile.
+    ax.text(6.3, -0.75, "Backprop durch $D$ bis in $G$", fontsize=8, color=HHU_RED, ha="center", va="top")
+    ax.add_patch(FancyArrowPatch((9.4, 1.45), (3.7, 0.35), connectionstyle="arc3,rad=-0.35", arrowstyle="-|>", mutation_scale=12, color=HHU_RED, lw=1, ls="--"))
+    ax.set_xlim(0, 12.4)
+    ax.set_ylim(-1.2, 4)
     save(fig, "vl12-gan-schema")
 
 
@@ -986,9 +1152,11 @@ def vl13_word_arithmetic():
     words = {"man": (0, 0), "woman": (1.0, 1.6), "king": (3.0, 0.3), "queen": (4.0, 1.9),
              "walk": (0.2, -2.6), "walking": (1.6, -1.8), "swim": (2.8, -2.9), "swimming": (4.2, -2.1)}
     fig, ax = plt.subplots(figsize=(6.5, 5))
+    start = {"man", "king", "walk", "swim"}  # von hier geht ein Pfeil nach oben rechts ab
     for w, (x, y) in words.items():
         ax.plot(x, y, "o", color=HHU_BLUE)
-        ax.text(x + 0.1, y + 0.1, w, fontsize=10)
+        ax.text(x + 0.1, y - 0.12 if w in start else y + 0.1, w, fontsize=10,
+                va="top" if w in start else "baseline")
     for a, b, c in [("man", "woman", HHU_ORANGE), ("king", "queen", HHU_ORANGE), ("walk", "walking", HHU_GREEN), ("swim", "swimming", HHU_GREEN)]:
         arrow(ax, words[a], words[b], color=c)
     ax.text(2.2, 1.4, "„feminin“", color=HHU_ORANGE)
@@ -1042,7 +1210,9 @@ def vl15_manifolds():
     axs[3].plot(x, 0.3 * np.sin(2 * x), color=HHU_ICE, lw=8, alpha=0.7, label="Datenmannigfaltigkeit")
     axs[3].plot(x, 0.3 * np.sin(2 * x) + 0.25 - 0.2 * np.exp(-((x - 0.8) ** 2) * 6), color=HHU_RED, lw=1.5, label="Entscheidungsgrenze")
     axs[3].scatter([0.8], [0.3 * np.sin(1.6)], color="k", zorder=3)
-    axs[3].annotate("adversarial:\nwinziger Schritt\nüber die Grenze", (0.8, 0.3 * np.sin(1.6)), (1.6, 0.9), fontsize=8, arrowprops={"arrowstyle": "->"})
+    axs[3].annotate("adversarial:\nwinziger Schritt\nüber die Grenze", (0.8, 0.3 * np.sin(1.6)), (-2.9, 1.25),
+                    fontsize=8, va="top", arrowprops={"arrowstyle": "->"})
+    axs[3].set_ylim(-0.75, 1.3)
     axs[3].legend(fontsize=7, loc="lower left")
     axs[3].set_title("Dimpled Manifold Model", fontsize=9)
     for a in axs:
@@ -1080,10 +1250,10 @@ def _la_grad(v):
     return np.degrees(np.arctan2(v[1], v[0]))
 
 
-def _la_winkel(ax, a, b, r, label=r"$\theta$"):
+def _la_winkel(ax, a, b, r, label=r"$\theta$", grad=None):
     t1, t2 = sorted([_la_grad(a), _la_grad(b)])
     ax.add_patch(Arc((0, 0), 2 * r, 2 * r, theta1=t1, theta2=t2, color=HHU_DARK, lw=1.5))
-    m = np.radians((t1 + t2) / 2)
+    m = np.radians((t1 + t2) / 2 if grad is None else grad)
     ax.text(1.25 * r * np.cos(m), 1.25 * r * np.sin(m), label, color=HHU_DARK, fontsize=13,
             ha="center", va="center")
 
@@ -1102,7 +1272,8 @@ def la_drehung():
         _la_ebene(ax, (-2.3, 2.8), (-0.6, 2.8))
         _la_pfeil(ax, a, HHU_BLUE, names[0])
         _la_pfeil(ax, b, HHU_ORANGE, names[1], off=(-0.35, 0.08))
-        _la_winkel(ax, a, b, 0.55)
+        # rechts liegt die blasse Kopie von v genau auf der Winkelhalbierenden
+        _la_winkel(ax, a, b, 0.55, grad=None if ax is axs[0] else 22)
         ax.set_title(title)
     for g in (v, w):
         _la_pfeil(axs[1], g, GREY, alpha=0.3, lw=1.2)
@@ -1159,7 +1330,7 @@ def la_projektion():
         ax.plot([v[0], p[0]], [v[1], p[1]], color=GREY, ls="--", lw=1)
         ax.plot([0, p[0]], [0, p[1]], color=HHU_RED, lw=4, alpha=0.7, solid_capstyle="butt")
         ax.text(0.25, -0.6, rf"$v \cdot \tilde w = \|v\|\cos\theta {sign}$", color=HHU_RED, ha="center")
-        _la_winkel(ax, wt, v, 0.4)
+        _la_winkel(ax, wt, v, 0.6)
     save(fig, "la-projektion")
 
 
@@ -1302,10 +1473,15 @@ if __name__ == "__main__":
         fehlt.append(f"copy_existing: {e.filename}")
         print(f"ÜBERSPRUNGEN copy_existing: {e.filename} fehlt")
 
+    if KOLLISIONEN:
+        print(f"\n{len(KOLLISIONEN)} Kollision(en) in den Abbildungen -- erst beheben, dann einchecken:")
+        for k in KOLLISIONEN:
+            print(f"  - {k}")
     if fehlt:
         print(f"\n{len(fehlt)} Schritt(e) ohne Material, gesucht in:")
         for kandidat in SRC_KANDIDATEN:
             print(f"  {kandidat}{'' if kandidat.is_dir() else '   (nicht da)'}")
         for z in fehlt:
             print(f"  - {z}")
+    if fehlt or KOLLISIONEN:
         raise SystemExit(1)

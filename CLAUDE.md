@@ -486,5 +486,17 @@ Hintergrundkapitel keinen, weil ihre Aufgaben auf den Übungsblättern stehen. D
   `SITE_ORIGIN` von selbst — aber `ds-en`, `ds-skript` und `konradvoelkel.com` nennen
   dieses Buch bei demselben `@id`, und der muss derselbe bleiben, sonst beschreiben die
   vier Seiten zwei Werke statt eines.
+* **Eine Abbildung mit unlesbarem Text eingecheckt.** Buchbau, PDF-Prüfung und
+  Byte-Vergleich sehen keine Bildinhalte: Das Autoencoder-Schema hatte vom 2026-09-17 bis
+  zum 2026-11-02 drei übereinanderliegende Überschriften und Pfeile durch „Encoder“ und
+  „Decoder“, und nichts wurde rot. Ursache war `set_aspect("equal")` in `draw_layers`, das
+  die Zeichenfläche nach dem Netz statt nach `figsize` formt. Seitdem prüft `save()` in
+  `make_figures.py` jede Abbildung (Textabstände, Pfeile durch Text, Text in seiner Form,
+  Panel-Titel) und endet bei einem Befund mit Fehlercode. Die erste Runde samt Durchsicht
+  von Hand fand Mängel in 19 weiteren Abbildungen. **Was sie nicht sieht** (Text in Markern, Legende über der
+  wichtigen Stelle, Abbildungen von außerhalb wie Notebook- und Paper-Bilder), sieht nur, wer
+  **jede geänderte PNG einmal öffnet** – das gehört zu jeder Änderung an einer Abbildung,
+  genauso wie der Blick auf die Foliensätze, die dieselbe PNG einbinden (`grep -l <name>
+  slides/*.tex`, dann `slides/build.sh`).
 * **`uv sync` gemacht und den mystmd-Patch vergessen.** Dann sind alle Kommandozeilen im
   lokal gebauten PDF falsch, und zwar unauffällig.
