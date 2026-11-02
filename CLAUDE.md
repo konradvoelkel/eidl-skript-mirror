@@ -70,16 +70,17 @@ Abschnitt „Orthogonale Matrizen“ im Kapitel „Hintergrundwissen Lineare Alg
 Rechenbeispiel zur Geradengleichung im Kapitel „Neuron und Perzeptron“ und den zwei
 Polyeder-Abbildungen im Kapitel „Aktivierungsfunktionen“ und den Literaturlisten in allen
 „Weiterlesen“-Boxen und dem Abschnitt „Approximieren heißt nicht generalisieren“ (Double Descent)
-im Kapitel „Universelle Approximation“; die
+im Kapitel „Universelle Approximation“ und der Vertiefung „Matrizen als Tensoren und die Spur“
+im Kapitel „Tensoren“; die
 fachliche Durchsicht vom 2026-10-15 deckte 27 Kapitel und das Glossar ab, den
-Kettenregel-Abschnitt vom 2026-10-20 und diesen Zuwachs nicht): HTML ohne Warnungen, PDF **134 Seiten A4** lokal, 0 LaTeX-Fehler,
+Kettenregel-Abschnitt vom 2026-10-20 und diesen Zuwachs nicht): HTML ohne Warnungen, PDF **135 Seiten A4** lokal, 0 LaTeX-Fehler,
 0 fehlende Glyphen, 5 überlange Zeilen. Das veröffentlichte PDF hatte bis zum 2026-10-19
 stets **eine Seite mehr** als das lokale (siehe unten); für den neuen Stand ist das noch
 nicht nachgemessen. Die `--min-pages`-Untergrenze
 soll einen *abgebrochenen* Lauf fangen, nicht eine gewollte Kürzung — sie steht deshalb
 deutlich unter der tatsächlichen Seitenzahl, in der CI auf demselben Wert.
 
-**Lokal und CI weichen um eine Seite ab, und das bleibt so**: hier 134 Seiten, das
+**Lokal und CI weichen um eine Seite ab, und das bleibt so**: hier 135 Seiten, das
 veröffentlichte PDF hatte am 2026-10-19 vor dem neuen Kapitel 113 gegen lokal 112. Die erste Abweichung steht auf Seite 28 in einem Codeblock,
 der eine Zeile anders bricht — es ist der *Satz*, nicht der Inhalt. Die Ursache ist am
 2026-10-15 gemessen worden, und sie ist nicht die, die hier vom 2026-09-29 bis dahin stand:
@@ -287,8 +288,8 @@ Der Ton ist knapp und präzise:
 * Rechenbeispiele werden **durchgerechnet**, nicht behauptet. Wer eine Zahl ändert, rechnet
   die Folgezahlen nach.
 * Vertiefungen, die nicht Vorlesungsstoff sind, stehen in einer Box
-  `:::{admonition} Vertiefung: …` mit `:class: note dropdown` (derzeit sieben; dazu eine
-  Antwortenbox in Kapitel 01, zusammen acht `dropdown`-Boxen).
+  `:::{admonition} Vertiefung: …` mit `:class: note dropdown` (derzeit acht; dazu eine
+  Antwortenbox in Kapitel 01, zusammen neun `dropdown`-Boxen).
   **Aufgeklappt wird nur im HTML**: `dropdown` hat im LaTeX-Export keine Wirkung, im PDF
   steht der Inhalt offen da. Für Vertiefungen ist das in Ordnung — für alles, was erst nach
   eigenem Nachdenken gelesen werden soll, ist `dropdown` kein Versteck. Genau daran hingen

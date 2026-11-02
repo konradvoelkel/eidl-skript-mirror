@@ -56,6 +56,45 @@ Jedes Element eines Tensorproduktraums wird *Tensor* genannt – also auch Skala
 
 **Obacht: lineare Abbildung ≠ Matrix.** Jede Matrix lässt sich als lineare Abbildung interpretieren. Umgekehrt lässt sich, gegeben eine Wahl von Basen, jede lineare Abbildung als Matrix schreiben, die *darstellende Matrix*. Genauso hat der gleiche Vektor $v \in V$ verschiedene darstellende Vektoren $[v]_B \in \mathbb{R}^n$ für verschiedene Basen $B$. Zu einem Tensor $T \in U \otimes V \otimes W$ lässt sich ebenso eine Darstellung finden, wenn man Basen von $U$, $V$ und $W$ wählt: Sie hat zu jedem Tripel von Indizes $(i, j, k)$ ein „Matrixelement“, nämlich den Koeffizienten von $u_i \otimes v_j \otimes w_k$. Das lässt sich dreidimensional darstellen, analog zur zweidimensionalen Darstellung für Matrizen.
 
+:::{admonition} Vertiefung: Matrizen als Tensoren und die Spur
+:class: note dropdown
+Sei $e_{ij} \in \operatorname{Mat}(n \times m)$ die Matrix mit genau einer Eins in Zeile $i$ und Spalte $j$ und Nullen sonst, also $e_{ij} = e_i e_j^T$. Dann lässt sich jede Matrix $A = (a_{ij})_{ij} \in \operatorname{Mat}(n \times m)$ lesen als
+
+$$
+A = \sum_{i=1}^n \sum_{j=1}^m a_{ij} \, e_{ij} .
+$$
+
+Die $e_{ij}$ bilden also eine Basis von $\operatorname{Mat}(n \times m)$, so wie die $e_i \otimes e_j$ eine Basis von $\mathbb{R}^n \otimes \mathbb{R}^m$ bilden. Die lineare Abbildung, die $e_{ij}$ auf $e_i \otimes e_j$ schickt, ist deshalb ein Isomorphismus $\operatorname{Mat}(n \times m) \cong \mathbb{R}^n \otimes \mathbb{R}^m$, und sie bildet $A$ auf $\sum_{i,j} a_{ij} \, e_i \otimes e_j$ ab. Allgemein wird $v w^T$ zu $v \otimes w$: Beide Seiten sind bilinear in $(v, w)$ und stimmen auf den Basisvektoren überein.
+
+**Die Spur.** Sei nun $m = n$. Das Skalarprodukt $\mathbb{R}^n \times \mathbb{R}^n \to \mathbb{R}$, $(v, w) \mapsto v \cdot w$ ist bilinear, gehört also zu einer linearen Abbildung $\mathbb{R}^n \otimes \mathbb{R}^n \to \mathbb{R}$ mit $v \otimes w \mapsto v \cdot w$. Das Bild von $A$ unter dieser Abbildung heißt *Spur* von $A$, und man rechnet es aus:
+
+$$
+\operatorname{tr} A = \sum_{i,j} a_{ij} \, (e_i \cdot e_j) = \sum_{i=1}^n a_{ii},
+$$
+
+die Summe der Diagonaleinträge. Der Vorteil dieser Definition: Sie zeigt, warum die Spur nicht von der Basis abhängt. Für eine invertierbare Matrix $S$ ist
+
+$$
+S \, e_{ij} \, S^{-1} = (S e_i) \bigl(e_j^T S^{-1}\bigr) = (S e_i) \bigl((S^{-1})^T e_j\bigr)^T ,
+$$
+
+zu $S A S^{-1}$ gehört also der Tensor $\sum_{i,j} a_{ij} \, S e_i \otimes (S^{-1})^T e_j$. Der linke Faktor transformiert sich mit $S$, der rechte mit $(S^{-1})^T$, und genau diese beiden heben sich im Skalarprodukt auf: $(S v) \cdot \bigl((S^{-1})^T w\bigr) = v^T S^T (S^{-1})^T w = v^T (S^{-1} S)^T w = v \cdot w$. Damit ist
+
+$$
+\operatorname{tr}(S A S^{-1}) = \sum_{i,j} a_{ij} \, (S e_i) \cdot \bigl((S^{-1})^T e_j\bigr) = \sum_{i,j} a_{ij} \, (e_i \cdot e_j) = \operatorname{tr} A .
+$$
+
+Dass der rechte Faktor sich anders transformiert als der linke, ist kein Zufall: Er ist in Wahrheit ein Kovektor, $A \in \mathbb{R}^n \otimes (\mathbb{R}^n)^\vee$ wie oben, und die Spur ist die Auswertung $v \otimes \varphi \mapsto \varphi(v)$, für die man gar keine Basis braucht.
+
+**Zyklisches Vertauschen.** Daraus folgt $\operatorname{tr}(AB) = \operatorname{tr}(BA)$ für quadratische $A, B$. Ist $A$ invertierbar, so ist $AB = A (BA) A^{-1}$, und die Invarianz liefert die Behauptung. Sonst wählt man ein $t \in \mathbb{R}$, das kein Eigenwert von $A$ ist; dann ist $A - tI$ invertierbar, und wegen der Linearität der Spur gilt
+
+$$
+\operatorname{tr}(AB) - t \operatorname{tr} B = \operatorname{tr}\bigl((A - tI) B\bigr) = \operatorname{tr}\bigl(B (A - tI)\bigr) = \operatorname{tr}(BA) - t \operatorname{tr} B .
+$$
+
+Zweimal angewendet ergibt das $\operatorname{tr}(ABC) = \operatorname{tr}\bigl(A (BC)\bigr) = \operatorname{tr}\bigl((BC) A\bigr) = \operatorname{tr}(BCA)$. Für rechteckige $A \in \operatorname{Mat}(n \times m)$ und $B \in \operatorname{Mat}(m \times n)$ gilt $\operatorname{tr}(AB) = \operatorname{tr}(BA)$ ebenfalls, dort am schnellsten mit Indizes: Beide Seiten sind $\sum_{i,j} a_{ij} b_{ji}$. Gebraucht wird das im [Kapitel „Backpropagation“](../part-lernen/09-backpropagation.md) beim Spur-Trick.
+:::
+
 **Zurück zu NumPy & Co.** In der Mathematik müssen wir uns zu einem Tensor merken, wie das Tensorprodukt zustande kam, um zu wissen, welche Variablen kovariant und welche kontravariant sind. Wählt man überall Basen, so verschwindet der Unterschied – man sieht nur noch die Koeffizienten. In NumPy arbeiten wir implizit mit Darstellungen in der Standardbasis von $\mathbb{R}^n$. Ist der Shape eines Arrays `a` z.B. `a.shape == (4, 10, 2)`, so bedeutet dies mathematisch gesehen
 
 $$
