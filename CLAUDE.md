@@ -436,7 +436,27 @@ des Data-Science-Skripts (`~/Sciebo/hhu/ds2026/ds-skript`, dort `erwartungswert.
 * **Nachgetragen wird, sobald die Aufzeichnung in der Playlist auftaucht**, in der Regel in
   der Woche nach der Sitzung. Dieselbe Adresse gehört in die Wochentabelle in ILIAS
   (`../ilias/runs/ws2026-27.yaml`, `schedule.weeks[].material`) — ein Arbeitsschritt, zwei
-  Stellen.
+  Stellen. **Und dazu Kapitelmarken in der Mediathek** (seit 2026-11-02 fester Teil dieses
+  Schritts): rund 8–12 je 90 Minuten, eine je Folienblock bzw. `##`-Abschnitt, Titel nach
+  den Folientiteln. Setzen kann sie nur Konrad eingeloggt, unter
+  `https://media.hhu.de/webplayer/formchapters/key/<hash>` (eine Marke je Absenden,
+  Sprache Deutsch, Zeit `HH:MM:SS`) — vorbereitet wird die Liste, eingetragen erst nach
+  Konrads Freigabe. Die Zeiten werden **gemessen, nicht geschätzt**: Video in 480p von
+  `https://media.hhu.de/getMedium/<hash>.mp4?format=480p` nach
+  `/media/konrad/xtraspace/eidl-videos/2026/`, Kontaktbögen mit einem Bild alle 30 s zum
+  Zuordnen, dann die Bilddifferenz im Titelband alle 5 s für die Sekunde des Wechsels
+  (OCR der Folientitel taugt nicht). Die Marke liegt auf dem ersten Bild der neuen Folie,
+  und ein `?t=` im Kapitel nennt dieselbe Sekunde wie die passende Marke. Die
+  Vorschaubilder der Kapitelleiste stammen aus einem Raster von etwa einem Bild pro
+  Minute und zeigen oft noch die vorige Folie — das lässt sich nicht wegschieben. Ein
+  eingebetteter Player zeigt die Marken nur mit `&chapters=true` in der Embed-Adresse.
+  **Ebenso Untertitel** (seit 2026-11-02, zuerst VL 3): faster-whisper large-v3 mit
+  Wortzeitstempeln, geschnitten auf höchstens 84 Zeichen und 7 s je Untertitel, dann eine
+  Bereinigung durch Opus, die nur korrigiert (Fachbegriffe, Rechtschreibung, Füllwörter)
+  und Zeiten und Anzahl erhält — geprüft per Skript, Änderungen als Vorher-nachher-Liste
+  an Konrad, hochgeladen erst nach seinem Ja über `/webPlayerSubtitles/upload/key/<hash>`
+  (`.srt` oder `.vtt`, Sprache Deutsch). Die Mediathek bricht die Zeilen selbst neu um.
+  Die Whisper-GPU teilt sich die Maschine mit Ollama; ist sie belegt, warten.
 * **Die Adresse wird nicht geraten.** Sie steht in der Playlist selbst oder in der
   Titelsuche <https://media.hhu.de/search/title/Einf%C3%BChrung+in+Deep+Learning+2026/>.
   Zwei Eigenheiten der Mediathek: Playlist-Adressen antworten mit **302** und landen beim
