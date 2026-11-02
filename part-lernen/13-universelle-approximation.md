@@ -47,6 +47,65 @@ Der Satz steht in Yarotsky, [*Error bounds for approximations with deep ReLU net
 
 Umgekehrt lässt sich jedes ReLU-Netz auch als Entscheidungsbaum schreiben: Jedes ReLU-Neuron ist eine Ja/Nein-Entscheidung „$\langle w, x \rangle + b > 0$?“, und die Regionen, in denen alle Entscheidungen feststehen, sind genau die Stücke, auf denen das Netz linear ist (Caglar Aytekin, *Neural Networks are Decision Trees*, [arXiv:2210.05189](https://arxiv.org/abs/2210.05189), 2022). Der Baum ist allerdings exponentiell groß.
 
+## Approximieren heißt nicht generalisieren
+
+Die Sätze oben sagen: Ein ausreichend großes Netz *kann* jede Funktion darstellen. Sie sagen nichts darüber, ob das Training die *richtige* findet. Ein Netz mit mehr Parametern als Trainingsbeispielen kann insbesondere jeden Trainingsdatensatz exakt treffen, samt Rauschen. Nach der Lehre aus dem Data-Science-Skript müsste es dann hoffnungslos overfitten. Moderne Netze haben aber oft viel mehr Parameter als Trainingsbeispiele und generalisieren trotzdem gut. Wie passt das zusammen?
+
+Ein Teil der Antwort ist ein Phänomen namens **Double Descent**, und es lässt sich schon an der polynomialen Regression vollständig verstehen, ganz ohne neuronales Netz.
+
+### Die klassische U-Kurve
+
+Wir nehmen $n = 15$ Punkte $x_i$ gleichverteilt aus $[-1, 1]$ und $y_i = \sin(\pi x_i) + \varepsilon_i$ mit normalverteiltem Rauschen, $\sigma = 0{,}2$. Als Merkmale nehmen wir die ersten $p$ Legendre-Polynome $P_0, \dots, P_{p-1}$ – das sind Polynome vom Grad $0$ bis $p - 1$, die auf $[-1, 1]$ zueinander orthogonal sind; dieselben Funktionen wie bei der [polynomialen Regression im Data-Science-Skript](https://voelkel.pages.cs.uni-duesseldorf.de/ds-skript/lineare-regression#lineare-regression), nur in einer numerisch gutmütigeren Basis. Mit der Designmatrix $A \in \mathbb{R}^{n \times p}$, $A_{ik} = P_k(x_i)$, suchen wir Gewichte $w$ mit $Aw \approx y$ im Sinne kleinster Quadrate.
+
+Gemessen wird der **Testfehler**: der mittlere quadratische Abstand der gelernten Funktion zur wahren Funktion $\sin(\pi x)$ auf ganz $[-1, 1]$. Weil das von den gezogenen Punkten abhängt, wiederholen wir das Ganze für 200 Datensätze und nehmen den Median. Für $p \le n$ sieht man das Bekannte (linke Hälfte der Abbildung): Bei $p = 4$ ist der Testfehler mit $0{,}018$ am kleinsten, danach steigt er, während der Trainingsfehler weiter fällt. Das ist die klassische U-Kurve des Overfittens.
+
+:::{figure} ../images/vl11-double-descent.png
+:width: 100%
+
+Links: Trainings- und Testfehler der polynomialen Regression über der Zahl der Merkmale, logarithmisch auf beiden Achsen. Bis $p = n$ die klassische U-Kurve, an der Interpolationsschwelle $p = n$ eine Spitze, dahinter ein zweiter Abstieg – wie tief, hängt von der Basis ab. Rechts: drei Lösungen für denselben Datensatz.
+:::
+
+### Die Spitze an der Interpolationsschwelle
+
+Bei $p = n$ ist $A$ quadratisch und (mit Wahrscheinlichkeit $1$) invertierbar. Es gibt dann **genau ein** Polynom vom Grad $n - 1$, das alle Punkte trifft, Rauschen inklusive. Der Trainingsfehler ist null, der Testfehler liegt im Median bei etwa $10^9$.
+
+Der Grund ist lineare Algebra: Die Lösung $w = A^{-1} y$ ist nur so gutartig wie $A^{-1}$. Für unseren ersten Datensatz ist der größte Singulärwert von $A$ etwa $4{,}4$, der kleinste etwa $2{,}5 \cdot 10^{-6}$. Ein Rauschanteil in Richtung des kleinsten Singulärwerts wird also mit $4 \cdot 10^5$ multipliziert. Das Polynom muss durch alle Punkte und schlägt dazwischen wild aus (rote Kurve rechts). Kurz vor und kurz nach $p = n$ ist der Testfehler immer noch riesig (Median $2{,}6 \cdot 10^6$ bei $p = 14$, $10^7$ bei $p = 16$), weil $A$ dort zwar nicht mehr quadratisch, aber immer noch fast singulär ist.
+
+### Der zweite Abstieg
+
+Für $p > n$ hat das Gleichungssystem $Aw = y$ **unendlich viele** Lösungen: Mit einer Lösung $w$ ist auch $w + v$ eine, für jedes $v$ im Kern von $A$ (d.h. $Av = 0$). Alle treffen die Trainingspunkte exakt; wir müssen also *wählen*. Die übliche Wahl ist die Lösung mit **minimaler Norm** $\|w\|$, die die Pseudoinverse liefert, $w^+ = A^+ y$. Sie ist auch der Grenzwert der Ridge-Regression für verschwindende Regularisierung ([Regularisierung im Data-Science-Skript](https://voelkel.pages.cs.uni-duesseldorf.de/ds-skript/lineare-regression#regularisierung)).
+
+Mit dieser Wahl fällt der Testfehler hinter der Spitze wieder: bei $p = 100$ auf $0{,}091$. Das ist der zweite Abstieg. Aber Vorsicht, die Abbildung zeigt zwei Dinge, die man gern unterschlägt:
+
+1. **Ob und wie tief es abwärts geht, hängt von der Basis ab.** Die orange Kurve verwendet dieselben Polynome, nur anders skaliert: $Q_k = \sqrt{2k+1}\, P_k$, sodass alle $Q_k$ im quadratischen Mittel über $[-1, 1]$ die Länge $1$ haben. Für $p \le n$ ist das egal – die Lösung ist eindeutig, und beide Kurven liegen exakt übereinander. Für $p > n$ wählt „minimale Norm“ in den beiden Basen verschiedene Interpolanten. Schreibt man dieselbe Funktion als $\sum_k a_k P_k = \sum_k b_k Q_k$, so ist $a_k = \sqrt{2k+1}\, b_k$, also
+
+   $$
+   \|a\|^2 = \sum_k (2k+1)\, b_k^2 .
+   $$
+
+   Minimale Norm in der unnormierten Basis bestraft den Grad $k$ also mit dem Gewicht $2k+1$: hohe Grade kosten mehr, und die Lösung wird glatter. Ergebnis bei $p = 100$: $0{,}091$ unnormiert gegen $0{,}43$ orthonormiert. Der zweite Abstieg ist keine Magie, sondern eine **implizite Regularisierung**, versteckt in der Frage, welche Norm man minimiert.
+2. **Er muss das klassische Minimum nicht schlagen.** Hier bleibt der zweite Abstieg mit $0{,}091$ deutlich über dem klassischen Optimum $0{,}018$. Die blaue Kurve rechts zeigt, warum: Sie folgt im Großen der Sinuskurve, trifft aber jeden verrauschten Punkt mit einer schmalen Zacke. Bei tiefen Netzen liegt das zweite Minimum dagegen oft *unter* dem ersten – deshalb ist das Phänomen dort so bedeutsam.
+
+### Wer wählt die Lösung? Der Gradientenabstieg
+
+Niemand trainiert ein neuronales Netz mit einer Pseudoinversen. Wer wählt dort unter den vielen Interpolanten aus? Für die kleinsten Quadrate lässt sich das genau beantworten:
+
+:::{prf:proposition} Gradientenabstieg findet die Lösung minimaler Norm
+Sei $A \in \mathbb{R}^{n \times p}$ mit $p > n$ und vollem Rang $n$, und $L(w) = \frac{1}{2}\|Aw - y\|^2$. Startet der Gradientenabstieg bei $w_0 = 0$ und konvergiert er gegen eine Lösung von $Aw = y$, dann ist diese Lösung $w^+ = A^+ y$, die mit minimaler Norm.
+:::
+
+*Beweis.* Der Gradient ist $\nabla L(w) = A^\top (Aw - y)$, liegt also immer im Bild von $A^\top$, dem von den Zeilen von $A$ aufgespannten Raum $R$. Mit $w_0 = 0$ liegen deshalb alle Iterierten $w_t$ in $R$, und weil $R$ ein Untervektorraum ist, auch ihr Grenzwert $w_\infty$.
+
+$R$ steht senkrecht auf dem Kern $K$ von $A$: Für $Av = 0$ ist $\langle A^\top u, v \rangle = \langle u, Av \rangle = 0$. Aus Dimensionsgründen ($\dim R = n$, $\dim K = p - n$) lässt sich jeder Vektor eindeutig als Summe eines Vektors in $R$ und eines in $K$ schreiben. Jede Lösung von $Aw = y$ hat also die Form $w_\infty + v$ mit $v \in K$, und nach Pythagoras ist $\|w_\infty + v\|^2 = \|w_\infty\|^2 + \|v\|^2$. Die kleinste Norm hat die Lösung mit $v = 0$, also $w_\infty$. $\square$
+
+Die **Initialisierung** entscheidet also mit darüber, wie gut das Ergebnis generalisiert: Ein Start bei $w_0 \ne 0$ landet bei $w^+$ plus dem Anteil von $w_0$, der im Kern liegt. Und die **Parametrisierung** entscheidet mit, wie Punkt 1 oben zeigt: Dieselbe Funktionenklasse in einer anderen Basis führt zu einer anderen Lösung.
+
+### Und bei tiefen Netzen?
+
+Belkin, Hsu, Ma und Mandal haben 2019 in [*Reconciling modern machine-learning practice and the classical bias–variance trade-off*](https://arxiv.org/abs/1812.11118) (PNAS) gezeigt, dass dieselbe Kurve bei Random-Feature-Modellen und neuronalen Netzen auftritt, und den Namen *Double Descent* geprägt. Nakkiran et al. haben sie im selben Jahr in [*Deep Double Descent*](https://arxiv.org/abs/1912.02292) (ICLR 2020) bei CNNs, ResNets und Transformern nachgemessen. Die Kurve zeigt sich dort in drei Formen: über der **Breite** des Netzes, über der **Zahl der Epochen** und – verblüffend – über der **Zahl der Trainingsbeispiele**. In der Nähe der Interpolationsschwelle können mehr Daten das Ergebnis also verschlechtern.
+
+Das Bild aus der polynomialen Regression überträgt sich: Spitze an der Interpolationsschwelle, dahinter entscheidet eine implizite Regularisierung, welche der vielen Interpolanten gewählt wird. Bei einem tiefen Netz ist das aber kein einzelner Satz mehr, sondern das Zusammenspiel von Architektur, Initialisierung und Optimierer, und welche Lösung es genau bevorzugt, ist Gegenstand aktueller Forschung. Die universelle Approximation sagt, dass das Netz die richtige Funktion darstellen *kann*. Dass es sie unter den vielen, die die Trainingsdaten treffen, auch *findet*, ist eine zweite, schwerere Frage.
+
 ## Übung
 
 1. Geben Sie zwei Neuronen mit steilen **Sigmoiden** und Ausgabegewichte an, deren Summe
@@ -57,18 +116,26 @@ Umgekehrt lässt sich jedes ReLU-Netz auch als Entscheidungsbaum schreiben: Jede
    ein Dreieck über $[1,2]$, wie viele für ein Trapez mit flachem Dach?
    *Tipp: Sehen Sie sich an, welche Steigung die Summe rechts von allen Knicken hat, und
    was sie sein müsste, damit die Funktion wieder auf $0$ zurückkommt.*
-3. Wie viele Neuronen brauchen Sie für eine Treppenfunktion mit $k$ Stufen?
+3. Zwei Trainingspunkte, $(x, y) = (-1, 0)$ und $(1, 2)$, und drei Merkmale $1, x, x^2$:
+   Gesucht ist $f(x) = w_0 + w_1 x + w_2 x^2$ durch beide Punkte. Bestimmen Sie alle
+   Lösungen $w = (w_0, w_1, w_2)$ und darunter die mit minimaler Norm $\|w\|$. Ist es die
+   Gerade durch die beiden Punkte?
+   *Tipp: Zwei Gleichungen, drei Unbekannte – die Lösungen bilden eine Gerade im
+   $\mathbb{R}^3$, und ihre Richtung ist der Kern der Designmatrix. Die Lösung minimaler
+   Norm steht senkrecht auf dieser Richtung.*
 
-*Antwortprobe: Die beiden Zahlen in (2) unterscheiden sich um genau eins, und die Antwort
-auf (3) ist linear in $k$.*
+*Antwortprobe: Die beiden Zahlen in (2) unterscheiden sich um genau eins. In (3) ist
+$\|w\|^2 = 3/2$ für die Lösung minimaler Norm und $\|w\|^2 = 2$ für die Gerade.*
 
 :::{admonition} Weiterlesen
 :class: seealso
-Prince, [*UDL*](https://udlbook.github.io/udlbook/), Kap. 3 (Universal approximation theorem), Kap. 4 (Depth vs. width) und Kap. 20 (Why does deep learning work?). Das Buch ist frei verfügbar, siehe [Über dieses Skript](../README.md).
+Prince, [*UDL*](https://udlbook.github.io/udlbook/), Kap. 3 (Universal approximation theorem), Kap. 4 (Depth vs. width), Kap. 8 (Measuring performance, dort auch Double Descent) und Kap. 20 (Why does deep learning work?). Das Buch ist frei verfügbar, siehe [Über dieses Skript](../README.md).
 
 **Im Kapitel zitiert:**
 
 * Yarotsky: [*Error bounds for approximations with deep ReLU networks*](https://hdl.handle.net/10.1016/j.neunet.2017.07.002), Neural Networks 2017; frei: [arXiv:1610.01145](https://arxiv.org/abs/1610.01145).
 * Thom: [*Approximation of functions by neural networks*](https://arxiv.org/abs/1901.10267), 2019.
 * Aytekin: [*Neural Networks are Decision Trees*](https://arxiv.org/abs/2210.05189), 2022.
+* Belkin, Hsu, Ma, Mandal: [*Reconciling modern machine-learning practice and the classical bias–variance trade-off*](https://arxiv.org/abs/1812.11118), PNAS 2019.
+* Nakkiran, Kaplun, Bansal, Yang, Barak, Sutskever: [*Deep Double Descent: Where Bigger Models and More Data Hurt*](https://arxiv.org/abs/1912.02292), ICLR 2020.
 :::

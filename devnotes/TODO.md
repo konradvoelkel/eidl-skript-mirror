@@ -22,7 +22,7 @@ uv run devnotes/check_pdf_build.py --min-pages 100
 uv run devnotes/check_doku.py           # stimmt die Doku noch mit dem Repo überein?
 ```
 
-Erwartung: **29 Kapitel plus Glossar, 131 Seiten A4 lokal** (veröffentlicht eine Seite
+Erwartung: **29 Kapitel plus Glossar, 134 Seiten A4 lokal** (veröffentlicht eine Seite
 mehr — die Abweichung ist seit dem 2026-10-15 erklärt, siehe `../CLAUDE.md`), 0 LaTeX-Fehler, 0 fehlende Glyphen,
 5 überlange Zeilen, 23 Übungsabschnitte. Weicht etwas davon ab, ist das der erste Befund, nicht
 Hintergrundrauschen.
@@ -103,6 +103,37 @@ Abgabe bis …“ in den TeX-Blättern.
   Kapitel 01; die übrigen kommen eine je Sitzung dazu, sobald die Aufzeichnung in der Playlist 2026/27 auftaucht.
   Adressform, Zuordnung Kapitel ↔ Sitzung und die zwei Fallen der Mediathek stehen in `../CLAUDE.md`
   („Vorlesungsaufzeichnungen“); dieselbe Adresse gehört in die Wochentabelle in `../../ilias/runs/ws2026-27.yaml`.
+
+### Lücken gegenüber anderen PyTorch-Lehrbüchern (Entscheidung Konrad, 2026-11-02)
+
+Vergleich mit Stevens/Antiga/Viehmann, Raschka, Howard/Gugger, d2l.ai, Prince (UDL), Bishop 2024. Die größte
+Lücke ist das Handwerk des Trainierens, nicht der Stoff. Entschieden: **zwei Ausblick-Kapitel, ohne Nummer im
+Dateinamen** (wie die Hintergrundkapitel; sie stehen nicht in der Vorlesungsreihenfolge, und 14–27 müssen
+nicht umbenannt werden), dazu Double Descent im Kapitel „Universelle Approximation“ (erledigt 2026-11-02,
+siehe `erledigt.md`).
+
+- [ ] **„Ausblick: Training in der Praxis“**, letztes Kapitel im Teil *Lernen*, hinter „Universelle
+  Approximation“. Inhalt: `Dataset`/`DataLoader` und die Trainingsschleife als festes Muster;
+  Train/Validierung/Test, Overfitting erkennen, Early Stopping; Regularisierung (Dropout, Weight Decay,
+  Augmentation); Lernraten-Scheduler (Warmup, Cosine); Debugging, wenn der Loss nicht sinkt (auf einem Batch
+  overfitten, Gradienten-Normen, NaNs); GPU und Effizienz (Mixed Precision mit `autocast`, `torch.compile`,
+  Speicher und Batchgröße, Checkpointing, Export). Danach kann „Autoencoder“ (14) auf das Kapitel
+  zurückverweisen, statt Dropout, BatchNorm und den steigenden Testloss nebenbei einzuführen
+  (`14-autoencoder.md`, Liste „Mehr Epochen trainieren“ und die Layer-Tricks).
+- [ ] **„Ausblick: Tiefe Netze stabil halten“** (Initialisierung, Normalisierung, Residuen), letztes Kapitel
+  im Teil *Representation Learning*, hinter „Transformer“. Begründung für den Ort: Normalisierung
+  standardisiert die Repräsentationen jeder Schicht; die Varianzrechnung bei Xavier/He beschreibt, wie sich
+  ihre Verteilung durch die Tiefe fortpflanzt; der Transformer braucht Residuen und LayerNorm, und der
+  Residual Stream führt zur Superposition in „Adversarial Attacks und Polysemie“ (27). Schließt nebenbei
+  zwei Lücken: LayerNorm kommt im Buch bisher nicht vor, ResNet nur als Name.
+- [ ] Weitere Lücken, **nicht** entschieden: Diffusionsmodelle als eigenes Kapitel (bisher nur erwähnt),
+  Segmentierung/Objekterkennung, Self-Supervised/Contrastive (CLIP), LoRA praktisch, Seq2Seq,
+  Interpretierbarkeit (Grad-CAM).
+- [ ] **Zurückgestellt (Konrad, 2026-11-02: „vorerst nichts umsetzen“)**, Ideen, die kein anderes Buch hat:
+  Transformer-Netze von Hand (Attention-Kopf mit gesetzten Gewichten, vgl. RASP); Fallbuch der
+  Fehlschläge (Loss-Kurven mit Diagnose); „Messen statt glauben“ als Methode (Ablation gegen unveränderten
+  Stand); Überschlagsrechnung mit 6·N·D FLOPs; On-Device-Deployment aus den eigenen Apps; den
+  geometrischen Leitfaden in der Einleitung benennen.
 
 ## Vorlesungsplan (`kurs-2026-27.md`)
 

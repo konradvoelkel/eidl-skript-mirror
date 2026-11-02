@@ -557,3 +557,22 @@ TVCG
 Vec
 Yarotsky
 Tuningkurve
+# Kapitel 13, Abschnitt Double Descent (2026-11-02): Eigennamen der zitierten Autoren und Fachwörter, angesehen
+Bansal
+Belkin
+Hsu
+Kaplun
+Mandal
+Nakkiran
+Sutskever
+Interpolanten
+Interpolationsschwelle
+Overfittens
+overfitten
+Pseudoinverse
+Pseudoinversen
+polynomialen
+orthonormiert
+unnormiert
+unnormierten
+Zacke

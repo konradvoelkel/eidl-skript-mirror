@@ -1163,6 +1163,87 @@ def vl11_step_from_sigmoids():
     save(fig, "vl11-step-from-sigmoids")
 
 
+# Double Descent mit polynomialer Regression: n verrauschte Punkte von sin(pi x) auf [-1, 1],
+# p Legendre-Polynome (Grad 0 bis p-1) als Merkmale, Lösung mit minimaler Norm per
+# Pseudoinverser. Zwei Basen desselben Funktionenraums: unnormiert (P_k wie in numpy) und
+# orthonormiert (P_k * sqrt(2k+1), bezogen auf das Mittel über [-1, 1]). Für p <= n ist die
+# Lösung eindeutig und die Basis egal, für p > n entscheidet die Basis, welche der vielen
+# Interpolanten "minimale Norm" hat. Eigener Zufallsgenerator, damit die Abbildung den
+# globalen `rng` der alphabetisch folgenden Abbildungen nicht verschiebt.
+DD_N, DD_SIGMA, DD_REPS = 15, 0.2, 200
+DD_PS = list(range(1, 41)) + [50, 60, 80, 100, 130, 160, 200]
+
+
+def _dd_merkmale(x, p, orthonormiert):
+    from numpy.polynomial import legendre
+
+    A = legendre.legvander(x, p - 1)
+    return A * np.sqrt(2 * np.arange(p) + 1) if orthonormiert else A
+
+
+def _dd_fit(x, y, p, orthonormiert):
+    return np.linalg.pinv(_dd_merkmale(x, p, orthonormiert), rcond=1e-12) @ y
+
+
+def _dd_daten(r):
+    g = np.random.default_rng(r)
+    x = g.uniform(-1, 1, DD_N)
+    return x, np.sin(np.pi * x) + DD_SIGMA * g.standard_normal(DD_N)
+
+
+def vl11_double_descent():
+    xt = np.linspace(-1, 1, 1000)
+    ft = np.sin(np.pi * xt)
+    test = {False: [], True: []}
+    train = []
+    for p in DD_PS:
+        fehler = {False: [], True: []}
+        tr = []
+        for r in range(DD_REPS):
+            x, y = _dd_daten(r)
+            for ortho in (False, True):
+                w = _dd_fit(x, y, p, ortho)
+                fehler[ortho].append(np.mean((_dd_merkmale(xt, p, ortho) @ w - ft) ** 2))
+                if not ortho:
+                    tr.append(np.mean((_dd_merkmale(x, p, ortho) @ w - y) ** 2))
+        for ortho in (False, True):
+            test[ortho].append(np.median(fehler[ortho]))
+        train.append(max(np.median(tr), 1e-6))
+    for ortho in (False, True):
+        werte = dict(zip(DD_PS, test[ortho]))
+        print("  Double Descent", "orthonormiert" if ortho else "unnormiert",
+              " ".join(f"{p}:{werte[p]:.3g}" for p in (4, 5, 10, 14, 15, 16, 20, 30, 50, 100, 200)))
+
+    fig, axs = plt.subplots(1, 2, figsize=(10.5, 3.8))
+    ax = axs[0]
+    ax.plot(DD_PS, test[False], color=HHU_BLUE, lw=2, label="Test, unnormiert")
+    ax.plot(DD_PS, test[True], color=HHU_ORANGE, lw=2, ls="--", label="Test, orthonormiert")
+    ax.plot(DD_PS, train, color=GREY, lw=1.2, label="Training")
+    ax.axvline(DD_N, color=HHU_RED, lw=1, ls=":")
+    ax.text(DD_N * 1.15, 1e9, f"$p = n = {DD_N}$", color=HHU_RED, fontsize=9)
+    ax.set_xscale("log")
+    ax.set_yscale("log")
+    ax.set_ylim(1e-4, 1e10)
+    ax.set_xlabel("Anzahl Merkmale $p$ (Grad + 1)")
+    ax.set_ylabel("Fehler (MSE, Median)")
+    ax.set_title(f"{DD_REPS} Datensätze à {DD_N} Punkte")
+    ax.legend(fontsize=8, loc="upper right", bbox_to_anchor=(1, 0.72))
+
+    ax = axs[1]
+    x, y = _dd_daten(0)
+    for p, farbe, ls in [(5, HHU_GREEN, "-"), (DD_N, HHU_RED, "-"), (100, HHU_BLUE, "-")]:
+        w = _dd_fit(x, y, p, False)
+        ax.plot(xt, _dd_merkmale(xt, p, False) @ w, color=farbe, ls=ls, lw=1.8,
+                label=f"$p = {p} = n$" if p == DD_N else f"$p = {p}$")
+    ax.plot(xt, ft, color=GREY, lw=1, ls="--", label=r"$\sin(\pi x)$")
+    ax.plot(x, y, "o", color=HHU_DARK, ms=4)
+    ax.set_ylim(-2.2, 2.2)
+    ax.set_xlabel("$x$")
+    ax.set_title("ein Datensatz, Legendre unnormiert")
+    ax.legend(fontsize=8, loc="lower right", ncol=2)
+    save(fig, "vl11-double-descent")
+
+
 # ----------------------------------------------------------------------------
 # VL 12
 # ----------------------------------------------------------------------------

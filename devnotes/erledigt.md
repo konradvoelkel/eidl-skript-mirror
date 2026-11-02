@@ -10,6 +10,18 @@ Datierte Protokolle größerer Umbauten liegen daneben als `build-log-<datum>.md
 
 ### Inhalt (Skript)
 
+- [x] **Double Descent im Kapitel „Universelle Approximation“** (13), 2026-11-02 (Entscheidung Konrad: als
+  zweite Hälfte von 13, nicht als eigenes Kapitel). Abschnitt „Approximieren heißt nicht generalisieren“:
+  U-Kurve, Spitze bei p = n (Singulärwerte), zweiter Abstieg mit der Lösung minimaler Norm, Basisabhängigkeit
+  (Legendre unnormiert gegen orthonormiert: dieselbe Lösung für p ≤ n, 0,091 gegen 0,43 bei p = 100),
+  Satz samt Beweis „GD ab w = 0 findet die Lösung minimaler Norm“, Ausblick auf Belkin et al. 2019 und
+  Nakkiran et al. 2019. Ehrlich festgehalten: Der zweite Abstieg (0,091) schlägt hier das klassische
+  Optimum (0,018 bei p = 4) nicht. Ein Versuch mit stärkerer Gradstrafe (Merkmale mal (2k+1)^-a) war
+  nicht monoton besser und ist deshalb nicht im Text. Abbildung `vl11-double-descent.png` aus
+  `make_figures.py` (eigener Zufallsgenerator je Datensatz, verschiebt den globalen `rng` nicht).
+  Übungsaufgabe 3 ist jetzt die Lösung minimaler Norm durch zwei Punkte mit drei Merkmalen
+  (Antwortprobe ‖w‖² = 3/2 gegen 2 für die Gerade); sie ersetzt die Treppenfunktion, die schwächste der
+  drei, weil ein Übungsabschnitt höchstens drei Aufgaben hat. PDF lokal 131 auf 134 Seiten.
 - [x] **Fachliche Durchsicht der Prosafassung**, abgeschlossen am 2026-09-29: alle 27 Kapitel und das
   Glossar auf den drei Achsen A1 (stimmt es), A2 (passt es zu Plan, Folien, Klausur) und A3 (trägt es
   beim Lesen). **Alle 126 Formelblöcke nachgerechnet**, jede Bibliotheksaussage gegen die `.venv`
