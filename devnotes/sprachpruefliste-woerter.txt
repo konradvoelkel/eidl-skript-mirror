@@ -519,3 +519,5 @@ Definitheit
 Hadamard
 Trennebene
 bilinear
+Parallelogramm
+Schulgeometrie

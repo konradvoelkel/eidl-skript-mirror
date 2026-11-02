@@ -27,7 +27,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
-from matplotlib.patches import Circle, FancyArrowPatch, FancyBboxPatch
+from matplotlib.patches import Arc, Circle, FancyArrowPatch, FancyBboxPatch, Polygon
 
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "images"
@@ -897,6 +897,220 @@ def vl15_manifolds():
 
 
 # ----------------------------------------------------------------------------
+# Kapitel „Hintergrundwissen Lineare Algebra“ (keine Vorlesung, daher Präfix la_)
+# Die Tafelbilder aus der Übung. Keine Zufallszahlen: Die Funktionen laufen alphabetisch
+# vor den vl-Funktionen und dürfen deren `rng`-Folge nicht verschieben.
+# ----------------------------------------------------------------------------
+def _la_ebene(ax, xlim, ylim):
+    ax.set_xlim(*xlim)
+    ax.set_ylim(*ylim)
+    ax.set_aspect("equal")
+    ax.axhline(0, color=GREY, lw=0.8)
+    ax.axvline(0, color=GREY, lw=0.8)
+    for s in ax.spines.values():
+        s.set_visible(False)
+    ax.set_xticks([])
+    ax.set_yticks([])
+
+
+def _la_pfeil(ax, v, color, label=None, off=(0.08, 0.08), lw=2, alpha=1.0):
+    ax.annotate("", xy=(v[0], v[1]), xytext=(0, 0),
+                arrowprops={"arrowstyle": "-|>", "color": color, "lw": lw, "alpha": alpha,
+                            "shrinkA": 0, "shrinkB": 0, "mutation_scale": 14})
+    if label:
+        ax.text(v[0] + off[0], v[1] + off[1], label, color=color, fontsize=13, alpha=alpha)
+
+
+def _la_grad(v):
+    return np.degrees(np.arctan2(v[1], v[0]))
+
+
+def _la_winkel(ax, a, b, r, label=r"$\theta$"):
+    t1, t2 = sorted([_la_grad(a), _la_grad(b)])
+    ax.add_patch(Arc((0, 0), 2 * r, 2 * r, theta1=t1, theta2=t2, color=HHU_DARK, lw=1.5))
+    m = np.radians((t1 + t2) / 2)
+    ax.text(1.25 * r * np.cos(m), 1.25 * r * np.sin(m), label, color=HHU_DARK, fontsize=13,
+            ha="center", va="center")
+
+
+def _la_drehmatrix(phi):
+    c, s = np.cos(phi), np.sin(phi)
+    return np.array([[c, -s], [s, c]])
+
+
+def la_drehung():
+    v, w = np.array([1.6, 1.9]), np.array([-1.2, 1.5])
+    A = _la_drehmatrix(-np.arctan2(v[1], v[0]))
+    fig, axs = plt.subplots(1, 2, figsize=(9, 3.8))
+    for ax, (a, b), names, title in [(axs[0], (v, w), ("$v$", "$w$"), r"$v \cdot w$"),
+                                     (axs[1], (A @ v, A @ w), ("$Av$", "$Aw$"), r"$(Av) \cdot (Aw)$")]:
+        _la_ebene(ax, (-2.3, 2.8), (-0.6, 2.8))
+        _la_pfeil(ax, a, HHU_BLUE, names[0])
+        _la_pfeil(ax, b, HHU_ORANGE, names[1], off=(-0.35, 0.08))
+        _la_winkel(ax, a, b, 0.55)
+        ax.set_title(title)
+    for g in (v, w):
+        _la_pfeil(axs[1], g, GREY, alpha=0.3, lw=1.2)
+    axs[1].add_patch(Arc((0, 0), 2.6, 2.6, theta1=_la_grad(A @ v) + 3, theta2=_la_grad(v) - 3,
+                         color=GREY, lw=1, ls="--"))
+    axs[1].text(1.5, 0.75, r"$A$", color=GREY, fontsize=13)
+    save(fig, "la-drehung")
+
+
+def la_einheitskreis():
+    th = np.radians(55)
+    v = np.array([np.cos(th), np.sin(th)])
+    fig, ax = plt.subplots(figsize=(4.6, 4.4))
+    _la_ebene(ax, (-1.3, 1.4), (-1.3, 1.4))
+    ax.add_patch(Circle((0, 0), 1, fill=False, ec=HHU_ICE, lw=2))
+    _la_pfeil(ax, np.array([1, 0]), HHU_DARK, r"$e_1$", off=(0.05, -0.18))
+    _la_pfeil(ax, v, HHU_BLUE, r"$v$")
+    ax.plot([v[0], v[0]], [0, v[1]], color=GREY, ls="--", lw=1)
+    ax.plot([0, v[0]], [-0.06, -0.06], color=HHU_RED, lw=3, solid_capstyle="butt")
+    ax.text(v[0] / 2, -0.2, r"$\cos\theta = v \cdot e_1$", color=HHU_RED, ha="center", fontsize=12)
+    ax.text(v[0] + 0.05, v[1] / 2, r"$\sin\theta$", color=GREY, fontsize=12)
+    _la_winkel(ax, np.array([1, 0]), v, 0.3)
+    save(fig, "la-einheitskreis")
+
+
+def la_normalisierung():
+    v, w = np.array([2.2, 0.9]), np.array([0.5, 1.6])
+    fig, ax = plt.subplots(figsize=(5.4, 4))
+    _la_ebene(ax, (-1.15, 2.7), (-1.15, 2.0))
+    ax.add_patch(Circle((0, 0), 1, fill=False, ec=HHU_ICE, lw=2))
+    for x, c, n, off in [(v, HHU_BLUE, "v", (0.06, -0.2)), (w, HHU_ORANGE, "w", (-0.25, 0.0))]:
+        _la_pfeil(ax, x, c, rf"${n}$", alpha=0.45, lw=1.5)
+        _la_pfeil(ax, x / np.linalg.norm(x), c, rf"$\tilde{{{n}}}$", lw=2.5, off=off)
+    _la_winkel(ax, v, w, 0.45)
+    save(fig, "la-normalisierung")
+
+
+def la_projektion():
+    w = np.array([1, 0.35])
+    wt = w / np.linalg.norm(w)
+    fig, axs = plt.subplots(1, 2, figsize=(9, 3.4))
+    for ax, v, sign in [(axs[0], np.array([1.3, 1.5]), "> 0"), (axs[1], np.array([-1.1, 1.4]), "< 0")]:
+        _la_ebene(ax, (-1.8, 2.3), (-0.8, 1.9))
+        t = np.array([-2, 2.5])
+        ax.plot(t * wt[0], t * wt[1], color=HHU_ICE, lw=1)
+        p = (v @ wt) * wt
+        _la_pfeil(ax, wt, HHU_ORANGE, r"$\tilde w$", off=(0.05, 0.12))
+        _la_pfeil(ax, v, HHU_BLUE, r"$v$")
+        ax.plot([v[0], p[0]], [v[1], p[1]], color=GREY, ls="--", lw=1)
+        ax.plot([0, p[0]], [0, p[1]], color=HHU_RED, lw=4, alpha=0.7, solid_capstyle="butt")
+        ax.text(0.25, -0.6, rf"$v \cdot \tilde w = \|v\|\cos\theta {sign}$", color=HHU_RED, ha="center")
+        _la_winkel(ax, wt, v, 0.4)
+    save(fig, "la-projektion")
+
+
+def la_halbebenen():
+    w = np.array([1.0, 0.6])
+    fig, ax = plt.subplots(figsize=(4.6, 4.4))
+    _la_ebene(ax, (-2, 2), (-2, 2))
+    g = np.linspace(-2, 2, 300)
+    X, Y = np.meshgrid(g, g)
+    ax.contourf(X, Y, w[0] * X + w[1] * Y, levels=[-10, 0, 10], colors=[HHU_ICE, "#E3EEC2"], alpha=0.7)
+    n = np.array([-w[1], w[0]]) * 3
+    ax.plot([-n[0], n[0]], [-n[1], n[1]], color=HHU_DARK, lw=1.5)
+    _la_pfeil(ax, w, HHU_RED, r"$w$")
+    ax.text(0.9, -1.4, r"$w \cdot x > 0$", fontsize=12)
+    ax.text(-1.8, 1.2, r"$w \cdot x < 0$", fontsize=12)
+    ax.text(-1.15, 1.75, r"$w \cdot x = 0$", fontsize=11, color=HHU_DARK)
+    for x in [np.array([1.4, -0.6]), np.array([-1.0, -0.6])]:
+        _la_pfeil(ax, x, HHU_BLUE, lw=1.3)
+    save(fig, "la-halbebenen")
+
+
+def la_lineare_abbildung():
+    mats = [(np.eye(2), "$I$"), (_la_drehmatrix(np.radians(30)), r"Drehung, $A^\top A = I$"),
+            (np.array([[1.5, 0.7], [0.2, 0.9]]), r"allgemein, $A^\top A \neq I$")]
+    fig, axs = plt.subplots(1, 3, figsize=(11, 3.6))
+    for ax, (A, title) in zip(axs, mats):
+        _la_ebene(ax, (-1.4, 2.6), (-0.9, 2.1))
+        for k in range(-1, 3):
+            for a, b in [((k, -1), (k, 2)), ((-1, k), (2, k))]:
+                p, q = A @ np.array(a), A @ np.array(b)
+                ax.plot([p[0], q[0]], [p[1], q[1]], color=HHU_ICE, lw=0.8)
+        sq = A @ np.array([[0, 1, 1, 0], [0, 0, 1, 1]])
+        ax.add_patch(Polygon(sq.T, fc=HHU_ICE, alpha=0.5, ec="none"))
+        _la_pfeil(ax, A[:, 0], HHU_BLUE, r"$Ae_1$", off=(0.05, -0.25))
+        _la_pfeil(ax, A[:, 1], HHU_ORANGE, r"$Ae_2$", off=(-0.45, 0.05))
+        c = A[:, 0] @ A[:, 1] / np.linalg.norm(A[:, 0]) / np.linalg.norm(A[:, 1])
+        winkel = f"{np.degrees(np.arccos(c)):.0f}"
+        flaeche = f"{abs(np.linalg.det(A)):.2f}".replace(".", "{,}")
+        ax.set_title(f"{title}\nWinkel ${winkel}^\\circ$, Fläche ${flaeche}$", fontsize=10)
+    save(fig, "la-lineare-abbildung")
+
+
+def la_ebene_r3():
+    # Zahlen wie im Kapitel: Die Zeilen von A sind u1 = v/|v|, u2 (Gram-Schmidt aus w)
+    # und n = u1 x u2. Dann ist alles ganzzahlig, und Av, Aw liegen in der x-y-Ebene.
+    v, w = np.array([1, 2, 2]), np.array([5, 4, -2])
+    A = np.array([[1, 2, 2], [2, 1, -2], [-2, 2, -1]]) / 3
+    u1, u2, n = A
+    assert np.allclose(A.T @ A, np.eye(3)) and np.isclose(n @ v, 0) and np.isclose(n @ w, 0)
+    assert np.allclose(A @ v, [3, 0, 0]) and np.allclose(A @ w, [3, 6, 0])
+    lim = (-2.6, 6)
+
+    def raum(ax):
+        ax.set_xlim(*lim); ax.set_ylim(*lim); ax.set_zlim(*lim)
+        ax.set_box_aspect((1, 1, 1))
+        ax.view_init(elev=24, azim=-30)
+        for d, lab in enumerate("xyz"):
+            e = np.zeros(3)
+            e[d] = lim[1]
+            ax.plot(*np.c_[np.zeros(3), e], color=GREY, lw=0.8)
+            ax.text(*(e * 1.05), lab, color=GREY)
+        ax.set_axis_off()
+
+    def pfeil(ax, x, color, label, lw=2.2):
+        ax.quiver(0, 0, 0, *x, color=color, lw=lw, arrow_length_ratio=0.1)
+        ax.text(*(x * 1.08), label, color=color, fontsize=13)
+
+    def flaeche(ax, a, b):
+        s, t = np.meshgrid(np.linspace(-0.15, 1.15, 2), np.linspace(-0.15, 1.15, 2))
+        P = s[..., None] * a + t[..., None] * b
+        ax.plot_surface(P[..., 0], P[..., 1], P[..., 2], color=HHU_BLUE, alpha=0.25, shade=False)
+
+    fig = plt.figure(figsize=(15, 4.6))
+    gs = fig.add_gridspec(1, 4, wspace=0.02)
+    ax = fig.add_subplot(gs[0], projection="3d")
+    raum(ax)
+    pfeil(ax, v, HHU_BLUE, "$v$")
+    pfeil(ax, w, HHU_ORANGE, "$w$")
+    ax = fig.add_subplot(gs[1], projection="3d")
+    raum(ax)
+    flaeche(ax, 3 * u1, 6 * u2)
+    pfeil(ax, v, HHU_BLUE, "$v$")
+    pfeil(ax, w, HHU_ORANGE, "$w$")
+    pfeil(ax, 2.5 * n, GREY, "$n$", lw=1.4)
+    ax = fig.add_subplot(gs[2], projection="3d")
+    raum(ax)
+    flaeche(ax, np.array([3, 0, 0]), np.array([0, 6, 0]))
+    pfeil(ax, A @ v, HHU_BLUE, "$Av$")
+    pfeil(ax, A @ w, HHU_ORANGE, "$Aw$")
+    pfeil(ax, 2.5 * (A @ n), GREY, "$An = e_3$", lw=1.4)
+
+    ax = fig.add_subplot(gs[3])
+    ax.set_xlim(-0.8, 4.8); ax.set_ylim(-0.8, 6.8); ax.set_aspect("equal")
+    for s in ax.spines.values():
+        s.set_visible(False)
+    ax.set_xticks(range(5)); ax.set_yticks(range(7)); ax.grid(color=HHU_ICE, lw=0.6)
+    ax.tick_params(length=0, labelsize=8, labelcolor=GREY)
+    for x, c, lab, off in [((3, 0), HHU_BLUE, "$Av$", (0.1, -0.5)), ((3, 6), HHU_ORANGE, "$Aw$", (0.1, 0.1))]:
+        _la_pfeil(ax, x, c)
+        ax.text(x[0] + off[0], x[1] + off[1], lab, color=c, fontsize=13)
+    ax.add_patch(Arc((0, 0), 1.6, 1.6, theta1=0, theta2=np.degrees(np.arctan2(6, 3)), color=HHU_DARK, lw=1.5))
+    ax.text(0.95, 0.55, r"$\theta$", color=HHU_DARK, fontsize=13)
+    # Gemeinsame Titelzeile: 3D-Achsen setzen ihre Titel tiefer als 2D-Achsen.
+    for i, t in enumerate(["zwei Vektoren in allgemeiner Lage", "die Ebene, die sie aufspannen",
+                           r"nach $A$: die Ebene $z = 0$", "in der Ebene gezeichnet"]):
+        pos = fig.axes[i].get_position()
+        fig.text((pos.x0 + pos.x1) / 2, 0.95, t, ha="center", fontsize=11)
+    save(fig, "la-ebene-r3")
+
+
+# ----------------------------------------------------------------------------
 def copy_existing():
     import shutil
 
@@ -916,7 +1130,7 @@ if __name__ == "__main__":
     # Eine fehlende Fremddatei darf nicht die Abbildungen danach verschlucken: Der Lauf
     # macht weiter, nennt am Ende, was fehlte, und endet trotzdem mit einem Fehlercode.
     fehlt: list[str] = []
-    for fn in [v for k, v in sorted(globals().items()) if k.startswith("vl") and callable(v)]:
+    for fn in [v for k, v in sorted(globals().items()) if k.startswith(("la_", "vl")) and callable(v)]:
         try:
             fn()
         except FileNotFoundError as e:
