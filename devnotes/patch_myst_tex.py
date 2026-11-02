@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Repariert zwei Fehler im LaTeX-Export von mystmd.
+"""Repariert drei Fehler im LaTeX-Export von mystmd.
 
 Beide treffen **nur** das PDF; im HTML ist nichts davon zu sehen. Beide sind
 idempotent gepatcht, und beide scheitern laut, wenn die Stelle nach einem
@@ -45,6 +45,17 @@ des eigenen PDF. Die Reparatur klammert die Ersetzung ein — `{``}` statt ``` `
 dann kann keine Ligatur über die Klammergrenze entstehen; das Anführungszeichen selbst
 bleibt unverändert. Dasselbe für das einfache `‘`.
 
+## 3. Kästen heißen „Example“ und „Theorem“
+
+mystmd legt die Umgebungen für `{prf:…}`-Kästen mit festen englischen Namen an
+(`\\newtheorem{example}{Example}[section]` in `renderThmDefinitions`), unabhängig von der
+Sprache des Dokuments; babel übersetzt nur `proof` („Beweis“), weil das amsthm-eigene
+`\\proofname` ist. In diesem Buch standen so 15-mal „Example“ und 4-mal „Theorem“ im PDF,
+gemeldet am 2026-11-02. Die Reparatur ersetzt die Namen in genau dieser Liste; die
+Umgebungsnamen (`example`, `theorem`) bleiben, also auch jedes `\\label` und jeder Verweis.
+Das HTML hat dasselbe Problem an anderer Stelle, im Site-Template; das repariert
+`_site/vendor/install_template.py`.
+
 ## Aufruf (idempotent)
 
     python3 devnotes/patch_myst_tex.py              # sucht das Bundle selbst
@@ -54,6 +65,7 @@ Gegenproben im gebauten PDF:
 
     pdftotext exports/eidl-skript.pdf - | grep -c ' -[a-zA-Z-]'   # Befehle
     pdftotext exports/eidl-skript.pdf - | grep -c '¿\\|¡'          # Anführungszeichen
+    pdftotext exports/eidl-skript.pdf - | grep -cE '^(Example|Theorem) [0-9]'  # Kastennamen
 """
 
 from __future__ import annotations
@@ -88,6 +100,16 @@ PATCHES = (
         '"\\u2018": "`",',
         '"\\u2018": "{`}",',
     ),
+) + tuple(
+    (f"Kastenname {en}", "renderThmDefinitions() {", 900, f"{{{en}}}", f"{{{de}}}")
+    for en, de in (
+        ("Theorem", "Satz"),
+        ("Corollary", "Folgerung"),
+        ("Example", "Beispiel"),
+        ("Remark", "Bemerkung"),
+        ("Conjecture", "Vermutung"),
+        ("Observation", "Beobachtung"),
+    )
 )
 
 KANDIDATEN = (

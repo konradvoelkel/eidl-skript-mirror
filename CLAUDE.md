@@ -379,6 +379,15 @@ dieselbe Form haben: **Es sieht im HTML unauffällig aus und ist trotzdem falsch
   der Satz im PDF in Mathe-Kursive erscheint. Passiert beim Einfügen einer zweiten Geldsumme
   in ein Kapitel, das schon eine hat (2026-09-27 in `04-vortrainierte-modelle.md`).
   Abhilfe: „US-Dollar“ ausschreiben, wie in Kapitel 20.
+* **`{prf:…}`-Kästen heißen auf Englisch.** mystmd und das Site-Template schreiben den
+  Kastennamen aus dem `kind`: „Example 1“, „Theorem 2“, im HTML wie im PDF, ohne Rücksicht
+  auf die Sprache. Repariert an zwei Stellen, beide als Patch, der laut scheitert, wenn sich
+  die Quelle bewegt: `devnotes/patch_myst_tex.py` (Abschnitt 3, die `\newtheorem`-Namen im
+  PDF) und `_site/vendor/install_template.py` (der Kastenkopf im Template, im Bündel für
+  den Server *und* in dem für den Browser – sonst schreibt die Hydration das Englische
+  zurück). Wer die `.venv` neu aufsetzt oder das Template neu entpackt, bekommt beides von
+  den Skripten wieder; wer sie überspringt, hat „Example“ zurück. Gegenprobe:
+  `pdftotext exports/eidl-skript.pdf - | grep -cE '^(Example|Theorem) [0-9]'` muss 0 sein.
 * **jtex ersetzt seine Marken auch in LaTeX-Kommentaren.** Wer den Namen des
   Import-Platzhalters in einen `%`-Kommentar von `templates/tex/eidl-skript/template.tex`
   schreibt, bekommt den ganzen Import-Block ein zweites Mal in die `.tex` — elf „already

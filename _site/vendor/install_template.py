@@ -14,6 +14,15 @@ Template zwischenspeichert — dann laedt es nichts nachher.
 
 Genau das tut dieses Skript. Es ist idempotent und braucht kein Netz.
 
+Danach setzt es **deutsche Kastennamen** ein (seit 2026-11-02): Das Template schreibt in
+den Kopf jedes `{prf:…}`-Kastens das `kind` mit großem Anfangsbuchstaben, also „Example 1“,
+„Theorem 2“. Dieselbe Stelle steht zweimal im Template, im Bündel fürs Server-Rendering
+(`build/index.js`) und in dem für den Browser (`public/build/_shared/…`); beide werden
+gepatcht, sonst schreibt der Browser beim Hydrieren das Englische zurück. Gesucht wird nach
+Struktur, nicht nach den minifizierten Namen; findet sich die Stelle nicht genau einmal je
+Bündel, endet das Skript mit Fehler — dann hat sich das Template bewegt. Das PDF repariert
+`devnotes/patch_myst_tex.py`.
+
 Aufruf (vor `myst build`):
 
     python _site/vendor/install_template.py
@@ -21,6 +30,7 @@ Aufruf (vor `myst build`):
 
 from __future__ import annotations
 
+import re
 import shutil
 import sys
 import zipfile
@@ -35,6 +45,44 @@ ZIEL = WURZEL / "_build" / "templates" / "site" / "myst" / "book-theme"
 # MyST trotzdem neu — deshalb wird der Wrapper beim Entpacken entfernt.
 MARKER = "template.yml"
 
+# Deutsche Namen der prf-Kästen; was hier fehlt, behält den englischen Namen.
+KASTENNAMEN = {
+    "proof": "Beweis", "theorem": "Satz", "lemma": "Lemma", "definition": "Definition",
+    "example": "Beispiel", "remark": "Bemerkung", "corollary": "Folgerung",
+    "proposition": "Proposition", "axiom": "Axiom", "conjecture": "Vermutung",
+    "observation": "Beobachtung", "algorithm": "Algorithmus", "exercise": "Aufgabe",
+}
+KOPF = re.compile(r'kind:(\w+)\((\w)\),children:\[\1\(\2\)," ",(\w)\]')
+GEPATCHT = "/*eidl:kastennamen*/"
+
+
+def kastennamen_eindeutschen() -> int:
+    """Ersetzt im Kopf der prf-Kästen `Gross(kind)` durch den deutschen Namen."""
+    tabelle = "{" + ",".join(f'{k}:"{v}"' for k, v in KASTENNAMEN.items()) + "}"
+    buendel = [ZIEL / "build" / "index.js", *sorted((ZIEL / "public" / "build" / "_shared").glob("*.js"))]
+    gefunden = 0
+    for pfad in buendel:
+        text = pfad.read_text(encoding="utf-8", errors="surrogateescape")
+        if GEPATCHT in text:
+            gefunden += 1
+            continue
+        treffer = KOPF.findall(text)
+        if not treffer:
+            continue
+        if len(treffer) != 1:
+            print(f"FEHLER: {len(treffer)} Kastenköpfe in {pfad.name}, erwartet 1", file=sys.stderr)
+            return 1
+        gross, k, nr = treffer[0]
+        alt = f'kind:{gross}({k}),children:[{gross}({k})," ",{nr}]'
+        neu = f'kind:{gross}({k}),children:[{GEPATCHT}({tabelle}[{k}]||{gross}({k}))," ",{nr}]'
+        pfad.write_text(text.replace(alt, neu), encoding="utf-8", errors="surrogateescape")
+        print(f"Kastennamen eingedeutscht: {pfad.relative_to(WURZEL)}")
+        gefunden += 1
+    if gefunden != 2:
+        print(f"FEHLER: Kastenkopf in {gefunden} statt 2 Bündeln gefunden — Template bewegt?", file=sys.stderr)
+        return 1
+    return 0
+
 
 def main() -> int:
     if not ARCHIV.is_file():
@@ -42,8 +90,8 @@ def main() -> int:
         return 1
 
     if (ZIEL / MARKER).is_file():
-        print(f"Template liegt schon in {ZIEL.relative_to(WURZEL)} — nichts zu tun.")
-        return 0
+        print(f"Template liegt schon in {ZIEL.relative_to(WURZEL)}.")
+        return kastennamen_eindeutschen()
 
     ZIEL.parent.mkdir(parents=True, exist_ok=True)
     if ZIEL.exists():
@@ -74,7 +122,7 @@ def main() -> int:
         return 1
 
     print(f"Template entpackt nach {ZIEL.relative_to(WURZEL)}")
-    return 0
+    return kastennamen_eindeutschen()
 
 
 if __name__ == "__main__":
