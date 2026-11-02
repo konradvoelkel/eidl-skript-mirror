@@ -23,6 +23,13 @@ Struktur, nicht nach den minifizierten Namen; findet sich die Stelle nicht genau
 Bündel, endet das Skript mit Fehler — dann hat sich das Template bewegt. Das PDF repariert
 `devnotes/patch_myst_tex.py`.
 
+Ebenso übersetzt es die **Bedienung** (seit 2026-11-02): Suche, Sprunglinks, Download-Menü,
+Kopierknöpfe und die Beschriftungen für Screenreader. Jede Ersetzung ist ein genaues Muster
+mit Kontext (`placeholder:"Search"`, nicht `"Search"` – dasselbe Wort ist im Suchdialog
+auch ein interner Zustandsname), und jedes Muster muss im Server-Bündel genauso oft stehen
+wie in den Browser-Bündeln, mindestens einmal. Eigennamen („Open Access“) und Wörter, die
+im Deutschen gleich lauten („Navigation“, „Downloads“), bleiben.
+
 Aufruf (vor `myst build`):
 
     python _site/vendor/install_template.py
@@ -54,6 +61,89 @@ KASTENNAMEN = {
 }
 KOPF = re.compile(r'kind:(\w+)\((\w)\),children:\[\1\(\2\)," ",(\w)\]')
 GEPATCHT = "/*eidl:kastennamen*/"
+
+# (Muster, Ersatz, Prüftext): Prüftext steht nach dem Ersetzen im Bündel und zeigt einen
+# früheren Lauf an. Die Muster sind reguläre Ausdrücke; Gruppen werden mitgenommen.
+BEDIENUNG = [
+    (r'"Skip to article frontmatter"', '"Zum Artikelkopf springen"', "Zum Artikelkopf springen"),
+    (r'"Skip to article content"', '"Zum Inhalt springen"', "Zum Inhalt springen"),
+    (r'"skip to content options"', '"Sprungmarken"', '"Sprungmarken"'),
+    (r'"article frontmatter"', '"Artikelkopf"', '"Artikelkopf"'),
+    (r'placeholder:"Search"', 'placeholder:"Suchen"', 'placeholder:"Suchen"'),
+    (r'children:"Search"\}', 'children:"Suche"}', 'children:"Suche"}'),
+    (r'"Search Website"', '"Website durchsuchen"', "Website durchsuchen"),
+    (r'"Search articles and their contents using fuzzy-search and prefix-matching"',
+     '"Durchsucht Titel und Text aller Kapitel; ungefähre Schreibweise und Wortanfänge genügen"',
+     "Wortanfänge genügen"),
+    (r'"No results found\."', '"Keine Treffer."', '"Keine Treffer."'),
+    (r'title:"Download"\}', 'title:"Herunterladen"}', 'title:"Herunterladen"}'),
+    (r'children:\["Download",(\w)\?` as \$\{\1\}`:""',
+     r'children:["Herunterladen",\1?` (${\1})`:""', 'children:["Herunterladen",'),
+    (r'children:\["Visit URL ",', 'children:["Öffnen: ",', 'children:["Öffnen: ",'),
+    (r'"Open Menu"', '"Menü öffnen"', '"Menü öffnen"'),
+    (r'"aria-label":"Table of Contents"', '"aria-label":"Inhaltsverzeichnis"', '"aria-label":"Inhaltsverzeichnis"'),
+    (r'"Open Folder"', '"Ordner öffnen"', '"Ordner öffnen"'),
+    (r'"Toggle theme between light and dark mode"', '"Zwischen hellem und dunklem Design wechseln"',
+     "Zwischen hellem und dunklem Design wechseln"),
+    (r'"Launch in external computing interface"', '"In externer Rechenumgebung starten"',
+     "In externer Rechenumgebung starten"),
+    (r'"Copied!!":"Copy to Clipboard"', '"Kopiert":"In die Zwischenablage kopieren"',
+     '"Kopiert":"In die Zwischenablage kopieren"'),
+    (r'"Copy code to clipboard"', '"Code in die Zwischenablage kopieren"', "Code in die Zwischenablage kopieren"),
+    (r'defaultMessage:"Copy Link",copiedMessage:"Link Copied"',
+     'defaultMessage:"Link kopieren",copiedMessage:"Link kopiert"', 'copiedMessage:"Link kopiert"'),
+    (r'"Author Details"', '"Zur Person"', '"Zur Person"'),
+    (r'"Document Outline"', '"Gliederung"', '"Gliederung"'),
+    (r'"Open Contents"', '"Inhaltsverzeichnis öffnen"', '"Inhaltsverzeichnis öffnen"'),
+    (r'preamble:"Content License: "', 'preamble:"Lizenz: "', 'preamble:"Lizenz: "'),
+    (r'"table content"', '"Tabelleninhalt"', '"Tabelleninhalt"'),
+    (r'="Contents",top:', '="Inhalt",top:', '="Inhalt",top:'),
+    (r'"Previous: ":"Next: "', '"Zurück: ":"Weiter: "', '"Zurück: ":"Weiter: "'),
+    (r'`Link to this \$\{(\w)\}`', '`Link zu dieser Stelle`', "`Link zu dieser Stelle`"),
+    (r'"aria-label":"Close"', '"aria-label":"Schließen"', '"aria-label":"Schließen"'),
+    (r'"aria-label":"code block content"', '"aria-label":"Codeblock"', '"aria-label":"Codeblock"'),
+    # Erläuterungen an den Lizenz-Symbolen; der Lizenzname selbst bleibt der offizielle.
+    (r'title:"Credit must be given to the creator"', 'title:"Namensnennung erforderlich"',
+     'title:"Namensnennung erforderlich"'),
+    (r'title:"Adaptations must be shared under the same terms"',
+     'title:"Bearbeitungen nur unter denselben Bedingungen weitergeben"', "unter denselben Bedingungen weitergeben"),
+    (r'title:"Only noncommercial uses of the work are permitted"', 'title:"Nur nicht kommerzielle Nutzung erlaubt"',
+     'title:"Nur nicht kommerzielle Nutzung erlaubt"'),
+    (r'title:"No derivatives or adaptations of the work are permitted"', 'title:"Keine Bearbeitungen erlaubt"',
+     'title:"Keine Bearbeitungen erlaubt"'),
+    (r'title:"CC0: Work is in the worldwide public domain"', 'title:"CC0: gemeinfrei"', 'title:"CC0: gemeinfrei"'),
+]
+
+
+def bedienung_eindeutschen() -> int:
+    """Übersetzt die Bedientexte des Templates, in Server- und Browser-Bündeln gleich oft."""
+    server = ZIEL / "build" / "index.js"
+    browser = sorted((ZIEL / "public" / "build").rglob("*.js"))
+    texte = {p: p.read_text(encoding="utf-8", errors="surrogateescape") for p in [server, *browser]}
+    fehler = 0
+    for muster, ersatz, pruef in BEDIENUNG:
+        rx = re.compile(muster)
+        n_server = len(rx.findall(texte[server]))
+        n_browser = sum(len(rx.findall(texte[p])) for p in browser)
+        if n_server == n_browser == 0:
+            if pruef in texte[server] and any(pruef in texte[p] for p in browser):
+                continue  # schon übersetzt
+            print(f"FEHLER: Bedientext {muster!r} nicht gefunden — Template bewegt?", file=sys.stderr)
+            fehler += 1
+        elif n_server != n_browser:
+            print(f"FEHLER: {muster!r} {n_server}x im Server-, {n_browser}x in den Browser-Bündeln",
+                  file=sys.stderr)
+            fehler += 1
+        else:
+            for p in texte:
+                texte[p] = rx.sub(ersatz, texte[p])
+    if fehler:
+        return 1
+    for p, t in texte.items():
+        if t != p.read_text(encoding="utf-8", errors="surrogateescape"):
+            p.write_text(t, encoding="utf-8", errors="surrogateescape")
+            print(f"Bedienung übersetzt: {p.relative_to(WURZEL)}")
+    return 0
 
 
 def kastennamen_eindeutschen() -> int:
@@ -91,7 +181,7 @@ def main() -> int:
 
     if (ZIEL / MARKER).is_file():
         print(f"Template liegt schon in {ZIEL.relative_to(WURZEL)}.")
-        return kastennamen_eindeutschen()
+        return kastennamen_eindeutschen() or bedienung_eindeutschen()
 
     ZIEL.parent.mkdir(parents=True, exist_ok=True)
     if ZIEL.exists():
@@ -122,7 +212,7 @@ def main() -> int:
         return 1
 
     print(f"Template entpackt nach {ZIEL.relative_to(WURZEL)}")
-    return kastennamen_eindeutschen()
+    return kastennamen_eindeutschen() or bedienung_eindeutschen()
 
 
 if __name__ == "__main__":

@@ -388,6 +388,12 @@ dieselbe Form haben: **Es sieht im HTML unauffällig aus und ist trotzdem falsch
   zurück). Wer die `.venv` neu aufsetzt oder das Template neu entpackt, bekommt beides von
   den Skripten wieder; wer sie überspringt, hat „Example“ zurück. Gegenprobe:
   `pdftotext exports/eidl-skript.pdf - | grep -cE '^(Example|Theorem) [0-9]'` muss 0 sein.
+  Dasselbe Skript übersetzt seit dem 2026-11-02 die **Bedienung** des Templates (Suche,
+  Sprunglinks, Download-Menü, Kopierknöpfe, Screenreader-Beschriftungen; Liste `BEDIENUNG`).
+  Jede Ersetzung ist ein Muster *mit Kontext*, weil dieselben Wörter im Code auch
+  Bezeichner sind („Search“ ist im Suchdialog ein Zustand), und muss im Server- und im
+  Browser-Bündel gleich oft vorkommen. Ein Template-Update, das eine Stelle verschiebt,
+  lässt das Skript scheitern statt halb englisch weiterzubauen.
 * **jtex ersetzt seine Marken auch in LaTeX-Kommentaren.** Wer den Namen des
   Import-Platzhalters in einen `%`-Kommentar von `templates/tex/eidl-skript/template.tex`
   schreibt, bekommt den ganzen Import-Block ein zweites Mal in die `.tex` — elf „already
