@@ -44,7 +44,7 @@ Wenn wir für eine Aufgabe ein vortrainiertes Modell verwenden wollen, müssen w
 * **Object Detection**: Von einem Bild sagen, was drauf ist, mit Bounding Boxes. Beispiel: *YOLOS* (NeurIPS 2021), trainiert auf ImageNet und COCO – findet in Bild #7781 des COCO-Datensatzes „Cat, Banana, Chair“.
 * **Image Segmentation**: Auf einem Bild für jedes erkannte Objekt die Umrisse finden, das Bild also aufteilen. Beispiel: Nvidias *Segformer* (2021), auf ImageNet vortrainiert und auf ADE20k gefinetunt.
 * **Image-to-Image**: Ein Bild als Input, ein Bild als Output, z.B. historische Fotos einfärben. Beispiel: Renato Sortinos *ColorizeNet*, ein Finetune von ControlNet / Stable Diffusion 2.1 auf bearbeitetem COCO.
-* **Unconditional Image Generation**: Nur ein Bild als Output, z.B. ein Katzenbild (je nach Datenbasis). Beispiel: *DDPM* (Ho et al., 2020), Denoising Diffusion Probabilistic Models – auf dem Hub liegt der Checkpoint unter `google/`, das Verfahren kommt aus Berkeley.
+* **Unconditional Image Generation**: Nur ein Bild als Output, z.B. ein Katzenbild (je nach Datenbasis). Beispiel: *DDPM* ([Ho et al., 2020](https://arxiv.org/abs/2006.11239)), Denoising Diffusion Probabilistic Models – auf dem Hub liegt der Checkpoint unter `google/`, das Verfahren kommt aus Berkeley.
 * **Zero-Shot Image Classification**: Von einem Bild sagen, was es ist – ohne dass für die Klassen gelabelte Daten vorlagen. Beispiel: OpenAIs *CLIP-ViT* (2021), Contrastive Language-Image Pretrained Vision Transformer, dem man die Kandidaten als Text gibt („a photo of a car“).
 
 Zur Einordnung des Vokabulars: **Zero-Shot** heißt ohne gelabelte Daten für die neue Aufgabe, **One-Shot** (oder Single-Shot) mit einem gelabelten Sample, **Few-Shot** mit einigen wenigen gelabelten Samples.
@@ -132,3 +132,10 @@ und erst *danach* mit `pip` fleißig installieren. Oder entspannt `uv` benutzen,
 ### Alternative: Google Colab
 
 Wer nicht lokal installieren will oder keine GPU hat: [Google Colab](https://colab.research.google.com/notebooks/intro.ipynb) bietet Jupyter-Notebooks mit (begrenzter) GPU-Zeit im Browser. Ein neues Notebook gibt es unter [colab.research.google.com/#create=true](http://colab.research.google.com/#create=true); die Hugging-Face-Dokumentation ist als Colab-Notebooks verfügbar, z.B. die [Task Summary](https://colab.research.google.com/github/huggingface/notebooks/blob/main/transformers_doc/en/task_summary.ipynb).
+
+:::{admonition} Weiterlesen
+:class: seealso
+**Im Kapitel zitiert:**
+
+* Ho, Jain, Abbeel: [*Denoising Diffusion Probabilistic Models*](https://arxiv.org/abs/2006.11239), NeurIPS 2020.
+:::

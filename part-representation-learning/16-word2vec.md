@@ -9,7 +9,7 @@ short_title: "word2vec"
 
 ### Von der Anwendung her gedacht
 
-Ein Beispiel-Task, unsupervised mit neuronalen Netzen: Alle Dokumente $D_i$ einlesen als Liste von Wörtern (getrennt an Leerzeichen, Satzzeichen entfernt), dann jedes einzelne Wort mit einem zuvor trainierten neuronalen Netz umrechnen in eine andere Repräsentation, die sich besser vergleichen lässt. Die andere Repräsentation verschaffen wir uns durch latente Vektoren aus einem Autoencoder. Das ist die Idee von **word2vec** (Mikolov et al., Google, 2013).
+Ein Beispiel-Task, unsupervised mit neuronalen Netzen: Alle Dokumente $D_i$ einlesen als Liste von Wörtern (getrennt an Leerzeichen, Satzzeichen entfernt), dann jedes einzelne Wort mit einem zuvor trainierten neuronalen Netz umrechnen in eine andere Repräsentation, die sich besser vergleichen lässt. Die andere Repräsentation verschaffen wir uns durch latente Vektoren aus einem Autoencoder. Das ist die Idee von **word2vec** ([Mikolov et al., Google, 2013](https://arxiv.org/abs/1301.3781)).
 
 ### Vorverarbeitung und Ziel
 
@@ -109,3 +109,11 @@ Der Satz „der hund bellt laut im garten“ (6 Token), Fenstergröße $S = 2$.
 
 *Antwortprobe: Bei (1) liefern das erste und das letzte Token je zwei Paare, das dritte
 und das vierte je vier; bei (3) sind es 15 Millionen.*
+
+:::{admonition} Weiterlesen
+:class: seealso
+**Im Kapitel zitiert:**
+
+* Mikolov, Chen, Corrado, Dean: [*Efficient Estimation of Word Representations in Vector Space*](https://arxiv.org/abs/1301.3781), 2013.
+* Jurafsky, Martin: [*Speech and Language Processing*](https://web.stanford.edu/~jurafsky/slp3/), 3. Auflage (Entwurf, frei verfügbar).
+:::

@@ -1048,6 +1048,52 @@ def vl09_rnn_unrolled():
 # ----------------------------------------------------------------------------
 # VL 10
 # ----------------------------------------------------------------------------
+def vl10_hubel_wiesel():
+    """Das klassische Hubel-Wiesel-Bild, nachgezeichnet statt übernommen: Das Motiv liegt als
+    Scan auf Wikimedia Commons (File:Hubel+wiesel.jpg), dort als "Own work" unter CC BY-SA 3.0
+    -- es ist aber erkennbar aus einem Lehrbuch gescannt, die Lizenzangabe also zweifelhaft
+    (geprüft am 2026-11-02). Die Spikes hier sind simuliert, die Tuningkurve ist schematisch."""
+    r = np.random.default_rng(1959)  # eigener Generator: das globale `rng` bleibt unberührt
+    winkel = [0, 45, 90, 135]
+    rate = lambda w: 2 + 38 * np.exp(-0.5 * (((w - 90 + 90) % 180 - 90) / 18) ** 2)  # Hz, Maximum bei 90 Grad
+    fig = plt.figure(figsize=(10, 4))
+    gs = fig.add_gridspec(len(winkel), 3, width_ratios=[0.5, 4, 3], wspace=0.4, hspace=0.35)
+    for i, w in enumerate(winkel):
+        ax = fig.add_subplot(gs[i, 0])
+        ax.set_facecolor("black")
+        phi = np.radians(w)
+        ax.plot([-0.7 * np.cos(phi), 0.7 * np.cos(phi)], [-0.7 * np.sin(phi), 0.7 * np.sin(phi)],
+                color="white", lw=3, solid_capstyle="butt")
+        ax.set_xlim(-1, 1); ax.set_ylim(-1, 1); ax.set_aspect("equal")
+        ax.set_xticks([]); ax.set_yticks([])
+        for sp in ax.spines.values():
+            sp.set_visible(False)
+        ax = fig.add_subplot(gs[i, 1])
+        ax.axvspan(1, 2, color=HHU_ICE, alpha=0.6, lw=0)
+        t = np.sort(r.uniform(0, 3, r.poisson(1.5 * 3)))  # Spontanaktivität
+        t = np.concatenate([t, 1 + np.sort(r.uniform(0, 1, r.poisson(rate(w) - 1.5)))])
+        ax.vlines(t, 0, 1, color=HHU_DARK, lw=1)
+        ax.axhline(0.0, color=HHU_DARK, lw=0.8)
+        ax.set_xlim(0, 3); ax.set_ylim(-0.1, 1.1)
+        ax.set_yticks([])
+        for sp in ("left", "right", "top"):
+            ax.spines[sp].set_visible(False)
+        if i < len(winkel) - 1:
+            ax.set_xticks([])
+            ax.spines["bottom"].set_visible(False)
+        else:
+            ax.set_xlabel("Zeit (s), Reiz in der hellen Zone")
+    ax = fig.add_subplot(gs[:, 2])
+    ws = np.linspace(0, 180, 361)
+    ax.plot(ws, rate(ws), color=HHU_BLUE, lw=2)
+    ax.plot(winkel, [rate(w) for w in winkel], "o", color=HHU_DARK)
+    ax.set_xticks([0, 45, 90, 135, 180])
+    ax.set_xlabel("Orientierung des Balkens (Grad)")
+    ax.set_ylabel("Feuerrate (Hz)")
+    ax.set_title("Tuningkurve", fontsize=10)
+    save(fig, "vl10-hubel-wiesel")
+
+
 def vl10_blur_edges():
     from PIL import Image
     from scipy import ndimage

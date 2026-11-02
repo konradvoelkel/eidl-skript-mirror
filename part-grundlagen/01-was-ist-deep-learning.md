@@ -123,9 +123,9 @@ Antwort: Wer Modelle vergleicht und Hyperparameter nach dem Testergebnis wählt,
 
 ### Bis 2010
 
-* **1943**: McCulloch und Pitts modellieren ein menschliches Hirnneuron mit elektrischen Schaltkreisen.
-* **1958**: Rosenblatt entwirft das **Perzeptron** – und es wurde tatsächlich gebaut: Der *Mark I Perceptron* am Cornell Aeronautical Laboratory war ein frühes System zur Mustererkennung, mit Fotozellen als Eingabe und Potentiometern als Gewichten, die von Elektromotoren nachgestellt wurden.
-* Das Perzeptron kann nur linear trennbare Klassen unterscheiden lernen (dazu gleich mehr). Diese Einsicht, prominent im Buch *Perceptrons* von Minsky und Papert (1969), gilt als Auslöser des ersten **AI Winter**. Wie viel an dieser offiziellen Geschichte dran ist, untersucht lesenswert: Olazaran, M. (1996). *A Sociological Study of the Official History of the Perceptrons Controversy.* Social Studies of Science, 26(3), 611–659.
+* **1943**: [McCulloch und Pitts](https://doi.org/10.1007/BF02478259) modellieren ein menschliches Hirnneuron mit elektrischen Schaltkreisen.
+* **1958**: [Rosenblatt](https://doi.org/10.1037/h0042519) entwirft das **Perzeptron** – und es wurde tatsächlich gebaut: Der *Mark I Perceptron* am Cornell Aeronautical Laboratory war ein frühes System zur Mustererkennung, mit Fotozellen als Eingabe und Potentiometern als Gewichten, die von Elektromotoren nachgestellt wurden.
+* Das Perzeptron kann nur linear trennbare Klassen unterscheiden lernen (dazu gleich mehr). Diese Einsicht, prominent im Buch [*Perceptrons*](https://doi.org/10.7551/mitpress/11301.001.0001) von Minsky und Papert (1969), gilt als Auslöser des ersten **AI Winter**. Wie viel an dieser offiziellen Geschichte dran ist, untersucht lesenswert: Olazaran, M. (1996). [*A Sociological Study of the Official History of the Perceptrons Controversy*](https://doi.org/10.1177/030631296026003005). Social Studies of Science, 26(3), 611–659.
 * **1986**: Backpropagation wird (wieder-)erfunden bzw. populär, mehr Schichten werden verwendet.
 
 ### 2010–2015
@@ -146,7 +146,7 @@ Das meiste davon ist Stoff der aufbauenden Module. Die Transformer sind die Ausn
   [„LLMs benutzen“](../part-architekturen-anwendungen/21-llms-benutzen.md) – trainieren
   werden wir aber keine.
 * **2020** AlphaFold 2 „löst“ das Proteinfaltungsproblem – Nobelpreis für Chemie 2024.
-* **2021** Diffusionsmodelle schlagen GANs bei der Bildgenerierung (Dhariwal und Nichol, *Diffusion Models Beat GANs on Image Synthesis*); das Verfahren selbst, DDPM, ist von 2020.
+* **2021** Diffusionsmodelle schlagen GANs bei der Bildgenerierung (Dhariwal und Nichol, [*Diffusion Models Beat GANs on Image Synthesis*](https://arxiv.org/abs/2105.05233)); das Verfahren selbst, DDPM, ist von 2020.
 * **2022** Veröffentlichung von ChatGPT; danach RLHF, Copilot, Multimodalität, RAG, Agents, …
 * **2024/25** *Agentic Coding*: Modelle bearbeiten echte GitHub-Issues selbstständig – Code lesen, ändern, Tests laufen lassen, nachbessern. Gemessen wird das auf **SWE-bench Verified**, 500 von Menschen geprüften Aufgaben aus zwölf Python-Projekten; bestanden ist eine Aufgabe erst, wenn die Tests des Projekts durchlaufen. Innerhalb von zwei Jahren ging das von wenigen Prozent auf über die Hälfte.
 
@@ -166,5 +166,14 @@ dessen Nenner die 30 steht.*
 
 :::{admonition} Weiterlesen
 :class: seealso
-Prince, *UDL*, Kap. 1 (Introduction) und 2 (Supervised learning); Deisenroth et al., *MML*, Kap. 8 (When models meet data). Beide Bücher sind frei verfügbar, siehe [Über dieses Skript](../README.md).
+Prince, [*UDL*](https://udlbook.github.io/udlbook/), Kap. 1 (Introduction) und 2 (Supervised learning); Deisenroth et al., [*MML*](https://mml-book.github.io/), Kap. 8 (When models meet data). Beide Bücher sind frei verfügbar, siehe [Über dieses Skript](../README.md).
+
+**Im Kapitel zitiert:**
+
+* McCulloch, Pitts: [*A logical calculus of the ideas immanent in nervous activity*](https://doi.org/10.1007/BF02478259), Bulletin of Mathematical Biophysics 1943.
+* Rosenblatt: [*The perceptron: A probabilistic model for information storage and organization in the brain*](https://doi.org/10.1037/h0042519), Psychological Review 1958.
+* Minsky, Papert: [*Perceptrons*](https://doi.org/10.7551/mitpress/11301.001.0001), MIT Press 1969 (Neuausgabe 2017).
+* Olazaran: [*A Sociological Study of the Official History of the Perceptrons Controversy*](https://doi.org/10.1177/030631296026003005), Social Studies of Science 1996.
+* Dhariwal, Nichol: [*Diffusion Models Beat GANs on Image Synthesis*](https://arxiv.org/abs/2105.05233), NeurIPS 2021.
+* [*How AMD May Get Across the CUDA Moat*](https://www.hpcwire.com/2023/10/05/how-amd-may-get-across-the-cuda-moat/), HPCwire 2023.
 :::

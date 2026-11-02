@@ -64,14 +64,14 @@ Erinnerung: Eine Matrix $A$ hat eine Singulärwertzerlegung $A = U D V$, wobei $
 * Berechne $A_{\text{oha}} := g(A)$ – nur Matrixmultiplikationen, die auf der GPU billig sind – und hoffe, dass es nah dran ist an $A_{\text{ortho}}$.
 * Update $W_{\text{neu}} := W_{\text{alt}} - \rho A_{\text{oha}}$.
 
-Jordan, Keller et al.: *Muon: An optimizer for hidden layers in neural networks* (2024). Alle Richtungen im Gewichtsraum bekommen dadurch denselben Schritt, nicht nur die mit großem Singulärwert – Richtungen, die der Gradient „vernachlässigt“, werden mitgezogen.
+Jordan, Keller et al.: [*Muon: An optimizer for hidden layers in neural networks*](https://kellerjordan.github.io/posts/muon/) (Blog, 2024). Alle Richtungen im Gewichtsraum bekommen dadurch denselben Schritt, nicht nur die mit großem Singulärwert – Richtungen, die der Gradient „vernachlässigt“, werden mitgezogen.
 
 ### Wieso so kompliziert?
 
 Genau genommen liegt der Gradient der Loss-Funktion an einem Punkt des Gewichtsraums im *Kotangentialraum* des Graphen der Loss-Funktion – er ist eine Linearform, die Änderungsrichtungen Zahlen zuordnet ([Kapitel „Tensoren“](../part-grundlagen/05-tensoren.md): Kovektoren!). Um einen Vektor aus dem Gewichtsraum daraus zu machen, mit dem wir einen Schritt gehen können, müssen wir „dualisieren“. Dabei kann man verschiedene Geometrien betrachten:
 
 * Die **euklidische Geometrie**, einfach $\mathbb{R}^n$ mit dem Standardskalarprodukt; dann kann man die Zahlen, die man ausrechnet, wie gehabt als Vektor in $\mathbb{R}^n$ auffassen. Das ist SGD.
-* Die **Riemannsche Geometrie**, die durch die Fisher-Informationsmatrix gegeben ist – der *Natural Gradient* (Amari). Die Fisher-Matrix ist die zweite Ableitung der relativen Entropie; Schritte werden so gemessen, wie stark sich die *Ausgabeverteilung* des Modells ändert, nicht die Gewichte.
+* Die **Riemannsche Geometrie**, die durch die Fisher-Informationsmatrix gegeben ist – der *Natural Gradient* (Amari, [*Natural Gradient Works Efficiently in Learning*](https://doi.org/10.1162/089976698300017746), 1998). Die Fisher-Matrix ist die zweite Ableitung der relativen Entropie; Schritte werden so gemessen, wie stark sich die *Ausgabeverteilung* des Modells ändert, nicht die Gewichte.
 * Verschiedene andere sogenannte affine Geometrien; das ist ein aktives Forschungsgebiet in der Optimierungstheorie, Stichwort **Informationsgeometrie**. Z.B. Derun Zhou, Keisuke Yano, Mahito Sugiyama: *Dual Riemannian Newton Method on Statistical Manifolds* (2025), [arXiv:2511.11318](https://arxiv.org/abs/2511.11318).
 
 Adam und Muon sind in diesem Bild billige Näherungen an eine bessere Geometrie des Gewichtsraums.
@@ -94,5 +94,11 @@ Schritten (ein langes, flaches Tal), Lernrate $\rho = 0{,}1$.
 
 :::{admonition} Weiterlesen
 :class: seealso
-Prince, *UDL*, Abschnitte 6.3 und 6.4 (Momentum, Adam); Deisenroth et al., *MML*, Kap. 7 (Continuous optimization). Beide Bücher sind frei verfügbar, siehe [Über dieses Skript](../README.md).
+Prince, [*UDL*](https://udlbook.github.io/udlbook/), Abschnitte 6.3 und 6.4 (Momentum, Adam); Deisenroth et al., [*MML*](https://mml-book.github.io/), Kap. 7 (Continuous optimization). Beide Bücher sind frei verfügbar, siehe [Über dieses Skript](../README.md).
+
+**Im Kapitel zitiert:**
+
+* Jordan et al.: [*Muon: An optimizer for hidden layers in neural networks*](https://kellerjordan.github.io/posts/muon/), Blog 2024.
+* Amari: [*Natural Gradient Works Efficiently in Learning*](https://doi.org/10.1162/089976698300017746), Neural Computation 1998.
+* Zhou, Yano, Sugiyama: [*Dual Riemannian Newton Method on Statistical Manifolds*](https://arxiv.org/abs/2511.11318), 2025.
 :::

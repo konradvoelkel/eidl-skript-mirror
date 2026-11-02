@@ -9,13 +9,13 @@ short_title: "GANs"
 
 ### NeurIPS 2014
 
-Goodfellow et al., *Generative Adversarial Nets*: „We propose a new framework for estimating generative models via adversarial nets, in which we simultaneously train two models: a generative model $G$ that captures the data distribution, and a discriminative model $D$ that estimates the probability that a sample came from the training data rather than $G$. The training procedure for $G$ is to maximize the probability of $D$ making a mistake. This framework corresponds to a minimax two-player game. In the space of arbitrary functions $G$ and $D$, a unique solution exists, with $G$ recovering the training data distribution and $D$ equal to $1/2$ everywhere. In the case where $G$ and $D$ are defined by multilayer perceptrons, the entire system can be trained with backpropagation.“
+Goodfellow et al., [*Generative Adversarial Nets*](https://arxiv.org/abs/1406.2661) (NeurIPS 2014): „We propose a new framework for estimating generative models via adversarial nets, in which we simultaneously train two models: a generative model $G$ that captures the data distribution, and a discriminative model $D$ that estimates the probability that a sample came from the training data rather than $G$. The training procedure for $G$ is to maximize the probability of $D$ making a mistake. This framework corresponds to a minimax two-player game. In the space of arbitrary functions $G$ and $D$, a unique solution exists, with $G$ recovering the training data distribution and $D$ equal to $1/2$ everywhere. In the case where $G$ and $D$ are defined by multilayer perceptrons, the entire system can be trained with backpropagation.“
 
 Der letzte Satz ist der Punkt: Kein Markov-Chain-Sampling, keine Variationsrechnung wie beim VAE – nur zwei Netze und Backpropagation.
 
 ### LeCun 2016
 
-Yann LeCun, auf Quora: „There are many interesting recent developments in deep learning […] The most important one, in my opinion, is adversarial training (also called GAN for Generative Adversarial Networks). This is an idea that was originally proposed by Ian Goodfellow when he was a student with Yoshua Bengio at the University of Montreal […] This, and the variations that are now being proposed is the most interesting idea in the last 10 years in ML, in my opinion.“
+Yann LeCun, [auf Quora](https://www.quora.com/What-are-some-recent-and-potentially-upcoming-breakthroughs-in-deep-learning) (Juli 2016): „There are many interesting recent developments in deep learning […] The most important one, in my opinion, is adversarial training (also called GAN for Generative Adversarial Networks). This is an idea that was originally proposed by Ian Goodfellow when he was a student with Yoshua Bengio at the University of Montreal […] This, and the variations that are now being proposed is the most interesting idea in the last 10 years in ML, in my opinion.“
 
 ## GANs technisch
 
@@ -53,13 +53,13 @@ Im Gleichgewicht, wenn $G$ die Datenverteilung exakt trifft, kann $D$ nicht bess
 
 Der **Diskriminator** kann ein einfaches Multilayer Perceptron sein, d.h. mehrere lineare Layer und zuletzt ein einzelnes Neuron zur Klassifikation „ist das echt?“ in 0 oder 1 – also logistische Regression auf Features. Alternativ kann der Diskriminator auch aus 2 Komponenten bestehen, wobei zunächst ein vortrainierter Encoder das Bild in latente Vektoren umrechnet, die dann an einen Klassifikator weitergegeben werden. Dabei kann z.B. ein CNN zur Extraktion von Features sinnvoll sein.
 
-Der **Generator** kann ein einfaches Multilayer Perceptron sein, etwa der Decoder eines Autoencoders, sodass es einen latenten Raum gibt, aus dem man sampeln kann. Mit Faltungen (genauer: *transponierten* Faltungen, die die Auflösung erhöhen) im Generator und einem CNN im Diskriminator heißt das **DCGAN** (deep convolutional GAN, Radford et al. 2015).
+Der **Generator** kann ein einfaches Multilayer Perceptron sein, etwa der Decoder eines Autoencoders, sodass es einen latenten Raum gibt, aus dem man sampeln kann. Mit Faltungen (genauer: *transponierten* Faltungen, die die Auflösung erhöhen) im Generator und einem CNN im Diskriminator heißt das **DCGAN** (deep convolutional GAN, [Radford et al. 2015](https://arxiv.org/abs/1511.06434)).
 
 ### Ausprobieren: GAN Lab
 
 :::{admonition} Ausprobieren: GAN Lab
 :class: tip
-[poloclub.github.io/ganlab](https://poloclub.github.io/ganlab/) (2019, Georgia Tech und Google Brain): ein GAN auf 2D-Punktwolken im Browser, mit der Generator-Verteilung, dem Gradientenfeld des Diskriminators und den Loss-Kurven live. Was man dort sehen sollte: Bei der Ring- oder Gauß-Wolke wandert die generierte Verteilung zur echten, bis das Gradientenfeld flach wird. Beim *linearen* Datensatz läuft das Training regelmäßig in ein lokales Minimum, in dem der Generator nur einen Teil der Linie bedient, und mehrere Neustarts liefern verschiedene Ergebnisse; das ist Mode Collapse in klein. Daraus folgt die Faustregel für GANs: *früh aufhören.* Anders als beim Autoencoder wird es nicht monoton besser. Man beobachtet die Samples und behält die Gewichte von dem Zeitpunkt, an dem sie gut aussahen. Die Loss-Kurven sind dabei nur bedingt hilfreich, siehe unten bei Wasserstein.
+[poloclub.github.io/ganlab](https://poloclub.github.io/ganlab/) (2019, Georgia Tech und Google Brain; das Paper dazu: [Kahng et al.](https://doi.org/10.1109/TVCG.2018.2864500)): ein GAN auf 2D-Punktwolken im Browser, mit der Generator-Verteilung, dem Gradientenfeld des Diskriminators und den Loss-Kurven live. Was man dort sehen sollte: Bei der Ring- oder Gauß-Wolke wandert die generierte Verteilung zur echten, bis das Gradientenfeld flach wird. Beim *linearen* Datensatz läuft das Training regelmäßig in ein lokales Minimum, in dem der Generator nur einen Teil der Linie bedient, und mehrere Neustarts liefern verschiedene Ergebnisse; das ist Mode Collapse in klein. Daraus folgt die Faustregel für GANs: *früh aufhören.* Anders als beim Autoencoder wird es nicht monoton besser. Man beobachtet die Samples und behält die Gewichte von dem Zeitpunkt, an dem sie gut aussahen. Die Loss-Kurven sind dabei nur bedingt hilfreich, siehe unten bei Wasserstein.
 :::
 
 ## Varianten von GANs
@@ -90,20 +90,20 @@ $$
 W(p, q) = \sup_{\|f\|_{\text{Lip}} \le 1} \Bigl( \mathbb{E}_{x \sim p}[f(x)] - \mathbb{E}_{x \sim q}[f(x)] \Bigr),
 $$
 
-ein Supremum über alle Funktionen $f$, die höchstens Steigung $1$ haben (1-Lipschitz). Der Kritiker *ist* dieses $f$: ein Netz, das auf echten Bildern hohe und auf generierten Bildern niedrige Werte ausgeben soll; die Differenz der Mittelwerte ist die geschätzte Distanz. Damit das eine Schranke bleibt, muss der Kritiker Lipschitz-beschränkt bleiben: im Original-WGAN (Arjovsky et al. 2017) durch Abschneiden der Gewichte (*weight clipping*), in WGAN-GP (Gulrajani et al. 2017) durch einen Strafterm auf die Gradientennorm (*gradient penalty*). Tutorial: Lilian Weng, [From GAN to WGAN](https://lilianweng.github.io/posts/2017-08-20-gan).
+ein Supremum über alle Funktionen $f$, die höchstens Steigung $1$ haben (1-Lipschitz). Der Kritiker *ist* dieses $f$: ein Netz, das auf echten Bildern hohe und auf generierten Bildern niedrige Werte ausgeben soll; die Differenz der Mittelwerte ist die geschätzte Distanz. Damit das eine Schranke bleibt, muss der Kritiker Lipschitz-beschränkt bleiben: im Original-WGAN ([Arjovsky et al. 2017](https://arxiv.org/abs/1701.07875)) durch Abschneiden der Gewichte (*weight clipping*), in WGAN-GP ([Gulrajani et al. 2017](https://arxiv.org/abs/1704.00028)) durch einen Strafterm auf die Gradientennorm (*gradient penalty*). Tutorial: Lilian Weng, [From GAN to WGAN](https://lilianweng.github.io/posts/2017-08-20-gan).
 :::
 
 ## Konkrete Modelle
 
 ### CycleGAN
 
-Zhu, Park, Isola, Efros (ICCV 2017), *Unpaired Image-to-Image Translation using Cycle-Consistent Adversarial Networks*: Image-to-image translation lernt die Abbildung von einem Eingabebild auf ein Ausgabebild – normalerweise aus einem Trainingsdatensatz *gepaarter* Bilder. Für viele Tasks gibt es aber keine Paare (Foto $\leftrightarrow$ Monet-Gemälde, Pferd $\leftrightarrow$ Zebra, Sommer $\leftrightarrow$ Winter). CycleGAN lernt eine Abbildung $G \colon X \to Y$, sodass die Verteilung von $G(X)$ von $Y$ nicht unterscheidbar ist (adversarial loss) – und weil das allein hochgradig unterbestimmt ist, gleichzeitig die inverse Abbildung $F \colon Y \to X$ mit einem **Cycle-Consistency-Loss** $F(G(x)) \approx x$ (und umgekehrt). Ein Pferd, das zum Zebra und zurück wird, muss wieder dasselbe Pferd sein.
+Zhu, Park, Isola, Efros (ICCV 2017), [*Unpaired Image-to-Image Translation using Cycle-Consistent Adversarial Networks*](https://doi.org/10.1109/ICCV.2017.244) (frei: [arXiv:1703.10593](https://arxiv.org/abs/1703.10593)): Image-to-image translation lernt die Abbildung von einem Eingabebild auf ein Ausgabebild – normalerweise aus einem Trainingsdatensatz *gepaarter* Bilder. Für viele Tasks gibt es aber keine Paare (Foto $\leftrightarrow$ Monet-Gemälde, Pferd $\leftrightarrow$ Zebra, Sommer $\leftrightarrow$ Winter). CycleGAN lernt eine Abbildung $G \colon X \to Y$, sodass die Verteilung von $G(X)$ von $Y$ nicht unterscheidbar ist (adversarial loss) – und weil das allein hochgradig unterbestimmt ist, gleichzeitig die inverse Abbildung $F \colon Y \to X$ mit einem **Cycle-Consistency-Loss** $F(G(x)) \approx x$ (und umgekehrt). Ein Pferd, das zum Zebra und zurück wird, muss wieder dasselbe Pferd sein.
 
 Beispielbilder (Monet $\leftrightarrow$ Foto, Zebra $\leftrightarrow$ Pferd, Sommer $\leftrightarrow$ Winter) auf der Projektseite [junyanz.github.io/CycleGAN](https://junyanz.github.io/CycleGAN/).
 
 ### StyleGAN
 
-Karras, Laine, Aila – NVIDIA (CVPR 2019), *A Style-Based Generator Architecture for Generative Adversarial Networks*: eine alternative Generator-Architektur, die sich an der Style-Transfer-Literatur orientiert. Der latente Vektor $z$ wird zuerst durch ein MLP in einen Zwischenraum $w$ abgebildet und dann *auf jeder Auflösungsstufe* des Generators als „Stil“ eingespeist. Das führt zu einer automatisch gelernten, unsupervised Trennung von High-Level-Attributen (z.B. Pose und Identität bei Gesichtern) und stochastischer Variation (z.B. Sommersprossen, Haare), und erlaubt intuitive, skalenspezifische Kontrolle der Synthese. Dazu ein neuer Datensatz von Gesichtern (FFHQ). StyleGAN2 ist hinter [thispersondoesnotexist.com](https://thispersondoesnotexist.com).
+Karras, Laine, Aila – NVIDIA (CVPR 2019), [*A Style-Based Generator Architecture for Generative Adversarial Networks*](https://doi.org/10.1109/CVPR.2019.00453) (frei: [arXiv:1812.04948](https://arxiv.org/abs/1812.04948)): eine alternative Generator-Architektur, die sich an der Style-Transfer-Literatur orientiert. Der latente Vektor $z$ wird zuerst durch ein MLP in einen Zwischenraum $w$ abgebildet und dann *auf jeder Auflösungsstufe* des Generators als „Stil“ eingespeist. Das führt zu einer automatisch gelernten, unsupervised Trennung von High-Level-Attributen (z.B. Pose und Identität bei Gesichtern) und stochastischer Variation (z.B. Sommersprossen, Haare), und erlaubt intuitive, skalenspezifische Kontrolle der Synthese. Dazu ein neuer Datensatz von Gesichtern (FFHQ). StyleGAN2 ist hinter [thispersondoesnotexist.com](https://thispersondoesnotexist.com).
 
 Beispielgesichter und das Video zur Interpolation im Stil-Raum: [github.com/NVlabs/stylegan](https://github.com/NVlabs/stylegan).
 
@@ -117,5 +117,17 @@ Tutorial time: [pytorch.org/tutorials/beginner/dcgan_faces_tutorial.html](https:
 
 :::{admonition} Weiterlesen
 :class: seealso
-Prince, *UDL*, Kap. 15 (Generative adversarial networks), inklusive Wasserstein-GAN und StyleGAN. Das Buch ist frei verfügbar, siehe [Über dieses Skript](../README.md).
+Prince, [*UDL*](https://udlbook.github.io/udlbook/), Kap. 15 (Generative adversarial networks), inklusive Wasserstein-GAN und StyleGAN. Das Buch ist frei verfügbar, siehe [Über dieses Skript](../README.md).
+
+**Im Kapitel zitiert:**
+
+* Goodfellow et al.: [*Generative Adversarial Nets*](https://arxiv.org/abs/1406.2661), NeurIPS 2014.
+* LeCun: [Antwort auf Quora](https://www.quora.com/What-are-some-recent-and-potentially-upcoming-breakthroughs-in-deep-learning), Juli 2016.
+* Radford, Metz, Chintala: [*Unsupervised Representation Learning with Deep Convolutional Generative Adversarial Networks*](https://arxiv.org/abs/1511.06434), ICLR 2016.
+* Kahng et al.: [*GAN Lab: Understanding Complex Deep Generative Models using Interactive Visual Experimentation*](https://doi.org/10.1109/TVCG.2018.2864500), IEEE TVCG 2019.
+* Arjovsky, Chintala, Bottou: [*Wasserstein GAN*](https://arxiv.org/abs/1701.07875), ICML 2017.
+* Gulrajani et al.: [*Improved Training of Wasserstein GANs*](https://arxiv.org/abs/1704.00028), NeurIPS 2017.
+* Weng: [*From GAN to WGAN*](https://lilianweng.github.io/posts/2017-08-20-gan), Blog 2017.
+* Zhu, Park, Isola, Efros: [*Unpaired Image-to-Image Translation using Cycle-Consistent Adversarial Networks*](https://doi.org/10.1109/ICCV.2017.244), ICCV 2017; frei: [arXiv:1703.10593](https://arxiv.org/abs/1703.10593).
+* Karras, Laine, Aila: [*A Style-Based Generator Architecture for Generative Adversarial Networks*](https://doi.org/10.1109/CVPR.2019.00453), CVPR 2019; frei: [arXiv:1812.04948](https://arxiv.org/abs/1812.04948).
 :::

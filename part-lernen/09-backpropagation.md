@@ -197,10 +197,10 @@ Genau das tut `loss.backward()` in PyTorch ([Kapitel „Autograd und Berechnungs
 
 Achtung: Das ist nicht notwendig für diese Veranstaltung, das ist weiterführend.
 
-* Thomas P. Minka, *Old and new matrix algebra useful for statistics*, Notes, 2000.
-* *The Matrix Cookbook* (Petersen & Pedersen).
+* Thomas P. Minka, [*Old and new matrix algebra useful for statistics*](https://tminka.github.io/papers/matrix/), Notes, 2000.
+* [*The Matrix Cookbook*](https://www2.imm.dtu.dk/pubdb/pubs/3274-full.html) (Petersen & Pedersen).
 * *Matrix derivatives cheat sheet*.
-* Wikipedia: *Loss functions for classification*.
+* Wikipedia: [*Loss functions for classification*](https://en.wikipedia.org/wiki/Loss_functions_for_classification).
 * Michael Nielsens Buchkapitel zu Backpropagation (sehr mathematisch): [neuralnetworksanddeeplearning.com/chap2.html](http://neuralnetworksanddeeplearning.com/chap2.html).
 
 ## Backpropagation als Induktion
@@ -257,5 +257,11 @@ Und eine größere, wenn Sie Lust haben: Nehmen Sie das Beispiel aus dem Abschni
 
 :::{admonition} Weiterlesen
 :class: seealso
-Prince, *UDL*, Kap. 7 (Gradients and initialization), dort Backpropagation mit derselben Rückwärts-Notation. Das Buch ist frei verfügbar, siehe [Über dieses Skript](../README.md).
+Prince, [*UDL*](https://udlbook.github.io/udlbook/), Kap. 7 (Gradients and initialization), dort Backpropagation mit derselben Rückwärts-Notation. Das Buch ist frei verfügbar, siehe [Über dieses Skript](../README.md).
+
+**Im Kapitel zitiert:**
+
+* Minka: [*Old and New Matrix Algebra Useful for Statistics*](https://tminka.github.io/papers/matrix/), Notes 2000.
+* Petersen, Pedersen: [*The Matrix Cookbook*](https://www2.imm.dtu.dk/pubdb/pubs/3274-full.html), TU Dänemark 2012.
+* Nielsen: [*Neural Networks and Deep Learning*, Kap. 2](http://neuralnetworksanddeeplearning.com/chap2.html), 2015.
 :::

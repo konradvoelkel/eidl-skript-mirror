@@ -110,7 +110,7 @@ $$
 \operatorname{logit} P(\text{Erfolg} \mid x) = \operatorname{logit} P(\text{Erfolg}) + \ln \frac{P(x \mid \text{Erfolg})}{P(x \mid \text{Misserfolg})},
 $$
 
-und jede Beobachtung verschiebt den Logit um ihr *Evidenzgewicht* (I. J. Good, 1950), ebenfalls in nat. Genau diese Form hat $w \cdot x + b$ unten: $b$ ist der Logit bei $x = 0$, jeder Summand $w_j x_j$ ein additiver Evidenzbeitrag.
+und jede Beobachtung verschiebt den Logit um ihr *Evidenzgewicht* (I. J. Good, [*Probability and the Weighing of Evidence*](https://archive.org/details/probabilityweigh0000good), 1950), ebenfalls in nat. Genau diese Form hat $w \cdot x + b$ unten: $b$ ist der Logit bei $x = 0$, jeder Summand $w_j x_j$ ein additiver Evidenzbeitrag.
 
 ## Logistische Sigmoidfunktion
 
@@ -358,5 +358,9 @@ statt $\sigma'(0)$ ausgerechnet.*
 
 :::{admonition} Weiterlesen
 :class: seealso
-Prince, *UDL*, Kap. 5 (Loss functions), dort die logistische Regression als Maximum-Likelihood-Modell; Deisenroth et al., *MML*, Kap. 6 (Probability). Beide Bücher sind frei verfügbar, siehe [Über dieses Skript](../README.md).
+Prince, [*UDL*](https://udlbook.github.io/udlbook/), Kap. 5 (Loss functions), dort die logistische Regression als Maximum-Likelihood-Modell; Deisenroth et al., [*MML*](https://mml-book.github.io/), Kap. 6 (Probability). Beide Bücher sind frei verfügbar, siehe [Über dieses Skript](../README.md).
+
+**Im Kapitel zitiert:**
+
+* Good: [*Probability and the Weighing of Evidence*](https://archive.org/details/probabilityweigh0000good), Griffin, London 1950 (Ausleihe im Internet Archive).
 :::

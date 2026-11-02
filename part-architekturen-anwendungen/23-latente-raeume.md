@@ -28,10 +28,10 @@ Beziehungen zwischen Wörtern als parallele Richtungen im Vektorraum (schematisc
 :::{figure} ../images/vl13-bolukbasi-fig7.png
 :width: 90%
 
-Figure 7 aus Bolukbasi et al. 2016 – Berufe, projiziert auf die Gender-Richtung.
+Figure 7 aus [Bolukbasi et al. 2016](https://arxiv.org/abs/1607.06520) – Berufe, projiziert auf die Gender-Richtung.
 :::
 
-**Bolukbasi et al. 2016, *Man is to Computer Programmer as Woman is to Homemaker? Debiasing Word Embeddings***: Dieselbe Arithmetik findet auch $\text{MAN} - \text{WOMAN} \approx \text{COMPUTER PROGRAMMER} - \text{HOMEMAKER}$. Die Embeddings enthalten die Stereotype des Trainingskorpus als Richtungen, und man kann sie messen – und, das ist der Beitrag des Papers, durch Projektion auf das orthogonale Komplement der Gender-Richtung teilweise entfernen (Abbildung oben).
+**Bolukbasi et al. 2016, [*Man is to Computer Programmer as Woman is to Homemaker? Debiasing Word Embeddings*](https://arxiv.org/abs/1607.06520)** (NeurIPS 2016): Dieselbe Arithmetik findet auch $\text{MAN} - \text{WOMAN} \approx \text{COMPUTER PROGRAMMER} - \text{HOMEMAKER}$. Die Embeddings enthalten die Stereotype des Trainingskorpus als Richtungen, und man kann sie messen – und, das ist der Beitrag des Papers, durch Projektion auf das orthogonale Komplement der Gender-Richtung teilweise entfernen (Abbildung oben).
 
 ### Interpolation und Superposition
 
@@ -80,12 +80,12 @@ Häufig wird zusätzlich zum $+\varepsilon$-Trick auch noch ein Summand zur Loss
 
 ### Arvanitidis et al. 2017: Latent Space Oddity
 
-*Latent Space Oddity: on the Curvature of Deep Generative Models* (ICLR 2018): Der latente Raum eines VAE sieht flach aus, aber der Decoder verzerrt ihn – die euklidische Gerade zwischen zwei Codes ist nicht der kürzeste Weg im *Bildraum*. Die richtige Geometrie ist die durch den Decoder induzierte Riemannsche Metrik, und Geodäten darin laufen um Regionen herum, in denen der Decoder unsicher ist (Abbildung unten). Praktisch: Interpolationen entlang Geodäten sehen besser aus als lineare.
+[*Latent Space Oddity: on the Curvature of Deep Generative Models*](https://arxiv.org/abs/1710.11379) (ICLR 2018): Der latente Raum eines VAE sieht flach aus, aber der Decoder verzerrt ihn – die euklidische Gerade zwischen zwei Codes ist nicht der kürzeste Weg im *Bildraum*. Die richtige Geometrie ist die durch den Decoder induzierte Riemannsche Metrik, und Geodäten darin laufen um Regionen herum, in denen der Decoder unsicher ist (Abbildung unten). Praktisch: Interpolationen entlang Geodäten sehen besser aus als lineare.
 
 :::{figure} ../images/vl13-arvanitidis-fig1.png
 :width: 90%
 
-Figure 1 aus Arvanitidis, Hansen, Hauberg: *Latent Space Oddity* (ICLR 2018): Die Gerade im latenten Raum (links) und die Geodäte bezüglich der vom Decoder induzierten Metrik führen zu unterschiedlichen Interpolationen.
+Figure 1 aus Arvanitidis, Hansen, Hauberg: [*Latent Space Oddity*](https://arxiv.org/abs/1710.11379) (ICLR 2018): Die Gerade im latenten Raum (links) und die Geodäte bezüglich der vom Decoder induzierten Metrik führen zu unterschiedlichen Interpolationen.
 :::
 
 ## Übung
@@ -99,3 +99,11 @@ Gegeben Embeddings $\text{KÖNIG} = (4,2)$, $\text{MANN} = (3,0)$, $\text{FRAU} 
 2. Interpolieren Sie linear zwischen $\text{MANN}$ und $\text{FRAU}$ in drei Schritten.
 
 *Antwortprobe: Bei (1) sind die Antworten für Kosinus und euklidischen Abstand verschieden – das ist der Punkt der Aufgabe.*
+
+:::{admonition} Weiterlesen
+:class: seealso
+**Im Kapitel zitiert:**
+
+* Bolukbasi et al.: [*Man is to Computer Programmer as Woman is to Homemaker? Debiasing Word Embeddings*](https://arxiv.org/abs/1607.06520), NeurIPS 2016.
+* Arvanitidis, Hansen, Hauberg: [*Latent Space Oddity: on the Curvature of Deep Generative Models*](https://arxiv.org/abs/1710.11379), ICLR 2018.
+:::

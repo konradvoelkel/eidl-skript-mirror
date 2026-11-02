@@ -15,7 +15,9 @@ Es liest die drei Dokumentationsdateien (`CLAUDE.md`, `devnotes/TODO.md`,
 4. **Vollständigkeit.** Jede Datei in `devnotes/` steht in dessen `README.md` und umgekehrt,
    und `TODO.md` enthält nur offene Punkte (die Historie steht in `erledigt.md`).
 5. **Die Regeln, die im Buch gelten:** keine Verweise auf nummerierte Übungsblätter, keine
-   Lösungsvorschläge, keine Unicode-Pfeile im Fließtext.
+   Lösungsvorschläge, keine Unicode-Pfeile im Fließtext. Und Literatur ist anklickbar: kein
+   `et al.` und kein `arXiv:…` ohne Link in derselben Zeile, und jedes Werk, das ein Kapitel
+   über DOI oder arXiv verlinkt, steht auch in dessen „Weiterlesen“-Box (seit 2026-11-02).
 
 Aufruf:
 
@@ -152,6 +154,27 @@ def fehler_sammeln() -> list[str]:
         for pfeil in ("→", "←", "⇒", "↦"):
             if pfeil in re.sub(r"```.*?```", "", text, flags=re.S):
                 fehler.append(f"{p.name}: Unicode-Pfeil „{pfeil}“ im Fließtext (bricht den PDF-Lauf)")
+
+    # Literatur (2026-11-02): Im Transformer-Kapitel stand ein Verweis auf einen Artikel, der
+    # weder anklickbar war noch in "Weiterlesen" auftauchte -- und so ging es rund 50 Werken
+    # im ganzen Buch. Zwei Prüfungen, beide bewusst grob: eine Zeile, die "et al." oder
+    # "arXiv:" nennt, enthält auch einen Link; und jede DOI- oder arXiv-Adresse eines Kapitels
+    # steht auch in dessen Weiterlesen-Box. Was keine dieser Formen hat ("Gage 1994"), fängt
+    # das nicht -- dafür gilt die Regel in CLAUDE.md, Abschnitt "Literatur".
+    for p in kapitel:
+        text = p.read_text(encoding="utf-8")
+        ohne_code = re.sub(r"```.*?```", "", text, flags=re.S)
+        for nr, zeile in enumerate(ohne_code.splitlines(), 1):
+            ohne_links = re.sub(r"\[[^\]]*\]\([^)]*\)", "", zeile)
+            if ("et al." in ohne_links or re.search(r"arXiv:\d", ohne_links)) and "](" not in zeile:
+                if zeile.lstrip().startswith(("#", ":::")):
+                    continue  # Überschriften und Direktiven-Köpfe tragen keine Links
+                fehler.append(f"{p.name}: Literaturverweis ohne Link: „{zeile.strip()[:70]}…“")
+        box = re.search(r":::\{admonition\} Weiterlesen\n(.*?)\n:::", ohne_code, re.S)
+        box_text = box.group(1) if box else ""
+        for url in sorted(set(re.findall(r"https://(?:doi\.org|arxiv\.org/abs)/[^)\s]+", ohne_code))):
+            if url not in box_text:
+                fehler.append(f"{p.name}: {url} steht im Text, aber nicht in „Weiterlesen“")
 
     # ── 6. Das gebaute PDF, falls vorhanden ─────────────────────────────────────
     pdf = WURZEL / "exports/eidl-skript.pdf"

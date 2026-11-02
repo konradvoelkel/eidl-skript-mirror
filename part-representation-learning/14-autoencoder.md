@@ -239,5 +239,5 @@ verbunden mit Bias.
 
 :::{admonition} Weiterlesen
 :class: seealso
-Prince, *UDL*, Kap. 14 (Unsupervised learning) als Einordnung; Deisenroth et al., *MML*, Kap. 10 (PCA) für den linearen Fall. Beide Bücher sind frei verfügbar, siehe [Über dieses Skript](../README.md).
+Prince, [*UDL*](https://udlbook.github.io/udlbook/), Kap. 14 (Unsupervised learning) als Einordnung; Deisenroth et al., [*MML*](https://mml-book.github.io/), Kap. 10 (PCA) für den linearen Fall. Beide Bücher sind frei verfügbar, siehe [Über dieses Skript](../README.md).
 :::

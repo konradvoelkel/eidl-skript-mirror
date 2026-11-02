@@ -294,7 +294,7 @@ Aktivierungsfunktion stehen im
 
 :::{admonition} Weiterlesen
 :class: seealso
-Deisenroth et al., *MML*, Kap. 5 (Vector calculus: partielle Ableitungen, Gradienten,
+Deisenroth et al., [*MML*](https://mml-book.github.io/), Kap. 5 (Vector calculus: partielle Ableitungen, Gradienten,
 Jacobi- und Hesse-Matrix). Frei verfügbar, siehe
 [Über dieses Skript](../README.md).
 :::

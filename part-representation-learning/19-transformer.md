@@ -9,13 +9,13 @@ short_title: "Transformer"
 
 ### Historie: BLEU (2001)
 
-Um Übersetzungsmodelle zu vergleichen, braucht man ein Maß. Papineni et al. (2001): „Human evaluations of machine translation are extensive but expensive. […] We propose a method of automatic machine translation evaluation that is quick, inexpensive, and language-independent, that correlates highly with human evaluation.“ Die Grundidee: „The closer a machine translation is to a professional human translation, the better it is.“
+Um Übersetzungsmodelle zu vergleichen, braucht man ein Maß. Papineni et al., [*BLEU: a Method for Automatic Evaluation of Machine Translation*](https://doi.org/10.3115/1073083.1073135) (2001 als IBM-Bericht, ACL 2002): „Human evaluations of machine translation are extensive but expensive. […] We propose a method of automatic machine translation evaluation that is quick, inexpensive, and language-independent, that correlates highly with human evaluation.“ Die Grundidee: „The closer a machine translation is to a professional human translation, the better it is.“
 
 Der **BLEU-Score** (bilingual evaluation understudy) zwischen 0 und 1 (auch skaliert 0–10 oder 0–100) ist das geometrische Mittel aus den $n$-Gramm-Präzisionsscores der Maschinenübersetzung relativ zu einer menschlichen Referenzübersetzung, multipliziert mit einem Strafterm für abweichende Übersetzungslänge (*brevity penalty*). Die $n$-Gramm-Präzision ist die Anzahl (mit Mehrfachzählung, aber gedeckelt durch die Referenz) der $n$-Gramme, die in der Maschinenübersetzung vorkommen und in der Referenzübersetzung, normiert mit der Anzahl der $n$-Gramme der Maschinenübersetzung. Für BLEU ist $n = 1, 2, 3, 4$ üblich.
 
 ### Historie: NeurIPS 2017
 
-Vaswani et al., *Attention is all you need*: „The dominant sequence transduction models are based on complex recurrent or convolutional neural networks in an encoder-decoder configuration. The best performing models also connect the encoder and decoder through an attention mechanism. We propose a new simple network architecture, the Transformer, based solely on attention mechanisms, dispensing with recurrence and convolutions entirely. […] Our model achieves 28.4 BLEU on the WMT 2014 English-to-German translation task, improving over the existing best results, including ensembles by over 2 BLEU. […] a new single-model state-of-the-art BLEU score of 41.8 after training for 3.5 days on eight GPUs.“
+Vaswani et al., [*Attention Is All You Need*](https://arxiv.org/abs/1706.03762) (NeurIPS 2017): „The dominant sequence transduction models are based on complex recurrent or convolutional neural networks in an encoder-decoder configuration. The best performing models also connect the encoder and decoder through an attention mechanism. We propose a new simple network architecture, the Transformer, based solely on attention mechanisms, dispensing with recurrence and convolutions entirely. […] Our model achieves 28.4 BLEU on the WMT 2014 English-to-German translation task, improving over the existing best results, including ensembles by over 2 BLEU. […] a new single-model state-of-the-art BLEU score of 41.8 after training for 3.5 days on eight GPUs.“
 
 Zur Einordnung: WMT = Workshop on Statistical Machine Translation, Task und Datensatz; die Challenge läuft bis heute jährlich weiter; sacreBLEU als Standard-Implementierung; 41.8 „BLEU“ = 0,418 BLEU. Und das WMT19-Modell aus dem [Kapitel „Vortrainierte Modelle“](../part-grundlagen/04-vortrainierte-modelle.md) ist genau ein Nachfolger davon.
 
@@ -35,7 +35,7 @@ Das Architekturbild ist Figure 1 in Vaswani et al., *Attention Is All You Need* 
 
 **GPT** (Generative Pretrained Transformer): Trainiert unsupervised auf gigantischen Textmassen (präziser: self-supervised); BPE (Byte Pair Encoding) als Tokenization-Schema; sehr große Modelle (= sehr viele Layer, sehr viele Parameter); gelernte Positionskodierung, begrenzter Kontext; **Decoder-only**: das nächste Token vorhersagen. Varianten: GPT-2, GPT-J, GPT-NeoX, Llama 1/2/3, und nichtöffentlich GPT-3, 3.5, 4, etc.
 
-**Byte Pair Encoding (BPE)**: ein Tokenization-Schema (Gage 1994). BPE baut auf einem Tokenizer auf, meist Token = Byte oder Character. Algorithmus:
+**Byte Pair Encoding (BPE)**: ein Tokenization-Schema ([Gage 1994](https://jacobfilipp.com/DrDobbs/articles/CUJ/1994/9402/gage/gage.htm), ursprünglich zur Datenkompression; für Wortteile in der Übersetzung [Sennrich et al. 2016](https://arxiv.org/abs/1508.07909)). BPE baut auf einem Tokenizer auf, meist Token = Byte oder Character. Algorithmus:
 
 1. Zähle, wie oft jedes benachbarte Tokenpaar im Korpus vorkommt.
 2. Nimm das **häufigste Paar** und ersetze jedes Vorkommen durch ein einzelnes neues
@@ -48,11 +48,11 @@ Die Vokabulargröße bei GPT-4s BPE „tiktoken“ ist z.B. 100 256; durchschnit
 
 **BERT** (Bidirectional Encoder Representations from Transformers): **Encoder-only** (nicht zwangsläufig generativ); Tokenization auf Subwort-Level (WordPiece); Training mit 2 Tasks: Masked Language Modeling (ähnlich wie bei word2vec, aber mit Kontext in beide Richtungen) und „nächsten Satz vorhersagen“. Bei gleicher Modellgröße besser als GPT für manche Tasks (Klassifikation, Embeddings). Varianten: RoBERTa, ALBERT, DistilBERT.
 
-**ViT** (Vision Transformer, Dosovitskiy et al., „An Image is Worth 16x16 Words“): Das Bild wird grob gerastert in „Patches“ aufgeteilt; jeder Patch (= Token) wird in einen Vektor umgewandelt; Positionskodierung für 2D-Position statt 1D wie bei Text; ansonsten „klassischer“ Transformer. Für Klassifikationsaufgaben manchmal besser als CNNs.
+**ViT** (Vision Transformer, Dosovitskiy et al., [„An Image is Worth 16x16 Words“](https://arxiv.org/abs/2010.11929), ICLR 2021): Das Bild wird grob gerastert in „Patches“ aufgeteilt; jeder Patch (= Token) wird in einen Vektor umgewandelt; Positionskodierung für 2D-Position statt 1D wie bei Text; ansonsten „klassischer“ Transformer. Für Klassifikationsaufgaben manchmal besser als CNNs.
 
 ### Implementierung des Transformers
 
-Alexander Rush et al.: *The Annotated Transformer* (updated 2022 edition) – der Artikel „Attention is all you need“ zusammen mit Codeschnipseln und einigen Kommentaren. Für Verrückte oder sehr Interessierte: „I made a transformer by hand (no training!)“ von Theia Vogel, mit sorgfältig von Hand bestimmten Gewichten – die Fortsetzung unseres „Parameter von Hand wählen“ aus dem [Kapitel „Netze von Hand bauen“](../part-lernen/12-netze-von-hand.md).
+Alexander Rush et al.: [*The Annotated Transformer*](https://nlp.seas.harvard.edu/annotated-transformer/) (updated 2022 edition) – der Artikel „Attention is all you need“ zusammen mit Codeschnipseln und einigen Kommentaren. Für Verrückte oder sehr Interessierte: [„I made a transformer by hand (no training!)“](https://vgel.me/posts/handmade-transformer/) von Theia Vogel (2023), mit sorgfältig von Hand bestimmten Gewichten – die Fortsetzung unseres „Parameter von Hand wählen“ aus dem [Kapitel „Netze von Hand bauen“](../part-lernen/12-netze-von-hand.md). Wer Attention selbst programmieren will, Schritt für Schritt in PyTorch: Sebastian Raschka, [*Understanding and Coding Self-Attention, Multi-Head Attention, Causal-Attention, and Cross-Attention in LLMs*](https://magazine.sebastianraschka.com/p/understanding-and-coding-self-attention) (2024), und ausführlicher sein Buch [*Build a Large Language Model (From Scratch)*](https://www.manning.com/books/build-a-large-language-model-from-scratch) (Manning 2024), dessen Code [frei auf GitHub](https://github.com/rasbt/LLMs-from-scratch) liegt.
 
 ## Übung
 
@@ -70,5 +70,17 @@ Ausgabe bleibt trotz $v_3 = 10$ unter $2{,}6$.*
 
 :::{admonition} Weiterlesen
 :class: seealso
-Prince, *UDL*, Kap. 12 (Transformers). Das Buch ist frei verfügbar, siehe [Über dieses Skript](../README.md).
+Prince, [*UDL*](https://udlbook.github.io/udlbook/), Kap. 12 (Transformers). Das Buch ist frei verfügbar, siehe [Über dieses Skript](../README.md).
+
+**Im Kapitel zitiert:**
+
+* Vaswani et al.: [*Attention Is All You Need*](https://arxiv.org/abs/1706.03762), NeurIPS 2017.
+* Papineni, Roukos, Ward, Zhu: [*BLEU: a Method for Automatic Evaluation of Machine Translation*](https://doi.org/10.3115/1073083.1073135), ACL 2002.
+* Gage: [*A New Algorithm for Data Compression*](https://jacobfilipp.com/DrDobbs/articles/CUJ/1994/9402/gage/gage.htm), C Users Journal 12(2), 1994.
+* Sennrich, Haddow, Birch: [*Neural Machine Translation of Rare Words with Subword Units*](https://arxiv.org/abs/1508.07909), ACL 2016.
+* Dosovitskiy et al.: [*An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale*](https://arxiv.org/abs/2010.11929), ICLR 2021.
+* Rush et al.: [*The Annotated Transformer*](https://nlp.seas.harvard.edu/annotated-transformer/), Ausgabe 2022.
+* Vogel: [*I made a transformer by hand (no training!)*](https://vgel.me/posts/handmade-transformer/), 2023.
+* Raschka: [*Understanding and Coding Self-Attention, Multi-Head Attention, Causal-Attention, and Cross-Attention in LLMs*](https://magazine.sebastianraschka.com/p/understanding-and-coding-self-attention), Ahead of AI, 2024 – Attention Schritt für Schritt in PyTorch, frei lesbar.
+* Raschka: [*Build a Large Language Model (From Scratch)*](https://www.manning.com/books/build-a-large-language-model-from-scratch), Manning 2024; der Code ist frei: [github.com/rasbt/LLMs-from-scratch](https://github.com/rasbt/LLMs-from-scratch).
 :::

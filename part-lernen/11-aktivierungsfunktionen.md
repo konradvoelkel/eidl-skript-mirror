@@ -88,5 +88,5 @@ nur Trainingsdaten mit nichtnegativen Einträgen.
 
 :::{admonition} Weiterlesen
 :class: seealso
-Prince, *UDL*: Die Aktivierungsfunktionen stehen in Kap. 3 (Abbildung 3.13 und der Abschnitt *Notes* am Kapitelende) und in Abschnitt 20.2.5 (Activation functions); zu Initialisierung und sterbenden Neuronen Kap. 7 (Gradients and initialization). Das Buch ist frei verfügbar, siehe [Über dieses Skript](../README.md).
+Prince, [*UDL*](https://udlbook.github.io/udlbook/): Die Aktivierungsfunktionen stehen in Kap. 3 (Abbildung 3.13 und der Abschnitt *Notes* am Kapitelende) und in Abschnitt 20.2.5 (Activation functions); zu Initialisierung und sterbenden Neuronen Kap. 7 (Gradients and initialization). Das Buch ist frei verfügbar, siehe [Über dieses Skript](../README.md).
 :::

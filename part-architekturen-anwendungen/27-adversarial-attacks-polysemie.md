@@ -19,7 +19,7 @@ Beispiel: die gezielte Manipulation des Inputs eines Bildklassifikators, um eine
 
 Wir betrachten den Eingaberaum „Menge aller Bilddateien“ ($[0, 1]^{3 \cdot H \cdot W}$) sowie die Eingabemenge „Menge aller Trainingsbilder“. Das Modell lernt Entscheidungsgrenzen im Eingaberaum, um Klassenlabel zu vergeben. Hypothese: Nahe der Entscheidungsgrenze liegen *adversarial examples* – und da die Trainingsbilder nur auf einer winzigen Teilmenge des Eingaberaums liegen (Manifold-Hypothese), verläuft die Entscheidungsgrenze fast überall dicht an jedem Bild vorbei, nur in Richtungen, die „aus der Mannigfaltigkeit heraus“ zeigen und für Menschen wie Rauschen aussehen.
 
-Das ist die These der Bachelorarbeit „Das Dimpled Manifold Model als Erklärung für die Existenz und die Eigenschaften von Adversarial Examples“ von N. Wieczorek (HHU 2023), nach Shamir et al. 2021: Die Entscheidungsgrenze schmiegt sich wie eine Folie mit kleinen Dellen (*dimples*) an die Datenmannigfaltigkeit an.
+Das ist die These der Bachelorarbeit „Das Dimpled Manifold Model als Erklärung für die Existenz und die Eigenschaften von Adversarial Examples“ von N. Wieczorek (HHU 2023), nach [Shamir et al. 2021](https://arxiv.org/abs/2106.10151): Die Entscheidungsgrenze schmiegt sich wie eine Folie mit kleinen Dellen (*dimples*) an die Datenmannigfaltigkeit an.
 
 ### Wie wird's gemacht?
 
@@ -27,7 +27,7 @@ Mit Gradientenabstiegsmethoden sucht man, ausgehend von einem Bild eines weißen
 
 :::{admonition} Vertiefung: Fast Gradient Sign Method
 :class: note dropdown
-Goodfellow, Shlens und Szegedy 2014: Mit dem Loss $L(f(x), y)$ für das wahre Label $y$ ist
+Goodfellow, Shlens und Szegedy, [*Explaining and Harnessing Adversarial Examples*](https://arxiv.org/abs/1412.6572) (2014, ICLR 2015): Mit dem Loss $L(f(x), y)$ für das wahre Label $y$ ist
 
 $$
 x_{\text{adv}} := x + \epsilon \cdot \operatorname{sign}\bigl(\nabla_x L(f(x), y)\bigr)
@@ -36,7 +36,7 @@ $$
 ein Bild, das sich in jedem Pixel um höchstens $\epsilon$ vom Original unterscheidet und den Loss in erster Näherung maximal vergrößert. Gezielt auf eine Wunschklasse $y_{\text{Ziel}}$: Minus statt Plus und $y_{\text{Ziel}}$ statt $y$. Ein einziger Gradientenschritt genügt oft, weil das Modell in der Umgebung des Bildes fast linear ist; die iterative Variante (PGD) macht viele kleine Schritte und projiziert nach jedem zurück in den $\epsilon$-Würfel um $x$.
 :::
 
-Dass das nicht nur mit Pixeln funktioniert: Sharif et al. 2016, *Accessorize to a Crime: Real and Stealthy Attacks on State-of-the-Art Face Recognition* – eine bedruckte Brillenfassung lässt ein Gesichtserkennungssystem eine andere Person erkennen. Und aus dem Heise-Newsticker vom 2.2.2026: [Manipulierte Straßenschilder: Wenn das autonome Auto Fußgänger umfährt](https://www.heise.de/news/Manipulierte-Strassenschilder-Wenn-das-autonome-Auto-Fussgaenger-umfaehrt-11162744.html).
+Dass das nicht nur mit Pixeln funktioniert: Sharif et al. 2016, [*Accessorize to a Crime: Real and Stealthy Attacks on State-of-the-Art Face Recognition*](https://doi.org/10.1145/2976749.2978392) (CCS 2016) – eine bedruckte Brillenfassung lässt ein Gesichtserkennungssystem eine andere Person erkennen. Und aus dem Heise-Newsticker vom 2.2.2026: [Manipulierte Straßenschilder: Wenn das autonome Auto Fußgänger umfährt](https://www.heise.de/news/Manipulierte-Strassenschilder-Wenn-das-autonome-Auto-Fussgaenger-umfaehrt-11162744.html).
 
 ## Polysemie und die Manifold-Hypothese
 
@@ -68,3 +68,12 @@ $(0{,}03,\ -0{,}07,\ 0{,}01)$, und $\varepsilon = 0{,}02$.
 3. Warum benutzt FGSM nur das **Vorzeichen** des Gradienten und nicht seinen Betrag?
 
 *Antwortprobe: Alle drei Pixel ändern sich um denselben Betrag.*
+
+:::{admonition} Weiterlesen
+:class: seealso
+**Im Kapitel zitiert:**
+
+* Shamir, Melamed, BenShmuel: [*The Dimpled Manifold Model of Adversarial Examples in Machine Learning*](https://arxiv.org/abs/2106.10151), 2021.
+* Goodfellow, Shlens, Szegedy: [*Explaining and Harnessing Adversarial Examples*](https://arxiv.org/abs/1412.6572), ICLR 2015.
+* Sharif et al.: [*Accessorize to a Crime: Real and Stealthy Attacks on State-of-the-Art Face Recognition*](https://doi.org/10.1145/2976749.2978392), CCS 2016.
+:::

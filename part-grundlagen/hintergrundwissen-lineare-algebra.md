@@ -365,7 +365,7 @@ beschreibt eines –, ist invariant unter solchen Transformationen.
 
 :::{admonition} Weiterlesen
 :class: seealso
-Deisenroth et al., *MML*, Kap. 2 (Linear algebra) und Kap. 3 (Analytic geometry:
+Deisenroth et al., [*MML*](https://mml-book.github.io/), Kap. 2 (Linear algebra) und Kap. 3 (Analytic geometry:
 Skalarprodukt, Winkel, Projektion). Frei verfügbar, siehe
 [Über dieses Skript](../README.md).
 :::

@@ -146,7 +146,7 @@ Wie groß „zu groß“ ist, hängt von den Daten ab, und zwar von jedem Featur
 
 Der einfachste Ausweg ist, alle Features vorher auf Mittelwert $0$ und Standardabweichung $1$ zu bringen (*Standardisierung*, `sklearn.preprocessing.StandardScaler`, und beim Testset mit den Werten aus dem *Trainingsset* skalieren). Dass dieselbe Idee auch *innerhalb* eines Netzes hilft (Batch Normalization, Layer Normalization) und dass Optimierer wie Adam die Lernrate pro Parameter anpassen, sehen wir in späteren Kapiteln; der Grund ist immer dieser.
 
-Wie so ein Loss-Gebirge für ein echtes neuronales Netz aussieht, zeigen z.B. Li, Xu, Taylor, Studer und Goldstein, *Visualizing the loss landscape of neural nets* (arXiv:1712.09913, 2017). Die Landschaften sind nicht konvex, es gibt viele lokale Minima, Sattelpunkte und Plateaus – und trotzdem funktioniert Gradientenabstieg erstaunlich gut.
+Wie so ein Loss-Gebirge für ein echtes neuronales Netz aussieht, zeigen z.B. Li, Xu, Taylor, Studer und Goldstein, [*Visualizing the loss landscape of neural nets*](https://arxiv.org/abs/1712.09913) (NeurIPS 2018). Die Landschaften sind nicht konvex, es gibt viele lokale Minima, Sattelpunkte und Plateaus – und trotzdem funktioniert Gradientenabstieg erstaunlich gut.
 
 :::{admonition} Ausprobieren: Loss Landscape Explorer
 :class: tip
@@ -261,5 +261,9 @@ Faktor $2$ aus der Kettenregel.*
 
 :::{admonition} Weiterlesen
 :class: seealso
-Prince, *UDL*, Kap. 6 (Fitting models: Gradientenabstieg, SGD, Lernrate); Deisenroth et al., *MML*, Kap. 5 (Vector calculus) und 7 (Continuous optimization). Beide Bücher sind frei verfügbar, siehe [Über dieses Skript](../README.md).
+Prince, [*UDL*](https://udlbook.github.io/udlbook/), Kap. 6 (Fitting models: Gradientenabstieg, SGD, Lernrate); Deisenroth et al., [*MML*](https://mml-book.github.io/), Kap. 5 (Vector calculus) und 7 (Continuous optimization). Beide Bücher sind frei verfügbar, siehe [Über dieses Skript](../README.md).
+
+**Im Kapitel zitiert:**
+
+* Li, Xu, Taylor, Studer, Goldstein: [*Visualizing the Loss Landscape of Neural Nets*](https://arxiv.org/abs/1712.09913), NeurIPS 2018.
 :::

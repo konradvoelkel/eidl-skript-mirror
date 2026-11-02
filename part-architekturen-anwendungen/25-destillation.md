@@ -41,7 +41,7 @@ Das legt nahe: erst mit einem großen Netz suchen, dann das Ergebnis in ein klei
 
 ### Vorläufer: Ensemble Model Compression
 
-Buciluă, Caruana, Niculescu-Mizil: *Model Compression* (2006):
+Buciluă, Caruana, Niculescu-Mizil: [*Model Compression*](https://doi.org/10.1145/1150402.1150464) (KDD 2006):
 
 1. Trainiere ein großes Ensemble-Modell (z.B. Random Forest, XGBoost) auf den Daten,
 2. generiere synthetische Eingabedaten,
@@ -52,7 +52,7 @@ Das Training wirkt regularisierend, das neuronale Netz verallgemeinert besser �
 
 ### Wie deep muss es sein?
 
-Ba, Caruana: *Do Deep Nets Really Need to be Deep?* (2013). Wie muss ein neuronales Netz aufgestellt sein (Architektur), um eine Funktion zu lernen? Zwei getrennte Fragen:
+Ba, Caruana: [*Do Deep Nets Really Need to be Deep?*](https://arxiv.org/abs/1312.6184) (2013, NeurIPS 2014). Wie muss ein neuronales Netz aufgestellt sein (Architektur), um eine Funktion zu lernen? Zwei getrennte Fragen:
 
 1. **Expressivity**: Ist das Netz komplex genug, um die Funktion abzubilden?
 2. **Learnability**: Kann der Gradientenabstieg diese Funktion im großen Suchraum finden?
@@ -63,7 +63,7 @@ Ergebnisse: Expressivity ist nicht das Problem (vgl. das [Kapitel „Universelle
 
 ### Distillation Loss
 
-Hinton, Vinyals, Dean: *Distilling the Knowledge in a Neural Network* (2015). Für eine $k$-Klassen-Klassifikationsaufgabe ist der letzte Schritt im großen Lehrer-Modell ein Softmax $\mathbb{R}^k \to [0, 1]^k$, gefolgt von der „harten“ Klassifikation $\operatorname{argmax}$, um zu einem Klassenurteil zu kommen. Idee: Lerne nicht aus dem harten, sondern aus dem *weichen* Urteil. Und mach es noch weicher.
+Hinton, Vinyals, Dean: [*Distilling the Knowledge in a Neural Network*](https://arxiv.org/abs/1503.02531) (2015). Für eine $k$-Klassen-Klassifikationsaufgabe ist der letzte Schritt im großen Lehrer-Modell ein Softmax $\mathbb{R}^k \to [0, 1]^k$, gefolgt von der „harten“ Klassifikation $\operatorname{argmax}$, um zu einem Klassenurteil zu kommen. Idee: Lerne nicht aus dem harten, sondern aus dem *weichen* Urteil. Und mach es noch weicher.
 
 Loss-Funktion zum Schüler-Training: KL-Divergenz (relative Entropie) zwischen Schüler-Verteilung und Lehrer-Verteilung, jeweils reskaliert mit Temperatur $T$:
 
@@ -81,11 +81,11 @@ Beispiel: fehlerhaft gelabelte Daten, z.B. ein Hund $x$ mit dem Label „Katze�
 
 ### Schüler übertreffen Lehrer
 
-Furlanello, Lipton, Tschannen, Itti, Anandkumar: *Born Again Neural Networks* (2018), inspiriert von „born again trees“ aus 1996. Das Schüler-Netzwerk ist nicht nur kleiner und damit schneller und billiger als das Lehrer-Netzwerk – es kann sogar *besser* werden, selbst bei gleicher Architektur. Die implizite Neugewichtung der Trainingsdaten führt zu Fokus auf „schwere Fälle“; der Loss berücksichtigt weniger den einfachen Teil der Aufgabe. Knowledge Distillation ist damit Regularisierung bzw. Optimierung statt nur Kompression. Und man kann iterieren: ein Ensemble aus Generationen von Schülern.
+Furlanello, Lipton, Tschannen, Itti, Anandkumar: [*Born Again Neural Networks*](https://arxiv.org/abs/1805.04770) (ICML 2018), inspiriert von „born again trees“ aus 1996. Das Schüler-Netzwerk ist nicht nur kleiner und damit schneller und billiger als das Lehrer-Netzwerk – es kann sogar *besser* werden, selbst bei gleicher Architektur. Die implizite Neugewichtung der Trainingsdaten führt zu Fokus auf „schwere Fälle“; der Loss berücksichtigt weniger den einfachen Teil der Aufgabe. Knowledge Distillation ist damit Regularisierung bzw. Optimierung statt nur Kompression. Und man kann iterieren: ein Ensemble aus Generationen von Schülern.
 
 ### DistilBERT
 
-Sanh, Debut, Chaumond, Wolf: *DistilBERT, a distilled version of BERT: smaller, faster, cheaper and lighter* (2019): „we leverage knowledge distillation during the pre-training phase and show that it is possible to reduce the size of a BERT model by 40 %, while retaining 97 % of its language understanding capabilities and being 60 % faster. To leverage the inductive biases learned by larger models during pre-training, we introduce a triple loss combining language modeling, distillation and cosine-distance losses.“
+Sanh, Debut, Chaumond, Wolf: [*DistilBERT, a distilled version of BERT: smaller, faster, cheaper and lighter*](https://arxiv.org/abs/1910.01108) (2019): „we leverage knowledge distillation during the pre-training phase and show that it is possible to reduce the size of a BERT model by 40 %, while retaining 97 % of its language understanding capabilities and being 60 % faster. To leverage the inductive biases learned by larger models during pre-training, we introduce a triple loss combining language modeling, distillation and cosine-distance losses.“
 
 DistilBERT := jeder zweite Layer von BERT (als Initialisierung). Der Loss ist die Summe aus drei Teilen:
 
@@ -99,15 +99,15 @@ Das ist das Modell aus dem [Kapitel „Vortrainierte Modelle“](../part-grundla
 
 ### Speculative Decoding
 
-Vgl. Yan, Agarwal, Venkataraman: *Decoding Speculative Decoding* (2024). Problem: Das (autoregressive) Sampling eines nächsten Tokens mit einem LLM ist teuer, benötigt aber ein Ergebnis, um das darauf folgende Token zu sampeln – man kann nicht parallelisieren. Trick: Rate die kommenden 5 Token mit einem kleinen, billigen Modell, und *verifiziere* sie mit dem teuren LLM in einem einzigen Forward-Pass (der ist parallel). Stimmen sie, hat man 5 Token zum Preis von einem; sonst nimmt man das erste abweichende Token des großen Modells und rät neu. Trick 2: Das billige Modell ist vom LLM destilliert, damit es möglichst oft richtig rät.
+Vgl. Yan, Agarwal, Venkataraman: [*Decoding Speculative Decoding*](https://arxiv.org/abs/2402.01528) (2024). Problem: Das (autoregressive) Sampling eines nächsten Tokens mit einem LLM ist teuer, benötigt aber ein Ergebnis, um das darauf folgende Token zu sampeln – man kann nicht parallelisieren. Trick: Rate die kommenden 5 Token mit einem kleinen, billigen Modell, und *verifiziere* sie mit dem teuren LLM in einem einzigen Forward-Pass (der ist parallel). Stimmen sie, hat man 5 Token zum Preis von einem; sonst nimmt man das erste abweichende Token des großen Modells und rät neu. Trick 2: Das billige Modell ist vom LLM destilliert, damit es möglichst oft richtig rät.
 
 ### SDXL Turbo
 
-Sauer, Lorenz, Blattmann, Rombach: *Adversarial Diffusion Distillation* (2023). Aus einem vortrainierten tiefen Diffusionsmodell (SDXL) zum Generieren von Bildern aus Bildbeschreibungen in einem $k$-Schritte-Iterationsprozess des Entrauschens wird ein 1-Schritt-Modell destilliert – mit Distillation Loss (Schüler-Output soll dem Lehrer-Output nach $k$ Schritten ähneln) und Adversarial Loss (GAN-Training aus dem [Kapitel „GANs“](22-gans.md), damit die Bilder scharf bleiben). Bildgenerierung in Echtzeit.
+Sauer, Lorenz, Blattmann, Rombach: [*Adversarial Diffusion Distillation*](https://arxiv.org/abs/2311.17042) (2023). Aus einem vortrainierten tiefen Diffusionsmodell (SDXL) zum Generieren von Bildern aus Bildbeschreibungen in einem $k$-Schritte-Iterationsprozess des Entrauschens wird ein 1-Schritt-Modell destilliert – mit Distillation Loss (Schüler-Output soll dem Lehrer-Output nach $k$ Schritten ähneln) und Adversarial Loss (GAN-Training aus dem [Kapitel „GANs“](22-gans.md), damit die Bilder scharf bleiben). Bildgenerierung in Echtzeit.
 
 ### Gemini Flash
 
-Google Gemini Team: *Gemini 1.5: Unlocking multimodal understanding across millions of tokens of context* (2024). Auch Google benutzt Destillation, um aus dem großen, teuren Gemini 1.5 Pro das günstigere, schnellere Gemini 1.5 Flash zu destillieren. Analog: OpenAIs GPT-Mini-Modelle.
+Google Gemini Team: [*Gemini 1.5: Unlocking multimodal understanding across millions of tokens of context*](https://arxiv.org/abs/2403.05530) (2024). Auch Google benutzt Destillation, um aus dem großen, teuren Gemini 1.5 Pro das günstigere, schnellere Gemini 1.5 Flash zu destillieren. Analog: OpenAIs GPT-Mini-Modelle.
 
 ### Chain of Thought
 
@@ -129,3 +129,17 @@ Ein Lehrer-Modell gibt für drei Klassen die Logits $(3, 1, 0)$ aus.
 3. Warum wird der Distillation Loss mit $T^2$ multipliziert?
 
 *Antwortprobe: Bei beiden Temperaturen summieren sich die drei Werte zu 1, aber der größte ist bei $T=2$ deutlich kleiner.*
+
+:::{admonition} Weiterlesen
+:class: seealso
+**Im Kapitel zitiert:**
+
+* Buciluă, Caruana, Niculescu-Mizil: [*Model Compression*](https://doi.org/10.1145/1150402.1150464), KDD 2006.
+* Ba, Caruana: [*Do Deep Nets Really Need to be Deep?*](https://arxiv.org/abs/1312.6184), NeurIPS 2014.
+* Hinton, Vinyals, Dean: [*Distilling the Knowledge in a Neural Network*](https://arxiv.org/abs/1503.02531), 2015.
+* Furlanello et al.: [*Born Again Neural Networks*](https://arxiv.org/abs/1805.04770), ICML 2018.
+* Sanh, Debut, Chaumond, Wolf: [*DistilBERT, a distilled version of BERT*](https://arxiv.org/abs/1910.01108), 2019.
+* Yan, Agarwal, Venkataraman: [*Decoding Speculative Decoding*](https://arxiv.org/abs/2402.01528), 2024.
+* Sauer, Lorenz, Blattmann, Rombach: [*Adversarial Diffusion Distillation*](https://arxiv.org/abs/2311.17042), 2023.
+* Gemini Team: [*Gemini 1.5: Unlocking multimodal understanding across millions of tokens of context*](https://arxiv.org/abs/2403.05530), 2024.
+:::

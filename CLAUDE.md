@@ -56,7 +56,7 @@ dev-Gruppe.
 matplotlib, numpy, scipy, scikit-learn — und weil seine Ausgabe, die PNGs in `images/`,
 **versioniert** ist, braucht es jedes Mal *dieselbe* Fassung davon. matplotlib ändert
 zwischen Minor-Fassungen den Satz; ein Komplettlauf mit einer anderen Fassung schreibt alle
-46 Abbildungen neu (dazu 6 Kopien aus dem Material von 2025), ohne dass sich an einer
+47 Abbildungen neu (dazu 6 Kopien aus dem Material von 2025), ohne dass sich an einer
 einzigen etwas Inhaltliches geändert hätte, und
 die echte Änderung ist dann nicht mehr von der Fassungsdifferenz zu unterscheiden. Bis zum
 2026-10-14 stand im Skriptkopf „System-Python reicht“; dessen matplotlib (3.10.9) war eine
@@ -68,16 +68,17 @@ byte-gleich sein.
 Erwartung eines gesunden Laufs (Stand 2026-11-02, nach den sieben Tafelbildern und dem
 Abschnitt „Orthogonale Matrizen“ im Kapitel „Hintergrundwissen Lineare Algebra“ und dem
 Rechenbeispiel zur Geradengleichung im Kapitel „Neuron und Perzeptron“ und den zwei
-Polyeder-Abbildungen im Kapitel „Aktivierungsfunktionen“; die
+Polyeder-Abbildungen im Kapitel „Aktivierungsfunktionen“ und den Literaturlisten in allen
+„Weiterlesen“-Boxen; die
 fachliche Durchsicht vom 2026-10-15 deckte 27 Kapitel und das Glossar ab, den
-Kettenregel-Abschnitt vom 2026-10-20 und diesen Zuwachs nicht): HTML ohne Warnungen, PDF **126 Seiten A4** lokal, 0 LaTeX-Fehler,
+Kettenregel-Abschnitt vom 2026-10-20 und diesen Zuwachs nicht): HTML ohne Warnungen, PDF **131 Seiten A4** lokal, 0 LaTeX-Fehler,
 0 fehlende Glyphen, 5 überlange Zeilen. Das veröffentlichte PDF hatte bis zum 2026-10-19
 stets **eine Seite mehr** als das lokale (siehe unten); für den neuen Stand ist das noch
 nicht nachgemessen. Die `--min-pages`-Untergrenze
 soll einen *abgebrochenen* Lauf fangen, nicht eine gewollte Kürzung — sie steht deshalb
 deutlich unter der tatsächlichen Seitenzahl, in der CI auf demselben Wert.
 
-**Lokal und CI weichen um eine Seite ab, und das bleibt so**: hier 126 Seiten, das
+**Lokal und CI weichen um eine Seite ab, und das bleibt so**: hier 131 Seiten, das
 veröffentlichte PDF hatte am 2026-10-19 vor dem neuen Kapitel 113 gegen lokal 112. Die erste Abweichung steht auf Seite 28 in einem Codeblock,
 der eine Zeile anders bricht — es ist der *Satz*, nicht der Inhalt. Die Ursache ist am
 2026-10-15 gemessen worden, und sie ist nicht die, die hier vom 2026-09-29 bis dahin stand:
@@ -291,6 +292,30 @@ Der Ton ist knapp und präzise:
   steht der Inhalt offen da. Für Vertiefungen ist das in Ordnung — für alles, was erst nach
   eigenem Nachdenken gelesen werden soll, ist `dropdown` kein Versteck. Genau daran hingen
   bis zum 2026-09-27 die Lösungsvorschläge der Übungsblätter im PDF.
+
+## Literatur
+
+**Jeder Literaturverweis ist anklickbar, und jedes zitierte Werk steht in der
+„Weiterlesen“-Box seines Kapitels.** Entschieden am 2026-11-02, nachdem im
+Transformer-Kapitel ein Artikel nur mit Titel und Autorin genannt war – und so rund 50
+Werke im ganzen Buch.
+
+* **Im Text** wird der Titel zum Link (bei Kurzzitaten die Angabe „Autor Jahr“). Ziel ist
+  die **DOI** (`https://doi.org/…`), wenn das Werk eine hat; sonst die Adresse, unter der es
+  frei abrufbar ist (arXiv-Abstract, Blog, Projektseite). Liegt die DOI-Fassung hinter
+  einer Bezahlschranke und gibt es eine freie, kommt sie als „frei: arXiv:…“ dazu.
+* **In „Weiterlesen“** steht unter **„Im Kapitel zitiert:“** jedes Werk mit Autoren,
+  verlinktem Titel, Ort und Jahr. Ein Kapitel ohne Box bekommt eine, am Ende.
+* **Kennungen werden nicht aus dem Gedächtnis eingetragen**, sondern gegen den Titel
+  geprüft: arXiv über `export.arxiv.org/api/query?id_list=…`, DOIs über `doi.org` mit
+  `Accept: application/vnd.citationstyles.csl+json`. Am 2026-11-02 so für 50 Kennungen.
+* `check_doku.py` meldet eine Zeile mit „et al.“ oder „arXiv:“ ohne Link und jede DOI-
+  oder arXiv-Adresse, die nicht auch in „Weiterlesen“ steht. Was keine dieser Formen hat
+  („Gage 1994“), fängt er nicht.
+* **Fremde Abbildungen:** Eine Lizenzangabe auf Wikimedia Commons ist eine Behauptung des
+  Hochladenden. Das klassische Hubel-Wiesel-Bild steht dort als „Own work“, ist aber
+  erkennbar aus einem Lehrbuch gescannt – deshalb ist es nachgezeichnet
+  (`vl10_hubel_wiesel` in `make_figures.py`) statt übernommen.
 
 ## Markup — die Fallen dieses Repos
 

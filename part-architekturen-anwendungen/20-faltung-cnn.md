@@ -19,9 +19,15 @@ Faltung in der Bildverarbeitung: Original, mit einer Gaußfunktion weichgezeichn
 
 ### Das menschliche Auge erkennt Kanten(orientierung)
 
-Hubel & Wiesel (1959) haben in der Sehrinde von Katzen Neuronen gefunden, die auf Balken einer bestimmten *Orientierung* antworten – und auf andere Orientierungen nicht (Reproduktion von Wurtz 1969, in Robert H. Wurtz: „Recounting the impact of Hubel and Wiesel“, J Physiol 2009). Solche Neuronen sind lokale Kantendetektoren: Sie schauen auf einen kleinen Ausschnitt des Gesichtsfelds und reagieren auf ein bestimmtes Muster darin. CNNs sind die technische Umsetzung dieser Idee, und die ersten Schichten eines trainierten CNN sehen tatsächlich aus wie Kantendetektoren verschiedener Orientierung.
+[Hubel & Wiesel (1959)](https://doi.org/10.1113/jphysiol.1959.sp006308) haben in der Sehrinde von Katzen Neuronen gefunden, die auf Balken einer bestimmten *Orientierung* antworten – und auf andere Orientierungen nicht (Reproduktion von Wurtz 1969, in Robert H. Wurtz: [„Recounting the impact of Hubel and Wiesel“](https://doi.org/10.1113/jphysiol.2009.170209), J Physiol 2009). Solche Neuronen sind lokale Kantendetektoren: Sie schauen auf einen kleinen Ausschnitt des Gesichtsfelds und reagieren auf ein bestimmtes Muster darin. CNNs sind die technische Umsetzung dieser Idee, und die ersten Schichten eines trainierten CNN sehen tatsächlich aus wie Kantendetektoren verschiedener Orientierung.
 
-Das klassische Bild dazu, ein Neuron, das nur bei einer Balkenorientierung feuert, steht im Wikipedia-Artikel zu [Hubel und Wiesel](https://en.wikipedia.org/wiki/Orientation_column) (Orientation column, Abbildung CC-BY-SA).
+Das klassische Bild dazu zeigt ein Neuron, das nur bei einer Balkenorientierung feuert:
+
+:::{figure} ../images/vl10-hubel-wiesel.png
+:width: 90%
+
+Ein orientierungsselektives Neuron, schematisch nach Hubel & Wiesel (1959). Links die Reize, ein heller Balken in vier Orientierungen, daneben die Spikes des Neurons; während der Reiz zu sehen ist (helle Zone), feuert es nur beim senkrechten Balken heftig. Rechts die Feuerrate über der Orientierung, die *Tuningkurve*. Die Spikes sind simuliert, die Kurve ist ein Modell, keine Messung.
+:::
 
 ### In der Informatik
 
@@ -211,7 +217,7 @@ Weiterführend:
 
 * Animationen von Vincent Dumoulin und Francesco Visin zu Padding, Stride und Dilation: [github.com/vdumoulin/conv_arithmetic](https://github.com/vdumoulin/conv_arithmetic).
 * Interaktives MNIST-CNN-Explorationswerkzeug von Adam Harley: [adamharley.com/nn_vis/cnn/2d.html](https://adamharley.com/nn_vis/cnn/2d.html) – man zeichnet eine Ziffer und sieht alle Feature Maps aller Schichten.
-* *Universal Fourier Features Emerge* ([arXiv:2312.08550](https://arxiv.org/abs/2312.08550)): warum gelernte Filter so oft wie Fourier-Basisfunktionen aussehen.
+* Marchetti et al., *Harmonics of Learning: Universal Fourier Features Emerge in Invariant Networks* ([arXiv:2312.08550](https://arxiv.org/abs/2312.08550)): warum gelernte Filter so oft wie Fourier-Basisfunktionen aussehen.
 * Faltung und Pooling einmal von Hand zu rechnen lohnt sich; ein Übungsblatt tut genau das.
 
 ## Übung
@@ -232,5 +238,11 @@ $f = (\tfrac12, 0, -\tfrac12)$ an den Stellen $-1, 0, 1$.
 
 :::{admonition} Weiterlesen
 :class: seealso
-Prince, *UDL*, Kap. 10 (Convolutional networks) und 11 (Residual networks). Das Buch ist frei verfügbar, siehe [Über dieses Skript](../README.md).
+Prince, [*UDL*](https://udlbook.github.io/udlbook/), Kap. 10 (Convolutional networks) und 11 (Residual networks). Das Buch ist frei verfügbar, siehe [Über dieses Skript](../README.md).
+
+**Im Kapitel zitiert:**
+
+* Hubel, Wiesel: [*Receptive fields of single neurones in the cat's striate cortex*](https://doi.org/10.1113/jphysiol.1959.sp006308), J Physiol 1959.
+* Wurtz: [*Recounting the impact of Hubel and Wiesel*](https://doi.org/10.1113/jphysiol.2009.170209), J Physiol 2009.
+* Marchetti et al.: [*Harmonics of Learning: Universal Fourier Features Emerge in Invariant Networks*](https://arxiv.org/abs/2312.08550), 2023.
 :::

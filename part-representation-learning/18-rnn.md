@@ -25,7 +25,7 @@ Ein rekurrentes Neuron: gefaltet mit der Rückkopplung $U$ (links) und über vie
 
 ### Historie: Rekurrente Netze
 
-1982 Hopfield-Netzwerk · 1985 Boltzmann Machine (Hinton, Sejnowski) · 1980er RNNs · 1991 Schmidhubers frühe Attention · 1990er Gated RNNs · 1997 LSTM (Hochreiter, Schmidhuber) · 2014 GRUs (Cho, Bengio et al.) · 2017 Transformer (Vaswani et al.).
+1982 [Hopfield-Netzwerk](https://doi.org/10.1073/pnas.79.8.2554) · 1985 [Boltzmann Machine](https://doi.org/10.1207/s15516709cog0901_7) (Ackley, Hinton, Sejnowski) · 1980er RNNs · 1991 Schmidhubers frühe Attention · 1990er Gated RNNs · 1997 [LSTM](https://doi.org/10.1162/neco.1997.9.8.1735) (Hochreiter, Schmidhuber) · 2014 [GRUs](https://arxiv.org/abs/1406.1078) (Cho, Bengio et al.) · 2017 [Transformer](https://arxiv.org/abs/1706.03762) (Vaswani et al.).
 
 Im Gegensatz zur *Finite Impulse Response* (FIR) eines CNNs (machen wir noch) ist ein RNN ein *Infinite Impulse Response* (IIR) Signalverarbeiter: Ein Eingabesignal zum Zeitpunkt $t$ kann den Zustand prinzipiell für immer beeinflussen.
 
@@ -47,7 +47,7 @@ Idee: Jeder Layer ist nah dran an „nichts ändern“ (Identität), und der Gra
 
 Schaltbilder der Zellen: [LSTM](https://de.wikipedia.org/wiki/Long_short-term_memory) und [GRU](https://en.wikipedia.org/wiki/Gated_recurrent_unit) auf Wikipedia (Abbildungen CC-BY-SA); die Gates sind dort als $\sigma$-Knoten gezeichnet, die elementweise multiplizieren, also genau die stetigen Bitmasken aus dem [Kapitel „Netze von Hand bauen“](../part-lernen/12-netze-von-hand.md).
 
-Bill Gates (2018): „huge milestone in advancing artificial intelligence“ – weil OpenAI mit LSTMs Dota 2 gewann. Auch mit LSTMs gebaut: AlphaStar von Google DeepMind, spielt StarCraft 2 (2019).
+Bill Gates (2018, auf Twitter): „huge milestone in advancing artificial intelligence“ – weil [OpenAI Five](https://openai.com/index/openai-five/) mit LSTMs Dota 2 gewann. Auch mit LSTMs gebaut: [AlphaStar](https://doi.org/10.1038/s41586-019-1724-z) von Google DeepMind, spielt StarCraft 2 (2019).
 
 ### LSTM praktisch
 
@@ -87,3 +87,16 @@ Eingabefolge $x = (1, 0, 0)$.
    mit $u$ pro Schritt.*
 
 *Antwortprobe: Bei (2) fällt einer der drei Verläufe deutlich langsamer ab als die anderen.*
+
+:::{admonition} Weiterlesen
+:class: seealso
+**Im Kapitel zitiert:**
+
+* Hopfield: [*Neural networks and physical systems with emergent collective computational abilities*](https://doi.org/10.1073/pnas.79.8.2554), PNAS 1982.
+* Ackley, Hinton, Sejnowski: [*A Learning Algorithm for Boltzmann Machines*](https://doi.org/10.1207/s15516709cog0901_7), Cognitive Science 1985.
+* Hochreiter, Schmidhuber: [*Long Short-Term Memory*](https://doi.org/10.1162/neco.1997.9.8.1735), Neural Computation 1997.
+* Cho et al.: [*Learning Phrase Representations using RNN Encoder-Decoder for Statistical Machine Translation*](https://arxiv.org/abs/1406.1078), EMNLP 2014.
+* Vaswani et al.: [*Attention Is All You Need*](https://arxiv.org/abs/1706.03762), NeurIPS 2017.
+* OpenAI: [*OpenAI Five*](https://openai.com/index/openai-five/), Blog 2018.
+* Vinyals et al.: [*Grandmaster level in StarCraft II using multi-agent reinforcement learning*](https://doi.org/10.1038/s41586-019-1724-z), Nature 2019.
+:::

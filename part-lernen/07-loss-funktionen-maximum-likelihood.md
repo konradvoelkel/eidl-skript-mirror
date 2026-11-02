@@ -152,5 +152,5 @@ ist die Kullback-Leibler-Divergenz (im [DS-Skript](https://voelkel.pages.cs.uni-
 
 :::{admonition} Weiterlesen
 :class: seealso
-Prince, *UDL*, Kap. 5 (Loss functions: Maximum Likelihood als Rezept für alle Loss-Funktionen); Deisenroth et al., *MML*, Abschnitt 8.3 (Parameter estimation) und Kap. 9 (Linear regression). Beide Bücher sind frei verfügbar, siehe [Über dieses Skript](../README.md).
+Prince, [*UDL*](https://udlbook.github.io/udlbook/), Kap. 5 (Loss functions: Maximum Likelihood als Rezept für alle Loss-Funktionen); Deisenroth et al., [*MML*](https://mml-book.github.io/), Abschnitt 8.3 (Parameter estimation) und Kap. 9 (Linear regression). Beide Bücher sind frei verfügbar, siehe [Über dieses Skript](../README.md).
 :::
