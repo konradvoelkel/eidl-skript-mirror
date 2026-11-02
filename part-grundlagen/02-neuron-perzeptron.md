@@ -67,6 +67,36 @@ Sei $w = (3, 4)$ und $b = -5$, also $\|w\| = 5$ und $H = \{ x \in \mathbb{R}^2 :
 
 Daraus folgt eine Beobachtung, die uns bei der logistischen Regression wieder begegnen wird. Multipliziert man $w$ und $b$ mit derselben Zahl $c > 0$, so ändert sich weder $H$ noch die Entscheidung $[w \cdot x + b > 0]$, aber die Aktivierung wird um den Faktor $c$ skaliert. Die *Richtung* von $w$ legt fest, *was* klassifiziert wird; die *Länge* von $w$ legt fest, wie schnell die Aktivierung mit dem Abstand wächst. Für das Perzeptron ist die Länge egal. Sobald wir statt der Sprungfunktion eine glatte Aktivierungsfunktion verwenden, ist sie es nicht mehr: Für die logistische Sigmoidfunktion $\sigma$ ist $\sigma(c \cdot 20)$ bei $c = 10$ praktisch $1$, bei $c = 0{,}01$ nur knapp über $\tfrac12$. Dieselbe Trenngerade, ganz andere „Sicherheit“.
 
+In der Ebene ist $H$ eine Gerade, und man kann ihre Gleichung in der Schulform aufschreiben. Aus $w_1 x_1 + w_2 x_2 + b = 0$ folgt für $w_2 \neq 0$
+
+$$
+x_2 = -\frac{w_1}{w_2} \, x_1 - \frac{b}{w_2} .
+$$
+
+Die Steigung ist $-w_1/w_2$, der Achsenabschnitt auf der $x_2$-Achse ist $-b/w_2$ – also *nicht* $b$ selbst. Das lässt sich aber immer herstellen: Multipliziert man $w$ und $b$ mit einer Zahl $c \neq 0$, bleibt $H$ dieselbe Gerade (für $c < 0$ tauschen nur die beiden Seiten). Mit $c = -1/w_2$ wird $w_2 = -1$, und die Gleichung lautet $x_2 = w_1 x_1 + b$: Steigung $w_1$, Achsenabschnitt $b$. Ist $w_2 = 0$, steht $H$ senkrecht, $x_1 = -b/w_1$.
+
+:::{prf:example} Ein Perzeptron nach einer Epoche
+Zwei Punktwolken aus `sklearn.datasets.make_blobs`, je 20 Punkte um $(-1, 3)$ (Klasse $0$) und um $(2, 0)$ (Klasse $1$). Das Perzeptron startet mit $w = (1, 1)$ und $b = 1$ und läuft einmal mit der Perzeptronregel aus dem [nächsten Kapitel](03-perzeptron-trainieren.md) über alle Punkte, Lernrate $\rho = 0{,}5$. Vier Punkte lösen ein Update aus; danach ist, auf zwei Stellen gerundet,
+
+$$
+w = (1{,}70;\ -0{,}49), \qquad b = 1{,}00 ,
+$$
+
+und alle 40 Punkte sind richtig klassifiziert. Die Trenngerade ist
+
+$$
+x_2 = \frac{1{,}70}{0{,}49} \, x_1 + \frac{1{,}00}{0{,}49} \approx 3{,}47 \, x_1 + 2{,}04 .
+$$
+
+Normiert mit $c = 1/0{,}49$ (hier $c > 0$, also ändert sich nicht einmal die Klassifikation) wird daraus $w \approx (3{,}47;\ -1)$ und $b \approx 2{,}04$, und jetzt steht der Achsenabschnitt als $b$ da. Probe an den beiden Zentren: $(2, 0)$ hat Aktivierung $1{,}70 \cdot 2 - 0{,}49 \cdot 0 + 1 = 4{,}40 > 0$, also Klasse $1$; $(-1, 3)$ hat $-1{,}70 - 1{,}47 + 1 = -2{,}17 < 0$, also Klasse $0$.
+:::
+
+:::{figure} ../images/vl02-perceptron-achsenabschnitt.png
+:width: 60%
+
+Das Perzeptron aus dem Beispiel: Die Trenngerade $w \cdot x + b = 0$ schneidet die $x_2$-Achse bei $-b/w_2 \approx 2{,}04$. Der Gewichtsvektor $w$, dort angetragen, steht senkrecht auf ihr und zeigt zur Klasse $1$. Gestrichelt die Gerade vor dem Training ($w = (1, 1)$, $b = 1$).
+:::
+
 :::{prf:definition} Linear trennbar
 Zwei Mengen $A, B \subseteq \mathbb{R}^n$ heißen *linear trennbar*, wenn es $w \in \mathbb{R}^n$ und $b \in \mathbb{R}$ gibt mit
 $w \cdot a + b > 0$ für alle $a \in A$ und $w \cdot a' + b \le 0$ für alle $a' \in B$.

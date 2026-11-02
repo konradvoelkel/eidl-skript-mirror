@@ -208,6 +208,47 @@ def vl01_mlp():
 # ----------------------------------------------------------------------------
 # VL 02
 # ----------------------------------------------------------------------------
+def vl02_perceptron_achsenabschnitt():
+    """Ein Perzeptron nach einer Epoche, für das Rechenbeispiel zur Geradengleichung im
+    Kapitel „Neuron und Perzeptron“. Die Gewichte werden auf zwei Stellen gerundet, damit
+    Bild und Text dieselben Zahlen zeigen (die Fehlerrate bleibt dabei 0)."""
+    from sklearn.datasets import make_blobs
+
+    X, y = make_blobs(40, centers=[(-1, 3), (2, 0)], cluster_std=0.9, random_state=2)
+    Xb = np.hstack([np.ones((len(X), 1)), X])  # Bias-Trick: (b, w1, w2)
+    start = np.array([1.0, 1.0, 1.0])
+    w = start.copy()
+    for xi, yi in zip(Xb, y):
+        w = w + 0.5 * (yi - float(w @ xi > 0)) * xi
+    b, w1, w2 = np.round(w, 2)
+    assert (b, w1, w2) == (1.0, 1.7, -0.49) and np.all((Xb @ [b, w1, w2] > 0) == y)
+    achse = -b / w2
+
+    fig, ax = plt.subplots(figsize=(5.6, 5))
+    for k, c in [(0, HHU_BLUE), (1, HHU_ORANGE)]:
+        ax.scatter(X[y == k, 0], X[y == k, 1], s=20, color=c, label=f"Klasse {k}", zorder=3)
+    xs = np.array([-4, 4])
+    ax.plot(xs, -(start[0] + start[1] * xs) / start[2], color=GREY, lw=1, ls="--",
+            label="vor dem Training")
+    ax.plot(xs, -(b + w1 * xs) / w2, color=HHU_RED, lw=2, label=r"$w \cdot x + b = 0$")
+    ax.axhline(0, color=GREY, lw=0.6)
+    ax.axvline(0, color=GREY, lw=0.6)
+    ax.annotate("", xy=(w1, achse + w2), xytext=(0, achse),
+                arrowprops={"arrowstyle": "-|>", "color": HHU_DARK, "lw": 2, "shrinkA": 0,
+                            "shrinkB": 0, "mutation_scale": 14}, zorder=4)
+    ax.text(w1 + 0.1, achse + w2 - 0.1, "$w$", color=HHU_DARK, fontsize=13)
+    ax.scatter([0], [achse], color=HHU_RED, s=40, zorder=5)
+    ax.annotate(rf"$-b/w_2 \approx {achse:.2f}$".replace(".", "{,}"), (0, achse), (-3.6, 3.9),
+                fontsize=11, color=HHU_RED, arrowprops={"arrowstyle": "->", "color": HHU_RED})
+    ax.set_xlim(-4, 4)
+    ax.set_ylim(-2.5, 5.5)
+    ax.set_aspect("equal")
+    ax.set_xlabel("$x_1$")
+    ax.set_ylabel("$x_2$")
+    ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.13), ncol=2, fontsize=9, frameon=False)
+    save(fig, "vl02-perceptron-achsenabschnitt")
+
+
 def vl02_perceptron_updates():
     from sklearn.datasets import make_blobs
 

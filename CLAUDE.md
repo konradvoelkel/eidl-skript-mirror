@@ -56,7 +56,7 @@ dev-Gruppe.
 matplotlib, numpy, scipy, scikit-learn — und weil seine Ausgabe, die PNGs in `images/`,
 **versioniert** ist, braucht es jedes Mal *dieselbe* Fassung davon. matplotlib ändert
 zwischen Minor-Fassungen den Satz; ein Komplettlauf mit einer anderen Fassung schreibt alle
-43 Abbildungen neu (dazu 6 Kopien aus dem Material von 2025), ohne dass sich an einer
+44 Abbildungen neu (dazu 6 Kopien aus dem Material von 2025), ohne dass sich an einer
 einzigen etwas Inhaltliches geändert hätte, und
 die echte Änderung ist dann nicht mehr von der Fassungsdifferenz zu unterscheiden. Bis zum
 2026-10-14 stand im Skriptkopf „System-Python reicht“; dessen matplotlib (3.10.9) war eine
@@ -66,16 +66,17 @@ trotzdem keine Gigabyte. Gegenprobe: zweimal laufen lassen, der zweite Lauf muss
 byte-gleich sein.
 
 Erwartung eines gesunden Laufs (Stand 2026-11-02, nach den sieben Tafelbildern und dem
-Abschnitt „Orthogonale Matrizen“ im Kapitel „Hintergrundwissen Lineare Algebra“; die
+Abschnitt „Orthogonale Matrizen“ im Kapitel „Hintergrundwissen Lineare Algebra“ und dem
+Rechenbeispiel zur Geradengleichung im Kapitel „Neuron und Perzeptron“; die
 fachliche Durchsicht vom 2026-10-15 deckte 27 Kapitel und das Glossar ab, den
-Kettenregel-Abschnitt vom 2026-10-20 und diesen Zuwachs nicht): HTML ohne Warnungen, PDF **122 Seiten A4** lokal, 0 LaTeX-Fehler,
+Kettenregel-Abschnitt vom 2026-10-20 und diesen Zuwachs nicht): HTML ohne Warnungen, PDF **123 Seiten A4** lokal, 0 LaTeX-Fehler,
 0 fehlende Glyphen, 5 überlange Zeilen. Das veröffentlichte PDF hatte bis zum 2026-10-19
 stets **eine Seite mehr** als das lokale (siehe unten); für den neuen Stand ist das noch
 nicht nachgemessen. Die `--min-pages`-Untergrenze
 soll einen *abgebrochenen* Lauf fangen, nicht eine gewollte Kürzung — sie steht deshalb
 deutlich unter der tatsächlichen Seitenzahl, in der CI auf demselben Wert.
 
-**Lokal und CI weichen um eine Seite ab, und das bleibt so**: hier 122 Seiten, das
+**Lokal und CI weichen um eine Seite ab, und das bleibt so**: hier 123 Seiten, das
 veröffentlichte PDF hatte am 2026-10-19 vor dem neuen Kapitel 113 gegen lokal 112. Die erste Abweichung steht auf Seite 28 in einem Codeblock,
 der eine Zeile anders bricht — es ist der *Satz*, nicht der Inhalt. Die Ursache ist am
 2026-10-15 gemessen worden, und sie ist nicht die, die hier vom 2026-09-29 bis dahin stand:
