@@ -456,6 +456,10 @@ des Data-Science-Skripts (`~/Sciebo/hhu/ds2026/ds-skript`, dort `erwartungswert.
   und Zeiten und Anzahl erhält — geprüft per Skript, Änderungen als Vorher-nachher-Liste
   an Konrad, hochgeladen erst nach seinem Ja über `/webPlayerSubtitles/upload/key/<hash>`
   (`.srt` oder `.vtt`, Sprache Deutsch). Die Mediathek bricht die Zeilen selbst neu um.
+  **Vorher auf ganze Sekunden runden** (`untertitel_ganze_sekunden.py`): Die Mediathek
+  verdirbt ab Minute 1 die Millisekunden, und kurze Untertitel bekommen dann Anfang gleich
+  Ende — bis zum 2026-11-02 waren so 11 bis 21 je Video unsichtbar. Geprüft wird an der
+  ausgelieferten VTT, und zwar an den Zeiten, nicht nur an Text und Anzahl (PLAYBOOK §3.13).
   Die Whisper-GPU teilt sich die Maschine mit Ollama; ist sie belegt, warten. **Und die
   Gegenrichtung:** In der Beschreibung des Videos je behandeltes Kapitel ein Link auf die
   Kapitelseite (beim zweiten Kapitel einer Sitzung mit „ab Minute n“), im Autorenfeld der
