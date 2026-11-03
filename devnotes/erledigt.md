@@ -159,6 +159,13 @@ Datierte Protokolle größerer Umbauten liegen daneben als `build-log-<datum>.md
 
 ### Infrastruktur
 
+- [x] **Startseite als Einstieg**, 2026-11-03. `index.md` war ein Satz, ein PDF-Link und ein
+  Hinweis-Kasten mit englischem Titel; keine H1, und als einziger interner Link `/readme` (die
+  Seitenleiste steht nicht im ausgelieferten HTML, ein Crawler ohne JavaScript fand die Kapitel nur
+  über die Vor/Zurück-Kette). Jetzt: Titel gleich dem Projekttitel (gemessen: `<title>` und
+  `og:site_name` bleiben „Einführung in Deep Learning“), zwei Absätze zu Inhalt und Voraussetzungen,
+  Kontakt über die Issues des GitHub-Spiegels, und eine Kapitelliste nach Teilen mit relativen
+  Links, 31 interne Links statt 2. Die Beschreibung der Seite bleibt die des Buchs.
 - [x] **Eine eigene Beschreibung je Seite**, 2026-11-03. Alle 32 Seiten trugen die Beschreibung des
   Projekts (Meta-Description, og:description, `description` im JSON-LD je Kapitel); jetzt hat jede
   Seite außer der Landingpage ein `description:` im Frontmatter, 141 bis 155 Zeichen, mit den

@@ -578,3 +578,6 @@ unnormierten
 Zacke
 Invarianz
 Kovektor
+ILIAS
+Lernregel
+Lernziele
