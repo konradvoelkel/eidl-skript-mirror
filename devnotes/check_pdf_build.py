@@ -55,7 +55,8 @@ VERSCHLUCKTER_KNOTEN = re.compile(r"Unhandled LaTeX conversion for node of \"([^
 # Ausnahme mit Absicht: Ein `{anywidget}` ist ein interaktives Bild fuer die Website und hat im
 # PDF kein Gegenstueck. Er steht deshalb nur direkt unter einer statischen Abbildung, die dasselbe
 # zeigt (`widgets/drehung.mjs` unter `la-drehung.png`, `widgets/perzeptron.mjs` unter
-# `vl02-perceptron-updates.png`, `widgets/stufe.mjs` unter `vl11-step-from-sigmoids.png`).
+# `vl02-perceptron-updates.png`, `widgets/stufe.mjs` unter `vl11-step-from-sigmoids.png`,
+# `widgets/gradientenabstieg.mjs` unter `vl05-schlucht.png`).
 # Gezaehlt und gemeldet
 # wird er trotzdem, damit die Zahl sichtbar bleibt.
 NUR_WEB = {"anywidget"}

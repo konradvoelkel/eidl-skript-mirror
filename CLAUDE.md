@@ -56,7 +56,7 @@ dev-Gruppe.
 matplotlib, numpy, scipy, scikit-learn — und weil seine Ausgabe, die PNGs in `images/`,
 **versioniert** ist, braucht es jedes Mal *dieselbe* Fassung davon. matplotlib ändert
 zwischen Minor-Fassungen den Satz; ein Komplettlauf mit einer anderen Fassung schreibt alle
-48 Abbildungen neu (dazu 6 Kopien aus dem Material von 2025), ohne dass sich an einer
+49 Abbildungen neu (dazu 6 Kopien aus dem Material von 2025), ohne dass sich an einer
 einzigen etwas Inhaltliches geändert hätte, und
 die echte Änderung ist dann nicht mehr von der Fassungsdifferenz zu unterscheiden. Bis zum
 2026-10-14 stand im Skriptkopf „System-Python reicht“; dessen matplotlib (3.10.9) war eine
@@ -246,7 +246,7 @@ Wichtig zur Ordnerstruktur:
 | `slides/` | Beamer-Foliensätze VL 01–15 (`build.sh`, gemeinsamer `header.tex`) |
 | `images/`, `logo/` | Abbildungen, Logos; dazu `images/social-card.png`, die Vorschaukarte |
 | `tools/` | Skripte der Veröffentlichung: Vorschaukarte, Sitemap-URLs, Kopf-Tags, JSON-LD |
-| `widgets/` | interaktive Abbildungen für die Website (`{anywidget}`, ein ES-Modul ohne Abhängigkeiten je Widget); im PDF fehlen sie, deshalb steht jedes direkt unter einer statischen Abbildung, die dasselbe zeigt. Bisher `drehung.mjs` im Kapitel „Hintergrundwissen Lineare Algebra“ , `perzeptron.mjs` im Kapitel „Das Perzeptron trainieren“ und `stufe.mjs` im Kapitel „Universelle Approximation“ |
+| `widgets/` | interaktive Abbildungen für die Website (`{anywidget}`, ein ES-Modul ohne Abhängigkeiten je Widget); im PDF fehlen sie, deshalb steht jedes direkt unter einer statischen Abbildung, die dasselbe zeigt. Bisher `drehung.mjs` im Kapitel „Hintergrundwissen Lineare Algebra“ , `perzeptron.mjs` im Kapitel „Das Perzeptron trainieren“ , `stufe.mjs` im Kapitel „Universelle Approximation“ und `gradientenabstieg.mjs` im Kapitel „Gradientenabstieg“ |
 | `notebooks/` | Notebooks aus 2025; nur `latent-classifier.ipynb` hat noch eine Funktion — es hängt als `downloads:` am Kapitel 21 |
 | `glossar.md` | Klausurbegriffe mit Link ins jeweilige Kapitel (im TOC, Abschnitt „Anhang“) |
 | `kurs-2026-27.md` | Semesterplan, Termine, Organisatorisches — **nicht im TOC**, also nicht Teil des Buchs |

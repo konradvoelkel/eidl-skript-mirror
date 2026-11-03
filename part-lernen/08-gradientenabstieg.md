@@ -144,13 +144,25 @@ Das ist der **Gradientenabstieg**, und $\rho$ ist die **Lernrate** – dieselbe,
 
 Wie groß „zu groß“ ist, hängt von den Daten ab, und zwar von jedem Feature einzeln. Für den MSE ist $\frac{\partial L}{\partial w_j} = \frac1N \sum_i 2\,(y_i - \langle w, x^{(i)} \rangle)\,(-x^{(i)}_j)$, also proportional zu den Werten von Feature $j$. Hat Feature 1 Werte um $1$ und Feature 2 Werte um $1000$ (Körpergröße in Metern, Einkommen in Euro), so ist die zweite Gradientenkomponente etwa tausendmal größer als die erste, und die Krümmung des Loss-Gebirges in $w_2$-Richtung ist eine Million mal größer: Das Tal ist eine lange, schmale Schlucht. Eine Lernrate, die in $w_1$-Richtung vernünftig vorankommt, springt in $w_2$-Richtung über die Schlucht hinaus; eine, die dort stabil ist, kriecht in $w_1$-Richtung.
 
+Im einfachsten Fall lässt sich das genau ausrechnen. Für $L(w) = \frac12 (\lambda_1 w_1^2 + \lambda_2 w_2^2)$ ist $L'(w) = (\lambda_1 w_1, \lambda_2 w_2)$, und ein Schritt macht aus $w$ den Punkt $\bigl((1 - \rho\lambda_1)\, w_1,\ (1 - \rho\lambda_2)\, w_2\bigr)$: Jede Komponente wird mit ihrem eigenen Faktor multipliziert. Ist ein Faktor negativ, wechselt die Komponente bei jedem Schritt das Vorzeichen; hat er Betrag größer als $1$, wächst sie. Mit $\lambda_1 = 1$ und $\lambda_2 = 10$ beginnt das Zickzack also bei $\rho = 0{,}1$, und ab $\rho = 2/\lambda_2 = 0{,}2$ divergiert das Verfahren – bei einer Lernrate, die in $w_1$-Richtung allein bis $\rho = 2$ stabil wäre.
+
+:::{figure} ../images/vl05-schlucht.png
+:width: 100%
+
+Gradientenabstieg auf $L(w) = \frac12 (w_1^2 + 10\, w_2^2)$ ab $(-4{,}5;\ 2)$, höchstens 30 Schritte. Ein Schritt multipliziert $w_1$ mit $1 - \rho$ und $w_2$ mit $1 - 10\rho$.
+:::
+
+:::{anywidget} ../widgets/gradientenabstieg.mjs
+{start: [-4.5, 2], rho: 0.15, lambda2: 10}
+:::
+
 Der einfachste Ausweg ist, alle Features vorher auf Mittelwert $0$ und Standardabweichung $1$ zu bringen (*Standardisierung*, `sklearn.preprocessing.StandardScaler`, und beim Testset mit den Werten aus dem *Trainingsset* skalieren). Dass dieselbe Idee auch *innerhalb* eines Netzes hilft (Batch Normalization, Layer Normalization) und dass Optimierer wie Adam die Lernrate pro Parameter anpassen, sehen wir in späteren Kapiteln; der Grund ist immer dieser.
 
 Wie so ein Loss-Gebirge für ein echtes neuronales Netz aussieht, zeigen z.B. Li, Xu, Taylor, Studer und Goldstein, [*Visualizing the loss landscape of neural nets*](https://arxiv.org/abs/1712.09913) (NeurIPS 2018). Die Landschaften sind nicht konvex, es gibt viele lokale Minima, Sattelpunkte und Plateaus – und trotzdem funktioniert Gradientenabstieg erstaunlich gut.
 
 :::{admonition} Ausprobieren: Loss Landscape Explorer
 :class: tip
-[losslandscape.com/explorer](https://losslandscape.com/explorer) zeigt echte Loss-Landschaften trainierter Netze als begehbares Gelände, mit einem Gradientenabstiegspfad, den man selbst starten kann. Probieren Sie drei Lernraten: eine so kleine, dass der Pfad im ersten Hang stecken bleibt, eine mittlere, die ins Tal findet, und eine so große, dass der Pfad zwischen den Talwänden hin und her springt oder ganz herausfliegt. Was man daraus mitnimmt: Man kennt die Landschaft im echten Training nicht, man sieht nur den Loss-Wert; der Loss steigt auch mal an, ohne dass etwas kaputt ist; wenn er dauerhaft steigt oder `nan` wird, ist die Lernrate zu groß oder ein Neustart mit anderer Initialisierung fällig; und in der Praxis fängt man mit großer Lernrate an und macht sie später kleiner. Das Bild ist ein trianguliertes Gitter aus wenigen Auswertungen und hängt an den Daten, mit anderen Trainingsdaten sähe dasselbe Netz anders aus.
+Die Schlucht oben hat eine Formel, und man kann ausrechnen, was passiert. [losslandscape.com/explorer](https://losslandscape.com/explorer) zeigt echte Loss-Landschaften trainierter Netze als begehbares Gelände, mit einem Gradientenabstiegspfad, den man selbst starten kann. Probieren Sie drei Lernraten: eine so kleine, dass der Pfad im ersten Hang stecken bleibt, eine mittlere, die ins Tal findet, und eine so große, dass der Pfad zwischen den Talwänden hin und her springt oder ganz herausfliegt. Was man daraus mitnimmt: Man kennt die Landschaft im echten Training nicht, man sieht nur den Loss-Wert; der Loss steigt auch mal an, ohne dass etwas kaputt ist; wenn er dauerhaft steigt oder `nan` wird, ist die Lernrate zu groß oder ein Neustart mit anderer Initialisierung fällig; und in der Praxis fängt man mit großer Lernrate an und macht sie später kleiner. Das Bild ist ein trianguliertes Gitter aus wenigen Auswertungen und hängt an den Daten, mit anderen Trainingsdaten sähe dasselbe Netz anders aus.
 :::
 
 ## Zurück zum Perzeptron

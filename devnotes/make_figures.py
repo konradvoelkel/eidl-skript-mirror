@@ -565,6 +565,37 @@ def vl05_loss_landscape():
     save(fig, "vl05-loss-landscape")
 
 
+# Gradientenabstieg in einer Schlucht: L(w) = (w1² + 10·w2²)/2, also Krümmung 1 in w1- und 10 in
+# w2-Richtung. Ein Schritt multipliziert w1 mit 1 − ρ und w2 mit 1 − 10ρ; ab ρ = 0,1 springt w2
+# das Vorzeichen (Zickzack), ab ρ = 2/10 = 0,2 wächst es (Divergenz). Dieselbe Funktion und
+# derselbe Start stehen als Voreinstellung im Widget widgets/gradientenabstieg.mjs.
+def vl05_schlucht():
+    lam = np.array([1.0, 10.0])
+    start = np.array([-4.5, 2.0])
+    w1, w2 = np.meshgrid(np.linspace(-5, 5, 300), np.linspace(-3, 3, 200))
+    L = (lam[0] * w1 ** 2 + lam[1] * w2 ** 2) / 2
+    fig, axs = plt.subplots(1, 3, figsize=(12, 3.6), sharey=True)
+    for ax, rho, titel in [(axs[0], 0.02, "kriecht"), (axs[1], 0.15, "Zickzack"), (axs[2], 0.21, "divergiert")]:
+        ax.contour(w1, w2, L, levels=[0.5, 2, 5, 10, 20, 40], colors=HHU_ICE, linewidths=1)
+        w = start.copy()
+        pfad = [w.copy()]
+        for _ in range(30):
+            w = w - rho * lam * w
+            pfad.append(w.copy())
+            if abs(w[1]) > 3:  # der erste Schritt aus dem Bild hinaus genügt
+                break
+        pfad = np.array(pfad)
+        ax.plot(pfad[:, 0], pfad[:, 1], "o-", color=HHU_BLUE, ms=3, lw=1.2)
+        ax.plot(*start, "o", color=HHU_ORANGE, ms=7)
+        ax.plot(0, 0, "+", color=GREY, ms=10)
+        ax.set_xlim(-5, 5)
+        ax.set_ylim(-3, 3)
+        ax.set_xlabel("$w_1$")
+        ax.set_title(f"$\\rho = {rho:.2f}$: {titel}".replace(".", "{,}"))
+    axs[0].set_ylabel("$w_2$")
+    save(fig, "vl05-schlucht")
+
+
 def vl05_loss_curves():
     f = np.linspace(-4, 4, 400)
     fig, ax = plt.subplots(figsize=(6, 3.6))
