@@ -141,6 +141,9 @@ _build/
 
 monkeytype.sqlite3
 exports/
+# Das Artefakt des pages-Jobs. CLAUDE.md nannte es seit jeher gitignored; es stand hier
+# aber nicht (am 2026-11-03 bemerkt, als der Job lokal nachgebaut wurde).
+public/
 scalene-profile.json
 # LLM-Gewichte (zu groß)
 *.gguf

@@ -221,6 +221,27 @@ Textfassung von Seite und Objektbaum: `~/Sciebo/hhu/eidl-26/ilias/` (analog zu
 
 ## Infrastruktur
 
+- [ ] **Offene Befunde aus dem SEO-Audit vom 2026-11-03** (Bericht nicht im Repo; die
+  Auslieferung ist am selben Tag mit sieben Ports aus ds-skript, ds-en und eipy erledigt,
+  siehe `erledigt.md`). Offen, nach Wirkung:
+  1. **Landingpage**: `index.md` hat keine H1, rund 45 eigene Wörter und als einzigen
+     internen Link `/readme`; die Seitenleiste steht nicht im ausgelieferten HTML, ein
+     Crawler ohne JavaScript erreicht die Kapitel nur über die Vor/Zurück-Kette.
+     *Vorschlag:* Titel, zwei Sätze Zielgruppe und Voraussetzungen, Kapitelliste nach
+     Teilen mit relativen Links (ohne Nummern), Glossar. Vorlage: `landing-page.md` im Repo ds-skript.
+  2. **Mobiler Kopf 419 px breit** bei 375 px Viewport: Theme-Knopf außerhalb, die Seite
+     scrollt waagerecht, auf jeder Seite (am 2026-11-03 gemessen, `scrollWidth` 419).
+  3. **Suchknopf mobil ohne zugänglichen Namen** (axe „Buttons must have discernible
+     text“, Lighthouse Agentic mobil 1/2). Eine Ersetzung mehr in `BEDIENUNG` in
+     `_site/vendor/install_template.py`.
+  4. Vier Kapitel wiederholen ihren Titel als erstes `##` (03-perzeptron-trainieren,
+     13-universelle-approximation, 18-rnn, 19-transformer); `README.md` hat einen
+     88 Zeichen langen Titel und eine doppelte Gliederung.
+  5. `myst.yml`: Autoren-URL `http://www.konradvoelkel.com` (256-mal ausgeliefert, 308).
+  6. Autor-`sameAs` ohne Wikidata Q102659059, GND 1122356269, VIAF 3141148269690605230001
+     (am 2026-11-03 nachgesehen) — in allen vier Repos mit demselben Autorknoten zugleich.
+  7. `llms.txt` (ds-skript hat dafür ein Skript, `llms_txt.py` in seinem tools/), Impressum/Datenschutz-Link,
+     Bing Webmaster Tools.
 - [ ] **Zwei Handgriffe in GitLab, die nur Konrad machen kann** (seit dem History-Rewrite vom
   2026-09-27 offen): *Settings → Repository → Protected branches* → bei `main` **Allowed to force
   push wieder ausschalten** (es wurde für den Rewrite eingeschaltet), und *Settings → Repository →
@@ -272,23 +293,11 @@ Textfassung von Seite und Objektbaum: `~/Sciebo/hhu/eidl-26/ilias/` (analog zu
   festen Namen neben die Seite kopieren (aus dem Unterordner build/ des Artefakts in
   dessen Wurzel) und `og:image` darauf zeigen lassen — eine Zeile im Job und eine in
   `tools/head_meta.py`.
-- [ ] **29-mal dieselbe `og:description`.** Keine Kapiteldatei hat eine eigene
+- [ ] **29-mal dieselbe `og:description` (im SEO-Audit vom 2026-11-03 der wichtigste inhaltliche Befund).** Keine Kapiteldatei hat eine eigene
   `description:` im Frontmatter, also tragen alle 29 Kapitelseiten die Beschreibung des
   Projekts — als Suchergebnis-Text 29-mal derselbe Satz, und im JSON-LD dieselbe
   `description` je Kapitel. *Vorschlag:* je Kapitel ein Satz im Frontmatter, beim nächsten
   inhaltlichen Durchgang mitgeschrieben. Inhaltsarbeit, kein Werkzeug.
-- [ ] **`freshness.py` aus ds-skript portieren** (sichtbares Datum auf der Landingpage,
-  `article:modified_time` je Seite, `<lastmod>` je Sitemap-Eintrag). `inject_jsonld.py`
-  liest sein Datum einstweilen selbst aus `git log`; `<lastmod>` fehlt noch ganz, und das
-  ist das Signal, an dem ein Crawler entscheidet, wann er wiederkommt.
-- [ ] **`vendor_assets.py` aus ds-skript portieren.** Das Theme holt KaTeX, Font-Awesome und
-  das Matplotlib-Widget-CSS weiterhin von zwei CDN — drei render-blockierende Stylesheets
-  von fremden Servern, und das Buch zu lesen kontaktiert damit Dritte. Dort gelöst samt
-  Prüfung (`check_css_assets.py`) und Herkunftsnachweis.
-- [ ] **Bildmaße und Gliederungsreservierung** (ds-en `head_meta.py`, Abschnitte 7 und 9):
-  `width`/`height` je Abbildung im Markup *und* im Stylesheet, dazu eine reservierte Höhe
-  für die Gliederung. Beides senkt CLS; beides hängt dort an Messungen, die hier erst
-  gemacht werden müssten, bevor man Zahlen behauptet.
 - `_site/sidebar_footer.md` leer, `navbar_end.md` nur „Inhaltsverzeichnis“ – wie bei EiPy; lassen.
 - Logo: `logo/` enthält SVGs und Exporte; für Rocket.Chat `logo/eidl-logo-512.png`.
 

@@ -159,6 +159,20 @@ Datierte Protokolle größerer Umbauten liegen daneben als `build-log-<datum>.md
 
 ### Infrastruktur
 
+- [x] **Auslieferung auf den Stand der Geschwister**, 2026-11-03, nach einem SEO-Audit (Score 75)
+  und dem Vergleich mit ds-skript, ds-en und eipy. Sieben Ports, je ein Commit, jeder lokal am
+  nachgebauten `pages`-Job und im Browser gegen das Artefakt geprüft: Vorkompression
+  (`precompress.py`, gzip 77 %, brotli 83 %), `loading="lazy"` vor den schließenden Schrägstrich
+  (derselbe Fehler war in ds-skript am 2026-10-29 behoben), Schriften und Theme-Stylesheets von
+  hier (`vendor_assets.py`, `check_css_assets.py`, `_site/fonts/`; vorher Google Fonts, jsdelivr,
+  cdnjs), Bildmaße und Gliederungsplatz (`image_dims.py`, `outline_reserve.py`; CLS mobil auf
+  `/gradientenabstieg/` live 0,2546, lokal 0), `<lastmod>` und `article:modified_time`
+  (`freshness.py`), Kapitellinks mit Schrägstrich (`trailing_slash.py`, 442 hrefs), thebe-core nur
+  wo rechenbar (`thebe_gate.py` aus ds-en; die Audit-Empfehlung „`jupyter: true` entfernen“
+  hätte es nicht abgestellt). Zwei Abweichungen von ds-skript, beide gemessen: Die Hydration
+  gelingt hier, also kein `hydration.py`; und ein Kapitelklick lädt das ganze Dokument neu.
+  Ersetzt die drei offenen Punkte `freshness.py`, `vendor_assets.py` und „Bildmaße und
+  Gliederungsreservierung“ aus `TODO.md`.
 - [x] **Abbildungen hingen am System-Python** (2026-10-14). `make_figures.py` lief laut eigenem
   Skriptkopf gegen das System-Python; dessen matplotlib (3.10.9) war eine andere Fassung als die
   in `uv.lock` angeheftete (3.11.2), und ein *unveränderter* Komplettlauf schrieb Abbildungen neu,

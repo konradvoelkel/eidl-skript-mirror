@@ -188,8 +188,10 @@ Dieselbe Falle wie bei den Playlists der Mediathek (Abschnitt „Vorlesungsaufze
 Was eine Suchmaschine oder eine Antwortmaschine über dieses Buch erfährt, entsteht
 **nicht** beim Bauen, sondern danach: MyST kennt die Adresse der Seite nicht und schreibt
 die seines eigenen Dev-Servers in `sitemap.xml` und `robots.txt`, emittiert keinen
-Canonical und keine strukturierten Daten. Vier Skripte in `tools/` tragen das nach; sie
-laufen im `pages`-Job und brauchen **kein einziges Python-Paket**.
+Canonical und keine strukturierten Daten. Die Skripte in `tools/` tragen das nach, und
+seit dem 2026-11-03 auch das, was die Auslieferung braucht (Kompression, eigene
+Herkunft, Layoutsprung; Ports aus ds-skript, ds-en und eipy, PLAYBOOK §3.12). Sie laufen
+im `pages`-Job und brauchen **kein einziges Python-Paket**.
 
 | Skript | Was |
 |---|---|
@@ -197,12 +199,30 @@ laufen im `pages`-Job und brauchen **kein einziges Python-Paket**.
 | `tools/publish_urls.py` | Echte Adresse in Sitemap und `robots.txt`, jede `<loc>` mit Schrägstrich, `og:image` absolut, ein Canonical je Seite; `--check` prüft das am Artefakt nach |
 | `tools/head_meta.py` | `og:url`, `og:site_name`, `og:type`, `og:locale`, `twitter:card`; `lang="de"` samt Wächter gegen die Hydration; zu kleine Abbildungen als Vorschaukarte ersetzen; Abbildungen unter der Falz verzögert laden |
 | `tools/inject_jsonld.py` | JSON-LD: ein Buchknoten samt den zwei anderen Skripten desselben Autors auf der Landingpage, je ein Kapitelknoten mit Brotkrume auf den 29 übrigen Seiten. Daten in `tools/structured-data.json` und `tools/sibling-works.json` |
+| `tools/vendor_assets.py`, `tools/check_css_assets.py` | Die drei Stylesheets des Themes (KaTeX, Font Awesome, jupyter-matplotlib) aus `_site/vendor/` statt von zwei CDN, in HTML **und** JS; die Schriften aus `_site/fonts/` statt von Google. Der Prüfer löst jeden `url()` der eingebundenen Stylesheets auf |
+| `tools/thebe_gate.py` | Lädt `thebe-core` (1,3 MB) nur auf Seiten mit ausführbarem Code, also hier auf keiner. Patcht einen Ausdruck im Client-Bündel und scheitert laut, wenn ein mystmd-Update ihn verschiebt |
+| `tools/freshness.py` | `article:modified_time` je Seite und `<lastmod>` je Sitemap-Eintrag, aus `git log` der Quelldatei |
+| `tools/image_dims.py`, `tools/outline_reserve.py` | Gegen den Layoutsprung: `width`/`height` an jeder Abbildung samt einem Stylesheet mit allen Bildmaßen, und Platz für die Gliederung, die das Theme erst nach dem Laden füllt |
+| `tools/trailing_slash.py` | Kapitellinks mit Schrägstrich (sonst 302), im Markup, in der Hydrations-Nutzlast und in den Seiten-JSON; die Seitenleiste bewusst nicht |
+| `tools/precompress.py` | `.br` und `.gz` neben jede Textdatei, **als letzter Schritt** des Jobs; `--check` packt jede Kopie aus und vergleicht byteweise |
 
-**Die Reihenfolge ist nicht beliebig**: `publish_urls.py`, dann `head_meta.py` (og:url
-bekommt dieselbe URL wie der Canonical), dann `inject_jsonld.py` (liest die absolute
-Karten-URL und den Kapiteltitel aus der Seite zurück), dann `publish_urls.py --check`.
-Lokal prüfen heißt: `myst build --html`, dann dieselben vier Aufrufe gegen eine **Kopie**
+**Die Reihenfolge ist nicht beliebig**, und sie steht samt Begründung im `pages`-Job:
+`vendor_assets.py` vor `thebe_gate.py` (beide ändern dieselben Bündel), `publish_urls.py`
+vor `head_meta.py` (og:url bekommt dieselbe URL wie der Canonical), `head_meta.py` vor
+`inject_jsonld.py` (liest Karten-URL und Kapiteltitel aus der Seite zurück) und vor
+`image_dims.py` (lazy und Maße zusammen), die Prüfläufe danach, und `precompress.py`
+**zuletzt** — jede Änderung nach ihm liefert allen Lesern die alte `.br` aus.
+Lokal prüfen heißt: `myst build --html`, die Schriften wie im `myst-build`-Job nach
+`_build/html/fonts/` kopieren, dann die Skriptzeilen des `pages`-Jobs gegen eine **Kopie**
 von `_build/html` — sie schreiben in das Verzeichnis hinein.
+
+**Die Hydration gelingt hier, anders als in ds-skript.** Dort scheitert sie (React #418)
+und rendert das ganze Dokument neu; ein Wächter (`hydration.py`) hängt die Kopf-Tags
+zurück. In eidl am 2026-11-03 gemessen: keine Fehlermeldung, Canonical, `og:*`, JSON-LD
+und `loading="lazy"` stehen nach der Hydration noch. Deshalb gibt es `hydration.py` hier
+nicht. Wer das Theme oder mystmd anhebt, misst das neu (sichtbares Fenster, nicht ein
+verdecktes mit `innerWidth` 0). Und ein Klick auf einen Kapitellink lädt hier das ganze
+Dokument neu, er rendert nicht aus der Nutzlast.
 
 **Diese Seite hat zwei Adressen.** Die lesbare Namensraum-URL
 https://voelkel.pages.cs.uni-duesseldorf.de/eidl-skript/ antwortet mit 308 auf
@@ -222,8 +242,9 @@ dort `SEO-NOTES.md`, und `~/Sciebo/hhu/ds2026/ds-skript`).
 
 Wichtig zur Ordnerstruktur:
 
-* `_site/` ist **Quellcode** (eigenes CSS, Navbar-Fragmente, und unter `_site/vendor/` das
-  mitgelieferte Site-Template).
+* `_site/` ist **Quellcode** (eigenes CSS, Navbar-Fragmente, unter `_site/fonts/` die zwei
+  Schriften, unter `_site/vendor/` das mitgelieferte Site-Template und die drei
+  Theme-Stylesheets samt Herkunftsnachweis in `PROVENANCE.txt`).
 * `_build/`, `exports/` und `public/` sind **Artefakte** — nie von Hand bearbeiten,
   gitignored.
 * `tools/` sind die Skripte der **Veröffentlichung** (siehe oben) — sie laufen in der
