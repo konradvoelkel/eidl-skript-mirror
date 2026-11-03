@@ -170,3 +170,4 @@ site:
   parts:
     navbar_end: _site/navbar_end.md
     primary_sidebar_footer: _site/sidebar_footer.md
+    footer: _site/footer.md

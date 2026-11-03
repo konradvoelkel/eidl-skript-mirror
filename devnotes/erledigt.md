@@ -159,6 +159,10 @@ Datierte Protokolle größerer Umbauten liegen daneben als `build-log-<datum>.md
 
 ### Infrastruktur
 
+- [x] **Impressum und Datenschutz in der Fußzeile**, 2026-11-03 (Entscheidung Konrad: das
+  der HHU, nicht das von konradvoelkel.com). `_site/footer.md` als `site.parts.footer` in
+  `myst.yml`, auf allen 32 Seiten unter dem Artikel; verlinkt `hhu.de/impressum` und
+  `hhu.de/datenschutzerklaerung`. Vorher hatte keine Seite einen Impressum-Link.
 - [x] **Suchknopf, doppelte Überschriften, `llms.txt`**, 2026-11-03, aus der Nachmessung des
   SEO-Audits. (1) Der Suchknopf trug sein Wort in einem Span, der unter `sm` verborgen ist,
   und hatte mobil keinen zugänglichen Namen; `install_template.py` setzt jetzt

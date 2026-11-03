@@ -253,7 +253,8 @@ dort `SEO-NOTES.md`, und `~/Sciebo/hhu/ds2026/ds-skript`).
 
 Wichtig zur Ordnerstruktur:
 
-* `_site/` ist **Quellcode** (eigenes CSS, Navbar-Fragmente, unter `_site/fonts/` die zwei
+* `_site/` ist **Quellcode** (eigenes CSS, Navbar-Fragmente, die Fußzeile mit Impressum und
+  Datenschutz der HHU (`footer.md`), unter `_site/fonts/` die zwei
   Schriften, unter `_site/vendor/` das mitgelieferte Site-Template und die drei
   Theme-Stylesheets samt Herkunftsnachweis in `PROVENANCE.txt`).
 * `_build/`, `exports/` und `public/` sind **Artefakte** — nie von Hand bearbeiten,

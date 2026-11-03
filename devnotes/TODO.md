@@ -222,14 +222,12 @@ Textfassung von Seite und Objektbaum: `~/Sciebo/hhu/eidl-26/ilias/` (analog zu
 ## Infrastruktur
 
 - [ ] **Offene Befunde aus dem SEO-Audit vom 2026-11-03** (Bericht nicht im Repo; Auslieferung,
-  Descriptions, Startseite, Suchknopf, doppelte Überschriften und `llms.txt` sind am selben Tag
+  Descriptions, Startseite, Suchknopf, doppelte Überschriften, `llms.txt` und Impressum sind am selben Tag
   erledigt, siehe `erledigt.md`). Offen:
   1. Autor-`sameAs` ohne Wikidata Q102659059, GND 1122356269, VIAF 3141148269690605230001
      (am 2026-11-03 nachgesehen) — in allen vier Repos mit demselben Autorknoten zugleich.
-  2. **[Entscheidung]** Impressum/Datenschutz-Link in der Fußzeile. *Vorschlag:* auf das
-     Impressum von konradvoelkel.com, falls es eines gibt, sonst auf das der HHU.
-  3. Bing Webmaster Tools (braucht Konrads Konto).
-  4. Desktop-TBT beobachten: nach der Kompression 360–490 ms statt 40–70 ms (Startseite,
+  2. Bing Webmaster Tools (braucht Konrads Konto).
+  3. Desktop-TBT beobachten: nach der Kompression 360–490 ms statt 40–70 ms (Startseite,
      Transformer); Vermutung, nicht belegt: dieselbe JS-Arbeit fällt nun ins Messfenster.
      Beleg wäre ein A/B gegen ein unkomprimiertes Artefakt.
 - [ ] **Zwei Handgriffe in GitLab, die nur Konrad machen kann** (seit dem History-Rewrite vom
