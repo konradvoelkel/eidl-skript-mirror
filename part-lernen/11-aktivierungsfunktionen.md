@@ -1,5 +1,6 @@
 ---
 title: "Aktivierungsfunktionen"
+description: "Aktivierungsfunktionen im Vergleich: Sigmoid, ReLU, ELU, GELU, Swish. Wozu Nichtlinearität, die Polyeder eines ReLU-Netzes, sterbende Neuronen."
 short_title: "Aktivierungsfunktionen"
 ---
 

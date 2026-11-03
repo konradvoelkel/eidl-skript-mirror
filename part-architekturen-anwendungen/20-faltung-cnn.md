@@ -1,5 +1,6 @@
 ---
 title: "Faltung und Convolutional Neural Networks"
+description: "Faltung und Convolutional Neural Networks: Faltung in einer und zwei Dimensionen, Pooling, Stride und Padding, Kanten finden, der Aufbau eines CNN."
 short_title: "CNNs"
 ---
 

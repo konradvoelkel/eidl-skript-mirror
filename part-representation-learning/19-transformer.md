@@ -1,5 +1,6 @@
 ---
 title: "Transformer"
+description: "Der Transformer aus „Attention is all you need“: Self-Attention mit Query, Key und Value, Multi-Head Attention, Positionskodierung, BLEU, Modelle."
 short_title: "Transformer"
 ---
 

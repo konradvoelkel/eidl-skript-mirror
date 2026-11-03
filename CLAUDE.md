@@ -206,6 +206,13 @@ im `pages`-Job und brauchen **kein einziges Python-Paket**.
 | `tools/trailing_slash.py` | Kapitellinks mit Schrägstrich (sonst 302), im Markup, in der Hydrations-Nutzlast und in den Seiten-JSON; die Seitenleiste bewusst nicht |
 | `tools/precompress.py` | `.br` und `.gz` neben jede Textdatei, **als letzter Schritt** des Jobs; `--check` packt jede Kopie aus und vergleicht byteweise |
 
+**Jede Seite außer der Landingpage hat ein eigenes `description:` im Frontmatter**
+(seit 2026-11-03; vorher erbten alle 32 die des Buchs aus `myst.yml`). Es ist der Text
+unter dem Suchergebnis, die Beschreibung der Vorschaukarte und die `description` des
+Kapitels im JSON-LD. Höchstens 155 Zeichen, was im Kapitel steht und mit den Wörtern, nach
+denen jemand sucht („Kreuzentropie“, „LSTM“), ohne Werbesprache. Ein neues Kapitel bekommt
+eines, sonst meldet sich `check_doku.py`.
+
 **Die Reihenfolge ist nicht beliebig**, und sie steht samt Begründung im `pages`-Job:
 `vendor_assets.py` vor `thebe_gate.py` (beide ändern dieselben Bündel), `publish_urls.py`
 vor `head_meta.py` (og:url bekommt dieselbe URL wie der Canonical), `head_meta.py` vor

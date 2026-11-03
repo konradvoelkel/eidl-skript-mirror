@@ -292,11 +292,6 @@ Textfassung von Seite und Objektbaum: `~/Sciebo/hhu/eidl-26/ilias/` (analog zu
   festen Namen neben die Seite kopieren (aus dem Unterordner build/ des Artefakts in
   dessen Wurzel) und `og:image` darauf zeigen lassen — eine Zeile im Job und eine in
   `tools/head_meta.py`.
-- [ ] **29-mal dieselbe `og:description` (im SEO-Audit vom 2026-11-03 der wichtigste inhaltliche Befund).** Keine Kapiteldatei hat eine eigene
-  `description:` im Frontmatter, also tragen alle 29 Kapitelseiten die Beschreibung des
-  Projekts — als Suchergebnis-Text 29-mal derselbe Satz, und im JSON-LD dieselbe
-  `description` je Kapitel. *Vorschlag:* je Kapitel ein Satz im Frontmatter, beim nächsten
-  inhaltlichen Durchgang mitgeschrieben. Inhaltsarbeit, kein Werkzeug.
 - `_site/sidebar_footer.md` leer, `navbar_end.md` nur „Inhaltsverzeichnis“ – wie bei EiPy; lassen.
 - Logo: `logo/` enthält SVGs und Exporte; für Rocket.Chat `logo/eidl-logo-512.png`.
 

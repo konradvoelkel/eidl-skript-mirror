@@ -1,5 +1,6 @@
 ---
 title: "Representation Learning und Graphen"
+description: "Representation Learning: gelernte statt handgemachte Features, node2vec als word2vec auf Zufallspfaden durch einen Graphen, Graph Neural Networks."
 short_title: "Representation Learning"
 ---
 

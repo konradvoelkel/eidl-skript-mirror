@@ -1,5 +1,6 @@
 ---
 title: "Neuron und Perzeptron"
+description: "Das künstliche Neuron nach McCulloch und Pitts als gewichtete Summe mit Schwelle, das Perzeptron als trennende Gerade und was ein neuronales Netz ist."
 short_title: "Neuron und Perzeptron"
 ---
 

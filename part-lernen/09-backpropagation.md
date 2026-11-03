@@ -1,5 +1,6 @@
 ---
 title: "Backpropagation"
+description: "Backpropagation von Hand gerechnet: Gradienten Schicht für Schicht rückwärts mit der Kettenregel, an kleinen Netzen und dann allgemein als Induktion."
 short_title: "Backpropagation"
 ---
 

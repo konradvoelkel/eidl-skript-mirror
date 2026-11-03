@@ -1,5 +1,6 @@
 ---
 title: "Logistische Regression"
+description: "Logistische Regression als einzelnes Neuron: Wahrscheinlichkeiten und Odds, Sigmoid und Logit, Klassifikation mit zwei Klassen, Softmax für mehr."
 short_title: "Logistische Regression"
 ---
 

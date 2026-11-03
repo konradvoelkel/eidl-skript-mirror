@@ -1,5 +1,6 @@
 ---
 title: "Generative Adversarial Networks"
+description: "Generative Adversarial Networks (GANs): Generator gegen Diskriminator, das Training als Spiel, Conditional und Wasserstein GANs, CycleGAN, StyleGAN."
 short_title: "GANs"
 ---
 

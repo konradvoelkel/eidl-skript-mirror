@@ -1,5 +1,6 @@
 ---
 title: "Destillation"
+description: "Destillation und Model Compression: ein kleines Netz lernt von einem großen, Distillation Loss, Dark Knowledge, DistilBERT, Speculative Decoding."
 short_title: "Destillation"
 ---
 

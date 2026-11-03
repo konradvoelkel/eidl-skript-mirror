@@ -159,6 +159,11 @@ Datierte Protokolle größerer Umbauten liegen daneben als `build-log-<datum>.md
 
 ### Infrastruktur
 
+- [x] **Eine eigene Beschreibung je Seite**, 2026-11-03. Alle 32 Seiten trugen die Beschreibung des
+  Projekts (Meta-Description, og:description, `description` im JSON-LD je Kapitel); jetzt hat jede
+  Seite außer der Landingpage ein `description:` im Frontmatter, 141 bis 155 Zeichen, mit den
+  Suchbegriffen des Kapitels (jeder genannte Begriff gegen den Kapiteltext geprüft).
+  `check_doku.py` meldet eine fehlende, doppelte, zu lange oder zu kurze.
 - [x] **Auslieferung auf den Stand der Geschwister**, 2026-11-03, nach einem SEO-Audit (Score 75)
   und dem Vergleich mit ds-skript, ds-en und eipy. Sieben Ports, je ein Commit, jeder lokal am
   nachgebauten `pages`-Job und im Browser gegen das Artefakt geprüft: Vorkompression

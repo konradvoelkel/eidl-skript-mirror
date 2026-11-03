@@ -1,5 +1,6 @@
 ---
 title: "Was ist Deep Learning?"
+description: "Was Deep Learning ist: das Training neuronaler Netze mit vielen Schichten. Dazu Begriffe des maschinellen Lernens, Python und eine kurze Geschichte."
 short_title: "Was ist Deep Learning?"
 ---
 

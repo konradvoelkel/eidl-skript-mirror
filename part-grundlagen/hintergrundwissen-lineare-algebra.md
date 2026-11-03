@@ -1,5 +1,6 @@
 ---
 title: "Hintergrundwissen Lineare Algebra"
+description: "Vektoren, Skalarprodukt, Norm, Winkel, Orthogonalität und Matrizen: die lineare Algebra, auf der Neuronen, Schichten und Backpropagation aufbauen."
 short_title: "Hintergrundwissen LA"
 ---
 

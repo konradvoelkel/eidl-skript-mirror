@@ -1,5 +1,6 @@
 ---
 title: "Glossar zur Klausurvorbereitung"
+description: "Die Klausurbegriffe der Vorlesung Einführung in Deep Learning in je ein bis drei Sätzen, vom Neuron bis zu Transformer und GAN, mit Link ins Kapitel."
 short_title: "Glossar"
 ---
 

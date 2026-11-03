@@ -1,5 +1,6 @@
 ---
 title: Über dieses Skript (Voraussetzungen, Lernziele, Literatur)
+description: "Wofür das Skript zur Vorlesung Einführung in Deep Learning da ist, was es voraussetzt (Python, NumPy, lineare Regression), Aufzeichnungen, Literatur."
 short_title: Über dieses Skript
 ---
 

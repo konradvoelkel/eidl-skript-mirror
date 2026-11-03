@@ -1,5 +1,6 @@
 ---
 title: "Anwendungsbeispiele"
+description: "Drei Anwendungen aus den Bausteinen: Chatbot, E-Mails klassifizieren, Empfehlungssystem. Dazu generierter Code und ein Rezept fürs Anwendungskonzept."
 short_title: "Anwendungsbeispiele"
 ---
 

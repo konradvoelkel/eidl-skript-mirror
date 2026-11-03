@@ -1,5 +1,6 @@
 ---
 title: "Netze von Hand bauen"
+description: "Neuronale Netze mit von Hand gewählten Gewichten: OR, NOR und XOR aus Perzeptronen, dann Arithmetik und warum zwei Schichten können, was eine nicht kann."
 short_title: "Netze von Hand"
 ---
 

@@ -1,5 +1,6 @@
 ---
 title: "Vortrainierte Modelle verwenden"
+description: "Vortrainierte Modelle von Hugging Face finden und nutzen: Tasks in Computer Vision und NLP, Übersetzen mit WMT19, Rechnen auf der GPU, Google Colab."
 short_title: "Vortrainierte Modelle"
 ---
 

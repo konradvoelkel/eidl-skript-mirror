@@ -1,5 +1,6 @@
 ---
 title: "Gradientenabstieg"
+description: "Gradientenabstieg und stochastischer Gradientenabstieg mit Mini-Batches: Kettenregel, Gradient, Lernrate, eine Schlucht als Beispiel, interaktives Widget."
 short_title: "Gradientenabstieg"
 ---
 

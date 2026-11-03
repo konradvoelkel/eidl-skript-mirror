@@ -1,5 +1,6 @@
 ---
 title: "Optimierer: Momentum, Adam, Muon"
+description: "Optimierer jenseits von SGD: Momentum, adaptive Lernraten wie RMSProp, Adam und Muon, was sie gegen die Schwächen des einfachen Gradientenabstiegs tun."
 short_title: "Optimierer"
 ---
 

@@ -1,5 +1,6 @@
 ---
 title: "Loss-Funktionen und Maximum Likelihood"
+description: "Was beim Training minimiert wird und warum: die Kreuzentropie als Maximum-Likelihood-Schätzung hergeleitet, im Vergleich mit dem quadratischen Fehler."
 short_title: "Loss und Maximum Likelihood"
 ---
 

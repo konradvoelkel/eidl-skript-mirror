@@ -1,5 +1,6 @@
 ---
 title: "Autograd und Berechnungsgraph"
+description: "Wie PyTorch Gradienten selbst berechnet: Autograd und Berechnungsgraph, Zwischenergebnisse im Vorwärtsdurchlauf, Freezing, geteilte Gewichte einer Faltung."
 short_title: "Autograd"
 ---
 

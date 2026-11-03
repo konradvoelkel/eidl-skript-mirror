@@ -18,7 +18,8 @@ Es liest die drei Dokumentationsdateien (`CLAUDE.md`, `devnotes/TODO.md`,
    Lösungsvorschläge, keine Unicode-Pfeile im Fließtext. Und Literatur ist anklickbar: kein
    `et al.` und kein `arXiv:…` ohne Link in derselben Zeile, und jedes Werk, das ein Kapitel
    über DOI oder arXiv verlinkt, steht auch in dessen „Weiterlesen“-Box, und DOI-Links gehen
-   über `hdl.handle.net`, nicht über `doi.org` (seit 2026-11-02).
+   über `hdl.handle.net`, nicht über `doi.org` (seit 2026-11-02). Und jede Seite außer
+   der Landingpage hat ein eigenes `description:` von 80 bis 155 Zeichen (seit 2026-11-03).
 
 Aufruf:
 
@@ -203,6 +204,31 @@ def fehler_sammeln() -> list[str]:
                 fehler.append(f"{p.name}: Player spielt {folgt[0]}, die Linkzeile darüber nennt {adresse}")
         if len(player) > len(links):
             fehler.append(f"{p.name}: Player-Widget ohne Aufzeichnungszeile darüber")
+
+    # ── 5c. Jede Seite außer der Landingpage hat eine eigene Beschreibung ─────────
+    # Bis zum 2026-11-03 trug keine einzige Seite ein `description:`; alle 32 erbten die
+    # des Projekts aus myst.yml, als Meta-Description, og:description und im JSON-LD je
+    # Kapitel -- als Suchergebnis 32-mal derselbe Satz (SEO-Audit, wichtigster inhaltlicher
+    # Befund). Die Landingpage behält die des Buchs. 155 Zeichen, weil Google ab etwa da
+    # abschneidet; eine Untergrenze fängt ein vergessenes halbes Stichwort.
+    beschreibungen: dict[str, str] = {}
+    for p in buchdateien:
+        if p.name == "index.md":
+            continue
+        kopf = re.match(r"---\n(.*?)\n---\n", p.read_text(encoding="utf-8"), re.S)
+        m = re.search(r'(?m)^description:\s*"([^"]*)"\s*$', kopf.group(1)) if kopf else None
+        if not m:
+            fehler.append(f"{p.name}: kein `description:` im Frontmatter -- dann erbt die Seite die des Buchs")
+            continue
+        d = m.group(1)
+        if not 80 <= len(d) <= 155:
+            fehler.append(f"{p.name}: description hat {len(d)} Zeichen, erwartet 80 bis 155")
+        if d in beschreibungen:
+            fehler.append(f"{p.name}: dieselbe description wie {beschreibungen[d]}")
+        beschreibungen.setdefault(d, p.name)
+        for zeichen in ("—", "→"):
+            if zeichen in d:
+                fehler.append(f"{p.name}: „{zeichen}“ in der description (Gedankenstrich ist „–“)")
 
     # ── 6. Das gebaute PDF, falls vorhanden ─────────────────────────────────────
     pdf = WURZEL / "exports/eidl-skript.pdf"

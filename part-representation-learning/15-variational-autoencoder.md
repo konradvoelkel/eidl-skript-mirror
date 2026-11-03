@@ -1,5 +1,6 @@
 ---
 title: "Variational Autoencoder"
+description: "Variational Autoencoder (VAE): vom Autoencoder zum probabilistischen Modell, Reparametrisierungstrick, ELBO und KL-Divergenz im Loss, neue Daten sampeln."
 short_title: "VAE"
 ---
 

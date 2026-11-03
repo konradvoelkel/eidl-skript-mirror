@@ -1,5 +1,6 @@
 ---
 title: "Autoencoder"
+description: "Autoencoder: Lernen ohne Label, Encoder und Decoder mit Flaschenhals, ein Autoencoder für MNIST in PyTorch, Varianten wie Denoising und Sparse Autoencoder."
 short_title: "Autoencoder"
 ---
 

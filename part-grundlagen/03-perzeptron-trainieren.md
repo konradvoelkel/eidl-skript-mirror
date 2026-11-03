@@ -1,5 +1,6 @@
 ---
 title: "Das Perzeptron trainieren"
+description: "Die Lernregel des Perzeptrons Schritt für Schritt und im Widget zum Ausprobieren, der Konvergenzsatz und warum es mehrere Schichten braucht."
 short_title: "Perzeptron trainieren"
 ---
 

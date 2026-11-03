@@ -1,5 +1,6 @@
 ---
 title: "Adversarial Attacks und Polysemie"
+description: "Adversarial Attacks: kleine Störungen, die ein Netz täuschen, wie man sie berechnet und warum es sie gibt. Dazu Polysemie und die Manifold-Hypothese."
 short_title: "Adversarial Attacks"
 ---
 

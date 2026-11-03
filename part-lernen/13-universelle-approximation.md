@@ -1,5 +1,6 @@
 ---
 title: "Universelle Approximation"
+description: "Das universelle Approximationstheorem, in fünf Schritten bewiesen und im Widget gezeigt. Warum Approximieren nicht Generalisieren heißt: Double Descent."
 short_title: "Universalität"
 ---
 

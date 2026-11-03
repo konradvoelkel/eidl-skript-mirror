@@ -1,5 +1,6 @@
 ---
 title: "Latente Räume geometrisch"
+description: "Latente Räume geometrisch: Arithmetik mit Wortvektoren, Interpolation, diskrete und kontinuierliche Räume, Autoencoder, VAE und GAN im Vergleich."
 short_title: "Latente Räume"
 ---
 

@@ -1,5 +1,6 @@
 ---
 title: "LLMs benutzen"
+description: "Große Sprachmodelle (LLMs) nutzen: per API oder lokal mit Llama und Ollama, Speicherbedarf aus der Parameterzahl, Finetuning, eine Anwendung bauen."
 short_title: "LLMs benutzen"
 downloads:
   - file: ../notebooks/latent-classifier.ipynb

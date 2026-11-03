@@ -1,5 +1,6 @@
 ---
 title: "Recurrent Neural Networks"
+description: "Recurrent Neural Networks für Text und Zeitreihen: verborgener Zustand, verschwindende Gradienten, Skip Connections, LSTM und GRU, LSTM in PyTorch."
 short_title: "RNNs"
 ---
 

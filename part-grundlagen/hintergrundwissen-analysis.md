@@ -1,5 +1,6 @@
 ---
 title: "Hintergrundwissen Analysis"
+description: "Partielle Ableitung, Gradient, Kettenregel, Jacobi- und Hesse-Matrix, Ableiten mit Knick wie bei ReLU: die Analysis hinter dem Training neuronaler Netze."
 short_title: "Hintergrundwissen Analysis"
 ---
 

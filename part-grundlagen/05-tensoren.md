@@ -1,5 +1,6 @@
 ---
 title: "Tensoren"
+description: "Tensoren in PyTorch: Array, NumPy-Array und Torch-Tensor, Form (shape), Datentyp und was ein Tensor in der Mathematik ist, mit der Spur als Beispiel."
 short_title: "Tensoren"
 ---
 

@@ -1,5 +1,6 @@
 ---
 title: "Wortvektoren: word2vec"
+description: "Wortvektoren mit word2vec: Skip-gram und CBOW, Embeddings aus dem Kontext, word2vec mit gensim, ähnliche Dokumente finden, Token statt Wörter."
 short_title: "word2vec"
 ---
 
