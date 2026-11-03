@@ -6,9 +6,7 @@ short_title: "RNNs"
 
 # Recurrent Neural Networks
 
-## Recurrent Neural Networks
-
-### RNNs
+## RNNs
 
 Input: ein linearer Strom von Daten, z.B. Text, Audio, Video oder andere Zeitreihen. Output: irgendeine vektorielle oder skalare Größe, z.B. die Vorhersage des nächsten Wortes. Idee: Zum Zeitpunkt $t$ nicht nur die neuen Daten $x_t$, sondern auch die Ergebnisse aus den Daten von $t - 1$ verwenden, um zum Ergebnis zu kommen. Ein rekurrentes Neuron hat einen **hidden state** $h_t$:
 
@@ -24,13 +22,13 @@ In der „entfalteten Perspektive“ (unrolled) ist ein RNN über $T$ Zeitschrit
 Ein rekurrentes Neuron: gefaltet mit der Rückkopplung $U$ (links) und über vier Zeitschritte entfaltet (rechts) – ein tiefes Netz mit geteilten Gewichten.
 :::
 
-### Historie: Rekurrente Netze
+## Historie: Rekurrente Netze
 
 1982 [Hopfield-Netzwerk](https://hdl.handle.net/10.1073/pnas.79.8.2554) · 1985 [Boltzmann Machine](https://hdl.handle.net/10.1207/s15516709cog0901_7) (Ackley, Hinton, Sejnowski) · 1980er RNNs · 1991 Schmidhubers frühe Attention · 1990er Gated RNNs · 1997 [LSTM](https://hdl.handle.net/10.1162/neco.1997.9.8.1735) (Hochreiter, Schmidhuber) · 2014 [GRUs](https://arxiv.org/abs/1406.1078) (Cho, Bengio et al.) · 2017 [Transformer](https://arxiv.org/abs/1706.03762) (Vaswani et al.).
 
 Im Gegensatz zur *Finite Impulse Response* (FIR) eines CNNs (machen wir noch) ist ein RNN ein *Infinite Impulse Response* (IIR) Signalverarbeiter: Ein Eingabesignal zum Zeitpunkt $t$ kann den Zustand prinzipiell für immer beeinflussen.
 
-### Trick: Skip Connections
+## Trick: Skip Connections
 
 Auch bekannt als *Residual Connections*. Anstatt $x^{(m)} = f_\vartheta(x^{(m-1)})$ (z.B. $f$ = MLP) parametrisiere
 
@@ -40,7 +38,7 @@ $$
 
 Idee: Jeder Layer ist nah dran an „nichts ändern“ (Identität), und der Gradient hat immer einen direkten Weg (den Term $x^{(m-1)}$) an der Schicht vorbei. Hilft gegen verschwindende oder explodierende Gradienten – in RNNs, in ResNets (daher der Name) und in Transformern.
 
-### Gated RNNs
+## Gated RNNs
 
 **GRU** (Gated Recurrent Unit): Der hidden state ist gleichzeitig der Output. Aus Input und altem hidden state wird ein *Kandidat* für den neuen hidden state berechnet, und zwei Gates (Sigmoide, also Werte in $(0, 1)$) steuern: Das *Reset Gate*, wie viel vom alten Zustand in den Kandidaten eingeht, und das *Update Gate*, wie stark der Zustand zum Kandidaten hin aktualisiert wird.
 
@@ -50,7 +48,7 @@ Schaltbilder der Zellen: [LSTM](https://de.wikipedia.org/wiki/Long_short-term_me
 
 Bill Gates (2018, auf Twitter): „huge milestone in advancing artificial intelligence“ – weil [OpenAI Five](https://openai.com/index/openai-five/) mit LSTMs Dota 2 gewann. Auch mit LSTMs gebaut: [AlphaStar](https://hdl.handle.net/10.1038/s41586-019-1724-z) von Google DeepMind, spielt StarCraft 2 (2019).
 
-### LSTM praktisch
+## LSTM praktisch
 
 Mit PyTorch:
 
@@ -70,7 +68,7 @@ class MyModel(nn.Module):
 
 `nn.LSTM` bekommt eine Sequenz von Vektoren (z.B. word2vec-Embeddings der Wörter) und liefert die Sequenz der hidden states; darauf ein linearer Layer für die Vorhersage. **Achtung bei den Achsen:** Anders als sonst in PyTorch erwartet `nn.LSTM` voreingestellt `(seq, batch, feature)`, der Batch liegt also auf der *zweiten* Achse (siehe [Kapitel „Tensoren“](../part-grundlagen/05-tensoren.md)). Mit `batch_first=True` im Konstruktor gilt wieder die gewohnte Reihenfolge.
 
-### Am Rande: Konkatenieren vs. Summe
+## Am Rande: Konkatenieren vs. Summe
 
 Wenn wir zwei verschiedene Eingabevektoren in einer Schicht verarbeiten wollen, ist es naheliegend, diese zu einem längeren Vektor zu konkatenieren. Oft sehen wir aber im Code stattdessen ein einfaches `+`. Wie kann das funktionieren???
 

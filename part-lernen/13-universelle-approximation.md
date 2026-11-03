@@ -6,7 +6,7 @@ short_title: "Universalität"
 
 # Universelle Approximation
 
-## Universelle Approximation
+## Das Approximationstheorem
 
 ### Warum neuronale Netze funktionieren
 
