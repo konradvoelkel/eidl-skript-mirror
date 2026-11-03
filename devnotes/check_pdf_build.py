@@ -118,7 +118,7 @@ def main(argv: list[str] | None = None) -> int:
 
     fehler: list[str] = []
 
-    pdf = args.pdf
+    pdf = args.pdf.resolve() if args.pdf else None
     if pdf is None:
         gefunden = sorted((WURZEL / "exports").glob("*.pdf"))
         if len(gefunden) != 1:

@@ -22,7 +22,7 @@ uv run devnotes/check_pdf_build.py --min-pages 100
 uv run devnotes/check_doku.py           # stimmt die Doku noch mit dem Repo überein?
 ```
 
-Erwartung: **29 Kapitel plus Glossar, 135 Seiten A4 lokal** (veröffentlicht eine Seite
+Erwartung: **29 Kapitel plus Glossar, 136 Seiten A4 lokal** (veröffentlicht eine Seite
 mehr — die Abweichung ist seit dem 2026-10-15 erklärt, siehe `../CLAUDE.md`), 0 LaTeX-Fehler, 0 fehlende Glyphen,
 5 überlange Zeilen, 23 Übungsabschnitte. Weicht etwas davon ab, ist das der erste Befund, nicht
 Hintergrundrauschen.
@@ -221,19 +221,17 @@ Textfassung von Seite und Objektbaum: `~/Sciebo/hhu/eidl-26/ilias/` (analog zu
 
 ## Infrastruktur
 
-- [ ] **Offene Befunde aus dem SEO-Audit vom 2026-11-03** (Bericht nicht im Repo; die
-  Auslieferung ist am selben Tag mit sieben Ports aus ds-skript, ds-en und eipy erledigt,
-  siehe `erledigt.md`). Offen, nach Wirkung (die `http://`-Autoren-URL ist am selben Tag auf `https` gestellt):
-  1. **Suchknopf mobil ohne zugänglichen Namen** (axe „Buttons must have discernible
-     text“, Lighthouse Agentic mobil 1/2). Eine Ersetzung mehr in `BEDIENUNG` in
-     `_site/vendor/install_template.py`.
-  2. Vier Kapitel wiederholen ihren Titel als erstes `##` (03-perzeptron-trainieren,
-     13-universelle-approximation, 18-rnn, 19-transformer); `README.md` hat einen
-     88 Zeichen langen Titel und eine doppelte Gliederung.
-  3. Autor-`sameAs` ohne Wikidata Q102659059, GND 1122356269, VIAF 3141148269690605230001
+- [ ] **Offene Befunde aus dem SEO-Audit vom 2026-11-03** (Bericht nicht im Repo; Auslieferung,
+  Descriptions, Startseite, Suchknopf, doppelte Überschriften und `llms.txt` sind am selben Tag
+  erledigt, siehe `erledigt.md`). Offen:
+  1. Autor-`sameAs` ohne Wikidata Q102659059, GND 1122356269, VIAF 3141148269690605230001
      (am 2026-11-03 nachgesehen) — in allen vier Repos mit demselben Autorknoten zugleich.
-  4. `llms.txt` (ds-skript hat dafür ein Skript, `llms_txt.py` in seinem tools/), Impressum/Datenschutz-Link,
-     Bing Webmaster Tools.
+  2. **[Entscheidung]** Impressum/Datenschutz-Link in der Fußzeile. *Vorschlag:* auf das
+     Impressum von konradvoelkel.com, falls es eines gibt, sonst auf das der HHU.
+  3. Bing Webmaster Tools (braucht Konrads Konto).
+  4. Desktop-TBT beobachten: nach der Kompression 360–490 ms statt 40–70 ms (Startseite,
+     Transformer); Vermutung, nicht belegt: dieselbe JS-Arbeit fällt nun ins Messfenster.
+     Beleg wäre ein A/B gegen ein unkomprimiertes Artefakt.
 - [ ] **Zwei Handgriffe in GitLab, die nur Konrad machen kann** (seit dem History-Rewrite vom
   2026-09-27 offen): *Settings → Repository → Protected branches* → bei `main` **Allowed to force
   push wieder ausschalten** (es wurde für den Rewrite eingeschaltet), und *Settings → Repository →

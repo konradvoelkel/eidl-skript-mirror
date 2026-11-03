@@ -159,6 +159,19 @@ Datierte Protokolle größerer Umbauten liegen daneben als `build-log-<datum>.md
 
 ### Infrastruktur
 
+- [x] **Suchknopf, doppelte Überschriften, `llms.txt`**, 2026-11-03, aus der Nachmessung des
+  SEO-Audits. (1) Der Suchknopf trug sein Wort in einem Span, der unter `sm` verborgen ist,
+  und hatte mobil keinen zugänglichen Namen; `install_template.py` setzt jetzt
+  `aria-label="Suche"` (und übersetzt das unsichtbare „Downloads“). (2) Vier Kapitel
+  wiederholten ihren Titel als erstes `##`: in 03 und 13 umbenannt („Die Lernregel“, „Das
+  Approximationstheorem“), weil danach weitere `##` folgen; in 18 und 19 gestrichen und die
+  Abschnitte eine Ebene angehoben. `README.md` heißt nur noch „Über dieses Skript“, ohne
+  `# Einführung in Deep Learning` darüber. Das PDF wird dadurch eine Seite länger (135 auf
+  136, gegen den unveränderten Baum gemessen). (3) `tools/llms_txt.py`, Port aus ds-skript:
+  Markdown je Seite, `rel="alternate"` im Kopf, `llms.txt` und `llms-full.txt`; anders als
+  dort mit Slugs aus `config.json`, Schwesterskripten aus `sibling-works.json` und relativen
+  Kapitelverweisen auf die Seitenadresse umgeschrieben. Nebenbei: `check_pdf_build.py --pdf`
+  scheiterte an einem relativen Pfad.
 - [x] **Nichts mehr breiter als der Bildschirm**, 2026-11-03, `_site/custom-style.css`. Vier Ursachen,
   alle im Theme, alle gemessen: der Kopf (linker Block `shrink-0`, Titel `w-fit`; bei 375 px 44 px,
   bei 640 px 84 px zu breit, eipy hat denselben Fehler), die Vor/Zurück-Links (`flex-1`, aber nicht
