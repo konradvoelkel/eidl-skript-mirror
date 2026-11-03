@@ -28,16 +28,18 @@ muss ein <style> je Seite zurueckhaengen. **In eidl schlaegt sie nicht fehl** --
 Fehlermeldung, und nach der Hydration tragen die Abbildungen weiter ihr loading="lazy"
 aus head_meta.py. Die Attribute halten hier also beim ersten Laden.
 
-Bleibt die Navigation ohne Neuladen: ein Klick in der Seitenleiste laesst React das
-naechste Kapitel aus der Nutzlast rendern, und dessen <img> tragen keine Attribute. Das
-Stylesheet ist deshalb hier **eines fuer das ganze Buch** -- je Abbildung aller Seiten
-eine Regel
+Das Stylesheet ist hier **eines fuer das ganze Buch** -- je Abbildung aller Seiten eine
+Regel
 
     img[src="..."]{width:1012px;aspect-ratio:1012/488}
 
-und derselbe Block in jedem Kopf. Wer auf irgendeiner Seite einsteigt, hat damit die
-Masse jeder Abbildung, die er danach anklickt. CSS haengt nicht am Knoten, sondern am
-Selektor: egal wie oft React das <img> neu baut, der src bleibt und die Regel greift.
+und derselbe Block in jedem Kopf. Gedacht war das fuer die Navigation ohne Neuladen, bei
+der React das naechste Kapitel aus der Nutzlast rendert, ohne Attribute. **Die gibt es
+in diesem Artefakt aber nicht**: am 2026-11-03 nachgemessen, live wie lokal, laedt ein
+Klick auf einen Kapitellink das ganze Dokument neu. Der Block ist damit Vorsorge fuer
+den Fall, dass ein Theme-Update das aendert, und kostet je Seite gut ein Kilobyte nach
+der Kompression. CSS haengt nicht am Knoten, sondern am Selektor: egal wie oft React das
+<img> neu baut, der src bleibt und die Regel greift.
 
 Warum `width` dazu noetig ist und `aspect-ratio` allein nicht genuegt: ein <img> ohne
 geladene Datei hat keine eigene Groesse, seine Breite ist dann null -- und null mal

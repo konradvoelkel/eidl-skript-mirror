@@ -259,6 +259,13 @@ pages:
     #    nach dem Mount fuellt; unterhalb von lg steht der Kasten im Fluss, und alles
     #    darunter faellt in dem Moment nach unten.
     - python3 tools/outline_reserve.py public
+    # 6. Kapitellinks auf die URL, die 200 liefert. MyST verlinkt "/gans", GitLab Pages
+    #    antwortet mit 302 auf "/gans/" (am 2026-11-03 rund 440 Links). Geschrieben wird
+    #    im Markup *und* in der Hydrations-Nutzlast samt Seiten-JSON, denn ein Klick ohne
+    #    Neuladen rendert aus der Nutzlast. Die Seitenleiste bleibt ohne Schraegstrich:
+    #    ihr href kommt aus dem Slug, und ein Schraegstrich dort kostet in ds-skript
+    #    gemessen die Vorschaukarten und das Aufklappen. Port aus ds-skript (2026-10-29).
+    - python3 tools/trailing_slash.py public --base "$BASE_URL"
     # Und danach am fertigen Artefakt nachzaehlen statt dem Protokoll zu glauben: kein
     # localhost, je genau ein Canonical, Sitemap-Eintraege gleich gebaute Seiten, keine
     # relative Bild-URL. Ein fehlendes Stueck davon ist im Browser unsichtbar und nur
@@ -269,6 +276,7 @@ pages:
     - python3 tools/image_dims.py public --base "$BASE_URL" --check
     - python3 tools/outline_reserve.py --check public
     - python3 tools/freshness.py --check public
+    - python3 tools/trailing_slash.py --check public --base "$BASE_URL"
     # --- Auslieferung -------------------------------------------------------------------
     # GitLab Pages komprimiert nichts, liefert aber eine daneben liegende .br bzw. .gz aus,
     # wenn der Browser sie akzeptiert. Ohne diesen Schritt gingen am 2026-11-03 je Seite
