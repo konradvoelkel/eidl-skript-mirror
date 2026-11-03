@@ -273,6 +273,10 @@ pages:
     # modified_time in jeden Kopf, <lastmod> in jeden Sitemap-Eintrag (vorher null von
     # 32). Port aus ds-skript; braucht wie inject_jsonld die volle Historie (GIT_DEPTH).
     - python3 tools/freshness.py public
+    # llms.txt, llms-full.txt und der Markdown-Quelltext je Kapitel samt
+    # <link rel="alternate" type="text/markdown">. Port aus ds-skript; Google ignoriert
+    # llms.txt erklaertermassen, der Nutzen liegt bei den .md-Dateien. Vor precompress.
+    - python3 tools/llms_txt.py "$SITE_ORIGIN$BASE_URL" public
     # --- Layoutsprung (CLS) ---------------------------------------------------------
     # Beides Ports aus ds-skript (2026-10-29), Begruendung und Messungen in den Skripten.
     # 4. Die echten Pixelmasse an jede Abbildung, als width/height ins Markup und als ein
