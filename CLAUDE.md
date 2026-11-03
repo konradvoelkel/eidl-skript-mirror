@@ -212,8 +212,8 @@ vor `head_meta.py` (og:url bekommt dieselbe URL wie der Canonical), `head_meta.p
 `inject_jsonld.py` (liest Karten-URL und Kapiteltitel aus der Seite zurück) und vor
 `image_dims.py` (lazy und Maße zusammen), die Prüfläufe danach, und `precompress.py`
 **zuletzt** — jede Änderung nach ihm liefert allen Lesern die alte `.br` aus.
-Lokal prüfen heißt: `myst build --html`, die Schriften wie im `myst-build`-Job nach
-`_build/html/fonts/` kopieren, dann die Skriptzeilen des `pages`-Jobs gegen eine **Kopie**
+Lokal prüfen heißt: `myst build --html`, die Schriften wie im `myst-build`-Job in das
+gebaute HTML kopieren, dann die Skriptzeilen des `pages`-Jobs gegen eine **Kopie**
 von `_build/html` — sie schreiben in das Verzeichnis hinein.
 
 **Die Hydration gelingt hier, anders als in ds-skript.** Dort scheitert sie (React #418)

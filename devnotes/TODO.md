@@ -223,7 +223,7 @@ Textfassung von Seite und Objektbaum: `~/Sciebo/hhu/eidl-26/ilias/` (analog zu
 
 - [ ] **Offene Befunde aus dem SEO-Audit vom 2026-11-03** (Bericht nicht im Repo; die
   Auslieferung ist am selben Tag mit sieben Ports aus ds-skript, ds-en und eipy erledigt,
-  siehe `erledigt.md`). Offen, nach Wirkung:
+  siehe `erledigt.md`). Offen, nach Wirkung (die `http://`-Autoren-URL ist am selben Tag auf `https` gestellt):
   1. **Landingpage**: `index.md` hat keine H1, rund 45 eigene Wörter und als einzigen
      internen Link `/readme`; die Seitenleiste steht nicht im ausgelieferten HTML, ein
      Crawler ohne JavaScript erreicht die Kapitel nur über die Vor/Zurück-Kette.
@@ -237,10 +237,9 @@ Textfassung von Seite und Objektbaum: `~/Sciebo/hhu/eidl-26/ilias/` (analog zu
   4. Vier Kapitel wiederholen ihren Titel als erstes `##` (03-perzeptron-trainieren,
      13-universelle-approximation, 18-rnn, 19-transformer); `README.md` hat einen
      88 Zeichen langen Titel und eine doppelte Gliederung.
-  5. `myst.yml`: Autoren-URL `http://www.konradvoelkel.com` (256-mal ausgeliefert, 308).
-  6. Autor-`sameAs` ohne Wikidata Q102659059, GND 1122356269, VIAF 3141148269690605230001
+  5. Autor-`sameAs` ohne Wikidata Q102659059, GND 1122356269, VIAF 3141148269690605230001
      (am 2026-11-03 nachgesehen) — in allen vier Repos mit demselben Autorknoten zugleich.
-  7. `llms.txt` (ds-skript hat dafür ein Skript, `llms_txt.py` in seinem tools/), Impressum/Datenschutz-Link,
+  6. `llms.txt` (ds-skript hat dafür ein Skript, `llms_txt.py` in seinem tools/), Impressum/Datenschutz-Link,
      Bing Webmaster Tools.
 - [ ] **Zwei Handgriffe in GitLab, die nur Konrad machen kann** (seit dem History-Rewrite vom
   2026-09-27 offen): *Settings → Repository → Protected branches* → bei `main` **Allowed to force

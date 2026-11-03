@@ -15,7 +15,7 @@ project:
   keywords: [deep learning, neural networks, pytorch, course]
   authors:
     - name: Dr. Konrad Völkel
-      url: http://www.konradvoelkel.com
+      url: https://www.konradvoelkel.com
       affiliations:
         - hhu
   affiliations:
