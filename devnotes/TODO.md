@@ -222,10 +222,9 @@ Textfassung von Seite und Objektbaum: `~/Sciebo/hhu/eidl-26/ilias/` (analog zu
 ## Infrastruktur
 
 - [ ] **Offene Befunde aus dem SEO-Audit vom 2026-11-03** (Bericht nicht im Repo; Auslieferung,
-  Descriptions, Startseite, Suchknopf, doppelte Überschriften, `llms.txt`, Impressum und Autor-`sameAs` sind am selben Tag
-  erledigt, siehe `erledigt.md`). Offen:
-  1. Bing Webmaster Tools (braucht Konrads Konto).
-  2. Desktop-TBT beobachten: nach der Kompression 360–490 ms statt 40–70 ms (Startseite,
+  Descriptions, Startseite, Suchknopf, doppelte Überschriften, `llms.txt`, Impressum, Autor-`sameAs` und
+  Bing Webmaster Tools sind am selben Tag erledigt, siehe `erledigt.md`). Offen:
+  1. Desktop-TBT beobachten: nach der Kompression 360–490 ms statt 40–70 ms (Startseite,
      Transformer); Vermutung, nicht belegt: dieselbe JS-Arbeit fällt nun ins Messfenster.
      Beleg wäre ein A/B gegen ein unkomprimiertes Artefakt.
 - [ ] **Zwei Handgriffe in GitLab, die nur Konrad machen kann** (seit dem History-Rewrite vom

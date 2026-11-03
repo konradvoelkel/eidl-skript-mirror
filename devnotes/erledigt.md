@@ -159,6 +159,10 @@ Datierte Protokolle größerer Umbauten liegen daneben als `build-log-<datum>.md
 
 ### Infrastruktur
 
+- [x] **Bing Webmaster Tools**, 2026-11-03, von Konrad in seinem Konto eingerichtet.
+  Im Repo liegt dafür keine Bestätigungsdatei und kein `msvalidate`-Tag;
+  wer die Bestätigung über eine Datei umstellen will, legt sie unter `_site/` ab und kopiert sie
+  im `pages`-Job nach `public/`, **vor** `precompress.py`.
 - [x] **Autor-`sameAs` um Wikidata, GND und VIAF ergänzt**, 2026-11-03, in
   `tools/structured-data.json` aller vier Skripten-Repos (ds-skript, ds-en, eipy, eidl) im
   selben Wortlaut, direkt hinter ORCID; 8 auf 11 Einträge. Gegen Wikidata geprüft:
