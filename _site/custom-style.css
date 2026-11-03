@@ -1,6 +1,121 @@
 /* custom-style.css */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap');
+/* Die beiden Schriften von hier, nicht von Google Fonts.
+ *
+ * Die Domain steht in diesem Kommentar bewusst **nicht** ausgeschrieben: der Waechter im
+ * `pages`-Job greppt das Artefakt nach ihr, und eine Erklaerung, die ihn ausloest, waere
+ * eine schlechte Erklaerung.
+ *
+ * Bis zum 2026-11-03 stand hier (in eipy bis zum 2026-10-20) ein `@import` auf deren CSS-API -- Zeile 3 unseres
+ * eigenen Stylesheets, und damit die einzige der fuenf fremden Herkuenfte der Seite, die
+ * uns selbst gehoerte. Drei Gruende, sie zu loeschen:
+ *
+ *  1. Datenschutz. Der Abruf gab Google die IP-Adresse jedes Lesers. Fuer eine Seite
+ *     einer deutschen Hochschule ist das die Seite der Sache, an der es nicht viel zu
+ *     diskutieren gibt; das Landgericht Muenchen I hat das dynamische Einbinden von
+ *     Google Fonts 2022 als Rechtsverletzung gewertet.
+ *  2. Layoutstabilitaet. Im kontrollierten A/B am 2026-10-20 gemessen, drei Laeufe je
+ *     Variante: die Schriften zu blockieren aenderte die Ladezeit praktisch nicht
+ *     (+14 ms), aber **CLS fiel von 0,015 auf 0,000**. Der Wechsel von der
+ *     Ersatzschrift auf die nachgeladene war die Ursache.
+ *  3. Eine Kette von drei Spruengen. HTML, dann dieses Stylesheet, dann deren CSS-API,
+ *     dann deren Schriftserver -- und erst dann steht der Text richtig.
+ *
+ * Den Platzhalter in den beiden url() unten ersetzt der `pages`-Job durch `BASE_URL`
+ * (hier: leer), damit der Pfad nicht davon abhaengt, ob die Datei als
+ * `/myst-theme.css` oder als `/build/custom-style-<hash>.css` ausgeliefert wird -- sie
+ * wird als beides. Er steht in diesem Satz absichtlich nicht wortwoertlich: der `sed`
+ * trifft jedes Vorkommen, auch das in einem Kommentar, und ein Kommentar, der sich beim
+ * Ausliefern selbst zerlegt, erklaert nichts mehr.
+ *
+ * Herkunft, Lizenzen und die Hashes der Dateien: `_site/fonts/PROVENANCE.txt`.
+ * Es sind variable Schriften, deren Bereich die vorher angeforderten Schnitte
+ * (Inter 400/600, JetBrains Mono 400/500) einschliesst.
+ */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('__BASE__/fonts/inter-latin.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url('__BASE__/fonts/jetbrains-mono-latin.woff2') format('woff2');
+}
+
+/* Zwei Ersatzschriften, die genauso viel Platz brauchen wie die echten.
+ *
+ * Das Problem, das sie loesen: `font-display: swap` zeigt den Text zuerst in der
+ * Systemschrift und tauscht dann. Belegt die Systemschrift anderen Platz, ruckt beim
+ * Tausch der ganze Absatz -- auf der Startseite am 2026-10-22 mit CLS 0,134 gemessen,
+ * und PSI nannte genau den Absatz "Fuer Studierende, die Java bereits koennen". Der
+ * Preload allein hat daran nichts geaendert (devnotes/build-log-2026-10-20.md §6a):
+ * er holt die Schrift frueher, aber unter gedrosselter Verbindung immer noch nach dem
+ * ersten Textbild.
+ *
+ * `ascent-override` und `descent-override` setzen die Zeilenhoehe **absolut**, ersetzen
+ * also die Metrik der Systemschrift durch die von Inter bzw. JetBrains Mono -- damit
+ * stimmt die Hoehe jedes Zeilenkastens schon vor dem Tausch. Das ist der Teil, der das
+ * Ruckeln behebt. `size-adjust` skaliert die Glyphen zusaetzlich so, dass auch die
+ * Zeilenumbrueche an denselben Stellen fallen.
+ *
+ * **Die Zahlen sind gemessen, nicht geschaetzt** (2026-10-22), und zwar zweimal:
+ *
+ * 1. *Senkrecht, aus den woff2-Dateien selbst* (fontTools): Inter hat unitsPerEm 2048,
+ *    typoAscender 1984, typoDescender -494, typoLineGap 0; JetBrains Mono 1000 / 1020 /
+ *    -300 / 0. Beide haben USE_TYPO_METRICS gesetzt, es sind also die Werte, die der
+ *    Browser nimmt. Die Ueberschreibungen werden **durch** `size-adjust` geteilt, weil
+ *    die Skalierung auch sie trifft: (1984/2048) / 1,065 = 90,96 %.
+ *
+ * 2. *Waagerecht, im Browser*, weil die erste Rechnung hier danebenlag. Die Summe der
+ *    Vorschubbreiten ueber den Text dieser Seite ergab 106,71 % -- **0,2 % zu viel**,
+ *    denn sie ignoriert das Kerning, das Inter benutzt. Nachgemessen mit
+ *    `canvas.measureText` ueber 23 Absaetze Fliesstext dieser Seite: Inter zu Arial
+ *    1,0650 (Median 1,0646, Spanne 1,0514-1,1001 je Absatz). Darum 106,5 % und nicht
+ *    106,71 %.
+ *
+ *    Gegenprobe im Layout: mit Werten von 105,0 % bis 106,71 % hatten **alle 23
+ *    Absaetze dieselbe Zeilenzahl wie mit echtem Inter** und die Seite dieselbe Hoehe
+ *    auf das Pixel. Die Wahl innerhalb dieser Spanne aendert fuer dieses Buch also
+ *    nichts; 106,5 % ist die, die am besten begruendet ist.
+ *
+ *    Fuer Monospace ist die Korrektur praktisch keine: JetBrains Mono und Courier New
+ *    messen denselben Text auf 1219 gegen 1219 Pixel (Verhaeltnis 0,9998). Beide stehen
+ *    auf 0,6 em, wie Monospace-Schriften das tun. Dort wirkt nur die Hoehenkorrektur.
+ *
+ * Arial lag hier nicht vor; gemessen wurde an **Liberation Sans** und **Liberation
+ * Mono**, die als metrikgleiche Klone von Arial und Courier New gebaut sind -- die
+ * Kontrollmessung an Arimo und Cousine (denselben Metriken aus anderer Hand) ergab
+ * dieselben Breiten. Im Browser loest `local('Arial')` hier auf dieselbe Breite auf wie
+ * Arimo und Liberation Sans (570 px fuer denselben Satz), die Werte stimmen also auch
+ * fuer Helvetica und fuer Linux-Systeme, auf denen fontconfig "Arial" abbildet.
+ *
+ * Nicht abgedeckt: ein System, das `sans-serif` auf DejaVu Sans (0,518 em) oder Noto
+ * Sans (0,483 em) aufloest, **ohne** eine der vier Arial-Metrik-Schriften zu haben.
+ * Dort greift `local()` nicht, und es bleibt beim unkorrigierten Verhalten von vorher --
+ * also nicht schlechter als ohne diesen Block.
+ */
+@font-face {
+  font-family: 'Inter Fallback';
+  src: local('Arial'), local('Helvetica'), local('Liberation Sans'), local('Arimo');
+  size-adjust: 106.50%;
+  ascent-override: 90.96%;
+  descent-override: 22.65%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: 'JetBrains Mono Fallback';
+  src: local('Courier New'), local('Liberation Mono'), local('Cousine');
+  size-adjust: 99.98%;
+  ascent-override: 102.02%;
+  descent-override: 30.00%;
+  line-gap-override: 0%;
+}
+
 
 :root {
   /* HHU Corporate Identity Colors */
@@ -31,12 +146,12 @@
 
 /* 1. Typography Overrides */
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Inter', 'Inter Fallback', sans-serif;
   color: var(--hhu-text);
 }
 
 code, kbd, samp, pre, .math-display {
-  font-family: 'JetBrains Mono', monospace !important;
+  font-family: 'JetBrains Mono', 'JetBrains Mono Fallback', monospace !important;
 }
 
 /* Ueberschriften bleiben beim Fast-Schwarz des Themes: das Theme setzt sie ueber

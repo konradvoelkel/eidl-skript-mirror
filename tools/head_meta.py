@@ -163,6 +163,9 @@ MARKER_LANG = "/*lang-waechter*/"
 CARD_MIN_WIDTH, CARD_MIN_HEIGHT = 1200, 630
 CARD_MAX_BYTES = 500 * 1024
 
+# Die selbst ausgelieferten Schriften (`_site/fonts/`, vom myst-build-Job nach /fonts/).
+FONTS = ("inter-latin.woff2", "jetbrains-mono-latin.woff2")
+
 
 def page_url(site: str, rel: pathlib.PurePath) -> str:
     """Die URL, die 200 liefert: mit Schrägstrich, so wie der Canonical sie hat."""
@@ -193,6 +196,16 @@ def head_tags(url: str, site_name: str, lang: str, is_landing: bool) -> list[tup
         ('property="og:locale"', f'<meta property="og:locale" content="{locale}"/>'),
         ('name="twitter:card"',
          '<meta name="twitter:card" content="summary_large_image"/>'),
+    ] + [
+        # Die Schriften vorladen (Port aus eipy, 2026-10-23). Sie liegen seit dem
+        # 2026-11-03 auf dieser Herkunft, werden aber erst entdeckt, wenn das Stylesheet
+        # geholt und geparst ist; der Preload zieht sie eine Ebene vor. `crossorigin` ist
+        # nötig, obwohl sie von hier kommen: Schriftabrufe laufen im CORS-Modus, und ein
+        # Preload in anderem Modus wird **zweimal** geholt. Der Pfad ohne BASE_URL, weil
+        # die hier leer ist (.gitlab-ci.yml); wer sie setzt, setzt sie auch hier.
+        (f'href="/fonts/{f}"',
+         f'<link rel="preload" href="/fonts/{f}" as="font" type="font/woff2" crossorigin/>')
+        for f in FONTS
     ]
 
 

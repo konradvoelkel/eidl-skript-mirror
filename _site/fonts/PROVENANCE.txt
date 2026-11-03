@@ -1,0 +1,111 @@
+Nach eidl-skript uebernommen am 2026-11-03, byteweise dieselben Dateien wie in
+eipy-skript und ds-skript (sha256 unten gegengeprueft). Der Text darunter ist der von
+ds-skript und erzaehlt dessen Geschichte -- "dieses Buch" und das Datenschutzkapitel
+sind dort gemeint; fuer eidl gelten dieselben Gruende, ohne das Kapitel.
+
+Woher diese zwei Dateien kommen, und warum sie eingecheckt sind statt geholt
+===========================================================================
+
+Bis zum 2026-10-16 begann custom-style.css mit
+
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600
+                 &family=JetBrains+Mono:wght@400;500&display=swap');
+
+Das kostete drei Dinge auf einmal:
+
+  1. Eine drei Ebenen tiefe, rendernde Anfragekette. Der Browser musste
+     custom-style.css holen, parsen, darin den @import finden, Googles CSS
+     holen, das parsen und erst dann die Schriftdateien entdecken. Ein @import
+     innerhalb eines Stylesheets laesst sich weder vorladen noch
+     parallelisieren; ein <link> faengt wenigstens auf Ebene eins an.
+  2. Einen Dritten bei jedem Seitenaufruf, ohne preconnect -- und das ist auch
+     ein Dritter, der die IP-Adresse jedes Lesers sieht.
+  3. Einen DSGVO-Verstoss in einem Buch, das der DSGVO ein Kapitel widmet.
+     LG Muenchen I, 20.01.2022 (3 O 17493/20), hat einem Seitenbetreiber
+     Schadensersatz auferlegt fuer genau diese Einbindung -- Google Fonts von
+     Googles Servern ohne Einwilligung, weil die IP-Adresse zu Google geht.
+     datenschutz.md zitiert die noyb-Beschwerden und die Google-Analytics-
+     Entscheidungen von 2022; die Seiten, die das sagen, von
+     fonts.googleapis.com auszuliefern war das eine, wogegen das Kapitel
+     argumentiert.
+
+Selbst ausliefern behebt alle drei. Die Dateien sind eingecheckt und werden
+nicht beim Bauen heruntergeladen, damit ein Deploy nicht davon abhaengt, dass
+ein Dritter erreichbar ist, und damit die Bytes sich nicht unter uns aendern.
+
+
+Die Dateien
+-----------
+
+inter-latin.woff2           48256 Bytes
+  sha256 3100e775e8616cd2611beecfa23a4263d7037586789b43f035236a2e6fbd4c62
+  Inter v20, Latin-Subset, variable Gewichtsachse 100-900.
+  Von https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2
+  Lizenz: SIL Open Font License 1.1 -- OFL-Inter.txt
+  Copyright (c) 2016 The Inter Project Authors (https://github.com/rsms/inter)
+
+jetbrains-mono-latin.woff2  31432 Bytes
+  sha256 83c005d49d8a6a50474c73a5a36ac0468076e9c4a29da7bdb14995d80560a5be
+  JetBrains Mono v24, Latin-Subset, variable Gewichtsachse 400-800.
+  Von https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwg.woff2
+  Lizenz: SIL Open Font License 1.1 -- OFL-JetBrainsMono.txt
+  Copyright 2020 The JetBrains Mono Project Authors (https://github.com/JetBrains/JetBrainsMono)
+
+Beide Lizenzen erlauben die Weitergabe; beide verlangen, dass die Lizenz
+mitreist -- dafuer liegen die zwei OFL-Dateien daneben. Keine der Schriften
+darf fuer sich verkauft werden, und keine wird verkauft.
+
+Es sind byteweise dieselben Dateien, die ds-en am 2026-10-16 von Google geholt
+hat (mit aktuellem Chrome-User-Agent, damit die woff2- und nicht die
+ttf-Variante kam); von dort uebernommen und die sha256 oben gegengeprueft, statt
+ein zweites Mal bei Google anzufragen. Das Herunterladen hat nichts daran
+geaendert, welche Glyphen ein Leser sieht.
+
+
+Eine Datei pro Familie, nicht eine pro Gewicht
+----------------------------------------------
+
+Der alte @import verlangte Inter 400 und 600 und JetBrains Mono 400 und 500.
+Google beantwortete beide Gewichte je Familie mit *derselben* URL: das sind
+variable Fonts, und das Latin-Subset traegt die ganze Gewichtsachse. Zwei
+Dateien decken also vier Gewichte, und `font-weight: 400` und `600` werden aus
+einer Schnittdatei interpoliert. Ein drittes Gewicht spaeter kostet keine
+zusaetzliche Anfrage.
+
+
+Abdeckung, und was absichtlich zurueckfaellt
+--------------------------------------------
+
+Das Latin-Subset ist U+0000-00FF plus der General-Punctuation-Block, deckt also
+jedes Zeichen ab, das der Lauftext wirklich benutzt: die Umlaute und das
+scharfe S in Voelkel und Duesseldorf, die akzentuierten Namen, den Gedankenstrich
+in Kullback-Leibler und die typografischen Anfuehrungszeichen.
+
+Es deckt kein Griechisch und keine mathematischen Operatoren ab -- Sigma, <=
+und den Rest. Das ist kein Rueckschritt: Google lieferte dasselbe Subset aus,
+diese Zeichen fielen also vorher wie nachher auf die Systemschrift zurueck. In
+der Mathematik selbst taten sie das ohnehin nie, weil KaTeX eigene Schriften
+mitbringt und benutzt.
+
+
+Wo sie im Build landen
+----------------------
+
+`build-web` kopiert sie nach `_build/html/fonts/`, und der url() in
+custom-style.css ist *relativ* zu dem Stylesheet, das MyST unter `build/`
+fingerprinted ablegt -- `../fonts/` trifft damit immer, ohne Platzhalter und
+ohne BASE_URL. Bei einem lokalen `myst build --html` ohne diesen Kopierschritt
+fehlen die Dateien und die Schrift faellt auf die Systemschrift zurueck; das
+Layout bleibt. Der Wächter in build-web prueft beides: dass die Dateien da sind
+und dass kein gebautes Artefakt wieder bei fonts.googleapis.com oder
+fonts.gstatic.com anfragt.
+
+
+Aktualisieren
+-------------
+
+Beide URLs neu holen, die sha256 oben gegen das Angekommene pruefen, und wenn es
+abweicht, erst lesen warum: ein neues vN im Pfad ist ein neues Release und ein
+Blick ins Changelog wert, waehrend derselbe Pfad mit anderen Bytes mehr als das
+wert ist. Der Wächter pinnt die Hashes absichtlich *nicht*, damit eine
+berechtigt aktualisierte Schrift den Build nicht rot macht.

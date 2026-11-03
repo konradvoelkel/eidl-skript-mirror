@@ -1,0 +1,161 @@
+Nach eidl-skript uebernommen am 2026-11-03, byteweise dieselben Dateien wie in
+eipy-skript und ds-skript (sha256 unten gegengeprueft). Der Text darunter ist der von
+ds-skript und erzaehlt dessen Geschichte -- "dieses Buch" und das Datenschutzkapitel
+sind dort gemeint; fuer eidl gelten dieselben Gruende, ohne das Kapitel.
+
+Die drei fremden Stylesheets, die das MyST-Book-Theme laedt, und warum sie hier liegen
+======================================================================================
+
+Bis zum 2026-10-16 holte jede Seite dieser Ausgabe drei Stylesheets von zwei CDN:
+
+    cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css
+    cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css
+    cdn.jsdelivr.net/npm/jupyter-matplotlib@0.11.3/css/mpl_widget.css
+
+und auf jeder Seite mit Mathematik dazu bis zu zwanzig Schriftdateien von jsdelivr. Die
+zieht das KaTeX-Stylesheet relativ zu seiner *eigenen* URL; sie stehen also in keinem
+HTML und waren von aussen nur im Netzwerkprotokoll zu sehen.
+
+Alle drei sind rendernd, keines liess sich vorladen (ein Stylesheet wird vor seinem
+eigenen Inhalt entdeckt), und alle drei gaben einem Dritten die IP-Adresse jedes Lesers
+eines Buchs, das dem Datenschutz ein Kapitel widmet. `_site/fonts/PROVENANCE.txt` fuehrt
+dieses Argument schon fuer den Google-Fonts-`@import`; das hier ist dasselbe Argument
+fuer den Rest der Seite. Die zwei Faelle unterscheiden sich nur darin, wen man fragen
+musste: der `@import` war unser eigener und liess sich loeschen, diese `<link>`-Tags
+gehoeren dem Theme und werden deshalb nach dem Bau umgeschrieben
+(`tools/vendor_assets.py`).
+
+Eingecheckt statt beim Bauen geholt, aus denselben Gruenden wie die Webfonts: ein Deploy
+darf nicht davon abhaengen, dass ein Dritter erreichbar ist, und die Bytes duerfen sich
+nicht unter uns aendern.
+
+
+Was hier liegt, und dass es unveraendert ist
+--------------------------------------------
+
+**Nichts in diesem Verzeichnis ist bearbeitet.** Jede Datei ist genau das, was das CDN
+ausgeliefert hat -- das ist die Eigenschaft, die einen spaeteren Abgleich mit Upstream
+ueberhaupt moeglich macht. Insbesondere verweisen die Stylesheets weiter auf `.woff`-,
+`.ttf`-, `.eot`- und `.svg`-Varianten, die absichtlich *nicht* vendoriert sind, siehe die
+Notiz am Ende.
+
+Uebernommen am 2026-10-16 aus dem Nachbarrepo ds-en, das dieselben drei URLs in denselben
+Versionen laedt (am gebauten Stand beider Ausgaben nachgemessen). Die sha256 unten sind
+gegen dessen Herkunftsdatei geprueft, statt ein zweites Mal bei den CDN anzufragen.
+
+katex/katex.min.css
+  23.112 Bytes
+  sha256 f7808d67f6c9b70ac1619ad7842381be9078ad9533067bc0b22ac5bf7d53306a
+  von https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css
+  sha384-MlJdn/WNKDGXveldHDdyRP1R4CTHr3FeuDNfhsLPYrq2t0UBkUdK2jyTnXPEK1NQ
+  ^ das ist der integrity-Hash, den das Theme selbst auf dem von ihm emittierten
+    <link> veroeffentlicht hat. Die vendorierte Kopie ist damit nachweislich genau
+    die Bytes, die die Seite schon vorher geladen hat.
+
+font-awesome/css/font-awesome.css
+  37.414 Bytes
+  sha256 36e0a7e08bee65774168528938072c536437669c1b7458ac77976ec788e4439c
+  von https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css
+
+jupyter-matplotlib/mpl_widget.css
+  911 Bytes
+  sha256 e14a545216f676853ee3ff11b2d906f06620f62c7f700a5092fa65ccb1016abb
+  von https://cdn.jsdelivr.net/npm/jupyter-matplotlib@0.11.3/css/mpl_widget.css
+
+katex/fonts/*.woff2
+  20 Dateien, 259.792 Bytes zusammen
+  von https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/fonts/<name>
+  Genau die zwanzig woff2, die das Stylesheet nennt -- am 2026-10-16 gegengeprueft:
+  die Menge der im CSS genannten Dateien und die Menge der hier liegenden sind
+  identisch, alle zwanzig tragen die woff2-Signatur, und bei allen stimmt die im
+  Kopf deklarierte Laenge mit der Dateigroesse. Welche davon ein Leser wirklich
+  herunterlaedt, haengt von der Mathematik der Seite ab: auf einem Kapitel ohne
+  Formeln keine.
+
+font-awesome/fonts/fontawesome-webfont.woff2
+  77.160 Bytes
+  sha256 2adefcbc041e7d18fcf2d417879dc5a09997aa64d675b7a3c4b6ce33da13f3fe
+  von https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/fonts/fontawesome-webfont.woff2
+
+
+Lizenzen
+--------
+
+    katex/LICENSE               MIT, Khan Academy und weitere Beitragende
+    font-awesome/LICENSE        Schrift SIL OFL 1.1, CSS MIT, Dave Gandy
+    jupyter-matplotlib/LICENSE  BSD 3-clause, Matplotlib Contributors
+
+Alle drei erlauben die Weitergabe. Die OFL verlangt, dass ihre Lizenz mit der Schrift
+reist -- dafuer ist font-awesome/LICENSE da.
+
+
+Warum Font Awesome ueberhaupt hier ist, wenn nichts auf der Seite es benutzt
+---------------------------------------------------------------------------
+
+Es sieht unbenutzt aus und ist es fast: ueber alle 32 gebauten Seiten gibt es **kein
+einziges** Element mit einer `fa-`-Klasse. Das Stylesheet wird geholt, die Schrift, die
+es verlangt, nie.
+
+Es ist nicht unbenutzt. Das Client-Bundle des Themes enthaelt `fa fa-` zusammen mit
+`fa-play`, `fa-stop`, `fa-pause`, `fa-check`, `fa-times`, `fa-caret` und `fa-retweet`,
+und zwar in zwei Bundle-Dateien: das sind thebes Start-, Stopp- und Neustart-Knoepfe, die
+erst erscheinen, wenn ein Leser ein Notebook lebendig macht. Das Stylesheet zu loeschen
+-- der naheliegende Schritt nach dem Befund eines normalen Seitenaufrufs -- haette genau
+diese Knoepfe zu leeren Quadraten gemacht, in dem einen Merkmal, das sie am dringendsten
+lesbar braucht.
+
+Am 2026-10-16 gegengeprueft, und zwar an den Klassen und nicht am Augenschein: alle
+sieben Klassen stehen in den Bundles, und das vendorierte CSS definiert jede davon mit
+einer `:before`-Regel.
+
+Also: vendoriert, nicht entfernt. Bei einem gewoehnlichen Seitenaufruf kostet das ein
+Stylesheet derselben Herkunft und keine Schrift.
+
+
+Warum nur die woff2, und warum nichts bearbeitet ist
+----------------------------------------------------
+
+Die Stylesheets nennen vier oder fuenf Formate je Schnitt; vendoriert ist nur das woff2.
+Jeder Browser, der diese Seite ausfuehren kann, unterstuetzt woff2 seit 2016, woff2 steht
+in jeder dieser `src`-Listen vor den aelteren Formaten, und `_site/fonts/` liefert aus
+demselben Grund schon woff2-only.
+
+
+Was das nicht entfernt
+----------------------
+
+Nach der Umschreibung stehen die zwei CDN-Hostnamen weiter in drei Dateien:
+
+    thebe-lite.min.js                 cdn.jsdelivr.net/pyodide/v0.27.0/full/pyodide.js
+    thebe-core.min.js                 cdnjs .../mathjax/2.7.5, .../require.js/2.3.6,
+                                      cdn.jsdelivr.net/npm/
+    build/_shared/chunk-LS4ALTVG.js   dieselben drei
+
+Das ist thebes Laufzeit -- der Python-Kernel im Browser und der Lader fuer
+Jupyter-Widget-Pakete -- und sie wird nur geholt, wenn ein Leser den Knopf drueckt, der
+ein Notebook lebendig macht. Pyodide allein sind Dutzende Megabyte vor jedem Paket; das
+zu vendorieren steht nicht zur Debatte, und wer darum gebeten hat, Python im Browser
+laufen zu lassen, hat per Definition um einen Netzabruf gebeten.
+
+Die zutreffende Aussage ist also eng, und sie ist eng zu formulieren: **Das Buch zu lesen
+kontaktiert keinen Dritten. Den Code darin laufen zu lassen schon.**
+
+Der Waechter in .gitlab-ci.yml greppt deshalb die drei Stylesheet-URLs und **nicht die
+Hostnamen** -- ein Waechter, der bei jeder Erwaehnung von jsdelivr anschlaegt, waere nur
+zu befriedigen, indem man thebe loescht.
+
+Diese Datei zitiert alle drei URLs ebenfalls, als die Datei, die sie erklaert. Sie wird
+mit den Lizenzen veroeffentlicht, wie die OFL es verlangt, und nicht umgeschrieben:
+`tools/vendor_assets.py` fasst nur `.html` und `.js` an.
+
+
+Aktualisieren
+-------------
+
+`tools/vendor_assets.py` trifft jede URL mit einem Muster, das *jede* Version erlaubt,
+und bricht ab, wenn die gefundene nicht die vendorierte ist -- ein MyST-Upgrade, das
+KaTeX hochzieht, meldet sich also als genau das. Dann: das Stylesheet und seine Schriften
+neu holen, die sha256 oben gegen das Angekommene pruefen, ASSETS in dem Werkzeug
+nachziehen und diese Datei. Bei KaTeX dabei daran denken, dass die Schriftliste des
+Stylesheets sich zwischen Versionen aendern kann; das Werkzeug prueft, dass jede
+vendorierte Datei erreichbar ist, nicht dass keine fehlt.

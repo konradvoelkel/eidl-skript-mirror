@@ -88,6 +88,19 @@ myst-build:
     - node -v
     - myst --version
     - myst build --html
+    # Die beiden Schriften mitnehmen. Seit dem 2026-11-03 holt `_site/custom-style.css`
+    # sie nicht mehr von Google, sondern von hier (Begruendung im Kopf jener Datei und in
+    # `_site/fonts/PROVENANCE.txt`, Port aus eipy). **MyST kopiert aus `_site/` nur das
+    # Stylesheet selbst**, die Schriften also von Hand -- samt der OFL, die das verlangt.
+    - mkdir -p _build/html/fonts
+    - cp _site/fonts/*.woff2 _site/fonts/OFL-*.txt _build/html/fonts/
+    # Eine leere oder fehlende Schriftdatei faellt im Browser nicht auf -- es wird die
+    # Ersatzschrift gerendert, und die Seite sieht nur ein wenig anders aus.
+    - |
+      for f in inter-latin.woff2 jetbrains-mono-latin.woff2; do
+        [ -s "_build/html/fonts/$f" ] || { echo "FEHLER: _build/html/fonts/$f fehlt oder ist leer"; exit 1; }
+      done
+      echo "ok: beide Schriften im Artefakt"
   artifacts:
     paths:
       - _build/html
@@ -176,6 +189,46 @@ pages:
     # `index.html`, und `--check` prueft Canonicals nur dort. Fehlt die Datei, laeuft
     # der Job trotzdem durch.
     - 'if ls _site/google*.html >/dev/null 2>&1; then cp _site/google*.html public/; echo "Google-Verifikationsdatei veroeffentlicht"; else echo "Hinweis - keine Google-Verifikationsdatei in _site/"; fi'
+    # --- Fremde Herkuenfte: von vier auf null ----------------------------------------
+    # Port aus eipy (2026-10-20), dort mit Messungen; PLAYBOOK §3.12 "Fremde Herkuenfte".
+    # `__BASE__` in den Schrift-URLs aufloesen. MyST legt dasselbe Stylesheet an zwei
+    # Orten ab -- `/myst-theme.css` und `/build/custom-style-<hash>.css` --, und ein
+    # relativer Pfad kann nicht fuer beide stimmen. Deshalb der Platzhalter.
+    - find public \( -name 'myst-theme.css' -o -name 'custom-style-*.css' \) -exec sed -i "s|__BASE__|$BASE_URL|g" {} +
+    # Die drei Stylesheets, die das **Theme** von zwei CDN holt (KaTeX, Font Awesome,
+    # jupyter-matplotlib), von hier ausliefern -- dazu die KaTeX-Schriften, die das
+    # Stylesheet relativ zu seiner eigenen URL nachzieht. Umgeschrieben in HTML **und**
+    # JS: Remix rendert den Kopf aus Route-Modulen, nur das Markup umzuschreiben hiesse,
+    # dass die Hydration die CDN-Links wieder hinzufuegt. Kopiert werden nur die drei
+    # Unterbaeume von `_site/vendor/`, nicht `book-theme.zip` daneben.
+    - python3 tools/vendor_assets.py public --base "$BASE_URL"
+    - python3 tools/check_css_assets.py public --base "$BASE_URL"
+    # Und nachsehen, dass keine der vier Herkuenfte mehr darin steht, die ein blosser
+    # Seitenaufruf anfragt. **Gezielt** und nicht pauschal nach der Domain: thebe-core
+    # traegt MathJax und require.js von cdnjs im Bundle und holt sie erst, wenn jemand die
+    # Rechenumgebung startet. Geprueft wird, was die Seiten **einbinden** -- lokal haelt
+    # `_build/` fingerprinted Fassungen frueherer Laeufe, die keine Seite laedt.
+    - |
+      eingebunden=$(grep -rho 'href="[^"]*\.css"' public --include='*.html' \
+        | sed 's/href="//; s/"$//' | sed 's|^/||' | sort -u \
+        | while read -r p; do [ -f "public/$p" ] && echo "public/$p"; done)
+      ziele=$(find public -name '*.html'; echo "$eingebunden")
+      if grep -lE 'https://fonts\.(googleapis|gstatic)\.com' $ziele 2>/dev/null | grep -q .; then
+        echo "FEHLER: eine Seite oder ein eingebundenes Stylesheet holt noch Schriften von Google"
+        grep -lE 'https://fonts\.(googleapis|gstatic)\.com' $ziele | head -5
+        exit 1
+      fi
+      if grep -lE 'https://(cdn\.jsdelivr\.net|cdnjs\.cloudflare\.com)/[^"]*\.css' $ziele 2>/dev/null | grep -q .; then
+        echo "FEHLER: ein CDN-Stylesheet ueberlebt im Markup"
+        grep -lE 'https://(cdn\.jsdelivr\.net|cdnjs\.cloudflare\.com)/[^"]*\.css' $ziele | head -5
+        exit 1
+      fi
+      for f in vendor/katex/katex.min.css vendor/font-awesome/css/font-awesome.css \
+               vendor/jupyter-matplotlib/mpl_widget.css; do
+        [ -s "public/$f" ] || { echo "FEHLER: public/$f fehlt oder ist leer"; exit 1; }
+        grep -rql "$f" public --include='*.html' || { echo "FEHLER: $f wird von keiner Seite eingebunden"; exit 1; }
+      done
+      echo "ok: keine Schrift und kein Stylesheet mehr von fremder Herkunft, drei vendorierte Pfade da und eingebunden"
     # --- Veroeffentlichungs-Metadaten ---------------------------------------------------
     # 1. Die echte Adresse in sitemap.xml und robots.txt, jede <loc> mit Schraegstrich,
     #    og:image absolut, Canonical je Seite. Ohne diesen Schritt nennt die Sitemap
