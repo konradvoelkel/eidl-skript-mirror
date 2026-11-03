@@ -244,11 +244,26 @@ pages:
     #    Landingpage, je ein Kapitelknoten mit Brotkrume auf den 29 uebrigen Seiten.
     #    **Nach** 1 und 2: Es liest die absolute Karten-URL und den Kapiteltitel zurueck.
     - python3 tools/inject_jsonld.py "$SITE_ORIGIN$BASE_URL" public
+    # --- Layoutsprung (CLS) ---------------------------------------------------------
+    # Beides Ports aus ds-skript (2026-10-29), Begruendung und Messungen in den Skripten.
+    # 4. Die echten Pixelmasse an jede Abbildung, als width/height ins Markup und als ein
+    #    <style id="bildmasse"> fuer das ganze Buch in jeden Kopf -- sonst ist eine
+    #    Abbildung null Pixel hoch, bis ihre ersten Bytes da sind, und der Text darunter
+    #    ruckt. **Nach** head_meta: erst lazy und Masse zusammen sind die Lage des Lesers.
+    - python3 tools/image_dims.py public --base "$BASE_URL"
+    # 5. Platz fuer die Gliederung, die das Theme mit leerem <nav> ausliefert und erst
+    #    nach dem Mount fuellt; unterhalb von lg steht der Kasten im Fluss, und alles
+    #    darunter faellt in dem Moment nach unten.
+    - python3 tools/outline_reserve.py public
     # Und danach am fertigen Artefakt nachzaehlen statt dem Protokoll zu glauben: kein
     # localhost, je genau ein Canonical, Sitemap-Eintraege gleich gebaute Seiten, keine
     # relative Bild-URL. Ein fehlendes Stueck davon ist im Browser unsichtbar und nur
     # von aussen zu messen -- derselbe Fehlertyp wie die localhost-Sitemap selbst.
     - python3 tools/publish_urls.py "$SITE_ORIGIN$BASE_URL" public --check
+    # Masse und Gliederung bewusst hier unten nachpruefen: zwischen dem Schreiben und
+    # dieser Zeile liegen alle Schritte, die noch am Markup drehen.
+    - python3 tools/image_dims.py public --base "$BASE_URL" --check
+    - python3 tools/outline_reserve.py --check public
     # --- Auslieferung -------------------------------------------------------------------
     # GitLab Pages komprimiert nichts, liefert aber eine daneben liegende .br bzw. .gz aus,
     # wenn der Browser sie akzeptiert. Ohne diesen Schritt gingen am 2026-11-03 je Seite
