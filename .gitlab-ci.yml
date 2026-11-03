@@ -153,7 +153,10 @@ pages:
   script:
     # git nachinstallieren: python:3.13-alpine bringt keins mit, und ohne git bricht
     # inject_jsonld.py ab (absichtlich -- es raet kein Datum).
-    - apk add --no-cache git >/dev/null
+    #
+    # brotli dazu: Python kennt das Verfahren nicht, und tools/precompress.py ruft deshalb
+    # das Programm auf. Fehlt es, bricht das Skript ab statt die .br still wegzulassen.
+    - apk add --no-cache git brotli >/dev/null
     - mv _build/html public
     # Ganze Zeile in Anfuehrungszeichen: Ein `: ` in einem unquotierten YAML-Skalar macht
     # aus dem Listeneintrag eine Map. Die Datei bleibt dabei valides YAML, GitLab lehnt sie
@@ -193,6 +196,18 @@ pages:
     # relative Bild-URL. Ein fehlendes Stueck davon ist im Browser unsichtbar und nur
     # von aussen zu messen -- derselbe Fehlertyp wie die localhost-Sitemap selbst.
     - python3 tools/publish_urls.py "$SITE_ORIGIN$BASE_URL" public --check
+    # --- Auslieferung -------------------------------------------------------------------
+    # GitLab Pages komprimiert nichts, liefert aber eine daneben liegende .br bzw. .gz aus,
+    # wenn der Browser sie akzeptiert. Ohne diesen Schritt gingen am 2026-11-03 je Seite
+    # 7,7 bis 9,1 MB unkomprimiert ueber die Leitung (PLAYBOOK §3.12, Port aus ds-skript).
+    #
+    # **Letzter schreibender Schritt, und das ist keine Vorliebe:** ab hier existiert jede
+    # Textdatei dreimal, und die .br ist, was praktisch jeder Leser bekommt. Ein Schritt
+    # danach, der HTML, CSS oder JS anfasst, liefert allen die alte Fassung aus, waehrend
+    # jeder Blick ins Artefakt die neue zeigt. --check packt deshalb jede Kopie wieder aus
+    # und vergleicht byteweise, statt nur ihre Existenz zu pruefen.
+    - python3 tools/precompress.py public
+    - python3 tools/precompress.py public --check
   artifacts:
     paths:
       - public
