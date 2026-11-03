@@ -224,8 +224,12 @@ Textfassung von Seite und Objektbaum: `~/Sciebo/hhu/eidl-26/ilias/` (analog zu
 - [ ] **Offene Befunde aus dem SEO-Audit vom 2026-11-03** (Bericht nicht im Repo; die
   Auslieferung ist am selben Tag mit sieben Ports aus ds-skript, ds-en und eipy erledigt,
   siehe `erledigt.md`). Offen, nach Wirkung (die `http://`-Autoren-URL ist am selben Tag auf `https` gestellt):
-  1. **Mobiler Kopf 419 px breit** bei 375 px Viewport: Theme-Knopf außerhalb, die Seite
-     scrollt waagerecht, auf jeder Seite (am 2026-11-03 gemessen, `scrollWidth` 419).
+  1. **Zwei Inline-Formeln in Kapitel 13 sind breiter als ein Handy**: die letzten Formeln
+     der Beweisschritte 2 und 3 (`\{\text{messbare Funktionen}\} \approx \{\text{…}\}`),
+     bei 320 px 57 px zu breit, die ganze Seite scrollt waagerecht. Inline-KaTeX bricht nicht um.
+     *Vorschlag:* als abgesetzte Formel (`$$…$$`), die dann in sich scrollt; ändert auch den
+     PDF-Satz, also danach die Seitenzahl nachmessen. Sonst ist seit dem 2026-11-03 keine
+     Seite in keiner Breite von 320 bis 1024 px zu breit.
   2. **Suchknopf mobil ohne zugänglichen Namen** (axe „Buttons must have discernible
      text“, Lighthouse Agentic mobil 1/2). Eine Ersetzung mehr in `BEDIENUNG` in
      `_site/vendor/install_template.py`.

@@ -231,3 +231,49 @@ aside.myst-admonition-danger, aside.myst-admonition-error {
 aside.myst-admonition-danger > header {
   color: var(--hhu-red) !important;
 }
+
+/* --- Nichts breiter als der Bildschirm (2026-11-03) --------------------------------
+   Zwei Stellen, an denen das Theme Inhalt nicht schrumpfen lässt; beide machten die Seite
+   auf dem Handy waagerecht scrollbar.
+
+   1. Kopfzeile. Der linke Block (Menüknopf, Logo, Titel) trägt `shrink-0`, der Titel-Link
+      `w-fit`: der Titel darf weder schrumpfen noch umbrechen. Bei 375 px schob „Einführung
+      in Deep Learning“ (205 px) Suche und Hell/Dunkel-Knopf 44 px über den Rand
+      (scrollWidth 419), bei 640 px, wo das Suchfeld 256 px breit wird, 84 px. eipy hat
+      denselben Fehler (434 bei 375), ds-skript mit kürzerem Titel nicht. Jetzt darf der
+      Block schrumpfen und der Titel umbrechen; wo Platz ist, schrumpft nichts.
+   2. Vor/Zurück-Links am Seitenende. Sie sind `flex-1`, aber ein Flex-Kind wird nicht
+      schmaler als sein längstes Wort: bei 320 px ragte „Backpropagation“ 29 px hinaus.
+   3. Formeln in Tabellen. KaTeX legt neben jede Formel eine unsichtbare MathML-Kopie,
+      `position: absolute`. Die scrollbare Hülle um eine Tabelle ist nicht positioniert,
+      hält sie also nicht fest, und die Kopie einer Formel am rechten Rand vergrößert die
+      ganze Seite (Loss-Funktionen bei 320 px: 8 px). `position: relative` an `.katex`
+      bindet sie an ihre Formel; sichtbar ändert sich nichts.
+   4. Das Ankerzeichen „¶“ hinter jeder Überschrift: ein 0 px breiter Kasten, um 10 px nach
+      rechts verschoben und unsichtbar, bis man darüberfährt. Endet eine Überschrift knapp
+      am rechten Rand, ragt das unsichtbare Zeichen hinaus (Loss-Funktionen bei 320 px:
+      8 px, und je nach Breite eine andere Seite). `overflow-x: clip` schneidet nur
+      waagerecht ab, ohne Scrollbereich und ohne Wirkung auf die Höhe. */
+.myst-top-nav-bar > div:first-child {
+  flex-shrink: 1;
+  min-width: 0;
+}
+.myst-home-link {
+  min-width: 0;
+}
+.myst-home-link-logo {
+  flex-shrink: 0;
+}
+.myst-home-link > span {
+  line-height: 1.15;
+}
+.myst-footer-link {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.katex {
+  position: relative;
+}
+article :is(h1, h2, h3, h4, h5, h6) {
+  overflow-x: clip;
+}

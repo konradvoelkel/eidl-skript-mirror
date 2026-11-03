@@ -159,6 +159,14 @@ Datierte Protokolle größerer Umbauten liegen daneben als `build-log-<datum>.md
 
 ### Infrastruktur
 
+- [x] **Nichts mehr breiter als der Bildschirm**, 2026-11-03, `_site/custom-style.css`. Vier Ursachen,
+  alle im Theme, alle gemessen: der Kopf (linker Block `shrink-0`, Titel `w-fit`; bei 375 px 44 px,
+  bei 640 px 84 px zu breit, eipy hat denselben Fehler), die Vor/Zurück-Links (`flex-1`, aber nicht
+  schmaler als „Backpropagation“), die unsichtbare MathML-Kopie von KaTeX in Tabellen (absolut
+  positioniert, von der Scroll-Hülle nicht gehalten) und das unsichtbare Ankerzeichen „¶“ hinter
+  Überschriften, die am Rand enden. Alle 32 Seiten in acht Breiten von 320 bis 1024 px nachgemessen,
+  im Browser mit Overlay-Scrollleiste (in einem iframe verfälscht die 15-px-Leiste das Ergebnis).
+  Übrig: zwei Inline-Formeln in Kapitel 13 (offen in `TODO.md`).
 - [x] **Startseite als Einstieg**, 2026-11-03. `index.md` war ein Satz, ein PDF-Link und ein
   Hinweis-Kasten mit englischem Titel; keine H1, und als einziger interner Link `/readme` (die
   Seitenleiste steht nicht im ausgelieferten HTML, ein Crawler ohne JavaScript fand die Kapitel nur
