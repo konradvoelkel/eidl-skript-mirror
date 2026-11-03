@@ -159,6 +159,12 @@ Datierte Protokolle größerer Umbauten liegen daneben als `build-log-<datum>.md
 
 ### Infrastruktur
 
+- [x] **Autor-`sameAs` um Wikidata, GND und VIAF ergänzt**, 2026-11-03, in
+  `tools/structured-data.json` aller vier Skripten-Repos (ds-skript, ds-en, eipy, eidl) im
+  selben Wortlaut, direkt hinter ORCID; 8 auf 11 Einträge. Gegen Wikidata geprüft:
+  Q102659059 nennt dieselbe ORCID, GND 1122356269 und VIAF 3141148269690605230001.
+  konradvoelkel.com bewusst nicht (Entscheidung Konrad): dort entsteht `sameAs` aus der
+  sichtbaren Linkzeile der Startseite.
 - [x] **Impressum und Datenschutz in der Fußzeile**, 2026-11-03 (Entscheidung Konrad: das
   der HHU, nicht das von konradvoelkel.com). `_site/footer.md` als `site.parts.footer` in
   `myst.yml`, auf allen 32 Seiten unter dem Artikel; verlinkt `hhu.de/impressum` und
