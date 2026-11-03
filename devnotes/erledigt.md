@@ -166,7 +166,9 @@ Datierte Protokolle größerer Umbauten liegen daneben als `build-log-<datum>.md
   positioniert, von der Scroll-Hülle nicht gehalten) und das unsichtbare Ankerzeichen „¶“ hinter
   Überschriften, die am Rand enden. Alle 32 Seiten in acht Breiten von 320 bis 1024 px nachgemessen,
   im Browser mit Overlay-Scrollleiste (in einem iframe verfälscht die 15-px-Leiste das Ergebnis).
-  Übrig: zwei Inline-Formeln in Kapitel 13 (offen in `TODO.md`).
+  Übrig waren zwei Inline-Formeln in Kapitel 13 (57 px bei 320); am selben Tag als abgesetzte
+  Formeln ohne Nummer gesetzt (`{math}` mit `:enumerated: false`, damit die (1) und (2) des Kapitels
+  bleiben). PDF unverändert 135 Seiten, 0 Fehler, 5 überlange Zeilen.
 - [x] **Startseite als Einstieg**, 2026-11-03. `index.md` war ein Satz, ein PDF-Link und ein
   Hinweis-Kasten mit englischem Titel; keine H1, und als einziger interner Link `/readme` (die
   Seitenleiste steht nicht im ausgelieferten HTML, ein Crawler ohne JavaScript fand die Kapitel nur
