@@ -229,6 +229,13 @@ pages:
         grep -rql "$f" public --include='*.html' || { echo "FEHLER: $f wird von keiner Seite eingebunden"; exit 1; }
       done
       echo "ok: keine Schrift und kein Stylesheet mehr von fremder Herkunft, drei vendorierte Pfade da und eingebunden"
+    # thebe-core (1,3 MB, 359 kB komprimiert) laedt das Theme per useEffect auf **jeder**
+    # Seite, unabhaengig von `jupyter:` in myst.yml -- und kein Kapitel dieses Buchs hat
+    # etwas Ausfuehrbares. Port aus ds-en: ein Ausdruck im einen Client-Chunk, der das
+    # Laden an MySTs eigenes `computable` je Seite knuepft. Scheitert laut, wenn ein
+    # mystmd-Update die minifizierte Form verschiebt, statt die 1,3 MB still
+    # zurueckzubringen. Nach vendor_assets.py, das dieselben Buendel anfasst.
+    - python3 tools/thebe_gate.py public
     # --- Veroeffentlichungs-Metadaten ---------------------------------------------------
     # 1. Die echte Adresse in sitemap.xml und robots.txt, jede <loc> mit Schraegstrich,
     #    og:image absolut, Canonical je Seite. Ohne diesen Schritt nennt die Sitemap
