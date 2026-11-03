@@ -213,25 +213,38 @@ pages:
     # Option ist eine GNU-Erweiterung. Aus eipy (python:3.14-slim) uebernommen, lief der
     # Block hier am 2026-11-03 in "unrecognized option" und brach den Deploy ab (Job
     # 673689). Deshalb `find ... -exec grep`.
+    #
+    # **Und ohne `| grep -q .` und ohne `| head`**: der Runner schaltet `pipefail` ein,
+    # wo die Shell es kann (BusyBox-ash kann es). Ein Leser, der nach der ersten Zeile
+    # aufhoert, laesst den Schreiber davor an SIGPIPE sterben, und die Pipeline gilt als
+    # gescheitert -- so meldete der zweite Lauf "katex.min.css wird von keiner Seite
+    # eingebunden", obwohl alle 32 es tun, und die zwei Pruefungen darueber haetten einen
+    # echten Treffer verschluckt. Also erst in eine Variable, dann `[ -n ]`; und `|| true`,
+    # wo "kein Treffer" der gute Fall ist (grep endet dann mit 1).
     - |
       eingebunden=$(find public -name '*.html' -exec grep -ho 'href="[^"]*\.css"' {} + \
-        | sed 's/href="//; s/"$//' | sed 's|^/||' | sort -u \
-        | while read -r p; do [ -f "public/$p" ] && echo "public/$p"; done)
-      ziele=$(find public -name '*.html'; echo "$eingebunden")
-      if grep -lE 'https://fonts\.(googleapis|gstatic)\.com' $ziele 2>/dev/null | grep -q .; then
+        | sed 's/href="//; s/"$//; s|^/||' | sort -u)
+      ziele=$(find public -name '*.html')
+      for p in $eingebunden; do
+        if [ -f "public/$p" ]; then ziele="$ziele public/$p"; fi
+      done
+      treffer=$(grep -lE 'https://fonts\.(googleapis|gstatic)\.com' $ziele || true)
+      if [ -n "$treffer" ]; then
         echo "FEHLER: eine Seite oder ein eingebundenes Stylesheet holt noch Schriften von Google"
-        grep -lE 'https://fonts\.(googleapis|gstatic)\.com' $ziele | head -5
+        echo "$treffer"
         exit 1
       fi
-      if grep -lE 'https://(cdn\.jsdelivr\.net|cdnjs\.cloudflare\.com)/[^"]*\.css' $ziele 2>/dev/null | grep -q .; then
+      treffer=$(grep -lE 'https://(cdn\.jsdelivr\.net|cdnjs\.cloudflare\.com)/[^"]*\.css' $ziele || true)
+      if [ -n "$treffer" ]; then
         echo "FEHLER: ein CDN-Stylesheet ueberlebt im Markup"
-        grep -lE 'https://(cdn\.jsdelivr\.net|cdnjs\.cloudflare\.com)/[^"]*\.css' $ziele | head -5
+        echo "$treffer"
         exit 1
       fi
       for f in vendor/katex/katex.min.css vendor/font-awesome/css/font-awesome.css \
                vendor/jupyter-matplotlib/mpl_widget.css; do
         [ -s "public/$f" ] || { echo "FEHLER: public/$f fehlt oder ist leer"; exit 1; }
-        find public -name '*.html' -exec grep -l "$f" {} + | grep -q . || { echo "FEHLER: $f wird von keiner Seite eingebunden"; exit 1; }
+        seiten=$(find public -name '*.html' -exec grep -l "$f" {} + || true)
+        [ -n "$seiten" ] || { echo "FEHLER: $f wird von keiner Seite eingebunden"; exit 1; }
       done
       echo "ok: keine Schrift und kein Stylesheet mehr von fremder Herkunft, drei vendorierte Pfade da und eingebunden"
     # thebe-core (1,3 MB, 359 kB komprimiert) laedt das Theme per useEffect auf **jeder**
