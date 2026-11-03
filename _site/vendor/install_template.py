@@ -76,6 +76,11 @@ BEDIENUNG = [
      '"Durchsucht Titel und Text aller Kapitel; ungefähre Schreibweise und Wortanfänge genügen"',
      "Wortanfänge genügen"),
     (r'"No results found\."', '"Keine Treffer."', '"Keine Treffer."'),
+    # Der Suchknopf trägt sein Wort in einem Span, der unter `sm` verborgen ist; mobil hatte er
+    # deshalb keinen Namen (axe „Buttons must have discernible text“, Lighthouse Agentic 1/2).
+    (r'(\{\.\.\.\w+,"aria-controls":\w+\["aria-expanded"\]\?\w+:void 0,)(className:\(0,[\w$]+\.default\)\("myst-search-bar")',
+     r'\1"aria-label":"Suche",\2', '"aria-label":"Suche",className:'),
+    (r'"sr-only",children:"Downloads"\}', '"sr-only",children:"Herunterladen"}', '"sr-only",children:"Herunterladen"}'),
     (r'title:"Download"\}', 'title:"Herunterladen"}', 'title:"Herunterladen"}'),
     (r'children:\["Download",(\w)\?` as \$\{\1\}`:""',
      r'children:["Herunterladen",\1?` (${\1})`:""', 'children:["Herunterladen",'),
