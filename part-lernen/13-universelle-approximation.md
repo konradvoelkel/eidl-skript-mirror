@@ -25,6 +25,10 @@ Die richtige Frage ist also nie „Geht das mit neuronalen Netzen?“ (Antwort: 
 Zwei steile Sigmoide mit entgegengesetzten Ausgabegewichten ergeben eine Stufe. Aus Stufen baut man Stufenfunktionen, aus Stufenfunktionen approximiert man alles Messbare.
 :::
 
+:::{anywidget} ../widgets/stufe.mjs
+{n1: [20, -4, 1], n2: [20, -14, 1]}
+:::
+
 ### Präzisere Ergebnisse
 
 :::{prf:theorem} Universelle Approximation (Pinkus / Kidger–Lyons)
