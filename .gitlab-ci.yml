@@ -208,8 +208,13 @@ pages:
     # traegt MathJax und require.js von cdnjs im Bundle und holt sie erst, wenn jemand die
     # Rechenumgebung startet. Geprueft wird, was die Seiten **einbinden** -- lokal haelt
     # `_build/` fingerprinted Fassungen frueherer Laeufe, die keine Seite laedt.
+    #
+    # **Ohne `grep --include`**: das Image ist Alpine, dessen grep ist BusyBox, und die
+    # Option ist eine GNU-Erweiterung. Aus eipy (python:3.14-slim) uebernommen, lief der
+    # Block hier am 2026-11-03 in "unrecognized option" und brach den Deploy ab (Job
+    # 673689). Deshalb `find ... -exec grep`.
     - |
-      eingebunden=$(grep -rho 'href="[^"]*\.css"' public --include='*.html' \
+      eingebunden=$(find public -name '*.html' -exec grep -ho 'href="[^"]*\.css"' {} + \
         | sed 's/href="//; s/"$//' | sed 's|^/||' | sort -u \
         | while read -r p; do [ -f "public/$p" ] && echo "public/$p"; done)
       ziele=$(find public -name '*.html'; echo "$eingebunden")
@@ -226,7 +231,7 @@ pages:
       for f in vendor/katex/katex.min.css vendor/font-awesome/css/font-awesome.css \
                vendor/jupyter-matplotlib/mpl_widget.css; do
         [ -s "public/$f" ] || { echo "FEHLER: public/$f fehlt oder ist leer"; exit 1; }
-        grep -rql "$f" public --include='*.html' || { echo "FEHLER: $f wird von keiner Seite eingebunden"; exit 1; }
+        find public -name '*.html' -exec grep -l "$f" {} + | grep -q . || { echo "FEHLER: $f wird von keiner Seite eingebunden"; exit 1; }
       done
       echo "ok: keine Schrift und kein Stylesheet mehr von fremder Herkunft, drei vendorierte Pfade da und eingebunden"
     # thebe-core (1,3 MB, 359 kB komprimiert) laedt das Theme per useEffect auf **jeder**
