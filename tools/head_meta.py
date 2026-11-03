@@ -226,6 +226,22 @@ def keep_html_lang(doc: str, lang: str) -> tuple[str, bool]:
     return doc.replace("</head>", script + "</head>", 1), False
 
 
+def mit_attributen(tag: str, zusatz: str) -> str:
+    """Attribute ans Ende eines Tags, mit dem schließenden Schrägstrich dahinter.
+
+    `<img ... />` endet auf "/>", und wer nur das letzte Zeichen abschneidet und wieder
+    anhängt, schiebt die neuen Attribute *hinter* den Schrägstrich: `... class=""/
+    loading="lazy">`. Ein Parser verzeiht das, ein Validator nicht – und so stand es vom
+    Einbau des lazy-Ladens bis zum 2026-11-03 auf jeder lazy gemachten Abbildung (SEO-Audit).
+    Derselbe Fehler und dieselbe Funktion wie in ds-skript (`c389644`, 2026-10-29).
+    """
+    kern = tag[:-1].rstrip()
+    schraeg = ""
+    if kern.endswith("/"):
+        kern, schraeg = kern[:-1].rstrip(), "/"
+    return f"{kern} {zusatz}{schraeg}>"
+
+
 def lazy_load_figures(doc: str) -> tuple[str, set[str]]:
     """Jedes <img> in <main> außer dem ersten verzögert laden.
 
@@ -251,7 +267,7 @@ def lazy_load_figures(doc: str) -> tuple[str, set[str]]:
             lazied.add(src.group(1))
         if re.search(r"\bloading=", t, re.I):
             return t
-        return t[:-1].rstrip() + ' loading="lazy" decoding="async"' + t[-1]
+        return mit_attributen(t, 'loading="lazy" decoding="async"')
 
     main_neu = re.sub(r"<img\b[^>]*?/?>", img_sub, main, flags=re.I)
     return doc[: m.start()] + main_neu + doc[m.end():], lazied
