@@ -183,6 +183,27 @@ def fehler_sammeln() -> list[str]:
         for treffer in sorted(set(re.findall(r"https?://(?:dx\.|www\.)?doi\.org/[^)\s]+", ohne_code))):
             fehler.append(f"{p.name}: {treffer} -- DOI-Links als https://hdl.handle.net/<DOI>, siehe CLAUDE.md „Literatur“")
 
+    # ── 5b. Aufzeichnungen: Linkzeile und Player-Widget nennen dieselbe Adresse ──
+    # Jede Zeile „[Vorlesungsaufzeichnung …](…)“ bekommt darunter den eingeklappten Player
+    # (widgets/mediathek.mjs). Die Adresse steht damit zweimal da; wird eine nachgetragen oder
+    # korrigiert, muss die andere mit -- sonst spielt der Player ein anderes Video als der Link.
+    LINKZEILE = re.compile(r"^\[Vorlesungsaufzeichnung[^\]]*\]\((https://media\.hhu\.de/video/[^)]+)\)$", re.M)
+    PLAYER = re.compile(r"^:::\{anywidget\} \.\./widgets/mediathek\.mjs\n\{url: '([^']+)'\}\n:::$", re.M)
+    for p in kapitel:
+        text = p.read_text(encoding="utf-8")
+        links = [(m.end(), m.group(1)) for m in LINKZEILE.finditer(text)]
+        player = [(m.start(), m.group(1)) for m in PLAYER.finditer(text)]
+        if text.count("widgets/mediathek.mjs") != len(player):
+            fehler.append(f"{p.name}: Player-Widget nicht in der Form {{url: '…'}} -- so prüft niemand die Adresse")
+        for ende, adresse in links:
+            folgt = [a for start, a in player if 0 < start - ende <= 2]
+            if not folgt:
+                fehler.append(f"{p.name}: unter der Aufzeichnungszeile fehlt der Player (widgets/mediathek.mjs)")
+            elif folgt[0] != adresse:
+                fehler.append(f"{p.name}: Player spielt {folgt[0]}, die Linkzeile darüber nennt {adresse}")
+        if len(player) > len(links):
+            fehler.append(f"{p.name}: Player-Widget ohne Aufzeichnungszeile darüber")
+
     # ── 6. Das gebaute PDF, falls vorhanden ─────────────────────────────────────
     pdf = WURZEL / "exports/eidl-skript.pdf"
     if pdf.is_file():

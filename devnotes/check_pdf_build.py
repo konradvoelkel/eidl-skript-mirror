@@ -56,7 +56,8 @@ VERSCHLUCKTER_KNOTEN = re.compile(r"Unhandled LaTeX conversion for node of \"([^
 # PDF kein Gegenstueck. Er steht deshalb nur direkt unter einer statischen Abbildung, die dasselbe
 # zeigt (`widgets/drehung.mjs` unter `la-drehung.png`, `widgets/perzeptron.mjs` unter
 # `vl02-perceptron-updates.png`, `widgets/stufe.mjs` unter `vl11-step-from-sigmoids.png`,
-# `widgets/gradientenabstieg.mjs` unter `vl05-schlucht.png`).
+# `widgets/gradientenabstieg.mjs` unter `vl05-schlucht.png`) oder unter einer Linkzeile, die
+# dasselbe Ziel hat (`widgets/mediathek.mjs` unter jeder „Vorlesungsaufzeichnung“).
 # Gezaehlt und gemeldet
 # wird er trotzdem, damit die Zahl sichtbar bleibt.
 NUR_WEB = {"anywidget"}
@@ -182,7 +183,7 @@ def main(argv: list[str] | None = None) -> int:
             knoten = [k for k in alle_knoten if k not in NUR_WEB]
             nur_web = len(alle_knoten) - len(knoten)
             if nur_web:
-                print(f"Hinweis: {nur_web}x anywidget nur im HTML (im PDF steht jeweils die Abbildung darueber)")
+                print(f"Hinweis: {nur_web}x anywidget nur im HTML (im PDF steht jeweils die Abbildung oder der Link darueber)")
             if knoten:
                 knotenliste = ", ".join(sorted({f"{k} ({knoten.count(k)}x)" for k in knoten}))
                 fehler.append(

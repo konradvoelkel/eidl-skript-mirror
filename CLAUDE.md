@@ -246,7 +246,7 @@ Wichtig zur Ordnerstruktur:
 | `slides/` | Beamer-Foliensätze VL 01–15 (`build.sh`, gemeinsamer `header.tex`) |
 | `images/`, `logo/` | Abbildungen, Logos; dazu `images/social-card.png`, die Vorschaukarte |
 | `tools/` | Skripte der Veröffentlichung: Vorschaukarte, Sitemap-URLs, Kopf-Tags, JSON-LD |
-| `widgets/` | interaktive Abbildungen für die Website (`{anywidget}`, ein ES-Modul ohne Abhängigkeiten je Widget); im PDF fehlen sie, deshalb steht jedes direkt unter einer statischen Abbildung, die dasselbe zeigt. Bisher `drehung.mjs` im Kapitel „Hintergrundwissen Lineare Algebra“ , `perzeptron.mjs` im Kapitel „Das Perzeptron trainieren“ , `stufe.mjs` im Kapitel „Universelle Approximation“ und `gradientenabstieg.mjs` im Kapitel „Gradientenabstieg“ |
+| `widgets/` | interaktive Teile der Website (`{anywidget}`, ein ES-Modul ohne Abhängigkeiten je Widget); im PDF fehlen sie, deshalb steht jedes direkt unter etwas, das im PDF dasselbe leistet. Unter einer statischen Abbildung: `drehung.mjs` im Kapitel „Hintergrundwissen Lineare Algebra“, `perzeptron.mjs` im Kapitel „Das Perzeptron trainieren“, `stufe.mjs` im Kapitel „Universelle Approximation“ und `gradientenabstieg.mjs` im Kapitel „Gradientenabstieg“. Unter jeder Aufzeichnungszeile: `mediathek.mjs`, der eingeklappte Player (Abschnitt „Vorlesungsaufzeichnungen“) |
 | `notebooks/` | Notebooks aus 2025; nur `latent-classifier.ipynb` hat noch eine Funktion — es hängt als `downloads:` am Kapitel 21 |
 | `glossar.md` | Klausurbegriffe mit Link ins jeweilige Kapitel (im TOC, Abschnitt „Anhang“) |
 | `kurs-2026-27.md` | Semesterplan, Termine, Organisatorisches — **nicht im TOC**, also nicht Teil des Buchs |
@@ -429,8 +429,18 @@ des Data-Science-Skripts (`~/Sciebo/hhu/ds2026/ds-skript`, dort `erwartungswert.
 
 ```markdown
 [Vorlesungsaufzeichnung VL 1: Überblick](https://media.hhu.de/video/einfuehrung-in-deep-learning-202627-vl-1-ueberblick/<hash>)
+
+:::{anywidget} ../widgets/mediathek.mjs
+{url: 'https://media.hhu.de/video/einfuehrung-in-deep-learning-202627-vl-1-ueberblick/<hash>'}
+:::
 ```
 
+* **Darunter der eingeklappte Player** (seit 2026-11-03, `widgets/mediathek.mjs`): ein
+  Kasten „Aufzeichnung hier abspielen“, erst der Klick lädt den Player der Mediathek
+  (`/media/embed?key=…&chapters=true`, mit derselben Startzeit `t`). Wer nur liest, lädt
+  nichts von `media.hhu.de`; im PDF steht die Linkzeile allein. Die Adresse steht damit
+  zweimal im Kapitel, **Zeichen für Zeichen gleich** — `check_doku.py` prüft das und
+  meldet auch eine Linkzeile ohne Player darunter.
 * Welches Kapitel zu welcher Sitzung gehört, sagt die Tabelle in `kurs-2026-27.md`. Deckt
   eine Sitzung zwei Kapitel ab, bekommt jedes seine Zeile; beginnt das Thema mitten im
   Video, kommt `?t=<sekunden>` an die Adresse (so macht es das DS-Skript).

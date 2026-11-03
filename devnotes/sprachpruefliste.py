@@ -91,7 +91,7 @@ def prosa_zeilen(text: str) -> list[str]:
     """
     zeilen = text.split("\n")
     raus: list[str] = []
-    in_code = in_mathe = False
+    in_code = in_mathe = in_widget = False
     in_front = zeilen[:1] == ["---"]
     for i, z in enumerate(zeilen):
         if in_front:
@@ -104,6 +104,15 @@ def prosa_zeilen(text: str) -> list[str]:
             raus.append("")
             continue
         if in_code:
+            raus.append("")
+            continue
+        # Rumpf eines {anywidget} ist JSON5 für das Widget, keine Prosa
+        if z.startswith(":::{anywidget}"):
+            in_widget = True
+            raus.append("")
+            continue
+        if in_widget:
+            in_widget = z.strip() != ":::"
             raus.append("")
             continue
         if z.strip() == "$$":
