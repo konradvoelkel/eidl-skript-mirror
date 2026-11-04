@@ -207,7 +207,9 @@ siehe `erledigt.md`).
 - [ ] **Deck 9 kürzen, vor dem 09.12.** Die Graphen gehen aus VL 9 heraus (Plan seit 2026-11-04,
   `../kurs-2026-27.md`). In dieser Sitzung fällt also nur etwas weg, das ist der billige Teil — aber er
   hat einen Termin, weil VL 9 am 09.12. stattfindet. Die Rahmen nicht löschen, sondern für Deck 14
-  beiseitelegen. Deck- und Dateiname heißen danach „VL 09 VAE und word2vec“.
+  beiseitelegen. Deck- und Dateiname heißen danach „VL 09 VAE und word2vec“. **Danach die
+  Zeile `9:` aus `DECK_STAND` in `folienlinks.py` löschen und `--schreiben` laufen lassen** —
+  sonst zeigen die Folienlinks weiter auf den alten Schnitt.
 - [ ] **Decks 12 bis 14 umschneiden, in der Weihnachtspause und erst nach VL 10.** Zu bewegen:
   * „Latente Räume geometrisch“ aus Deck 14 nach vorn in Deck 12 (Deck 12 hat 15 Rahmen, das dünnste
     neben VL 15, und verträgt es).
@@ -220,6 +222,8 @@ siehe `erledigt.md`).
   weiter die Kapitel, aus denen die Rahmen heute stammen — sie werden mit den Rahmen nachgezogen, nicht
   vorher, sonst behaupten sie etwas Falsches. Beim Umbenennen eines Decks daran denken, dass die
   Foliennamen in ILIAS hängen (Abschnitt „ILIAS“) und `slides/build.sh` über `*VL*.tex` glob't.
+  Je umgeschnittenes Deck die passende Zeile aus `DECK_STAND` in `folienlinks.py` löschen, dann
+  `--schreiben`; ist die Liste leer, kommt wieder alles aus dem Plan.
 
 - [ ] Rest aus der Durchsicht vom 25.09. (`folien-review-2026-09-25.md`): Ablaufplan-Foliennummern in
   9 Decks (VL 1 am 2026-10-02, VL 3 am 2026-10-28, VL 4 und VL 5 am 2026-11-04

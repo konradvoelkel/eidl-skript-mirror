@@ -29,6 +29,16 @@ Woher die Seitenzahlen kommen
 Die Zuordnung Sitzung → Kapitel kommt aus der Tabelle in `../kurs-2026-27.md`, nicht aus
 einer zweiten Liste. Ein Kapitel kann in zwei Sitzungen vorkommen (Backpropagation in VL 6
 und VL 13, Anwendungsbeispiele in VL 14 und VL 15); dann nennt die Zeile beide.
+
+**Ausnahme, solange der Plan den Decks voraus ist:** `DECK_STAND` unten. Ein Folienlink muss
+auf das zeigen, was im Deck steht; ist eine Sitzung im Plan schon umgeschnitten und das Deck
+noch nicht, gilt für sie die Liste dort. Jede Zeile verschwindet mit dem Umschnitt ihres
+Decks, dann kommt wieder alles aus dem Plan.
+
+Was `--check` prüft: dass jedes Kapitel der Tabelle eine Folienzeile hat, dass jede Grenze
+gefunden wurde, **und dass die eingetragene Zeile noch zu den Bereichen passt**. Das Dritte
+hat bis zum 2026-11-04 gefehlt – ein geänderter Plan hat die Links still falsch werden
+lassen, und rot wurde nur die nicht gefundene Grenze.
 """
 
 import argparse
@@ -51,6 +61,31 @@ SITE = "https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de/"
 # HTML fallen oder gibt es escaped aus (am 2026-11-04 gemessen), ein
 # `<!-- ... -->` koennte also als Text auf der Seite landen.
 MARKE = "/folien/vl"
+
+# Sitzungen, deren Deck noch nach dem **alten** Schnitt gebaut ist (Stand 2026-11-04).
+# Der Plan in `../kurs-2026-27.md` ist den Decks voraus: VL 9 und VL 12 bis 14 sind dort am
+# 2026-11-04 neu geschnitten worden (Graphen aus VL 9 nach VL 14, latente Raeume als Sitzung
+# nach der Pause, Autograd und die Backprop-Induktion zusammen hinter die GANs), die Decks
+# folgen erst -- Deck 9 vor dem 09.12., die anderen in der Weihnachtspause (offener Punkt in
+# `TODO.md`, Abschnitt "Beamer-Folien").
+#
+# Bis dahin gilt fuer diese Sitzungen die Liste hier, denn ein Folienlink muss auf das zeigen,
+# was im Deck **steht**, nicht auf das, was der Plan vorsieht. Sonst schickt das Kapitel
+# "Latente Raeume geometrisch" den Leser auf Deck 12, wo Autograd steht.
+#
+# **Jede Zeile verschwindet mit dem Umschnitt ihres Decks.** Ist die Liste leer, kommt wieder
+# alles aus dem Plan, so wie es gedacht ist.
+DECK_STAND = {
+    9:  ["part-representation-learning/15-variational-autoencoder.md",
+         "part-representation-learning/16-word2vec.md",
+         "part-representation-learning/18-representation-learning-graphen.md"],
+    12: ["part-lernen/10-autograd-berechnungsgraph.md",
+         "part-architekturen-anwendungen/23-llms-benutzen.md"],
+    13: ["part-architekturen-anwendungen/22-gans.md",
+         "part-lernen/09-backpropagation.md"],
+    14: ["part-representation-learning/17-latente-raeume-geometrisch.md",
+         "part-architekturen-anwendungen/24-anwendungsbeispiele.md"],
+}
 
 # Grenzen, die der Titelvergleich nicht findet: Sitzung -> {Kapitelindex: erste Seite}.
 # Quelle ist der Ablaufplan in der Titelnotiz des jeweiligen Decks.
@@ -79,6 +114,13 @@ def seiten_titel(pdf):
     return n, out
 
 
+def kapiteltitel(pfad):
+    """Der Titel aus dem Frontmatter -- fuer DECK_STAND, damit dort nur Pfade stehen."""
+    s = (WURZEL / pfad).read_text(encoding="utf-8")
+    m = re.search(r'^title: "?(.+?)"?$', s, re.M)
+    return m.group(1) if m else pathlib.Path(pfad).stem
+
+
 def kurs_plan():
     s = (WURZEL / "kurs-2026-27.md").read_text(encoding="utf-8")
     plan = {}
@@ -86,6 +128,10 @@ def kurs_plan():
         if re.match(r"^\| *\d+ *\|", z):
             sp = [x.strip() for x in z.strip("|").split("|")]
             plan[int(sp[0])] = re.findall(r"\[([^\]]+)\]\(([^)]+\.md)\)", sp[1])
+    for nr in sorted(DECK_STAND):
+        plan[nr] = [(kapiteltitel(pf), pf) for pf in DECK_STAND[nr]]
+        print("Hinweis: Deck VL %d ist noch nach dem alten Schnitt gebaut, "
+              "Bereiche aus DECK_STAND statt aus dem Plan." % nr)
     return plan
 
 
@@ -191,12 +237,32 @@ def main():
             print("    " + z)
 
     if args.check:
-        fehlt = [p for p in kapitel if MARKE not in (WURZEL / p).read_text(encoding="utf-8")]
-        if fehlt or offen:
+        # Drei Fragen, und die dritte ist die, die am 2026-11-04 gefehlt hat: Bis dahin
+        # pruefte --check nur, *dass* eine Folienzeile da ist und dass jede Grenze gefunden
+        # wurde -- nicht, ob die Zeile im Kapitel noch zu den Bereichen passt. Ein
+        # umgeschnittenes Deck oder ein geaenderter Plan hat die Links also still falsch
+        # werden lassen.
+        fehlt, falsch = [], []
+        for pf in kapitel:
+            s = (WURZEL / pf).read_text(encoding="utf-8")
+            if MARKE not in s:
+                fehlt.append(pf)
+                continue
+            ist = re.search(r"^\[Folien VL .*$", s, re.M)
+            soll = zeile_fuer(pf, alles)
+            if ist and soll and ist.group(0) != soll:
+                falsch.append((pf, ist.group(0), soll))
+        if fehlt or falsch or offen:
             for f in fehlt:
                 print("FEHLT: %s hat keine Folienzeile" % f)
+            for pf, ist, soll in falsch:
+                print("FALSCH: %s" % pf)
+                print("    steht: " + ist)
+                print("    soll:  " + soll)
             for o in offen:
                 print("OFFEN: " + o)
+            print("\nMit `--schreiben` eintragen. Zeigt eine Zeile auf ein Deck, das den Stoff"
+                  " gar nicht enthaelt,\ngehoert die Sitzung nach DECK_STAND, nicht in die Links.")
             return 1
         print("Alle %d Kapitel mit Deck haben ihre Folienzeile." % len(kapitel))
     if offen:
