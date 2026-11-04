@@ -245,6 +245,31 @@ def fehler_sammeln() -> list[str]:
     else:
         print("Hinweis: kein gebautes PDF in exports/ — Seitenzahlen ungeprüft.")
 
+    # ── 7. Die ausgegebenen Uebungsblaetter ─────────────────────────────────────
+    # `blaetter/` ist der einzige Ort im Repo, an dem ein Uebungsblatt liegt, und das Repo
+    # ist oeffentlich. Zwei Dinge muessen deshalb stimmen: dort liegt **nur** das Blatt,
+    # nie eine Loesungsfassung (die TeX-Quellen enthalten sie, der Wrapper schaltet sie
+    # ein), und die Seite `uebungsblaetter.md` verlinkt genau die Dateien, die da sind --
+    # sonst steht ein Blatt unverlinkt im Netz oder ein Link zeigt ins Leere.
+    ordner = WURZEL / "blaetter"
+    if ordner.exists():
+        dateien = sorted(p.name for p in ordner.iterdir() if p.is_file())
+        for name in dateien:
+            if re.search(r"loesung|lösung|solution", name, re.I):
+                fehler.append(f"blaetter/{name}: Loesungsfassung im oeffentlichen Repo")
+            elif not re.fullmatch(r"blatt\d\d\.pdf", name):
+                fehler.append(f"blaetter/{name}: erwartet wird blattNN.pdf")
+        seite = WURZEL / "uebungsblaetter.md"
+        if not seite.exists():
+            fehler.append("blaetter/ ist da, aber uebungsblaetter.md fehlt")
+        else:
+            verlinkt = set(re.findall(r"blaetter/(blatt\d\d\.pdf)", seite.read_text(encoding="utf-8")))
+            for name in dateien:
+                if name.endswith(".pdf") and name not in verlinkt:
+                    fehler.append(f"blaetter/{name} ist nicht in uebungsblaetter.md verlinkt")
+            for name in sorted(verlinkt - set(dateien)):
+                fehler.append(f"uebungsblaetter.md verlinkt {name}, die Datei fehlt")
+
     return fehler
 
 

@@ -164,6 +164,13 @@ uebungen-2025/
 
 # Beamer-Folien: TeX-Quellen sind im Repo, PDFs und LaTeX-Nebenprodukte nicht
 slides/*.pdf
+
+# Die Uebungsblaetter unter blaetter/ sind **gewollt** im Repo -- sie werden mit der
+# Website ausgeliefert (siehe uebungsblaetter.md). Die Loesungsfassungen nicht, und
+# zwar nie: Das Repo ist oeffentlich und wird nach GitHub gespiegelt. Diese Zeile ist
+# die zweite Sicherung, die erste ist der Waechter in devnotes/check_doku.py.
+blaetter/*loesung*
+blaetter/*solution*
 # Notizenfassungen (./build.sh --notizen): Folie plus Dozentennotiz, nur zum Vortragen
 slides/notizen/
 # Die Wrapper-Kopie, die --notizen waehrend des Laufs anlegt und danach wegraeumt

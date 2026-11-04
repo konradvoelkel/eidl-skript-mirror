@@ -262,6 +262,15 @@ pages:
     # `devnotes/folienlinks.py` liest dieselbe Datei, damit kein Kapitel auf ein Deck
     # verlinkt, das es unter `/folien/` gar nicht gibt.
     - 'mkdir -p public/folien; n=0; uebersprungen=""; for f in slides/*VL*.pdf; do [ -e "$f" ] || continue; nr=$(echo "$f" | sed -n "s/.*VL \([0-9]\{2\}\).*/\1/p"); [ -n "$nr" ] || continue; if grep -v "^#" slides/freigegeben.txt | grep -qx "$nr"; then cp "$f" "public/folien/vl$nr.pdf"; n=$((n+1)); else uebersprungen="$uebersprungen $nr"; fi; done; echo "Foliensaetze veroeffentlicht: $n; nicht freigegeben:$uebersprungen"'
+    # Die ausgegebenen Uebungsblaetter unter `public/blaetter/`. Anders als die Decks werden
+    # sie nicht hier gebaut: Die TeX-Quellen liegen in `../exercises/` (Sciebo, kein Repo) und
+    # enthalten **auch die Loesungen**, die ueber einen Wrapper eingeschaltet werden -- sie
+    # duerfen deshalb nicht ins oeffentliche Repository. Was unter `blaetter/` liegt, ist das
+    # fertige Blatt-PDF, und dass es dort liegt, ist die Freigabe: Hineingelegt wird es, wenn
+    # das Blatt in ILIAS ausgegeben ist. `devnotes/check_doku.py` prueft, dass dort nichts
+    # mit "loesung" im Namen landet und dass die Seite `uebungsblaetter.md` genau diese
+    # Dateien verlinkt.
+    - 'mkdir -p public/blaetter; n=0; for f in blaetter/*.pdf; do [ -e "$f" ] || continue; cp "$f" public/blaetter/; n=$((n+1)); done; echo "Uebungsblaetter veroeffentlicht: $n"'
     # Google Search Console, Datei-Methode. Die Datei aus der Search Console liegt in
     # `_site/` und wird hier nach `public/` kopiert; sie ist dann unter
     # `<pages-url>/google<token>.html` abrufbar. Kein Geheimnis -- oeffentlich abrufbar

@@ -107,6 +107,7 @@ project:
 #   Kapitel; der Vorschlag dazu steht in devnotes/uebungen-pro-kapitel.md.
     - title: Anhang
       children:
+       - file: uebungsblaetter.md
        - file: glossar.md
 #    - title: Developer Notes (temp.)
 #      children:
