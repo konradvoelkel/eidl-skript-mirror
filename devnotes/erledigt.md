@@ -118,6 +118,19 @@ Datierte Protokolle größerer Umbauten liegen daneben als `build-log-<datum>.md
 
 ### Übungsblätter
 
+- **Blatt 6 und 7 getauscht (2026-11-04, vertagt seit 2026-09-24).** Der Wochenplan 2026/27 ist gegenüber
+  2025/26 ab Woche 7 verschoben (Autoencoder jetzt VL 8), dadurch kam der Iris-Autoencoder eine Woche *vor*
+  seiner Vorlesung heraus, während die Backpropagation zwei Wochen hinter ihrer lag. Von den drei Optionen
+  (tauschen, Blatt 6 anpassen, so lassen) ist es der Tausch geworden, und zwar der der **Inhalte**: Blatt 6
+  ist jetzt die Backpropagation (25.11., 8 Punkte), Blatt 7 der Iris-Autoencoder (02.12., 6 Punkte). Damit
+  bleiben Nummern, Termine und Übungseinheiten in ILIAS unverändert und `blattNN.pdf` gehört weiter zu
+  `sheet-NN` – die Befürchtung in der Checkliste, ein Tausch betreffe „Abgabetermine *und* Dateien“, gilt nur
+  für das Tauschen der Nummern. Offen bleibt ein Handgriff in ILIAS: `autoencoder-good-output.png` gehört an
+  Übungseinheit 7. Der Autoencoder-Teil liegt jetzt auf dem Tag seiner Vorlesung, nicht mehr davor; ganz
+  auflösen ließe sich das nur mit einer Verschiebung der ganzen Kette um eine Woche, und die bricht an
+  Blatt 8/9, der Winterpause und den Probeklausur-Terminen.
+
+
 - [x] **Lösungsvorschläge aus dem Skript heraus** (2026-09-27, auf Konrads Hinweis): 15 Blöcke aus den
   Blättern 0, 1, 3 und 5 herausgenommen (heute in `uebungen-2025/loesungen/`) — ein Ordner wie
   `transcripts/`, in Sciebo, aber nicht im Repo. Vorher standen sie im veröffentlichten PDF (aufgeklappt, nicht einmal versteckt) und

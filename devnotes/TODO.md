@@ -175,11 +175,12 @@ siehe `erledigt.md`).
   Übungseinheiten 3 bis 11 weiterhin die 2025er PDFs** — hochgeladen sind bisher Blatt 0, 1 und 2
   (Blatt 2 am 2026-10-21). Erkennungsmerkmal der alten Dateien: „Erstellt am 24.09.2026“, das
   Kopierdatum. Alles Weitere in `../../exercises/ILIAS-UPLOAD-CHECKLISTE.md`.
-- [ ] **[Entscheidung vertagt]** Blatt 6 (Iris-Autoencoder) wird nach dem neuen Wochenplan eine Woche *vor* der
-  Autoencoder-Vorlesung ausgegeben (AE ist jetzt VL 8 statt VL 7, CNNs VL 11, LLMs VL 12). Optionen: Blätter 6/7
-  in der Ausgabe tauschen, Blatt 6 anpassen, oder so lassen (Skript-Kapitel steht online). Bei der
-  Blatt-Überarbeitung ansehen; in ILIAS ist vorerst die unveränderte Reihenfolge eingetragen — und so sind die Blätter am
-  2026-10-21 auch gebaut worden. Ein Tausch von 6 und 7 betrifft jetzt Abgabetermine *und* Dateien.
+- [ ] **In ILIAS nachzuziehen (aus dem Tausch von Blatt 6 und 7, 2026-11-04):**
+  `autoencoder-good-output.png` hängt an Übungseinheit 6 und gehört an 7; `iris-autoencoder.py` bleibt an beiden.
+  Die Blätter selbst sind neu gebaut (6 = Backpropagation, 25.11., 8 Punkte; 7 = Iris-Autoencoder, 02.12.,
+  6 Punkte) und noch nicht ausgegeben, Termine und Übungseinheiten bleiben unverändert. Begründung und
+  Entscheidung: `../../ilias/runs/ws2026-27.yaml` (Kommentar über `assignment_ids`) und
+  `../../exercises/ILIAS-UPLOAD-CHECKLISTE.md`.
 - [ ] Blatt 12 = Take-Home-Probeklausur anlegen (Grundlage: `~/Sciebo/hhu/eidl-25/exam/`, Probeklausur 2025).
 - [ ] Lösungen: Die 15 Textlösungen von 2025 liegen in `uebungen-2025/loesungen/`, Notebook- und
   Skriptlösungen in `~/Sciebo/hhu/eidl-25/exercises/blattNN-solution/`. Beides gitignored bzw. außerhalb.
