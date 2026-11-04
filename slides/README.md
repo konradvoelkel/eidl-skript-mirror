@@ -13,7 +13,8 @@ latexmk -lualatex "Einführung in Deep Learning 2026 VL 01 Was ist Deep Learning
 
 Bequemer ist `./build.sh` – mit einer `.tex` als Argument baut es dieses Deck, ohne Argument
 alle, und es meldet je Deck die Seitenzahl und die Zahl der zu vollen Rahmen
-(`Overfull \vbox`). Steht dort **„Rahmen NICHT geprueft"**, gehört das LaTeX-Log nicht zum
+(`Overfull \vbox`). Mit `--notizen` als erstem Argument baut es statt der Folien die
+**Notizenfassung** (siehe unten). Steht dort **„Rahmen NICHT geprueft"**, gehört das LaTeX-Log nicht zum
 vorhandenen PDF – dann hilft `latexmk -g`, das den Lauf erzwingt. Das Skript liest die Zahl
 nämlich aus dem LaTeX-Log neben der `.tex` und nicht aus der Ausgabe von latexmk: Ist das PDF
 aktuell, startet latexmk LaTeX gar nicht erst, und in seiner Ausgabe steht dann kein einziges
@@ -68,9 +69,22 @@ aktualisiert auch diese Kopie oder löscht sie. Und ein Pfad in `TEXINPUTS`, der
 * Der Header ersetzt die Frametitle-Vorlage des Themes durch eine Kopie mit Breitenbegrenzung
   (lange Titel brechen vor dem Logo um) und setzt Source Sans Pro als Sans-Schrift (das Theme lädt
   `helvet`, das unter LuaTeX nicht existiert). Titel trotzdem unter etwa 45 Zeichen halten.
-* Fassung mit Notizen für den zweiten Schirm: im Deck die Zeile
-  `\setbeameroption{show notes on second screen=right}` nach dem `\input{...header}`
-  einkommentieren.
+* **Fassung mit Notizen für den zweiten Schirm:** `./build.sh --notizen` baut sie nach
+  `notizen/` (gitignored), ohne das Deck anzufassen – gebaut wird eine Kopie mit
+  einkommentierter Zeile `\setbeameroption{show notes on second screen=right}`. Von Hand
+  geht es auch, indem man diese Zeile im Deck selbst einkommentiert; dann **überschreibt**
+  der Lauf allerdings genau das PDF, das nach ILIAS geht, denn die Notizenfassung heißt
+  gleich. Deshalb der eigene Ordner. Alle 15 Decks tragen die Zeile auskommentiert; fehlt
+  sie, sagt das Skript das.
+* **Nur die Notizen**, ohne Folienbild, zum Lesen vorher:
+
+  ```sh
+  latexmk -lualatex -pretex='\PassOptionsToClass{notes=only}{beamer}' -usepretex \
+    -outdir=notizen "Einführung in Deep Learning 2026 VL 04 Logistische Regression.tex"
+  ```
+
+  Die Option muss als *Klassen*-Option kommen; `show notes on second screen` ist eine
+  Dokument-Option und lässt sich so **nicht** setzen (sie braucht die Kopie oben).
 * Fassung mit Notizen: Die Notizseite ist im Header ohne Vorschaubild und in `\scriptsize`
   eingestellt, weil Beamer Notizen nicht paginiert und die Titelnotiz von VL 1 (Ablaufplan
   plus Kürzungsregeln) sonst mitten im Satz abbricht. Wer eine Notiz schreibt, die länger ist

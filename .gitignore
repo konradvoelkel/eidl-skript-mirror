@@ -164,6 +164,10 @@ uebungen-2025/
 
 # Beamer-Folien: TeX-Quellen sind im Repo, PDFs und LaTeX-Nebenprodukte nicht
 slides/*.pdf
+# Notizenfassungen (./build.sh --notizen): Folie plus Dozentennotiz, nur zum Vortragen
+slides/notizen/
+# Die Wrapper-Kopie, die --notizen waehrend des Laufs anlegt und danach wegraeumt
+slides/__notizenfassung_*.tex
 *.aux
 *.nav
 *.snm
