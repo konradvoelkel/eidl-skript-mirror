@@ -40,7 +40,8 @@
   \begin{center}
     \Large
     Verallgemeinertes Perzeptron: $f(x) = \tau(w \cdot x)$\\[16pt]
-    Heute: $\tau = \sigma$ -- und warum das eine \emph{Wahrscheinlichkeit} ist.
+    Heute: $\tau = \sigma$ und warum das eine \emph{Wahrscheinlichkeit} ist.\\[16pt]
+    $\sigma(z) = \dfrac{1}{1+e^{-z}}$
   \end{center}
 
   \note{Erst basteln wir eine S-Kurve aus dem $\tanh$ und haben keine Interpretation dafür.
@@ -78,7 +79,7 @@
   \frametitle{S-Förmigkeit basteln}
 
   \begin{center}
-    \Large $\tfrac12\left(\tanh(\hat{y}) + 1\right)$
+    \Large $\sigma(2\hat{y}) = \tfrac12\left(\tanh(\hat{y}) + 1\right)$
   \end{center}
 
   \bigskip
@@ -157,8 +158,15 @@
 
   \begin{center}
     \Large
+    Entropie $H(X)$ einer Bernoulli-Variable mit Parameter $p$\\[16pt]
     $H(p) = -p\ln p - (1-p)\ln(1-p)$\\[16pt]
     $H'(p) = -\operatorname{logit}(p)$
+  \end{center}
+
+  \bigskip
+  \begin{center}
+    $\displaystyle H'(p) = -(\ln p + 1) + \bigl(\ln(1-p) + 1\bigr)
+      = \ln(1-p) - \ln p = -\ln\frac{p}{1-p}$
   \end{center}
 
   \note{Interpretation: Mit der Überraschung $I(A) = -\ln P(A)$ ist der Logit eine Differenz,
@@ -213,11 +221,17 @@
 
   \bigskip
   \begin{center}
-    Punktsymmetrisch um $(0, \tfrac12)$.
+    $\displaystyle \sigma(-x) = \frac{1}{1+e^{x}} = \frac{e^{-x}}{e^{-x}+1}
+      = \frac{(1+e^{-x}) - 1}{1+e^{-x}} = 1 - \sigma(x)$
   \end{center}
 
-  \note{Die Rechnung ist kurz genug für die Tafel: mit $e^{-x}$ erweitern, dann sieht man
-    es. Diese Identität brauchen wir bei der Kreuzentropie wieder.}
+  \medskip
+  \begin{center}
+    Im zweiten Schritt mit $e^{-x}$ erweitert. Punktsymmetrisch um $(0, \tfrac12)$.
+  \end{center}
+
+  \note{Die Rechnung steht auf der Folie; der einzige Schritt, der etwas hermacht, ist das
+    Erweitern mit $e^{-x}$. Diese Identität brauchen wir bei der Kreuzentropie wieder.}
 \end{frame}
 
 \begin{frame}
@@ -245,9 +259,23 @@
     zu der $x$ der Logit-Wert ist.
   \end{center}
 
+  \medskip
+  \begin{center}
+    \small
+    Bayes in Logit-Form: $\displaystyle \operatorname{logit} P(\text{Erfolg} \mid x)
+      = \operatorname{logit} P(\text{Erfolg})
+      + \ln \frac{P(x \mid \text{Erfolg})}{P(x \mid \text{Misserfolg})}$\\[6pt]
+    Der zweite Term ist das \emph{Evidenzgewicht}. Genau diese Form hat $w \cdot x + b$:
+    $b$ ist der Logit bei $x = 0$, jeder Summand $w_j x_j$ ein Evidenzbeitrag.
+  \end{center}
+
   \note{Das ist die Antwort auf die Frage von Folie 4, und die Take-Home-Message der
     Sitzung. Eine Zahl zwischen 0 und 1 ist eine Wahrscheinlichkeit, \emph{wenn} die
-    Eingabe ein Logit war -- nicht einfach, weil sie zwischen 0 und 1 liegt.}
+    Eingabe ein Logit war -- nicht einfach, weil sie zwischen 0 und 1 liegt.
+    Das Evidenzgewicht ist der Begriff von I. J. Good, \emph{Probability and the Weighing
+    of Evidence} (1950); die Herleitung steht im Kapitel ``Logistische Regression'' im
+    Skript, zusammen mit der Entropie-Rechnung von Folie 9. Wer in Bits rechnet
+    ($\log_2$ statt $\ln$), liest ein Gewicht als Bit Evidenz pro Einheit des Merkmals.}
 \end{frame}
 
 \begin{frame}
