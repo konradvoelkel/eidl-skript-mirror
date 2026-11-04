@@ -20,6 +20,30 @@ Datierte Protokolle größerer Umbauten liegen daneben als `build-log-<datum>.md
   `build-slides` hat sich sofort bewaehrt: Beim ersten Lauf ohne Theme im Image stand eine
   Zeile im Log, die sagt was zu tun ist, statt fuenfzehn LaTeX-Fehlern.
 
+  **Fuenf Anlaeufe, fuenf verschiedene Ursachen** — der Reihe nach, weil jede einzelne
+  typisch ist:
+
+  1. `wget` aus busybox (kaniko:debug) kann kein TLS gegen diesen Server. Deshalb der
+     eigene Job `fetch-theme` mit Python.
+  2. `snapshot.debian.org` antwortete mit 503 fuer **ein** Paket und riss den Image-Bau
+     mit. Jetzt `Acquire::Retries=5`.
+  3. Das Archiv lag im Kontext und kam trotzdem nicht ins Image: `.dockerignore` beginnt
+     mit `*`, und die Ausnahme fehlte. Das fehlertolerante `COPY` schweigt dann — der
+     Image-Bau war gruen, und erst `build-slides` merkte es.
+  4. `fc-list: command not found` — `fontconfig` fehlte. luaotfload findet eine Schrift
+     ueber den Familiennamen nur ueber diese Datenbank.
+  5. `File 'sourcecodepro.sty' not found` — der Header laedt sie fuer die
+     Schreibmaschinenschrift, sie kommt aus `texlive-fonts-extra`.
+
+  Und eine Lehre ueber das Pruefen selbst: Die Schrift wird jetzt mit `pdffonts` **am
+  gebauten Deck** geprueft, nicht mit `fc-list` im Container. Der Job sah dort eine leere
+  Liste, obwohl der Image-Bau unmittelbar davor "Schrift da: 14 Schnitte" gemeldet hatte.
+  Die richtige Frage ist ohnehin nicht, was fontconfig kennt, sondern was im PDF steht.
+
+  Ergebnis (Pipeline 184943): 15 Decks im CI gebaut, Seitenzahlen wie lokal, **0 zu volle
+  Rahmen in allen**, SourceSans3 eingebettet, und /folien/vl01.pdf bis vl15.pdf liefern
+  200. `#page=` trifft: Seite 9 von vl04.pdf ist "Entropie und Logit".
+
 - **Das HHU-Theme liegt als Secure File im Projekt (2026-11-04).** Es gehoert nicht ins
   Repository: kein Lizenzvermerk, kein Autor, und `fig/` enthaelt die HHU-Bildmarke — der
   GitHub-Spiegel ist oeffentlich. Hochgeladen wurde `hhubeamer.tar.gz` (797 KB, nur die vier
