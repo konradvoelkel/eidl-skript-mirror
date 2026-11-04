@@ -6,6 +6,8 @@ short_title: "Destillation"
 
 # Destillation
 
+[Folien VL 15, S. 2–12](https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de/folien/vl15.pdf#page=2)
+
 ## Was lernen wir beim Deep Learning eigentlich?
 
 ### Ansatz 1: Regression zu bekannter Funktion

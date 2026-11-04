@@ -6,6 +6,8 @@ short_title: "word2vec"
 
 # Wortvektoren: word2vec
 
+[Folien VL 9, S. 10–14](https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de/folien/vl09.pdf#page=10)
+
 ## word2vec
 
 ### Von der Anwendung her gedacht

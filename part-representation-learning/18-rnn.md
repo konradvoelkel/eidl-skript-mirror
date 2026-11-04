@@ -6,6 +6,8 @@ short_title: "RNNs"
 
 # Recurrent Neural Networks
 
+[Folien VL 10, S. 2–10](https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de/folien/vl10.pdf#page=2)
+
 ## RNNs
 
 Input: ein linearer Strom von Daten, z.B. Text, Audio, Video oder andere Zeitreihen. Output: irgendeine vektorielle oder skalare Größe, z.B. die Vorhersage des nächsten Wortes. Idee: Zum Zeitpunkt $t$ nicht nur die neuen Daten $x_t$, sondern auch die Ergebnisse aus den Daten von $t - 1$ verwenden, um zum Ergebnis zu kommen. Ein rekurrentes Neuron hat einen **hidden state** $h_t$:

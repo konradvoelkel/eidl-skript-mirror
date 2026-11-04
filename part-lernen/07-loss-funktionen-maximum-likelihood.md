@@ -6,6 +6,8 @@ short_title: "Loss und Maximum Likelihood"
 
 # Loss-Funktionen und Maximum Likelihood
 
+[Folien VL 5, S. 2–14](https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de/folien/vl05.pdf#page=2)
+
 Dieses Kapitel klärt, *was* beim Training minimiert wird und warum. Das nächste Kapitel klärt, *wie*.
 
 ## Training eines einzelnen Neurons: Was bisher geschah

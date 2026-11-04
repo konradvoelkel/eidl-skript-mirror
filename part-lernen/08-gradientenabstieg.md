@@ -6,6 +6,8 @@ short_title: "Gradientenabstieg"
 
 # Gradientenabstieg
 
+[Folien VL 5, S. 15–21](https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de/folien/vl05.pdf#page=15)
+
 Im [letzten Kapitel](07-loss-funktionen-maximum-likelihood.md) blieb die Frage offen, in welche Richtung man von der bisher besten Schätzung $w$ aus gehen soll, damit die Loss-Funktion kleiner wird. Die Antwort ist der Gradient, und um ihn für verkettete Funktionen auszurechnen, brauchen wir zuerst die Kettenregel.
 
 ## Kurze Erinnerung an die Kettenregel

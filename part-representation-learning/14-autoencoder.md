@@ -6,6 +6,8 @@ short_title: "Autoencoder"
 
 # Autoencoder
 
+[Folien VL 8, S. 2–18](https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de/folien/vl08.pdf#page=2)
+
 ## Lernen ohne Label
 
 ### Im Kontrast zu unserem bisherigen Vorgehen

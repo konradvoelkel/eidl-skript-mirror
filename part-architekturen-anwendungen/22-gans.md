@@ -6,6 +6,8 @@ short_title: "GANs"
 
 # Generative Adversarial Networks
 
+[Folien VL 13, S. 2–12](https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de/folien/vl13.pdf#page=2)
+
 ## Historie
 
 ### NeurIPS 2014

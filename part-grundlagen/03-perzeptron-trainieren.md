@@ -12,6 +12,8 @@ short_title: "Perzeptron trainieren"
 {url: 'https://media.hhu.de/video/einfuehrung-in-deep-learning-202627-vl-2-perzeptron/51e599cac1fd865687fc6599e7879f4d?t=3300'}
 :::
 
+[Folien VL 2, S. 15–29](https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de/folien/vl02.pdf#page=15)
+
 ## Die Lernregel
 
 Im [letzten Kapitel](02-neuron-perzeptron.md) haben wir das Perzeptron als Modell kennengelernt: ein Gewichtsvektor $w \in \mathbb{R}^n$, ein Bias $b \in \mathbb{R}$, und die Inferenz $f(x) = [\, w \cdot x + b > 0 \,]$. Was fehlt, ist das *Lernen*. Bevor wir ein Modell implementieren, sollten wir uns ein paar Fragen stellen, die für jedes Modell in dieser Vorlesung wieder auftauchen werden:

@@ -6,6 +6,8 @@ short_title: "Netze von Hand"
 
 # Netze von Hand bauen
 
+[Folien VL 7, S. 13–16](https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de/folien/vl07.pdf#page=13)
+
 ## Das Geheimnis um Deep Learning lüften
 
 Warum – und wie genau – funktioniert Deep Learning so gut? Die Zutaten, die wir bisher haben:

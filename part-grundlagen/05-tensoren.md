@@ -12,6 +12,8 @@ short_title: "Tensoren"
 {url: 'https://media.hhu.de/video/einfuehrung-in-deep-learning-202627-vl-3-vortrainierte-modelle/d3e7f42de07bc308ea159007e607285e?t=3860'}
 :::
 
+[Folien VL 3, S. 12–20](https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de/folien/vl03.pdf#page=12)
+
 ## Tensoren in PyTorch
 
 ### Tensoren ≈ Arrays

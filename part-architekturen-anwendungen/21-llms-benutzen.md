@@ -9,6 +9,8 @@ downloads:
 
 # LLMs benutzen
 
+[Folien VL 12, S. 9–15](https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de/folien/vl12.pdf#page=9)
+
 ## Transformer-LLMs in der Praxis einsetzen
 
 Zur Erinnerung der Aufbau eines Transformers ([Kapitel „Transformer“](../part-representation-learning/19-transformer.md), Fig. 1 in „Attention is all you need“): Encoder- und Decoder-Stapel aus Attention- und MLP-Blöcken. Ein *Large Language Model* ist ein sehr großer, meist Decoder-only Transformer, der das nächste Token vorhersagt.

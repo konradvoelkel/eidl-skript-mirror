@@ -6,6 +6,8 @@ short_title: "CNNs"
 
 # Faltung und Convolutional Neural Networks
 
+[Folien VL 11, S. 2–16](https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de/folien/vl11.pdf#page=2)
+
 ## Motivation zur Faltung
 
 ### Bildverarbeitung: it's a blur

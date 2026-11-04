@@ -6,6 +6,8 @@ short_title: "Transformer"
 
 # Transformer
 
+[Folien VL 10, S. 11–17](https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de/folien/vl10.pdf#page=11)
+
 ## Historie: BLEU (2001)
 
 Um Übersetzungsmodelle zu vergleichen, braucht man ein Maß. Papineni et al., [*BLEU: a Method for Automatic Evaluation of Machine Translation*](https://hdl.handle.net/10.3115/1073083.1073135) (2001 als IBM-Bericht, ACL 2002): „Human evaluations of machine translation are extensive but expensive. […] We propose a method of automatic machine translation evaluation that is quick, inexpensive, and language-independent, that correlates highly with human evaluation.“ Die Grundidee: „The closer a machine translation is to a professional human translation, the better it is.“

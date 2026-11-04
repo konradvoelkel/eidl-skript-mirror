@@ -12,6 +12,8 @@ short_title: "Neuron und Perzeptron"
 {url: 'https://media.hhu.de/video/einfuehrung-in-deep-learning-202627-vl-2-perzeptron/51e599cac1fd865687fc6599e7879f4d'}
 :::
 
+[Folien VL 2, S. 2–14](https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de/folien/vl02.pdf#page=2)
+
 ## Das Neuron und das Perzeptron
 
 ### Das McCulloch-Pitts-Neuron

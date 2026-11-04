@@ -206,6 +206,11 @@ build-slides:
     # fontconfig kennt, sondern was im PDF steht. Faellt LuaTeX still auf Latin Modern
     # zurueck (PLAYBOOK-folien §2.3), sieht man genau das hier.
     - 'pdffonts slides/*VL\ 04*.pdf | grep -q SourceSans3 || { echo "FEHLER - das Deck ist nicht in Source Sans 3 gesetzt; faellt LuaTeX auf Latin Modern zurueck?"; pdffonts slides/*VL\ 04*.pdf; exit 1; }'
+    # Und nachsehen, ob die Seitenbereiche in den Kapiteln noch zu den Decks passen. Hier
+    # ist der einzige Ort, an dem beides gleichzeitig vorliegt: die gebauten PDFs und die
+    # Kapitel. Verschiebt eine neue Folie die Seitenzahlen, faellt es hier auf und nicht
+    # dem Leser, der auf Seite 9 die falsche Folie sieht.
+    - python3 devnotes/folienlinks.py --check
     # Die Zahl melden, auf die der Schritt gewirkt hat, nicht dass er lief.
     - ls -1 slides/*.pdf | wc -l | xargs echo "Decks gebaut:"
   artifacts:

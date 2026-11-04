@@ -6,6 +6,8 @@ short_title: "VAE"
 
 # Variational Autoencoder
 
+[Folien VL 9, S. 2–9](https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de/folien/vl09.pdf#page=2)
+
 ## Vom Autoencoder zum VAE
 
 ### Motivation: probabilistische Modelle

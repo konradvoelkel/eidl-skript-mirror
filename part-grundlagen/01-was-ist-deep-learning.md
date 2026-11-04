@@ -12,6 +12,8 @@ short_title: "Was ist Deep Learning?"
 {url: 'https://media.hhu.de/video/einfuehrung-in-deep-learning-202627-vl-1-ueberblick/e72e1ac0b45ec094bba7beb17b6f3863'}
 :::
 
+[Folien VL 1, S. 2–41](https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de/folien/vl01.pdf#page=2)
+
 ## Was ist eigentlich Deep Learning?
 
 Der Name ist erfreulich ehrlich: *Deep* heißt „viele Ebenen (Layer)“, *Learning* heißt „Training“. Deep Learning ist also das Training von künstlichen neuronalen Netzen mit vielen Ebenen. Was ein künstliches neuronales Netz ist, was eine Ebene ist und was beim Training passiert, ist der Inhalt dieser Vorlesung. Am Ende des Kapitels haben wir zumindest eine erste Definition.
