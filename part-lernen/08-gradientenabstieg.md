@@ -203,6 +203,7 @@ $$
 \frac{dL}{dz}
 = -y\,\frac{\sigma(z)(1 - \sigma(z))}{\sigma(z)} + (1 - y)\,\frac{\sigma(z)(1 - \sigma(z))}{1 - \sigma(z)}
 = -y(1 - p) + (1 - y)\,p
+= -y + yp + p - yp
 = p - y .
 $$
 

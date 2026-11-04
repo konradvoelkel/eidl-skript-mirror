@@ -302,20 +302,40 @@
   \frametitle{Und die logistische Regression?}
 
   \begin{center}
-    \Huge $\dfrac{dL}{dz} = p - y$
+    \normalsize Ein Sample, $z = \langle w, x\rangle$, $p = \sigma(z)$:\\[4pt]
+    $L(z) = -y \ln \sigma(z) - (1-y) \ln\bigl(1 - \sigma(z)\bigr)$
   \end{center}
 
-  \bigskip
+  \medskip
   \begin{center}
-    \normalsize Alle Logarithmen und Sigmoide heben sich weg.
+    \small Mit $\sigma' = \sigma(1-\sigma)$ und der Kettenregel:\\[4pt]
+    $\displaystyle \frac{dL}{dz}
+      = -y\,\frac{\sigma(z)\bigl(1-\sigma(z)\bigr)}{\sigma(z)}
+      + (1-y)\,\frac{\sigma(z)\bigl(1-\sigma(z)\bigr)}{1-\sigma(z)}
+      = -y\,(1-p) + (1-y)\,p$\\[6pt]
+    und ausmultipliziert: \quad
+    $-y\,(1-p) + (1-y)\,p = -y + yp + p - yp = p - y$
   \end{center}
 
-  \note{Die Rechnung an der Tafel: $L(z) = -y\ln\sigma(z) - (1-y)\ln(1-\sigma(z))$,
-    mit $\sigma' = \sigma(1-\sigma)$ und Kettenregel bleibt $p - y$ übrig.
-    Übrig bleibt der \emph{Vorhersagefehler} -- und mit $\partial z/\partial w = x$ ist
-    der Gradient $(p-y)x$. Also dieselbe Gestalt wie die Perzeptronregel.
-    Das ist ein Ergebnis, das man sich merkt: Bei Sigmoid plus BCE ist der Gradient
-    einfach „Vorhersage minus Wahrheit“.}
+  \smallskip
+  \begin{center}
+    \Large $\dfrac{dL}{dz} = p - y$
+    \qquad \normalsize und mit $\partial z/\partial w = x$: \quad $\nabla_w L = (p-y)\,x$
+  \end{center}
+
+  \begin{center}
+    \small Alle Logarithmen und Sigmoide heben sich weg -- übrig bleibt der Vorhersagefehler.
+  \end{center}
+
+  \note{Die Rechnung steht jetzt auf der Folie, in denselben Schritten wie im Kapitel
+    „Gradientenabstieg“: erst $L$ hinschreiben, dann $\sigma' = \sigma(1-\sigma)$ einsetzen,
+    dann kürzen. Der Zwischenschritt $-y(1-p) + (1-y)p$ ausmultipliziert ist $p - y$ -- das
+    an der Tafel oder laut vorrechnen, es ist der Moment, in dem es klickt.
+    Mit $\partial z/\partial w = x$ ist der Gradient $(p-y)x$, also dieselbe Gestalt wie die
+    Perzeptronregel von der Folie davor. Das ist ein Ergebnis, das man sich merkt: Bei
+    Sigmoid plus BCE ist der Gradient einfach „Vorhersage minus Wahrheit“. Es kommt bei
+    Backpropagation als Startwert der Rückwärtsrechnung wieder und gilt genauso für Softmax
+    mit Kreuzentropie.}
 \end{frame}
 
 \begin{frame}
