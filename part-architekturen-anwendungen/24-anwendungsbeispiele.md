@@ -6,8 +6,6 @@ short_title: "Anwendungsbeispiele"
 
 # Anwendungsbeispiele
 
-[Folien VL 14, S. 14–17](https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de/folien/vl14.pdf#page=14) · [Folien VL 15, S. 13–14](https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de/folien/vl15.pdf#page=13)
-
 Drei Beispiele, wie sich die Bausteine aus den vorigen Kapiteln zu Anwendungen zusammensetzen – und ein Blick darauf, wie man mit generiertem Code arbeitet.
 
 ## Drei Beispiele aus der Praxis

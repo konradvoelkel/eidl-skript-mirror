@@ -116,7 +116,16 @@ aktualisiert auch diese Kopie oder löscht sie. Und ein Pfad in `TEXINPUTS`, der
 * Die PDFs sind Build-Artefakte und stehen in `.gitignore`; verteilt werden sie
   über ILIAS **und seit dem 2026-11-04 über die Website**: Der Job `build-slides`
   baut sie im CI, `pages` legt sie als `/folien/vl01.pdf` … `/folien/vl15.pdf` ab
-  (kurze Adressen, weil die Kapitel sie mit `#page=` verlinken). Das Theme kommt
+  (kurze Adressen, weil die Kapitel sie mit `#page=` verlinken). **Ausgeliefert wird
+  aber nur, was in `freigegeben.txt` steht** (seit dem 2026-11-05): Ein Deck kommt
+  dort erst hinein, wenn es final durchgesehen ist – Wording, Pacing, Umfang –, in
+  der Regel nach seiner Sitzung. Gebaut werden alle, damit ein Fehler laut wird;
+  `devnotes/folienlinks.py` liest dieselbe Datei und verlinkt nur Freigegebenes,
+  sonst zeigte ein Kapitel auf eine Adresse, die es nicht gibt. **Der Weg daran
+  vorbei sind die Job-Artefakte**: `build-slides` reicht `slides/*.pdf` an `pages`
+  weiter, und in einem öffentlichen Projekt kann das auch abrufbar sein. Wer das
+  nicht will, stellt in den Projekteinstellungen die Artefakte auf
+  *Nur Projektmitglieder*. Das Theme kommt
   dafür aus den **Secure Files** des Projekts (Einstellungen → CI/CD → Secure files,
   `hhubeamer.tar.gz`, hochgeladen am 2026-11-04) in das Image — es darf nicht ins
   Repository, weil es keinen Lizenzvermerk hat und die HHU-Bildmarke enthält, und der

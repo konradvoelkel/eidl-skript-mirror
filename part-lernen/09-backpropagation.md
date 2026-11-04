@@ -6,8 +6,6 @@ short_title: "Backpropagation"
 
 # Backpropagation
 
-[Folien VL 6, S. 2–17](https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de/folien/vl06.pdf#page=2) · [Folien VL 13, S. 13–17](https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de/folien/vl13.pdf#page=13)
-
 ## Ziel
 
 Verstehen können, was im [TensorFlow Playground](https://playground.tensorflow.org) geschieht.

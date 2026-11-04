@@ -26,6 +26,12 @@ Woher die Seitenzahlen kommen
    gegengeprüft. Diese vier Zeilen sind die einzige Handarbeit; ändert sich ein Deck
    wesentlich, meldet `--check`, dass der Titel an der Grenze nicht mehr passt.
 
+**Verlinkt wird nur, was freigegeben ist.** `../slides/freigegeben.txt` sagt, welche Decks
+veroeffentlicht werden duerfen; dieselbe Datei liest der `pages`-Job. Ein Deck, das dort
+fehlt, wird gebaut (ein Fehler soll laut sein), aber nicht ausgeliefert -- und bekommt
+deshalb auch keine Zeile im Kapitel. `--schreiben` nimmt eine Zeile wieder heraus, deren
+Deck aus der Freigabe faellt.
+
 Die Zuordnung Sitzung → Kapitel kommt aus der Tabelle in `../kurs-2026-27.md`, nicht aus
 einer zweiten Liste. Ein Kapitel kann in zwei Sitzungen vorkommen (Backpropagation in VL 6
 und VL 13, Anwendungsbeispiele in VL 14 und VL 15); dann nennt die Zeile beide.
@@ -52,6 +58,26 @@ import sys
 import unicodedata
 
 WURZEL = pathlib.Path(__file__).resolve().parent.parent
+
+
+def freigegeben():
+    """Die Nummern der Decks, die veroeffentlicht und verlinkt werden duerfen.
+
+    Steht in `../slides/freigegeben.txt`, eine Nummer je Zeile, `#` ist Kommentar.
+    Dieselbe Datei liest der `pages`-Job; ein Deck, das dort fehlt, wird gebaut, aber
+    nicht ausgeliefert -- und darf deshalb auch aus keinem Kapitel verlinkt sein, sonst
+    zeigt der Link auf eine Adresse, die es nicht gibt.
+    """
+    datei = WURZEL / "slides" / "freigegeben.txt"
+    if not datei.exists():
+        raise SystemExit("slides/freigegeben.txt fehlt -- ohne sie ist unklar, "
+                         "welche Decks veroeffentlicht sind.")
+    nummern = set()
+    for z in datei.read_text(encoding="utf-8").splitlines():
+        z = z.split("#", 1)[0].strip()
+        if z:
+            nummern.add(int(z))
+    return nummern
 # **Vollstaendige Adresse, nicht `/folien/...`.** Eine absolute Pfadangabe funktioniert im
 # HTML, wird aber im PDF-Export zu einem Link ohne Host und damit tot -- und das Skript
 # wird gedruckt und als PDF weitergegeben. Dieselbe Entscheidung wie bei den
@@ -137,7 +163,10 @@ def kurs_plan():
 def bereiche():
     """Je Sitzung: [(Kapitelpfad, Kapiteltitel, von, bis, Titel der Startfolie)]."""
     plan, alles = kurs_plan(), {}
+    frei = freigegeben()
     for nr, kapitel in sorted(plan.items()):
+        if nr not in frei:
+            continue   # nicht freigegeben: kein Link, siehe slides/freigegeben.txt
         pdfs = glob.glob(str(WURZEL / "slides" / ("*VL %02d *.pdf" % nr)))
         if not pdfs:
             continue

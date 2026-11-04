@@ -6,8 +6,6 @@ short_title: "Universalität"
 
 # Universelle Approximation
 
-[Folien VL 7, S. 17–21](https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de/folien/vl07.pdf#page=17)
-
 ## Das Approximationstheorem
 
 ### Warum neuronale Netze funktionieren

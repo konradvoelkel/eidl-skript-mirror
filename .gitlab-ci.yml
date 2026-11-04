@@ -256,7 +256,12 @@ pages:
     # ..."), die in einer URL beides nur Aerger sind; verlinkt wird aus den Kapiteln ohnehin
     # mit `#page=`, und dafuer muss die Adresse kurz und vorhersagbar sein. Gezaehlt wird,
     # was ankam -- fehlt der Artefakt (Theme fehlt im Image), sagt die Zeile das.
-    - 'mkdir -p public/folien; n=0; for f in slides/*VL*.pdf; do [ -e "$f" ] || continue; nr=$(echo "$f" | sed -n "s/.*VL \([0-9]\{2\}\).*/\1/p"); [ -n "$nr" ] || continue; cp "$f" "public/folien/vl$nr.pdf"; n=$((n+1)); done; echo "Foliensaetze veroeffentlicht: $n"'
+    # Veroeffentlicht wird nur, was in `slides/freigegeben.txt` steht: Konrad gibt ein Deck
+    # erst nach der final Durchsicht frei (Wording, Pacing, Umfang), in der Regel nach der
+    # Sitzung. Gebaut werden alle -- ein Fehler soll laut sein --, ausgeliefert nicht.
+    # `devnotes/folienlinks.py` liest dieselbe Datei, damit kein Kapitel auf ein Deck
+    # verlinkt, das es unter `/folien/` gar nicht gibt.
+    - 'mkdir -p public/folien; n=0; uebersprungen=""; for f in slides/*VL*.pdf; do [ -e "$f" ] || continue; nr=$(echo "$f" | sed -n "s/.*VL \([0-9]\{2\}\).*/\1/p"); [ -n "$nr" ] || continue; if grep -v "^#" slides/freigegeben.txt | grep -qx "$nr"; then cp "$f" "public/folien/vl$nr.pdf"; n=$((n+1)); else uebersprungen="$uebersprungen $nr"; fi; done; echo "Foliensaetze veroeffentlicht: $n; nicht freigegeben:$uebersprungen"'
     # Google Search Console, Datei-Methode. Die Datei aus der Search Console liegt in
     # `_site/` und wird hier nach `public/` kopiert; sie ist dann unter
     # `<pages-url>/google<token>.html` abrufbar. Kein Geheimnis -- oeffentlich abrufbar

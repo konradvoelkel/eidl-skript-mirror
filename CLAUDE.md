@@ -76,14 +76,14 @@ im Kapitel „Tensoren“ – und seit dem 2026-11-03 eine Seite mehr, weil in d
 Titelüberschrift entfiel und die Abschnitte eine Ebene höher stehen (gegen den unveränderten
 Baum gemessen: 135); die
 fachliche Durchsicht vom 2026-10-15 deckte 27 Kapitel und das Glossar ab, den
-Kettenregel-Abschnitt vom 2026-10-20 und diesen Zuwachs nicht): HTML ohne Warnungen, PDF **140 Seiten A4** lokal, 0 LaTeX-Fehler,
+Kettenregel-Abschnitt vom 2026-10-20 und diesen Zuwachs nicht): HTML ohne Warnungen, PDF **139 Seiten A4** lokal, 0 LaTeX-Fehler,
 0 fehlende Glyphen, 5 überlange Zeilen. Das veröffentlichte PDF hatte bis zum 2026-10-19
 stets **eine Seite mehr** als das lokale (siehe unten); für den neuen Stand ist das noch
 nicht nachgemessen. Die `--min-pages`-Untergrenze
 soll einen *abgebrochenen* Lauf fangen, nicht eine gewollte Kürzung — sie steht deshalb
 deutlich unter der tatsächlichen Seitenzahl, in der CI auf demselben Wert.
 
-**Lokal und CI weichen um eine Seite ab, und das bleibt so**: hier 140 Seiten, das
+**Lokal und CI weichen um eine Seite ab, und das bleibt so**: hier 139 Seiten, das
 veröffentlichte PDF hatte am 2026-10-19 vor dem neuen Kapitel 113 gegen lokal 112. Die erste Abweichung steht auf Seite 28 in einem Codeblock,
 der eine Zeile anders bricht — es ist der *Satz*, nicht der Inhalt. Die Ursache ist am
 2026-10-15 gemessen worden, und sie ist nicht die, die hier vom 2026-09-29 bis dahin stand:
@@ -107,12 +107,17 @@ veröffentlichte Zahl braucht, holt sie mit dem `curl`-Rezept weiter unten.
 Beides ist unabhängig von mystmd: 1.10.1 und 1.11.0 liefern auf demselben Baum dieselbe
 Seitenzahl (gemessen am 2026-10-15 beim Upgrade, `devnotes/build-log-2026-10-15.md`).
 
-**Die 140 Seiten enthalten zwei Seiten Teilegliederung** (2026-11-04). Vor dem Umbau auf
+**Die 139 Seiten enthalten zwei Seiten Teilegliederung** (2026-11-04). Vor dem Umbau auf
 sechs Teile baute derselbe Baum 138 Seiten, gemessen in einem Worktree auf `4d3434e` mit
 derselben `.venv` — die zwei zusätzlichen Seiten sind die zwei neuen Teiltrenner
 („Modelle in der Praxis“, „Ausblick“), nicht neuer Text. Von 136 auf 138 war es davor
 schon durch die seitengenauen Folienlinks gewachsen, ohne dass diese Zahl hier nachgezogen
 worden wäre.
+
+Am 2026-11-05 ist eine Seite weggefallen, als die Folienzeilen der noch nicht
+freigegebenen Decks aus 18 Kapiteln verschwanden (`slides/freigegeben.txt`). Sie kommt
+zurück, sobald die Decks freigegeben sind – diese Zahl bewegt sich also diesen Durchgang
+über noch, und zwar nach oben.
 
 Die Lehre daran ist nicht die Zahl, sondern die Methode: **Eine Seitenzahl, die sich
 „von selbst“ ändert, gehört gegen einen unveränderten Baum gemessen, bevor man sie der
@@ -284,7 +289,7 @@ Wichtig zur Ordnerstruktur:
 | `part-lernen/` | Kapitel 06–13: logistische Regression, Loss und Maximum Likelihood, Gradientenabstieg, Backprop, Autograd, Aktivierungen, Netze von Hand, universelle Approximation |
 | `part-representation-learning/` | Kapitel 14–18: Autoencoder, VAE, word2vec, latente Räume geometrisch, Graphen |
 | `part-architekturen-anwendungen/` | Kapitel 19–27: RNN, Transformer, CNN, GANs; LLMs benutzen, Anwendungsbeispiele, Destillation; Optimierer, Adversarial Attacks. **Der Ordner trägt drei Teile des Buchs**, siehe unten |
-| `slides/` | Beamer-Foliensätze VL 01–15 (`build.sh`, gemeinsamer `header.tex`) |
+| `slides/` | Beamer-Foliensätze VL 01–15 (`build.sh`, gemeinsamer `header.tex`); `freigegeben.txt` sagt, welche davon veröffentlicht und verlinkt werden dürfen |
 | `images/`, `logo/` | Abbildungen, Logos; dazu `images/social-card.png`, die Vorschaukarte |
 | `tools/` | Skripte der Veröffentlichung: Vorschaukarte, Sitemap-URLs, Kopf-Tags, JSON-LD |
 | `widgets/` | interaktive Teile der Website (`{anywidget}`, ein ES-Modul ohne Abhängigkeiten je Widget); im PDF fehlen sie, deshalb steht jedes direkt unter etwas, das im PDF dasselbe leistet. Unter einer statischen Abbildung: `drehung.mjs` im Kapitel „Hintergrundwissen Lineare Algebra“, `perzeptron.mjs` im Kapitel „Das Perzeptron trainieren“, `stufe.mjs` im Kapitel „Universelle Approximation“ und `gradientenabstieg.mjs` im Kapitel „Gradientenabstieg“. Unter jeder Aufzeichnungszeile: `mediathek.mjs`, der eingeklappte Player (Abschnitt „Vorlesungsaufzeichnungen“) |
@@ -503,7 +508,11 @@ des Data-Science-Skripts (`~/Sciebo/hhu/ds2026/ds-skript`, dort `erwartungswert.
   eine Sitzung zwei Kapitel ab, bekommt jedes seine Zeile; beginnt das Thema mitten im
   Video, kommt `?t=<sekunden>` an die Adresse (so macht es das DS-Skript).
 * **Nachgetragen wird, sobald die Aufzeichnung in der Playlist auftaucht**, in der Regel in
-  der Woche nach der Sitzung. Dieselbe Adresse gehört in die Wochentabelle in ILIAS
+  der Woche nach der Sitzung. **Zum selben Handgriff gehört die Freigabe des Decks**: die
+  Nummer in `slides/freigegeben.txt` eintragen und `python3 devnotes/folienlinks.py
+  --schreiben` laufen lassen, dann steht die Folienzeile im Kapitel und das PDF
+  unter der Adresse `vlNN.pdf` im Ordner `folien` der Website. Vorher ist beides absichtlich nicht da – ein Deck wird veröffentlicht, wenn
+  es durchgesehen ist, nicht wenn es gebaut ist. Dieselbe Adresse gehört in die Wochentabelle in ILIAS
   (`../ilias/runs/ws2026-27.yaml`, `schedule.weeks[].material`) — ein Arbeitsschritt, zwei
   Stellen. **Und dazu Kapitelmarken in der Mediathek** (seit 2026-11-02 fester Teil dieses
   Schritts): rund 8–12 je 90 Minuten, eine je Folienblock bzw. `##`-Abschnitt, Titel nach

@@ -6,8 +6,6 @@ short_title: "Aktivierungsfunktionen"
 
 # Aktivierungsfunktionen
 
-[Folien VL 7, S. 2–12](https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de/folien/vl07.pdf#page=2)
-
 ## Aktivierungsfunktionen und weitere Layer
 
 Ein Neuron „forward“ ist $\tau(\langle w, x \rangle)$. Beim Perzeptron ist $\tau = \operatorname{sign}$, bei der logistischen Regression $\tau = \sigma$. Allgemein ist $\tau$ beliebig – aber ableitbar, sonst funktioniert Backpropagation nicht. *Überall* differenzierbar muss es dafür nicht sein: ReLU hat bei $0$ einen Knick und ist trotzdem die meistbenutzte Aktivierungsfunktion überhaupt. Wie das zusammengeht, klärt der nächste Abschnitt.

@@ -6,8 +6,6 @@ short_title: "Autograd"
 
 # Autograd und Berechnungsgraph
 
-[Folien VL 12, S. 2–8](https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de/folien/vl12.pdf#page=2)
-
 Im [Kapitel „Backpropagation“](09-backpropagation.md) haben wir Gradienten von Hand rückwärts durch ein Netz gerechnet. PyTorch tut genau dasselbe – automatisch, für beliebige Architekturen, und mit demselben Muster: Zwischenergebnisse im Vorwärtsdurchlauf speichern, Kettenregel im Rückwärtsdurchlauf. Dieses Kapitel schaut hinter die Kulissen von `loss.backward()`.
 
 ## Ein Beispiel im Kleinen

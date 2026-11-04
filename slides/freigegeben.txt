@@ -1,0 +1,18 @@
+# Welche Foliensätze veröffentlicht werden dürfen, eine Nummer je Zeile.
+#
+# Ein Deck kommt hier erst hinein, wenn Konrad es final durchgesehen hat -- Wording,
+# Pacing, Umfang. Bis dahin wird es zwar gebaut (ein Fehler soll laut sein), aber weder
+# nach `public/folien/` kopiert noch aus einem Kapitel verlinkt. In der Regel heißt das:
+# nach der Sitzung, nicht davor.
+#
+# Zwei Stellen lesen diese Datei:
+#   * der `pages`-Job in `.gitlab-ci.yml` (kopiert nur, was hier steht)
+#   * `devnotes/folienlinks.py` (verlinkt nur, was hier steht; `--schreiben` nimmt die
+#     Zeile aus einem Kapitel wieder heraus, dessen Deck nicht mehr freigegeben ist)
+#
+# Nachziehen: Nummer eintragen, `python3 devnotes/folienlinks.py --schreiben` laufen
+# lassen, committen. `--check` meldet jede Abweichung.
+01
+02
+03
+04
