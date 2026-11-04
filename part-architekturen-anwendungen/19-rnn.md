@@ -100,4 +100,8 @@ Eingabefolge $x = (1, 0, 0)$.
 * Vaswani et al.: [*Attention Is All You Need*](https://arxiv.org/abs/1706.03762), NeurIPS 2017.
 * OpenAI: [*OpenAI Five*](https://openai.com/index/openai-five/), Blog 2018.
 * Vinyals et al.: [*Grandmaster level in StarCraft II using multi-agent reinforcement learning*](https://hdl.handle.net/10.1038/s41586-019-1724-z), Nature 2019.
+
+**Zum Ansehen:**
+
+* StatQuest: [*Long Short-Term Memory (LSTM), Clearly Explained*](https://www.youtube.com/watch?v=YCzL96nL7j0), 21 Minuten, 2022 (englisch) – die Gates, die oben nur benannt sind, einzeln durchgerechnet.
 :::

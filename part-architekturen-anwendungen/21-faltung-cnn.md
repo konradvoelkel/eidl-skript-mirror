@@ -248,4 +248,8 @@ Prince, [*UDL*](https://udlbook.github.io/udlbook/), Kap. 10 (Convolutional netw
 * Hubel, Wiesel: [*Receptive fields of single neurones in the cat's striate cortex*](https://hdl.handle.net/10.1113/jphysiol.1959.sp006308), J Physiol 1959.
 * Wurtz: [*Recounting the impact of Hubel and Wiesel*](https://hdl.handle.net/10.1113/jphysiol.2009.170209), J Physiol 2009.
 * Marchetti et al.: [*Harmonics of Learning: Universal Fourier Features Emerge in Invariant Networks*](https://arxiv.org/abs/2312.08550), 2023.
+
+**Zum Ausprobieren:**
+
+* [CNN Explainer](https://poloclub.github.io/cnn-explainer/) (Polo Club, Georgia Tech) – Filter, Feature Maps und Pooling eines trainierten Netzes zum Durchklicken, bis hinunter auf die einzelne Faltung.
 :::

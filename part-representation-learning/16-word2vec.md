@@ -119,4 +119,8 @@ und das vierte je vier; bei (3) sind es 15 Millionen.*
 
 * Mikolov, Chen, Corrado, Dean: [*Efficient Estimation of Word Representations in Vector Space*](https://arxiv.org/abs/1301.3781), 2013.
 * Jurafsky, Martin: [*Speech and Language Processing*](https://web.stanford.edu/~jurafsky/slp3/), 3. Auflage (Entwurf, frei verfügbar).
+
+**Zum Ansehen:**
+
+* StatQuest: [*Word Embedding and Word2Vec, Clearly Explained!!!*](https://www.youtube.com/watch?v=viZrOnJclY0), 16 Minuten, 2023 (englisch) – CBOW und Skip-gram am kleinen Beispiel durchgerechnet.
 :::

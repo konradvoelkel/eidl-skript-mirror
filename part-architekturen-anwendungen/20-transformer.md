@@ -84,4 +84,8 @@ Prince, [*UDL*](https://udlbook.github.io/udlbook/), Kap. 12 (Transformers). Das
 * Vogel: [*I made a transformer by hand (no training!)*](https://vgel.me/posts/handmade-transformer/), 2023.
 * Raschka: [*Understanding and Coding Self-Attention, Multi-Head Attention, Causal-Attention, and Cross-Attention in LLMs*](https://magazine.sebastianraschka.com/p/understanding-and-coding-self-attention), Ahead of AI, 2024 – Attention Schritt für Schritt in PyTorch, frei lesbar.
 * Raschka: [*Build a Large Language Model (From Scratch)*](https://www.manning.com/books/build-a-large-language-model-from-scratch), Manning 2024; der Code ist frei: [github.com/rasbt/LLMs-from-scratch](https://github.com/rasbt/LLMs-from-scratch).
+
+**Zum Ausprobieren:**
+
+* [Transformer Explainer](https://poloclub.github.io/transformer-explainer/) (Polo Club, Georgia Tech) – ein echtes GPT-2 im Browser: Satz eintippen und Query, Key, Value und die Attention-Gewichte Schicht für Schicht ansehen. Läuft im Browser, nichts zu installieren.
 :::

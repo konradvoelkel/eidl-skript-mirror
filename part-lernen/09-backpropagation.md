@@ -267,4 +267,8 @@ Prince, [*UDL*](https://udlbook.github.io/udlbook/), Kap. 7 (Gradients and initi
 * Minka: [*Old and New Matrix Algebra Useful for Statistics*](https://tminka.github.io/papers/matrix/), Notes 2000.
 * Petersen, Pedersen: [*The Matrix Cookbook*](https://www2.imm.dtu.dk/pubdb/pubs/3274-full.html), TU Dänemark 2012.
 * Nielsen: [*Neural Networks and Deep Learning*, Kap. 2](http://neuralnetworksanddeeplearning.com/chap2.html), 2015.
+
+**Zum Ansehen:**
+
+* 3Blue1Brown: [*Backpropagation calculus*](https://www.youtube.com/watch?v=tIeHLnjs5U8), 10 Minuten, 2017 (englisch) – dieselbe Rechnung wie hier, Schicht für Schicht, aber animiert. Davor liegt [*Backpropagation, intuitively*](https://www.youtube.com/watch?v=Ilg3gGewQ5U), 13 Minuten, für die Anschauung ohne Formeln.
 :::
