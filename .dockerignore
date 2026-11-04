@@ -2,5 +2,12 @@
 # haelt den Build-Kontext klein -- ohne das ginge unter anderem das mitgelieferte
 # Site-Template (13 MB), die Bilder und das gebaute PDF mit, die im Image nichts zu
 # suchen haben.
+# **Jede neue Datei, die ins Image soll, braucht hier eine Ausnahme.** Am 2026-11-04 hat
+# genau das einen halben Abend gekostet: Das HHU-Theme lag als Artefakt in `ci/`, kaniko
+# meldete brav "Resolving srcs [ci/hhubeamer.tar.g[z]]", kopierte aber nichts -- weil die
+# Zeile `*` hier darueber liegt. Das `COPY` mit dem Klammer-Muster ist absichtlich
+# fehlertolerant und schweigt dann; der Image-Bau lief gruen durch, und erst `build-slides`
+# meldete das fehlende Theme.
 *
 !devnotes/patch_myst_tex.py
+!ci/hhubeamer.tar.gz

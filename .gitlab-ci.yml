@@ -63,6 +63,7 @@ build-image:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       changes:
         - Dockerfile
+        - .dockerignore
         - devnotes/patch_myst_tex.py
     # Und von Hand ausloesbar, etwa wenn das Basis-Image angehoben wurde.
     - when: manual
