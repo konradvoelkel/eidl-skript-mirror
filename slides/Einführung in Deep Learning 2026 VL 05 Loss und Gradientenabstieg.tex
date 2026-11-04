@@ -20,16 +20,16 @@
   \note{\textbf{Ablauf, 90 Minuten} (2025: 49 Min. Folien, 12 Min. Tafel, 23 Min. Browser,
     5 Min. Fragen):\\[2pt]
     \begin{tabular}{@{}rll@{}}
-      0--6   & Folien 2--3   & Zwei Modelle, zwei Trainingsgeschichten\\
-      6--16  & Folien 4--5   & Loss-Funktion als einheitliche Perspektive, BCE\\
-      16--28 & Folien 6--8   & \textbf{Maximum Likelihood}, Münzwurf-Beispiel\\
-      28--36 & Folien 9--10  & Exakt oder approximativ minimieren\\
-      36--50 & Folien 11--13 & Gradient, Richtung des steilsten Abstiegs \textbf{(Tafel)}\\
-      50--58 & Folie 14      & Der Algorithmus, Lernrate\\
-      58--70 & Folie 15      & \textbf{Loss Landscape Explorer (Browser)}\\
-      70--78 & Folien 16--17 & Zurück zum Perzeptron, $p - y$\\
-      78--85 & Folien 18--19 & Drei Loss-Funktionen, Feature-Skalierung\\
-      85--90 & Folien 20--21 & Take-Home, wo steckt der Zufall, Übungsblatt\\
+      0--6   & Folie 2       & Zwei Modelle, zwei Trainingsgeschichten\\
+      6--16  & Folien 3--4   & Loss-Funktion als einheitliche Perspektive, BCE\\
+      16--28 & Folien 5--7   & \textbf{Maximum Likelihood}, Münzwurf-Beispiel\\
+      28--36 & Folien 8--9   & Exakt oder approximativ minimieren\\
+      36--50 & Folien 10--12 & Gradient, Richtung des steilsten Abstiegs \textbf{(Tafel)}\\
+      50--58 & Folie 13      & Der Algorithmus, Lernrate\\
+      58--70 & Folie 14      & \textbf{Loss Landscape Explorer (Browser)}\\
+      70--78 & Folien 15--16 & Zurück zum Perzeptron, $p - y$\\
+      78--85 & Folien 17--18 & Drei Loss-Funktionen, Feature-Skalierung\\
+      85--90 & Folien 19--21 & Take-Home, wo steckt der Zufall, Übungsblatt\\
     \end{tabular}\\[4pt]
     \textbf{Die Zufalls-Klammer}: Die Frage „wo steckt hier eigentlich Zufall?“ beim
     Tafelbeispiel aufwerfen und erst nach dem Take-Home-Slide auflösen -- das waren
@@ -286,7 +286,8 @@
 
   \bigskip
   \begin{center}
-    \normalsize Für $N = 1$: \quad $w_{\text{neu}} = w_{\text{alt}} \pm \rho\,x$
+    \normalsize Hier $y \in \{-1,+1\}$ (in VL 2: $\{0,1\}$) -- das Vorzeichen trägt die Klasse.\\[6pt]
+    Für $N = 1$: \quad $w_{\text{neu}} = w_{\text{alt}} + \rho\,y\,x = w_{\text{alt}} \pm \rho\,x$
   \end{center}
 
   \note{Der „harte“ Perceptron Loss mit \texttt{sign} hätte fast überall Gradient null --

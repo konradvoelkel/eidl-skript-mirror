@@ -184,7 +184,9 @@ siehe `erledigt.md`).
 ## Beamer-Folien (Schritt 4 des Migrationsplans)
 
 - [ ] Rest aus der Durchsicht vom 25.09. (`folien-review-2026-09-25.md`): Ablaufplan-Foliennummern in
-  9 Decks (VL 1 ist am 2026-10-02 nachgezogen), fachliche Punkte in VL 5/7/9/14 (Abschnitt B), Bilder
+  9 Decks (VL 1 am 2026-10-02, VL 3 am 2026-10-28, VL 4 und VL 5 am 2026-11-04
+  nachgezogen; offen bleiben VL 6, 7, 10, 12, 14, 15), fachliche Punkte in VL 7/9/14 (Abschnitt B;
+  der zu VL 5 ist am 2026-11-04 erledigt, in Deck und Kapitel), Bilder
   für VL 10/13/15 und acht zu kleine Bilder (Abschnitt C; die Briefmarken-Folie in VL 1 ist erledigt).
   Die Notizseite ist seit dem 2026-10-02 im Header geregelt (`note page` plain + `\scriptsize`) und
   gilt für alle Decks.

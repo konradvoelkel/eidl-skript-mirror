@@ -90,8 +90,8 @@ Planzeilen:
 |---|---|
 | VL 1 | Plan: Folie 7 = Semesterplan, 8 = Definition. Im Deck ist 7 die Definition, 8 der Plan. Die Deck-Reihenfolge ist gewollt (Notiz auf 7: „hier beginnt der Semesterplan“), also die beiden Planzeilen tauschen. |
 | VL 3 | Ab Folie 7 um eins verschoben (Plan zählt 19 Folien, Deck hat 18). |
-| VL 4 | Folie 5 (S-Form basteln) ist im Plan in „2–4“ subsumiert, „5–7“ meint 6–7; Rest stimmt. |
-| VL 5 | Ab Folie 5 um eins verschoben (Plan 22, Deck 21). |
+| VL 4 | Folie 5 (S-Form basteln) ist im Plan in „2–4“ subsumiert, „5–7“ meint 6–7; Rest stimmt. **Erledigt am 2026-11-04**: Zeile 1 nennt jetzt Folien 2–5, Zeile 2 Folien 6–7; die acht übrigen Zeilen waren schon richtig, Gegenprobe gegen die `frametitle`. |
+| VL 5 | Ab Folie 5 um eins verschoben (Plan 22, Deck 21). **Erledigt am 2026-11-04**: alle zehn Planzeilen auf die 21 Folien nachgezogen (Zeile 1 nennt jetzt nur Folie 2, die letzte Folien 19–21), Gegenprobe Zeile für Zeile gegen die `frametitle`. |
 | VL 6 | Ab Folie 15 um eins verschoben (Plan 18, Deck 17): „Das Muster“ ist 14, nicht 15. |
 | VL 7 | Ab Folie 16 um eins verschoben, diesmal in die andere Richtung (Plan 20, Deck 21): `xy` ist 16, Universalität 17–19, Take-Home 20, Blatt 21. |
 | VL 10 | Ab Folie 6 um eins verschoben (Plan 18, Deck 17). |
@@ -154,6 +154,11 @@ heißt „8 bestandene Blätter“. Ursprünglicher Befund:
   `y_i ∈ {−1, +1}` voraus; in VL 2 (Folie 5, 13) ist `Y ∈ {0,1}` und die Regel `w + r(y − f(x))x`.
   Ohne einen Halbsatz „hier y ∈ {±1}“ ist „Für N = 1: w ± ρx“ nicht nachvollziehbar. Das Skript
   (Kapitel 08, Abschnitt „Zurück zum Perzeptron“) hat dieselbe Lücke.
+  **Erledigt am 2026-11-04, in beiden:** Die Folie sagt jetzt „Hier y ∈ {−1,+1} (in VL 2: {0,1}) –
+  das Vorzeichen trägt die Klasse“ und schreibt das Update als `w + ρ y x = w ± ρ x`, das Vorzeichen
+  kommt also sichtbar aus y. Das Kapitel nennt die Kodierung an der Stelle, an der es „korrekt
+  klassifiziert“ behauptet, mit dem Grund (mit `y ∈ {0,1}` wäre jeder Summand der Klasse 0 selbst 0,
+  der Loss blind für die halben Daten) und verlinkt das Perzeptron-Kapitel.
 * **VL 7, Folie 9 „OR“**: „Ansatz x + y? Nein: f(1,1) = 2“, dann „oder besser ReLU(x) + ReLU(y)“.
   Aber `ReLU(1) + ReLU(1) = 2` ebenfalls, und mit der auf Folie 8 (Notiz) festgelegten
   Interpretation „x ≥ 1 heißt TRUE“ ist 2 in Ordnung. Das Skript (Kapitel 12) argumentiert

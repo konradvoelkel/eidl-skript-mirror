@@ -174,7 +174,7 @@ $$
 L_{\text{Perc}}(w) = \sum_{i=1}^N \max\bigl(0,\, -y_i \langle w, x_i \rangle\bigr).
 $$
 
-Ein Summand ist $0$, wenn $x_i$ korrekt klassifiziert ist ($y_i \langle w, x_i \rangle > 0$), und sonst $-y_i \langle w, x_i \rangle > 0$, also proportional dazu, *wie weit* auf der falschen Seite $x_i$ liegt. Die (schwache) Ableitung ist
+Ein Summand ist $0$, wenn $x_i$ korrekt klassifiziert ist ($y_i \langle w, x_i \rangle > 0$), und sonst $-y_i \langle w, x_i \rangle > 0$, also proportional dazu, *wie weit* auf der falschen Seite $x_i$ liegt. Dabei sind die Labels hier als $y_i \in \{-1, +1\}$ kodiert und nicht als $\{0, 1\}$ wie im [Kapitel „Das Perzeptron trainieren“](../part-grundlagen/03-perzeptron-trainieren.md): Das Vorzeichen von $y_i$ trägt die Klasse, und nur so heißt $y_i \langle w, x_i \rangle > 0$ „richtig klassifiziert“. Mit $y_i \in \{0, 1\}$ wäre jeder Summand der Klasse $0$ selbst gleich $0$, der Loss also blind für die halben Daten. Die (schwache) Ableitung ist
 
 $$
 L_{\text{Perc}}'(w) = \sum_{i \text{ falsch klassifiziert}} -y_i x_i ,
@@ -183,9 +183,10 @@ $$
 die Summe über die falsch klassifizierten Samples. Die allgemeine Update-Regel $w_{\text{neu}} = w_{\text{alt}} - \rho\, L'(w)$ liefert für ein einzelnes $(x, y_{\text{true}})$, also $N = 1$:
 
 $$
-w_{\text{neu}} = w_{\text{alt}} \pm \rho\, x \quad \text{wenn } x \text{ falsch klassifiziert ist, sonst } w_{\text{neu}} = w_{\text{alt}}.
+w_{\text{neu}} = w_{\text{alt}} + \rho\, y\, x = w_{\text{alt}} \pm \rho\, x \quad \text{wenn } x \text{ falsch klassifiziert ist, sonst } w_{\text{neu}} = w_{\text{alt}}.
 $$
 
+Das Vorzeichen kommt also aus $y$: $+\rho x$ für die Klasse $+1$, $-\rho x$ für die Klasse $-1$.
 Das ist exakt die Perzeptronregel. Rosenblatt hat also, ohne es so zu nennen, stochastischen Gradientenabstieg auf dem Perceptron Loss gemacht.
 
 ### Und zurück zur logistischen Regression
