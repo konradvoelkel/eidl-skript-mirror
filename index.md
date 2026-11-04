@@ -6,7 +6,7 @@ Dieses Skript begleitet die Vorlesung mit Übung „Einführung in Deep Learning
 
 Vorausgesetzt wird, was das Modul Data Science vermittelt: Python mit NumPy und die Idee der linearen Regression. Die nötige lineare Algebra und Analysis stehen in zwei Hintergrundkapiteln, die Stochastik im [Data-Science-Skript](https://voelkel.pages.cs.uni-duesseldorf.de/ds-skript/). Lernziele, Aufzeichnungen und Literatur stehen unter [Über dieses Skript](README.md). Fast jedes Kapitel endet mit einer kurzen Übung samt Antwortprobe; die Übungsblätter gibt es in ILIAS.
 
-[Das ganze Skript als PDF](/eidl-skript.pdf)
+{button}`Das ganze Skript als PDF </eidl-skript.pdf>`
 
 :::{note} Hinweis
 Wenn Sie Fehler finden oder etwas unklar ist, freue ich mich über eine Nachricht – Konrad Völkel. Am einfachsten als [Issue auf GitHub](https://github.com/konradvoelkel/eidl-skript-mirror/issues).

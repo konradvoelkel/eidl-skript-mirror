@@ -295,6 +295,12 @@ pages:
     #    ihr href kommt aus dem Slug, und ein Schraegstrich dort kostet in ds-skript
     #    gemessen die Vorschaukarten und das Aufklappen. Port aus ds-skript (2026-10-29).
     - python3 tools/trailing_slash.py public --base "$BASE_URL"
+    # 7. Den Hinweiskasten "Site not loading correctly? ... BASE_URL" herausnehmen. Er
+    #    ist fuer Leser unsichtbar, steht aber als erster Text in jeder Seite -- wer die
+    #    Seite als Text liest (Schnipsel, Vorschau, Crawler eines Sprachmodells), beginnt
+    #    mit einer Deploy-Fehlermeldung. Dass das Stylesheet da ist, prueft in diesem Job
+    #    schon check_css_assets.py (Befund Konrad, 2026-11-04).
+    - python3 tools/no_css_dialog.py public
     # Und danach am fertigen Artefakt nachzaehlen statt dem Protokoll zu glauben: kein
     # localhost, je genau ein Canonical, Sitemap-Eintraege gleich gebaute Seiten, keine
     # relative Bild-URL. Ein fehlendes Stueck davon ist im Browser unsichtbar und nur
@@ -306,6 +312,7 @@ pages:
     - python3 tools/outline_reserve.py --check public
     - python3 tools/freshness.py --check public
     - python3 tools/trailing_slash.py --check public --base "$BASE_URL"
+    - python3 tools/no_css_dialog.py public --check
     # --- Auslieferung -------------------------------------------------------------------
     # GitLab Pages komprimiert nichts, liefert aber eine daneben liegende .br bzw. .gz aus,
     # wenn der Browser sie akzeptiert. Ohne diesen Schritt gingen am 2026-11-03 je Seite

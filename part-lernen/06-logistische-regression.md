@@ -6,6 +6,12 @@ short_title: "Logistische Regression"
 
 # Logistische Regression
 
+[Vorlesungsaufzeichnung VL 4: Logistische Regression](https://media.hhu.de/video/einfuehrung-in-deep-learning-202627-vl-4-logistische-regression/9213b0d5e9c2fda01dda9fe1d9b2f7b2)
+
+:::{anywidget} ../widgets/mediathek.mjs
+{url: 'https://media.hhu.de/video/einfuehrung-in-deep-learning-202627-vl-4-logistische-regression/9213b0d5e9c2fda01dda9fe1d9b2f7b2'}
+:::
+
 Im ersten Abschnitt basteln wir eine S-förmige Kurve aus dem $\tanh$, haben aber keine Interpretation dafür. Danach bauen wir die S-Kurve von der Wahrscheinlichkeitsrechnung her auf, und dann fällt die Interpretation von selbst ab.
 
 ## Lineare Regression zur Klassifikation

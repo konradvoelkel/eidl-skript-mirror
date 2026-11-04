@@ -209,6 +209,28 @@ def head_tags(url: str, site_name: str, lang: str, is_landing: bool) -> list[tup
     ]
 
 
+TITEL_ZUSATZ = " — Vorlesungsskript, HHU Düsseldorf"
+
+
+def titel_erweitern(doc: str, zusatz: str) -> tuple[str, bool]:
+    """Den <title> der Landingpage um den Zusatz ergänzen (2026-11-04).
+
+    Der <title> ist die Überschrift im Suchergebnis. Er lautete hier „Einführung in Deep
+    Learning“ und sagte damit nicht, was die Seite ist und von wem — zwei Wörter, die in
+    jedem Kurskatalog stehen. Der Zusatz nennt Gattung und Hochschule. **Ohne Jahreszahl**:
+    Das Skript ist bewusst semesterunabhängig (`kurs-2026-27.md`), ein „2026/27“ im Titel
+    wäre nächstes Jahr falsch, ohne dass es jemand merkt.
+
+    Nur der <title>, nicht die `<h1>` und nicht `og:title`: Die Überschrift im Dokument und
+    die Vorschaukarte tragen den Werktitel, und der ist der Name des Buchs.
+    """
+    m = re.search(r"<title[^>]*>(.*?)</title>", doc, re.S | re.I)
+    if not m or zusatz in m.group(1):
+        return doc, False
+    neu = m.group(0).replace(m.group(1), m.group(1).strip() + zusatz)
+    return doc[: m.start()] + neu + doc[m.end():], True
+
+
 def set_html_lang(doc: str, lang: str) -> tuple[str, bool]:
     """Die Sprache am <html> setzen. Gibt das Dokument und zurück, ob sie schon stand."""
     m = re.search(r"<html\b[^>]*>", doc, re.I)
@@ -495,7 +517,7 @@ def main() -> None:
     name = project_title(index.read_text(encoding="utf-8"))
     karte = social_card(root, index.read_text(encoding="utf-8"))
     seiten = sorted(root.rglob("index.html"))
-    n_lazy = n_preload = n_head = n_lang = n_guard = n_karten = 0
+    n_lazy = n_preload = n_head = n_lang = n_guard = n_karten = n_titel = 0
 
     for f in seiten:
         rel = f.parent.relative_to(root)
@@ -511,6 +533,10 @@ def main() -> None:
                 sys.exit(f"FEHLER: {f} hat kein </head>")
             doc = doc.replace("</head>", "".join(fehlend) + "</head>", 1)
             n_head += 1
+
+        if str(rel) == ".":
+            doc, ergaenzt = titel_erweitern(doc, TITEL_ZUSATZ)
+            n_titel += ergaenzt
 
         doc, hatte_lang = set_html_lang(doc, args.lang)
         n_lang += not hatte_lang
@@ -575,7 +601,8 @@ def main() -> None:
     print(f"head_meta: {len(seiten)} Seiten, fünf Karten-Tags auf allen "
           f"({n_head} ergänzt), lang=\"{args.lang}\" auf allen ({n_lang} gesetzt, "
           f"{n_guard} Wächter), {n_karten} zu kleine Abbildungen durch {karte} ersetzt, "
-          f"{n_lazy} Abbildungen lazy, {n_preload} Bild-Preloads entfernt")
+          f"{n_lazy} Abbildungen lazy, {n_preload} Bild-Preloads entfernt, "
+          f"Titelzusatz auf der Landingpage {'gesetzt' if n_titel else 'schon da'}")
 
 
 if __name__ == "__main__":

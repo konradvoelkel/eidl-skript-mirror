@@ -104,6 +104,18 @@ Abgabe bis …“ in den TeX-Blättern.
   Adressform, Zuordnung Kapitel ↔ Sitzung und die zwei Fallen der Mediathek stehen in `../CLAUDE.md`
   („Vorlesungsaufzeichnungen“); dieselbe Adresse gehört in die Wochentabelle in `../../ilias/runs/ws2026-27.yaml`.
 
+- [ ] **SEO-Felder der Aufzeichnungen füllen, VL 2 an** (angefangen 2026-11-04). Bei VL 1 sind die fünf
+  Felder gesetzt und am ausgelieferten Kopf nachgemessen; VL 2 und VL 3 warten auf Konrads Ja. Vorschläge
+  kommen aus `mediathek_seo.py`, die Regeln samt Messung stehen in `../CLAUDE.md`
+  („Vorlesungsaufzeichnungen“). Offen dazu:
+  * VL 4: Slug trägt noch `…-202526-…`, obwohl der Titel am 2026-11-04 auf 2026/27 berichtigt wurde
+    (gefahrlos zu ändern, der Hash entscheidet — gemessen); in der Beschreibung steht „bertrachten“;
+    Kapitelzeile, Player, Meta-Felder kommen, sobald Untertitel, Kapitelmarken und Thumbnail fertig sind.
+  * Der Mediathek melden, daß Slug-Vorschlag und `video:description` im Sitemap Umlaute **löschen**
+    statt sie umzuschreiben, und daß den Videoseiten ein Canonical fehlt, obwohl jeder Slug mit
+    richtigem Hash dieselbe Seite liefert.
+  * Bei Gefallen die Regel nach `~/Sciebo/hhu/PLAYBOOK.md` §3.13 heben (gilt für alle Kurse).
+
 ### Lücken gegenüber anderen PyTorch-Lehrbüchern (Entscheidung Konrad, 2026-11-02)
 
 Vergleich mit Stevens/Antiga/Viehmann, Raschka, Howard/Gugger, d2l.ai, Prince (UDL), Bishop 2024. Die größte

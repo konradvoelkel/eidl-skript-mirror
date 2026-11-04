@@ -200,7 +200,7 @@ im `pages`-Job und brauchen **kein einziges Python-Paket**.
 |---|---|
 | `tools/social_card.py` | Erzeugt und prüft `images/social-card.png` (1200×630). Die Karte ist eingecheckt und steht als `thumbnail:` in `myst.yml` |
 | `tools/publish_urls.py` | Echte Adresse in Sitemap und `robots.txt`, jede `<loc>` mit Schrägstrich, `og:image` absolut, ein Canonical je Seite; `--check` prüft das am Artefakt nach |
-| `tools/head_meta.py` | `og:url`, `og:site_name`, `og:type`, `og:locale`, `twitter:card`; `lang="de"` samt Wächter gegen die Hydration; zu kleine Abbildungen als Vorschaukarte ersetzen; Abbildungen unter der Falz verzögert laden |
+| `tools/head_meta.py` | `og:url`, `og:site_name`, `og:type`, `og:locale`, `twitter:card`; den `<title>` **der Landingpage** um „ — Vorlesungsskript, HHU Düsseldorf“ (ohne Jahreszahl, das Skript ist semesterunabhängig; `h1` und `og:title` bleiben der Werktitel); `lang="de"` samt Wächter gegen die Hydration; zu kleine Abbildungen als Vorschaukarte ersetzen; Abbildungen unter der Falz verzögert laden |
 | `tools/inject_jsonld.py` | JSON-LD: ein Buchknoten samt den zwei anderen Skripten desselben Autors auf der Landingpage, je ein Kapitelknoten mit Brotkrume auf den 29 übrigen Seiten. Daten in `tools/structured-data.json` und `tools/sibling-works.json` |
 | `tools/vendor_assets.py`, `tools/check_css_assets.py` | Die drei Stylesheets des Themes (KaTeX, Font Awesome, jupyter-matplotlib) aus `_site/vendor/` statt von zwei CDN, in HTML **und** JS; die Schriften aus `_site/fonts/` statt von Google. Der Prüfer löst jeden `url()` der eingebundenen Stylesheets auf |
 | `tools/thebe_gate.py` | Lädt `thebe-core` (1,3 MB) nur auf Seiten mit ausführbarem Code, also hier auf keiner. Patcht einen Ausdruck im Client-Bündel und scheitert laut, wenn ein mystmd-Update ihn verschiebt |
@@ -208,6 +208,7 @@ im `pages`-Job und brauchen **kein einziges Python-Paket**.
 | `tools/llms_txt.py` | Der Quelltext jeder Seite als Markdown (`/<slug>.md` und `/<slug>/index.md`, relative Kapitelverweise auf die Seitenadresse umgeschrieben), `<link rel="alternate" type="text/markdown">` im Kopf, `/llms.txt` und `/llms-full.txt`. Google ignoriert `llms.txt`; der Nutzen liegt bei den `.md`-Dateien |
 | `tools/image_dims.py`, `tools/outline_reserve.py` | Gegen den Layoutsprung: `width`/`height` an jeder Abbildung samt einem Stylesheet mit allen Bildmaßen, und Platz für die Gliederung, die das Theme erst nach dem Laden füllt |
 | `tools/trailing_slash.py` | Kapitellinks mit Schrägstrich (sonst 302), im Markup, in der Hydrations-Nutzlast und in den Seiten-JSON; die Seitenleiste bewusst nicht |
+| `tools/no_css_dialog.py` | Nimmt den Kasten „Site not loading correctly? … `BASE_URL`“ aus jeder Seite. Das Theme legt ihn als `<dialog id="myst-no-css">` an; sichtbar wird er nur ohne Stylesheet, **im Text der Seite steht er aber als erstes** und begrüßt jeden, der die Seite als Text liest, mit einer Deploy-Fehlermeldung. `--check` zählt nach; findet der Lauf gar keinen Kasten, scheitert er (mystmd könnte ihn umbenannt haben) |
 | `tools/precompress.py` | `.br` und `.gz` neben jede Textdatei, **als letzter Schritt** des Jobs; `--check` packt jede Kopie aus und vergleicht byteweise |
 
 **Jede Seite außer der Landingpage hat ein eigenes `description:` im Frontmatter**
@@ -509,6 +510,27 @@ des Data-Science-Skripts (`~/Sciebo/hhu/ds2026/ds-skript`, dort `erwartungswert.
   Kapitelseite (beim zweiten Kapitel einer Sitzung mit „ab Minute n“), im Autorenfeld der
   Name als Link auf `https://www.konradvoelkel.com`; dazu Thumbnail im Kursdesign. Der
   ganze Ablauf, für alle Kurse: `~/Sciebo/hhu/PLAYBOOK.md` §3.13.
+* **Die fünf SEO-Felder des Formulars** (`/media/edit/key/<hash>`: „SEO URL Titel“ und die
+  vier Meta-Tag-Felder) sind nicht kosmetisch, und sie waren bis zum 2026-11-04 bei allen
+  Videos leer. Geprüft und erzeugt wird das mit `devnotes/mediathek_seo.py`; im Docstring
+  steht, was am 2026-11-04 an VL 1 gemessen wurde. Kurz:
+  * **„SEO URL Titel“ (`media[slug]`) muß von Hand nachgezogen werden**: Der Vorschlag der
+    Mediathek **löscht** Umlaute statt sie umzuschreiben („einfhrung“). Dieselbe Löschung
+    steckt unverbesserlich in der `video:description` des Sitemaps („berblick ber die
+    Vorlesung“) — die ist Sache der Mediathek. Der Slug ist die Adresse, die die Mediathek
+    selbst als `<video:player_loc>` ins Sitemap schreibt, also die, die Google Video kennt;
+    gleichzeitig hat die Videoseite **kein Canonical**, und *jeder* Slug mit dem richtigen
+    Hash liefert dieselbe Seite. Deshalb immer dieselbe Schreibweise verlinken. Ein Tippfehler
+    im Titel wandert in den Slug, und eine Titelkorrektur zieht den Slug **nicht** mit (VL 4,
+    2026-11-04: Titel „2025/26“ berichtigt, Slug blieb `…-202526-…`).
+  * **`meta_description` ist der Ertrag**: Ist das Feld leer, füllt die Seite
+    `<meta name="description">` aus der Beschreibung **samt escapeten HTML-Tags** — der
+    Suchtreffer-Text beginnt mit „<p>“. Hinein gehört das `description:` aus dem Frontmatter
+    des Kapitels, das die Aufzeichnung verlinkt (80–155 Zeichen, von `check_doku.py` geprüft).
+  * `meta_author` und `meta_copyright` füllen, die Tags fehlen sonst ganz. `meta_keywords`
+    **ersetzt** die Hausliste der Mediathek, ergänzt sie nicht — Tag und Hausbegriffe also
+    mitnehmen. `meta_title` landet nur in `<meta name="title">`, das Suchmaschinen nicht
+    lesen; der `<title>` kommt weiter aus `media[title]`.
 * **Die Adresse wird nicht geraten.** Sie steht in der Playlist selbst oder in der
   Titelsuche <https://media.hhu.de/search/title/Einf%C3%BChrung+in+Deep+Learning+2026/>.
   Zwei Eigenheiten der Mediathek: Playlist-Adressen antworten mit **302** und landen beim
