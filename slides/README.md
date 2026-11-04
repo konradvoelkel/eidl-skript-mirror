@@ -11,6 +11,16 @@ Woche → Kapitel steht in [`../kurs-2026-27.md`](../kurs-2026-27.md). Was für 
 latexmk -lualatex "Einführung in Deep Learning 2026 VL 01 Was ist Deep Learning.tex"
 ```
 
+Bequemer ist `./build.sh` – mit einer `.tex` als Argument baut es dieses Deck, ohne Argument
+alle, und es meldet je Deck die Seitenzahl und die Zahl der zu vollen Rahmen
+(`Overfull \vbox`). Steht dort **„Rahmen NICHT geprueft"**, gehört das LaTeX-Log nicht zum
+vorhandenen PDF – dann hilft `latexmk -g`, das den Lauf erzwingt. Das Skript liest die Zahl
+nämlich aus dem LaTeX-Log neben der `.tex` und nicht aus der Ausgabe von latexmk: Ist das PDF
+aktuell, startet latexmk LaTeX gar nicht erst, und in seiner Ausgabe steht dann kein einziges
+`Overfull` – bis zum 2026-11-04 meldete das Skript in dieser Lage „0 zu volle Rahmen" für ein
+PDF mit einem überfüllten Rahmen. Die ganze Geschichte samt der Fallen beim Reparieren:
+`~/Sciebo/hhu/PLAYBOOK-folien.md` §2.4.
+
 Gebraucht wird das HHU-Beamer-Theme (`hhubeamer`) unter
 `/usr/share/texmf/tex/latex/beamer/themes/` und die Schrift Source Sans Pro. Die deutsche
 Silbentrennung kommt über `babel` (Header); LuaTeX lädt die Trennmuster beim ersten Gebrauch
