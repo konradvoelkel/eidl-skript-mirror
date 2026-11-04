@@ -187,7 +187,14 @@ build-pdf:
 # und zwar mit einer Meldung, die sagt warum, statt mit 15 LaTeX-Fehlern.
 build-slides:
   stage: build
-  image: $CI_REGISTRY_IMAGE:latest
+  # `pull_policy: always`, und das ist kein Luxus: Am 2026-11-04 lief dieser Job gegen
+  # ein **zwischengespeichertes** `:latest` (sha256:3539ebef) und meldete das fehlende
+  # Theme, waehrend die Registry laengst das neue Image hatte (sha256:c3109d59). Der
+  # Runner holt `:latest` sonst nur, wenn er es noch nicht kennt -- und `latest` ist
+  # genau der Tag, hinter dem sich der Inhalt aendert, ohne dass der Name es sagt.
+  image:
+    name: $CI_REGISTRY_IMAGE:latest
+    pull_policy: always
   allow_failure: true
   script:
     - kpsewhich beamerthemehhubeamer.sty > /dev/null || { echo "FEHLER - das HHU-Theme fehlt im Image. Secure File hhubeamer.tar.gz hinterlegen und build-image von Hand ausloesen."; exit 1; }
