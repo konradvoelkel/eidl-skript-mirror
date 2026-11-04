@@ -11,15 +11,21 @@
 \usepackage{iftex}
 % `no-math` ist nicht optional. Ohne die Option übernimmt fontspec die Mathe-Schrift
 % teilweise: Operatoren, Ziffern, Klammern und Funktionsnamen wie \tanh kommen dann aus
-% Source Sans Pro, die Variablen weiter aus Computer Modern -- zwei Schriftbilder in
+% Source Sans 3, die Variablen weiter aus Computer Modern -- zwei Schriftbilder in
 % einer Formel, dasselbe Übel wie in PLAYBOOK-folien.md §2.3, nur eine Ebene tiefer.
 % Sichtbar wurde es am 2026-10-21 an \Longrightarrow: Der Pfeil wird aus \Relbar und
-% \Rightarrow zusammengesetzt, das `=` kam aus Source Sans Pro und der Schaft aus CMSY,
+% \Rightarrow zusammengesetzt, das `=` kam aus Source Sans 3 und der Schaft aus CMSY,
 % die Balken trafen sich nicht, und der Pfeil fiel auseinander. Mit `no-math` kommt das
 % `=` aus CMR und alles passt. Gegenprobe: pdffonts an einem formelreichen Deck.
+% Seit dem 2026-11-04 **Source Sans 3**, nicht mehr Source Sans Pro: Adobe hat die
+% Familie 2021 umbenannt und zaehlt die Hauptversion seither im Namen mit (zuletzt
+% 3.052, 2023-04). Der Name ist der Familienname, nach dem fontspec sucht -- unter dem
+% alten Namen findet es die alte 2.021. Debian trixie hat sie als
+% `fonts-adobe-sourcesans3` (3.052+dfsg), lokal liegt dieselbe Fassung als OTF in
+% ~/.fonts/SourceSans3. Beides SIL OFL, also auch im CI-Image mitlieferbar.
 \ifLuaTeX
  \usepackage[no-math]{fontspec}
- \setmainfont[Ligatures=TeX]{Source Sans Pro}
+ \setmainfont[Ligatures=TeX]{Source Sans 3}
 \else
  \usepackage[utf8]{inputenc}
 \fi
@@ -151,7 +157,7 @@
 % sie wie Beamers Standard-Fonttheme serifenlos und aufrecht zu verbiegen.
 \usefonttheme{professionalfonts}
 \ifLuaTeX
-  \setsansfont[Ligatures=TeX]{Source Sans Pro}
+  \setsansfont[Ligatures=TeX]{Source Sans 3}
 \fi
 
 % Notizseite (Deck mit `show notes on second screen=right`): Beamer paginiert Notizen

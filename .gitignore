@@ -187,3 +187,7 @@ devnotes/durchsicht/
 
 # AUCTeX legt neben den Decks ein auto/ mit .el-Dateien an -- Editorkram, kein Inhalt.
 slides/auto/
+
+# Das HHU-Theme darf nie ins Repository (kein Lizenzvermerk, HHU-Logo; der Spiegel auf
+# GitHub ist oeffentlich). Im CI holt es `build-image` aus der Paketregistry nach `ci/`.
+ci/

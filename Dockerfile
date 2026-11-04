@@ -66,17 +66,52 @@ RUN set -eu; \
 # 2026-09-27) und kein einziges SVG. Sollte je ein SVG dazukommen, meldet MyST das auf
 # stdout ("To convert .svg images ... you must install inkscape"), und
 # check_pdf_build.py liest diese Ausgabe ueber `--myst-log` mit.
+#
+# Seit dem 2026-11-04 kommen die Beamer-Decks dazu (`slides/*.tex`), und die bringen vier
+# eigene Anforderungen mit: `texlive-luatex`, weil die Decks mit **LuaLaTeX** gebaut werden
+# und nicht mit XeLaTeX wie das Buch; `texlive-pictures` fuer TikZ, das das HHU-Theme
+# benutzt; `fonts-adobe-sourcesans3` als Schrift der Decks -- Debian trixie fuehrt genau die
+# Fassung 3.052, die auch lokal in ~/.fonts liegt, unter SIL OFL, also ohne jede
+# Lizenzfrage; und das HHU-Theme selbst, das **nicht** im Repository liegen darf (kein
+# Lizenzvermerk, dazu das HHU-Logo) und deshalb unten aus einer Secure File kommt.
 RUN apt-get update && apt-get install -y --no-install-recommends \
     procps \
     latexmk \
     texlive-xetex \
+    texlive-luatex \
     texlive-latex-recommended \
     texlive-latex-extra \
+    texlive-pictures \
     texlive-fonts-recommended \
+    fonts-adobe-sourcesans3 \
     texlive-lang-german \
     fonts-dejavu-core \
     poppler-utils \
     && rm -rf /var/lib/apt/lists/*
+
+# Das HHU-Beamer-Theme. Es liegt **bewusst nicht im Repository**: Es hat keinen
+# Lizenzvermerk und keinen Autor, und sein `fig/` enthaelt das HHU-Logo -- ein Markenzeichen,
+# dessen Weitergabe nicht uns gehoert. Das Repository wird nach GitHub gespiegelt und waere
+# damit oeffentlich; die Registry dieses Projekts ist es nicht. Deshalb kommt das Theme als
+# **generisches Paket aus der Registry dieses Projekts** in den Build-Kontext (siehe
+# `build-image` in .gitlab-ci.yml) und von dort in das Image.
+#
+# Die eckigen Klammern in `hhubeamer.tar.g[z]` sind kein Tippfehler, sondern der uebliche
+# Griff fuer ein *optionales* COPY: Fehlt die Datei, trifft das Muster nichts und der Bau
+# laeuft weiter, statt mit "file not found" abzubrechen. Dann fehlt das Theme im Image, und
+# der Job `build-slides` sagt genau das -- sichtbar, nicht still.
+COPY ci/hhubeamer.tar.g[z] /tmp/
+RUN set -eu; \
+    if [ -f /tmp/hhubeamer.tar.gz ]; then \
+      mkdir -p /usr/share/texmf/tex/latex/beamer/themes; \
+      tar -xzf /tmp/hhubeamer.tar.gz -C /usr/share/texmf/tex/latex/beamer/themes; \
+      rm -f /tmp/hhubeamer.tar.gz; \
+      mktexlsr; \
+      kpsewhich beamerthemehhubeamer.sty \
+        && echo "hhubeamer: eingebaut"; \
+    else \
+      echo "hhubeamer: nicht im Kontext -- das Image kann keine Decks bauen"; \
+    fi
 
 # Seit `code_style: minted` in myst.yml steht, braucht der PDF-Bau die Hilfsanwendung
 # `latexminted`: Debians texlive-latex-extra bringt minted **v3** mit, und das holt seine

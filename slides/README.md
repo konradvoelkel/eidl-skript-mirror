@@ -23,7 +23,12 @@ PDF mit einem überfüllten Rahmen. Die ganze Geschichte samt der Fallen beim Re
 `~/Sciebo/hhu/PLAYBOOK-folien.md` §2.4.
 
 Gebraucht wird das HHU-Beamer-Theme (`hhubeamer`) unter
-`/usr/share/texmf/tex/latex/beamer/themes/` und die Schrift Source Sans Pro. Die deutsche
+`/usr/share/texmf/tex/latex/beamer/themes/` und die Schrift **Source Sans 3**
+(seit 2026-11-04; davor Source Sans Pro 2.021 — Adobe hat die Familie 2021
+umbenannt, aktuell 3.052). `fontspec` sucht nach dem *Familiennamen*, der jetzt
+„Source Sans 3“ lautet; lokal liegen die OTF in `~/.fonts/SourceSans3`, im
+CI-Image kommt sie aus dem Debian-Paket `fonts-adobe-sourcesans3`. Beide Fassungen
+stehen unter der SIL OFL. Die deutsche
 Silbentrennung kommt über `babel` (Header); LuaTeX lädt die Trennmuster beim ersten Gebrauch
 aus `hyph-utf8`, das zu jedem texlive gehört. Bis zum 2026-10-02 lud der Header das veraltete
 `german.sty`, das im LuaTeX-Format keine deutsche Sprache fand – kein Deck trennte Silben, und
@@ -109,5 +114,11 @@ aktualisiert auch diese Kopie oder löscht sie. Und ein Pfad in `TEXINPUTS`, der
   `rarerepro@cornell.edu` an. **Im Git-Verlauf liegt die alte Datei weiter**; sie aus der
   Historie zu entfernen hieße, die gespiegelten Repositories neu zu schreiben.
 * Die PDFs sind Build-Artefakte und stehen in `.gitignore`; verteilt werden sie
-  über ILIAS. Dasselbe gilt für alles andere, was der Bau erzeugt – `.aux`, `.nav`,
+  über ILIAS **und seit dem 2026-11-04 über die Website**: Der Job `build-slides`
+  baut sie im CI, `pages` legt sie als `/folien/vl01.pdf` … `/folien/vl15.pdf` ab
+  (kurze Adressen, weil die Kapitel sie mit `#page=` verlinken). Das Theme kommt
+  dafür aus der **Paketregistry** des Projekts in das Image — es darf nicht ins
+  Repository, weil es keinen Lizenzvermerk hat und das HHU-Logo enthält, und der
+  GitHub-Spiegel ist öffentlich. Fehlt das Paket, scheitert nur `build-slides`
+  (mit `allow_failure`), und die Meldung sagt, was zu tun ist. Dasselbe gilt für alles andere, was der Bau erzeugt – `.aux`, `.nav`,
   `.snm`, `.toc`, `.out`, `.vrb` und Verwandte gehören nicht ins Repo.

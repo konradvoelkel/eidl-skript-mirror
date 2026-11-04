@@ -55,6 +55,26 @@ build-image:
       --destination "${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}"
       --cache=true --cache-repo "${CI_REGISTRY_IMAGE}/cache"
       --cache-ttl=336h --snapshot-mode=redo
+  before_script:
+    # Das HHU-Theme kommt aus der **Paketregistry dieses Projekts** und nicht aus dem
+    # Repository: Es hat keinen Lizenzvermerk, sein `fig/` enthaelt das HHU-Logo, und das
+    # Repository wird oeffentlich nach GitHub gespiegelt -- die Registry ist privat.
+    #
+    # Ein generisches Paket hat eine feste, lesbare Adresse; damit braucht dieser Schritt
+    # weder einen Installer von fremder Stelle noch JSON-Gefummel, nur wget und das
+    # Job-Token. Einmalig hochladen (Konrad, mit einem Token mit `api`-Recht):
+    #
+    #   tar -czf hhubeamer.tar.gz -C /usr/share/texmf/tex/latex/beamer/themes hhubeamer
+    #   curl --header "PRIVATE-TOKEN: <token>" --upload-file hhubeamer.tar.gz \
+    #     "$CI_API_V4_URL/projects/$CI_PROJECT_ID/packages/generic/hhubeamer/1.0/hhubeamer.tar.gz"
+    #
+    # Fehlt das Paket, laeuft der Image-Bau trotzdem durch (optionales COPY im Dockerfile),
+    # und `build-slides` sagt, was fehlt -- statt dass die Pipeline an einer fehlenden
+    # Datei stirbt, die mit dem Buch nichts zu tun hat.
+    - mkdir -p ci
+    - 'wget -q --header="JOB-TOKEN: $CI_JOB_TOKEN" -O ci/hhubeamer.tar.gz "$CI_API_V4_URL/projects/$CI_PROJECT_ID/packages/generic/hhubeamer/1.0/hhubeamer.tar.gz" || { rm -f ci/hhubeamer.tar.gz; echo "hhubeamer: kein Paket in der Registry - Image ohne Theme"; }'
+
+
 
 # Kein `needs` auf build-image: Wenn das Dockerfile unveraendert ist, ist der Job manuell,
 # und eine `needs`-Abhaengigkeit auf einen wartenden manuellen Job wuerde diesen Job (und
@@ -144,6 +164,27 @@ build-pdf:
     paths:
       - exports/eidl-skript.pdf
 
+# Die fuenfzehn Beamer-Decks. Sie wurden bis zum 2026-11-04 nur lokal gebaut und ueber
+# ILIAS verteilt; seitdem liegen sie auch auf der Website, damit das Skript sie an der
+# Aufzeichnungszeile verlinken kann (mit `#page=`, siehe CLAUDE.md).
+#
+# `allow_failure: true` mit Absicht: Das Theme kommt aus einer Secure File (siehe
+# build-image). Fehlt sie, soll die Pipeline nicht rot werden, sondern dieser eine Job --
+# und zwar mit einer Meldung, die sagt warum, statt mit 15 LaTeX-Fehlern.
+build-slides:
+  stage: build
+  image: $CI_REGISTRY_IMAGE:latest
+  allow_failure: true
+  script:
+    - kpsewhich beamerthemehhubeamer.sty > /dev/null || { echo "FEHLER - das HHU-Theme fehlt im Image. Secure File hhubeamer.tar.gz hinterlegen und build-image von Hand ausloesen."; exit 1; }
+    - fc-list | grep -q "Source Sans 3" || { echo "FEHLER - Schrift Source Sans 3 fehlt im Image (Paket fonts-adobe-sourcesans3)."; exit 1; }
+    - cd slides && ./build.sh
+    # Die Zahl melden, auf die der Schritt gewirkt hat, nicht dass er lief.
+    - ls -1 slides/*.pdf | wc -l | xargs echo "Decks gebaut:"
+  artifacts:
+    paths:
+      - slides/*.pdf
+
 # Veroeffentlicht die Website **und** das PDF. Ein Job-Artefakt allein genuegt nicht: Es
 # verfaellt und ist nur ueber die Job-Seite erreichbar, also nicht verlinkbar. Unter
 # `public/` liegt es als `<pages-url>/eidl-skript.pdf`, und `downloads:` in myst.yml
@@ -157,6 +198,8 @@ pages:
   needs:
     - myst-build
     - build-pdf
+    - job: build-slides
+      artifacts: true
   variables:
     # tools/inject_jsonld.py liest das Aenderungsdatum je Kapitel aus "git log" der
     # Quelldatei. GitLab klont flach (GIT_DEPTH 20); gegen einen Commit ohne Eltern
@@ -176,6 +219,12 @@ pages:
     # aber ab ("script config should be a string") -- und dann laeuft kein einziger Job.
     # devnotes/check_ci_yaml.py prueft das vor dem Push.
     - 'if [ -f exports/eidl-skript.pdf ]; then cp exports/eidl-skript.pdf public/; echo "PDF veroeffentlicht"; else echo "WARNUNG - kein PDF im Artefakt, Website ohne PDF"; fi'
+    # Die Decks unter kurzen, stabilen Adressen: `public/folien/vl04.pdf`. Die Dateinamen im
+    # Repository tragen Leerzeichen und Umlaute ("Einfuehrung in Deep Learning 2026 VL 04
+    # ..."), die in einer URL beides nur Aerger sind; verlinkt wird aus den Kapiteln ohnehin
+    # mit `#page=`, und dafuer muss die Adresse kurz und vorhersagbar sein. Gezaehlt wird,
+    # was ankam -- fehlt der Artefakt (Theme fehlt im Image), sagt die Zeile das.
+    - 'mkdir -p public/folien; n=0; for f in slides/*VL*.pdf; do [ -e "$f" ] || continue; nr=$(echo "$f" | sed -n "s/.*VL \([0-9]\{2\}\).*/\1/p"); [ -n "$nr" ] || continue; cp "$f" "public/folien/vl$nr.pdf"; n=$((n+1)); done; echo "Foliensaetze veroeffentlicht: $n"'
     # Google Search Console, Datei-Methode. Die Datei aus der Search Console liegt in
     # `_site/` und wird hier nach `public/` kopiert; sie ist dann unter
     # `<pages-url>/google<token>.html` abrufbar. Kein Geheimnis -- oeffentlich abrufbar

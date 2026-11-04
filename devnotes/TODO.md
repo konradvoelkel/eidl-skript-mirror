@@ -115,6 +115,19 @@ Abgabe bis …“ in den TeX-Blättern.
     richtigem Hash dieselbe Seite liefert.
   * Bei Gefallen die Regel nach `~/Sciebo/hhu/PLAYBOOK.md` §3.13 heben (gilt für alle Kurse).
 
+- [ ] **Einmalig: das HHU-Theme in die Paketregistry laden** (nur Konrad, braucht ein Token mit
+  `api`-Recht). Erst danach bauen die Decks im CI und erscheinen auf der Website unter /folien/vlNN.pdf:
+
+  ```sh
+  tar -czf hhubeamer.tar.gz -C /usr/share/texmf/tex/latex/beamer/themes hhubeamer
+  curl --header "PRIVATE-TOKEN: <token>" --upload-file hhubeamer.tar.gz \
+    "https://gitlab.cs.uni-duesseldorf.de/api/v4/projects/<id>/packages/generic/hhubeamer/1.0/hhubeamer.tar.gz"
+  ```
+
+  Danach `build-image` von Hand auslösen. Fertig gepackt liegt das Archiv unter
+  `/tmp/claude-1000/…/scratchpad/hhubeamer.tar.gz` (815 KB, nur die vier Theme-Dateien und das Bildverzeichnis,
+  ohne die Bauartefakte, die im Systemverzeichnis daneben liegen).
+
 ### Lücken gegenüber anderen PyTorch-Lehrbüchern (Entscheidung Konrad, 2026-11-02)
 
 Vergleich mit Stevens/Antiga/Viehmann, Raschka, Howard/Gugger, d2l.ai, Prince (UDL), Bishop 2024. Die größte
