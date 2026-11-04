@@ -121,11 +121,20 @@ aktualisiert auch diese Kopie oder löscht sie. Und ein Pfad in `TEXINPUTS`, der
   dort erst hinein, wenn es final durchgesehen ist – Wording, Pacing, Umfang –, in
   der Regel nach seiner Sitzung. Gebaut werden alle, damit ein Fehler laut wird;
   `devnotes/folienlinks.py` liest dieselbe Datei und verlinkt nur Freigegebenes,
-  sonst zeigte ein Kapitel auf eine Adresse, die es nicht gibt. **Der Weg daran
-  vorbei sind die Job-Artefakte**: `build-slides` reicht `slides/*.pdf` an `pages`
-  weiter, und in einem öffentlichen Projekt kann das auch abrufbar sein. Wer das
-  nicht will, stellt in den Projekteinstellungen die Artefakte auf
-  *Nur Projektmitglieder*. Das Theme kommt
+  sonst zeigte ein Kapitel auf eine Adresse, die es nicht gibt. **Die Job-Artefakte sind kein Weg daran
+  vorbei**, obwohl `build-slides` alle `slides/*.pdf` an `pages` weiterreicht: Die
+  CI/CD-Sichtbarkeit des Projekts steht auf *Only Project Members*
+  (Einstellungen → Allgemein → Sichtbarkeit), und damit sind Artefakte, Jobs und
+  Pipelines für Nicht-Mitglieder nicht abrufbar. Am 2026-11-05 nachgemessen, und zwar
+  an beidem – am Formular und ohne Anmeldung an der Adresse selbst:
+
+  ```sh
+  B=https://gitlab.cs.uni-duesseldorf.de/voelkel/eidl-skript
+  curl -s -o /dev/null -w "%{http_code}\n" "$B/-/jobs/artifacts/main/download?job=build-slides"
+  ```
+
+  Erwartet wird **404** (so versteckt GitLab, was man nicht sehen darf); 200 hieße, die
+  ungeprüften Decks liegen offen. Das Theme kommt
   dafür aus den **Secure Files** des Projekts (Einstellungen → CI/CD → Secure files,
   `hhubeamer.tar.gz`, hochgeladen am 2026-11-04) in das Image — es darf nicht ins
   Repository, weil es keinen Lizenzvermerk hat und die HHU-Bildmarke enthält, und der
