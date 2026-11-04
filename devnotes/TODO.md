@@ -191,7 +191,11 @@ siehe `erledigt.md`).
 - [ ] Decks inhaltlich gegenlesen und im Hörsaal erproben; Folien-PDFs in ILIAS hochladen (die kopierten
   Dateien dort sind noch die von 2025/26). **VL 1, VL 2 und VL 3 sind gegengelesen und umgebaut**
   (`folien-review-vl01-2026-10-02.md`, `folien-review-vl02-2026-10-02.md`,
-  `folien-review-vl03-2026-10-28.md`); die übrigen 12 nach
+  `folien-review-vl03-2026-10-28.md`). **In ILIAS liegen VL 1 bis VL 4**, alle vier in der
+  Wochentabelle verlinkt (`../../ilias/runs/ws2026-27.yaml`). VL 4 ist am 2026-11-04 auf Konrads
+  Ansagen ergänzt worden (σ-Definition auf Folie 2, die Rechnungen zu H′(p) und zur Symmetrie,
+  das Evidenzgewicht auf Folie 14) und hochgeladen, aber **nicht** nach der Prüfliste
+  gegengelesen — das steht für VL 4 wie für die übrigen 11 noch aus; die übrigen nach
   demselben Muster (Prüfliste: `~/Sciebo/hhu/PLAYBOOK-folien.md` §3): Ablaufplan gegen die
   Frame-Reihenfolge, Notizenfassung bauen, Termine und Ansagen gegen `kurs-2026-27.md` und die
   ILIAS-Konfiguration (`../../ilias/runs/ws2026-27.yaml`, der Schwesterordner neben dem Repo),
