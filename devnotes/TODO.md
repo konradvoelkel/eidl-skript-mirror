@@ -204,19 +204,15 @@ siehe `erledigt.md`).
 
 ## Beamer-Folien (Schritt 4 des Migrationsplans)
 
-- [ ] **Deck 9 kürzen, vor dem 09.12.** Die Graphen gehen aus VL 9 heraus (Plan seit 2026-11-04,
-  `../kurs-2026-27.md`). In dieser Sitzung fällt also nur etwas weg, das ist der billige Teil — aber er
-  hat einen Termin, weil VL 9 am 09.12. stattfindet. Die Rahmen nicht löschen, sondern für Deck 14
-  beiseitelegen. Deck- und Dateiname heißen danach „VL 09 VAE und word2vec“. **Danach die
-  Zeile `9:` aus `DECK_STAND` in `folienlinks.py` löschen und `--schreiben` laufen lassen** —
-  sonst zeigen die Folienlinks weiter auf den alten Schnitt.
 - [ ] **Decks 12 bis 14 umschneiden, in der Weihnachtspause und erst nach VL 10.** Zu bewegen:
   * „Latente Räume geometrisch“ aus Deck 14 nach vorn in Deck 12 (Deck 12 hat 15 Rahmen, das dünnste
     neben VL 15, und verträgt es).
   * Autograd aus Deck 12 nach Deck 13, **hinter** die GANs, zusammen mit dem Induktionsteil der
     Backpropagation, der dort schon liegt.
-  * Die Graphen-Rahmen aus Deck 9 nach Deck 14, vor die drei Anwendungsbeispiele. Deck 14 heißt danach
-    „VL 14 Graphen und Anwendungen“.
+  * Die fünf Graphen-Rahmen von `../slides/parkplatz-vl14-graphen.tex` nach Deck 14, vor die drei
+    Anwendungsbeispiele. Deck 14 heißt danach „VL 14 Graphen und Anwendungen“, und das Kapitel
+    „Representation Learning und Graphen“ bekommt seine Folienzeile zurück — es hat seit dem
+    2026-11-04 keine, weil die Rahmen in keinem Deck stehen.
   Erst **nach** VL 10 anfangen: Wenn RNNs und Transformer wie 2025 überziehen, sind VL 13 und 14 der
   Puffer, und dann will man sie nicht gleichzeitig umgebaut haben. Die Kopfkommentare der Decks nennen
   weiter die Kapitel, aus denen die Rahmen heute stammen — sie werden mit den Rahmen nachgezogen, nicht

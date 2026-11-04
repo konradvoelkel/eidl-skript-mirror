@@ -10,6 +10,18 @@ Datierte Protokolle größerer Umbauten liegen daneben als `build-log-<datum>.md
 
 ### Beamer-Folien
 
+- **Deck 9 gekürzt (2026-11-04).** Die fünf Graphen-Rahmen sind nach
+  `../slides/parkplatz-vl14-graphen.tex` ausgezogen, weil der Plan die Graphen seit demselben Tag in
+  VL 14 führt; Deck und Datei heißen jetzt „VL 09 VAE und word2vec“, 15 statt 20 Seiten, 0 zu volle
+  Rahmen. Die knapp 26 Minuten, die der Ablaufplan des Decks den Graphen gab, gehen an den VAE und an
+  die Fragerunde — mit dem Hinweis auf die Notizseite, dass 2025 der KL-Term in der Sitzung falsch
+  herum begründet wurde (Sigma explodiere statt Sigma gegen null). Dazu `DECK_STAND` in
+  `folienlinks.py` um die Zeile für VL 9 leichter, und `--schreiben` hat die Folienzeilen nachgezogen:
+  word2vec läuft jetzt bis Folie 15, das Graphen-Kapitel hat **keine** Folienzeile mehr, bis Deck 14
+  umgeschnitten ist. Das Herausnehmen einer solchen Zeile kann `folienlinks.py` seitdem auch
+  (`entfernen`), und `--check` meldet eine Zeile, die zu keiner Sitzung mehr gehört, als „ÜBRIG“ —
+  vorher wäre sie still falsch geblieben.
+
 - **Die Decks bauen im CI (2026-11-04).** Neuer Job `build-slides`, `pages` legt sie als
   /folien/vlNN.pdf ab. Drei Dinge waren dafuer noetig und haben je einen Versuch gekostet:
   das Image braucht `texlive-luatex` (die Decks sind LuaLaTeX, das Buch XeLaTeX),

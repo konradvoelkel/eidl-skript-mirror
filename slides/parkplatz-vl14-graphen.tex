@@ -1,0 +1,106 @@
+% Kein eigenes Deck -- Rahmen auf dem Parkplatz.
+%
+% Die fünf Rahmen zum Kapitel part-representation-learning/18-representation-learning-graphen.md
+% standen bis zum 2026-11-04 in Deck VL 09. Der Plan in ../kurs-2026-27.md führt die
+% Graphen seit dem 2026-11-04 in VL 14, direkt vor dem Empfehlungssystem, das im
+% Anwendungskapitel darauf zurückgreift; Deck 9 ist deshalb gekürzt, Deck 14 noch nicht
+% umgeschnitten (offener Punkt in ../devnotes/TODO.md, Abschnitt "Beamer-Folien").
+%
+% Beim Einsetzen in Deck 14: Reihenfolge Graphen, dann Anwendungsbeispiele; danach die
+% Zeile 14 in DECK_STAND (../devnotes/folienlinks.py) auf den neuen Stand bringen oder
+% löschen, GRENZEN dort gegen die neuen Folienzahlen prüfen und folienlinks.py
+% --schreiben laufen lassen. Der Dateiname wird nicht von build.sh geglobbt (*VL*.tex),
+% dieses Stück baut also nicht mit.
+
+% ------------------------------------------------------------------ Representation Learning
+\begin{frame}
+  \frametitle{Representation Learning}
+
+  \begin{center}
+    \Large
+    Features \emph{lernen} statt sie hinzuprogrammieren.
+  \end{center}
+
+  \bigskip
+  \begin{center}
+    \normalsize Ziele: bessere Performance, Generalisierung -- und \emph{Transfer}.
+  \end{center}
+
+  \note{Zwei Mechanismen kennen wir schon: Dimensionsreduktion (Autoencoder) und
+    nichtlineare neue Features (jede versteckte Schicht tut das).
+    Transfer: Ein Encoder, der für Englisch gelernt wurde, taugt auch für Französisch
+    etwas.
+    Take-Home aus 2025: Alles, was man von Hand bauen kann, kann ein Optimierer
+    grundsätzlich auch finden.}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Handgemachte Features}
+
+  \begin{center}
+    \Large
+    Spektrogramm einer Audiodatei\\[12pt]
+    Kanten und Ecken in einem Bild
+  \end{center}
+
+  \bigskip
+  \begin{center}
+    \normalsize Die automatische Variante davon: CNNs (VL 11).
+  \end{center}
+
+  \note{Feature Engineering ist die Handarbeit, Representation Learning die Automatik.
+    Das Spektrogramm macht aus einer Waveform ein Bild -- Grundlage für Spracherkennung
+    und -synthese.}
+\end{frame}
+
+% ------------------------------------------------------------------ Graphen
+\begin{frame}
+  \frametitle{Ein Satz ist ein Graph}
+
+  \begin{center}
+    \includegraphics[width=0.72\textwidth]{vl09-sentence-graph.png}
+  \end{center}
+
+  \note{Zwei Sätze teilen sich den Knoten „frisst“ -- und erzeugen dadurch Pfade, die
+    keine ursprünglichen Sätze sind.
+    Das ist die Beobachtung, aus der node2vec entsteht: Wenn Sätze Pfade in einem Graphen
+    sind, kann man umgekehrt aus einem Graphen Sätze machen.}
+\end{frame}
+
+\begin{frame}
+  \frametitle{node2vec}
+
+  \begin{enumerate}\setlength{\itemsep}{10pt}
+  \item „Sätze“ durch \emph{Random Walks} auf dem Graphen erzeugen
+  \item word2vec-Skip-gram darauf trainieren
+  \end{enumerate}
+
+  \bigskip
+  \begin{center}
+    \normalsize Verstehe einen Knoten durch seinen Kontext.
+  \end{center}
+
+  \note{Grover \& Leskovec 2016. Schritt 1 ist teuer, aber parallelisierbar.
+    Beispiel, das gut zieht: ein bipartiter Graph Titel $\to$ Genre aus einem
+    Netflix-Datensatz -- nach node2vec sucht man im latenten Raum nach ähnlichen Titeln.
+    Take-Home: word2vec braucht nur Sätze, also läuft es auf allem, woraus man Sätze
+    sampeln kann.
+    \emph{Wenn Zeit ist}, die Frage stellen: Wie sähe wav2vec aus? Was sind die „Wörter“,
+    was der „Kontext“? 2025 waren das elf Minuten Brainstorming -- dieses Jahr nur, wenn
+    die Zeit reicht.}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Graph Neural Networks: Message Passing}
+
+  \begin{center}
+    \includegraphics[width=0.66\textwidth]{vl09-message-passing.png}
+  \end{center}
+
+  \note{Nur die Idee: Jeder Knoten sammelt Informationen von seinen Nachbarn, mischt sie
+    mit seinem eigenen Zustand, und das mehrfach. Nach $k$ Runden weiß ein Knoten etwas
+    über seine $k$-Nachbarschaft.
+    Die Formel steht als Vertiefung im Skript -- hier nicht vertiefen, das ist Stoff für
+    andere Module.}
+\end{frame}
+

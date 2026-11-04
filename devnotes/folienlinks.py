@@ -76,9 +76,8 @@ MARKE = "/folien/vl"
 # **Jede Zeile verschwindet mit dem Umschnitt ihres Decks.** Ist die Liste leer, kommt wieder
 # alles aus dem Plan, so wie es gedacht ist.
 DECK_STAND = {
-    9:  ["part-representation-learning/15-variational-autoencoder.md",
-         "part-representation-learning/16-word2vec.md",
-         "part-representation-learning/18-representation-learning-graphen.md"],
+    # VL 9 ist am 2026-11-04 gekürzt und steht wieder auf dem Plan: Die fünf Graphen-Rahmen
+    # liegen auf `../slides/parkplatz-vl14-graphen.tex`, bis Deck 14 umgeschnitten wird.
     12: ["part-lernen/10-autograd-berechnungsgraph.md",
          "part-architekturen-anwendungen/23-llms-benutzen.md"],
     13: ["part-architekturen-anwendungen/22-gans.md",
@@ -182,6 +181,18 @@ def zeile_fuer(kapitelpfad, alles):
     return " · ".join(teile) if teile else None
 
 
+def entfernen(pfad):
+    """Die Folienzeile samt Leerzeile herausnehmen -- für ein Kapitel, das in keiner
+    Sitzung mehr vorkommt, weil sein Stoff aus dem Deck ausgezogen ist."""
+    p = WURZEL / pfad
+    s = p.read_text(encoding="utf-8")
+    neu = re.sub(r"^\[Folien VL .*\n\n?", "", s, count=1, flags=re.M)
+    if neu == s:
+        return "nichts zu entfernen"
+    p.write_text(neu, encoding="utf-8")
+    return "entfernt"
+
+
 def eintragen(pfad, zeile):
     """Die Zeile unter die `#`-Überschrift setzen -- hinter Aufzeichnung und Player,
     wenn es sie gibt, sonst direkt darunter. Idempotent über die Marke."""
@@ -223,16 +234,26 @@ def main():
             print("VL %2d  %-40s S. %3s-%-3s  ab Folie: %s"
                   % (nr, t[:40], von or "?", bis, start[:38]))
 
-    kapitel = sorted({pfad for nr in alles for pfad, *_ in alles[nr]})
+    # Ueber *alle* Kapitel, nicht nur ueber die der Sitzungen: Ein Kapitel, dessen Stoff aus
+    # einem Deck ausgezogen ist, kommt in keiner Sitzung mehr vor und behielte sonst still
+    # seine alte Zeile -- einen Link auf Folien, die es nicht mehr gibt (2026-11-04, Graphen).
+    kapitel = sorted(
+        pf.relative_to(WURZEL).as_posix()
+        for teil in ("part-grundlagen", "part-lernen", "part-representation-learning",
+                     "part-architekturen-anwendungen")
+        for pf in (WURZEL / teil).glob("*.md")
+    )
     print("-" * 78)
     for pfad in kapitel:
         z = zeile_fuer(pfad, alles)
-        if not z:
+        vorhanden = MARKE in (WURZEL / pfad).read_text(encoding="utf-8")
+        if not z and not vorhanden:
             continue
         if args.schreiben:
-            print("%-52s %s" % (pfad, eintragen(pfad, z)))
+            print("%-52s %s" % (pfad, eintragen(pfad, z) if z else entfernen(pfad)))
+        elif not z:
+            print("%-52s %s" % (pfad, "Zeile übrig, gehört zu keiner Sitzung"))
         else:
-            vorhanden = MARKE in (WURZEL / pfad).read_text(encoding="utf-8")
             print("%-52s %s" % (pfad, "steht schon" if vorhanden else "neu"))
             print("    " + z)
 
@@ -242,19 +263,26 @@ def main():
         # wurde -- nicht, ob die Zeile im Kapitel noch zu den Bereichen passt. Ein
         # umgeschnittenes Deck oder ein geaenderter Plan hat die Links also still falsch
         # werden lassen.
-        fehlt, falsch = [], []
+        fehlt, falsch, uebrig = [], [], []
         for pf in kapitel:
             s = (WURZEL / pf).read_text(encoding="utf-8")
+            soll_da = zeile_fuer(pf, alles) is not None
             if MARKE not in s:
-                fehlt.append(pf)
+                if soll_da:
+                    fehlt.append(pf)
+                continue
+            if not soll_da:
+                uebrig.append(pf)
                 continue
             ist = re.search(r"^\[Folien VL .*$", s, re.M)
             soll = zeile_fuer(pf, alles)
             if ist and soll and ist.group(0) != soll:
                 falsch.append((pf, ist.group(0), soll))
-        if fehlt or falsch or offen:
+        if fehlt or falsch or uebrig or offen:
             for f in fehlt:
                 print("FEHLT: %s hat keine Folienzeile" % f)
+            for u in uebrig:
+                print("ÜBRIG: %s hat eine Folienzeile, kommt aber in keiner Sitzung vor" % u)
             for pf, ist, soll in falsch:
                 print("FALSCH: %s" % pf)
                 print("    steht: " + ist)

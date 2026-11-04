@@ -1,6 +1,7 @@
 % !Mode:: "TeX:UTF-8"
-% VL 9, gebaut aus part-representation-learning/15-variational-autoencoder.md,
-% 16-word2vec.md und 18-representation-learning-graphen.md
+% VL 9, gebaut aus part-representation-learning/15-variational-autoencoder.md
+% und 16-word2vec.md. Die fünf Graphen-Rahmen sind am 2026-11-04 nach
+% parkplatz-vl14-graphen.tex ausgezogen, weil der Plan die Graphen in VL 14 führt.
 % (Dialogmuster: transcripts/vl08-vae-word2vec-2025 und vl09-representation-learning-2025).
 \input{Einführung in Deep Learning 2026 header}
 
@@ -9,7 +10,7 @@
 
 \graphicspath{{../images/}}
 
-\title[VAE, word2vec, Graphen (VL 9)]{VAE, word2vec und Graphen\\\large Einführung in Deep Learning, VL 9}
+\title[VAE und word2vec (VL 9)]{VAE und word2vec\\\large Einführung in Deep Learning, VL 9}
 \date{09.12.2026}
 
 \begin{document}
@@ -17,21 +18,23 @@
 \begin{frame}
   \titlepage
 
-  \note{\textbf{Ablauf, 90 Minuten.} Drei Kapitel -- das ist viel, deshalb ist der
-    Graphenteil bewusst kurz (node2vec und Message Passing als Idee, keine Vertiefung):\\[2pt]
+  \note{\textbf{Ablauf, 90 Minuten.} Zwei Kapitel. Die Graphen sind am 2026-11-04 nach
+    VL 14 gerückt, direkt vor das Empfehlungssystem -- die knapp 26 Minuten, die sie hier
+    hatten, gehen an den VAE und an die Fragerunde:\\[2pt]
     \begin{tabular}{@{}rll@{}}
-      0--6   & Folie 2       & Rückblick Autoencoder, Löcher im latenten Raum\\
-      6--18  & Folien 3--5   & Rauschen dazu, der Reparametrisierungstrick\\
-      18--30 & Folien 6--8   & VAE-Training, KL-Term, Recap\\
-      30--38 & Folien 9--10  & word2vec: Ziel und Kernidee\\
-      38--50 & Folien 11--12 & CBOW und Skip-gram\\
-      50--58 & Folien 13--14 & Token statt Wörter, Dokumente vergleichen\\
-      58--70 & Folien 15--16 & Representation Learning, Feature Engineering\\
-      70--84 & Folien 17--19 & node2vec, Message Passing\\
-      84--90 & Folie 20      & Übungsblatt\\
+      0--8   & Folie 2       & Rückblick Autoencoder, Löcher im latenten Raum\\
+      8--22  & Folien 3--5   & Rauschen dazu, der Reparametrisierungstrick\\
+      22--38 & Folien 6--8   & VAE-Training, KL-Term, Recap\\
+      38--48 & Folien 9--10  & word2vec: Ziel und Kernidee\\
+      48--60 & Folien 11--12 & CBOW und Skip-gram\\
+      60--72 & Folien 13--14 & Token statt Wörter, Dokumente vergleichen\\
+      72--80 & Folie 15      & Übungsblatt\\
+      80--90 & Reserve       & Fragen, und der KL-Term in Ruhe\\
     \end{tabular}\\[4pt]
-    2025 gab es nach dem VAE eine siebenminütige Fragerunde -- die Zeit einplanen,
-    der Reparametrisierungstrick braucht sie.}
+    2025 gab es nach dem VAE eine siebenminütige Fragerunde -- die Zeit ist jetzt da,
+    der Reparametrisierungstrick braucht sie. Und beim KL-Term aufpassen: 2025 wurde in
+    der Sitzung begründet, Sigma \emph{explodiere}, im Skript steht die umgekehrte
+    Richtung (Sigma geht gegen null). Das Skript hat recht.}
 \end{frame}
 
 \begin{frame}
@@ -249,98 +252,6 @@
 
   \note{Der Task, von dem das Kapitel ausgeht: zu $N$ Dokumenten die $k$ ähnlichsten Paare.
     Mit Wortvektoren statt Wortzählungen werden „Hund“ und „Tier“ endlich benachbart.}
-\end{frame}
-
-% ------------------------------------------------------------------ Representation Learning
-\begin{frame}
-  \frametitle{Representation Learning}
-
-  \begin{center}
-    \Large
-    Features \emph{lernen} statt sie hinzuprogrammieren.
-  \end{center}
-
-  \bigskip
-  \begin{center}
-    \normalsize Ziele: bessere Performance, Generalisierung -- und \emph{Transfer}.
-  \end{center}
-
-  \note{Zwei Mechanismen kennen wir schon: Dimensionsreduktion (Autoencoder) und
-    nichtlineare neue Features (jede versteckte Schicht tut das).
-    Transfer: Ein Encoder, der für Englisch gelernt wurde, taugt auch für Französisch
-    etwas.
-    Take-Home aus 2025: Alles, was man von Hand bauen kann, kann ein Optimierer
-    grundsätzlich auch finden.}
-\end{frame}
-
-\begin{frame}
-  \frametitle{Handgemachte Features}
-
-  \begin{center}
-    \Large
-    Spektrogramm einer Audiodatei\\[12pt]
-    Kanten und Ecken in einem Bild
-  \end{center}
-
-  \bigskip
-  \begin{center}
-    \normalsize Die automatische Variante davon: CNNs (VL 11).
-  \end{center}
-
-  \note{Feature Engineering ist die Handarbeit, Representation Learning die Automatik.
-    Das Spektrogramm macht aus einer Waveform ein Bild -- Grundlage für Spracherkennung
-    und -synthese.}
-\end{frame}
-
-% ------------------------------------------------------------------ Graphen
-\begin{frame}
-  \frametitle{Ein Satz ist ein Graph}
-
-  \begin{center}
-    \includegraphics[width=0.72\textwidth]{vl09-sentence-graph.png}
-  \end{center}
-
-  \note{Zwei Sätze teilen sich den Knoten „frisst“ -- und erzeugen dadurch Pfade, die
-    keine ursprünglichen Sätze sind.
-    Das ist die Beobachtung, aus der node2vec entsteht: Wenn Sätze Pfade in einem Graphen
-    sind, kann man umgekehrt aus einem Graphen Sätze machen.}
-\end{frame}
-
-\begin{frame}
-  \frametitle{node2vec}
-
-  \begin{enumerate}\setlength{\itemsep}{10pt}
-  \item „Sätze“ durch \emph{Random Walks} auf dem Graphen erzeugen
-  \item word2vec-Skip-gram darauf trainieren
-  \end{enumerate}
-
-  \bigskip
-  \begin{center}
-    \normalsize Verstehe einen Knoten durch seinen Kontext.
-  \end{center}
-
-  \note{Grover \& Leskovec 2016. Schritt 1 ist teuer, aber parallelisierbar.
-    Beispiel, das gut zieht: ein bipartiter Graph Titel $\to$ Genre aus einem
-    Netflix-Datensatz -- nach node2vec sucht man im latenten Raum nach ähnlichen Titeln.
-    Take-Home: word2vec braucht nur Sätze, also läuft es auf allem, woraus man Sätze
-    sampeln kann.
-    \emph{Wenn Zeit ist}, die Frage stellen: Wie sähe wav2vec aus? Was sind die „Wörter“,
-    was der „Kontext“? 2025 waren das elf Minuten Brainstorming -- dieses Jahr nur, wenn
-    die Zeit reicht.}
-\end{frame}
-
-\begin{frame}
-  \frametitle{Graph Neural Networks: Message Passing}
-
-  \begin{center}
-    \includegraphics[width=0.66\textwidth]{vl09-message-passing.png}
-  \end{center}
-
-  \note{Nur die Idee: Jeder Knoten sammelt Informationen von seinen Nachbarn, mischt sie
-    mit seinem eigenen Zustand, und das mehrfach. Nach $k$ Runden weiß ein Knoten etwas
-    über seine $k$-Nachbarschaft.
-    Die Formel steht als Vertiefung im Skript -- hier nicht vertiefen, das ist Stoff für
-    andere Module.}
 \end{frame}
 
 \begin{frame}

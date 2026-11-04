@@ -6,8 +6,6 @@ short_title: "Representation Learning"
 
 # Representation Learning und Graphen
 
-[Folien VL 9, S. 15–20](https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de/folien/vl09.pdf#page=15)
-
 ## Representation Learning
 
 ### Worum geht's?
