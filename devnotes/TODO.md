@@ -154,9 +154,9 @@ siehe `erledigt.md`).
   **und** die Punkteverteilung der korrigierten Blätter. Erster Schritt ist nicht der Umbau, sondern das
   Messen: ab VL 1 die Aufzeichnungen mitschneiden lassen und je Sitzung notieren, womit sie beginnt –
   2025 begannen zehn von fünfzehn mit dem Rest der vorigen, und genau diese Kette ist die Diagnose.
-- [ ] **VL 12 bis 14 sind am 2026-11-04 umgeschnitten** (latente Räume als Sitzung nach der Pause,
-  Autograd und Induktion zusammen hinter die GANs, Anwendungsbeispiele als ganze Sitzung). Im Plan steht
-  das; die **Decks** fehlen noch, siehe Abschnitt „Beamer-Folien“.
+- [ ] **VL 9 und VL 12 bis 14 sind am 2026-11-04 umgeschnitten** (Graphen aus VL 9 nach VL 14, latente
+  Räume als Sitzung nach der Pause, Autograd und Induktion zusammen hinter die GANs). Im Plan steht das;
+  die **Decks** fehlen noch, und Deck 9 hat einen Termin — siehe Abschnitt „Beamer-Folien“.
 
 - [ ] **[Entscheidung]** Die Reserve-Kapitel 26/27 ganz aus dem Plan nehmen oder als 16. Termin (Fragestunde vor
   der Klausur) einplanen? *Vorschlag:* 15 Termine wie 2025, Reserve nur, wenn eine Woche ausfällt.
@@ -204,17 +204,22 @@ siehe `erledigt.md`).
 
 ## Beamer-Folien (Schritt 4 des Migrationsplans)
 
-- [ ] **Decks 12 bis 14 umschneiden, in der Weihnachtspause und erst nach VL 10.** Der Plan ist seit dem
-  2026-11-04 neu (`../kurs-2026-27.md`), die Decks sind es nicht. Zu bewegen:
+- [ ] **Deck 9 kürzen, vor dem 09.12.** Die Graphen gehen aus VL 9 heraus (Plan seit 2026-11-04,
+  `../kurs-2026-27.md`). In dieser Sitzung fällt also nur etwas weg, das ist der billige Teil — aber er
+  hat einen Termin, weil VL 9 am 09.12. stattfindet. Die Rahmen nicht löschen, sondern für Deck 14
+  beiseitelegen. Deck- und Dateiname heißen danach „VL 09 VAE und word2vec“.
+- [ ] **Decks 12 bis 14 umschneiden, in der Weihnachtspause und erst nach VL 10.** Zu bewegen:
   * „Latente Räume geometrisch“ aus Deck 14 nach vorn in Deck 12 (Deck 12 hat 15 Rahmen, das dünnste
     neben VL 15, und verträgt es).
   * Autograd aus Deck 12 nach Deck 13, **hinter** die GANs, zusammen mit dem Induktionsteil der
     Backpropagation, der dort schon liegt.
-  * Deck 14 behält die drei Anwendungsbeispiele und bekommt den Platz, den die latenten Räume frei machen.
+  * Die Graphen-Rahmen aus Deck 9 nach Deck 14, vor die drei Anwendungsbeispiele. Deck 14 heißt danach
+    „VL 14 Graphen und Anwendungen“.
   Erst **nach** VL 10 anfangen: Wenn RNNs und Transformer wie 2025 überziehen, sind VL 13 und 14 der
   Puffer, und dann will man sie nicht gleichzeitig umgebaut haben. Die Kopfkommentare der Decks nennen
-  weiter die Kapitel, aus denen die Rahmen heute stammen – sie werden mit den Rahmen nachgezogen, nicht
-  vorher, sonst behaupten sie etwas Falsches.
+  weiter die Kapitel, aus denen die Rahmen heute stammen — sie werden mit den Rahmen nachgezogen, nicht
+  vorher, sonst behaupten sie etwas Falsches. Beim Umbenennen eines Decks daran denken, dass die
+  Foliennamen in ILIAS hängen (Abschnitt „ILIAS“) und `slides/build.sh` über `*VL*.tex` glob't.
 
 - [ ] Rest aus der Durchsicht vom 25.09. (`folien-review-2026-09-25.md`): Ablaufplan-Foliennummern in
   9 Decks (VL 1 am 2026-10-02, VL 3 am 2026-10-28, VL 4 und VL 5 am 2026-11-04
