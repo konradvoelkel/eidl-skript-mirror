@@ -199,8 +199,13 @@ build-slides:
   allow_failure: true
   script:
     - kpsewhich beamerthemehhubeamer.sty > /dev/null || { echo "FEHLER - das HHU-Theme fehlt im Image. Secure File hhubeamer.tar.gz hinterlegen und build-image von Hand ausloesen."; exit 1; }
-    - fc-list | grep -q "Source Sans 3" || { echo "FEHLER - Schrift Source Sans 3 fehlt im Image (Paket fonts-adobe-sourcesans3)."; exit 1; }
-    - cd slides && ./build.sh
+    - cd slides && ./build.sh && cd ..
+    # Die Schrift wird **am Ergebnis** geprueft, nicht an `fc-list`. Zwei Gruende: Der Job
+    # sah am 2026-11-04 eine leere fontconfig-Liste, obwohl der Image-Bau "Schrift da:
+    # 14 Schnitte" gemeldet hatte -- und vor allem ist die Frage ohnehin nicht, was
+    # fontconfig kennt, sondern was im PDF steht. Faellt LuaTeX still auf Latin Modern
+    # zurueck (PLAYBOOK-folien §2.3), sieht man genau das hier.
+    - 'pdffonts slides/*VL\ 04*.pdf | grep -q SourceSans3 || { echo "FEHLER - das Deck ist nicht in Source Sans 3 gesetzt; faellt LuaTeX auf Latin Modern zurueck?"; pdffonts slides/*VL\ 04*.pdf; exit 1; }'
     # Die Zahl melden, auf die der Schritt gewirkt hat, nicht dass er lief.
     - ls -1 slides/*.pdf | wc -l | xargs echo "Decks gebaut:"
   artifacts:
