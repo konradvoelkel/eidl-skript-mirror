@@ -97,6 +97,16 @@ RUN apt-get -o Acquire::Retries=5 update \
     poppler-utils \
     && rm -rf /var/lib/apt/lists/*
 
+# Die fontconfig-Datenbank einmal bauen und **nachsehen, ob die Schrift drin ist**. Das
+# Paket liefert 14 OTF nach /usr/share/fonts/opentype/sourcesans3/, aber der Cache, in dem
+# luaotfload nach dem Familiennamen sucht, entsteht im Container nicht von selbst: Am
+# 2026-11-04 war `fc-list` leer, und `build-slides` meldete die fehlende Schrift, obwohl
+# die Dateien da lagen. Schlaegt die Probe fehl, soll der **Image-Bau** scheitern und nicht
+# erst der Job, der das Image benutzt.
+RUN fc-cache -f > /dev/null \
+    && fc-list | grep -q "Source Sans 3" \
+    && echo "Schrift da: $(fc-list | grep -c 'Source Sans 3') Schnitte"
+
 # Das HHU-Beamer-Theme. Es liegt **bewusst nicht im Repository**: Es hat keinen
 # Lizenzvermerk und keinen Autor, und sein `fig/` enthaelt das HHU-Logo -- ein Markenzeichen,
 # dessen Weitergabe nicht uns gehoert. Das Repository wird nach GitHub gespiegelt und waere
