@@ -25,6 +25,28 @@ variables:
 #
 # Zwei Tags: `latest` benutzen die anderen Jobs, das Kurz-SHA erlaubt es, im Zweifel auf
 # ein bestimmtes Image zurueckzugehen.
+# Holt das HHU-Theme aus den Secure Files des Projekts und reicht es als Artefakt an
+# `build-image` weiter. Python aus der Standardbibliothek, damit weder `curl` noch ein
+# `apk add` noetig ist -- und ganz bewusst nicht der Installer von gitlab.com, der ein
+# unangeheftetes Skript als root ausfuehrt. Fehlt die Datei, endet der Job mit 0 und sagt
+# es; `build-slides` scheitert dann sichtbar.
+fetch-theme:
+  # `.pre` statt `image`: Diese Stufe laeuft immer vor allen anderen, und damit gilt das
+  # `needs` von build-image auch dann, wenn jemand die Stufen umsortiert.
+  stage: .pre
+  image: python:3.13-alpine
+  rules:
+    - if: $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH
+      when: never
+    - when: always
+  script:
+    - python3 tools/fetch_secure_file.py hhubeamer.tar.gz ci/hhubeamer.tar.gz
+    - 'if [ -f ci/hhubeamer.tar.gz ]; then tar -tzf ci/hhubeamer.tar.gz | wc -l | xargs echo "Dateien im Theme-Archiv:"; fi'
+  artifacts:
+    when: always
+    paths:
+      - ci/hhubeamer.tar.gz
+
 build-image:
   stage: image
   image:
@@ -55,25 +77,15 @@ build-image:
       --destination "${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}"
       --cache=true --cache-repo "${CI_REGISTRY_IMAGE}/cache"
       --cache-ttl=336h --snapshot-mode=redo
-  before_script:
-    # Das HHU-Theme kommt aus den **Secure Files dieses Projekts** und nicht aus dem
-    # Repository: Es hat keinen Lizenzvermerk und keinen Autor, sein `fig/` enthaelt die
-    # HHU-Bildmarke, und das Repository wird oeffentlich nach GitHub gespiegelt. Die
-    # Secure Files liegen in Einstellungen > CI/CD > Secure files (hochgeladen 2026-11-04,
-    # `hhubeamer.tar.gz`, 797 KB) und sind nur ueber die API mit Job-Token lesbar.
-    #
-    # Zwei Aufrufe statt des Installers von gitlab.com: Der laedt ein unangeheftetes Skript
-    # aus dem Netz und fuehrt es als root aus -- in einem Repository, das jede
-    # Paketversion anheftet, waere das die eine Ausnahme, die nichts einbringt. busybox in
-    # kaniko:debug kann wget, tr, grep und cut, und mehr braucht es nicht. `tr '{' '\n'`
-    # legt jedes JSON-Objekt auf eine eigene Zeile, damit id und name zusammen bleiben --
-    # unabhaengig davon, in welcher Reihenfolge die API sie schreibt.
-    #
-    # Fehlt die Datei, laeuft der Image-Bau trotzdem durch (optionales COPY im Dockerfile),
-    # und `build-slides` sagt, was fehlt.
-    - mkdir -p ci
-    - 'id=$(wget -qO - --header="JOB-TOKEN: $CI_JOB_TOKEN" "$CI_API_V4_URL/projects/$CI_PROJECT_ID/secure_files" | tr "{" "\n" | grep "\"name\":\"hhubeamer.tar.gz\"" | grep -o "\"id\":[0-9]*" | head -1 | cut -d: -f2); echo "Secure File id: ${id:-keine}"'
-    - 'if [ -n "$id" ]; then wget -q --header="JOB-TOKEN: $CI_JOB_TOKEN" -O ci/hhubeamer.tar.gz "$CI_API_V4_URL/projects/$CI_PROJECT_ID/secure_files/$id/download" && tar -tzf ci/hhubeamer.tar.gz > /dev/null && echo "hhubeamer.tar.gz geholt: $(wc -c < ci/hhubeamer.tar.gz) Bytes" || { rm -f ci/hhubeamer.tar.gz; echo "hhubeamer: Download kaputt - Image ohne Theme"; }; else echo "hhubeamer: keine Secure File - Image ohne Theme"; fi'
+  # Das Theme kommt als Artefakt aus `fetch-theme` in den Build-Kontext. Es darf nicht ins
+  # Repository (kein Lizenzvermerk, HHU-Bildmarke, oeffentlicher GitHub-Spiegel) und liegt
+  # deshalb als Secure File im Projekt. Warum ein eigener Job und nicht ein wget hier:
+  # Das busybox-wget in kaniko:debug kann kein TLS gegen diesen Server -- am 2026-11-04 in
+  # Job 674487 gemessen ("TLS error from peer (alert code 47)").
+  needs:
+    - job: fetch-theme
+      artifacts: true
+
 
 
 
