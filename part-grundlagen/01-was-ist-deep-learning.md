@@ -148,9 +148,9 @@ Lesetipp: „The Decade of Deep Learning“ von Leo Gao, [bmk.sh/2019/12/31/The-
 Das meiste davon ist Stoff der aufbauenden Module. Die Transformer sind die Ausnahme:
 
 * **2017** Transformer, „Attention is all you need“ – die Grundlage für GPT. Die sehen wir
-  uns im Kapitel [„Transformer“](../part-representation-learning/19-transformer.md) an und
+  uns im Kapitel [„Transformer“](../part-architekturen-anwendungen/20-transformer.md) an und
   benutzen sie im Kapitel
-  [„LLMs benutzen“](../part-architekturen-anwendungen/21-llms-benutzen.md) – trainieren
+  [„LLMs benutzen“](../part-architekturen-anwendungen/23-llms-benutzen.md) – trainieren
   werden wir aber keine.
 * **2020** AlphaFold 2 „löst“ das Proteinfaltungsproblem – Nobelpreis für Chemie 2024.
 * **2021** Diffusionsmodelle schlagen GANs bei der Bildgenerierung (Dhariwal und Nichol, [*Diffusion Models Beat GANs on Image Synthesis*](https://arxiv.org/abs/2105.05233)); das Verfahren selbst, DDPM, ist von 2020.

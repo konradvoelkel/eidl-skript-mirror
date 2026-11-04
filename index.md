@@ -40,18 +40,24 @@ Wenn Sie Fehler finden oder etwas unklar ist, freue ich mich über eine Nachrich
 - [Autoencoder](part-representation-learning/14-autoencoder.md) – Lernen ohne Label
 - [Variational Autoencoder](part-representation-learning/15-variational-autoencoder.md) – der Autoencoder als probabilistisches Modell
 - [Wortvektoren: word2vec](part-representation-learning/16-word2vec.md) – Embeddings aus dem Kontext
-- [Representation Learning und Graphen](part-representation-learning/17-representation-learning-graphen.md) – node2vec und Graph Neural Networks
-- [Recurrent Neural Networks](part-representation-learning/18-rnn.md) – Sequenzen, LSTM und GRU
-- [Transformer](part-representation-learning/19-transformer.md) – Self-Attention mit Query, Key und Value
+- [Latente Räume geometrisch](part-representation-learning/17-latente-raeume-geometrisch.md) – Arithmetik und Interpolation im latenten Raum
+- [Representation Learning und Graphen](part-representation-learning/18-representation-learning-graphen.md) – node2vec und Graph Neural Networks
 
-### Architekturen und Anwendungen
+### Architekturen
 
-- [Faltung und Convolutional Neural Networks](part-architekturen-anwendungen/20-faltung-cnn.md) – Faltung, Pooling, CNNs
-- [LLMs benutzen](part-architekturen-anwendungen/21-llms-benutzen.md) – große Sprachmodelle per API und lokal
+- [Recurrent Neural Networks](part-architekturen-anwendungen/19-rnn.md) – Sequenzen, LSTM und GRU
+- [Transformer](part-architekturen-anwendungen/20-transformer.md) – Self-Attention mit Query, Key und Value
+- [Faltung und Convolutional Neural Networks](part-architekturen-anwendungen/21-faltung-cnn.md) – Faltung, Pooling, CNNs
 - [Generative Adversarial Networks](part-architekturen-anwendungen/22-gans.md) – Generator gegen Diskriminator
-- [Latente Räume geometrisch](part-architekturen-anwendungen/23-latente-raeume.md) – Arithmetik und Interpolation im latenten Raum
+
+### Modelle in der Praxis
+
+- [LLMs benutzen](part-architekturen-anwendungen/23-llms-benutzen.md) – große Sprachmodelle per API und lokal
 - [Anwendungsbeispiele](part-architekturen-anwendungen/24-anwendungsbeispiele.md) – Chatbot, E-Mails klassifizieren, Empfehlungssystem
 - [Destillation](part-architekturen-anwendungen/25-destillation.md) – kleine Netze lernen von großen
+
+### Ausblick
+
 - [Optimierer: Momentum, Adam, Muon](part-architekturen-anwendungen/26-optimierer.md) – was über SGD hinausgeht
 - [Adversarial Attacks und Polysemie](part-architekturen-anwendungen/27-adversarial-attacks-polysemie.md) – Netze täuschen, mehrdeutige Wörter
 

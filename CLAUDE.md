@@ -76,14 +76,14 @@ im Kapitel „Tensoren“ – und seit dem 2026-11-03 eine Seite mehr, weil in d
 Titelüberschrift entfiel und die Abschnitte eine Ebene höher stehen (gegen den unveränderten
 Baum gemessen: 135); die
 fachliche Durchsicht vom 2026-10-15 deckte 27 Kapitel und das Glossar ab, den
-Kettenregel-Abschnitt vom 2026-10-20 und diesen Zuwachs nicht): HTML ohne Warnungen, PDF **136 Seiten A4** lokal, 0 LaTeX-Fehler,
+Kettenregel-Abschnitt vom 2026-10-20 und diesen Zuwachs nicht): HTML ohne Warnungen, PDF **140 Seiten A4** lokal, 0 LaTeX-Fehler,
 0 fehlende Glyphen, 5 überlange Zeilen. Das veröffentlichte PDF hatte bis zum 2026-10-19
 stets **eine Seite mehr** als das lokale (siehe unten); für den neuen Stand ist das noch
 nicht nachgemessen. Die `--min-pages`-Untergrenze
 soll einen *abgebrochenen* Lauf fangen, nicht eine gewollte Kürzung — sie steht deshalb
 deutlich unter der tatsächlichen Seitenzahl, in der CI auf demselben Wert.
 
-**Lokal und CI weichen um eine Seite ab, und das bleibt so**: hier 136 Seiten, das
+**Lokal und CI weichen um eine Seite ab, und das bleibt so**: hier 140 Seiten, das
 veröffentlichte PDF hatte am 2026-10-19 vor dem neuen Kapitel 113 gegen lokal 112. Die erste Abweichung steht auf Seite 28 in einem Codeblock,
 der eine Zeile anders bricht — es ist der *Satz*, nicht der Inhalt. Die Ursache ist am
 2026-10-15 gemessen worden, und sie ist nicht die, die hier vom 2026-09-29 bis dahin stand:
@@ -106,6 +106,13 @@ veröffentlichte Zahl braucht, holt sie mit dem `curl`-Rezept weiter unten.
 
 Beides ist unabhängig von mystmd: 1.10.1 und 1.11.0 liefern auf demselben Baum dieselbe
 Seitenzahl (gemessen am 2026-10-15 beim Upgrade, `devnotes/build-log-2026-10-15.md`).
+
+**Die 140 Seiten enthalten zwei Seiten Teilegliederung** (2026-11-04). Vor dem Umbau auf
+sechs Teile baute derselbe Baum 138 Seiten, gemessen in einem Worktree auf `4d3434e` mit
+derselben `.venv` — die zwei zusätzlichen Seiten sind die zwei neuen Teiltrenner
+(„Modelle in der Praxis“, „Ausblick“), nicht neuer Text. Von 136 auf 138 war es davor
+schon durch die seitengenauen Folienlinks gewachsen, ohne dass diese Zahl hier nachgezogen
+worden wäre.
 
 Die Lehre daran ist nicht die Zahl, sondern die Methode: **Eine Seitenzahl, die sich
 „von selbst“ ändert, gehört gegen einen unveränderten Baum gemessen, bevor man sie der
@@ -275,8 +282,8 @@ Wichtig zur Ordnerstruktur:
 |---|---|
 | `part-grundlagen/` | Kapitel 01–05: Was ist Deep Learning, Neuron/Perzeptron, Training, vortrainierte Modelle, Tensoren; dazu die zwei Hintergrundkapitel (Lineare Algebra, Analysis) **hinter** Kapitel 01, ohne Nummer im Dateinamen, weil sie nicht in der Vorlesungsreihenfolge stehen |
 | `part-lernen/` | Kapitel 06–13: logistische Regression, Loss und Maximum Likelihood, Gradientenabstieg, Backprop, Autograd, Aktivierungen, Netze von Hand, universelle Approximation |
-| `part-representation-learning/` | Kapitel 14–19: Autoencoder, VAE, word2vec, Graphen, RNN, Transformer |
-| `part-architekturen-anwendungen/` | Kapitel 20–27: CNN, LLMs benutzen, GANs, latente Räume, Anwendungen, Destillation, Optimierer, Adversarial Attacks |
+| `part-representation-learning/` | Kapitel 14–18: Autoencoder, VAE, word2vec, latente Räume geometrisch, Graphen |
+| `part-architekturen-anwendungen/` | Kapitel 19–27: RNN, Transformer, CNN, GANs; LLMs benutzen, Anwendungsbeispiele, Destillation; Optimierer, Adversarial Attacks. **Der Ordner trägt drei Teile des Buchs**, siehe unten |
 | `slides/` | Beamer-Foliensätze VL 01–15 (`build.sh`, gemeinsamer `header.tex`) |
 | `images/`, `logo/` | Abbildungen, Logos; dazu `images/social-card.png`, die Vorschaukarte |
 | `tools/` | Skripte der Veröffentlichung: Vorschaukarte, Sitemap-URLs, Kopf-Tags, JSON-LD |
@@ -288,6 +295,23 @@ Wichtig zur Ordnerstruktur:
 
 Das Inhaltsverzeichnis steht **explizit** in `myst.yml` unter `project.toc`. Eine neue Datei
 erscheint erst nach einem Eintrag dort.
+
+**Sechs Teile, vier Ordner** (seit 2026-11-04): Grundlagen, Lernen, Representation Learning,
+Architekturen, Modelle in der Praxis, Ausblick. Die Ordner sind nicht nachgezogen worden —
+`part-architekturen-anwendungen/` trägt die letzten drei Teile. Das ist Absicht: Ein Umzug
+der Dateien kostet Verweise, und die Teile stehen ohnehin in `myst.yml`, nicht im Pfad.
+`devnotes/check_doku.py` zählt die Kapitel über genau diese vier Ordner.
+
+**Die Nummern im Dateinamen folgen der Buchreihenfolge, nicht der Vorlesung.** Wer ein
+Kapitel verschiebt, nummeriert die folgenden mit um (am 2026-11-04 für sechs Kapitel
+getan: latente Räume von 23 nach 17, Graphen 17 nach 18, RNN 18 nach 19, Transformer 19
+nach 20, CNN 20 nach 21, LLMs benutzen 21 nach 23). Billig ist das, weil die Nummer
+**nirgends nach außen** sichtbar wird: MyST bildet die Seitenadresse aus dem Dateinamen
+*ohne* Nummer und ohne Ordner — das Transformer-Kapitel liegt unter
+`https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de/transformer/`, nicht unter einer
+Adresse mit Ordner und Nummer. Überschriften tragen keine Nummern, und Querverweise
+dürfen keine tragen. Eine *Umbenennung* ändert die Adresse dagegen sehr wohl — am
+2026-11-04 genau eine: aus `latente-raeume` wurde `latente-raeume-geometrisch`.
 
 ## Schreibstil
 

@@ -24,7 +24,7 @@ Das ist die These der Bachelorarbeit „Das Dimpled Manifold Model als Erklärun
 
 ### Wie wird's gemacht?
 
-Mit Gradientenabstiegsmethoden sucht man, ausgehend von einem Bild eines weißen Hais, Richtungen, die die Klassifikation ändern, ohne besonders viel am Bild zu ändern: ein Schritt in Richtung des Gradienten des Loss nach dem *Bild* oder viele kleine Schritte. Anders als sonst: Gradientenabstieg im **Eingaberaum**, nicht im Gewichtsraum – Backpropagation liefert $\nabla_x$ genauso wie $\nabla_w$, denn im DAG ist $x$ nur ein weiteres Blatt. Genau das tut auch das „Dreaming“ im Notebook `latent-classifier.ipynb` zum [Kapitel „LLMs benutzen“](21-llms-benutzen.md): Es sucht per Adam im Raum der Eingabe-Embeddings nach einem Text, der den Spam-Detektor maximal triggert – ein adversarial example ohne den Anspruch, unauffällig zu sein.
+Mit Gradientenabstiegsmethoden sucht man, ausgehend von einem Bild eines weißen Hais, Richtungen, die die Klassifikation ändern, ohne besonders viel am Bild zu ändern: ein Schritt in Richtung des Gradienten des Loss nach dem *Bild* oder viele kleine Schritte. Anders als sonst: Gradientenabstieg im **Eingaberaum**, nicht im Gewichtsraum – Backpropagation liefert $\nabla_x$ genauso wie $\nabla_w$, denn im DAG ist $x$ nur ein weiteres Blatt. Genau das tut auch das „Dreaming“ im Notebook `latent-classifier.ipynb` zum [Kapitel „LLMs benutzen“](23-llms-benutzen.md): Es sucht per Adam im Raum der Eingabe-Embeddings nach einem Text, der den Spam-Detektor maximal triggert – ein adversarial example ohne den Anspruch, unauffällig zu sein.
 
 :::{admonition} Vertiefung: Fast Gradient Sign Method
 :class: note dropdown
@@ -55,7 +55,7 @@ Genau das passiert bei **Polysemie**: Ein Wort wie „Maus“ (Tier, Computermau
 Die Manifold-Hypothese und ihre Grenzen: Daten nahe einer Kurve; Rauschen; zwei sich kreuzende Kurven (keine Mannigfaltigkeit – so sieht Polysemie im Embedding-Raum aus); und das Dimpled Manifold Model, in dem die Entscheidungsgrenze sich an die Daten schmiegt und Adversarial Examples nur einen winzigen Schritt entfernt sind.
 :::
 
-Damit schließt sich der Kreis zur Kernfrage aus dem [Kapitel „Latente Räume geometrisch“](23-latente-raeume.md): Welche Struktur finden wir im Latent Space? Manchmal eine schöne Mannigfaltigkeit – und manchmal etwas Interessanteres.
+Damit schließt sich der Kreis zur Kernfrage aus dem [Kapitel „Latente Räume geometrisch“](../part-representation-learning/17-latente-raeume-geometrisch.md): Welche Struktur finden wir im Latent Space? Manchmal eine schöne Mannigfaltigkeit – und manchmal etwas Interessanteres.
 
 ## Übung
 

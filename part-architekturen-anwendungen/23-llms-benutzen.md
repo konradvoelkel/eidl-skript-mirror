@@ -13,7 +13,7 @@ downloads:
 
 ## Transformer-LLMs in der Praxis einsetzen
 
-Zur Erinnerung der Aufbau eines Transformers ([Kapitel „Transformer“](../part-representation-learning/19-transformer.md), Fig. 1 in „Attention is all you need“): Encoder- und Decoder-Stapel aus Attention- und MLP-Blöcken. Ein *Large Language Model* ist ein sehr großer, meist Decoder-only Transformer, der das nächste Token vorhersagt.
+Zur Erinnerung der Aufbau eines Transformers ([Kapitel „Transformer“](20-transformer.md), Fig. 1 in „Attention is all you need“): Encoder- und Decoder-Stapel aus Attention- und MLP-Blöcken. Ein *Large Language Model* ist ein sehr großer, meist Decoder-only Transformer, der das nächste Token vorhersagt.
 
 ### Verschiedene Wege, LLMs zu nutzen
 
@@ -100,7 +100,7 @@ red = llm.tokenize(b" red")[0]
 print(f"{probs[red]:.2%}")                           # 0.72%
 ```
 
-Das ist die logistische Regression aus dem [Kapitel „Logistische Regression“](../part-lernen/06-logistische-regression.md) – Softmax über Logits –, nur mit 150 000 Klassen; alles aus dem [Kapitel „Latente Räume geometrisch“](23-latente-raeume.md) über Sampling-Strategien und Temperatur setzt genau hier an. (Bei `llm.scores` gibt es einen Fallstrick: Das Array hat immer `n_ctx` Zeilen, `scores[-1]` wäre also die falsche Position.)
+Das ist die logistische Regression aus dem [Kapitel „Logistische Regression“](../part-lernen/06-logistische-regression.md) – Softmax über Logits –, nur mit 150 000 Klassen; alles aus dem [Kapitel „Latente Räume geometrisch“](../part-representation-learning/17-latente-raeume-geometrisch.md) über Sampling-Strategien und Temperatur setzt genau hier an. (Bei `llm.scores` gibt es einen Fallstrick: Das Array hat immer `n_ctx` Zeilen, `scores[-1]` wäre also die falsche Position.)
 
 **Weg 10, strukturierter Output.** Wir zwingen das LLM, JSON auszugeben, und nutzen `pydantic`, um zu garantieren, dass die Datentypen stimmen:
 

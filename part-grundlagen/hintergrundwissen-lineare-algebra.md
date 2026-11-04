@@ -178,7 +178,7 @@ ist $\theta$ spitz, rechts stumpf.
 Der Kosinus misst Ähnlichkeit der *Richtungen*, unabhängig von den Längen. Als
 **Kosinusähnlichkeit** ist er das Standardmaß für Embeddings, etwa im
 [Kapitel „word2vec“](../part-representation-learning/16-word2vec.md) und im
-[Kapitel „Latente Räume“](../part-architekturen-anwendungen/23-latente-raeume.md).
+[Kapitel „Latente Räume“](../part-representation-learning/17-latente-raeume-geometrisch.md).
 
 ## Orthogonalität
 

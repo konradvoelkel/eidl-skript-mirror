@@ -18,7 +18,7 @@ Drei Beispiele, wie sich die Bausteine aus den vorigen Kapiteln zu Anwendungen z
 
 Wir überlegen gemeinsam: Wie implementiert man eine semantische Suche im Gewand eines Chatbots?
 
-**Vorbereitung**: Wandle die vorhandene HTML-FAQ um in JSON (`beautifulsoup`). Tokenisiere die Fragen und wandle sie in Vektoren um mit einem LLM (jede Frage ein Vektor, Weg 2 aus dem [Kapitel „LLMs benutzen“](21-llms-benutzen.md)).
+**Vorbereitung**: Wandle die vorhandene HTML-FAQ um in JSON (`beautifulsoup`). Tokenisiere die Fragen und wandle sie in Vektoren um mit einem LLM (jede Frage ein Vektor, Weg 2 aus dem [Kapitel „LLMs benutzen“](23-llms-benutzen.md)).
 
 **Anwendung**: Tokenisiere den Nutzerinput und wandle ihn in einen Vektor um mit demselben LLM. Vergleiche mit Kosinus-Ähnlichkeit den Inputvektor zu den Fragenvektoren aus der Datenbank, zeige die Top-3-Treffer an. Zeige zum Top-Treffer die Antwort aus der Datenbank.
 
@@ -40,7 +40,7 @@ Aufgabe: Gegeben eine Liste besuchter bzw. gekaufter Items (Artikel, Produkte) p
 
 Lösungsansatz: Ein neuronales Netz konvertiert Items in Vektoren, sodass Items, die auf vielen Listen gemeinsam auftreten, zu Vektoren zugeordnet werden, die einen kleinen (Kosinus-)Abstand zueinander haben (Feature Engineering / Representation Learning). Dann finde im Latent Space Items in der Nähe vergangener Items eines Nutzers.
 
-Wie trainieren wir das neuronale Netz? Die Listen der Nutzer sind „Sätze“, die Items sind „Wörter“ – das ist word2vec (Skip-gram) auf Kauflisten, bzw. node2vec auf dem bipartiten Nutzer-Item-Graphen aus dem [Kapitel über Representation Learning und Graphen](../part-representation-learning/17-representation-learning-graphen.md). Alternativ bettet man Nutzer *und* Items in denselben Latent Space ein und trainiert supervised darauf, dass gekaufte Paare einen kleinen Abstand haben (*two-tower model*).
+Wie trainieren wir das neuronale Netz? Die Listen der Nutzer sind „Sätze“, die Items sind „Wörter“ – das ist word2vec (Skip-gram) auf Kauflisten, bzw. node2vec auf dem bipartiten Nutzer-Item-Graphen aus dem [Kapitel über Representation Learning und Graphen](../part-representation-learning/18-representation-learning-graphen.md). Alternativ bettet man Nutzer *und* Items in denselben Latent Space ein und trainiert supervised darauf, dass gekaufte Paare einen kleinen Abstand haben (*two-tower model*).
 
 ## Vibecoding Deep Learning
 

@@ -224,7 +224,7 @@ Die drei Abbildungen oben stammen aus einem *Denoising Sparse Label Autoencoder*
 
 Wir haben das Autoencoder-Design eingesetzt, um Bilder zu komprimieren (mit Sparsity Constraint), Bilder zu klassifizieren, Bilder zu entrauschen – und all das zusammen. Ein ML-System, welches diese Bilder verarbeiten soll, kann nun den fertig trainierten Encoder verwenden und direkt auf den Repräsentationen im Latent Space arbeiten. Das ist **Modularisierung im Training**: Der Encoder wird einmal trainiert und dann als Feature-Extraktor wiederverwendet.
 
-Frage: Welche Struktur finden wir im Latent Space bzw. in den Latent Vectors der Daten? Die **Latent-Manifold-Hypothese** besagt, dass die Daten in $\mathbb{R}^D$ nahe einer niedrigdimensionalen gekrümmten Fläche (Mannigfaltigkeit) liegen und der latente Raum diese Fläche „flach“ parametrisiert. Dazu mehr im [Kapitel „Latente Räume geometrisch“](../part-architekturen-anwendungen/23-latente-raeume.md).
+Frage: Welche Struktur finden wir im Latent Space bzw. in den Latent Vectors der Daten? Die **Latent-Manifold-Hypothese** besagt, dass die Daten in $\mathbb{R}^D$ nahe einer niedrigdimensionalen gekrümmten Fläche (Mannigfaltigkeit) liegen und der latente Raum diese Fläche „flach“ parametrisiert. Dazu mehr im [Kapitel „Latente Räume geometrisch“](17-latente-raeume-geometrisch.md).
 
 Später werden wir das Autoencoder-Design einsetzen, um Text (Strings) natürlicher Sprache zu kodieren, sodass die latente Repräsentation interessante Struktur aufweist – das ist word2vec ([Kapitel „word2vec“](16-word2vec.md)).
 

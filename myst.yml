@@ -65,17 +65,29 @@ project:
        - file: part-representation-learning/14-autoencoder.md
        - file: part-representation-learning/15-variational-autoencoder.md
        - file: part-representation-learning/16-word2vec.md
-       - file: part-representation-learning/17-representation-learning-graphen.md
-       - file: part-representation-learning/18-rnn.md
-       - file: part-representation-learning/19-transformer.md
-    - title: Architekturen und Anwendungen
+       # Direkt hinter word2vec: die Vektorarithmetik dort ist das Beispiel, an dem
+       # Arithmetik und Interpolation im latenten Raum haengen. In der Vorlesung ist
+       # das VL 14, im Buch gehoert es hierher (siehe kurs-2026-27.md).
+       - file: part-representation-learning/17-latente-raeume-geometrisch.md
+       - file: part-representation-learning/18-representation-learning-graphen.md
+    # Die vier Bauformen jenseits des MLP, nach ihrem induktiven Bias geordnet:
+    # Sequenz, Attention, Gitter, adversarielles Paar.
+    - title: Architekturen
       children:
-       - file: part-architekturen-anwendungen/20-faltung-cnn.md
-       - file: part-architekturen-anwendungen/21-llms-benutzen.md
+       - file: part-architekturen-anwendungen/19-rnn.md
+       - file: part-architekturen-anwendungen/20-transformer.md
+       - file: part-architekturen-anwendungen/21-faltung-cnn.md
        - file: part-architekturen-anwendungen/22-gans.md
-       - file: part-architekturen-anwendungen/23-latente-raeume.md
+    - title: Modelle in der Praxis
+      children:
+       - file: part-architekturen-anwendungen/23-llms-benutzen.md
        - file: part-architekturen-anwendungen/24-anwendungsbeispiele.md
        - file: part-architekturen-anwendungen/25-destillation.md
+    # Was ueber die Vorlesung hinausgeht. Welche Kapitel in einem Durchgang Reserve
+    # sind, steht in kurs-2026-27.md -- nicht hier, das Skript bleibt
+    # semesterunabhaengig.
+    - title: Ausblick
+      children:
        - file: part-architekturen-anwendungen/26-optimierer.md
        - file: part-architekturen-anwendungen/27-adversarial-attacks-polysemie.md
 #   Notebooks aus 2025: Inhalte sind in die Kapitel übernommen (siehe notebooks/README.md),

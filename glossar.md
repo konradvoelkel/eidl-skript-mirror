@@ -106,7 +106,7 @@ Die Begriffe, die in Klausuraufgaben vorkommen, je in ein bis drei Sätzen, mit 
 
 **`logvar`.** Der Encoder gibt $\ln \sigma_x^2$ aus statt $\sigma_x$, damit kein Ausgang auf positive Werte eingeschränkt werden muss. [Variational Autoencoder](part-representation-learning/15-variational-autoencoder.md)
 
-**Latent Space, Manifold-Hypothese.** Die Daten liegen nahe einer niedrigdimensionalen gekrümmten Fläche; der latente Raum parametrisiert sie. Gerade Linien zwischen Codes können die Fläche verlassen: Interpolation gut, Extrapolation schlecht. [Latente Räume geometrisch](part-architekturen-anwendungen/23-latente-raeume.md)
+**Latent Space, Manifold-Hypothese.** Die Daten liegen nahe einer niedrigdimensionalen gekrümmten Fläche; der latente Raum parametrisiert sie. Gerade Linien zwischen Codes können die Fläche verlassen: Interpolation gut, Extrapolation schlecht. [Latente Räume geometrisch](part-representation-learning/17-latente-raeume-geometrisch.md)
 
 ## Text, Graphen, Sequenzen
 
@@ -114,37 +114,37 @@ Die Begriffe, die in Klausuraufgaben vorkommen, je in ein bis drei Sätzen, mit 
 
 **Embedding-Layer.** Eine Lookup-Tabelle, die einer ID (Wort, Item, Nutzer) einen gelernten Vektor zuordnet, `nn.Embedding`. [word2vec](part-representation-learning/16-word2vec.md)
 
-**Temperatur- und Top-k-Sampling.** Beim Generieren die Logits durch $T$ teilen (klein: gieriger, groß: zufälliger) oder nur unter den $k$ wahrscheinlichsten Token sampeln. [Latente Räume geometrisch](part-architekturen-anwendungen/23-latente-raeume.md)
+**Temperatur- und Top-k-Sampling.** Beim Generieren die Logits durch $T$ teilen (klein: gieriger, groß: zufälliger) oder nur unter den $k$ wahrscheinlichsten Token sampeln. [Latente Räume geometrisch](part-representation-learning/17-latente-raeume-geometrisch.md)
 
-**node2vec.** Random Walks auf einem Graphen erzeugen „Sätze“, darauf word2vec. So bekommen Knoten Vektoren, etwa Items eines Empfehlungssystems. [Representation Learning und Graphen](part-representation-learning/17-representation-learning-graphen.md)
+**node2vec.** Random Walks auf einem Graphen erzeugen „Sätze“, darauf word2vec. So bekommen Knoten Vektoren, etwa Items eines Empfehlungssystems. [Representation Learning und Graphen](part-representation-learning/18-representation-learning-graphen.md)
 
-**RNN, GRU, LSTM.** Ein rekurrentes Netz verarbeitet eine Sequenz Schritt für Schritt und trägt einen Zustand mit, deshalb geeignet für Zeitreihen. LSTM und GRU steuern mit Gates, was in den Zustand geschrieben und gelesen wird, gegen verschwindende Gradienten über lange Sequenzen. [RNNs](part-representation-learning/18-rnn.md)
+**RNN, GRU, LSTM.** Ein rekurrentes Netz verarbeitet eine Sequenz Schritt für Schritt und trägt einen Zustand mit, deshalb geeignet für Zeitreihen. LSTM und GRU steuern mit Gates, was in den Zustand geschrieben und gelesen wird, gegen verschwindende Gradienten über lange Sequenzen. [RNNs](part-architekturen-anwendungen/19-rnn.md)
 
-**Transformer, Attention.** Kein rekurrentes Netz: Jedes Token vergleicht seine Query mit den Keys aller anderen und mischt deren Values, alles parallel. Positionsinformation kommt über ein Positionsembedding, gelernt oder fest. [Transformer](part-representation-learning/19-transformer.md)
+**Transformer, Attention.** Kein rekurrentes Netz: Jedes Token vergleicht seine Query mit den Keys aller anderen und mischt deren Values, alles parallel. Positionsinformation kommt über ein Positionsembedding, gelernt oder fest. [Transformer](part-architekturen-anwendungen/20-transformer.md)
 
-**BERT und GPT.** BERT ist ein Encoder, trainiert mit maskierten Wörtern (Masked Language Model), liefert kontextabhängige Embeddings, die man als Features klassifizieren kann. GPT ist ein Decoder, trainiert auf das nächste Token. [Transformer](part-representation-learning/19-transformer.md)
+**BERT und GPT.** BERT ist ein Encoder, trainiert mit maskierten Wörtern (Masked Language Model), liefert kontextabhängige Embeddings, die man als Features klassifizieren kann. GPT ist ein Decoder, trainiert auf das nächste Token. [Transformer](part-architekturen-anwendungen/20-transformer.md)
 
 ## Faltung und CNNs
 
-**Faltung.** An jeder Stelle ein Skalarprodukt des Filters mit einem gespiegelten Ausschnitt des Signals. Ein Faltungslayer ist ein spezieller linearer Layer mit vielen Nullen und geteilten Gewichten. [Faltung und CNNs](part-architekturen-anwendungen/20-faltung-cnn.md)
+**Faltung.** An jeder Stelle ein Skalarprodukt des Filters mit einem gespiegelten Ausschnitt des Signals. Ein Faltungslayer ist ein spezieller linearer Layer mit vielen Nullen und geteilten Gewichten. [Faltung und CNNs](part-architekturen-anwendungen/21-faltung-cnn.md)
 
-**Parameter Sharing, Translationsäquivarianz.** Derselbe Filter an jeder Position: wenige Parameter, und ein verschobenes Bild gibt eine verschobene Feature Map. [Faltung und CNNs](part-architekturen-anwendungen/20-faltung-cnn.md)
+**Parameter Sharing, Translationsäquivarianz.** Derselbe Filter an jeder Position: wenige Parameter, und ein verschobenes Bild gibt eine verschobene Feature Map. [Faltung und CNNs](part-architekturen-anwendungen/21-faltung-cnn.md)
 
-**Ausgabegröße.** $\lfloor (n + 2p - k)/s \rfloor + 1$ für Eingabe $n$, Padding $p$, Kernel $k$, Stride $s$. Stride und Pooling verkleinern die Feature Map. Vor dem linearen Kopf `Flatten`. [Faltung und CNNs](part-architekturen-anwendungen/20-faltung-cnn.md)
+**Ausgabegröße.** $\lfloor (n + 2p - k)/s \rfloor + 1$ für Eingabe $n$, Padding $p$, Kernel $k$, Stride $s$. Stride und Pooling verkleinern die Feature Map. Vor dem linearen Kopf `Flatten`. [Faltung und CNNs](part-architekturen-anwendungen/21-faltung-cnn.md)
 
-**Pooling.** Max- oder Average-Pooling verkleinert ohne Parameter und macht das Netz robust gegen kleine Verschiebungen. [Faltung und CNNs](part-architekturen-anwendungen/20-faltung-cnn.md)
+**Pooling.** Max- oder Average-Pooling verkleinert ohne Parameter und macht das Netz robust gegen kleine Verschiebungen. [Faltung und CNNs](part-architekturen-anwendungen/21-faltung-cnn.md)
 
-**1×1-Faltung.** Ändert die Kanalzahl, nicht die räumliche Größe: eine lineare Abbildung pro Pixel. [Faltung und CNNs](part-architekturen-anwendungen/20-faltung-cnn.md)
+**1×1-Faltung.** Ändert die Kanalzahl, nicht die räumliche Größe: eine lineare Abbildung pro Pixel. [Faltung und CNNs](part-architekturen-anwendungen/21-faltung-cnn.md)
 
-**Gauß-Kernel.** Glättet (Tiefpass). Frühe CNN-Schichten lernen von selbst Kanten- und Balkendetektoren. [Faltung und CNNs](part-architekturen-anwendungen/20-faltung-cnn.md)
+**Gauß-Kernel.** Glättet (Tiefpass). Frühe CNN-Schichten lernen von selbst Kanten- und Balkendetektoren. [Faltung und CNNs](part-architekturen-anwendungen/21-faltung-cnn.md)
 
 ## Vortrainierte Modelle, LLMs, Destillation
 
-**Transfer Learning, Finetuning.** Ein auf großen Daten (ImageNet, COCO) vortrainiertes Modell als Startpunkt: Features einfrieren und nur den Kopf trainieren oder alle Gewichte mit kleiner Lernrate nachtrainieren. [Vortrainierte Modelle](part-grundlagen/04-vortrainierte-modelle.md), [LLMs benutzen](part-architekturen-anwendungen/21-llms-benutzen.md)
+**Transfer Learning, Finetuning.** Ein auf großen Daten (ImageNet, COCO) vortrainiertes Modell als Startpunkt: Features einfrieren und nur den Kopf trainieren oder alle Gewichte mit kleiner Lernrate nachtrainieren. [Vortrainierte Modelle](part-grundlagen/04-vortrainierte-modelle.md), [LLMs benutzen](part-architekturen-anwendungen/23-llms-benutzen.md)
 
 **Object Detection, Segmentierung.** Detection liefert Klassen mit Bounding Boxes, der Loss kombiniert Klassifikation und Box-Regression; Segmentierung liefert pro Pixel eine Klasse. [Vortrainierte Modelle](part-grundlagen/04-vortrainierte-modelle.md)
 
-**Lokale LLMs, Quantisierung.** Mit Ollama oder llama.cpp laufen Modelle mit wenigen Milliarden Parametern in 4-Bit-Quantisierung auf der CPU. Ein LLM liefert eine Verteilung über dem Vokabular, die man auslesen, als Vektor weiterverarbeiten oder per Constrained Generation einschränken kann. [LLMs benutzen](part-architekturen-anwendungen/21-llms-benutzen.md)
+**Lokale LLMs, Quantisierung.** Mit Ollama oder llama.cpp laufen Modelle mit wenigen Milliarden Parametern in 4-Bit-Quantisierung auf der CPU. Ein LLM liefert eine Verteilung über dem Vokabular, die man auslesen, als Vektor weiterverarbeiten oder per Constrained Generation einschränken kann. [LLMs benutzen](part-architekturen-anwendungen/23-llms-benutzen.md)
 
 **Destillation.** Ein kleines Schülernetz lernt per Regression die (mit Temperatur aufgeweichten) Ausgaben eines großen Lehrers, nicht nur die harten Labels. Speculative Decoding nutzt ein kleines Modell zum Vorschlagen und das große zum Prüfen. [Destillation](part-architekturen-anwendungen/25-destillation.md)
 

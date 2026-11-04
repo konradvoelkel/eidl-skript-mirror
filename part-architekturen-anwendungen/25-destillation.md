@@ -76,7 +76,7 @@ q_i = \frac{\exp(z_i / T)}{\sum_j \exp(z_j / T)},
 L_{\text{distill}} = T^2 \cdot D_{KL}\bigl( q^{\text{Lehrer}} \,\|\, q^{\text{Schüler}} \bigr).
 $$
 
-Mit $T > 1$ werden die kleinen Wahrscheinlichkeiten der falschen Klassen sichtbar (Temperature Scaling im [Kapitel „Latente Räume geometrisch“](23-latente-raeume.md)), und genau die tragen die Information. In der Praxis kombiniert man das mit dem gewöhnlichen Kreuzentropie-Loss auf den echten Labels bei $T = 1$.
+Mit $T > 1$ werden die kleinen Wahrscheinlichkeiten der falschen Klassen sichtbar (Temperature Scaling im [Kapitel „Latente Räume geometrisch“](../part-representation-learning/17-latente-raeume-geometrisch.md)), und genau die tragen die Information. In der Praxis kombiniert man das mit dem gewöhnlichen Kreuzentropie-Loss auf den echten Labels bei $T = 1$.
 
 ### Dark Knowledge
 
