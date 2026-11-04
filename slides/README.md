@@ -89,15 +89,25 @@ aktualisiert auch diese Kopie oder löscht sie. Und ein Pfad in `TEXINPUTS`, der
   eingestellt, weil Beamer Notizen nicht paginiert und die Titelnotiz von VL 1 (Ablaufplan
   plus Kürzungsregeln) sonst mitten im Satz abbricht. Wer eine Notiz schreibt, die länger ist
   als die von VL 1, baut die Notizenfassung einmal und sieht nach.
-* **Bildnachweise** für Fotos, die nicht aus `devnotes/make_figures.py` stammen: Das Foto des
-  Mark I Perceptron (`images/vl01-mark-i-perceptron.jpg`, VL 1, 1024 × 1352 px) stammt vom
-  Cornell Aeronautical Laboratory; die Vorlage liegt in den Digital Collections der Cornell
-  University Library, Katalognummer `ss:550351`
-  (<https://digital.library.cornell.edu/catalog/ss:550351>). Die englische Wikipedia nutzt
-  eine kleine Fassung desselben Fotos als `File:Mark_I_perceptron.jpeg` **unter Fair Use**
-  und führt es als urheberrechtlich geschützt. Das Foto war schon in den Folien 2023 und
-  2025; die Herkunft stand bis zum 2026-10-02 nirgends, und die Rechtefrage für das
-  öffentliche Repository ist offen (`devnotes/TODO.md`).
+* **Bildnachweise** für Fotos, die nicht aus `devnotes/make_figures.py` stammen: Das Foto
+  des Mark I Perceptron auf Folie „1958: gebaut, nicht simuliert“
+  (`images/vl01-mark-i-perceptron-navy.jpg`, 1800 × 1409 px) ist eine Aufnahme der **U.S.
+  Navy** vom 24. Juni 1960, veröffentlicht vom National Museum of the U.S. Navy
+  ([Wikimedia Commons](https://commons.wikimedia.org/wiki/File:330-PSA-80-60_(USN_710739)_(20897323365).jpg),
+  Flickr-Original `330-PSA-80-60 (USN 710739)`). Als Werk von Bediensteten der US-Regierung
+  im Dienst ist sie in den USA gemeinfrei; Commons führt sie unter *Public Domain Mark*.
+  Sie zeigt die Kamera mit dem Cornell-C vor dem Fotozellenraster.
+* **Vorher stand dort ein anderes Foto** (`vl01-mark-i-perceptron.jpg`, der geöffnete
+  Schrank mit dem Drahtbündel) aus den Digital Collections der Cornell University Library,
+  Katalognummer `ss:550351`. Dessen Rechteangabe lautet dort wörtlich „For information
+  regarding copyright for this image, send inquiries to rarerepro@cornell.edu“ — Cornell
+  erteilt also **keine** Lizenz und macht keine Aussage zur Nachnutzung; das Bild stammt aus
+  den *Cornell University News Service records*, einer Sammlung der Universität, nicht aus
+  einer Bundesbehörde. Die englische Wikipedia nutzt dieselbe Aufnahme nur **unter Fair
+  Use** und führt sie als geschützt. Am 2026-11-04 nachgesehen und ersetzt, weil die Decks
+  öffentlich ausgeliefert werden sollen. Wer das Originalfoto trotzdem will, fragt bei
+  `rarerepro@cornell.edu` an. **Im Git-Verlauf liegt die alte Datei weiter**; sie aus der
+  Historie zu entfernen hieße, die gespiegelten Repositories neu zu schreiben.
 * Die PDFs sind Build-Artefakte und stehen in `.gitignore`; verteilt werden sie
   über ILIAS. Dasselbe gilt für alles andere, was der Bau erzeugt – `.aux`, `.nav`,
   `.snm`, `.toc`, `.out`, `.vrb` und Verwandte gehören nicht ins Repo.

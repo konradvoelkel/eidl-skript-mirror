@@ -73,7 +73,6 @@ Hintergrundrauschen.
 | Antwortenbox in Kapitel 01 steht im PDF offen | „Inhalt“ | in einen Anhang oder auf eine Antwortprobe eindampfen |
 | Anhang mit den Endergebnissen der Übungen? | „Übungsblätter“ | erst, wenn die Antwortproben sich als zu dünn erweisen |
 | Eingangsumfrage schließt am 14.10. um 13:55, also mit der ersten Sitzung | „Beamer-Folien“ | so lassen; die Notiz in VL 1 sagt seit 2026-10-02 „jetzt, nicht morgen“. Alternative: Fenster in ILIAS bis 15.10. verlängern, dann die Notiz zurückdrehen |
-| Mark-I-Foto (`images/vl01-mark-i-perceptron.jpg`) im öffentlichen Repo, Rechte ungeklärt: Wikipedia nutzt dieselbe Aufnahme nur unter Fair Use | „Beamer-Folien“, `folien-review-vl01-2026-10-02.md` | Rechteangabe bei Cornell (`ss:550351`) im Browser nachsehen; wenn nicht frei, durch das US-Navy-Foto bei Wikimedia Commons ersetzen (Public Domain) |
 
 Der erste Punkt ist der einzige, der jemanden blockiert: An ihm hängt die Kopfzeile „N Punkte,
 Abgabe bis …“ in den TeX-Blättern.

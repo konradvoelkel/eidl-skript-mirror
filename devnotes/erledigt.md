@@ -8,6 +8,17 @@ Datierte Protokolle größerer Umbauten liegen daneben als `build-log-<datum>.md
 
 ## Nach Themen (aus den Abschnitten von `TODO.md`)
 
+### Beamer-Folien
+
+- **Mark-I-Foto: Rechtefrage geklärt und das Bild ersetzt (2026-11-04).** Die Rechteangabe
+  bei Cornell (`ss:550351`) lautet wörtlich „For information regarding copyright for this
+  image, send inquiries to rarerepro@cornell.edu“ — keine Lizenz, keine Aussage; die
+  Sammlung ist die der Universität, kein Bundeswerk. Damit war das Foto für ein öffentlich
+  ausgeliefertes Deck nicht brauchbar. An seiner Stelle steht jetzt eine Aufnahme der U.S.
+  Navy vom 24.06.1960 (Public Domain, National Museum of the U.S. Navy über Wikimedia
+  Commons), die obendrein mehr zeigt: die Kamera mit dem Cornell-C vor dem Fotozellenraster.
+  Folientext und Notiz sind nachgezogen, Nachweis in `../slides/README.md`.
+
 ### Inhalt (Skript)
 
 - [x] **Double Descent im Kapitel „Universelle Approximation“** (13), 2026-11-02 (Entscheidung Konrad: als
