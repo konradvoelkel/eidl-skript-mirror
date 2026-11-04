@@ -56,23 +56,25 @@ build-image:
       --cache=true --cache-repo "${CI_REGISTRY_IMAGE}/cache"
       --cache-ttl=336h --snapshot-mode=redo
   before_script:
-    # Das HHU-Theme kommt aus der **Paketregistry dieses Projekts** und nicht aus dem
-    # Repository: Es hat keinen Lizenzvermerk, sein `fig/` enthaelt das HHU-Logo, und das
-    # Repository wird oeffentlich nach GitHub gespiegelt -- die Registry ist privat.
+    # Das HHU-Theme kommt aus den **Secure Files dieses Projekts** und nicht aus dem
+    # Repository: Es hat keinen Lizenzvermerk und keinen Autor, sein `fig/` enthaelt die
+    # HHU-Bildmarke, und das Repository wird oeffentlich nach GitHub gespiegelt. Die
+    # Secure Files liegen in Einstellungen > CI/CD > Secure files (hochgeladen 2026-11-04,
+    # `hhubeamer.tar.gz`, 797 KB) und sind nur ueber die API mit Job-Token lesbar.
     #
-    # Ein generisches Paket hat eine feste, lesbare Adresse; damit braucht dieser Schritt
-    # weder einen Installer von fremder Stelle noch JSON-Gefummel, nur wget und das
-    # Job-Token. Einmalig hochladen (Konrad, mit einem Token mit `api`-Recht):
+    # Zwei Aufrufe statt des Installers von gitlab.com: Der laedt ein unangeheftetes Skript
+    # aus dem Netz und fuehrt es als root aus -- in einem Repository, das jede
+    # Paketversion anheftet, waere das die eine Ausnahme, die nichts einbringt. busybox in
+    # kaniko:debug kann wget, tr, grep und cut, und mehr braucht es nicht. `tr '{' '\n'`
+    # legt jedes JSON-Objekt auf eine eigene Zeile, damit id und name zusammen bleiben --
+    # unabhaengig davon, in welcher Reihenfolge die API sie schreibt.
     #
-    #   tar -czf hhubeamer.tar.gz -C /usr/share/texmf/tex/latex/beamer/themes hhubeamer
-    #   curl --header "PRIVATE-TOKEN: <token>" --upload-file hhubeamer.tar.gz \
-    #     "$CI_API_V4_URL/projects/$CI_PROJECT_ID/packages/generic/hhubeamer/1.0/hhubeamer.tar.gz"
-    #
-    # Fehlt das Paket, laeuft der Image-Bau trotzdem durch (optionales COPY im Dockerfile),
-    # und `build-slides` sagt, was fehlt -- statt dass die Pipeline an einer fehlenden
-    # Datei stirbt, die mit dem Buch nichts zu tun hat.
+    # Fehlt die Datei, laeuft der Image-Bau trotzdem durch (optionales COPY im Dockerfile),
+    # und `build-slides` sagt, was fehlt.
     - mkdir -p ci
-    - 'wget -q --header="JOB-TOKEN: $CI_JOB_TOKEN" -O ci/hhubeamer.tar.gz "$CI_API_V4_URL/projects/$CI_PROJECT_ID/packages/generic/hhubeamer/1.0/hhubeamer.tar.gz" || { rm -f ci/hhubeamer.tar.gz; echo "hhubeamer: kein Paket in der Registry - Image ohne Theme"; }'
+    - 'id=$(wget -qO - --header="JOB-TOKEN: $CI_JOB_TOKEN" "$CI_API_V4_URL/projects/$CI_PROJECT_ID/secure_files" | tr "{" "\n" | grep "\"name\":\"hhubeamer.tar.gz\"" | grep -o "\"id\":[0-9]*" | head -1 | cut -d: -f2); echo "Secure File id: ${id:-keine}"'
+    - 'if [ -n "$id" ]; then wget -q --header="JOB-TOKEN: $CI_JOB_TOKEN" -O ci/hhubeamer.tar.gz "$CI_API_V4_URL/projects/$CI_PROJECT_ID/secure_files/$id/download" && tar -tzf ci/hhubeamer.tar.gz > /dev/null && echo "hhubeamer.tar.gz geholt: $(wc -c < ci/hhubeamer.tar.gz) Bytes" || { rm -f ci/hhubeamer.tar.gz; echo "hhubeamer: Download kaputt - Image ohne Theme"; }; else echo "hhubeamer: keine Secure File - Image ohne Theme"; fi'
+
 
 
 

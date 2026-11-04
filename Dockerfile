@@ -93,8 +93,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Lizenzvermerk und keinen Autor, und sein `fig/` enthaelt das HHU-Logo -- ein Markenzeichen,
 # dessen Weitergabe nicht uns gehoert. Das Repository wird nach GitHub gespiegelt und waere
 # damit oeffentlich; die Registry dieses Projekts ist es nicht. Deshalb kommt das Theme als
-# **generisches Paket aus der Registry dieses Projekts** in den Build-Kontext (siehe
-# `build-image` in .gitlab-ci.yml) und von dort in das Image.
+# **Secure File dieses Projekts** in den Build-Kontext (siehe `build-image` in
+# .gitlab-ci.yml) und von dort in das Image.
 #
 # Die eckigen Klammern in `hhubeamer.tar.g[z]` sind kein Tippfehler, sondern der uebliche
 # Griff fuer ein *optionales* COPY: Fehlt die Datei, trifft das Muster nichts und der Bau

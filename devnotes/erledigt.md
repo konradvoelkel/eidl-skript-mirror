@@ -10,6 +10,14 @@ Datierte Protokolle größerer Umbauten liegen daneben als `build-log-<datum>.md
 
 ### Beamer-Folien
 
+- **Das HHU-Theme liegt als Secure File im Projekt (2026-11-04).** Es gehoert nicht ins
+  Repository: kein Lizenzvermerk, kein Autor, und `fig/` enthaelt die HHU-Bildmarke — der
+  GitHub-Spiegel ist oeffentlich. Hochgeladen wurde `hhubeamer.tar.gz` (797 KB, nur die vier
+  Theme-Dateien und das Bildverzeichnis, ohne die Bauartefakte, die im Systemverzeichnis
+  daneben liegen) unter Einstellungen → CI/CD → Secure files. `build-image` holt es mit dem
+  Job-Token in den Kontext; bewusst ohne den Installer von gitlab.com, der ein
+  unangeheftetes Skript als root ausfuehren wuerde.
+
 - **Mark-I-Foto: Rechtefrage geklärt und das Bild ersetzt (2026-11-04).** Die Rechteangabe
   bei Cornell (`ss:550351`) lautet wörtlich „For information regarding copyright for this
   image, send inquiries to rarerepro@cornell.edu“ — keine Lizenz, keine Aussage; die

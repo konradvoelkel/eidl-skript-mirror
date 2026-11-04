@@ -117,8 +117,9 @@ aktualisiert auch diese Kopie oder löscht sie. Und ein Pfad in `TEXINPUTS`, der
   über ILIAS **und seit dem 2026-11-04 über die Website**: Der Job `build-slides`
   baut sie im CI, `pages` legt sie als `/folien/vl01.pdf` … `/folien/vl15.pdf` ab
   (kurze Adressen, weil die Kapitel sie mit `#page=` verlinken). Das Theme kommt
-  dafür aus der **Paketregistry** des Projekts in das Image — es darf nicht ins
-  Repository, weil es keinen Lizenzvermerk hat und das HHU-Logo enthält, und der
-  GitHub-Spiegel ist öffentlich. Fehlt das Paket, scheitert nur `build-slides`
+  dafür aus den **Secure Files** des Projekts (Einstellungen → CI/CD → Secure files,
+  `hhubeamer.tar.gz`, hochgeladen am 2026-11-04) in das Image — es darf nicht ins
+  Repository, weil es keinen Lizenzvermerk hat und die HHU-Bildmarke enthält, und der
+  GitHub-Spiegel ist öffentlich. Fehlt die Datei, scheitert nur `build-slides`
   (mit `allow_failure`), und die Meldung sagt, was zu tun ist. Dasselbe gilt für alles andere, was der Bau erzeugt – `.aux`, `.nav`,
   `.snm`, `.toc`, `.out`, `.vrb` und Verwandte gehören nicht ins Repo.
