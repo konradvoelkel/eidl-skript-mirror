@@ -70,7 +70,10 @@ RUN set -eu; \
 # Seit dem 2026-11-04 kommen die Beamer-Decks dazu (`slides/*.tex`), und die bringen vier
 # eigene Anforderungen mit: `texlive-luatex`, weil die Decks mit **LuaLaTeX** gebaut werden
 # und nicht mit XeLaTeX wie das Buch; `texlive-pictures` fuer TikZ, das das HHU-Theme
-# benutzt; `fonts-adobe-sourcesans3` als Schrift der Decks -- Debian trixie fuehrt genau die
+# benutzt; `texlive-fonts-extra` wegen `sourcecodepro.sty`, das der Header fuer die
+# Schreibmaschinenschrift laedt (am 2026-11-04 fiel genau daran der erste Deck-Bau im
+# CI aus, mit "File `sourcecodepro.sty' not found" fuenfzehnmal);
+# `fonts-adobe-sourcesans3` als Schrift der Decks -- Debian trixie fuehrt genau die
 # Fassung 3.052, die auch lokal in ~/.fonts liegt, unter SIL OFL, also ohne jede
 # Lizenzfrage -- dazu `fontconfig`, denn luaotfload findet eine Schrift **ueber ihren
 # Familiennamen** nur in der fontconfig-Datenbank, und ohne das Paket gibt es keine
@@ -90,6 +93,7 @@ RUN apt-get -o Acquire::Retries=5 update \
     texlive-latex-extra \
     texlive-pictures \
     texlive-fonts-recommended \
+    texlive-fonts-extra \
     fonts-adobe-sourcesans3 \
     fontconfig \
     texlive-lang-german \
