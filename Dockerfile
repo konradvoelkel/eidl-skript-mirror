@@ -72,7 +72,9 @@ RUN set -eu; \
 # und nicht mit XeLaTeX wie das Buch; `texlive-pictures` fuer TikZ, das das HHU-Theme
 # benutzt; `fonts-adobe-sourcesans3` als Schrift der Decks -- Debian trixie fuehrt genau die
 # Fassung 3.052, die auch lokal in ~/.fonts liegt, unter SIL OFL, also ohne jede
-# Lizenzfrage; und das HHU-Theme selbst, das **nicht** im Repository liegen darf (kein
+# Lizenzfrage -- dazu `fontconfig`, denn luaotfload findet eine Schrift **ueber ihren
+# Familiennamen** nur in der fontconfig-Datenbank, und ohne das Paket gibt es keine
+# (am 2026-11-04 daran gescheitert: `fc-list: command not found`); und das HHU-Theme selbst, das **nicht** im Repository liegen darf (kein
 # Lizenzvermerk, dazu das HHU-Logo) und deshalb unten aus einer Secure File kommt.
 # `Acquire::Retries`: snapshot.debian.org antwortet unter Last mit 503 ("No healthy
 # backends"), und ein einziges verfehltes .deb reisst den ganzen Bau mit -- am
@@ -89,6 +91,7 @@ RUN apt-get -o Acquire::Retries=5 update \
     texlive-pictures \
     texlive-fonts-recommended \
     fonts-adobe-sourcesans3 \
+    fontconfig \
     texlive-lang-german \
     fonts-dejavu-core \
     poppler-utils \
