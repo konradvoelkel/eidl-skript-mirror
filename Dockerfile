@@ -74,7 +74,12 @@ RUN set -eu; \
 # Fassung 3.052, die auch lokal in ~/.fonts liegt, unter SIL OFL, also ohne jede
 # Lizenzfrage; und das HHU-Theme selbst, das **nicht** im Repository liegen darf (kein
 # Lizenzvermerk, dazu das HHU-Logo) und deshalb unten aus einer Secure File kommt.
-RUN apt-get update && apt-get install -y --no-install-recommends \
+# `Acquire::Retries`: snapshot.debian.org antwortet unter Last mit 503 ("No healthy
+# backends"), und ein einziges verfehltes .deb reisst den ganzen Bau mit -- am
+# 2026-11-04 an `preview-latex-style` passiert, Job 674494. Fuenf Versuche je Paket
+# kosten nichts und machen den Bau gegen die Launen des Spiegels unempfindlich.
+RUN apt-get -o Acquire::Retries=5 update \
+    && apt-get -o Acquire::Retries=5 install -y --no-install-recommends \
     procps \
     latexmk \
     texlive-xetex \

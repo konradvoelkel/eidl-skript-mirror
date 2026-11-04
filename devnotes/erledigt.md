@@ -10,6 +10,16 @@ Datierte Protokolle größerer Umbauten liegen daneben als `build-log-<datum>.md
 
 ### Beamer-Folien
 
+- **Die Decks bauen im CI (2026-11-04).** Neuer Job `build-slides`, `pages` legt sie als
+  /folien/vlNN.pdf ab. Drei Dinge waren dafuer noetig und haben je einen Versuch gekostet:
+  das Image braucht `texlive-luatex` (die Decks sind LuaLaTeX, das Buch XeLaTeX),
+  `texlive-pictures` fuer das TikZ des Themes und die Schrift als Debian-Paket; das Theme
+  darf nicht ins Repository und kommt als Secure File; und die Secure File laesst sich
+  **nicht** im kaniko-Job holen, weil dessen busybox-wget kein TLS kann -- dafuer gibt es
+  jetzt den Job `fetch-theme` mit Python aus der Standardbibliothek. Die Schutzzeile in
+  `build-slides` hat sich sofort bewaehrt: Beim ersten Lauf ohne Theme im Image stand eine
+  Zeile im Log, die sagt was zu tun ist, statt fuenfzehn LaTeX-Fehlern.
+
 - **Das HHU-Theme liegt als Secure File im Projekt (2026-11-04).** Es gehoert nicht ins
   Repository: kein Lizenzvermerk, kein Autor, und `fig/` enthaelt die HHU-Bildmarke — der
   GitHub-Spiegel ist oeffentlich. Hochgeladen wurde `hhubeamer.tar.gz` (797 KB, nur die vier
