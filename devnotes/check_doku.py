@@ -105,7 +105,7 @@ def fehler_sammeln() -> list[str]:
 
     behauptet(claude, r"(\d+) der 29 Kapitel haben einen", "CLAUDE.md/Übungsabschnitte", len(uebungen))
     behauptet(todo, r"(\d+) Übungsabschnitte", "TODO.md/Übungsabschnitte", len(uebungen))
-    if dropdowns != 9:
+    if dropdowns != 10:
         fehler.append(
             f"CLAUDE.md nennt neun `dropdown`-Boxen, im Buch sind es {dropdowns} — "
             "und `dropdown` versteckt im PDF nichts, also nachsehen, was da offen steht"

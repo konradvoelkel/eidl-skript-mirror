@@ -60,6 +60,48 @@ with torch.no_grad():        # sonst würde der Update selbst Teil des Graphen
 
 Der Optimizer-Schritt muss unter `torch.no_grad()` passieren, damit der Update selbst nicht Teil des Graphen wird, und die Gradienten müssen danach mit `zero_()` zurückgesetzt werden – sonst *akkumuliert* PyTorch sie beim nächsten `backward()`. Das ist der Grund für `optimizer.zero_grad()` in jeder Trainingsschleife.
 
+## Warum rückwärts?
+
+`backward()` läuft den Graphen von der Loss-Funktion zu den Blättern, nicht umgekehrt. Das
+ist keine Willkür. Automatisches Differenzieren kann in beide Richtungen laufen, und der
+Unterschied liegt darin, was ein Durchlauf liefert:
+
+* **Forward-Mode** schiebt eine Richtung von den Eingängen nach vorn. Ein Durchlauf gibt
+  die Ableitung *aller* Ausgaben nach *einer* Eingabe – eine Spalte der Jacobi-Matrix.
+* **Reverse-Mode**, also die Backpropagation, zieht eine Richtung vom Ausgang zurück. Ein
+  Durchlauf gibt die Ableitung *einer* Ausgabe nach *allen* Eingaben – eine Zeile.
+
+Für $f \colon \mathbb{R}^n \to \mathbb{R}^m$ braucht man demnach $n$ Durchläufe
+vorwärts oder $m$ rückwärts, jeder davon in der Größenordnung einer Funktionsauswertung.
+Welche Richtung billiger ist, hängt also nur am Verhältnis von $n$ und $m$:
+
+:::{admonition} Faustregel
+:class: tip
+* $n \gg m$: **Reverse-Mode**. Beim Training ist $n$ die Zahl der Parameter – Millionen –
+  und $m = 1$, weil der Loss eine einzelne Zahl ist. Ein Rückwärtsdurchlauf liefert alle
+  Gradienten.
+* $m \gg n$: **Forward-Mode**. Etwa die Sensitivitätsanalyse einer Kurve
+  $\gamma \colon \mathbb{R} \to \mathbb{R}^m$: ein Parameter hinein, viele Werte
+  heraus. Ein Vorwärtsdurchlauf liefert alles.
+:::
+
+Deep Learning liegt am äußersten Ende des ersten Falls, mit $m = 1$ gegen Millionen von
+Parametern. Deshalb heißt das Verfahren hier Backpropagation und nicht Forwardpropagation.
+
+:::{admonition} Vertiefung: Pushforward und Pullback
+:class: note dropdown
+Differentialgeometrisch sind die beiden Richtungen nicht dasselbe Objekt in zwei
+Laufrichtungen, sondern zwei verschiedene Objekte. Der Forward-Mode schiebt
+*Tangentialvektoren* nach vorn: Aus einer Richtung $v$ am Eingang wird $df_x(v)$, der
+**Pushforward**. Die Backpropagation zieht *Kovektoren* zurück, also 1-Formen: Aus $\omega$
+am Ausgang wird $df_x^{*}(\omega)$, der **Pullback**.
+
+Darin steckt der Grund für die Asymmetrie. Am Ausgang steht mit $dL$ bereits eine skalare
+1-Form, ein einziges Element des Kotangentialraums – es gibt genau ein Objekt
+zurückzuziehen. Vorwärts müsste man statt dessen eine ganze Basis des $n$-dimensionalen
+Tangentialraums durchschieben, einen Vektor nach dem anderen.
+:::
+
 ## Freezing
 
 Setzt man `w.requires_grad = False`, so hat `z = w * x` keine `grad_fn` mehr, der Graph ist an dieser Stelle abgeschnitten:

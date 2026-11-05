@@ -76,14 +76,14 @@ im Kapitel „Tensoren“ – und seit dem 2026-11-03 eine Seite mehr, weil in d
 Titelüberschrift entfiel und die Abschnitte eine Ebene höher stehen (gegen den unveränderten
 Baum gemessen: 135); die
 fachliche Durchsicht vom 2026-10-15 deckte 27 Kapitel und das Glossar ab, den
-Kettenregel-Abschnitt vom 2026-10-20 und diesen Zuwachs nicht): HTML ohne Warnungen, PDF **140 Seiten A4** lokal, 0 LaTeX-Fehler,
+Kettenregel-Abschnitt vom 2026-10-20 und diesen Zuwachs nicht): HTML ohne Warnungen, PDF **141 Seiten A4** lokal, 0 LaTeX-Fehler,
 0 fehlende Glyphen, 5 überlange Zeilen. Das veröffentlichte PDF hatte bis zum 2026-10-19
 stets **eine Seite mehr** als das lokale (siehe unten); für den neuen Stand ist das noch
 nicht nachgemessen. Die `--min-pages`-Untergrenze
 soll einen *abgebrochenen* Lauf fangen, nicht eine gewollte Kürzung — sie steht deshalb
 deutlich unter der tatsächlichen Seitenzahl, in der CI auf demselben Wert.
 
-**Lokal und CI weichen um eine Seite ab, und das bleibt so**: hier 140 Seiten, das
+**Lokal und CI weichen um eine Seite ab, und das bleibt so**: hier 141 Seiten, das
 veröffentlichte PDF hatte am 2026-10-19 vor dem neuen Kapitel 113 gegen lokal 112. Die erste Abweichung steht auf Seite 28 in einem Codeblock,
 der eine Zeile anders bricht — es ist der *Satz*, nicht der Inhalt. Die Ursache ist am
 2026-10-15 gemessen worden, und sie ist nicht die, die hier vom 2026-09-29 bis dahin stand:
@@ -107,7 +107,7 @@ veröffentlichte Zahl braucht, holt sie mit dem `curl`-Rezept weiter unten.
 Beides ist unabhängig von mystmd: 1.10.1 und 1.11.0 liefern auf demselben Baum dieselbe
 Seitenzahl (gemessen am 2026-10-15 beim Upgrade, `devnotes/build-log-2026-10-15.md`).
 
-**Die 140 Seiten enthalten zwei Seiten Teilegliederung** (2026-11-04). Vor dem Umbau auf
+**Die 141 Seiten enthalten zwei Seiten Teilegliederung** (2026-11-04). Vor dem Umbau auf
 sechs Teile baute derselbe Baum 138 Seiten, gemessen in einem Worktree auf `4d3434e` mit
 derselben `.venv` — die zwei zusätzlichen Seiten sind die zwei neuen Teiltrenner
 („Modelle in der Praxis“, „Ausblick“), nicht neuer Text. Von 136 auf 138 war es davor
@@ -354,8 +354,8 @@ Der Ton ist knapp und präzise:
 * Rechenbeispiele werden **durchgerechnet**, nicht behauptet. Wer eine Zahl ändert, rechnet
   die Folgezahlen nach.
 * Vertiefungen, die nicht Vorlesungsstoff sind, stehen in einer Box
-  `:::{admonition} Vertiefung: …` mit `:class: note dropdown` (derzeit acht; dazu eine
-  Antwortenbox in Kapitel 01, zusammen neun `dropdown`-Boxen).
+  `:::{admonition} Vertiefung: …` mit `:class: note dropdown` (derzeit neun; dazu eine
+  Antwortenbox in Kapitel 01, zusammen zehn `dropdown`-Boxen).
   **Aufgeklappt wird nur im HTML**: `dropdown` hat im LaTeX-Export keine Wirkung, im PDF
   steht der Inhalt offen da. Für Vertiefungen ist das in Ordnung — für alles, was erst nach
   eigenem Nachdenken gelesen werden soll, ist `dropdown` kein Versteck. Genau daran hingen
