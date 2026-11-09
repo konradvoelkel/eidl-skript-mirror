@@ -153,7 +153,8 @@
     \end{column}
   \end{columns}
 
-  \note{GELU ist heute die Standardwahl in Transformern.
+  \note{GELU kam mit BERT und GPT-2 in die Transformer; die heutigen großen Sprachmodelle
+    (Llama, Mistral, Qwen) nehmen Swish/SiLU im gated Feed-Forward-Block (SwiGLU).
     Am Plot diskutieren, was man eigentlich will: das Signal im Negativen \emph{behalten},
     ohne die Nichtlinearität zu verlieren. Die kleine Delle unter der Achse ist gewollt.
     Swish sieht aus wie das Nike-Logo -- das merkt sich der Hörsaal.}
@@ -372,7 +373,7 @@
   \begin{center}
     \Large
     Die Gewichte \emph{existieren} -- wir haben sie hingeschrieben.\\[16pt]
-    Also kann der Optimierer sie auch finden.\\[16pt]
+    Ob der Optimierer sie findet, ist eine zweite Frage.\\[16pt]
     \normalsize Aber: Netze interpolieren gut und extrapolieren schlecht.
   \end{center}
 

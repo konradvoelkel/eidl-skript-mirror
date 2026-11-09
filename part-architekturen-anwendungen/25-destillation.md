@@ -76,6 +76,8 @@ $$
 
 Mit $T > 1$ werden die kleinen Wahrscheinlichkeiten der falschen Klassen sichtbar (Temperature Scaling im [Kapitel „Latente Räume geometrisch“](../part-representation-learning/17-latente-raeume-geometrisch.md)), und genau die tragen die Information. In der Praxis kombiniert man das mit dem gewöhnlichen Kreuzentropie-Loss auf den echten Labels bei $T = 1$.
 
+Der Faktor $T^2$ gleicht aus, dass die Gradienten dieses Terms nach den Schüler-Logits mit $1/T^2$ schrumpfen: Ein Faktor $1/T$ kommt aus der Kettenregel durch $z/T$, ein zweiter daher, dass beide Verteilungen bei großem $T$ fast gleichverteilt sind und sich entsprechend wenig unterscheiden. Ohne $T^2$ müsste man bei jeder neuen Temperatur das Gewicht gegenüber dem Kreuzentropie-Term neu einstellen.
+
 ### Dark Knowledge
 
 Beispiel: fehlerhaft gelabelte Daten, z.B. ein Hund $x$ mit dem Label „Katze“. Der Lehrer klassifiziert nach dem Lernen „Katze“ (leider falsch). Aber vor dem $\operatorname{argmax}$ sehen wir vermutlich $P(x = \text{Hund}) > 0$, und zwar deutlich – d.h. in $P(x = \text{Hund})$ steckt noch Information, „dunkles Wissen“: Der Lehrer weiß, dass das Bild einem Hund ähnlich sieht, auch wenn er es der falschen Klasse zuordnet. Der Schüler lernt aus dunklem Wissen und leidet weniger unter falschen Labels. Allgemeiner: Die Ähnlichkeitsstruktur zwischen den Klassen (eine 7 sieht eher wie eine 1 aus als wie eine 0) wird mitübertragen.

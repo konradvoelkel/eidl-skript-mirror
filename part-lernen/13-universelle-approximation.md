@@ -12,7 +12,7 @@ short_title: "Universalität"
 
 **Universelles Approximationstheorem, grobe Aussage** (wir erinnern uns an das [Kapitel „Netze von Hand bauen“](12-netze-von-hand.md)): Mit neuronalen Netzen (beliebig viele Neuronen, beliebig viele Layer, fully connected, ReLU) lässt sich jede Funktion beliebig gut approximieren. Der Beweis in fünf Schritten:
 
-1. Jede beschränkte messbare Funktion $f \colon E \subseteq \mathbb{R} \to \mathbb{R}$ ist beliebig gut ($\forall \varepsilon > 0$) durch *einfache Funktionen* $g, h$ approximierbar: $g \le f \le h$ und $0 \le h - g < \varepsilon$. Dabei sind einfache Funktionen endliche Linearkombinationen von Indikatorfunktionen messbarer Mengen. (Stetige Funktionen sind integrierbar, integrierbare Funktionen sind messbar.)
+1. Jede beschränkte messbare Funktion $f \colon E \subseteq \mathbb{R} \to \mathbb{R}$ ist beliebig gut ($\forall \varepsilon > 0$) durch *einfache Funktionen* $g, h$ approximierbar: $g \le f \le h$ und $0 \le h - g < \varepsilon$. Dabei sind einfache Funktionen endliche Linearkombinationen von Indikatorfunktionen messbarer Mengen. (Stetige Funktionen sind messbar; auf einem abgeschlossenen beschränkten Intervall $[a, b]$ sind sie außerdem beschränkt, fallen also unter diese Aussage.)
 2. Eine Funktion $f \colon E \to \mathbb{R}$ (für $E$ messbar) ist messbar genau dann, wenn es eine Folge einfacher Funktionen $f_n$ gibt, die punktweise gegen $f$ konvergieren und $|f_n| \le |f|$ erfüllen. Eine messbare Funktion ist integrierbar, wenn es eine dominierende integrierbare Funktion $h$ gibt, $|f| \le |h|$. Wir können also sagen:
 
    ```{math}
@@ -28,7 +28,7 @@ short_title: "Universalität"
    ```
 
 4. Eine einzelne Stufe lässt sich mit einem einfachen neuronalen Netz realisieren: Zwei Neuronen mit sehr steilen Sigmoiden an den Intervallgrenzen, mit Gewichten $+h$ und $-h$ in der Ausgabeschicht, ergeben eine Stufe der Höhe $h$ auf dem Intervall (Grafik von Michael Nielsen, Kapitel 4 seines Buchs). Mit ReLUs statt Sigmoiden reichen zwei Neuronen dafür **nicht**: $a\operatorname{ReLU}(x-p) + b\operatorname{ReLU}(x-q)$ ist rechts von beiden Knicken affin mit Steigung $a+b$ und kommt nie auf null zurück – man bekommt eine Rampe mit Plateau, keinen Buckel. Für ein Dreieck über dem Intervall braucht man drei ReLUs, für ein Trapez mit flachem Dach vier.
-5. Die leicht zu verstehende Konstruktion mit 2 Hidden Layers bei Michael Nielsen funktioniert auch mit beliebig hoher Ein- und Ausgabedimension, also zur Approximation von Funktionen $\mathbb{R}^n \to \mathbb{R}^n$. Es gibt auch Konstruktionen mit nur 1 Hidden Layer.
+5. Die leicht zu verstehende Konstruktion mit 2 Hidden Layers bei Michael Nielsen funktioniert auch mit beliebig hoher Ein- und Ausgabedimension, also zur Approximation von Funktionen $\mathbb{R}^n \to \mathbb{R}^m$. Es gibt auch Konstruktionen mit nur 1 Hidden Layer.
 
 Die richtige Frage ist also nie „Geht das mit neuronalen Netzen?“ (Antwort: JA), sondern „*Wie* geht das am *effizientesten* mit neuronalen Netzen?“
 
@@ -66,7 +66,7 @@ Umgekehrt lässt sich jedes ReLU-Netz auch als Entscheidungsbaum schreiben: Jede
 
 ## Approximieren heißt nicht generalisieren
 
-Die Sätze oben sagen: Ein ausreichend großes Netz *kann* jede Funktion darstellen. Sie sagen nichts darüber, ob das Training die *richtige* findet. Ein Netz mit mehr Parametern als Trainingsbeispielen kann insbesondere jeden Trainingsdatensatz exakt treffen, samt Rauschen. Nach der Lehre aus dem Data-Science-Skript müsste es dann hoffnungslos overfitten. Moderne Netze haben aber oft viel mehr Parameter als Trainingsbeispiele und generalisieren trotzdem gut. Wie passt das zusammen?
+Die Sätze oben sagen: Ein ausreichend großes Netz *kann* jede Funktion darstellen. Sie sagen nichts darüber, ob das Training die *richtige* findet. Ein Netz mit mehr Parametern als Trainingsbeispielen kann insbesondere jeden Trainingsdatensatz exakt treffen, samt Rauschen. Nach der Lehre aus dem [Data-Science-Skript](https://voelkel.pages.cs.uni-duesseldorf.de/ds-skript/lineare-regression) müsste es dann hoffnungslos overfitten: die Trainingsdaten samt Rauschen auswendig lernen und auf neuen Daten schlecht sein. Moderne Netze haben aber oft viel mehr Parameter als Trainingsbeispiele und generalisieren trotzdem gut. Wie passt das zusammen?
 
 Ein Teil der Antwort ist ein Phänomen namens **Double Descent**, und es lässt sich schon an der polynomialen Regression vollständig verstehen, ganz ohne neuronales Netz.
 

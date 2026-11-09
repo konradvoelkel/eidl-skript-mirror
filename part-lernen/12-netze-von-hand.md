@@ -94,9 +94,9 @@ Vom Gradientenabstieg gefundene Approximation im TensorFlow Playground mit 3 ver
 Dasselbe mit 2 versteckten Schichten.
 :::
 
-### Take-Home Message
+### Take-Home: Boolesche Funktionen
 
-Boolesche Funktionen lassen sich mit neuronalen Netzen darstellen bzw. approximieren, d.h. es gibt Gewichte, sodass die resultierende Funktion tut, was sie soll. Also kann auch Optimierung diese idealen Gewichte finden. Aus elementaren Funktionen lassen sich komplexe verknüpfen; neuronale Netze können aber auch „Abkürzungen“ nehmen und Platz verschwenden (überflüssige Neuronen).
+Boolesche Funktionen lassen sich mit neuronalen Netzen darstellen bzw. approximieren, d.h. es gibt Gewichte, sodass die resultierende Funktion tut, was sie soll. Damit lohnt es sich, nach ihnen zu suchen; ob die Optimierung sie auch findet, ist eine zweite Frage (siehe [Universelle Approximation](13-universelle-approximation.md)). Aus elementaren Funktionen lassen sich komplexe verknüpfen; neuronale Netze können aber auch „Abkürzungen“ nehmen und Platz verschwenden (überflüssige Neuronen).
 
 ### Arithmetik
 
@@ -136,9 +136,9 @@ $$
 \operatorname{MUL}(x, y) := \tfrac14 Q(x + y) - \tfrac14 Q(x - y),
 $$
 
-und $x + y$ sowie $x - y$ sind lineare Schichten. Mit MUL und Addition bekommen wir alle Polynome, und damit (Weierstraß) alle stetigen Funktionen auf beschränkten Bereichen.
+und $x + y$ sowie $x - y$ sind lineare Schichten. Mit MUL und Addition bekommen wir alle Polynome, und damit (Weierstraß) alle stetigen Funktionen auf kompakten (beschränkten und abgeschlossenen) Bereichen.
 
-### Take-Home Message
+### Take-Home: Interpolieren, nicht extrapolieren
 
 Funktionen lassen sich mit neuronalen Netzen darstellen bzw. approximieren. Mit einer Lookup-Table (LUT) und Interpolation sind beliebig gute Näherungen auf *beschränkten* Definitionsbereichen möglich – so rechnet auch die GPU z.B. den Sinus aus. Außerhalb der Stützstellen wird die Approximation beliebig schlecht: **Neuronale Netze interpolieren gut, extrapolieren schlecht.**
 

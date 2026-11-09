@@ -233,7 +233,7 @@ $$
 
 ### Nicht konkret genug? Ein weiteres einfaches Beispiel
 
-Wir wählen als Input $x \in \mathcal{X} \subseteq \mathbb{R}^n$. Im Beispiel soll $y := y(x; w) := w \cdot x$ sein, also ein linearer Layer. Die „nächste Rechenoperation“ ist $z \colon \mathbb{R} \to \mathbb{R}$, und zwar $z := z(y) := \operatorname{ReLU}(y) = \max(0, y)$. Die Ableitung nach $y$ ist $[y > 0]$. Aus $\frac{dz}{dw} = \frac{dz}{dy} \cdot \frac{dy}{dw}$ wird also
+Wir wählen als Input $x \in \mathcal{X} \subseteq \mathbb{R}^n$. Im Beispiel soll $y := y(x; w) := w \cdot x$ sein, also ein linearer Layer. Die „nächste Rechenoperation“ ist $z \colon \mathbb{R} \to \mathbb{R}$, und zwar $z := z(y) := \operatorname{ReLU}(y) = \max(0, y)$ (die *Rectified Linear Unit*, mehr dazu im [Kapitel „Aktivierungsfunktionen“](11-aktivierungsfunktionen.md)). Die Ableitung nach $y$ ist $[y > 0]$; an der Knickstelle $y = 0$ setzt man sie auf $0$. Aus $\frac{dz}{dw} = \frac{dz}{dy} \cdot \frac{dy}{dw}$ wird also
 
 $$
 \frac{dz}{dw} = [y > 0] \cdot x .
@@ -246,7 +246,7 @@ Eingabe $x = 3$ und Ziel $t = 1$; Loss $L = \tfrac12 (z-t)^2$.
 
 1. Forward Pass: Berechnen Sie $y$, $z$ und $L$.
 2. Berechnen Sie $\frac{\partial L}{\partial w}$ und $\frac{\partial L}{\partial v}$.
-   *Tipp: $\frac{\partial L}{\partial z} = z - t$, die schwache Ableitung von ReLU an der
+   *Tipp: $\frac{\partial L}{\partial z} = z - t$, die Ableitung von ReLU (bei $0$ per Konvention $0$, siehe [Hintergrundwissen Analysis](../part-grundlagen/hintergrundwissen-analysis.md)) an der
    Stelle $a$ ist $[a > 0]$, und der Gradient eines Gewichts ist Eingabe des Neurons mal
    Ableitung des Fehlers nach seiner Ausgabe.*
 3. Setzen Sie $w = +1$ und rechnen Sie noch einmal. Was hat sich an

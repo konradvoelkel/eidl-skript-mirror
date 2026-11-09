@@ -161,7 +161,7 @@ also $\sigma(-x) = 1 - \sigma(x)$: Der Graph ist punktsymmetrisch um $(0, \tfrac
 
 ### Andere Sigmoidfunktionen: Tangens hyperbolicus
 
-Die Parameter $M$ und $k$ sind Skalierungsfaktoren. Möchte man die Skala des Standardsigmoids von $[0, 1]$ auf z.B. $[-1, 1]$ bringen, so nimmt man $2\sigma(x) - 1$, und mit $k = 2$:
+Die Parameter $M$ und $k$ sind Skalierungsfaktoren. Möchte man die Skala des Standardsigmoids von $(0, 1)$ auf z.B. $(-1, 1)$ bringen, so nimmt man $2\sigma(x) - 1$, und mit $k = 2$:
 
 $$
 2\sigma(2x) - 1 = \frac{2}{1 + e^{-2x}} - 1 = \frac{1 - e^{-2x}}{1 + e^{-2x}} = \frac{e^{x} - e^{-x}}{e^{x} + e^{-x}} = \tanh(x).
@@ -281,7 +281,7 @@ for epoch in range(number_of_epochs):
 y_pred = model(inputs).detach().numpy()
 ```
 
-Die fünf Zeilen in der Schleife sind *die* Trainingsschleife von PyTorch, die uns in allen weiteren Kapiteln begleitet: Gradienten auf null setzen, Vorwärtsrechnung, Loss berechnen, Gradienten rückwärts berechnen (`backward`), Parameter anpassen (`step`). Was `criterion` (die Loss-Funktion, hier der mittlere quadratische Fehler MSE) und `optimizer` (hier stochastischer Gradientenabstieg SGD mit Lernrate $0{,}01$) genau tun, klären die nächsten beiden Kapitel.
+Die fünf Zeilen in der Schleife sind *die* Trainingsschleife von PyTorch, die uns in allen weiteren Kapiteln begleitet: Gradienten auf null setzen, Vorwärtsrechnung, Loss berechnen, Gradienten rückwärts berechnen (`backward`), Parameter anpassen (`step`). Was `criterion` (die Loss-Funktion, hier der mittlere quadratische Fehler MSE) und `optimizer` (hier stochastischer Gradientenabstieg SGD mit Lernrate $0{,}01$) genau tun, klären das [Kapitel „Loss-Funktionen und Maximum Likelihood“](07-loss-funktionen-maximum-likelihood.md) und das [Kapitel „Gradientenabstieg“](08-gradientenabstieg.md).
 
 :::{figure} ../images/vl04-lin-vs-log-regression.png
 :width: 90%
@@ -348,7 +348,7 @@ Nicht jedes Multiklassen-Klassifikationsproblem schreit nach dem Softmax. Softma
 :class: warning
 In `float32` ist $e^{89}$ bereits `inf`, und $\sigma(-100) = 1/(1 + e^{100})$ wird zu $1/\texttt{inf} = 0$ gerundet. Wer dann die Kreuzentropie selbst ausschreibt, berechnet $\ln 0 = -\infty$ und $0 \cdot (-\infty) = \texttt{nan}$; der Loss ist `nan`, und ab dem nächsten Schritt sind es alle Gewichte auch. Ähnlich beim Softmax: $e^{v_j}$ läuft über, sobald ein Logit größer als etwa $88$ ist.
 
-Abhilfe ist immer dieselbe: nie erst $e^x$ und dann $\ln$ berechnen, sondern beides algebraisch zusammenfassen. Zum Beispiel ist $\ln \sigma(z) = -\ln(1 + e^{-z})$, und für $z < 0$ schreibt man das als $z - \ln(1 + e^{z})$, dann ist der Exponent nie groß. Beim Softmax darf man von allen $v_k$ das Maximum abziehen, ohne das Ergebnis zu ändern (*log-sum-exp-Trick*). PyTorch hat das eingebaut: `nn.BCEWithLogitsLoss` und `nn.CrossEntropyLoss` nehmen die *Logits* entgegen, nicht die Wahrscheinlichkeiten, und rechnen stabil. (`nn.BCELoss` auf Wahrscheinlichkeiten fängt $\ln 0$ mit einem Trick ab, indem es den Logarithmus bei $-100$ abschneidet. Das verhindert `nan`, ist aber ein Pflaster, keine Lösung.) Praktisch heißt das: Wenn Ihr Loss `nan` wird, ist meist das die Ursache, nicht ein Fehler in Ihrer Trainingsschleife.
+Abhilfe ist immer dieselbe: nie erst $e^x$ und dann $\ln$ berechnen, sondern beides algebraisch zusammenfassen. Zum Beispiel ist $\ln \sigma(z) = -\ln(1 + e^{-z})$, und für $z < 0$ schreibt man das als $z - \ln(1 + e^{z})$, dann ist der Exponent nie groß. Beim Softmax darf man von allen $v_k$ das Maximum abziehen, ohne das Ergebnis zu ändern (*log-sum-exp-Trick*). PyTorch hat das eingebaut: `nn.BCEWithLogitsLoss` und `nn.CrossEntropyLoss` nehmen die *Logits* entgegen, nicht die Wahrscheinlichkeiten, und rechnen stabil. (`nn.BCELoss` auf Wahrscheinlichkeiten fängt $\ln 0$ mit einem Trick ab, indem es den Logarithmus bei $-100$ abschneidet. Das verhindert `nan`, ist aber ein Pflaster, keine Lösung.) Praktisch heißt das: Wird der Loss `nan`, ist meist das die Ursache, nicht ein Fehler in der Trainingsschleife.
 :::
 
 ## Übung

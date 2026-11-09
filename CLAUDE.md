@@ -161,7 +161,8 @@ und deshalb liegt das einfach im Repo. Begründung und Aktualisierungsweg:
 `check_doku.py` vergleicht, was die Dokumentation behauptet, mit dem, was da ist: Pfade,
 Kapitel- und Übungszahlen, Seitenzahl, `--min-pages` hier und in der CI, die Vollständigkeit
 von `devnotes/README.md`, und die Regeln, die im Buch gelten (keine Blattnummern, keine
-Lösungen, keine Unicode-Pfeile). Er ist entstanden, weil diese Datei an einem einzigen Tag
+Lösungen, keine Unicode-Pfeile, keine zwei gleich benannten Überschriften in einer Datei –
+die teilen sich sonst einen Anker, und der zweite Abschnitt ist nicht mehr adressierbar). Er ist entstanden, weil diese Datei an einem einzigen Tag
 drei falsche Angaben angesammelt hatte, ohne dass irgendetwas rot geworden wäre. Wer eine
 Zahl hier bewusst ändert, ändert sie dort mit — oder der Prüfer meldet sich.
 

@@ -27,6 +27,47 @@ mehr — die Abweichung ist seit dem 2026-10-15 erklärt, siehe `../CLAUDE.md`),
 5 überlange Zeilen, 23 Übungsabschnitte. Weicht etwas davon ab, ist das der erste Befund, nicht
 Hintergrundrauschen.
 
+**ZUERST ENTSCHEIDEN — der Befund, der an der Gliederung rührt (2026-11-09):**
+
+> **Kapitel 17 „Latente Räume geometrisch", Abschnitt „Autoencoder vs. GANs" (Z. 74) setzt
+> das ganze GAN-Vokabular voraus — Generator, Diskriminator, adversarial Training,
+> Adversarial Loss —, aber GANs kommen erst in Kapitel 22.** Ohne Vorwissen ist der Kernsatz
+> des Abschnitts („Rekonstruktions-Loss steigt, während der Adversarial Loss sinkt") nicht
+> verständlich; es gibt dort weder Kurzerklärung noch Link.
+>
+> Zwei Wege, und das ist eine Gliederungsfrage, keine Formulierungsfrage:
+> 1. **Vorziehen in Kurzform** — ein Absatz vor dem Abschnitt, der Generator, Diskriminator
+>    und Adversarial Loss in drei Zeilen erklärt und auf Kapitel 22 verlinkt. Billig, aber
+>    das Buch erklärt GANs dann an zwei Stellen.
+> 2. **Abschnitt verschieben** — „Autoencoder vs. GANs" wandert ins GAN-Kapitel, Kapitel 17
+>    verweist nur darauf. Sauberer in der Sache, verändert aber den Aufbau zweier Kapitel
+>    und reißt den Vergleich aus seinem Zusammenhang.
+>
+> **Konrad entscheidet das in Ruhe; am Inhalt wurde am 2026-11-09 bewusst nichts geändert.**
+> Herkunft: `EiDL-Skript_ Befunde.html` im Ordner darüber, Befund „Kap. 17: Vergleich
+> Autoencoder vs. GAN vor dem GAN-Kapitel".
+
+**AUCH ZU ENTSCHEIDEN — gehört eine Klausuraufgabe ins Skript? (2026-11-09):**
+
+> Das Rechenbeispiel „Backpropagation durch Faltung und ReLU von Hand" in Kapitel 10
+> (Z. 134 ff.) **ist Aufgabe 4 der Zweitklausur vom 19.03.2026**, Zahl für Zahl: Signal
+> $x = [2, 0, -1, 4]$, Kernel $[1, -1]$, Bias 0, Target $[1, 2, 0]$, Lernrate 0,1, Ergebnisse
+> $a = [2, 1, 0]$ und $\partial L/\partial k_0 = 2$. Dieselbe Aufgabe steht in
+> `exam2025-eidl-aufgabenschatz.tex`, `exam2025-eidl-alleklausuren.tex` und englisch in
+> `exam2026-eidl-exam-1.tex`. Die Übernahme war Absicht (`klausur-abdeckung.md`, Z. 101–103),
+> ein Fehler ist es also nicht — eine Frage ist es nur, weil das Skript öffentlich ist:
+> 1. **Lassen und die Herkunft offen sagen**, z.B. im Titel des Kastens
+>    („… von Hand (Klausuraufgabe 2025)"). Dann weiß jede Leserin, woher sie kommt.
+> 2. **Lassen, wie es ist** — wer die alten Klausuren hat, erkennt es ohnehin.
+> 3. **Im Skript andere Zahlen nehmen**, wenn die Aufgabe im Klausurpool bleiben soll:
+>    $x = [1, 3, -2, 2]$, $k = [1, -1]$, $t = [0, 4, 0]$ ergibt $z = [-2, 5, -4]$,
+>    $a = [0, 5, 0]$, $\partial L/\partial a = [0, 1, 0]$, $\partial L/\partial k_0 = 3$,
+>    $\partial L/\partial k_1 = -2$, $k_0 \to 0{,}7$ (nachgerechnet). Dann auch
+>    `exam2026-eidl-exam-1.tex` ansehen, falls das ein Entwurf für 2027 ist.
+>
+> **Am 2026-11-09 bewusst nichts geändert**, weil die Antwort davon abhängt, ob die Aufgabe
+> noch einmal gestellt werden soll — das weiß nur Konrad. Herkunft: derselbe Befundbericht.
+
 **Womit anfangen**, wenn nichts anderes vorgegeben ist:
 
 1. **Der Sprachdurchgang ist durch — Buch *und* Folien** (2026-09-29, 24 Befunde:

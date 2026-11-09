@@ -57,7 +57,7 @@
 
   \note{Der Klassiker bei word2vec. Also ist WOMAN $-$ MAN die Richtung „feminin“.
     Weitere: PARIS $-$ FRANCE $+$ ITALY $=$ ROME (Richtung „Hauptstadt“),
-    WALKING $-$ WALK $+$ SWIMMING $=$ SWAM (Richtung „Vergangenheit“).
+    WALKED $-$ WALK $+$ SWIM $=$ SWAM (Richtung „Vergangenheit“).
     \textbf{Die eigentliche Pointe:} Darauf wurde nicht trainiert. Das entsteht von selbst
     aus dem Kontext-Vorhersage-Training.}
 \end{frame}
@@ -266,6 +266,7 @@
   \item Welches Modell, und woher? (fast nie von null)
   \item Welcher Loss? (folgt aus 2)
   \item Wie messen wir Güte?
+  \item Was kann schiefgehen? (Datenschutz, Kosten, Verteilungsverschiebung, Bias)
   \end{enumerate}
 
   \note{Das ist der Aufgabentyp „Anwendungskonzept“ in der Klausur -- und die Struktur,

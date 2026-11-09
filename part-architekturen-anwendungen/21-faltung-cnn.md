@@ -52,7 +52,7 @@ wobei der Definitionsbereich von $g$ mit $0$ erweitert wird (*zero padding*).
 
 Da steht ein Skalarprodukt des Vektors $(f(-n), \dots, f(n))$ mit $(g(x + n), \dots, g(x - n))$. Rechnung: Nimm einen $[-n, +n]$-Ausschnitt von $g$, zentriert bei $x$, dann *flippen* (bei $x$ spiegeln) und dann Skalarprodukt mit $f$. Das Flippen ist der Unterschied zwischen Faltung und *Korrelation*; für symmetrische Filter ($f(-y) = f(y)$) ist es egal, und in Deep-Learning-Bibliotheken wird tatsächlich meist die Korrelation berechnet und trotzdem „Convolution“ genannt. Da die Filter gelernt werden, spielt es keine Rolle.
 
-Ein Faltungsfilter ist also ein *Neuron mit $2n + 1$ Gewichten*, das an jeder Position $x$ des Signals dasselbe Skalarprodukt mit dem lokalen Ausschnitt berechnet. Dieselben Gewichte an jeder Position: das heißt **Parameter Sharing**, und es hat zwei Konsequenzen. Erstens hat die Schicht nur $2n + 1$ Parameter, egal wie lang das Signal ist. Zweitens ist die Faltung **translationsäquivariant**: Verschiebt man das Signal, verschiebt sich das Ergebnis genauso.
+Ein Faltungsfilter ist also ein *Neuron mit $2n + 1$ Gewichten*, das an jeder Position $x$ des Signals dasselbe Skalarprodukt mit dem lokalen Ausschnitt berechnet. Dieselben Gewichte an jeder Position: das heißt **Parameter Sharing**, und es hat zwei Konsequenzen. Erstens hat die Schicht nur $2n + 1$ Gewichte (plus einen Bias, den `nn.Conv1d` voreingestellt mitlernt), egal wie lang das Signal ist. Zweitens ist die Faltung **translationsäquivariant**: Verschiebt man das Signal, verschiebt sich das Ergebnis genauso.
 
 ### Beispiel: ASML-Aktienkurs
 
@@ -126,9 +126,9 @@ d.h. „glätten und dann ableiten“ ist dasselbe wie „mit dem abgeleiteten F
 
 ### Pooling ≈ Binning
 
-**Binning** = Array in feste disjunkte Blöcke (ohne Überlapp) zerlegen, dann Summe oder Mittelwert bilden. Das ist ungefähr eine Faltung mit einer Kastenfunktion, bei der man aber nur wenige Werte des Ergebnisses verwendet. Wie viel Überlapp es gibt, bestimmt der **Stride** (Schrittlänge).
+**Binning** = Array in feste disjunkte Blöcke (ohne Überlapp) zerlegen, dann Summe oder Mittelwert bilden. Das ist ungefähr eine Faltung mit einer Kastenfunktion, bei der man aber nur wenige Werte des Ergebnisses verwendet.
 
-**Pooling** = Array in feste Blöcke (mit Überlapp) einteilen. **Average-Pooling** = Pooling + Mittelwert der Blöcke. **Max-Pooling** = Pooling + Maximum der Blöcke.
+**Pooling** = Array in Blöcke der Größe $k$ (**Poolgröße**) einteilen, deren Anfänge um den **Stride** $s$ (Schrittlänge) auseinanderliegen. Der Überlapp zweier benachbarter Blöcke ist $k - s$: Bei $s = k$ liegen sie lückenlos nebeneinander wie beim Binning, bei $s < k$ überlappen sie. **Average-Pooling** = Pooling + Mittelwert der Blöcke. **Max-Pooling** = Pooling + Maximum der Blöcke.
 
 ### Pooling-Beispiel
 
@@ -189,7 +189,7 @@ Die Zahl im `nn.Linear` muss man also ausrechnen – der häufigste Shape-Fehler
 
 ### 2-dimensionale Faltung in PyTorch
 
-`nn.Conv2d` ist ein Layer mit lernbaren Gewichten; man kann die Gewichte aber auch von Hand setzen und den Layer als Bildfilter benutzen. Ein Farbfoto wird zu einem Tensor der Form `(1, 3, H, W)` (Batch, RGB-Kanäle, Höhe, Breite), und ein Filter mit `in_channels=3` summiert über die drei Farbkanäle:
+`nn.Conv2d` ist ein Layer mit lernbaren Gewichten; man kann die Gewichte aber auch von Hand setzen und den Layer als Bildfilter benutzen. Ein Farbfoto wird zu einem Tensor der Form `(1, 3, H, W)` (Batch, RGB-Kanäle, Höhe, Breite), und ein Filter mit `in_channels=3` summiert über die drei Farbkanäle. Eine `nn.Conv2d(C_in, C_out, k)` hat $C_{\text{out}} \cdot C_{\text{in}} \cdot k^2$ Gewichte und $C_{\text{out}}$ Biases, etwa `nn.Conv2d(3, 16, 5)`: $16 \cdot 3 \cdot 25 + 16 = 1216$. Für einen festen Bildfilter wie unten schaltet `bias=False` den Bias ab:
 
 ```python
 import torch, torch.nn as nn
@@ -226,8 +226,8 @@ Weiterführend:
 Signal $g = (3, 1, 4, 1, 5)$ an den Stellen $x = 0..4$, Filter
 $f = (\tfrac12, 0, -\tfrac12)$ an den Stellen $-1, 0, 1$.
 
-1. Berechnen Sie $(g \ast f)(x)$ für $x = 1, 2, 3$ mit
-   $(g \ast f)(x) = \sum_k g(x-k) f(k)$.
+1. Berechnen Sie $(f \ast g)(x)$ für $x = 1, 2, 3$ mit
+   $(f \ast g)(x) = \sum_{k=-1}^{1} f(k)\, g(x-k)$.
    *Tipp: Nur drei Summanden je Stelle, und einer davon fällt weg.*
 2. Berechnen Sie Max-Pooling von $g$ mit Poolgröße 2 und Stride 2.
 3. Ein $28\times28$-Bild geht durch `Conv2d(1, 16, kernel_size=5)`, dann

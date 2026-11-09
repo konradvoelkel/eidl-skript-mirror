@@ -24,11 +24,25 @@ PDF mit einem überfüllten Rahmen. Die ganze Geschichte samt der Fallen beim Re
 
 Gebraucht wird das HHU-Beamer-Theme (`hhubeamer`) unter
 `/usr/share/texmf/tex/latex/beamer/themes/` und die Schrift **Source Sans 3**
-(seit 2026-11-04; davor Source Sans Pro 2.021 — Adobe hat die Familie 2021
+(seit 2026-11-04; davor Source Sans Pro 2.021 – Adobe hat die Familie 2021
 umbenannt, aktuell 3.052). `fontspec` sucht nach dem *Familiennamen*, der jetzt
 „Source Sans 3“ lautet; lokal liegen die OTF in `~/.fonts/SourceSans3`, im
 CI-Image kommt sie aus dem Debian-Paket `fonts-adobe-sourcesans3`. Beide Fassungen
-stehen unter der SIL OFL. Die deutsche
+stehen unter der SIL OFL.
+
+**Fehlt sie, bricht jeder Deckbau ab** – „Package fontspec Error: The font „Source Sans 3"
+cannot be found", kein PDF, für alle Decks zugleich. Mit Root genügt
+`apt install fonts-adobe-sourcesans3`; ohne Root das Archiv des Herstellers (2,4 MB):
+
+```sh
+curl -LO https://github.com/adobe-fonts/source-sans/releases/download/3.052R/OTF-source-sans-3.052R.zip
+unzip -j OTF-source-sans-3.052R.zip 'OTF/SourceSans3-*.otf' -d ~/.fonts/SourceSans3
+fc-cache -f ~/.fonts
+```
+
+Gegenprobe: `fc-list : family | grep "Source Sans 3"` muss den **Familiennamen** nennen,
+nicht nur Dateinamen – danach sucht `fontspec`. So am 2026-11-09 auf der zweiten Maschine
+eingerichtet (PLAYBOOK-folien §2.14). Die deutsche
 Silbentrennung kommt über `babel` (Header); LuaTeX lädt die Trennmuster beim ersten Gebrauch
 aus `hyph-utf8`, das zu jedem texlive gehört. Bis zum 2026-10-02 lud der Header das veraltete
 `german.sty`, das im LuaTeX-Format keine deutsche Sprache fand – kein Deck trennte Silben, und
@@ -105,7 +119,7 @@ aktualisiert auch diese Kopie oder löscht sie. Und ein Pfad in `TEXINPUTS`, der
 * **Vorher stand dort ein anderes Foto** (`vl01-mark-i-perceptron.jpg`, der geöffnete
   Schrank mit dem Drahtbündel) aus den Digital Collections der Cornell University Library,
   Katalognummer `ss:550351`. Dessen Rechteangabe lautet dort wörtlich „For information
-  regarding copyright for this image, send inquiries to rarerepro@cornell.edu“ — Cornell
+  regarding copyright for this image, send inquiries to rarerepro@cornell.edu“ – Cornell
   erteilt also **keine** Lizenz und macht keine Aussage zur Nachnutzung; das Bild stammt aus
   den *Cornell University News Service records*, einer Sammlung der Universität, nicht aus
   einer Bundesbehörde. Die englische Wikipedia nutzt dieselbe Aufnahme nur **unter Fair
@@ -136,7 +150,7 @@ aktualisiert auch diese Kopie oder löscht sie. Und ein Pfad in `TEXINPUTS`, der
   Erwartet wird **404** (so versteckt GitLab, was man nicht sehen darf); 200 hieße, die
   ungeprüften Decks liegen offen. Das Theme kommt
   dafür aus den **Secure Files** des Projekts (Einstellungen → CI/CD → Secure files,
-  `hhubeamer.tar.gz`, hochgeladen am 2026-11-04) in das Image — es darf nicht ins
+  `hhubeamer.tar.gz`, hochgeladen am 2026-11-04) in das Image – es darf nicht ins
   Repository, weil es keinen Lizenzvermerk hat und die HHU-Bildmarke enthält, und der
   GitHub-Spiegel ist öffentlich. Fehlt die Datei, scheitert nur `build-slides`
   (mit `allow_failure`), und die Meldung sagt, was zu tun ist. Dasselbe gilt für alles andere, was der Bau erzeugt – `.aux`, `.nav`,

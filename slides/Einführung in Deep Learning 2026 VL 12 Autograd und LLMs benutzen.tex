@@ -203,7 +203,7 @@ print(k.grad)     # tensor([6.])
     Weg 1 ist sehr billig, aber blind für längere Zusammenhänge; Weg 2 hat hohe Qualität,
     braucht aber ein LLM zur Inferenz (das ist das Übungsblatt dieser Woche); Weg 5 kostet für Llama 2 zwischen
     2 und 10 Mio. Dollar.
-    Heute machen wir 1, 3 und 10 im Code.}
+    Heute machen wir 2, 3 und 10 im Code.}
 \end{frame}
 
 \begin{frame}
@@ -213,12 +213,12 @@ print(k.grad)     # tensor([6.])
     \Large
     Llama 2 7B: $7 \cdot 4$ GB $= 28$ GB (32 Bit)\\[10pt]
     $7 \cdot 2$ GB $= 14$ GB (16 Bit)\\[10pt]
-    quantisiert (4 Bit): unter 5 GB
+    quantisiert (4 Bit): $7 \cdot \tfrac12$ GB $\approx 3{,}5$ GB (als Datei gut 4 GB)
   \end{center}
 
   \note{Die Faustformel ist die wichtigste Zahl der Sitzung: Parameterzahl mal Bytes pro
     Parameter.
-    Llama2-7B ist etwa 8,6 GB groß und passt auf eine Consumer-Grafikkarte.
+    Llama2-7B ist in 16 Bit 13,5 GB groß, als 4-Bit-GGUF gut 4 GB, und passt damit auf eine Consumer-Grafikkarte.
     Llama3.3-70B spielt in der Liga von GPT-4, braucht aber viel VRAM; Llama3.1-405B
     verteilt man auf mehrere GPUs.}
 \end{frame}
@@ -244,7 +244,7 @@ ollama run llama3.2:1b "Explain how LLMs work"
 \end{frame}
 
 \begin{frame}[fragile]
-  \frametitle{Weg 1: Embeddings}
+  \frametitle{Weg 2: Satz-Embeddings}
 
   \begin{lstlisting}
 import ollama, numpy as np

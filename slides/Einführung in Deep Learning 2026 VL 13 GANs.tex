@@ -198,9 +198,10 @@
 
   \note{Mode Collapse: Die Verteilung kollabiert auf wenige Punkte, die $D$ gerade nicht
     erkennt. Genau das hat man im GAN Lab gesehen.
-    Vanishing Gradients: Ist $D(G(z)) \approx 0$ überall, dann ist $\log(1 - D(G(z)))$
-    flach und der Generator lernt nichts mehr -- dasselbe Phänomen wie bei den sterbenden
-    Neuronen in VL 7.}
+    Vanishing Gradients: Ist $D(G(z)) \approx 0$ überall, dann sättigt in
+    $\log(1 - D(G(z)))$ das Sigmoid am Ausgang von $D$, und beim Generator kommt kaum
+    Gradient an -- dasselbe Phänomen wie bei den sterbenden Neuronen in VL 7. Deshalb
+    trainiert man $G$ mit Label 1, also mit $-\log D(G(z))$.}
 \end{frame}
 
 \begin{frame}

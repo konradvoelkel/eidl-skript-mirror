@@ -46,6 +46,10 @@ Zwei kleine ReLU-Netze $\mathbb{R}^2 \to \mathbb{R}$, oben mit einer versteckten
 
 Mehrere Neuronen, die parallel verarbeitet werden, bilden eine Schicht. Ein **Linear Layer** ist eine Matrix (Zeilen = Gewichtsvektoren) plus Bias. Ein **ReLU Layer** ist eine Schicht, in der jedes Neuron die Aktivierungsfunktion ReLU nutzt, also Linear Layer + komponentenweises ReLU. In PyTorch: `nn.Sequential(nn.Linear(n, m), nn.ReLU())`.
 
+### Problem bei Sigmoid: verschwindende Gradienten
+
+Bei der Backpropagation wird das Fehlersignal in jeder Schicht mit der Ableitung der Aktivierungsfunktion multipliziert (und mit der transponierten Gewichtsmatrix, [Kapitel „Backpropagation“](09-backpropagation.md)). Für $\tau = \sigma$ ist dieser Faktor höchstens $\tfrac14$ ([Kapitel „Logistische Regression“](06-logistische-regression.md)); nach zehn Schichten bleibt, solange die Gewichte nicht groß sind, höchstens $4^{-10} \approx 10^{-6}$ übrig, und die vorderen Schichten lernen praktisch nichts mehr. Das heißt **verschwindender Gradient** (*vanishing gradient*). ReLU hat für $y > 0$ die Ableitung $1$ und reicht das Signal unverändert weiter; ihr eigenes Problem ist der nächste Abschnitt. Über sehr viele Schichten helfen außerdem Skip Connections ([Kapitel „Recurrent Neural Networks“](../part-architekturen-anwendungen/19-rnn.md)).
+
 ### Problem bei ReLU: sterbende Neuronen
 
 Wenn ein Neuron immer $0$ liefert, weil die Eingabe immer negativ ist, „fließt“ keine Information mehr durch das Neuron während der Backpropagation – die Ableitung ist $0$, also ist $\delta$ für dieses Neuron $0$, also ändern sich seine Gewichte nie wieder. Das Neuron ist tot. Zwei Lösungen:
@@ -59,7 +63,7 @@ $$
 \tau(y) := y\,\Phi(y) \quad \text{(GELU, Gaussian Error Linear Unit)},
 $$
 
-wobei $\Phi$ die Verteilungsfunktion der Standardnormalverteilung ist. Beide sind im negativen Bereich nicht strikt null, sondern haben eine kleine Delle unter der Achse, und die Ableitung verschwindet nur asymptotisch. GELU steht in den Transformern der BERT- und GPT-2-Generation und in Vision Transformern; die heutigen großen Sprachmodelle (Llama, Mistral, Qwen) nehmen stattdessen Swish/SiLU, eingebaut in einen *gated* Feed-Forward-Block, den man SwiGLU nennt.
+wobei $\Phi$ die Verteilungsfunktion der Standardnormalverteilung ist. Beide sind im negativen Bereich nicht strikt null, sondern haben eine kleine Delle unter der Achse. Die Ableitung ist deshalb nirgends auf einem ganzen Bereich null wie bei ReLU: Sie hat nur am Tiefpunkt der Delle eine einzelne Nullstelle (Swish bei $y \approx -1{,}28$, GELU bei $y \approx -0{,}75$) und geht für $y \to -\infty$ gegen null, ohne sie dort zu erreichen. GELU steht in den Transformern der BERT- und GPT-2-Generation und in Vision Transformern; die heutigen großen Sprachmodelle (Llama, Mistral, Qwen) nehmen stattdessen Swish/SiLU, eingebaut in einen *gated* Feed-Forward-Block, den man SwiGLU nennt.
 
 Welche Aktivierungsfunktionen in der Praxis genutzt wurden, listete [paperswithcode](https://web.archive.org/web/20250716173325/https://paperswithcode.com/methods/category/activation-functions) – die Seite gibt es nicht mehr, der Link führt auf den Schnappschuss vom Juli 2025 im Internet Archive.
 

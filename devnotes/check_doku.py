@@ -270,6 +270,38 @@ def fehler_sammeln() -> list[str]:
             for name in sorted(verlinkt - set(dateien)):
                 fehler.append(f"uebungsblaetter.md verlinkt {name}, die Datei fehlt")
 
+    # ── Doppelte Ueberschriften in einer Datei ──────────────────────────────────
+    # Zwei gleich benannte Ueberschriften in einem Kapitel bekommen von mystmd
+    # **denselben** Identifier; im HTML haengt an der zweiten ein "-1", in den
+    # Seiten-JSON steht zweimal derselbe. Ein Verweis auf den Anker landet damit
+    # immer bei der ersten, und ein Werkzeug, das die Identifier ausliest (die
+    # Fragen auf assess lesen sie), kann den zweiten Abschnitt ueberhaupt nicht
+    # adressieren -- er wird von der gleichnamigen ersten Stelle ueberschrieben.
+    # Gefunden am 2026-11-09 an drei Stellen: "Take-Home Message" zweimal in
+    # "Netze von Hand", dazu zwei Unterabschnitte, die den Titel ihres eigenen
+    # Abschnitts wiederholten ("Label Autoencoder", "Adam oder was?"). Still in
+    # jedem Fall: HTML und PDF sehen tadellos aus.
+    for datei in kapitel + [WURZEL / "glossar.md", WURZEL / "index.md"]:
+        if not datei.exists():
+            continue
+        gesehen: dict[str, int] = {}
+        for zeile in datei.read_text(encoding="utf-8").splitlines():
+            # Die eine `#`-Zeile ist der Kapiteltitel: mystmd macht daraus den
+            # Seitentitel, nicht einen Ueberschriften-Knoten, also auch keinen Anker.
+            # `06-logistische-regression.md` hat deshalb zu Recht `# Logistische
+            # Regression` und spaeter `## Logistische Regression` -- geprueft am
+            # gebauten `_build/html/logistische-regression.json`, dort gibt es den
+            # Titel als Ueberschrift nicht. Verglichen wird also ab Ebene 2.
+            m = re.match(r"^(#{2,6})\s+(.*?)\s*$", zeile)
+            if m:
+                gesehen[m.group(2)] = gesehen.get(m.group(2), 0) + 1
+        for titel, n in gesehen.items():
+            if n > 1:
+                fehler.append(
+                    f"{datei.relative_to(WURZEL)}: Ueberschrift {titel!r} kommt {n}-mal vor "
+                    "- gleicher Anker, der zweite Abschnitt ist nicht verlinkbar"
+                )
+
     return fehler
 
 

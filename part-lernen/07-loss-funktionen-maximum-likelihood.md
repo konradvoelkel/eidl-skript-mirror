@@ -15,7 +15,7 @@ Wir haben zwei Modelle für ein einzelnes Neuron gesehen, mit gleicher Struktur,
 | | Perzeptron | Logistische Regression |
 |---|---|---|
 | Inferenz | $[\langle w, x \rangle > 0] \in \{0, 1\}$ | $\sigma(\langle w, x \rangle) \in (0, 1)$ |
-| Aktivierungsfunktion | „sign“ (Vorzeichen) | $\sigma$ (logistische Sigmoidfunktion) |
+| Aktivierungsfunktion | Schwellenwertfunktion $[\zeta > 0]$ (mit Labels $\pm 1$: $\operatorname{sign}$) | $\sigma$ (logistische Sigmoidfunktion) |
 | Training | Update-Regel $w_{\text{neu}} = w_{\text{alt}} + \rho\,(y_{\text{true}} - f(x))\,x$ | naiv: finde $w$, sodass der MSE der linearen Regression minimal wird |
 
 Beim Perzeptron kann jedes einzelne neue Paar $(x, y)$ zum Weiterlernen benutzt werden; bei der logistischen Regression wird ein Fehler minimiert. Zwei Fragen drängen sich auf: Wie lernt man bei der logistischen Regression aus einem *einzelnen* neuen Paar $(x, y)$ etwas dazu? Und wird beim Perzeptron eigentlich auch etwas maximiert oder minimiert?
@@ -111,7 +111,7 @@ Für die lineare Regression mit MSE klappt das (die [Normalgleichungen](https://
 Zwei Datenpunkte in $\mathbb{R}$: $x = -1$ mit $y = 0$ und $x = +1$ mit $y = 1$, Modell $\sigma(w x)$ ohne Bias. Die BCE ist
 
 $$
-L(w) = -\ln\bigl(1 - \sigma(-w)\bigr) - \ln \sigma(w) = -2 \ln \sigma(w)
+L(w) = -\tfrac12\Bigl(\ln\bigl(1 - \sigma(-w)\bigr) + \ln \sigma(w)\Bigr) = -\ln \sigma(w)
 $$
 
 (wegen $1 - \sigma(-w) = \sigma(w)$). Diese Funktion fällt streng monoton in $w$ und nähert sich $0$ für $w \to \infty$, erreicht es aber nie: Es gibt kein Minimum. Jedes Verfahren, das $L$ verkleinert, schiebt $w$ immer weiter, weil ein steileres Sigmoid (größeres $\|w\|$, siehe [Kapitel „Neuron und Perzeptron“](../part-grundlagen/02-neuron-perzeptron.md)) den Datenpunkten immer mehr Wahrscheinlichkeit gibt. In der Praxis sieht das so aus: Der Loss sinkt und sinkt, die Gewichte wachsen, die Vorhersagen werden „sicherer“, ohne dass sich die Trenngerade noch bewegt. Abhilfe: ein Strafterm für $\|w\|$ (*Regularisierung*, wie bei der Ridge-Regression im [DS-Skript](https://voelkel.pages.cs.uni-duesseldorf.de/ds-skript/lineare-regression#regularisierung); in PyTorch `weight_decay` im Optimierer) oder einfach rechtzeitig aufhören.
@@ -136,7 +136,7 @@ $$
 die binäre Kreuzentropie und die Entropie von $q$, und
 
 $$
-D(q \Vert p) = q(0)\log\frac{q(0)}{p(0)} + q(1)\log\frac{q(1)}{p(1)}
+D_{KL}(q \Vert p) = q(0)\log\frac{q(0)}{p(0)} + q(1)\log\frac{q(1)}{p(1)}
 $$
 
 ist die Kullback-Leibler-Divergenz (im [DS-Skript](https://voelkel.pages.cs.uni-duesseldorf.de/ds-skript/relative-entropie) als $H(q \Vert p)$ geschrieben).
@@ -144,12 +144,12 @@ ist die Kullback-Leibler-Divergenz (im [DS-Skript](https://voelkel.pages.cs.uni-
 1. Sei $q(0) = 0$ und $q(1) = 1$ (das wahre Label ist 1), dazu $p(0) = 0{,}2$ und
    $p(1) = 0{,}8$. Berechnen Sie $BCE(q,p)$ und $H(q)$.
    *Tipp: $0 \log 0$ wird als $0$ gelesen. $H(q)$ ist hier besonders einfach.*
-2. Zeigen Sie allgemein $D(q \Vert p) = BCE(q,p) - H(q)$.
+2. Zeigen Sie allgemein $D_{KL}(q \Vert p) = BCE(q,p) - H(q)$.
    *Tipp: Schreiben Sie den Logarithmus des Quotienten als Differenz von Logarithmen und
    sortieren Sie nach $p$ und $q$.*
-3. Warum darf man beim Training statt $D(q \Vert p)$ einfach $BCE(q,p)$ minimieren?
+3. Warum darf man beim Training statt $D_{KL}(q \Vert p)$ einfach $BCE(q,p)$ minimieren?
 
-*Antwortprobe: In Teil 1 muss $D(q\Vert p) = BCE(q,p)$ herauskommen.*
+*Antwortprobe: In Teil 1 muss $D_{KL}(q\Vert p) = BCE(q,p)$ herauskommen.*
 
 :::{admonition} Weiterlesen
 :class: seealso

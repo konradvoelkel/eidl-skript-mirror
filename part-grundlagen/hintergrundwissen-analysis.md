@@ -16,6 +16,15 @@ Nachschlagekapitel. Wie der Gradient *benutzt* wird, steht im
 [Kapitel „Gradientenabstieg“](../part-lernen/08-gradientenabstieg.md); hier steht, was er
 ist.
 
+:::{admonition} Vorausgesetzt: Ableiten in einer Variablen
+:class: note
+$(fg)' = f'g + fg'$, $\left(\frac{f}{g}\right)' = \frac{f'g - fg'}{g^2}$, $(f \circ g)' = (f' \circ g)\, g'$, $(x^n)' = n x^{n-1}$, $(e^x)' = e^x$, $(\ln x)' = \frac1x$. Damit ist z.B.
+
+$$
+\sigma'(x) = \frac{e^{-x}}{(1 + e^{-x})^2} = \sigma(x)\bigl(1 - \sigma(x)\bigr).
+$$
+:::
+
 ## Partielle Ableitung
 
 :::{prf:definition} Partielle Ableitung

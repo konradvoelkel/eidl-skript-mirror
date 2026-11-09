@@ -42,7 +42,15 @@ Idee: Jeder Layer ist nah dran an „nichts ändern“ (Identität), und der Gra
 
 **GRU** (Gated Recurrent Unit): Der hidden state ist gleichzeitig der Output. Aus Input und altem hidden state wird ein *Kandidat* für den neuen hidden state berechnet, und zwei Gates (Sigmoide, also Werte in $(0, 1)$) steuern: Das *Reset Gate*, wie viel vom alten Zustand in den Kandidaten eingeht, und das *Update Gate*, wie stark der Zustand zum Kandidaten hin aktualisiert wird.
 
-**LSTM** (Long Short-Term Memory): Zusätzlich zum hidden state $h_t$ (= Output, *short term memory*) gibt es einen **cell state** $c_t$ (*long term memory*), der nur durch Addition und komponentenweise Multiplikation verändert wird – eine Art Skip Connection durch die Zeit. Drei Gates (Sigmoide) steuern ihn: *forget* (was aus $c_{t-1}$ gelöscht wird), *input* (was neu hineingeschrieben wird), *output* (was davon in $h_t$ sichtbar wird). Mehr Erklärungen: Shi Yan @ MLReview, *Understanding LSTM and its diagrams*.
+**LSTM** (Long Short-Term Memory): Zusätzlich zum hidden state $h_t$ (= Output, *short term memory*) gibt es einen **cell state** $c_t$ (*long term memory*), der nur durch Addition und komponentenweise Multiplikation verändert wird – eine Art Skip Connection durch die Zeit. Drei Gates (Sigmoide, Werte in $(0, 1)$, berechnet aus $x_t$ und $h_{t-1}$) steuern ihn: *forget* $f_t$ (wie viel von $c_{t-1}$ erhalten bleibt; nahe $0$ heißt vergessen), *input* $i_t$ (wie viel vom neuen Kandidaten $\tilde c_t$ hineingeschrieben wird), *output* $o_t$ (wie viel davon in $h_t$ sichtbar wird):
+
+$$
+c_t = f_t \odot c_{t-1} + i_t \odot \tilde c_t,
+\qquad
+h_t = o_t \odot \tanh(c_t).
+$$
+
+Das erste $\odot$ ist die Skip Connection durch die Zeit: Mit $f_t \approx 1$ fließt $c_{t-1}$ und mit ihm sein Gradient fast unverändert weiter. Mehr Erklärungen: Shi Yan @ MLReview, *Understanding LSTM and its diagrams*.
 
 Schaltbilder der Zellen: [LSTM](https://de.wikipedia.org/wiki/Long_short-term_memory) und [GRU](https://en.wikipedia.org/wiki/Gated_recurrent_unit) auf Wikipedia (Abbildungen CC-BY-SA); die Gates sind dort als $\sigma$-Knoten gezeichnet, die elementweise multiplizieren, also genau die stetigen Bitmasken aus dem [Kapitel „Netze von Hand bauen“](../part-lernen/12-netze-von-hand.md).
 

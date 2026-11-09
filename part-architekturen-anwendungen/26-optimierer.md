@@ -47,7 +47,7 @@ $$
 
 mit typischerweise $\beta_2 = 0{,}999$ und $\epsilon = 10^{-8}$ gegen Division durch null. Sind die Gradienten einer Koordinate durchweg groß, wird der Schritt dort gedämpft; sind sie durchweg klein, wird er verstärkt. Im Ergebnis ist $m_t / \sqrt{v_t}$ von der Größenordnung $1$, jeder Parameter macht also Schritte der Größenordnung $\rho$ – unabhängig davon, wie groß seine Gradienten absolut sind. Diese Technik kommt von RMSProp (Root Mean Square Propagation). Der Effekt ist eine **Lernrate pro Gewicht**: Gewichte mit selten großen Gradienten (z.B. Embeddings seltener Wörter) bekommen dadurch relativ größere Schritte.
 
-### Adam oder was?
+### Beides zusammen: Adam
 
 Dahinter steckt also eine adaptive Lernrate, abhängig von der bisherigen Größe der Gradienten, einzeln für jedes Gewicht, sowie die Impuls-Heuristik zur verbesserten Gradientenschätzung. (Adam korrigiert außerdem die Schätzungen $m_t$, $v_t$ in den ersten Schritten für den Bias durch die Initialisierung mit null.) Wo geht das schief? Wenn die Lernrate nicht stark genug abgesenkt wird, findet die Optimierung nie das lokale Optimum und oszilliert darum herum. Deshalb kombiniert man Adam in der Praxis mit einem *Learning Rate Schedule*, der $\rho$ im Laufe des Trainings verkleinert.
 

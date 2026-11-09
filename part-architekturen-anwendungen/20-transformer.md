@@ -10,7 +10,7 @@ short_title: "Transformer"
 
 Um Übersetzungsmodelle zu vergleichen, braucht man ein Maß. Papineni et al., [*BLEU: a Method for Automatic Evaluation of Machine Translation*](https://hdl.handle.net/10.3115/1073083.1073135) (2001 als IBM-Bericht, ACL 2002): „Human evaluations of machine translation are extensive but expensive. […] We propose a method of automatic machine translation evaluation that is quick, inexpensive, and language-independent, that correlates highly with human evaluation.“ Die Grundidee: „The closer a machine translation is to a professional human translation, the better it is.“
 
-Der **BLEU-Score** (bilingual evaluation understudy) zwischen 0 und 1 (auch skaliert 0–10 oder 0–100) ist das geometrische Mittel aus den $n$-Gramm-Präzisionsscores der Maschinenübersetzung relativ zu einer menschlichen Referenzübersetzung, multipliziert mit einem Strafterm für abweichende Übersetzungslänge (*brevity penalty*). Die $n$-Gramm-Präzision ist die Anzahl (mit Mehrfachzählung, aber gedeckelt durch die Referenz) der $n$-Gramme, die in der Maschinenübersetzung vorkommen und in der Referenzübersetzung, normiert mit der Anzahl der $n$-Gramme der Maschinenübersetzung. Für BLEU ist $n = 1, 2, 3, 4$ üblich.
+Der **BLEU-Score** (bilingual evaluation understudy) zwischen 0 und 1 (auch skaliert 0–10 oder 0–100) ist das geometrische Mittel aus den $n$-Gramm-Präzisionsscores der Maschinenübersetzung relativ zu einer menschlichen Referenzübersetzung, multipliziert mit einem Strafterm für zu kurze Übersetzungen (*brevity penalty*): $\mathrm{BP} = 1$, wenn die Maschinenübersetzung mindestens so lang ist wie die Referenz, sonst $e^{1 - r/c}$ mit Referenzlänge $r$ und Länge $c$ der Maschinenübersetzung. Die $n$-Gramm-Präzision ist die Anzahl (mit Mehrfachzählung, aber gedeckelt durch die Referenz) der $n$-Gramme, die in der Maschinenübersetzung vorkommen und in der Referenzübersetzung, normiert mit der Anzahl der $n$-Gramme der Maschinenübersetzung. Für BLEU ist $n = 1, 2, 3, 4$ üblich. Zu lange Übersetzungen braucht man nicht extra zu bestrafen: Überzählige $n$-Gramme stehen im Nenner der Präzision und drücken sie von selbst.
 
 ## Historie: NeurIPS 2017
 
@@ -20,7 +20,7 @@ Zur Einordnung: WMT = Workshop on Statistical Machine Translation, Task und Date
 
 ## Transformer technisch
 
-Der Aufbau (Fig. 1 in „Attention is all you need“): ein **Encoder**-Stapel und ein **Decoder**-Stapel, beide aus identischen Blöcken mit Multi-Head Self-Attention, einem MLP, Residual Connections und Layer-Normalisierung. Anstelle von Rekurrenz bekommt jedes Token eine **Positionskodierung** addiert. Der Kern ist die **Attention**:
+Der Aufbau (Fig. 1 in „Attention is all you need“): ein **Encoder**-Stapel und ein **Decoder**-Stapel, beide aus identischen Blöcken mit Multi-Head Self-Attention, einem MLP, Residual Connections und Layer-Normalisierung. Die Layer-Normalisierung ist die Schwester der Batch Normalization aus dem [Kapitel „Autoencoder“](../part-representation-learning/14-autoencoder.md): Sie bringt jeden Token-Vektor für sich auf Mittelwert $0$ und Varianz $1$ – gemittelt über seine $d$ Komponenten statt über den Batch – und skaliert und verschiebt danach mit lernbaren Gewichten. Sie hängt deshalb nicht von der Batch-Größe ab und rechnet im Training und in der Inferenz gleich. Anstelle von Rekurrenz bekommt jedes Token eine **Positionskodierung** addiert. Der Kern ist die **Attention**:
 
 $$
 \operatorname{Attention}(Q, K, V) = \operatorname{sm}\!\left( \frac{Q K^T}{\sqrt{d_k}} \right) V ,
@@ -47,7 +47,7 @@ Die Vokabulargröße bei GPT-4s BPE „tiktoken“ ist z.B. 100 256; durchschnit
 
 **BERT** (Bidirectional Encoder Representations from Transformers): **Encoder-only** (nicht zwangsläufig generativ); Tokenization auf Subwort-Level (WordPiece); Training mit 2 Tasks: Masked Language Modeling (ähnlich wie bei word2vec, aber mit Kontext in beide Richtungen) und „nächsten Satz vorhersagen“. Bei gleicher Modellgröße besser als GPT für manche Tasks (Klassifikation, Embeddings). Varianten: RoBERTa, ALBERT, DistilBERT.
 
-**ViT** (Vision Transformer, Dosovitskiy et al., [„An Image is Worth 16x16 Words“](https://arxiv.org/abs/2010.11929), ICLR 2021): Das Bild wird grob gerastert in „Patches“ aufgeteilt; jeder Patch (= Token) wird in einen Vektor umgewandelt; Positionskodierung für 2D-Position statt 1D wie bei Text; ansonsten „klassischer“ Transformer. Für Klassifikationsaufgaben manchmal besser als CNNs.
+**ViT** (Vision Transformer, Dosovitskiy et al., [„An Image is Worth 16x16 Words“](https://arxiv.org/abs/2010.11929), ICLR 2021): Das Bild wird grob gerastert in „Patches“ aufgeteilt; jeder Patch (= Token) wird in einen Vektor umgewandelt; Positionskodierung für 2D-Position statt 1D wie bei Text; ansonsten „klassischer“ Transformer. Für Klassifikationsaufgaben manchmal besser als CNNs, die Faltungsnetze aus dem [nächsten Kapitel](21-faltung-cnn.md).
 
 ## Implementierung des Transformers
 

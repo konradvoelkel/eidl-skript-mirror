@@ -18,7 +18,7 @@ Die Begriffe, die in Klausuraufgaben vorkommen, je in ein bis drei Sätzen, mit 
 
 **Accuracy, Precision, Recall.** Accuracy ist der Anteil richtiger Vorhersagen und bei unbalancierten Klassen irreführend. Precision: Anteil der als positiv vorhergesagten, die wirklich positiv sind. Recall: Anteil der wirklich positiven, die gefunden wurden. [Was ist Deep Learning?](part-grundlagen/01-was-ist-deep-learning.md)
 
-**Over- und Underfitting.** Overfitting: gut auf Trainings-, schlecht auf Testdaten, das Modell hat auswendig gelernt. Underfitting: schon auf Trainingsdaten schlecht. Gegenmittel gegen Overfitting sind Regularisierung, Early Stopping, Data Augmentation, Dropout. [Autoencoder](part-representation-learning/14-autoencoder.md)
+**Over- und Underfitting.** Overfitting: gut auf Trainings-, schlecht auf Testdaten, das Modell hat auswendig gelernt. Underfitting: schon auf Trainingsdaten schlecht. Gegenmittel gegen Overfitting sind Regularisierung, Early Stopping, Data Augmentation, Dropout. [Autoencoder](part-representation-learning/14-autoencoder.md), [Universelle Approximation](part-lernen/13-universelle-approximation.md)
 
 **Generatives Modell.** Ein Modell für eine Wahrscheinlichkeitsverteilung, als Dichte oder als Sampler. Generieren heißt aus dieser Verteilung sampeln. [Was ist Deep Learning?](part-grundlagen/01-was-ist-deep-learning.md)
 
@@ -84,7 +84,7 @@ Die Begriffe, die in Klausuraufgaben vorkommen, je in ein bis drei Sätzen, mit 
 
 **Sterbende Neuronen, Swish, GELU.** Ein ReLU-Neuron mit negativer Aktivierung für alle Daten bekommt nie wieder einen Gradienten. Leaky ReLU, Swish (SiLU) und GELU lassen im Negativen ein kleines Signal durch. [Aktivierungsfunktionen](part-lernen/11-aktivierungsfunktionen.md)
 
-**Universelle Approximation.** Ein Netz mit einer versteckten Schicht kann jede stetige Funktion auf einem beschränkten Bereich beliebig gut annähern, aus Treppen- oder Knickfunktionen. Sagt nichts darüber, ob der Gradientenabstieg die Gewichte findet, und nichts über Extrapolation. [Universelle Approximation](part-lernen/13-universelle-approximation.md)
+**Universelle Approximation.** Ein Netz mit einer einzigen, genügend breiten versteckten Schicht kann jede stetige Funktion auf einem kompakten (beschränkten und abgeschlossenen) Bereich beliebig gut annähern, aus Treppen- oder Knickfunktionen. Ebenso reichen schmale Netze, wenn sie tief genug sind. Sagt nichts darüber, ob der Gradientenabstieg die Gewichte findet, und nichts über Extrapolation. [Universelle Approximation](part-lernen/13-universelle-approximation.md)
 
 **Dropout, Batch Normalization.** Dropout setzt im Training zufällig Aktivierungen auf null, gegen Overfitting. Batch Normalization normiert die Ausgabe einer Schicht über den Batch auf Mittelwert null und Varianz eins, mit lernbarer Rückskalierung. [Autoencoder](part-representation-learning/14-autoencoder.md)
 
@@ -98,7 +98,7 @@ Die Begriffe, die in Klausuraufgaben vorkommen, je in ein bis drei Sätzen, mit 
 
 **Sparse AE.** Strafterm, der die mittlere Aktivierung jeder latenten Dimension klein hält; muss zum Loss addiert werden. [Autoencoder](part-representation-learning/14-autoencoder.md)
 
-**Weight Decay, L2-Regularisierung.** $\lambda \|W\|^2$ zum Loss, zieht Gewichte Richtung null; in PyTorch ein Parameter des Optimierers. [Autoencoder](part-representation-learning/14-autoencoder.md)
+**Weight Decay, L2-Regularisierung.** $\tfrac{\lambda}{2}\|W\|^2$ zum Loss, zieht Gewichte Richtung null; in PyTorch heißt $\lambda$ `weight_decay` und ist ein Parameter des Optimierers. [Autoencoder](part-representation-learning/14-autoencoder.md)
 
 **Early Stopping, Data Augmentation.** Aufhören, wenn der Test-Loss wieder steigt; Trainingsdaten durch labelerhaltende Transformationen vervielfachen. [Autoencoder](part-representation-learning/14-autoencoder.md)
 
@@ -106,7 +106,7 @@ Die Begriffe, die in Klausuraufgaben vorkommen, je in ein bis drei Sätzen, mit 
 
 **`logvar`.** Der Encoder gibt $\ln \sigma_x^2$ aus statt $\sigma_x$, damit kein Ausgang auf positive Werte eingeschränkt werden muss. [Variational Autoencoder](part-representation-learning/15-variational-autoencoder.md)
 
-**Latent Space, Manifold-Hypothese.** Die Daten liegen nahe einer niedrigdimensionalen gekrümmten Fläche; der latente Raum parametrisiert sie. Gerade Linien zwischen Codes können die Fläche verlassen: Interpolation gut, Extrapolation schlecht. [Latente Räume geometrisch](part-representation-learning/17-latente-raeume-geometrisch.md)
+**Latent Space, Manifold-Hypothese.** Die Daten liegen nahe einer niedrigdimensionalen gekrümmten Fläche; der latente Raum parametrisiert sie. Gerade Linien zwischen Codes können die Fläche verlassen: Interpolation gut, Extrapolation schlecht. [Latente Räume geometrisch](part-representation-learning/17-latente-raeume-geometrisch.md), [Autoencoder](part-representation-learning/14-autoencoder.md), [Adversarial Attacks und Polysemie](part-architekturen-anwendungen/27-adversarial-attacks-polysemie.md)
 
 ## Text, Graphen, Sequenzen
 
@@ -140,15 +140,15 @@ Die Begriffe, die in Klausuraufgaben vorkommen, je in ein bis drei Sätzen, mit 
 
 ## Vortrainierte Modelle, LLMs, Destillation
 
-**Transfer Learning, Finetuning.** Ein auf großen Daten (ImageNet, COCO) vortrainiertes Modell als Startpunkt: Features einfrieren und nur den Kopf trainieren oder alle Gewichte mit kleiner Lernrate nachtrainieren. [Vortrainierte Modelle](part-grundlagen/04-vortrainierte-modelle.md), [LLMs benutzen](part-architekturen-anwendungen/23-llms-benutzen.md)
+**Transfer Learning, Finetuning.** Ein auf großen Daten (ImageNet, COCO) vortrainiertes Modell als Startpunkt: Features einfrieren und nur den Kopf trainieren oder alle Gewichte mit kleiner Lernrate nachtrainieren. [Autograd und Berechnungsgraph](part-lernen/10-autograd-berechnungsgraph.md), [LLMs benutzen](part-architekturen-anwendungen/23-llms-benutzen.md), [Anwendungsbeispiele](part-architekturen-anwendungen/24-anwendungsbeispiele.md)
 
-**Object Detection, Segmentierung.** Detection liefert Klassen mit Bounding Boxes, der Loss kombiniert Klassifikation und Box-Regression; Segmentierung liefert pro Pixel eine Klasse. [Vortrainierte Modelle](part-grundlagen/04-vortrainierte-modelle.md)
+**Object Detection, Segmentierung.** Detection liefert Klassen mit Bounding Boxes; Segmentierung liefert pro Pixel eine Klasse. [Vortrainierte Modelle](part-grundlagen/04-vortrainierte-modelle.md)
 
 **Lokale LLMs, Quantisierung.** Mit Ollama oder llama.cpp laufen Modelle mit wenigen Milliarden Parametern in 4-Bit-Quantisierung auf der CPU. Ein LLM liefert eine Verteilung über dem Vokabular, die man auslesen, als Vektor weiterverarbeiten oder per Constrained Generation einschränken kann. [LLMs benutzen](part-architekturen-anwendungen/23-llms-benutzen.md)
 
 **Destillation.** Ein kleines Schülernetz lernt per Regression die (mit Temperatur aufgeweichten) Ausgaben eines großen Lehrers, nicht nur die harten Labels. Speculative Decoding nutzt ein kleines Modell zum Vorschlagen und das große zum Prüfen. [Destillation](part-architekturen-anwendungen/25-destillation.md)
 
-**Multimodal, Encoder-Decoder.** Ein Modell mit Encoder für die eine Modalität und Decoder für die andere (Bild zu Text, Text zu Bild); die Verbindung läuft über einen gemeinsamen latenten Raum. [Vortrainierte Modelle](part-grundlagen/04-vortrainierte-modelle.md)
+**Multimodal, Encoder-Decoder.** Ein Encoder für die eine Modalität, ein Decoder für die andere (Bild zu Text, Text zu Bild); der Decoder liest die Repräsentation des Encoders. CLIP bildet stattdessen Bild und Text in einen gemeinsamen Raum ab und vergleicht dort. [Transformer](part-architekturen-anwendungen/20-transformer.md), [Vortrainierte Modelle](part-grundlagen/04-vortrainierte-modelle.md)
 
 ## GANs
 

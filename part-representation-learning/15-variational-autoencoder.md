@@ -10,7 +10,7 @@ short_title: "VAE"
 
 ### Motivation: probabilistische Modelle
 
-Beim klassischen Autoencoder bildet der Encoder einen Datenpunkt $x$ aus dem Datenraum $\mathbb{R}^D$ auf einen Punkt $\operatorname{enc}(x)$ im latenten Raum $\mathbb{R}^L$ ab, der Decoder einen Punkt $y \in \mathbb{R}^L$ zurück in den Datenraum ($D$ und $L$ sind dieselben Dimensionen wie im [Kapitel „Autoencoder“](14-autoencoder.md)); Ziel ist $\operatorname{MSE}(x, \operatorname{dec}(\operatorname{enc}(x)))$ möglichst klein. Die Modellannahme war aber: Die Punkte $x \in D$ sind eine Stichprobe aus einer *Verteilung*. Können wir die Verteilung direkt mit modellieren, in $\operatorname{enc}(x)$?
+Beim klassischen Autoencoder bildet der Encoder einen Datenpunkt $x$ aus dem Datenraum $\mathbb{R}^D$ auf einen Punkt $\operatorname{enc}(x)$ im latenten Raum $\mathbb{R}^L$ ab, der Decoder einen Punkt $y \in \mathbb{R}^L$ zurück in den Datenraum ($D$ und $L$ sind dieselben Dimensionen wie im [Kapitel „Autoencoder“](14-autoencoder.md)); Ziel ist $\operatorname{MSE}(x, \operatorname{dec}(\operatorname{enc}(x)))$ möglichst klein. Die Modellannahme war aber: Die Datenpunkte $x \in \mathbb{R}^D$ sind eine Stichprobe aus einer *Verteilung*. Können wir die Verteilung direkt mit modellieren, in $\operatorname{enc}(x)$?
 
 **Variation des Ziels**: Auch $\operatorname{MSE}(x, \operatorname{dec}(\operatorname{enc}(x) + \varepsilon))$ soll möglichst klein sein, für einen normalverteilten Fehler $\varepsilon \sim \mathcal{N}(0, 1)$. **Variation des Trainings**: Nach $\operatorname{enc}(x)$ ein $\varepsilon$ sampeln, addieren, dann $\operatorname{dec}$. Der Decoder muss dann nicht nur den Punkt $\operatorname{enc}(x)$, sondern eine ganze Umgebung davon auf $x$ abbilden – der latente Raum wird „glatt“.
 
@@ -46,7 +46,7 @@ denn dann ist $\varepsilon$ wieder eine Konstante und $\sigma_x$ ein ganz normal
 
 ### Training
 
-Wie trainiert man einen Variational Autoencoder? Für jeden Datenpunkt $x \in D$ berechne $\operatorname{enc}(x) = (\mu_x, \sigma_x)$ – der Encoder hat jetzt $2L$ Ausgänge –, generiere ein $\varepsilon \sim \mathcal{N}(0, 1)$ und setze $y := \mu_x + \sigma_x \varepsilon$. Die Loss-Funktion ist *naiv* $\operatorname{MSE}(x, \operatorname{dec}(y))$. Das hat einen Haken, und zwar in beide Richtungen: Das Netz kann $\sigma_x \to 0$ lernen und ist dann wieder ein klassischer Autoencoder. Oder es lässt $\mu_x$ und $\sigma_x$ beliebig groß werden, dann explodieren die latenten Vektoren, die Wolken der einzelnen Datenpunkte liegen weit auseinander, und der latente Raum füllt sich nie lückenlos.
+Wie trainiert man einen Variational Autoencoder? Für jeden Datenpunkt $x$ der Stichprobe berechne $\operatorname{enc}(x) = (\mu_x, \sigma_x)$ – der Encoder hat jetzt $2L$ Ausgänge –, generiere ein $\varepsilon \sim \mathcal{N}(0, 1)$ und setze $y := \mu_x + \sigma_x \varepsilon$. Die Loss-Funktion ist *naiv* $\operatorname{MSE}(x, \operatorname{dec}(y))$. Das hat einen Haken, und zwar in beide Richtungen: Das Netz kann $\sigma_x \to 0$ lernen und ist dann wieder ein klassischer Autoencoder. Oder es lässt $\mu_x$ und $\sigma_x$ beliebig groß werden, dann explodieren die latenten Vektoren, die Wolken der einzelnen Datenpunkte liegen weit auseinander, und der latente Raum füllt sich nie lückenlos.
 
 Stabileres Training mit dem Extra-Term **Variational Loss**:
 
@@ -60,13 +60,13 @@ $$
 D_{KL}\bigl( \mathcal{N}(\mu, \sigma^2) \,\|\, \mathcal{N}(0, 1) \bigr) = \tfrac12 \left( \mu^2 + \sigma^2 - 1 - \ln \sigma^2 \right).
 $$
 
-Diese Loss-Funktion ist der negative **ELBO** (evidence lower bound) aus dem Kapitel [Expectation Maximization](https://voelkel.pages.cs.uni-duesseldorf.de/ds-skript/expectation-maximization) in Data Science – bis auf einen Faktor und eine additive Konstante, die daher rühren, dass wir den Rekonstruktionsterm als schlichten MSE schreiben statt als negative Log-Likelihood eines gaußschen Decoders mit fester Varianz. Für die Optimierung macht das keinen Unterschied, für den Vergleich der Zahlenwerte schon.
+Diese Loss-Funktion ist der negative **ELBO** (evidence lower bound) aus dem Kapitel [Expectation Maximization](https://voelkel.pages.cs.uni-duesseldorf.de/ds-skript/expectation-maximization) in Data Science – bis auf die Gewichtung der beiden Terme. Für einen gaußschen Decoder mit fester Varianz $s^2$ ist die negative Log-Likelihood der Rekonstruktion $\|x - \operatorname{dec}(y)\|^2 / (2s^2)$ plus eine Konstante, also ein Vielfaches des MSE. Dieser Faktor steht aber nur vor dem Rekonstruktionsterm, nicht vor dem KL-Term, und verschiebt deshalb das Gleichgewicht: Je größer er ist, desto schärfer die Rekonstruktionen und desto weniger ordentlich der latente Raum. Unser $L_{\text{VAE}}$ entspricht damit einer bestimmten, recht großen Decoder-Varianz. Wer den KL-Term bewusst mit einem Gewicht $\beta$ versieht, baut einen *$\beta$-VAE*.
 
 :::{admonition} Zwei Fragen, die immer kommen
 :class: note
 *Wie wird $\sigma_x$ berechnet?* Gar nicht aus den Daten, sondern erfunden: $\mu_x$ und $\sigma_x$ sind einfach die $2L$ Ausgänge des Encoders, und der Gradientenabstieg stellt sie so ein, dass der Loss klein wird. Der Encoder lernt, wie unsicher er sich bei jedem Datenpunkt sein darf.
 
-*Was hat das mit PCA und EM zu tun?* Ein linearer Autoencoder ohne Aktivierungsfunktionen findet denselben Unterraum wie PCA ([Kapitel „Autoencoder“](14-autoencoder.md)), nur bis auf Drehung und Vertauschung der Achsen. Ein Gaussian Mixture Model mit EM aus Data Science fittet *wenige* Cluster, jeder mit eigener Normalverteilung, und ordnet jeden Datenpunkt einem Cluster zu. Der VAE geht den umgekehrten Weg: *Jeder* Datenpunkt bekommt seine eigene Normalverteilung im latenten Raum, und der KL-Term sorgt dafür, dass alle zusammen ungefähr eine Standardnormalverteilung ergeben.
+*Was hat das mit PCA und EM zu tun?* Ein linearer Autoencoder ohne Aktivierungsfunktionen findet denselben Unterraum wie PCA ([Kapitel „Autoencoder“](14-autoencoder.md)); seine latenten Koordinaten sind aber nur bis auf eine invertierbare lineare Abbildung die PCA-Koordinaten, die Achsen dürfen gedreht, gespiegelt, gestreckt und schief zueinander sein. (Koppelt man die Gewichte, $W_{\text{dec}} = W_{\text{enc}}^\top$, bleiben nur Drehungen und Spiegelungen.) Ein Gaussian Mixture Model mit EM aus Data Science fittet *wenige* Cluster, jeder mit eigener Normalverteilung, und ordnet jeden Datenpunkt einem Cluster zu. Der VAE geht den umgekehrten Weg: *Jeder* Datenpunkt bekommt seine eigene Normalverteilung im latenten Raum, und der KL-Term sorgt dafür, dass alle zusammen ungefähr eine Standardnormalverteilung ergeben.
 :::
 
 ### Recap
@@ -89,7 +89,7 @@ $\tfrac12\left(\mu^2 + \sigma^2 - \ln \sigma^2 - 1\right)$.
    *Tipp: Leiten Sie nach $\mu$ und nach $\sigma$ getrennt ab.*
 2. Berechnen Sie den Wert für $(\mu,\sigma) = (2, 1)$ und für $(0\ ,\ 0{,}5)$. Welche der
    beiden Abweichungen bestraft der Term stärker?
-3. Der Reparametrisierungstrick schreibt $z = \mu + \sigma\varepsilon$ mit
+3. Der Reparametrisierungstrick schreibt $y = \mu_x + \sigma_x\varepsilon$ mit
    $\varepsilon \sim \mathcal{N}(0,1)$. Warum lässt sich ohne ihn nicht nach $\mu$ und
    $\sigma$ ableiten?
 

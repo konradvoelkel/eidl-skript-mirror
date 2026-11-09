@@ -72,7 +72,7 @@ Das ist der **vorzeichenbehaftete Abstand** von $x$ zur Hyperebene: positiv auf 
 Sei $w = (3, 4)$ und $b = -5$, also $\|w\| = 5$ und $H = \{ x \in \mathbb{R}^2 : 3x_1 + 4x_2 = 5 \}$. Der Punkt $(1, \tfrac12)$ liegt auf $H$, denn $3 + 2 - 5 = 0$. Der Punkt $(3, 4)$ hat Aktivierung $9 + 16 - 5 = 20$ und damit Abstand $20/5 = 4$. Der Punkt $(-1, 0)$ hat Aktivierung $-3 - 5 = -8$ und Abstand $-8/5$: andere Seite.
 :::
 
-Daraus folgt eine Beobachtung, die uns bei der logistischen Regression wieder begegnen wird. Multipliziert man $w$ und $b$ mit derselben Zahl $c > 0$, so ändert sich weder $H$ noch die Entscheidung $[w \cdot x + b > 0]$, aber die Aktivierung wird um den Faktor $c$ skaliert. Die *Richtung* von $w$ legt fest, *was* klassifiziert wird; die *Länge* von $w$ legt fest, wie schnell die Aktivierung mit dem Abstand wächst. Für das Perzeptron ist die Länge egal. Sobald wir statt der Sprungfunktion eine glatte Aktivierungsfunktion verwenden, ist sie es nicht mehr: Für die logistische Sigmoidfunktion $\sigma$ ist $\sigma(c \cdot 20)$ bei $c = 10$ praktisch $1$, bei $c = 0{,}01$ nur knapp über $\tfrac12$. Dieselbe Trenngerade, ganz andere „Sicherheit“.
+Daraus folgt eine Beobachtung, die uns bei der logistischen Regression wieder begegnen wird. Multipliziert man $w$ und $b$ mit derselben Zahl $c > 0$, so ändert sich weder $H$ noch die Entscheidung $[w \cdot x + b > 0]$, aber die Aktivierung wird um den Faktor $c$ skaliert. Die *Richtung* von $w$ legt fest, *was* klassifiziert wird; die *Länge* von $w$ legt fest, wie schnell die Aktivierung mit dem Abstand wächst. Für das Perzeptron ist die Länge egal. Sobald wir statt der Sprungfunktion eine glatte Aktivierungsfunktion verwenden, ist sie es nicht mehr: Für die logistische Sigmoidfunktion $\sigma(a) = \frac{1}{1 + e^{-a}}$ (ausführlich im [Kapitel „Logistische Regression“](../part-lernen/06-logistische-regression.md)) ist $\sigma(c \cdot 20)$ bei $c = 10$ praktisch $1$, bei $c = 0{,}01$ nur knapp über $\tfrac12$. Dieselbe Trenngerade, ganz andere „Sicherheit“.
 
 In der Ebene ist $H$ eine Gerade, und man kann ihre Gleichung in der Schulform aufschreiben. Aus $w_1 x_1 + w_2 x_2 + b = 0$ folgt für $w_2 \neq 0$
 
@@ -133,7 +133,7 @@ wobei $\tau$ komponentenweise angewendet wird.
 
 Wie liest man $Wx$? Die $i$-te Komponente von $Wx$ ist das Skalarprodukt der $i$-ten *Zeile* von $W$ mit $x$. Die Zeilen von $W$ (in NumPy `W[i, :]`) sind also die Gewichtsvektoren der $m$ Neuronen, und $Wx + b$ berechnet $m$ Aktivierungen auf einmal, mit dem vorigen Abschnitt: $m$ skalierte Abstände zu $m$ Hyperebenen. Als Bild in $\mathbb{R}^2$: Jedes Neuron der ersten Schicht zeichnet eine Gerade in die Eingabeebene, und der Vektor $h$ sagt für jede dieser Geraden, auf welcher Seite $x$ liegt und wie weit weg. Das XOR-Beispiel unten ist genau das: zwei Geraden, dann eine Entscheidung im Raum der beiden Seiten-Informationen.
 
-In PyTorch speichert `nn.Linear(n, m)` die Matrix als `weight` mit Shape `(m, n)`, eine Zeile pro Neuron, und `bias` mit Shape `(m,)`.
+In PyTorch (ab dem [Kapitel „Tensoren“](05-tensoren.md)) speichert `nn.Linear(n, m)` die Matrix als `weight` mit Shape `(m, n)`, eine Zeile pro Neuron, und `bias` mit Shape `(m,)`.
 
 Ein Netz mit $L$ Schichten berechnet dann
 

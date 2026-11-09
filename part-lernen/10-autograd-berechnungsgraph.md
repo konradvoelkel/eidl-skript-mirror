@@ -117,7 +117,7 @@ Ein Optimizer verändert $w$ nicht mehr, $b$ aber schon. So friert man beim Tran
 
 ## Geteilte Gewichte: Backprop durch eine Faltung
 
-Wie funktioniert Backprop, wenn Gewichte geteilt werden wie bei einem Faltungslayer? Der Kernel `[0.5]` wird über den Input `[1, 2, 3]` geschoben, $o_i = x_i \cdot k$, und der Loss ist $o_1 + o_2 + o_3$:
+Wie funktioniert Backprop, wenn Gewichte geteilt werden wie bei einem Faltungslayer? Eine (1D-)Faltung schiebt einen kurzen Gewichtsvektor, den *Kernel*, über die Eingabe und bildet an jeder Position dasselbe Skalarprodukt mit dem Ausschnitt darunter; ausführlich im [Kapitel „Faltung und Convolutional Neural Networks“](../part-architekturen-anwendungen/21-faltung-cnn.md). Hier reicht der kleinste Fall: Der Kernel `[0.5]` wird über den Input `[1, 2, 3]` geschoben, $o_i = x_i \cdot k$, und der Loss ist $o_1 + o_2 + o_3$:
 
 ```python
 x = torch.tensor([1.0, 2.0, 3.0])
@@ -131,7 +131,7 @@ print(k.grad)                # tensor([6.])
 Der Gradient nach $k$ ist die *Summe* der Beiträge aller Positionen, $\frac{dL}{dk} = x_1 + x_2 + x_3 = 6$: Ein geteilter Parameter bekommt die Gradienten aller seiner Verwendungen aufsummiert – im Graphen führen mehrere Kanten zu demselben Blatt.
 
 :::{prf:example} Backpropagation durch Faltung und ReLU von Hand
-Ein Neuron führt eine 1D-Faltung gefolgt von ReLU aus: Eingabesignal $x = [2, 0, -1, 4]$, Kernel $k = [k_0, k_1] = [1, -1]$, Bias $b = 0$, „valid“ ohne Padding, Stride 1. Die Pre-Aktivierung an Position $i$ ist $z_i = x_i k_0 + x_{i+1} k_1 + b$, die Ausgabe $a_i = \operatorname{ReLU}(z_i)$.
+Ein Neuron führt eine 1D-Faltung gefolgt von ReLU aus: Eingabesignal $x = [2, 0, -1, 4]$, Kernel $k = [k_0, k_1] = [1, -1]$, Bias $b = 0$, ohne Auffüllen am Rand (der Kernel bleibt ganz im Signal) und mit Schrittweite 1. Die Pre-Aktivierung an Position $i$ ist $z_i = x_i k_0 + x_{i+1} k_1 + b$, die Ausgabe $a_i = \operatorname{ReLU}(z_i)$.
 
 *Forward:* $z = [2 \cdot 1 + 0 \cdot (-1),\ 0 + (-1)(-1),\ -1 + 4 \cdot (-1)] = [2, 1, -5]$, also $a = [2, 1, 0]$.
 

@@ -74,8 +74,10 @@ Generator und Diskriminator bekommen Zusatzinformationen, z.B. Klassenlabels: De
 Probleme mit klassischen GANs bei der Bildgenerierung:
 
 * **Mode Collapse** – der Generator produziert nur (noch) stereotype Bilder ohne große Variation. Die Verteilung kollabiert auf die Moden, also die Wahrscheinlichkeitsmasse konzentriert sich auf einige wenige Punkte, die $D$ gerade nicht erkennt.
-* **Vanishing Gradients** – wenn der Diskriminator zu schnell gut wird, ist $D(G(z)) \approx 0$ überall, $\log(1 - D(G(z)))$ ist flach, und der Lernprozess geht für den Generator nicht weiter.
+* **Vanishing Gradients** – wenn der Diskriminator zu schnell gut wird, ist $D(G(z)) \approx 0$ überall, im Minimax-Loss $\log(1 - D(G(z)))$ sättigt das Sigmoid am Ausgang von $D$, und beim Generator kommt kaum Gradient an.
 * **Instabilität im Training** – die Loss-Funktion des Generators entspricht nicht unbedingt der Qualität der Bilder; man kann am Loss nicht ablesen, ob es besser wird.
+
+Zum zweiten Punkt genauer: Die Ableitung von $\log(1 - D(G(z)))$ nach dem Logit von $D$ ist $-D(G(z)) \approx 0$ – dasselbe Phänomen wie bei den sterbenden Neuronen im [Kapitel „Aktivierungsfunktionen“](../part-lernen/11-aktivierungsfunktionen.md). Deshalb trainiert man $G$ wie oben mit Label 1, also mit $-\log D(G(z))$; dort ist die Ableitung nach dem Logit $D(G(z)) - 1 \approx -1$. Ganz gelöst ist das Problem damit nicht: Ein perfekter Diskriminator liefert trotzdem instabile, wenig aussagekräftige Gradienten – und das ist die Motivation für den nächsten Abschnitt.
 
 ### Wasserstein GANs – was?
 

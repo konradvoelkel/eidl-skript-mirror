@@ -49,13 +49,13 @@ Gegeben Vektor $v \in \mathbb{R}^n$, welches Token $t \in$ Vokabular wählen wir
 * Für eine natürliche Zahl $k$ (z.B. $k = 5$) wähle die $k$ nächstgelegenen Token $t_1, \dots, t_k$ aus und sample mit der Softmax-Verteilung nur aus $\{t_1, \dots, t_k\}$ (**top-k sampling**; *top-p* nimmt stattdessen so viele Token, bis ihre Wahrscheinlichkeit $p$ überschreitet).
 * Verändere die Verteilung: Richtung top-1 durch niedrige Temperatur, Richtung Gleichverteilung durch hohe Temperatur.
 
-**Temperature Scaling**: Gegeben eine Temperatur $T > 0$, berechne die Verteilung
+**Temperature Scaling**: Seien $s_i := -d(v, \operatorname{code}(t_i))$ die **Logits**, eine Zahl je Token $t_i$ (bei einem LLM: die Ausgabe der letzten Schicht). Gegeben eine Temperatur $T > 0$, berechne die Verteilung
 
 $$
-P_i = \frac{\exp(v_i / T)}{\sum_j \exp(v_j / T)},
+P_i = \frac{\exp(s_i / T)}{\sum_j \exp(s_j / T)},
 $$
 
-d.h. die Einträge von $v$ (die Logits) werden durch $T$ geteilt, dann wird mit Softmax eine Wahrscheinlichkeitsverteilung daraus. Großes $T > 1$: Die verschiedenen $P_i$ werden sich ähnlicher, das Modell wird „kreativer“ (und fehleranfälliger). Kleines $T < 1$: Die großen $P_i$ werden größer, die kleinen $P_i$ werden kleiner; im Grenzfall $T \to 0$ ist es top-1.
+d.h. die Logits werden durch $T$ geteilt, dann wird mit Softmax eine Wahrscheinlichkeitsverteilung daraus. Großes $T > 1$: Die verschiedenen $P_i$ werden sich ähnlicher, das Modell wird „kreativer“ (und fehleranfälliger). Kleines $T < 1$: Die großen $P_i$ werden größer, die kleinen $P_i$ werden kleiner; im Grenzfall $T \to 0$ ist es top-1.
 
 ## Latente Räume für Bilder: AE, VAE, GAN
 
@@ -81,7 +81,7 @@ Häufig wird zusätzlich zum $+\varepsilon$-Trick auch noch ein Summand zur Loss
 
 ### Arvanitidis et al. 2017: Latent Space Oddity
 
-[*Latent Space Oddity: on the Curvature of Deep Generative Models*](https://arxiv.org/abs/1710.11379) (ICLR 2018): Der latente Raum eines VAE sieht flach aus, aber der Decoder verzerrt ihn – die euklidische Gerade zwischen zwei Codes ist nicht der kürzeste Weg im *Bildraum*. Die richtige Geometrie ist die durch den Decoder induzierte Riemannsche Metrik, und Geodäten darin laufen um Regionen herum, in denen der Decoder unsicher ist (Abbildung unten). Praktisch: Interpolationen entlang Geodäten sehen besser aus als lineare.
+[*Latent Space Oddity: on the Curvature of Deep Generative Models*](https://arxiv.org/abs/1710.11379) (ICLR 2018): Der latente Raum eines VAE sieht flach aus, aber der Decoder verzerrt ihn – die euklidische Gerade zwischen zwei Codes ist nicht der kürzeste Weg im *Bildraum*. Die richtige Geometrie ist die durch den Decoder induzierte Riemannsche Metrik, und Geodäten darin laufen um Regionen herum, in denen der Decoder unsicher ist (Abbildung unten). Praktisch: Interpolationen entlang Geodäten sehen besser aus als lineare. Das ist die Manifold-Hypothese aus dem [Kapitel „Autoencoder“](14-autoencoder.md) in Aktion: Die Bilder liegen auf einer gekrümmten Fläche im Bildraum, der Decoder bildet den flachen latenten Raum auf sie ab, und eine Gerade im latenten Raum ist auf dieser Fläche im Allgemeinen nicht der kürzeste Weg.
 
 :::{figure} ../images/vl13-arvanitidis-fig1.png
 :width: 90%

@@ -18,7 +18,7 @@ Ohne Label müssen wir den Output des neuronalen Netzes anders bewerten. Wie Erf
 
 Ein mögliches Ziel: **Transformation der Eingabe in ein anderes Koordinatensystem** (Feature Extraction). Das kann man rückgängig machen – und messen, wie gut das klappt. Abstrakt: $f$ ist nicht bekannt, aber $g \circ f$ ist bekannt, nämlich $g(f(x)) = x$. Hier heißt $f$ **Encoder** und $g$ **Decoder**, und $g \circ f$ soll die Identität sein.
 
-Das allein wäre trivial ($f = g = \operatorname{id}$). Interessant wird es mit einer Einschränkung: **Dimensionsreduktion**. Versuche, die Dimensionalität zu reduzieren ohne Informationsverlust – transformiere die Eingabe in ein *kleineres* Koordinatensystem, sodass man es trotzdem rückgängig machen kann. Der Encoder $f \colon \mathbb{R}^n \to \mathbb{R}^k$ mit $k \ll n$ muss dann lernen, was an den Daten wesentlich ist.
+Das allein wäre trivial ($f = g = \operatorname{id}$). Interessant wird es mit einer Einschränkung: **Dimensionsreduktion**. Versuche, die Dimensionalität zu reduzieren ohne Informationsverlust – transformiere die Eingabe in ein *kleineres* Koordinatensystem, sodass man es trotzdem rückgängig machen kann. Der Encoder $f \colon \mathbb{R}^D \to \mathbb{R}^L$ mit $L \ll D$ muss dann lernen, was an den Daten wesentlich ist.
 
 ### Loss-Funktion
 
@@ -123,14 +123,14 @@ for epoch in range(15):
         optimizer.step()
 ```
 
-Neu gegenüber dem [Kapitel „Tensoren“](../part-grundlagen/05-tensoren.md) sind `Dataset` und `DataLoader`: Der Datensatz liefert einzelne Samples (hier mit einer `transform`, die das Bild in einen Vektor der Länge 784 verwandelt), der Loader fasst sie zu zufällig gemischten Mini-Batches zusammen. Die Trainingsschleife selbst ist dieselbe wie immer, nur dass das Label das Bild selbst ist.
+Zum ersten Mal im Code (im [Kapitel „Tensoren“](../part-grundlagen/05-tensoren.md) nur erwähnt) sind `Dataset` und `DataLoader`: Der Datensatz liefert einzelne Samples (hier mit einer `transform`, die das Bild in einen Vektor der Länge 784 verwandelt), der Loader fasst sie zu zufällig gemischten Mini-Batches zusammen. Die Trainingsschleife selbst ist dieselbe wie immer, nur dass das Label das Bild selbst ist.
 
 ### Tricks beim Training
 
 * **Mehr Epochen trainieren!** – aber nicht beliebig viele: Wenn der Loss auf dem Testset wieder *steigt*, während er auf den Trainingsdaten weiter sinkt, overfittet das Modell. **Early Stopping** heißt, an diesem Punkt aufzuhören (bzw. die Gewichte von dort zu behalten).
 * **Data Augmentation**: die Trainingsdaten durch zufällige Transformationen vervielfachen, die das Label nicht ändern – Bilder leicht drehen, verschieben, spiegeln, verrauschen. Das Modell sieht nie zweimal dasselbe Bild und kann es nicht auswendig lernen; auch das ist Regularisierung.
 * **Lernrate anpassen** – statt `lr=1e-3` mal mit `lr=1e-2` probieren.
-* Die Gewichte können zu groß werden, dann kann man eine **L2-Regularisierung** nutzen, den *Weight Decay* (als Parameter für den Optimierer, wie die Lernrate): `weight_decay=1e-5`. Das addiert $\lambda \|W\|^2$ zum Loss und zieht die Gewichte bei jedem Schritt ein wenig Richtung null.
+* Die Gewichte können zu groß werden, dann kann man eine **L2-Regularisierung** nutzen, den *Weight Decay* (als Parameter für den Optimierer, wie die Lernrate): `weight_decay=1e-5`. Steht dort der Wert $\lambda$, so zählt der Optimierer zu jedem Gradienten $\lambda W$ dazu; das ist dasselbe, als stünde $\tfrac{\lambda}{2}\|W\|^2$ im Loss, und zieht die Gewichte bei jedem Schritt ein wenig Richtung null (bei SGD um den Faktor $1 - \rho\lambda$). Betroffen sind alle Parameter, die der Optimierer kennt, auch die Biases.
 * SGD kann sehr langsam sein. Es gibt eine ganze Reihe von Tricks wie z.B. eine adaptive Lernrate und cleveres Mitteln über mehrere Batches hinweg, die in **Adam** implementiert sind: `optim.Adam(model.parameters(), lr=1e-3)`. Faustregel für den Rest des Kurses: Adam statt SGD, ohne dass wir Optimierer weiter vertiefen. Was Adam genau tut, steht im [Kapitel „Optimierer“](../part-architekturen-anwendungen/26-optimierer.md).
 * Oft ist I/O oder die CPU ein Bottleneck beim Laden der Daten. Im Konstruktor des `DataLoader` mit anderen `batch_size`s experimentieren (im Zweifel mehr, bis Out of Memory), und mehrere CPU-Kerne zum Laden der Daten nutzen: `num_workers=8`.
 
@@ -142,7 +142,7 @@ Ein „klassischer“ Klassifikator-Ansatz auf Basis des Autoencoders: Encoder v
 
 Loss-Funktion: **Negative Log-Likelihood** = Kreuzentropie $\mathrel{\hat=}$ Kullback-Leibler-Divergenz zwischen echten Labels und Vorhersage (siehe [Kapitel „Loss-Funktionen und Maximum Likelihood“](../part-lernen/07-loss-funktionen-maximum-likelihood.md)). Das ist der *classification loss*, im Gegensatz zum *reconstruction loss*. In PyTorch: `nn.CrossEntropyLoss()`, das Softmax und NLL in einem Schritt (numerisch stabiler) berechnet und direkt auf die Logits angewendet wird. **Deshalb gehört das Softmax nicht ins Modell**, wenn man diese Loss-Funktion benutzt – sonst wird zweimal normiert, die Verteilung wird flach und das Training langsam. Erst bei der Inferenz, wenn man Wahrscheinlichkeiten sehen will, wendet man `torch.softmax` von Hand an.
 
-### Label Autoencoder
+### Beides zugleich: ein Encoder, zwei Köpfe
 
 Warum nicht beides? Encoder vom Autoencoder, darauf der lineare Layer auf 10 Dimensionen (Logits) – und *daneben* der Decoder vom Autoencoder. Input ist ein Bild, Output sind Rekonstruktion und Label-Vorhersage, und die Loss-Funktion ist
 
@@ -163,7 +163,7 @@ Label Autoencoder: ein Encoder, zwei Köpfe, zwei Loss-Terme.
 * **Mehr Layer!**
 * Dem Problem sterbender Neuronen entgegenwirken mit anderen Aktivierungsfunktionen als ReLU, z.B. dem **Swish** (in PyTorch `nn.SiLU`).
 * **Dropout-Layer**: Zufällig ein paar Einträge des eingehenden Vektors auf $0$ setzen (`nn.Dropout(0.3)` setzt 30 % auf null, nur während des Trainings). Verhindert zu starke Konzentration auf einige wenige Neuronen und wirkt gegen Overfitting.
-* **Batch-Normalization-Layer** (`nn.BatchNorm1d`): Nach jedem Batch den Output des vorigen Layers auf eine Normalverteilung normieren, d.h. Mittelwert abziehen und durch die Standardabweichung teilen, beides über den Batch berechnet. Die Transformation (Skalierung und Translation) auf eine andere Normalverteilung als die Standardnormalverteilung sind erlernbare Gewichte dieses Layers. Theoretisch etwas kompliziert (wieso es nützt), praktisch sehr nützlich.
+* **Batch-Normalization-Layer** (`nn.BatchNorm1d`): Die Ausgabe des vorigen Layers wird in jedem Batch pro Merkmal standardisiert, d.h. Mittelwert abziehen und durch die Standardabweichung teilen, beides über den Batch berechnet. Danach hat jedes Merkmal im Batch Mittelwert $0$ und Varianz $1$ – normalverteilt ist es deshalb nicht, die Form der Verteilung bleibt. Anschließend skaliert und verschiebt der Layer mit erlernbaren Gewichten, kann also auch einen anderen Mittelwert und eine andere Varianz einstellen. Bei der Inferenz nimmt er statt der Batch-Werte die im Training mitgeführten gleitenden Mittelwerte. Theoretisch etwas kompliziert (wieso es nützt), praktisch sehr nützlich.
 
 ## Autoencoder-Varianten
 
