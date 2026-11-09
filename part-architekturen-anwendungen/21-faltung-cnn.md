@@ -174,7 +174,7 @@ $$
 n_{\text{out}} = \left\lfloor \frac{n + 2p - k}{s} \right\rfloor + 1,
 $$
 
-pro Dimension. Ohne Padding („valid“) schrumpft das Bild also um $k - 1$; mit $p = (k-1)/2$ („same“) bleibt es gleich groß. Pooling folgt derselben Formel mit $k = s$ = Poolgröße. Beispiel für ein kleines CNN auf $28 \times 28$-Bildern (MNIST):
+pro Dimension. Ohne Padding („valid“) schrumpft das Bild also um $k - 1$; mit $p = (k-1)/2$ („same“) bleibt es gleich groß. Pooling folgt derselben Formel mit $k$ = Poolgröße und $p = 0$; `nn.MaxPool2d` setzt den Stride voreingestellt auf $s = k$. Beispiel für ein kleines CNN auf $28 \times 28$-Bildern (MNIST):
 
 ```python
 nn.Conv2d(1, 8, kernel_size=5)      # 28 -> 24, 8 Kanäle

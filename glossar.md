@@ -122,6 +122,8 @@ Die Begriffe, die in Klausuraufgaben vorkommen, je in ein bis drei Sätzen, mit 
 
 **Transformer, Attention.** Kein rekurrentes Netz: Jedes Token vergleicht seine Query mit den Keys aller anderen und mischt deren Values, alles parallel. Positionsinformation kommt über ein Positionsembedding, gelernt oder fest. [Transformer](part-architekturen-anwendungen/20-transformer.md)
 
+**Layer Normalization.** Bringt jeden Token-Vektor für sich auf Mittelwert null und Varianz eins, gemittelt über seine Komponenten statt über den Batch, mit lernbarer Rückskalierung. Hängt deshalb nicht von der Batch-Größe ab und rechnet in Training und Inferenz gleich; Baustein jedes Transformer-Blocks. [Transformer](part-architekturen-anwendungen/20-transformer.md)
+
 **BERT und GPT.** BERT ist ein Encoder, trainiert mit maskierten Wörtern (Masked Language Model), liefert kontextabhängige Embeddings, die man als Features klassifizieren kann. GPT ist ein Decoder, trainiert auf das nächste Token. [Transformer](part-architekturen-anwendungen/20-transformer.md)
 
 ## Faltung und CNNs

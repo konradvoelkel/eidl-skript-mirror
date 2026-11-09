@@ -20,7 +20,7 @@ Zur Einordnung: WMT = Workshop on Statistical Machine Translation, Task und Date
 
 ## Transformer technisch
 
-Der Aufbau (Fig. 1 in „Attention is all you need“): ein **Encoder**-Stapel und ein **Decoder**-Stapel, beide aus identischen Blöcken mit Multi-Head Self-Attention, einem MLP, Residual Connections und Layer-Normalisierung. Die Layer-Normalisierung ist die Schwester der Batch Normalization aus dem [Kapitel „Autoencoder“](../part-representation-learning/14-autoencoder.md): Sie bringt jeden Token-Vektor für sich auf Mittelwert $0$ und Varianz $1$ – gemittelt über seine $d$ Komponenten statt über den Batch – und skaliert und verschiebt danach mit lernbaren Gewichten. Sie hängt deshalb nicht von der Batch-Größe ab und rechnet im Training und in der Inferenz gleich. Anstelle von Rekurrenz bekommt jedes Token eine **Positionskodierung** addiert. Der Kern ist die **Attention**:
+Der Aufbau (Fig. 1 in „Attention is all you need“): ein **Encoder**-Stapel und ein **Decoder**-Stapel, beide aus identischen Blöcken mit Multi-Head Self-Attention, einem MLP, Residual Connections und Layer Normalization. Die Layer Normalization ist die Schwester der Batch Normalization aus dem [Kapitel „Autoencoder“](../part-representation-learning/14-autoencoder.md): Sie bringt jeden Token-Vektor für sich auf Mittelwert $0$ und Varianz $1$ – gemittelt über seine $d$ Komponenten statt über den Batch – und skaliert und verschiebt danach mit lernbaren Gewichten. Sie hängt deshalb nicht von der Batch-Größe ab und rechnet im Training und in der Inferenz gleich. Anstelle von Rekurrenz bekommt jedes Token eine **Positionskodierung** addiert. Der Kern ist die **Attention**:
 
 $$
 \operatorname{Attention}(Q, K, V) = \operatorname{sm}\!\left( \frac{Q K^T}{\sqrt{d_k}} \right) V ,
