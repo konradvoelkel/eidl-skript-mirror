@@ -17,6 +17,7 @@ Ein Blatt kommt dazu, sobald es ausgegeben ist, nicht vorher.
 * [Blatt 2](https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de/blaetter/blatt02.pdf) – Ein Perzeptron mit NumPy implementieren.
 * [Blatt 3](https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de/blaetter/blatt03.pdf) – Das verallgemeinerte Perzeptron.
 * [Blatt 4](https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de/blaetter/blatt04.pdf) – Dasselbe noch einmal, diesmal mit PyTorch.
+* [Blatt 5](https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de/blaetter/blatt05.pdf) – Sigmoid und Softmax, Kreuzentropie als Loss-Funktion, dazu Gradient, Jacobimatrix und Richtungsableitung.
 
 Die Aufgaben zum Mitdenken beim Lesen stehen woanders: Fast jedes Kapitel endet mit einem
 kurzen Abschnitt „Übung“ samt Antwortprobe. Die Blätter hier sind die bewerteten Aufgaben
