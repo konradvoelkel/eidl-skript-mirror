@@ -116,6 +116,13 @@ aktualisiert auch diese Kopie oder löscht sie. Und ein Pfad in `TEXINPUTS`, der
   Flickr-Original `330-PSA-80-60 (USN 710739)`). Als Werk von Bediensteten der US-Regierung
   im Dienst ist sie in den USA gemeinfrei; Commons führt sie unter *Public Domain Mark*.
   Sie zeigt die Kamera mit dem Cornell-C vor dem Fotozellenraster.
+* **Der Screenshot des Loss Landscape Explorer** auf der VL-5-Folie gleichen Namens
+  (`images/vl05-losslandscape-explorer.jpg`, 1107 × 1092 px) ist am 2026-11-10 von
+  <https://losslandscape.com/explorer> aufgenommen – dem *Loss Landscape Project* von
+  **Javier Ideami** (ideami.com). Es ist ein Bildschirmfoto der Seite, zur Ankündigung
+  des Werkzeugs, das im Browser-Block live gezeigt wird; das Bild ist mit der Adresse
+  verlinkt, ein Klick öffnet die Seite. Keine freie Lizenz – deshalb bleibt es auf der
+  Folie, die die Seite nennt, und wird nicht weiterverwendet.
 * **Vorher stand dort ein anderes Foto** (`vl01-mark-i-perceptron.jpg`, der geöffnete
   Schrank mit dem Drahtbündel) aus den Digital Collections der Cornell University Library,
   Katalognummer `ss:550351`. Dessen Rechteangabe lautet dort wörtlich „For information

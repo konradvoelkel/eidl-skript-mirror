@@ -18,18 +18,18 @@
   \titlepage
 
   \note{\textbf{Ablauf, 90 Minuten} (2025: 49 Min. Folien, 12 Min. Tafel, 23 Min. Browser,
-    5 Min. Fragen):\\[2pt]
+    5 Min. Fragen; Seitenzahlen sind PDF-Seiten, zwölf davon sind Überblendungen):\\[2pt]
     \begin{tabular}{@{}rll@{}}
-      0--6   & Folie 2       & Zwei Modelle, zwei Trainingsgeschichten\\
-      6--16  & Folien 3--4   & Loss-Funktion als einheitliche Perspektive, BCE\\
-      16--28 & Folien 5--7   & \textbf{Maximum Likelihood}, Münzwurf-Beispiel\\
-      28--36 & Folien 8--9   & Exakt oder approximativ minimieren\\
-      36--50 & Folien 10--12 & Gradient, Richtung des steilsten Abstiegs \textbf{(Tafel)}\\
-      50--58 & Folie 13      & Der Algorithmus, Lernrate\\
-      58--70 & Folie 14      & \textbf{Loss Landscape Explorer (Browser)}\\
-      70--78 & Folien 15--16 & Zurück zum Perzeptron, $p - y$\\
-      78--85 & Folien 17--18 & Drei Loss-Funktionen, Feature-Skalierung\\
-      85--90 & Folien 19--21 & Take-Home, wo steckt der Zufall, Übungsblatt\\
+      0--6   & Seite 2       & Zwei Modelle, zwei Trainingsgeschichten\\
+      6--16  & Seiten 3--4   & Loss-Funktion als einheitliche Perspektive, BCE\\
+      16--28 & Seiten 5--8   & \textbf{Maximum Likelihood}, Münzwurf-Beispiel\\
+      28--36 & Seiten 9--12  & Exakt oder approximativ minimieren\\
+      36--50 & Seiten 13--17 & Gradient, Richtung des steilsten Abstiegs \textbf{(Tafel)}\\
+      50--58 & Seite 18      & Der Algorithmus, Lernrate\\
+      58--70 & Seiten 19--20 & \textbf{Loss Landscape Explorer (Browser)}\\
+      70--78 & Seiten 21--26 & Zurück zum Perzeptron, $p - y$\\
+      78--85 & Seiten 27--28 & Drei Loss-Funktionen, Feature-Skalierung\\
+      85--90 & Seiten 29--34 & Take-Home, wo steckt der Zufall, Übungsblatt\\
     \end{tabular}\\[4pt]
     \textbf{Die Zufalls-Klammer}: Die Frage „wo steckt hier eigentlich Zufall?“ beim
     Tafelbeispiel aufwerfen und erst nach dem Take-Home-Slide auflösen -- das waren
@@ -136,6 +136,7 @@
     \Large
     Kopf, Kopf, Zahl\\[14pt]
     $\mathcal{L}(p) = p \cdot p \cdot (1-p)$\\[14pt]
+    \pause % Transition 2026-11-10: erst mitrechnen lassen, dann auflösen
     $\dfrac{2}{p} - \dfrac{1}{1-p} = 0 \;\Longrightarrow\; p = \tfrac23$
   \end{center}
 
@@ -152,6 +153,7 @@
   \end{center}
 
   \bigskip
+  \pause % Transition 2026-11-10: den naheliegenden Weg anbieten, dann scheitern lassen
   \begin{center}
     Lineare Regression: geht (Normalgleichungen).\\[6pt]
     Logistische Regression: keine geschlossene Lösung.\\[6pt]
@@ -175,6 +177,7 @@
   \end{enumerate}
 
   \bigskip
+  \pause % Transition 2026-11-10: die Pointe nach der dummen Variante
   \begin{center}
     \emph{Clever} wird es, wenn Schritt 1 nicht zufällig ist.
   \end{center}
@@ -192,6 +195,7 @@
   \end{center}
 
   \bigskip
+  \pause % Transition 2026-11-10: 2025 kam die Antwort aus dem Hörsaal, bevor sie stand
   \begin{center}
     \normalsize Die Richtung des steilsten \emph{Anstiegs}.
   \end{center}
@@ -211,6 +215,7 @@
   \end{center}
 
   \bigskip
+  \pause % Transition 2026-11-10: den Einwand aus dem Hörsaal abwarten
   \begin{center}
     \normalsize Minus: Gradienten\emph{ab}stieg, nicht -anstieg.
   \end{center}
@@ -253,6 +258,21 @@
   \note{Loss-Landschaften echter Netze sind nicht konvex, haben viele lokale Minima,
     Sattelpunkte und Plateaus -- und trotzdem funktioniert das Verfahren erstaunlich gut.
     Bild nach Li et al., \emph{Visualizing the loss landscape of neural nets} (2017).}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Loss Landscape Explorer}
+
+  \begin{center}
+    \href{https://losslandscape.com/explorer}{%
+      \includegraphics[height=0.58\textheight]{vl05-losslandscape-explorer.jpg}}\\[4pt]
+    \small \href{https://losslandscape.com/explorer}{\color{eidlbrand}losslandscape.com/explorer}
+  \end{center}
+
+  \note{Das Bild ist anklickbar und öffnet die Seite -- im Vortrag ein Klick statt
+    Adresse abtippen. Zu sehen ist die Verlustlandschaft eines echten Netzes
+    (Javier Ideami, \emph{Loss Landscape}, losslandscape.com; Screenshot vom
+    2026-11-10). Hier nur zeigen; gespielt wird auf der nächsten Folie.}
 \end{frame}
 
 \begin{frame}
@@ -307,22 +327,29 @@
   \end{center}
 
   \medskip
+  \pause % Transition 2026-11-10: erst den Loss stehen lassen, dann rechnen
   \begin{center}
     \small Mit $\sigma' = \sigma(1-\sigma)$ und der Kettenregel:\\[4pt]
     $\displaystyle \frac{dL}{dz}
       = -y\,\frac{\sigma(z)\bigl(1-\sigma(z)\bigr)}{\sigma(z)}
       + (1-y)\,\frac{\sigma(z)\bigl(1-\sigma(z)\bigr)}{1-\sigma(z)}
       = -y\,(1-p) + (1-y)\,p$\\[6pt]
-    und ausmultipliziert: \quad
+  \end{center}
+
+  \pause % Transition 2026-11-10: das Ausmultiplizieren ist der Schritt, der klickt
+  \begin{center}
+    \small und ausmultipliziert: \quad
     $-y\,(1-p) + (1-y)\,p = -y + yp + p - yp = p - y$
   \end{center}
 
   \smallskip
+  \pause % Transition 2026-11-10: Ergebnis erst, wenn die Rechnung gesehen ist
   \begin{center}
     \Large $\dfrac{dL}{dz} = p - y$
     \qquad \normalsize und mit $\partial z/\partial w = x$: \quad $\nabla_w L = (p-y)\,x$
   \end{center}
 
+  \pause % Transition 2026-11-10: die Pointe zuletzt
   \begin{center}
     \small Alle Logarithmen und Sigmoide heben sich weg -- übrig bleibt der Vorhersagefehler.
   \end{center}
@@ -401,11 +428,14 @@
   \begin{center}
     \Large
     im Startvektor\\[10pt]
+    \pause % Transition 2026-11-10: die drei Antworten so einsammeln, wie sie kommen
     in den Daten (als Stichprobe modelliert)\\[10pt]
+    \pause
     in der Reihenfolge der Samples
   \end{center}
 
   \bigskip
+  \pause % Transition 2026-11-10: erst danach der Name
   \begin{center}
     \normalsize Deshalb: \emph{stochastischer} Gradientenabstieg.
   \end{center}
