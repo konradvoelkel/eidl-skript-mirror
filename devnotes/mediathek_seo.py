@@ -84,9 +84,13 @@ STICHWORTE_FEST = ["Deep Learning", "Vorlesung", "Vorlesungsaufzeichnung", "eidl
 SKRIPT = "https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de/"
 
 WURZEL = pathlib.Path(__file__).resolve().parent.parent
+# Das `?t=` des zweiten Kapitels einer Sitzung gehoert nicht zur Adresse des Videos, muss
+# aber erlaubt sein: ohne es fand die Regex nur das erste Kapitel, und die Stichworte
+# verloren das zweite Thema ("Tensoren" bei VL 3, "Gradientenabstieg" bei VL 5).
+# Gefunden am 2026-11-11 beim Nachtragen von VL 5.
 LINK = re.compile(
     r"\[Vorlesungsaufzeichnung VL (\d+): ([^\]]+)\]"
-    r"\((https://media\.hhu\.de/video/([a-z0-9-]+)/([0-9a-f]{32}))\)"
+    r"\((https://media\.hhu\.de/video/([a-z0-9-]+)/([0-9a-f]{32}))(?:\?t=\d+)?\)"
 )
 
 # Die Mediathek löscht Umlaute im Slug-Vorschlag; richtig ist die Umschrift.
