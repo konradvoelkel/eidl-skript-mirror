@@ -6,6 +6,12 @@ short_title: "Loss und Maximum Likelihood"
 
 # Loss-Funktionen und Maximum Likelihood
 
+[Vorlesungsaufzeichnung VL 5: Loss und Maximum Likelihood](https://media.hhu.de/video/einfuehrung-in-deep-learning-202627-vl-5-gradientenabstieg/c0b3a84b8c0c1de8ec1cd76d5be63075)
+
+:::{anywidget} ../widgets/mediathek.mjs
+{url: 'https://media.hhu.de/video/einfuehrung-in-deep-learning-202627-vl-5-gradientenabstieg/c0b3a84b8c0c1de8ec1cd76d5be63075'}
+:::
+
 Dieses Kapitel klärt, *was* beim Training minimiert wird und warum. Das nächste Kapitel klärt, *wie*.
 
 ## Training eines einzelnen Neurons: Was bisher geschah

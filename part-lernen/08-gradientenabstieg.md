@@ -6,6 +6,12 @@ short_title: "Gradientenabstieg"
 
 # Gradientenabstieg
 
+[Vorlesungsaufzeichnung VL 5: Gradientenabstieg (ab Minute 26)](https://media.hhu.de/video/einfuehrung-in-deep-learning-202627-vl-5-gradientenabstieg/c0b3a84b8c0c1de8ec1cd76d5be63075?t=1612)
+
+:::{anywidget} ../widgets/mediathek.mjs
+{url: 'https://media.hhu.de/video/einfuehrung-in-deep-learning-202627-vl-5-gradientenabstieg/c0b3a84b8c0c1de8ec1cd76d5be63075?t=1612'}
+:::
+
 Im [letzten Kapitel](07-loss-funktionen-maximum-likelihood.md) blieb die Frage offen, in welche Richtung man von der bisher besten Schätzung $w$ aus gehen soll, damit die Loss-Funktion kleiner wird. Die Antwort ist der Gradient, und um ihn für verkettete Funktionen auszurechnen, brauchen wir zuerst die Kettenregel.
 
 ## Kurze Erinnerung an die Kettenregel
