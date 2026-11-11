@@ -28,7 +28,7 @@ Punkt 6 allein wäre ein gewöhnlicher Autoencoder auf One-Hot-Vektoren – und 
 
 Die Semantik eines Wortes ergibt sich durch seine Nutzung in Sätzen (*distributional hypothesis*). Beispiel: „Die [MASK] frisst ihr Futter am liebsten aus dem goldenen Napf“ kommt in Texten mit [MASK] = Katze und [MASK] = Hündin vor. Der Machine-Learning-Task, unsupervised: Gegeben Text, ersetze ein Wort durch [MASK] und lasse vorhersagen, was [MASK] ist – wie ein Denoising Autoencoder, bei dem das Rauschen im Löschen eines Wortes besteht.
 
-**CBOW** (Continuous Bag of Words, für kleinere Korpora). Hyperparameter ist die Fenstergröße $S$ (window size), z.B. $S = 2$. Eingabe: $2S + 1$ Token, die hintereinander im Text vorkommen, dabei das mittlere durch [MASK] ersetzt – also $2S$ One-Hot-Vektoren. Ausgabe: eine Wahrscheinlichkeitsverteilung auf allen $N$ Wörtern. Loss-Funktion: negative Log-Likelihood (NLL), d.h. Vergleich der ausgegebenen Verteilung mit dem One-Hot-Vektor für das Wort, welches sich hinter [MASK] verbirgt. Architektur: 1 Hidden Layer mit $K$ Neuronen, der „Encoder“ $W \in \mathbb{R}^{K \times N}$, angewendet auf alle $2S$ Kontextwörter und dann gemittelt (*averaging*), danach ein Layer „Decoder“ $W' \in \mathbb{R}^{N \times K}$ gefolgt von Softmax:
+**CBOW** (Continuous Bag of Words). Hyperparameter ist die Fenstergröße $S$ (window size), z.B. $S = 2$. Eingabe: $2S + 1$ Token, die hintereinander im Text vorkommen, dabei das mittlere durch [MASK] ersetzt – also $2S$ One-Hot-Vektoren. Ausgabe: eine Wahrscheinlichkeitsverteilung auf allen $N$ Wörtern. Loss-Funktion: negative Log-Likelihood (NLL), d.h. Vergleich der ausgegebenen Verteilung mit dem One-Hot-Vektor für das Wort, welches sich hinter [MASK] verbirgt. Architektur: 1 Hidden Layer mit $K$ Neuronen, der „Encoder“ $W \in \mathbb{R}^{K \times N}$, angewendet auf alle $2S$ Kontextwörter und dann gemittelt (*averaging*), danach ein Layer „Decoder“ $W' \in \mathbb{R}^{N \times K}$ gefolgt von Softmax:
 
 $$
 P(w_{\text{mitte}} \mid \text{Kontext}) = \operatorname{sm}\Bigl( W' \cdot \frac{1}{2S} \sum_{j \in \text{Kontext}} W w_j \Bigr).
@@ -36,7 +36,7 @@ $$
 
 Die Wortvektoren sind die Spalten von $W$: $e(w) = W w$ ist für einen One-Hot-Vektor $w$ einfach die entsprechende Spalte.
 
-**Skip-gram**, die Alternative zu CBOW: Gegeben ein Token, sage den Kontext vorher. Eingabe: das mittlere Token als One-Hot-Vektor für eine Abfolge von $2S + 1$ Token. Ausgabe: eine Wahrscheinlichkeitsverteilung auf allen $N$ Token. Loss-Funktion: NLL, d.h. Vergleich der ausgegebenen Verteilung mit der Summe der One-Hot-Vektoren für alle $2S$ Kontexttoken. Architektur: 1 Hidden Linear Layer mit $K$ Neuronen (der „Encoder“), danach ein Layer „Decoder“ mit $N$ Neuronen gefolgt von Softmax. Skip-gram funktioniert bei großen Korpora und seltenen Wörtern besser.
+**Skip-gram**, die Alternative zu CBOW: Gegeben ein Token, sage den Kontext vorher. Eingabe: das mittlere Token als One-Hot-Vektor für eine Abfolge von $2S + 1$ Token. Ausgabe: eine Wahrscheinlichkeitsverteilung auf allen $N$ Token. Loss-Funktion: NLL, d.h. Vergleich der ausgegebenen Verteilung mit der Summe der One-Hot-Vektoren für alle $2S$ Kontexttoken. Architektur: 1 Hidden Linear Layer mit $K$ Neuronen (der „Encoder“), danach ein Layer „Decoder“ mit $N$ Neuronen gefolgt von Softmax. Skip-gram ist langsamer als CBOW, lernt dafür seltene Wörter besser – und ist damit die Wahl für *kleinere* Korpora, während CBOW auf sehr großen praktikabel bleibt. Mikolov schreibt es in der Anleitung zu word2vec knapp so: „architecture: skip-gram (slower, better for infrequent words) vs CBOW (fast)“ ([word2vec-Projektseite](https://web.archive.org/web/20161211192011/https://code.google.com/p/word2vec/) – die Seite bei Google Code gibt es nicht mehr, der Link führt auf den Schnappschuss im Internet Archive).
 
 :::{figure} ../images/vl08-cbow-skipgram.png
 :width: 90%
@@ -116,6 +116,7 @@ und das vierte je vier; bei (3) sind es 15 Millionen.*
 **Im Kapitel zitiert:**
 
 * Mikolov, Chen, Corrado, Dean: [*Efficient Estimation of Word Representations in Vector Space*](https://arxiv.org/abs/1301.3781), 2013.
+* Mikolov u.a.: [*word2vec – Tool for computing continuous distributed representations of words*](https://web.archive.org/web/20161211192011/https://code.google.com/p/word2vec/), Projektseite bei Google Code, 2013 (Schnappschuss von 2016 im Internet Archive) – dort die Faustregeln zur Wahl der Architektur.
 * Jurafsky, Martin: [*Speech and Language Processing*](https://web.stanford.edu/~jurafsky/slp3/), 3. Auflage (Entwurf, frei verfügbar).
 
 **Zum Ansehen:**

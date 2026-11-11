@@ -76,15 +76,19 @@ im Kapitel „Tensoren“ – und seit dem 2026-11-03 eine Seite mehr, weil in d
 Titelüberschrift entfiel und die Abschnitte eine Ebene höher stehen (gegen den unveränderten
 Baum gemessen: 135); die
 fachliche Durchsicht vom 2026-10-15 deckte 27 Kapitel und das Glossar ab, den
-Kettenregel-Abschnitt vom 2026-10-20 und diesen Zuwachs nicht): HTML ohne Warnungen, PDF **141 Seiten A4** lokal, 0 LaTeX-Fehler,
+Kettenregel-Abschnitt vom 2026-10-20 und diesen Zuwachs nicht): HTML ohne Warnungen, PDF **142 Seiten A4** lokal, 0 LaTeX-Fehler,
 0 fehlende Glyphen, 5 überlange Zeilen. Das veröffentlichte PDF hatte bis zum 2026-10-19
 stets **eine Seite mehr** als das lokale (siehe unten); für den neuen Stand ist das noch
 nicht nachgemessen. Die `--min-pages`-Untergrenze
 soll einen *abgebrochenen* Lauf fangen, nicht eine gewollte Kürzung — sie steht deshalb
 deutlich unter der tatsächlichen Seitenzahl, in der CI auf demselben Wert.
 
-**Lokal und CI weichen um eine Seite ab, und das bleibt so**: hier 141 Seiten, das
-veröffentlichte PDF hatte am 2026-10-19 vor dem neuen Kapitel 113 gegen lokal 112. Die erste Abweichung steht auf Seite 28 in einem Codeblock,
+**Lokal und CI wichen um eine Seite ab; für den heutigen Stand gilt das nicht mehr**: Am
+2026-11-10 hatten das veröffentlichte und das lokale PDF **beide 141 Seiten** — gemessen,
+nicht geschätzt (`pdfinfo` auf beide). Die 142 oben ist der Stand nach der word2vec-
+Korrektur vom 2026-11-11 und noch nicht gegen das veröffentlichte PDF gehalten. Vorher war
+es anders: Am 2026-10-19 hatte das veröffentlichte PDF vor dem neuen Kapitel 113 Seiten
+gegen lokal 112. Die erste Abweichung steht auf Seite 28 in einem Codeblock,
 der eine Zeile anders bricht — es ist der *Satz*, nicht der Inhalt. Die Ursache ist am
 2026-10-15 gemessen worden, und sie ist nicht die, die hier vom 2026-09-29 bis dahin stand:
 
