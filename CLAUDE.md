@@ -76,19 +76,29 @@ im Kapitel „Tensoren“ – und seit dem 2026-11-03 eine Seite mehr, weil in d
 Titelüberschrift entfiel und die Abschnitte eine Ebene höher stehen (gegen den unveränderten
 Baum gemessen: 135); die
 fachliche Durchsicht vom 2026-10-15 deckte 27 Kapitel und das Glossar ab, den
-Kettenregel-Abschnitt vom 2026-10-20 und diesen Zuwachs nicht): HTML ohne Warnungen, PDF **142 Seiten A4** lokal, 0 LaTeX-Fehler,
-0 fehlende Glyphen, 5 überlange Zeilen. Das veröffentlichte PDF hatte bis zum 2026-10-19
-stets **eine Seite mehr** als das lokale (siehe unten); für den neuen Stand ist das noch
-nicht nachgemessen. Die `--min-pages`-Untergrenze
+Kettenregel-Abschnitt vom 2026-10-20 und diesen Zuwachs nicht): HTML ohne Warnungen, PDF **144 Seiten A4** lokal, 0 LaTeX-Fehler,
+0 fehlende Glyphen, 5 überlange Zeilen. Das veröffentlichte PDF hat **143** (beide am
+2026-11-12 auf demselben Baum `2a8a3db` gemessen, siehe unten). Die `--min-pages`-Untergrenze
 soll einen *abgebrochenen* Lauf fangen, nicht eine gewollte Kürzung — sie steht deshalb
 deutlich unter der tatsächlichen Seitenzahl, in der CI auf demselben Wert.
 
-**Lokal und CI wichen um eine Seite ab; für den heutigen Stand gilt das nicht mehr**: Am
-2026-11-10 hatten das veröffentlichte und das lokale PDF **beide 141 Seiten** — gemessen,
-nicht geschätzt (`pdfinfo` auf beide). Die 142 oben ist der Stand nach der word2vec-
-Korrektur vom 2026-11-11 und noch nicht gegen das veröffentlichte PDF gehalten. Vorher war
-es anders: Am 2026-10-19 hatte das veröffentlichte PDF vor dem neuen Kapitel 113 Seiten
-gegen lokal 112. Die erste Abweichung steht auf Seite 28 in einem Codeblock,
+**Lokal und CI weichen wieder um eine Seite ab, und diesmal in die andere Richtung**: Am
+2026-11-12 hatte das lokale PDF **144 Seiten**, das veröffentlichte **143** — beide auf
+demselben Baum (`2a8a3db`, Arbeitsbaum sauber), beide mit denselben zwei
+VL-5-Aufzeichnungszeilen, gemessen mit `pdfinfo`, nicht geschätzt. Am 2026-11-10 waren
+beide noch bei **141**, am 2026-10-19 lag das veröffentlichte mit 113 gegen lokal 112
+*darüber*. Die Abweichung ist also keine feste Größe und kein Vorzeichen, auf das man sich
+verlassen kann — sie ist der Satzunterschied unten, und wie er sich auswirkt, hängt davon
+ab, wo gerade eine Zeile umbricht. **Wer eine der beiden Zahlen nennt, sagt dazu, welche.**
+
+Die **142**, die hier und in `devnotes/TODO.md` bis zum 2026-11-12 stand, ist nie gemessen
+worden: Sie wurde am 2026-11-11 mit der word2vec-Korrektur eingetragen und war schon beim
+Eintragen nicht geprüft. Gefunden wurde das erst, als ein Wächter 17 Stunden lang auf einen
+Build wartete, der längst durch war — sein `pgrep`-Muster stand in seiner eigenen
+Kommandozeile und fand deshalb sich selbst. Also: **Die Seitenzahl wird aus dem fertigen
+PDF gelesen, nicht aus der Änderungsnotiz übernommen.**
+
+Die erste Abweichung steht auf Seite 28 in einem Codeblock,
 der eine Zeile anders bricht — es ist der *Satz*, nicht der Inhalt. Die Ursache ist am
 2026-10-15 gemessen worden, und sie ist nicht die, die hier vom 2026-09-29 bis dahin stand:
 
