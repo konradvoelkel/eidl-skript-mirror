@@ -98,16 +98,17 @@ mehr durch den Abschnitt „Mehr Daten oder mehr Epochen?“ samt Abbildung im K
 der Arbeit“ samt Abbildung im Kapitel „Autograd und Berechnungsgraph“ – jener Abschnitt in 13
 wurde dabei um 28 Zeilen kürzer, weil die Verteilung nun in 10 eingeführt wird): HTML ohne
 Warnungen, PDF **148 Seiten A4** lokal, 0 LaTeX-Fehler,
-0 fehlende Glyphen, 5 überlange Zeilen. Das veröffentlichte PDF hatte am 2026-11-12 **143** (beide an jenem Tag auf
-demselben Baum `2a8a3db` gemessen, siehe unten); für die Stände vom 2026-11-13 ist nur die
-lokale Zahl gemessen, die veröffentlichte steht noch aus. Die `--min-pages`-Untergrenze
+0 fehlende Glyphen, 5 überlange Zeilen. Das veröffentlichte PDF hat am 2026-11-14 **147**
+(auf dem Baum `7ccf9c9` gemessen, derselbe wie lokal; am 2026-11-12 waren es **143** gegen
+lokal 144, siehe unten). Die `--min-pages`-Untergrenze
 soll einen *abgebrochenen* Lauf fangen, nicht eine gewollte Kürzung — sie steht deshalb
 deutlich unter der tatsächlichen Seitenzahl, in der CI auf demselben Wert.
 
 **Lokal und CI weichen wieder um eine Seite ab, und diesmal in die andere Richtung**: Am
 2026-11-12 hatte das lokale PDF **144 Seiten**, das veröffentlichte **143** — beide auf
 demselben Baum (`2a8a3db`, Arbeitsbaum sauber), beide mit denselben zwei
-VL-5-Aufzeichnungszeilen, gemessen mit `pdfinfo`, nicht geschätzt. Am 2026-11-10 waren
+VL-5-Aufzeichnungszeilen, gemessen mit `pdfinfo`, nicht geschätzt. Am 2026-11-14 stand es
+auf `7ccf9c9` genauso: lokal **148**, veröffentlicht **147**. Am 2026-11-10 waren
 beide noch bei **141**, am 2026-10-19 lag das veröffentlichte mit 113 gegen lokal 112
 *darüber*. Die Abweichung ist also keine feste Größe und kein Vorzeichen, auf das man sich
 verlassen kann — sie ist der Satzunterschied unten, und wie er sich auswirkt, hängt davon

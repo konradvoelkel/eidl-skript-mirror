@@ -22,8 +22,8 @@ uv run devnotes/check_pdf_build.py --min-pages 100
 uv run devnotes/check_doku.py           # stimmt die Doku noch mit dem Repo überein?
 ```
 
-Erwartung: **29 Kapitel plus Glossar, 148 Seiten A4 lokal** (veröffentlicht am 2026-11-12
-**143**, auf demselben Baum gemessen; die Ein-Seiten-Abweichung ist seit dem 2026-10-15
+Erwartung: **29 Kapitel plus Glossar, 148 Seiten A4 lokal** (veröffentlicht am 2026-11-14
+**147**, auf demselben Baum `7ccf9c9` gemessen; die Ein-Seiten-Abweichung ist seit dem 2026-10-15
 erklärt, ihr Vorzeichen aber nicht verlässlich, siehe `../CLAUDE.md`), 0 LaTeX-Fehler, 0 fehlende Glyphen,
 5 überlange Zeilen, 23 Übungsabschnitte. Weicht etwas davon ab, ist das der erste Befund, nicht
 Hintergrundrauschen.
