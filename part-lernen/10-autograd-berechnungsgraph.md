@@ -202,8 +202,8 @@ Abkürzungen gezielt zu verbauen.
 leicht ein Merkmal, das die Klasse verrät, ohne dass die Form dafür gesehen werden müsste.
 Hier wäre das die Fläche: Ein Dreieck und ein Quadrat *gleichen Umfangs* unterscheiden sich
 in der Fläche deutlich, und „Tinte zählen“ wäre schon die halbe Antwort. Deshalb wird die
-Fläche vorgegeben und für beide Klassen gleich gezogen. Ob das reicht, ist eine Messung und
-keine Meinung – ein lineares Modell auf ein paar handgebauten Merkmalen sagt es:
+Fläche vorgegeben und für beide Klassen gleich gezogen. Ob das reicht, ist eine Messung –
+ein lineares Modell auf ein paar handgebauten Merkmalen sagt es:
 
 | Merkmal | Genauigkeit |
 |---|---|
@@ -336,8 +336,7 @@ eigene, mitlaufend angepasste Schrittweite gibt; das [Kapitel
 Unterschied ist an dieser Aufgabe nicht kosmetisch: Mit demselben Budget, demselben Netz und
 demselben Strom kommt einfaches `SGD` auf $0{,}606$ (Lernrate $0{,}01$) oder auf $0{,}763$
 (Lernrate $0{,}1$, und das mit Werten zwischen $0{,}688$ und $0{,}807$ über drei Läufe),
-gegen $0{,}922$ mit `Adam`. Der Optimierer und seine Lernrate sind also keine Nebensache –
-wer hier am Netz zweifelt, zweifelt an der falschen Stelle.
+gegen $0{,}922$ mit `Adam`.
 :::
 
 Die Verteilung bleibt uns erhalten: Im [Kapitel „Universelle

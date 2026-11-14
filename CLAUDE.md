@@ -387,6 +387,13 @@ Der Ton ist knapp und präzise:
   vier Stellen mit `?!?`, `??`, `!!`, `???` sind Absicht — dort soll der Text wachrütteln.
 * **Keine Adjektiv-Inflation.** Nicht „ein extrem mächtiges, unglaublich flexibles
   Verfahren“, sondern was es tut und wann man es nimmt.
+* **Keine Pointe am Absatzende.** Kein Nachsatz, der eine Zahl noch einmal in eine Haltung
+  übersetzt: „ist also keine Nebensache“, „wer hier am Netz zweifelt, zweifelt an der
+  falschen Stelle“, „ist eine Messung und keine Meinung“. Die Messung steht schon da; der
+  Nachsatz sagt dem Lesenden bloß, was er davon halten soll, und klingt nach Werbung für
+  den eigenen Befund. Am 2026-11-14 zwei solche Stellen im Kapitel „Autograd und
+  Berechnungsgraph“ entfernt (Konrads Entscheidung) — und daran gemerkt, dass solche Sätze
+  beim Schreiben wie Abschlüsse wirken und deshalb von allein wiederkommen.
 * **Jede Behauptung belegbar.** Formeln nachrechnen, Paper mit Jahr und Titel nennen,
   Bibliotheksversionen prüfen statt erinnern.
 * Rechenbeispiele werden **durchgerechnet**, nicht behauptet. Wer eine Zahl ändert, rechnet
