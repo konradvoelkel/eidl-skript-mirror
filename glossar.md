@@ -96,7 +96,7 @@ Die Begriffe, die in Klausuraufgaben vorkommen, je in ein bis drei Sätzen, mit 
 
 **Autoencoder.** Encoder von $D$ auf $L \ll D$ Dimensionen, Decoder zurück, Loss ist die Rekonstruktion (MSE). Approximiert die Identität durch einen Flaschenhals, braucht keine Label, komprimiert. Der Decoder erhöht die Dimension. Linear ist er PCA. [Autoencoder](part-representation-learning/14-autoencoder.md)
 
-**Standard-AE ist nicht generativ, VAE schon.** Der klassische Autoencoder lässt Löcher im latenten Raum; der VAE zwingt die Codes zur Standardnormalverteilung, danach kann man sampeln und dekodieren. [Variational Autoencoder](part-representation-learning/15-variational-autoencoder.md)
+**Generieren: Standard-AE gegen VAE.** Sampeln und dekodieren geht bei beiden; beim klassischen Autoencoder trifft man dabei aber Löcher und Ausreißer im latenten Raum, und dort kommt Matsch heraus. Der VAE zwingt die Codes zur Standardnormalverteilung — erst damit ist Sampeln verlässlich. [Variational Autoencoder](part-representation-learning/15-variational-autoencoder.md)
 
 **Denoising AE.** Rauschen auf die *Eingabe*, Loss gegen das *saubere* Bild. [Autoencoder](part-representation-learning/14-autoencoder.md)
 
