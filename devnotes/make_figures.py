@@ -27,6 +27,7 @@ Acht Dateien kommen aus dem Material von 2025 und liegen in **Sciebo**, nicht im
 Skript nennt am Ende, was fehlte, und endet mit einem Fehlercode.
 """
 
+import json
 from pathlib import Path
 
 import matplotlib
@@ -35,6 +36,10 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.patches import Arc, Circle, FancyArrowPatch, FancyBboxPatch, Polygon
+
+# Die Verteilung „Dreiecke gegen Quadrate“, reines NumPy und deshalb auch in der Gruppe
+# `figures` verfügbar; dasselbe Modul benutzt make_formen_daten.py mit torch.
+import formen
 
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "images"
@@ -1273,6 +1278,88 @@ def vl11_double_descent():
     ax.set_title("ein Datensatz, Legendre unnormiert")
     ax.legend(fontsize=8, loc="lower right", ncol=2)
     save(fig, "vl11-double-descent")
+
+
+# Die Zahlen kommen aus devnotes/make_formen_daten.py (braucht torch, läuft deshalb nicht
+# in dieser Gruppe) und liegen als versionierte JSON daneben. Siehe deren Docstring.
+FORMEN_JSON = Path(__file__).resolve().parent / "formen-stichprobengroesse.json"
+
+
+def vl11_formen_beispiele():
+    """Beispielbilder der Verteilung „Dreiecke gegen Quadrate“ (Kapitel „Autograd“).
+
+    Steht trotz des anderen Kapitels direkt neben `vl11_stichprobengroesse`: Beide
+    Abbildungen zeigen **dieselbe** Verteilung aus `formen.py`, und wer dort etwas ändert,
+    muss beide neu erzeugen. Deshalb auch derselbe Präfix.
+
+    Die Bilder kommen aus demselben Code, mit dem die Netze trainiert werden — nicht aus
+    einer Nachzeichnung davon. Ein fester Seed, damit die PNG byte-gleich bleibt.
+    """
+    x, y = formen.sample_batch(formen.ShapeConfig(), np.random.default_rng(20261113), 64)
+
+    fig, axs = plt.subplots(2, 8, figsize=(9.0, 2.6))
+    for reihe, (klasse, titel) in enumerate(
+            ((formen.DREIECK, "Dreieck"), (formen.QUADRAT, "Quadrat"))):
+        for ax, bild in zip(axs[reihe], x[y == klasse][:8]):
+            ax.imshow(bild, cmap="gray", vmin=0.0, vmax=1.0, interpolation="nearest")
+            ax.set_xticks([])
+            ax.set_yticks([])
+            for rand in ax.spines.values():          # rcParams nimmt oben und rechts weg
+                rand.set_visible(True)
+                rand.set_color(HHU_ICE)
+        axs[reihe][0].set_ylabel(titel, fontsize=10)
+    fig.subplots_adjust(wspace=0.08, hspace=0.08)
+    save(fig, "vl11-formen-beispiele")
+
+
+def vl11_stichprobengroesse():
+    d = json.loads(FORMEN_JSON.read_text(encoding="utf-8"))
+    fest = [lauf for lauf in d["laeufe"] if lauf["n"] is not None]
+    strom = next(lauf for lauf in d["laeufe"] if lauf["n"] is None)
+    gesehen = d["schritte"] * d["batch"]
+
+    print("  Stichprobengröße", " ".join(f"{lauf['n']}:{lauf['test_acc'][-1]:.3f}" for lauf in fest),
+          f"Strom:{strom['test_acc'][-1]:.3f}")
+
+    fig, axs = plt.subplots(1, 2, figsize=(10.5, 3.9))
+
+    ax = axs[0]
+    farben = [HHU_ORANGE, HHU_GREEN, HHU_BLUE, HHU_DARK]
+    for lauf, farbe in zip([l for l in fest if l["n"] in d["kurven"]], farben):
+        ax.plot(lauf["schritt"], lauf["test_acc"], color=farbe, lw=1.6, label=f"$N = {lauf['n']}$")
+        ax.plot(lauf["schritt"], lauf["train_acc"], color=farbe, lw=1.0, ls=":", alpha=0.8)
+    ax.plot(strom["schritt"], strom["test_acc"], color=HHU_RED, lw=2.2, label="frischer Strom")
+    ax.axhline(d["abkuerzungen"]["alle_vier"], color=GREY, lw=1, ls="--")
+    # Unten Luft für die Legende: Die Kurven starten bei 0,5, darunter ist die Fläche frei.
+    ax.set_ylim(0.36, 1.04)
+    ax.set_yticks([0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0])
+    ax.set_xlabel("Gradientenschritte (gleiches Budget für alle)")
+    ax.set_ylabel("Genauigkeit")
+    ax.set_title("Test durchgezogen, Trainingsmenge gepunktet", fontsize=10)
+    ax.legend(fontsize=8, loc="lower right", ncol=2, framealpha=0.9, columnspacing=1.0)
+
+    ax = axs[1]
+    ns = [lauf["n"] for lauf in fest]
+    med = [lauf["test_acc"][-1] for lauf in fest]
+    unten = [lauf["test_final_je_rep"][0] for lauf in fest]
+    oben = [lauf["test_final_je_rep"][-1] for lauf in fest]
+    ax.fill_between(ns, unten, oben, color=HHU_ICE, alpha=0.7, lw=0)
+    ax.plot(ns, med, "o-", color=HHU_BLUE, ms=4, lw=1.8, label="Test")
+    ax.plot(ns, [lauf["train_acc"][-1] for lauf in fest], "s--", color=GREY, ms=3, lw=1.2,
+            label="Trainingsmenge")
+    ax.plot([gesehen], [strom["test_acc"][-1]], "*", color=HHU_RED, ms=14,
+            label=f"Strom ({gesehen // 1000}k, je einmal)")
+    kurz = d["abkuerzungen"]["alle_vier"]
+    ax.axhline(kurz, color=GREY, lw=1, ls="--",
+               label=f"ohne die Form: {round(100 * kurz)}%")
+    ax.set_xscale("log")
+    ax.set_ylim(0.36, 1.04)
+    ax.set_yticks([0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0])
+    ax.set_xlabel("Zahl $N$ verschiedener Trainingsbilder")
+    ax.set_title(f"Endstand, Median aus {d['reps']} Wiederholungen", fontsize=10)
+    ax.legend(fontsize=8, loc="lower right", framealpha=0.9)
+    save(fig, "vl11-stichprobengroesse")
+
 
 
 # ----------------------------------------------------------------------------

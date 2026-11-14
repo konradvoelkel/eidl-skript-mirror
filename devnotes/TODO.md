@@ -22,7 +22,7 @@ uv run devnotes/check_pdf_build.py --min-pages 100
 uv run devnotes/check_doku.py           # stimmt die Doku noch mit dem Repo überein?
 ```
 
-Erwartung: **29 Kapitel plus Glossar, 144 Seiten A4 lokal** (veröffentlicht am 2026-11-12
+Erwartung: **29 Kapitel plus Glossar, 148 Seiten A4 lokal** (veröffentlicht am 2026-11-12
 **143**, auf demselben Baum gemessen; die Ein-Seiten-Abweichung ist seit dem 2026-10-15
 erklärt, ihr Vorzeichen aber nicht verlässlich, siehe `../CLAUDE.md`), 0 LaTeX-Fehler, 0 fehlende Glyphen,
 5 überlange Zeilen, 23 Übungsabschnitte. Weicht etwas davon ab, ist das der erste Befund, nicht
@@ -166,7 +166,11 @@ nicht umbenannt werden), dazu Double Descent im Kapitel „Universelle Approxima
 siehe `erledigt.md`).
 
 - [ ] **„Ausblick: Training in der Praxis“**, letztes Kapitel im Teil *Lernen*, hinter „Universelle
-  Approximation“. Inhalt: `Dataset`/`DataLoader` und die Trainingsschleife als festes Muster;
+  Approximation“. **Seit 2026-11-13 kleiner geworden:** `Dataset`, `IterableDataset`, `DataLoader`,
+  Generator und die Schleife über Schritte statt Epochen stehen im Kapitel „Autograd und
+  Berechnungsgraph“ (10), das Kapitel hier kann darauf zurückverweisen und bei den Fallen und beim
+  Tuning anfangen (Durchsatz, `num_workers`, `pin_memory`, `drop_last`, `persistent_workers`).
+  Übriger Inhalt: `Dataset`/`DataLoader` und die Trainingsschleife als festes Muster;
   Train/Validierung/Test, Overfitting erkennen, Early Stopping; Regularisierung (Dropout, Weight Decay,
   Augmentation); Lernraten-Scheduler (Warmup, Cosine); Debugging, wenn der Loss nicht sinkt (auf einem Batch
   overfitten, Gradienten-Normen, NaNs); GPU und Effizienz (Mixed Precision mit `autocast`, `torch.compile`,
@@ -179,6 +183,50 @@ siehe `erledigt.md`).
   ihre Verteilung durch die Tiefe fortpflanzt; der Transformer braucht Residuen und LayerNorm, und der
   Residual Stream führt zur Superposition in „Adversarial Attacks und Polysemie“ (27). Schließt nebenbei
   zwei Lücken: LayerNorm kommt im Buch bisher nicht vor, ResNet nur als Name.
+- [ ] **Die Formen-Verteilung weiterverwenden** (2026-11-13). Die Verteilung steht in
+  `devnotes/formen.py` (Dreiecke gegen Quadrate, 32x32, Fläche und Drehung gezogen, SDF-Renderer,
+  Koroutine) und wird in zwei Kapiteln benutzt: „Autograd und Berechnungsgraph“ (10, die Demo mit
+  Generator, `IterableDataset`, `DataLoader` und Trainingsschleife) und „Universelle Approximation“
+  (13, Stichprobengröße gegen Epochen). Was daran **schon gerechnet, aber noch nicht im Buch** ist,
+  und was sich zusätzlich anböte — **nichts davon ist entschieden**:
+  * **Deep Dream und die kontrafaktische Frage**, für „Adversarial Attacks und Polysemie“ (27).
+    Befund, der nicht der erwartete war: Der Gradientenaufstieg auf `logit(Dreieck) − logit(Quadrat)`
+    liefert **kein Dreieck**, sondern die extremste Richtung weg vom Quadrat, über Zufallsstarts
+    stabil und gegen fünf Zielfunktionen und vier Prior-Stärken robust. Ohne Prioris reichen acht
+    Schritte zu einem Rauschbild mit P = 0,99 — ein Adversarial Example in zwanzig Zeilen. Mit
+    Ankerterm auf den Abstand zum Ausgangsbild wird daraus die beantwortbare Frage: mittlere
+    Pixeländerung 0,05, das Quadrat bleibt sichtbar ein Quadrat, P(Dreieck) = 1,00.
+  * **Loss-Landschaft, filter-normalisiert** (Li et al. 2018), für „Gradientenabstieg“ (08), wo das
+    Paper schon verlinkt ist. Das auf 64 Bildern überangepasste Netz sitzt in einem weiten Plateau
+    mit Loss 1,8·10^-6 auf seinen eigenen Bildern; in **derselben Ebene** liegt der Test-Loss bei
+    3,54, und die tiefste Stelle der Ebene woanders. Dazu die Interpolation zwischen zwei
+    unabhängig trainierten Lösungen: 0,19 — Kamm 0,67 bei α = 0,53 — 0,16.
+  * **Durchsatz und Worker**, für „Training in der Praxis“ (oben). Gemessen am 2026-11-13 auf dem
+    Rechner des Autors: 3.966 Bilder/s ohne Worker gegen 17.277 mit acht — das Ziehen ist hier
+    teurer als der Gradientenschritt. Eine Zeitmessung gehört **nicht** in die versionierte JSON
+    (die muss byte-gleich reproduzierbar bleiben), also entweder als Zahl mit Rechner-Vorbehalt ins
+    Kapitel oder gar nicht. Die Worker-Falle selbst steht seit dem 2026-11-13 in Kapitel 10.
+  * **Sterbende Neuronen und verschwindende Gradienten messen**, für „Aktivierungsfunktionen“ (11).
+    Das Kapitel ist mit 97 Zeilen das dünnste im Buch und begründet beide Probleme analytisch, ohne
+    eine einzige Zahl von einer echten Aufgabe: Wie oft passiert das eigentlich? Dasselbe MLP,
+    Sigmoid gegen ReLU, Gradientennormen je Schicht und der Anteil toter Einheiten über die
+    Schritte. Noch nicht gerechnet.
+  * **MLP gegen CNN bei gleichem Budget**, für „Faltung und CNNs“ (21). Lage und Drehung stecken
+    bauartbedingt in der Verteilung, der induktive Bias wird damit messbar statt erzählt —
+    besonders bei kleinem N. Noch nicht gerechnet.
+  * **Latenter Raum mit bekannter Wahrheit**, für „Latente Räume geometrisch“ (17) oder
+    „Autoencoder“ (14). Die erzeugenden Faktoren (Drehung, Fläche, Klasse) sind hier *bekannt*, man
+    kann also prüfen, ob ein Autoencoder sie gefunden hat, statt nur MNIST-Interpolationen zu
+    zeigen — Disentanglement mit Grundwahrheit. Die Verteilung ist faktisch ein kleiner Verwandter
+    von dSprites (Matthey et al. 2017), das lässt sich auch so zitieren. Noch nicht gerechnet.
+  * **Ein Sampler-Widget** neben der Demo in Kapitel 10: zieht live, zeigt die drei erzeugenden
+    Größen, Regler für Strichstärke und Füllung. Der Rahmen dafür steht (`widgets/`, fünf
+    anywidgets im Buch).
+
+  Wogegen der Autor wäre: die Formen zum durchlaufenden Beispiel des ganzen Buchs zu machen. Sie
+  haben keine Bedeutung außer Geometrie und können deshalb nichts über Sprache, Sequenzen oder
+  vortrainierte Modelle tragen. Zwei, drei Auftritte mit je einer klaren Aufgabe.
+
 - [ ] Weitere Lücken, **nicht** entschieden: Diffusionsmodelle als eigenes Kapitel (bisher nur erwähnt),
   Segmentierung/Objekterkennung, Self-Supervised/Contrastive (CLIP), LoRA praktisch, Seq2Seq,
   Interpretierbarkeit (Grad-CAM).

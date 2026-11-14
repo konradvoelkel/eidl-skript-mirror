@@ -75,6 +75,91 @@ Datierte Protokolle größerer Umbauten liegen daneben als `build-log-<datum>.md
 
 ### Inhalt (Skript)
 
+- [x] **Anwendungsdemo im Kapitel „Autograd und Berechnungsgraph“** (10), 2026-11-13 (Entscheidung
+  Konrad: „Ja, Kapitel 10“). Neuer Abschnitt „Autograd bei der Arbeit: Dreiecke gegen Quadrate“
+  vor der Übung: die Verteilung, ein Generator als Datenquelle, `IterableDataset` und
+  `DataLoader`, die Trainingsschleife — ein MLP (295.554 Parameter) kommt in 3000 Schritten zu je
+  128 frisch gezogenen Bildern auf 0,922 auf 10.000 neuen Bildern, gegen 0,707 für handgebaute
+  Merkmale ohne die Form. Dazu ein Beispielraster als Abbildung (`vl11-formen-beispiele`) und eine
+  dritte Übungsaufgabe zur Worker-Falle.
+
+  Warum überhaupt und warum **dort**:
+
+  * **Die Lücke war echt.** Im ganzen Buch wurde nirgends ein Klassifikator auf Bildern von Anfang
+    bis Ende trainiert; Kapitel 06 hat die Fünf-Zeilen-Schleife, aber auf 50 Punkten einer
+    verrauschten Geraden. `Dataset`/`DataLoader` standen im Code zum ersten Mal in Kapitel 14
+    (Autoencoder, unüberwacht, nebenbei), `yield` kam gar nicht vor. Nach Kapitel 09 kann der Leser
+    Gradienten von Hand rechnen und hat noch nichts trainiert, das er ansehen kann.
+  * **Kein eigenes Kapitel.** Ein eingeschobenes Kapitel hätte 10 bis 27 umnummeriert: 159 Verweise
+    in 30 Dateien, dazu Folien und Blätter. Kapitel 10 war mit 161 Zeilen das kürzeste im Teil
+    *Lernen* und rein mechanisch (Graph, Freezing, geteilte Gewichte); die Demo ist seine
+    Auszahlung. API-seitig ist alles da (`nn.Module`, `nn.Linear`, Schleife aus 06, `backward()`
+    aus 10 selbst); Vorgriffe sind nur `nn.ReLU`/`nn.Sequential` auf 11 — den macht Kapitel 09
+    bereits ausdrücklich — und `Adam` auf 26.
+  * **Kapitel 13 wird dadurch kürzer, nicht länger.** Dort nahm die Einführung der Verteilung drei
+    Fünftel des Abschnitts „Mehr Daten oder mehr Epochen?“ ein (30 von 51 Zeilen: Codeblock,
+    Umkreis-Erklärung, Flächen-Absatz, Abkürzungstabelle), bevor die eigentliche Frage drankam. Das
+    steht jetzt in 10, in 13 blieb ein Absatz Rückverweis mit den beiden Zahlen, die man zum Lesen
+    der Abbildung braucht (0,707 und 0,506). Kapitel 13: 209 → 181 Zeilen.
+  * **Die Verteilung ist ein eigenes Modul geworden** (`devnotes/formen.py`, reines NumPy). Zwei
+    Skripte in verschiedenen Abhängigkeitsgruppen brauchen sie: `make_formen_daten.py` mit torch
+    zum Trainieren und `make_figures.py` ohne torch für das Beispielraster. Hätte man sie
+    verdoppelt, zeigte die Abbildung früher oder später eine Nachzeichnung statt der Daten, mit
+    denen gerechnet wurde. Steht als Regel im Playbook (§3.8q).
+  * **Seitenzahl:** 145 → 148 lokal (Kapitel 10 wächst um gut drei Seiten, Kapitel 13 wird um
+    eine knappe kürzer). HTML ohne Warnungen, 0 LaTeX-Fehler, 0 fehlende Glyphen, weiterhin
+    5 überlange Zeilen — der neue Abschnitt hat keine hinzugefügt.
+  * **Gegenprobe zum Refactor:** Nach dem Herauslösen reproduziert der Lauf alle alten Zahlen exakt
+    (Abkürzungen, alle neun Stichprobengrößen, Strom 0,922) — der Zufallsstrom ist derselbe
+    geblieben.
+
+  Neu mitgemessen, weil die Demo `Adam` zeigt und das Kapitel sagt, warum nicht `SGD`: am
+  selben Strom, mit demselben Budget und denselben Initialisierungen kommt `SGD` auf 0,606
+  (Lernrate 0,01) oder 0,763 (Lernrate 0,1, Einzelwerte 0,688 bis 0,807), `Adam` auf 0,922.
+  Die Adam-Zeile läuft absichtlich durch die Voreinstellung von `trainiere` und wiederholt
+  damit die ersten drei Ströme aus dem Hauptlauf exakt — eine billige Gegenprobe.
+
+  Glossar: zwei neue Einträge („Generator, Koroutine“ und „`Dataset`, `IterableDataset`,
+  `DataLoader`“). Nicht übernommen, weil nicht versionierbar: die Durchsatzzahlen (3.966 gegen
+  17.277 Bilder/s) — eine Zeitmessung gehört nicht in eine JSON, die byte-gleich reproduzierbar
+  sein soll. Sie stehen mit Rechner-Vorbehalt in der TODO für „Training in der Praxis“.
+
+- [x] **Abschnitt „Mehr Daten oder mehr Epochen?“ im Kapitel „Universelle Approximation“** (13),
+  2026-11-13. Hängt hinten an „Approximieren heißt nicht generalisieren“ und beantwortet die Frage,
+  die Nakkiran et al. im Absatz davor aufwerfen (Double Descent über der Zahl der Trainingsbeispiele),
+  an einer Verteilung, die man vollständig hinschreiben kann: Dreiecke gegen Quadrate, 32x32
+  Graustufen, Fläche und Drehung gezogen statt Eckpunkte. Ein MLP (295.554 Parameter) bekommt für
+  jede Stichprobengröße dasselbe Budget — 3000 Schritte zu 128 Beispielen, dieselbe
+  Initialisierung —, und nur die Zahl verschiedener Bilder ändert sich: N = 64 lernt auswendig
+  (Train 1,000) und bleibt auf neuen Bildern bei 0,508, also Raten; der unendliche Strom kommt auf
+  0,922. Die Lücke schließt sich von +0,492 auf +0,035.
+
+  Vier Dinge, die beim Bauen nicht selbstverständlich waren:
+
+  * **Die Fläche wird vorgegeben**, sonst ist „Tinte zählen“ fast die Antwort (Dreieck und Quadrat
+    gleicher Fläche unterscheiden sich im Umfang um 14%). Wie weit die Abkürzungen danach noch
+    tragen, steht als Tabelle im Kapitel und wird vom Skript mitgemessen: Tinte 0,544, Bounding-Box
+    0,677, alle vier zusammen 0,707 — das ist die Latte. Ein lineares Modell auf den Rohpixeln bleibt
+    bei 0,506, deshalb ist die Aufgabe für ein MLP überhaupt interessant.
+  * **Mit Zurücklegen ziehen, nicht `shuffle=True`.** Beim ersten Lauf war die Batchgröße bei N = 64
+    auf 64 begrenzt, dieser eine Lauf sah also halb so viele Beispiele wie alle anderen — die
+    Abbildung hätte zwei Dinge auf einmal verglichen. Jetzt zieht jeder Lauf dieselben 384.000
+    Beispiele i.i.d. aus seiner Menge, genau wie der Strom aus der Verteilung.
+  * **Fünf Wiederholungen, Median.** Mit einem Seed war die Kurve nicht monoton (N = 16384 fiel unter
+    N = 8192), und eine Abbildung über Stichprobengrößen darf nicht an der Ziehung hängen. Dieselbe
+    Vorkehrung wie bei Double Descent, dort mit 200 Datensätzen.
+  * **torch bleibt aus der `figures`-Gruppe draußen.** `devnotes/make_formen_daten.py` rechnet die
+    50 Läufe einmal (rund neun Minuten) und legt sie als versionierte JSON ab, `make_figures.py`
+    zeichnet nur noch daraus. Begründung in `../CLAUDE.md`.
+
+  Ehrlich festgehalten: Die Interpolationsschwelle liegt zwischen N = 512 und N = 1024 und damit
+  mehr als zwei Größenordnungen unter der Parameterzahl. Ob das an der Kapazität oder am Budget
+  liegt, ist **nicht sauber** zu beantworten — mit zehnfachem Budget erreichen bei N = 1024 zwei von
+  drei Läufen die 1,000, der dritte bleibt bei 0,81, und bei fünffachem Budget liegt der Median
+  unter dem bei einfachem. Das steht so im Kapitel, statt der glatten Fassung. Einen zweiten
+  Abstieg über N zeigt die Messung nicht; bei neun Stützstellen ist das keine Aussage über sein
+  Nichtvorhandensein.
+
 - [x] **Double Descent im Kapitel „Universelle Approximation“** (13), 2026-11-02 (Entscheidung Konrad: als
   zweite Hälfte von 13, nicht als eigenes Kapitel). Abschnitt „Approximieren heißt nicht generalisieren“:
   U-Kurve, Spitze bei p = n (Singulärwerte), zweiter Abstieg mit der Lösung minimaler Norm, Basisabhängigkeit

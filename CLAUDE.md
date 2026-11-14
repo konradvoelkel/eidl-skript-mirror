@@ -40,6 +40,7 @@ uv run --no-project devnotes/check_pdf_build.py --min-pages 100  # prüft das ge
 uv run --only-group dev devnotes/check_ci_yaml.py    # vor jedem Push, wenn .gitlab-ci.yml angefasst wurde
 uv run --no-project devnotes/check_doku.py           # prüft diese Datei und devnotes/ gegen das Repo
 uv run --only-group figures devnotes/make_figures.py # Abbildungen nach images/ (nie mit System-Python)
+uv run devnotes/make_formen_daten.py      # rechnet vor, was torch braucht: Formen-Verteilung (~11 min)
 python3 tools/social_card.py --verify                # Vorschaukarte: Maß und Titel (stdlib)
 uv run --only-group figures python tools/social_card.py  # Karte neu erzeugen (nur bei Titel-/Farbwechsel)
 ```
@@ -65,6 +66,21 @@ andere als die angeheftete (3.11.2), und genau das ist passiert. Die Gruppe `fig
 trotzdem keine Gigabyte. Gegenprobe: zweimal laufen lassen, der zweite Lauf muss
 byte-gleich sein.
 
+**Eine Abbildung braucht trotzdem ein trainiertes Netz**, und das ist der Grund für
+`devnotes/make_formen_daten.py` (seit 2026-11-13). Es trainiert für die Abbildung
+`vl11-stichprobengroesse` im Kapitel „Universelle Approximation“ 50 MLPs – dazu neun
+weitere für den Optimierer-Vergleich im Kapitel „Autograd und Berechnungsgraph“ – und legt
+das Ergebnis als **versionierte** JSON daneben
+(`devnotes/formen-stichprobengroesse.json`); `make_figures.py` zeichnet nur noch daraus
+und bleibt damit torch-frei. Die Verteilung selbst steht in `devnotes/formen.py`, reines
+NumPy und deshalb auch aus der `figures`-Gruppe heraus benutzbar: Die Beispielbilder in
+`vl11-formen-beispiele` kommen aus demselben Code wie die Trainingsdaten und nicht aus
+einer Nachzeichnung davon. Die Trennung ist Absicht und keine Umständlichkeit: Sonst
+müsste torch in die `figures`-Gruppe, jeder Komplettlauf der Abbildungen würde sieben
+Minuten länger dauern, und eine Abbildung hinge an der torch-Fassung statt nur an der
+matplotlib-Fassung. Neu erzeugt wird die JSON nur, wenn sich Verteilung oder Budget
+ändern — dann mit `uv run devnotes/make_formen_daten.py`, also der Default-Gruppe.
+
 Erwartung eines gesunden Laufs (Stand 2026-11-03, nach den sieben Tafelbildern und dem
 Abschnitt „Orthogonale Matrizen“ im Kapitel „Hintergrundwissen Lineare Algebra“ und dem
 Rechenbeispiel zur Geradengleichung im Kapitel „Neuron und Perzeptron“ und den zwei
@@ -76,9 +92,15 @@ im Kapitel „Tensoren“ – und seit dem 2026-11-03 eine Seite mehr, weil in d
 Titelüberschrift entfiel und die Abschnitte eine Ebene höher stehen (gegen den unveränderten
 Baum gemessen: 135); die
 fachliche Durchsicht vom 2026-10-15 deckte 27 Kapitel und das Glossar ab, den
-Kettenregel-Abschnitt vom 2026-10-20 und diesen Zuwachs nicht): HTML ohne Warnungen, PDF **144 Seiten A4** lokal, 0 LaTeX-Fehler,
-0 fehlende Glyphen, 5 überlange Zeilen. Das veröffentlichte PDF hat **143** (beide am
-2026-11-12 auf demselben Baum `2a8a3db` gemessen, siehe unten). Die `--min-pages`-Untergrenze
+Kettenregel-Abschnitt vom 2026-10-20 und diesen Zuwachs nicht; seit dem 2026-11-13 eine Seite
+mehr durch den Abschnitt „Mehr Daten oder mehr Epochen?“ samt Abbildung im Kapitel
+„Universelle Approximation“ und am selben Tag drei weitere durch den Abschnitt „Autograd bei
+der Arbeit“ samt Abbildung im Kapitel „Autograd und Berechnungsgraph“ – jener Abschnitt in 13
+wurde dabei um 28 Zeilen kürzer, weil die Verteilung nun in 10 eingeführt wird): HTML ohne
+Warnungen, PDF **148 Seiten A4** lokal, 0 LaTeX-Fehler,
+0 fehlende Glyphen, 5 überlange Zeilen. Das veröffentlichte PDF hatte am 2026-11-12 **143** (beide an jenem Tag auf
+demselben Baum `2a8a3db` gemessen, siehe unten); für die Stände vom 2026-11-13 ist nur die
+lokale Zahl gemessen, die veröffentlichte steht noch aus. Die `--min-pages`-Untergrenze
 soll einen *abgebrochenen* Lauf fangen, nicht eine gewollte Kürzung — sie steht deshalb
 deutlich unter der tatsächlichen Seitenzahl, in der CI auf demselben Wert.
 

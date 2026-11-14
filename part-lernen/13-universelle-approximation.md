@@ -123,6 +123,28 @@ Belkin, Hsu, Ma und Mandal haben 2019 in [*Reconciling modern machine-learning p
 
 Das Bild aus der polynomialen Regression überträgt sich: Spitze an der Interpolationsschwelle, dahinter entscheidet eine implizite Regularisierung, welche der vielen Interpolanten gewählt wird. Bei einem tiefen Netz ist das aber kein einzelner Satz mehr, sondern das Zusammenspiel von Architektur, Initialisierung und Optimierer, und welche Lösung es genau bevorzugt, ist Gegenstand aktueller Forschung. Die universelle Approximation sagt, dass das Netz die richtige Funktion darstellen *kann*. Dass es sie unter den vielen, die die Trainingsdaten treffen, auch *findet*, ist eine zweite, schwerere Frage.
 
+### Mehr Daten oder mehr Epochen?
+
+Die dritte Form – die Kurve über der Zahl der Trainingsbeispiele – führt auf eine Frage, die sich an einem festen Datensatz gar nicht sauber stellen lässt: Wenn Rechenzeit das Budget ist, steckt man sie besser in mehr Daten oder in mehr Durchgänge durch dieselben? Wer einen Ordner mit Bildern hat, kann nur eine der beiden Größen drehen. Wer statt dessen die **Verteilung** hinschreibt, kann beliebig oft daraus ziehen und beide trennen.
+
+Die Verteilung dafür steht schon bereit: die Dreiecke und Quadrate aus dem Kapitel [„Autograd und Berechnungsgraph“](10-autograd-berechnungsgraph.md), $32 \times 32$ Graustufen, mit gezogener Drehung, Fläche, Lage, Strichstärke und Füllung. Zwei Dinge daran sind hier entscheidend. Erstens ist die Zahl der verschiedenen Bilder damit ein Regler und keine gegebene Größe. Zweitens ist dort nachgemessen, wie weit man **ohne die Form** kommt: Handgebaute Merkmale (Tinte, Helligkeit, Bounding-Box, Füllgrad) bringen zusammen $0{,}707$, ein lineares Modell auf den 1024 Rohpixeln bleibt mit $0{,}506$ beim Raten. $0{,}707$ ist damit die Höhe, über die ein Netz erst einmal kommen muss, damit seine Zahl etwas bedeutet.
+
+Nun dasselbe Netz, dasselbe Budget, verschieden viele Bilder: ein MLP mit zwei versteckten Schichten (1024-256-128-2, 295.554 Parameter), Adam mit Lernrate $10^{-3}$, 3000 Schritte zu je 128 Beispielen. Jeder Lauf sieht also 384.000 Beispiele und startet bei derselben Initialisierung; der einzige Unterschied ist, aus wie vielen *verschiedenen* Bildern diese Beispiele stammen.
+
+:::{figure} ../images/vl11-stichprobengroesse.png
+:width: 100%
+
+Links: Genauigkeit über den Gradientenschritten, gleiches Budget für alle Läufe. Durchgezogen auf frischen Testbildern, gepunktet auf der eigenen Trainingsmenge; die graue Linie ist, was von Hand gebaute Merkmale ohne die Form erreichen. Rechts: der Endstand über der Zahl verschiedener Trainingsbilder, Median aus fünf Wiederholungen, das Band ist deren Spannweite. Der Stern ist der unendliche Strom, in dem jedes der 384.000 Beispiele genau einmal vorkommt.
+:::
+
+Bei $N = 64$ lernt das Netz seine 64 Bilder in den ersten hundert Schritten auswendig – Trainingsgenauigkeit $1{,}000$ – und bleibt auf neuen Bildern mit $0{,}508$ **auf Ratewahrscheinlichkeit**. Die restlichen 2900 Schritte ändern daran nichts. Bei $N = 1024$ sind es $0{,}613$, bei $N = 16384$ schon $0{,}878$, und der Strom immer neuer Bilder – jedes genau einmal gesehen, eine Epoche, die nie endet – kommt auf $0{,}922$. Mit der Zahl verschiedener Bilder schließt sich zugleich die Lücke zwischen Training und Test, von $+0{,}492$ auf $+0{,}035$.
+
+In der rechten Hälfte steht noch etwas. Die Trainingsgenauigkeit verlässt die $1{,}000$ zwischen $N = 512$ und $N = 1024$ – dort liegt die Interpolationsschwelle dieses Aufbaus, mehr als zwei Größenordnungen unter der Parameterzahl. Dass das Netz 1024 Bilder nicht *darstellen* könnte, ist damit aber nicht gesagt. Lässt man es bei $N = 1024$ zehnmal so lange laufen, erreichen zwei von drei Läufen doch noch die $1{,}000$ – der dritte bleibt bei $0{,}81$, und bei fünffachem Budget liegt der Median sogar unter dem bei einfachem. Die Schwelle ist hier also keine Eigenschaft der Architektur, sondern eine des Optimierens, und das Suchen wird mit mehr Zeit nicht einmal verlässlich fündig. Das ist genau die Unterscheidung, auf die der Abschnitt zuvor hinauslief, nur von der Messseite her.
+
+Einen *zweiten Abstieg* über $N$ zeigt diese Messung übrigens nicht, die Kurve steigt an allen neun Punkten. Ob zwischen $512$ und $1024$ bei feinerer Abtastung einer säße, ist mit neun Punkten nicht entschieden.
+
+Die praktische Lehre daraus ist unspektakulär und trägt weit: Bei knappem Budget sind mehr verschiedene Beispiele fast immer mehr wert als mehr Durchgänge durch dieselben. Das ist auch der Grund, warum **Data Augmentation** wirkt ([Kapitel „Autoencoder“](../part-representation-learning/14-autoencoder.md)) – sie ist der Versuch, aus einem endlichen Datensatz etwas zu machen, das sich wie eine Verteilung verhält.
+
 ## Übung
 
 1. Geben Sie zwei Neuronen mit steilen **Sigmoiden** und Ausgabegewichte an, deren Summe

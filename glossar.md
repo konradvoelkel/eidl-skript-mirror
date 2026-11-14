@@ -76,6 +76,10 @@ Die Begriffe, die in Klausuraufgaben vorkommen, je in ein bis drei Sätzen, mit 
 
 **Geteilte Gewichte.** Kommt ein Gewicht an mehreren Stellen vor (Faltung, rekurrente Netze), ist sein Gradient die Summe der Beiträge aller Stellen. [Autograd und Berechnungsgraph](part-lernen/10-autograd-berechnungsgraph.md)
 
+**Generator, Koroutine.** Eine Funktion, die mit `yield` Werte herausgibt und zwischen zwei Werten angehalten bleibt; ihr Zustand lebt in der Funktion selbst. Generatoren sind in Python die einfachste Form der Koroutine. Für eine Verteilung ohne Ende sind sie die natürliche Datenquelle, weil es dort keine Liste und kein `len` gibt. [Autograd und Berechnungsgraph](part-lernen/10-autograd-berechnungsgraph.md)
+
+**`Dataset`, `IterableDataset`, `DataLoader`.** Ein `Dataset` liefert einzelne Beispiele über einen Index und kennt seine Länge (`__getitem__`, `__len__`); ein `IterableDataset` liefert statt dessen einen Iterator und hat keine Länge – die Form für einen Strom ohne Ende. Der `DataLoader` stapelt beides zu Mini-Batches, mischt auf Wunsch (`shuffle`, nicht bei `IterableDataset`) und lässt mit `num_workers` in Hintergrundprozessen vorbereiten. Jeder Worker bekommt eine *Kopie* des Datensatzes, ein `IterableDataset` muss deshalb mit `get_worker_info()` selbst dafür sorgen, dass die Prozesse Verschiedenes liefern. [Autograd und Berechnungsgraph](part-lernen/10-autograd-berechnungsgraph.md)
+
 ## Aktivierungsfunktionen und Universalität
 
 **ReLU und ihre Ableitung.** $\max(0, x)$ mit schwacher Ableitung $[x > 0]$. Billig, kein Sättigen im Positiven. [Aktivierungsfunktionen](part-lernen/11-aktivierungsfunktionen.md)
