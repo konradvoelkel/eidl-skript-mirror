@@ -311,7 +311,7 @@ def block(payload: dict) -> str:
 
 
 def pruefen(site: str, root: Path, seiten: list[tuple[str, str, str | None]],
-            buch: dict, suffix: str | None) -> int:
+            buch: dict) -> int:
     for position, (slug, _, _) in enumerate(seiten, 1):
         ziel = root / "index.html" if not slug else root / slug / "index.html"
         doc = ziel.read_text(encoding="utf-8")
@@ -371,10 +371,20 @@ def pruefen(site: str, root: Path, seiten: list[tuple[str, str, str | None]],
             if not kapitel.get(feld):
                 print(f"✗ {ziel} hat ein leeres {feld} -- lief head_meta.py vorher?")
                 return 1
-        if suffix and kapitel["name"].endswith(suffix):
+        # Gegen den Buchtitel geprüft, nicht gegen den Suffix: Dieser Test bestand bis
+        # zum 2026-11-15 leer, weil er denselben falsch berechneten Suffix benutzte wie
+        # `ohne_suffix()` (Begründung in main()). Gegen `buch["name"]` ist er davon
+        # unabhängig und hält auch, wenn der Suffix einmal anders geschrieben wird.
+        if buch["name"] in kapitel["name"]:
             print(f"✗ {ziel} trägt den Buchtitel noch im Kapitelnamen: "
                   f"{kapitel['name']!r}")
             return 1
+        for eintrag in knoten["BreadcrumbList"]["itemListElement"]:
+            # Position 1 *ist* das Buch; erst ab 2 wäre der Titel eine Wiederholung.
+            if eintrag["position"] > 1 and buch["name"] in eintrag["name"]:
+                print(f"✗ {ziel} trägt den Buchtitel noch in der Brotkrume: "
+                      f"{eintrag['name']!r}")
+                return 1
     return 0
 
 
@@ -395,11 +405,27 @@ def main() -> int:
     daten = {slug: git_datum(datei) for slug, datei, _ in seiten}
     buch_datum = max(daten.values())
 
-    # Der Suffix, den MyST an jeden Kapiteltitel hängt -- aus dem <title> der
-    # Landingpage gelesen, der *der* Projekttitel ist, nicht hart geschrieben.
-    m_titel = re.search(r"<title[^>]*>(.*?)</title>",
-                        (root / "index.html").read_text(encoding="utf-8"), re.S | re.I)
-    suffix = f" - {html.unescape(m_titel.group(1).strip())}" if m_titel else None
+    # Der Suffix, den MyST an jeden Kapiteltitel hängt -- aus dem `og:title` der
+    # Landingpage gelesen, nicht aus deren `<title>`.
+    #
+    # Nicht aus `<title>`, obwohl genau das hier bis zum 2026-11-15 stand: head_meta.py
+    # läuft eine Zeile vorher (.gitlab-ci.yml 362 vor 366) und schreibt eben diesen
+    # `<title>` auf „Einführung in Deep Learning — Vorlesungsskript, HHU Düsseldorf" um.
+    # Der daraus gebildete Suffix paßte danach auf keinen Kapiteltitel, `ohne_suffix()`
+    # tat nichts, und `pruefen()` benutzte denselben falschen Suffix und bestand deshalb
+    # leer. An der ausgelieferten Seite gemessen: alle 32 Kapitel trugen den Buchtitel im
+    # `name` („Backpropagation - Einführung in Deep Learning") und zweimal in der
+    # Brotkrume.
+    #
+    # `og:title` läßt head_meta.py erklärtermaßen als bloßen Werktitel stehen (CLAUDE.md,
+    # „Veröffentlichungs-Metadaten"), ist also die Zeichenkette, die MyST anhängt.
+    og_titel = meta((root / "index.html").read_text(encoding="utf-8"),
+                    "property", "og:title")
+    if not og_titel:
+        print(f"✗ {root / 'index.html'} hat kein og:title; ohne das ist der Titel-Suffix "
+              "der Kapitel nicht zu bestimmen -- lief head_meta.py vorher?")
+        return 1
+    suffix = f" - {og_titel}"
 
     geschrieben = uebersprungen = 0
     for position, (slug, _, _) in enumerate(seiten, 1):
@@ -431,7 +457,7 @@ def main() -> int:
                         encoding="utf-8")
         geschrieben += 1
 
-    if rc := pruefen(site, root, seiten, buch, suffix):
+    if rc := pruefen(site, root, seiten, buch):
         return rc
     print(f"✓ strukturierte Daten auf {len(seiten)} Seiten: {geschrieben} geschrieben, "
           f"{uebersprungen} hatten schon einen Block; ein Buch ({buch['@id']}), "

@@ -4,13 +4,15 @@ title: "Einführung in Deep Learning"
 
 Dieses Skript begleitet die Vorlesung mit Übung „Einführung in Deep Learning“ im Bachelor Informatik an der HHU Düsseldorf, Wintersemester 2026/27. Es führt vom einzelnen Neuron über Gradientenabstieg und Backpropagation bis zu Autoencodern, Transformern und großen Sprachmodellen, mit durchgerechneten Beispielen und Code in PyTorch.
 
-Vorausgesetzt wird, was das Modul Data Science vermittelt: Python mit NumPy und die Idee der linearen Regression. Die nötige lineare Algebra und Analysis stehen in zwei Hintergrundkapiteln, die Stochastik im [Data-Science-Skript](https://voelkel.pages.cs.uni-duesseldorf.de/ds-skript/). Lernziele, Aufzeichnungen und Literatur stehen unter [Über dieses Skript](README.md). Fast jedes Kapitel endet mit einer kurzen Übung samt Antwortprobe; die Übungsblätter gibt es in ILIAS.
+Vorausgesetzt wird, was das Modul Data Science vermittelt: Python mit NumPy und die Idee der linearen Regression. Die nötige lineare Algebra und Analysis stehen in zwei Hintergrundkapiteln, die Stochastik im [Data-Science-Skript](https://voelkel.pages.cs.uni-duesseldorf.de/ds-skript/). Lernziele, Aufzeichnungen und Literatur stehen unter [Über dieses Skript](README.md). Fast jedes Kapitel endet mit einer kurzen Übung samt Antwortprobe; die Übungsblätter gibt es in ILIAS, die bereits ausgegebenen auch [hier](uebungsblaetter.md).
 
 {button}`Das ganze Skript als PDF </eidl-skript.pdf>`
 
 :::{note} Hinweis
 Wenn Sie Fehler finden oder etwas unklar ist, freue ich mich über eine Nachricht – Konrad Völkel. Am einfachsten als [Issue auf GitHub](https://github.com/konradvoelkel/eidl-skript-mirror/issues).
 :::
+
+Dieses Skript steht unter [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) und ist frei nutzbar, auch für die eigene Lehre. Autor ist Dr. Konrad Völkel ([ORCID 0000-0002-4144-4199](https://orcid.org/0000-0002-4144-4199)), Institut für Informatik der HHU Düsseldorf; Lizenztext, Zitationsvorschlag und Quelltext stehen unter [Über dieses Skript](README.md).
 
 ## Inhalt
 
@@ -64,3 +66,4 @@ Wenn Sie Fehler finden oder etwas unklar ist, freue ich mich über eine Nachrich
 ### Anhang
 
 - [Glossar zur Klausurvorbereitung](glossar.md) – die Klausurbegriffe, je mit Link ins Kapitel
+- [Übungsblätter](uebungsblaetter.md) – die ausgegebenen Blätter als PDF

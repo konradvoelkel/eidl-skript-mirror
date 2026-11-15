@@ -50,3 +50,27 @@ Das [Glossar](glossar.md) listet die Begriffe, die in Klausuraufgaben vorkommen,
 
 * Simon J.D. Prince, *Understanding Deep Learning*, MIT Press 2023, frei verfügbar unter <https://udlbook.github.io/udlbook/>
 * Deisenroth, Faisal, Ong, *Mathematics for Machine Learning*, Cambridge University Press 2020, frei verfügbar unter <https://mml-book.github.io/>
+
+## Über den Autor
+
+Dr. Konrad Völkel lehrt an der Heinrich-Heine-Universität Düsseldorf, in der Arbeitsgruppe Dialog Systems and Machine Learning am Institut für Informatik. Von ihm stammen außerdem, ebenfalls frei unter CC BY-SA 4.0, die Skripte [Einführung in Python](https://eipy-skript-7dd28c.pages.cs.uni-duesseldorf.de/) und [Data Science: von der Stochastik zum Machine Learning mit Python](https://voelkel.pages.cs.uni-duesseldorf.de/ds-skript/). Alle drei sind Vorlesungsskripten für ein Informatik-Bachelorstudium, vom Autor selbst veröffentlicht.
+
+* Eigene Seite: <https://www.konradvoelkel.com>
+* ORCID: <https://orcid.org/0000-0002-4144-4199>
+* Lehre im Überblick: <https://www.konradvoelkel.com/teaching/>
+
+## Lizenz, Nachnutzung und Zitation
+
+Dieses Skript steht unter [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) – Namensnennung, Weitergabe unter gleichen Bedingungen. Sie dürfen es vervielfältigen, verbreiten und bearbeiten, auch für die eigene Lehre, solange Sie den Urheber nennen und Ihre Bearbeitung unter dieselbe Lizenz stellen.
+
+Vorgeschlagene Zitation:
+
+```text
+Konrad Völkel: Einführung in Deep Learning. Skript zur Vorlesung im Bachelor
+Informatik, Heinrich-Heine-Universität Düsseldorf, 2026. CC BY-SA 4.0.
+https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de/
+```
+
+Der Quelltext – MyST-Markdown, die Skripte für die Abbildungen, die Bauanleitung – liegt als Spiegel auf GitHub: <https://github.com/konradvoelkel/eidl-skript-mirror>. Wer einen Fehler findet oder eine Stelle für unklar hält, meldet das am einfachsten [als Issue](https://github.com/konradvoelkel/eidl-skript-mirror/issues).
+
+Was zur Nachnutzung bereitsteht und was nicht: Die [ausgegebenen Übungsblätter](uebungsblaetter.md) liegen als PDF auf dieser Website, die Lösungsvorschläge nicht. Die Foliensätze werden einzeln freigegeben, sobald sie durchgesehen sind; verlinkt ist jeweils nur, was freigegeben ist.

@@ -16,6 +16,11 @@ project:
   authors:
     - name: Dr. Konrad Völkel
       url: https://www.konradvoelkel.com
+      # Die ORCID steckte bis zum 2026-11-15 nur als `sameAs` im JSON-LD -- also genau
+      # dort, wo die Hydration sie entfernt (SEO-Audit 2026-11-15, §1). Hier gesetzt,
+      # rendert mystmd sie als Abzeichen neben die Byline *aller* Seiten, als Markup und
+      # nicht nachgetragen; das übersteht die Hydration.
+      orcid: 0000-0002-4144-4199
       affiliations:
         - hhu
   affiliations:
