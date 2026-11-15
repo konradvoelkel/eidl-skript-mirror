@@ -260,6 +260,7 @@ im `pages`-Job und brauchen **kein einziges Python-Paket**.
 | `tools/image_dims.py`, `tools/outline_reserve.py` | Gegen den Layoutsprung: `width`/`height` an jeder Abbildung samt einem Stylesheet mit allen Bildmaßen, und Platz für die Gliederung, die das Theme erst nach dem Laden füllt |
 | `tools/trailing_slash.py` | Kapitellinks mit Schrägstrich (sonst 302), im Markup, in der Hydrations-Nutzlast und in den Seiten-JSON; die Seitenleiste bewusst nicht |
 | `tools/no_css_dialog.py` | Nimmt den Kasten „Site not loading correctly? … `BASE_URL`“ aus jeder Seite. Das Theme legt ihn als `<dialog id="myst-no-css">` an; sichtbar wird er nur ohne Stylesheet, **im Text der Seite steht er aber als erstes** und begrüßt jeden, der die Seite als Text liest, mit einer Deploy-Fehlermeldung. `--check` zählt nach; findet der Lauf gar keinen Kasten, scheitert er (mystmd könnte ihn umbenannt haben) |
+| `tools/hydration.py` | Hält nach der Hydration zurück, was React ausräumt: Canonical, `og:*`, `twitter:card`, Markdown-`alternate`, `lang`, Titelzusatz, `ld+json` und die zwei Stylesheets; `og:image` dagegen über die Nutzlast, weil das Theme dafür ein Feld rendert. **Letzter Schritt am Kopf.** `--check-rendered` mißt im Browser statt am Artefakt |
 | `tools/precompress.py` | `.br` und `.gz` neben jede Textdatei, **als letzter Schritt** des Jobs; `--check` packt jede Kopie aus und vergleicht byteweise |
 
 **Jede Seite außer der Landingpage hat ein eigenes `description:` im Frontmatter**
@@ -279,13 +280,32 @@ Lokal prüfen heißt: `myst build --html`, die Schriften wie im `myst-build`-Job
 gebaute HTML kopieren, dann die Skriptzeilen des `pages`-Jobs gegen eine **Kopie**
 von `_build/html` — sie schreiben in das Verzeichnis hinein.
 
-**Die Hydration gelingt hier, anders als in ds-skript.** Dort scheitert sie (React #418)
-und rendert das ganze Dokument neu; ein Wächter (`hydration.py`) hängt die Kopf-Tags
-zurück. In eidl am 2026-11-03 gemessen: keine Fehlermeldung, Canonical, `og:*`, JSON-LD
-und `loading="lazy"` stehen nach der Hydration noch. Deshalb gibt es `hydration.py` hier
-nicht. Wer das Theme oder mystmd anhebt, misst das neu (sichtbares Fenster, nicht ein
-verdecktes mit `innerWidth` 0). Und ein Klick auf einen Kapitellink lädt hier das ganze
-Dokument neu, er rendert nicht aus der Nutzlast.
+**Die Hydration scheitert hier, wie in ds-skript — berichtigt am 2026-11-15.** Bis dahin
+stand an dieser Stelle das Gegenteil, gemessen am 2026-11-03. Es war falsch, und zwar für
+jede Seite. Die Konsole zeigt **React #418 und #423**; #423 heißt, daß React die Wurzel
+vollständig neu rendert, und dabei wird `documentElement` mitsamt `<head>` **ersetzt**,
+nicht verändert. Nach dem ersten Frame ist deshalb weg, was die Schritte in `tools/`
+nachgetragen haben: `lang="de"` (steht dann auf `en`), jeder `ld+json`-Block, der
+Canonical, `og:url`/`og:site_name`/`og:type`/`og:locale`, `twitter:card`, der
+Markdown-`alternate`, die zwei Stylesheets `bildmasse` und `gliederungsplatz` und der
+Titelzusatz der Landingpage; `og:image` steht wieder wurzelrelativ. Zweifach nachgemessen:
+im sichtbaren Browserfenster und, unabhängig davon, an Googles eigenem Renderer (Rich
+Results Test, „View tested page") — dieser mit dem Befund „No items detected", obwohl
+`BreadcrumbList` ein Rich-Result-fähiger Typ ist und im Roh-HTML steht.
+
+Deshalb gibt es `tools/hydration.py` jetzt auch hier — aber **nicht** als Kopie des
+dortigen. ds-skripts Wächter beobachtet `document.head`; das wäre hier still wirkungslos,
+weil genau dieser Knoten ersetzt wird. Eine Sonde zur Parse-Zeit meldet `headSame: false`,
+`headConnected: false`, `deSame: false`. Der Wächter hier hängt an `document` und schlägt
+Kopf und Wurzelelement bei jedem Lauf frisch nach. Daran war auch der `lang`-Wächter in
+`head_meta.py` gestorben: `langFired: 0`, der Knoten wurde getauscht und nicht mutiert.
+
+**Wer das Theme oder mystmd anhebt, mißt das neu — am gerenderten DOM, nicht am
+Artefakt**: `tools/hydration.py --check-rendered _build/html` (braucht Playwright und
+läuft deshalb nicht in der CI). Daß alle Schritte bisher nur das Artefakt prüften, ist der
+Grund, aus dem der Verlust zwei Audits lang unentdeckt blieb; Messwerte in
+`devnotes/seo-audit-2026-11-15.md`. Und ein Klick auf einen Kapitellink lädt hier das
+ganze Dokument neu, er rendert nicht aus der Nutzlast.
 
 **Diese Seite hat zwei Adressen.** Die lesbare Namensraum-URL
 https://voelkel.pages.cs.uni-duesseldorf.de/eidl-skript/ antwortet mit 308 auf

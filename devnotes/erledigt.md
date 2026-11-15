@@ -383,6 +383,13 @@ Datierte Protokolle größerer Umbauten liegen daneben als `build-log-<datum>.md
   wo rechenbar (`thebe_gate.py` aus ds-en; die Audit-Empfehlung „`jupyter: true` entfernen“
   hätte es nicht abgestellt). Zwei Abweichungen von ds-skript, beide gemessen: Die Hydration
   gelingt hier, also kein `hydration.py`; und ein Kapitelklick lädt das ganze Dokument neu.
+  **Berichtigung vom 2026-11-15: der erste Teil war falsch.** Die Hydration scheitert hier
+  ebenfalls (React #418 *und* #423) und ersetzt `documentElement` mitsamt `<head>`; die
+  Messung vom 2026-11-03 hat das übersehen, weil sie das Artefakt ansah und nicht den
+  gerenderten DOM. `tools/hydration.py` gibt es seitdem auch hier, mit einem Observer auf
+  `document` statt auf `document.head`. Messwerte: `seo-audit-2026-11-15.md` §1. Die
+  CLS-Zahl zwei Zeilen höher (live 0,2546 gegen lokal 0) ist dieselbe Ursache: Das
+  `<style id="gliederungsplatz">` fiel bei der Hydration weg.
   Ersetzt die drei offenen Punkte `freshness.py`, `vendor_assets.py` und „Bildmaße und
   Gliederungsreservierung“ aus `TODO.md`.
 - [x] **Abbildungen hingen am System-Python** (2026-10-14). `make_figures.py` lief laut eigenem

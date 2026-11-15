@@ -48,6 +48,15 @@ genau diesem Attribut. Einmalig zuweisen genügt nicht, weil das Theme ein Clien
 ist und jeder Kapitelwechsel ohne Neuladen das Attribut erneut setzt. (In ds-skript am
 2026-10-16 im Browser nachgemessen; hier übernommen, weil es dasselbe book-theme ist.)
 
+**Dieser Wächter hält hier nicht, und das ist seit dem 2026-11-15 gemessen.** React
+ersetzt bei seinem Abbruch (#423) `documentElement` als Ganzes, statt es zu verändern --
+der Observer hängt danach an einem abgehängten Knoten und feuert nie (`langFired: 0`).
+Gegenprobe an der ausgelieferten Seite: `lang` von Hand auf `xx` gesetzt, nach 600 ms
+steht weiterhin `xx`. Das Attribut im Markup bleibt trotzdem richtig und wichtig -- es ist
+das, was jeder Leser ohne JavaScript und jeder Crawler ohne Rendering sieht --, und der
+Wächter bleibt stehen, weil er bis zur Hydration seine Arbeit tut. Den Teil *danach*
+übernimmt `tools/hydration.py`, das an `document` hängt und deshalb den Tausch übersteht.
+
 
 3. loading="lazy" auf den Abbildungen -- und die Preloads, die es aufgehoben hätten
 -----------------------------------------------------------------------------------

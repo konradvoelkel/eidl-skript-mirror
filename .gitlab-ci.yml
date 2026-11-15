@@ -396,6 +396,20 @@ pages:
     #    mit einer Deploy-Fehlermeldung. Dass das Stylesheet da ist, prueft in diesem Job
     #    schon check_css_assets.py (Befund Konrad, 2026-11-04).
     - python3 tools/no_css_dialog.py public
+    # **Letzter Schritt, der am Kopf schreibt, und das ist keine Vorliebe:** hydration.py
+    # liest die Tags und Knoten, die alle Schritte davor in den Kopf geschrieben haben,
+    # zurueck und baut daraus seinen Waechter. Laeuft noch einer danach, passt der
+    # Waechter nicht mehr zu seinem Kopf -- sein eigener --check faellt dann durch.
+    #
+    # Warum es ihn braucht: Der <head> gehoert zum React-Baum, Remix hydriert das ganze
+    # Dokument, und React ersetzt dabei `documentElement` mitsamt `<head>` (#418 und
+    # #423 in der Konsole jeder Seite). Alles Nachgetragene ist nach dem ersten Frame
+    # weg -- am 2026-11-15 im Browser und an Googles eigenem Renderer nachgemessen:
+    # `lang="en"` statt `de`, null ld+json, kein Canonical, keine og:*, kein
+    # Titelzusatz. Die Annahme vom 2026-11-03, die Hydration lasse den Kopf stehen, war
+    # falsch. Begruendung und Messwerte im Docstring des Skripts und in
+    # devnotes/seo-audit-2026-11-15.md.
+    - python3 tools/hydration.py "$SITE_ORIGIN$BASE_URL" public --base "$BASE_URL" --lang de
     # Und danach am fertigen Artefakt nachzaehlen statt dem Protokoll zu glauben: kein
     # localhost, je genau ein Canonical, Sitemap-Eintraege gleich gebaute Seiten, keine
     # relative Bild-URL. Ein fehlendes Stueck davon ist im Browser unsichtbar und nur
@@ -408,6 +422,12 @@ pages:
     - python3 tools/freshness.py --check public
     - python3 tools/trailing_slash.py --check public --base "$BASE_URL"
     - python3 tools/no_css_dialog.py public --check
+    # Der Waechter gegen seinen eigenen Kopf. Was diese Pruefung *nicht* kann, ist der
+    # Grund, aus dem der Befund zwei Audits lang unentdeckt blieb: sie sieht das
+    # Artefakt, nicht den gerenderten DOM. Dafuer gibt es --check-rendered, das
+    # Playwright braucht und deshalb nicht hier laeuft (Entscheidung 5: das Image
+    # installiert kein Python-Paket) -- von Hand nach jedem Theme- oder mystmd-Update.
+    - python3 tools/hydration.py --check public --base "$BASE_URL" --lang de
     # --- Auslieferung -------------------------------------------------------------------
     # GitLab Pages komprimiert nichts, liefert aber eine daneben liegende .br bzw. .gz aus,
     # wenn der Browser sie akzeptiert. Ohne diesen Schritt gingen am 2026-11-03 je Seite
