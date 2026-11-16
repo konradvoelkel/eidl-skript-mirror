@@ -24,10 +24,13 @@ Folgen, beide am 2026-11-16 gemessen:
   (`/builds/voelkel/eidl-skript/...` gegen `/home/konrad/...`).
 * Die meisten CI-Laeufe stimmen untereinander nicht ueberein, weil die Datei beim
   Checkout neu gestempelt wird. Gemessen an fuenf aufeinanderfolgenden Pipelines:
-  viermal gewechselt, einmal nicht (#185732 behielt den Namen von #185731, bei gleichem
-  Runner, gleichem Pfad und ohne frischen Klon -- woran das haengt, ist **nicht**
-  gemessen). Die mtime laesst sich aus dem Hash zurueckrechnen, weil Pfad und Groesse
-  bekannt sind; sie lag jedesmal 9 bis 18 Sekunden nach dem Start ihrer Pipeline.
+  viermal gewechselt, einmal nicht; ueber elf Pipelines sind es acht von zehn Uebergaengen.
+  Die mtime laesst sich aus dem Hash zurueckrechnen, weil Pfad und Groesse bekannt sind; sie
+  lag jedesmal 9 bis 18 Sekunden nach dem Start ihrer Pipeline. Namen kehren dabei wieder
+  (`f425a4d6` zweimal, 85 Minuten auseinander), es gibt also mehrere Arbeitskopien: beide
+  Jobs laufen unter dem Docker-Executor, `/builds/voelkel/eidl-skript` ist ein Cache-Volume
+  je Nebenlaeufigkeits-Slot. Die Messung dazu steht in `devnotes/seo-audit-2026-11-15.md`
+  §10; in welchem Slot ein Job landet, ist nicht gemessen.
 
 Die Quelle `images/social-card.png` ist dabei seit Commit a3da25d unveraendert
 (`md5 b6ec819d...`), und die gebaute Datei ist mit ihr bytegleich: MyST kodiert nicht
