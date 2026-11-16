@@ -322,6 +322,19 @@ Datierte Protokolle größerer Umbauten liegen daneben als `build-log-<datum>.md
 
 ### Infrastruktur
 
+- [x] **Stabiler Dateiname für die Vorschaukarte**, 2026-11-16, mit
+  `tools/stable_card.py` im `pages`-Job (nach `llms_txt.py`, vor `image_dims.py`). MyST
+  benennt kopierte Dateien in `hashAndCopyStaticFile` nach `md5(absoluter Pfad + mtime +
+  size)`, nicht nach dem Inhalt — nachgelesen im ausgelieferten `myst.cjs` und mit `node`
+  nachgerechnet, bis auf den Hash genau. Der Checkout stempelt die Datei bei den meisten
+  Läufen neu, also wechselte die URL (gemessen: bei fünf aufeinanderfolgenden Pipelines
+  viermal), und die vorige antwortete 404. Getauscht wird nur der **Dateiname**, nicht die
+  URL, deshalb bleibt absolut absolut und der Basispfad unberührt; die Datei liegt unter
+  `build/`, weil `hydration.py` nur dort wurzelrelative Kartenangaben absolut macht. Die
+  gehashte Datei bleibt liegen (42 kB), damit auch die URL dieses Laufs weiter 200 gibt.
+  Nachgemessen: volle Kette über eine Kopie von `_build/html` (188 Verweise in 35 Dateien,
+  alle Prüfungen grün) und im Browser 4 von 4 Seiten mit stabilem, absolutem `og:image`
+  nach der Hydration.
 - [x] **Bing Webmaster Tools**, 2026-11-03, von Konrad in seinem Konto eingerichtet.
   Im Repo liegt dafür keine Bestätigungsdatei und kein `msvalidate`-Tag;
   wer die Bestätigung über eine Datei umstellen will, legt sie unter `_site/` ab und kopiert sie

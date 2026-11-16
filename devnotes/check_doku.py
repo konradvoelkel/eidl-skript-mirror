@@ -49,6 +49,7 @@ DOKU = ("CLAUDE.md", "devnotes/TODO.md", "devnotes/README.md")
 PFAD_AUSNAHMEN = {
     "public/",
     "public/eidl-skript.pdf",
+    "public/build/social-card.png",
     "part-exercises/",
     "exam2026-eidl-exam-1/2.tex",
     "_tex/plain_latex-hhu/",

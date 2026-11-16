@@ -372,6 +372,15 @@ pages:
     # <link rel="alternate" type="text/markdown">. Port aus ds-skript; Google ignoriert
     # llms.txt erklaertermassen, der Nutzen liegt bei den .md-Dateien. Vor precompress.
     - python3 tools/llms_txt.py "$SITE_ORIGIN$BASE_URL" public
+    # Die Vorschaukarte unter einen Namen, der nicht bei jedem Lauf wechselt. MyST hasht
+    # kopierte Dateien nach Pfad + mtime + Groesse statt nach Inhalt, und der Checkout
+    # stempelt die Datei bei den meisten Laeufen neu -- die URL des vorigen Laufs
+    # antwortet dann 404. Hier und nicht frueher: head_meta.py *bestimmt* die Karte erst
+    # aus dem og:image der Landingpage und besteht dabei auf /build/ im Pfad,
+    # inject_jsonld.py und llms_txt.py schreiben den Namen weiter. Und nicht spaeter:
+    # image_dims.py muss die Datei finden, und hydration.py soll den stabilen Namen
+    # einfrieren. Begruendung und Messungen im Skript.
+    - python3 tools/stable_card.py public
     # --- Layoutsprung (CLS) ---------------------------------------------------------
     # Beides Ports aus ds-skript (2026-10-29), Begruendung und Messungen in den Skripten.
     # 4. Die echten Pixelmasse an jede Abbildung, als width/height ins Markup und als ein
@@ -422,6 +431,10 @@ pages:
     - python3 tools/freshness.py --check public
     - python3 tools/trailing_slash.py --check public --base "$BASE_URL"
     - python3 tools/no_css_dialog.py public --check
+    # Kein Verweis zeigt mehr auf einen gehashten Kartennamen. Was diese Pruefung nicht
+    # kann, ist die Eigenschaft, um die es geht: dass der Name ueber zwei Laeufe hinweg
+    # derselbe ist. Das zeigt erst der naechste Deploy.
+    - python3 tools/stable_card.py public --check
     # Der Waechter gegen seinen eigenen Kopf. Was diese Pruefung *nicht* kann, ist der
     # Grund, aus dem der Befund zwei Audits lang unentdeckt blieb: sie sieht das
     # Artefakt, nicht den gerenderten DOM. Dafuer gibt es --check-rendered, das
