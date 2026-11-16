@@ -126,7 +126,7 @@ der eine Zeile anders bricht — es ist der *Satz*, nicht der Inhalt. Die Ursach
 2026-10-15 gemessen worden, und sie ist nicht die, die hier vom 2026-09-29 bis dahin stand:
 
 * **Diese Maschine benutzt nicht Debians texlive.** `xelatex` kommt aus einer eigenen
-  TeX-Live-2024-Installation unter `/usr/local/texlive/2024`, und die ist seit dem
+  TeX-Live-2024-Installation unter `/usr/share/texlive/2024`, und die ist seit dem
   2024-06-08 unangetastet; `texlive-latex-extra` steht in `dpkg` auf `rc`. Der Satz
   „diese Maschine hat, was Debian gerade liefert“ war hier nie richtig.
 * **minted v2 gegen minted v3.** Lokal lädt der Lauf `minted 2023/12/18 v2.9`, das

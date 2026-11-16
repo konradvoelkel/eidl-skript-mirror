@@ -334,7 +334,10 @@ Datierte Protokolle größerer Umbauten liegen daneben als `build-log-<datum>.md
   gehashte Datei bleibt liegen (42 kB), damit auch die URL dieses Laufs weiter 200 gibt.
   Nachgemessen: volle Kette über eine Kopie von `_build/html` (188 Verweise in 35 Dateien,
   alle Prüfungen grün) und im Browser 4 von 4 Seiten mit stabilem, absolutem `og:image`
-  nach der Hydration.
+  nach der Hydration. Der erste Deploy damit (#185761) stempelte selbst neu — der gehashte
+  Name war `f425a4d6…`, die der zwei Vorläufe antworten jetzt 404 —, der Tausch war also
+  kein Leerlauf. Daß der *stabile* Name über zwei Läufe hält, zeigt erst der nächste
+  Deploy; `--check` kann es grundsätzlich nicht sehen.
 - [x] **Bing Webmaster Tools**, 2026-11-03, von Konrad in seinem Konto eingerichtet.
   Im Repo liegt dafür keine Bestätigungsdatei und kein `msvalidate`-Tag;
   wer die Bestätigung über eine Datei umstellen will, legt sie unter `_site/` ab und kopiert sie
