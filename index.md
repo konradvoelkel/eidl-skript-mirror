@@ -6,6 +6,7 @@ Dieses Skript begleitet die Vorlesung mit Übung „Einführung in Deep Learning
 
 Vorausgesetzt wird, was das Modul Data Science vermittelt: Python mit NumPy und die Idee der linearen Regression. Die nötige lineare Algebra und Analysis stehen in zwei Hintergrundkapiteln, die Stochastik im [Data-Science-Skript](https://voelkel.pages.cs.uni-duesseldorf.de/ds-skript/). Lernziele, Aufzeichnungen und Literatur stehen unter [Über dieses Skript](README.md). Fast jedes Kapitel endet mit einer kurzen Übung samt Antwortprobe; die Übungsblätter gibt es in ILIAS, die bereits ausgegebenen auch [hier](uebungsblaetter.md).
 
+{button}`Hier anfangen: Was ist Deep Learning? <part-grundlagen/01-was-ist-deep-learning.md>`
 {button}`Das ganze Skript als PDF </eidl-skript.pdf>`
 
 :::{note} Hinweis

@@ -345,7 +345,9 @@ dort `SEO-NOTES.md`, und `~/Sciebo/hhu/ds2026/ds-skript`).
 Wichtig zur Ordnerstruktur:
 
 * `_site/` ist **Quellcode** (eigenes CSS, Navbar-Fragmente, die Fußzeile mit Impressum und
-  Datenschutz der HHU (`footer.md`), unter `_site/fonts/` die zwei
+  Datenschutz der HHU (`footer.md`), die Wegweiser unter dem Inhaltsverzeichnis
+  (`sidebar_footer.md`: zum Anfang, Über dieses Skript, Glossar und Übungsblätter — auf
+  dem Handy stehen sie im aufgeklappten Menü), unter `_site/fonts/` die zwei
   Schriften, unter `_site/vendor/` das mitgelieferte Site-Template und die drei
   Theme-Stylesheets samt Herkunftsnachweis in `PROVENANCE.txt`).
 * `_build/`, `exports/` und `public/` sind **Artefakte** — nie von Hand bearbeiten,
@@ -536,7 +538,11 @@ dieselbe Form haben: **Es sieht im HTML unauffällig aus und ist trotzdem falsch
   die Quelle bewegt: `devnotes/patch_myst_tex.py` (Abschnitt 3, die `\newtheorem`-Namen im
   PDF) und `_site/vendor/install_template.py` (der Kastenkopf im Template, im Bündel für
   den Server *und* in dem für den Browser – sonst schreibt die Hydration das Englische
-  zurück). Wer die `.venv` neu aufsetzt oder das Template neu entpackt, bekommt beides von
+  zurück). **Wer einen dieser Texte ändert, löscht vorher
+  `_build/templates/site/myst/book-theme`**: Das Skript hält sich an seinem eigenen
+  Prüftext für erledigt, und das zwischengespeicherte Template trägt noch den alten
+  deutschen Text – es meldet dann „Bedientext nicht gefunden – Template bewegt?“,
+  obwohl sich nichts bewegt hat. In der CI wird ohnehin frisch entpackt. Wer die `.venv` neu aufsetzt oder das Template neu entpackt, bekommt beides von
   den Skripten wieder; wer sie überspringt, hat „Example“ zurück. Gegenprobe:
   `pdftotext exports/eidl-skript.pdf - | grep -cE '^(Example|Theorem) [0-9]'` muss 0 sein.
   Dasselbe Skript übersetzt seit dem 2026-11-02 die **Bedienung** des Templates (Suche,

@@ -332,7 +332,13 @@ article :is(h1, h2, h3, h4, h5, h6) {
  * und Schrift, nicht als Flaeche -- ein Buch wirbt nicht, es weist hin. Eine
  * Vertrauenszeile darueber gab es am 2026-11-04 kurz; Konrad wollte sie nicht. */
 
-main a.link.button {
+/* **Beide Knopfarten**, nicht nur `link button`: MyST schreibt an ein `{button}` mit
+ * externem oder absolutem Ziel `class="link button"`, an eines mit einem Kapitel als Ziel
+ * dagegen `class="hover-link button"` (die Klasse der Querverweise mit Vorschau). Der
+ * Einstiegsknopf „Hier anfangen" vom 2026-11-16 ist der zweite Fall und sah deshalb
+ * zuerst aus wie das Gegenteil des hier Gewollten: blaue Flaeche, weisse Schrift, neben
+ * dem leisen PDF-Knopf. Gemessen, bevor es auffiel: Grund `rgb(59,130,246)`, Text weiss. */
+main a.button {
   display: inline-flex;
   align-items: baseline;
   gap: 0.5em;
@@ -347,7 +353,14 @@ main a.link.button {
   font-weight: 600;
   text-decoration: none !important;
 }
-main a.link.button:hover, main a.link.button:focus-visible {
+main a.button:hover, main a.button:focus-visible {
   background: var(--brand) !important;
   color: #fff !important;
+}
+/* Im Dunkelmodus ist `--brand` das helle Violett (#b39ef2); weisse Schrift darauf waere
+ * 1,9:1. Dort traegt die gefuellte Flaeche deshalb die Schriftfarbe der Seite: #1c1917
+ * auf #b39ef2 sind 7,2:1. Gilt nur fuer den Hover-Zustand, die Ruhelage ist in beiden
+ * Modi der leise Rahmen. */
+.dark main a.button:hover, .dark main a.button:focus-visible {
+  color: #1c1917 !important;
 }

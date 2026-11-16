@@ -321,6 +321,33 @@ Datierte Protokolle größerer Umbauten liegen daneben als `build-log-<datum>.md
   samt Einladungslink, das Forum-Objekt ist gelöscht (der Block „Foren“ verschwand mit ihm).
 
 ### Infrastruktur
+- [x] **Wegweisung für den kalt Ankommenden**, 2026-11-16, §4.2–4.5 des SEO-Audits.
+  Vier Punkte, drei davon neu: (a) Der Kopf über der Seiten-Outline heißt nicht mehr
+  „Inhalt", sondern **„Auf dieser Seite"** — mobil stand die Abschnittsliste eines
+  Kapitels genau dort, wo das Inhaltsverzeichnis des Buchs wäre (die Seitenleiste ist
+  unter `lg` ausgeblendet), und hieß „INHALT". Der Text kommt nicht aus dem CSS, sondern
+  aus dem Theme-Bündel; `_site/vendor/install_template.py` übersetzt ihn ohnehin. **Falle
+  dabei:** das Skript hält sich an seinem Prüftext für erledigt, das zwischengespeicherte
+  Template trug noch „Inhalt" — ohne einmal `_build/templates/site/myst/book-theme` zu
+  löschen passiert nichts, und es meldet „Bedientext nicht gefunden". (b)
+  `_site/sidebar_footer.md` war seit dem 2026-09-17 leer und trägt jetzt drei Zeilen:
+  „Zum Anfang des Skripts", „Über dieses Skript", „Glossar · Übungsblätter"; auf dem
+  Handy stehen sie im aufgeklappten Menü, `tools/trailing_slash.py` fasst sie mit an (63
+  `href` je Lauf). Kein PDF-Link, das hängt schon im Herunterladen-Menü jeder Seite.
+  (c) Auf der Startseite ein zweiter Knopf **„Hier anfangen: Was ist Deep Learning?"**
+  vor dem PDF-Knopf. (d) „Übungsblätter" in der Anhang-Liste war schon am 2026-11-15
+  erledigt (`9ae65b3`), nachgesehen statt abgehakt.
+
+  **Der neue Knopf hat eine Unstimmigkeit sichtbar gemacht:** MyST schreibt an ein
+  `{button}` mit Kapitel als Ziel `class="hover-link button"`, an eines mit externem oder
+  absolutem Ziel `class="link button"` — unsere Knopfregel traf nur die zweite Form, der
+  neue Knopf kam also blau gefüllt heraus, neben dem bewusst leisen PDF-Knopf. Die Regel
+  heißt jetzt `main a.button`. Im selben Zug ein Fehler behoben, der seit dem 2026-11-04
+  im PDF-Knopf steckte: der Hover-Zustand füllt mit `--brand`, und das ist im
+  Dunkelmodus das helle Violett — weiße Schrift darauf sind 1,9:1. Jetzt dunkle Schrift,
+  7,57:1. Gemessen: beide Knöpfe 5,74:1 hell und 7,57:1 dunkel, in Ruhe wie im Hover.
+  HTML ohne Warnungen, PDF 148 Seiten, 0 LaTeX-Fehler, 0 fehlende Glyphen.
+
 - [x] **Drei unbenutzte Stylesheets laden nicht mehr mit**, 2026-11-16, §7.3 des
   SEO-Audits. Das Theme legte in jede der 33 Seiten `thebe-core.css` (87 kB roh,
   12,5 kB brotli), `font-awesome.css` (37/5,9) und `mpl_widget.css` (911 B) — alle drei

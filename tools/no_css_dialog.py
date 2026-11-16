@@ -36,7 +36,15 @@ DIALOG = re.compile(r'<dialog\s+id="myst-no-css".*?</dialog>', re.S)
 
 
 def seiten(wurzel):
-    return sorted(pathlib.Path(wurzel).rglob("*.html"))
+    """Die Seiten des Buchs, also jede `index.html`.
+
+    Nicht `*.html`: Im Artefakt des `pages`-Jobs liegt auch die Google-Verifikationsdatei
+    (`google<token>.html`, eine Zeile Text), und die hat keinen Kasten. Die Meldung sagte
+    deshalb „aus 33 von 34 Seiten entfernt" und sah nach einer übersehenen Seite aus.
+    Dieselbe Zählung wie in `head_meta.py`, `publish_urls.py` und `dead_css.py`
+    (dort am 2026-11-16 die Ursache eines abgebrochenen Deploys).
+    """
+    return sorted(pathlib.Path(wurzel).rglob("index.html"))
 
 
 def main():

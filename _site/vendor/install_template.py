@@ -102,7 +102,12 @@ BEDIENUNG = [
     (r'"Open Contents"', '"Inhaltsverzeichnis öffnen"', '"Inhaltsverzeichnis öffnen"'),
     (r'preamble:"Content License: "', 'preamble:"Lizenz: "', 'preamble:"Lizenz: "'),
     (r'"table content"', '"Tabelleninhalt"', '"Tabelleninhalt"'),
-    (r'="Contents",top:', '="Inhalt",top:', '="Inhalt",top:'),
+    # Der Kopf ueber der Seiten-Outline. **Nicht "Inhalt"**: Das ist die Gliederung
+    # *dieser Seite*, nicht das Inhaltsverzeichnis des Buchs -- und mobil steht sie
+    # genau dort, wo das Inhaltsverzeichnis waere (die Seitenleiste ist unter `lg`
+    # ausgeblendet). Wer dort "INHALT" liest, haelt die Abschnittsliste eines Kapitels
+    # fuer das Buch. Befund im SEO-Audit vom 2026-11-15, §4.
+    (r'="Contents",top:', '="Auf dieser Seite",top:', '="Auf dieser Seite",top:'),
     (r'"Previous: ":"Next: "', '"Zurück: ":"Weiter: "', '"Zurück: ":"Weiter: "'),
     (r'`Link to this \$\{(\w)\}`', '`Link zu dieser Stelle`', "`Link zu dieser Stelle`"),
     (r'"aria-label":"Close"', '"aria-label":"Schließen"', '"aria-label":"Schließen"'),
