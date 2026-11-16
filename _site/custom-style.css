@@ -170,6 +170,26 @@ code, kbd, samp, pre, .math-display {
   font-family: 'JetBrains Mono', 'JetBrains Mono Fallback', monospace !important;
 }
 
+/* Die Codemasse, die bis zum 2026-11-16 aus `thebe-core.css` kamen. Dieses Blatt des
+   Themes ist fuer Notebook-Ausgaben da, die dieses Buch nicht hat, und laedt deshalb
+   nicht mehr mit (`tools/dead_css.py`) -- es trug aber die eine Regel
+   `tt,code,kbd,samp,pre{font-family:var(--jp-code-font-family);font-size:13px;line-height:1.3077}`,
+   und von der Zeilenhoehe hing jeder Codeblock des Buchs ab: unsere Regel darueber setzt
+   nur die Schrift. Gemessen, bevor das Blatt wegfiel, ueber alle 33 Seiten: ohne die
+   Regel erben Codebloecke die Zeilenhoehe des Fliesstexts und werden lockerer -- das
+   Kapitel „Autograd und Berechnungsgraph" wurde 219 px laenger, „Autoencoder" 144 px,
+   bei 3.620 bzw. 1.514 verschobenen Elementen (Rauschboden derselben Messung: 0).
+
+   Die Werte sind deshalb genau die alten, als Zahl und nicht als `var()`: der Wechsel
+   sollte drei rendernde Anfragen kosten und nichts am Aussehen. Ob 13 px zu einem
+   16-px-Fliesstext passen, ist eine Gestaltungsfrage -- hier nicht entschieden, sondern
+   unveraendert gelassen. `.math-display` gehoert **nicht** in die Liste (thebe-core hatte
+   es auch nicht): 13 px wuerden abgesetzte Formeln zusammenstauchen. */
+tt, code, kbd, samp, pre {
+  font-size: 13px;
+  line-height: 1.3077;
+}
+
 /* Ueberschriften bleiben beim Fast-Schwarz des Themes: das Theme setzt sie ueber
    Tailwind-Klassen, ein Farbwunsch hier braeuchte !important und muesste den Dunkelmodus
    gleich mitbauen. Die Marke zeigt sich in den Akzenten (Links, Code, Notiz-Kasten),

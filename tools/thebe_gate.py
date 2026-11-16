@@ -19,7 +19,11 @@ render, and this site configures no kernel server, so nothing can be run anywher
 
 The audit's prescription was to strip a `<script>` tag. **There is no such tag.** Measured
 on all thirty built pages before writing this: the only thebe reference in the markup is a
-stylesheet (dropped by `head_meta.py`, its section 5). The script is appended to
+stylesheet -- which nothing dropped. The parenthesis here claimed `head_meta.py` removed it
+in its section 5; it never did, and `head_meta.py` has no such section. Corrected on
+2026-11-16, when the stylesheet finally went: `tools/dead_css.py` takes its `<link>` out of
+every page, together with `font-awesome.css` and `mpl_widget.css`, after measuring what the
+three of them still do to the rendered page. The script is appended to
 `document.head` at runtime, by thebe-react's `ThebeBundleLoaderProvider`, from an effect
 in the theme's own `ExecuteScopeProvider` that reads
 
@@ -41,10 +45,17 @@ One expression, in the one client chunk that contains that effect:
 `state.pages[slug].computable` is **MyST's own flag**, not a new notion invented here:
 the theme computes it as `computables.length > 0 || kind === Notebook` when the page
 enters the execute scope, where `computables` are the figure and embed nodes that have
-`output` children. It is true on the eighteen notebook pages and false on the twelve
-Markdown chapters, which is exactly the partition `head_meta.py` finds in the markup from
-the `myst-jp` class prefix -- two independent routes to the same twelve pages, which is
-the reason to trust either.
+`output` children.
+
+The sentence that stood here -- true on eighteen notebook pages, false on twelve Markdown
+chapters, "exactly the partition `head_meta.py` finds from the `myst-jp` class prefix" --
+is wrong in this repository and was never measured in it: `head_meta.py` contains no
+`myst-jp` route, and this book has no notebook in its table of contents. It came over with
+the port from the sibling book, which does have both. **Measured here on 2026-11-16**, over
+all 33 built pages: no output node, no page of kind Notebook, no `myst-jp` class, no
+`vnd.jupyter.widget-view` -- every marker zero. So the flag is false everywhere, and this
+gate holds thebe-core back on *every* page, not on twelve of thirty. Cross-checked in the
+browser on eight pages of the delivered site: zero requests for `thebe-core.min.js`.
 
 The pages that do have output are untouched: there the effect still fires on mount, and
 the two output renderers that call `load()` themselves when they are asked to render a
@@ -85,7 +96,15 @@ Verifying it
 Serve the built directory and load a Markdown chapter and a notebook chapter with the
 network panel open: `thebe-core.min.js` must be absent on the first and present on the
 second, and the notebook figures must still render. Measured 2026-10-17 on this build:
-absent on all twelve Markdown chapters, present on all eighteen notebook pages.
+absent on all twelve Markdown chapters, present on all eighteen notebook pages -- numbers
+that belong to the book this was ported from, see above.
+
+What is measurable here is the first half only, because the second half has no page to run
+on. On 2026-11-16, eight pages of the delivered site were loaded in Chromium with the
+request log on: zero requests for `thebe-core.min.js`, on every one of them. The day a
+chapter does get an executed cell, this is the thing to measure again -- and
+`tools/dead_css.py` will fail the build until someone does, because the stylesheet it
+removes is the one those pages need.
 """
 
 from __future__ import annotations

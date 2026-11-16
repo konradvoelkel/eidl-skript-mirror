@@ -269,7 +269,8 @@ im `pages`-Job und brauchen **kein einziges Python-Paket**.
 | `tools/publish_urls.py` | Echte Adresse in Sitemap und `robots.txt`, jede `<loc>` mit Schrägstrich, `og:image` absolut, ein Canonical je Seite; `--check` prüft das am Artefakt nach |
 | `tools/head_meta.py` | `og:url`, `og:site_name`, `og:type`, `og:locale`, `twitter:card`; den `<title>` **der Landingpage** um „ — Vorlesungsskript, HHU Düsseldorf“ (ohne Jahreszahl, das Skript ist semesterunabhängig; `h1` und `og:title` bleiben der Werktitel); `lang="de"` samt Wächter gegen die Hydration; zu kleine Abbildungen als Vorschaukarte ersetzen; Abbildungen unter der Falz verzögert laden |
 | `tools/inject_jsonld.py` | JSON-LD: ein Buchknoten samt den zwei anderen Skripten desselben Autors auf der Landingpage, je ein Kapitelknoten mit Brotkrume auf den 29 übrigen Seiten. Daten in `tools/structured-data.json` und `tools/sibling-works.json` |
-| `tools/vendor_assets.py`, `tools/check_css_assets.py` | Die drei Stylesheets des Themes (KaTeX, Font Awesome, jupyter-matplotlib) aus `_site/vendor/` statt von zwei CDN, in HTML **und** JS; die Schriften aus `_site/fonts/` statt von Google. Der Prüfer löst jeden `url()` der eingebundenen Stylesheets auf |
+| `tools/dead_css.py` | Nimmt die drei Stylesheets heraus, die das Theme in jede Seite legt und die dieses Buch nicht benutzen kann: `thebe-core.css` (87 kB), `font-awesome.css`, `mpl_widget.css` — alle drei für Jupyter-Ausgaben, und keine der 33 Seiten hat eine. Im Markup **und** im `links()`-Array des Wurzel-Chunks. **Vor `vendor_assets.py`.** Scheitert, sobald eine Seite ausführbar wird |
+| `tools/vendor_assets.py`, `tools/check_css_assets.py` | Das KaTeX-Stylesheet des Themes aus `_site/vendor/` statt vom CDN, in HTML **und** JS, samt seinen zwanzig Schriftdateien; die Schriften aus `_site/fonts/` statt von Google. Der Prüfer löst jeden `url()` der eingebundenen Stylesheets auf. Font Awesome und jupyter-matplotlib lagen hier bis zum 2026-11-16, siehe `dead_css.py` |
 | `tools/thebe_gate.py` | Lädt `thebe-core` (1,3 MB) nur auf Seiten mit ausführbarem Code, also hier auf keiner. Patcht einen Ausdruck im Client-Bündel und scheitert laut, wenn ein mystmd-Update ihn verschiebt |
 | `tools/freshness.py` | `article:modified_time` je Seite und `<lastmod>` je Sitemap-Eintrag, aus `git log` der Quelldatei |
 | `tools/llms_txt.py` | Der Quelltext jeder Seite als Markdown (`/<slug>.md` und `/<slug>/index.md`, relative Kapitelverweise auf die Seitenadresse umgeschrieben), `<link rel="alternate" type="text/markdown">` im Kopf, `/llms.txt` und `/llms-full.txt`. Google ignoriert `llms.txt`; der Nutzen liegt bei den `.md`-Dateien |
@@ -288,7 +289,8 @@ denen jemand sucht („Kreuzentropie“, „LSTM“), ohne Werbesprache. Ein neu
 eines, sonst meldet sich `check_doku.py`.
 
 **Die Reihenfolge ist nicht beliebig**, und sie steht samt Begründung im `pages`-Job:
-`vendor_assets.py` vor `thebe_gate.py` (beide ändern dieselben Bündel), `publish_urls.py`
+`dead_css.py` vor `vendor_assets.py` (dessen Nachbedingung ist, daß jedes vendorierte
+Blatt auch eingebunden ist), `vendor_assets.py` vor `thebe_gate.py` (beide ändern dieselben Bündel), `publish_urls.py`
 vor `head_meta.py` (og:url bekommt dieselbe URL wie der Canonical), `head_meta.py` vor
 `inject_jsonld.py` (liest Karten-URL und Kapiteltitel aus der Seite zurück) und vor
 `image_dims.py` (lazy und Maße zusammen), die Prüfläufe danach, und `precompress.py`

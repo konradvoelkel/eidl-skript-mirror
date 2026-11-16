@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Die drei fremden Stylesheets des Themes von dieser Herkunft ausliefern, nicht von zwei CDN.
+"""Das fremde Stylesheet des Themes von dieser Herkunft ausliefern, nicht vom CDN.
 
     python3 tools/vendor_assets.py <html-dir> [--base BASE_URL]
 
@@ -7,7 +7,14 @@ Jede Seite holte drei rendernde Stylesheets von `cdn.jsdelivr.net` und
 `cdnjs.cloudflare.com`, und jede Seite mit Mathematik dazu bis zu zwanzig
 Schriftdateien von jsdelivr -- die zieht das KaTeX-Stylesheet relativ zu seiner *eigenen*
 URL, sie stehen also in keinem HTML und sind von aussen nur im Netzwerkprotokoll zu
-sehen. Das ist ein Dritter, der die IP-Adresse jedes Lesers eines Buchs mit einem
+sehen.
+
+**Seit dem 2026-11-16 ist es nur noch eines.** Von den drei brauchte dieses Buch zwei
+ueberhaupt nicht: `font-awesome.css` und `mpl_widget.css` gehoeren zu Jupyter-Ausgaben,
+die hier auf keiner Seite stehen. Sie werden jetzt gar nicht erst eingebunden
+(`tools/dead_css.py`, laeuft **vor** diesem Schritt) und liegen deshalb auch nicht mehr
+in `_site/vendor/`. Hier bleibt KaTeX, und das ist der Fall, um den es die ganze Zeit
+ging: zwanzig Schriftdateien je Formelseite. Das ist ein Dritter, der die IP-Adresse jedes Lesers eines Buchs mit einem
 Datenschutzkapitel haelt -- dasselbe Argument, das `_site/fonts/PROVENANCE.txt` ueber den
 Google-Fonts-`@import` macht.
 
@@ -20,11 +27,12 @@ liegen unveraendert in `_site/vendor/`, mit Hashes und Lizenzen.
 Der Teil, der das mehr als ein sed macht
 ----------------------------------------
 
-**Die URLs stehen auch im Client-JavaScript, nicht nur im HTML.** Remix rendert die
-`<head>`-Links aus Route-Modulen, das Bundle traegt also dieselben drei URLs. Nur das
+**Die URL steht auch im Client-JavaScript, nicht nur im HTML.** Remix rendert die
+`<head>`-Links aus Route-Modulen, das Bundle traegt also dieselbe URL. Nur das
 servergerenderte Markup umzuschreiben hiesse: die Seite laedt richtig und fuegt bei der
-Hydration die CDN-Links wieder hinzu -- holt also beide Kopien, was schlechter ist als
-vorher und unsichtbar, wenn man nicht ins Netzwerkprotokoll sieht.
+Hydration den CDN-Link wieder hinzu -- holt also beide Kopien, was schlechter ist als
+vorher und unsichtbar, wenn man nicht ins Netzwerkprotokoll sieht. (Aus genau diesem
+Grund fasst `tools/dead_css.py` dasselbe Array an.)
 
 Deshalb deckt die Umschreibung `.html` und `.js` gleichermassen ab, und der Waechter
 greppt das ganze Artefakt, nicht nur das HTML.
@@ -56,13 +64,15 @@ laufen zu lassen, hat per Definition um einen Netzabruf gebeten.
 Die zutreffende Aussage ist also eng, und sie ist eng zu formulieren: **Das Buch zu lesen
 kontaktiert keinen Dritten. Den Code darin laufen zu lassen schon.**
 
-Der Waechter greppt deshalb die drei Stylesheet-URLs und **nicht die Hostnamen** -- ein
+Der Waechter greppt deshalb die Stylesheet-URLs und **nicht die Hostnamen** -- ein
 Waechter, der bei jeder Erwaehnung von jsdelivr anschlaegt, waere nur zu befriedigen,
 indem man thebe loescht.
 
-(`vendor/PROVENANCE.txt` zitiert alle drei URLs ebenfalls, als die Datei, die sie
-erklaert. Sie wird mit den Lizenzen veroeffentlicht, wie die OFL es fuer die
-Font-Awesome-Schrift verlangt, und nicht umgeschrieben: nur `.html` und `.js`.)
+(`_site/vendor/PROVENANCE.txt` zitiert die URLs ebenfalls, als die Datei, die sie
+erklaert, und wird nicht umgeschrieben: nur `.html` und `.js`. Veroeffentlicht wird sie
+**nicht** -- kopiert werden nur die Unterbaeume, die ASSETS nennt, und darin liegt je
+eine `LICENSE`. Bis zum 2026-11-16 stand hier das Gegenteil; die Lizenz reist mit der
+Datei, die Herkunftsnotiz bleibt im Repository.)
 
 
 `integrity` und `crossorigin` fallen weg
@@ -95,17 +105,12 @@ ASSETS = [
         "0.15.2",
         "vendor/katex/katex.min.css",
     ),
-    (
-        r"https://cdnjs\.cloudflare\.com/ajax/libs/font-awesome/([\d.]+)/css/font-awesome\.css",
-        "4.7.0",
-        "vendor/font-awesome/css/font-awesome.css",
-    ),
-    (
-        r"https://cdn\.jsdelivr\.net/npm/jupyter-matplotlib@([\d.]+)/css/mpl_widget\.css",
-        "0.11.3",
-        "vendor/jupyter-matplotlib/mpl_widget.css",
-    ),
 ]
+# Hier standen bis zum 2026-11-16 Font Awesome 4.7.0 und jupyter-matplotlib 0.11.3. Sie
+# sind nicht vendoriert worden, weil sie nicht mehr eingebunden werden
+# (`tools/dead_css.py`): Beide gehoeren zu Jupyter-Ausgaben, und dieses Buch hat keine.
+# Kommen sie zurueck, kommen sie aus der Historie -- mit ihren Pruefsummen in
+# `_site/vendor/PROVENANCE.txt`.
 
 VENDOR_SRC = pathlib.Path("_site/vendor")
 

@@ -3,8 +3,15 @@ eipy-skript und ds-skript (sha256 unten gegengeprueft). Der Text darunter ist de
 ds-skript und erzaehlt dessen Geschichte -- "dieses Buch" und das Datenschutzkapitel
 sind dort gemeint; fuer eidl gelten dieselben Gruende, ohne das Kapitel.
 
-Die drei fremden Stylesheets, die das MyST-Book-Theme laedt, und warum sie hier liegen
-======================================================================================
+Die fremden Stylesheets, die das MyST-Book-Theme laedt, und warum eines hier liegt
+==================================================================================
+
+**Stand 2026-11-16: hier liegt nur noch KaTeX.** Font Awesome und jupyter-matplotlib sind
+entfernt, weil dieses Buch sie nicht mehr einbindet -- `tools/dead_css.py` nimmt die
+`<link>`-Tags heraus, bevor `tools/vendor_assets.py` ueberhaupt etwas umschreibt. Ihre
+Hashes bleiben unten stehen, damit eine Rueckkehr pruefbar ist; der Abschnitt "Warum Font
+Awesome ueberhaupt hier ist" erzaehlt, warum es anderthalb Monate hier lag. Der Text
+darunter ist der Stand von 2026-10-16 und beschreibt drei Blaetter.
 
 Bis zum 2026-10-16 holte jede Seite dieser Ausgabe drei Stylesheets von zwei CDN:
 
@@ -52,12 +59,12 @@ katex/katex.min.css
     <link> veroeffentlicht hat. Die vendorierte Kopie ist damit nachweislich genau
     die Bytes, die die Seite schon vorher geladen hat.
 
-font-awesome/css/font-awesome.css
+font-awesome/css/font-awesome.css   (am 2026-11-16 entfernt)
   37.414 Bytes
   sha256 36e0a7e08bee65774168528938072c536437669c1b7458ac77976ec788e4439c
   von https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css
 
-jupyter-matplotlib/mpl_widget.css
+jupyter-matplotlib/mpl_widget.css   (am 2026-11-16 entfernt)
   911 Bytes
   sha256 e14a545216f676853ee3ff11b2d906f06620f62c7f700a5092fa65ccb1016abb
   von https://cdn.jsdelivr.net/npm/jupyter-matplotlib@0.11.3/css/mpl_widget.css
@@ -72,7 +79,7 @@ katex/fonts/*.woff2
   herunterlaedt, haengt von der Mathematik der Seite ab: auf einem Kapitel ohne
   Formeln keine.
 
-font-awesome/fonts/fontawesome-webfont.woff2
+font-awesome/fonts/fontawesome-webfont.woff2   (am 2026-11-16 entfernt)
   77.160 Bytes
   sha256 2adefcbc041e7d18fcf2d417879dc5a09997aa64d675b7a3c4b6ce33da13f3fe
   von https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/fonts/fontawesome-webfont.woff2
@@ -82,11 +89,12 @@ Lizenzen
 --------
 
     katex/LICENSE               MIT, Khan Academy und weitere Beitragende
-    font-awesome/LICENSE        Schrift SIL OFL 1.1, CSS MIT, Dave Gandy
-    jupyter-matplotlib/LICENSE  BSD 3-clause, Matplotlib Contributors
+    font-awesome/LICENSE        Schrift SIL OFL 1.1, CSS MIT, Dave Gandy   (entfernt)
+    jupyter-matplotlib/LICENSE  BSD 3-clause, Matplotlib Contributors      (entfernt)
 
 Alle drei erlauben die Weitergabe. Die OFL verlangt, dass ihre Lizenz mit der Schrift
-reist -- dafuer ist font-awesome/LICENSE da.
+reist -- dafuer war font-awesome/LICENSE da; seit dem 2026-11-16 wird die Schrift nicht
+mehr weitergegeben, und die Pflicht entfaellt mit ihr.
 
 
 Warum Font Awesome ueberhaupt hier ist, wenn nichts auf der Seite es benutzt
@@ -110,6 +118,22 @@ einer `:before`-Regel.
 
 Also: vendoriert, nicht entfernt. Bei einem gewoehnlichen Seitenaufruf kostet das ein
 Stylesheet derselben Herkunft und keine Schrift.
+
+**Am 2026-11-16 ist diese Begruendung entfallen, und zwar nicht, weil sie falsch war.**
+Die Knoepfe, um die es ging, koennen hier nicht mehr erscheinen: `tools/thebe_gate.py`
+knuepft das Laden von thebe-core an MySTs `computable`, und von den 33 gebauten Seiten ist
+**keine** ausfuehrbar -- kein Ausgabeknoten, keine Notebook-Seite, keine
+`myst-jp`-Klasse, kein `vnd.jupyter.widget-view` (alle Marker null). Ohne thebe-core kein
+Start-Knopf, ohne Start-Knopf kein `fa-play`. Gemessen wurde dann, was das Blatt
+ueberhaupt noch tut: Von seinen 710 Stilregeln trifft im gerenderten DOM genau eine
+(`.sr-only{...;border:0}`), und das aendert die `border-*-color` von zwei weggeclippten
+`span.sr-only` bei Rahmenbreite 0 -- das Vollbild ist byte-gleich.
+
+Die Bedingung ist in `tools/dead_css.py` als Waechter festgehalten: Bekommt eine Seite
+eine ausgefuehrte Zelle, ein ipywidget oder den Rang einer Notebook-Seite, **bricht der
+Schritt ab** und verlangt, dieses Verzeichnis wieder zu fuellen. Das ist die Richtung, in
+die der Fehler laufen muss -- ein Notebook mit Knoepfen und ohne deren Stylesheet sieht
+kaputt aus, und niemand weiter unten in der Kette merkt es.
 
 
 Warum nur die woff2, und warum nichts bearbeitet ist
@@ -140,13 +164,15 @@ laufen zu lassen, hat per Definition um einen Netzabruf gebeten.
 Die zutreffende Aussage ist also eng, und sie ist eng zu formulieren: **Das Buch zu lesen
 kontaktiert keinen Dritten. Den Code darin laufen zu lassen schon.**
 
-Der Waechter in .gitlab-ci.yml greppt deshalb die drei Stylesheet-URLs und **nicht die
+Der Waechter in .gitlab-ci.yml greppt deshalb die Stylesheet-URLs und **nicht die
 Hostnamen** -- ein Waechter, der bei jeder Erwaehnung von jsdelivr anschlaegt, waere nur
 zu befriedigen, indem man thebe loescht.
 
-Diese Datei zitiert alle drei URLs ebenfalls, als die Datei, die sie erklaert. Sie wird
-mit den Lizenzen veroeffentlicht, wie die OFL es verlangt, und nicht umgeschrieben:
-`tools/vendor_assets.py` fasst nur `.html` und `.js` an.
+Diese Datei zitiert die URLs ebenfalls, als die Datei, die sie erklaert, und wird nicht
+umgeschrieben: `tools/vendor_assets.py` fasst nur `.html` und `.js` an. **Veroeffentlicht
+wird sie nicht** -- kopiert werden nur die Unterbaeume, die ASSETS nennt, und darin liegt
+je eine LICENSE. Bis zum 2026-11-16 stand hier das Gegenteil; nachgesehen wurde es am
+gebauten Artefakt, wo `vendor/` genau die Unterbaeume enthaelt und keine PROVENANCE.txt.
 
 
 Aktualisieren

@@ -321,6 +321,51 @@ Datierte Protokolle größerer Umbauten liegen daneben als `build-log-<datum>.md
   samt Einladungslink, das Forum-Objekt ist gelöscht (der Block „Foren“ verschwand mit ihm).
 
 ### Infrastruktur
+- [x] **Drei unbenutzte Stylesheets laden nicht mehr mit**, 2026-11-16, §7.3 des
+  SEO-Audits. Das Theme legte in jede der 33 Seiten `thebe-core.css` (87 kB roh,
+  12,5 kB brotli), `font-awesome.css` (37/5,9) und `mpl_widget.css` (911 B) — alle drei
+  für Jupyter-Ausgaben, und dieses Buch hat keine (kein Ausgabeknoten, keine
+  Notebook-Seite, keine `myst-jp`-Klasse, kein `vnd.jupyter.widget-view`; im Browser
+  gegengeprüft, null Anfragen für `thebe-core.min.js` auf acht Seiten). Weg sind damit
+  19,3 kB über die Leitung und **drei rendernde Anfragen** je Seitenaufruf; das Audit hatte
+  „vier Stylesheets, etwa 14 kB, ein bis zwei Requests" geschätzt, beides ist jetzt
+  gemessen und berichtigt. `tools/dead_css.py` nimmt die `<link>` aus dem Markup **und**
+  die Einträge aus dem `links()`-Array des Wurzel-Chunks (nur Markup hieße: die Hydration
+  hängt sie wieder an), läuft **vor** `vendor_assets.py`, und der vendoriert seitdem nur
+  noch KaTeX — Font Awesome und jupyter-matplotlib sind samt Schrift aus `_site/vendor/`
+  heraus (144 kB). Der Schritt scheitert laut in beide Richtungen: wenn das Theme sein
+  Array umbaut, und wenn eine Seite ausführbar wird (Negativtest: Marker eingesetzt,
+  Abbruch mit Pfad und Anweisung, die Blätter zurückzuholen).
+
+  **Gemessen wurde per Ablation, nicht per Klassen-Grep** — ein Blatt kann über
+  CSS-Variablen wirken, die ein anderes benutzt, und genau das tat thebe-core:
+  `tt,code,kbd,samp,pre{…font-size:13px;line-height:1.3077}`, von dem die Zeilenhöhe
+  **jedes Codeblocks im Buch** abhing, während unser Blatt dort nur die Schrift setzt.
+  Die ersten fünf abgetasteten Seiten hatten zufällig keinen langen Codeblock und meldeten
+  „verschiebt nichts"; der Vergleich zweier lokal ausgelieferter Artefakte über alle 33
+  Seiten zeigte +219 px auf `/autograd-berechnungsgraph/`, +144 px auf `/autoencoder/`,
+  +123 px auf `/faltung-cnn/`, +138 px auf `/llms-benutzen/`, +132 px auf
+  `/logistische-regression/` — über alle 33 Seiten 12.339 verschobene Elemente, bei
+  Rauschboden 0 (dieselbe Messung A gegen A, also dieselbe Variante zweimal geladen).
+  Deshalb stehen die alten Werte jetzt in `_site/custom-style.css`, ohne `.math-display`.
+  Danach unterscheiden sich die beiden Artefakte auf jeder Seite in genau **zwei**
+  Elementen:
+  zwei weggeclippte `span.sr-only`, deren Rahmenfarbe bei Rahmenbreite 0 wechselt (das ist
+  Font Awesomes einzige greifende Regel) — 66 Abweichungen auf 33 Seiten hell, 64 auf 32
+  Seiten dunkel; die Landingpage im Dunkelmodus ist nicht vergleichbar, weil dort die
+  Gliederung je nach Lauf schon gemountet ist oder noch nicht (393 oder 416 Elemente,
+  in beiden Varianten). Die Stylesheet-Anfragen je Seitenaufruf gehen von 6 auf 3,
+  entpackt von 332.477 B auf 207.073 B. Der Pixelvergleich der Vollbilder war davor
+  630 von 3,5 bis 10,6 Millionen Pixeln, ausschließlich im Rechteck
+  (974,17)–(1054,47) — das Tastenabzeichen der Suchzeile.
+
+  Drei Doku-Stellen waren dabei falsch und sind berichtigt: `thebe_gate.py` behauptete,
+  `head_meta.py` entferne das Stylesheet in seinem „Abschnitt 5" (es tut es nicht, und den
+  Abschnitt gibt es nicht) und `computable` sei auf achtzehn Notebook-Seiten wahr (das kam
+  mit dem Port aus dem Schwesterbuch; hier sind es 0 von 33); `vendor_assets.py` und
+  `PROVENANCE.txt` behaupteten, die Herkunftsdatei werde mitveröffentlicht (nur die
+  Unterbäume mit ihrer `LICENSE` werden es).
+
 - [x] **Dunkelmodus: die Markenfarbe folgt dem Schalter**, 2026-11-16, §9 des SEO-Audits.
   `_site/custom-style.css` schaltete `--brand` nur über `@media (prefers-color-scheme:
   dark)`. Das Theme schaltet aber über die Klasse `dark` an `<html>` (104 solche Regeln
