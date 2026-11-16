@@ -413,6 +413,15 @@ Textfassung von Seite und Objektbaum: `~/Sciebo/hhu/eidl-26/ilias/` (analog zu
   festen Namen neben die Seite kopieren (aus dem Unterordner build/ des Artefakts in
   dessen Wurzel) und `og:image` darauf zeigen lassen — eine Zeile im Job und eine in
   `tools/head_meta.py`.
+  **Ursache nachgerechnet am 2026-11-16** (`devnotes/seo-audit-2026-11-15.md` §10):
+  MyST benennt in `hashAndCopyStaticFile` nach `md5(absoluter Pfad + mtime + size)`, nicht
+  nach dem Inhalt. Ein frischer Klon gibt jeder Datei die Checkout-Zeit, deshalb wandert der
+  Name bei **jedem** CI-Lauf — zuletzt durch `31bb9c3`, der nur `devnotes/` anfaßte — und
+  deshalb stimmen lokal und CI nie überein. Betrifft alle 70 Bilddateien, nicht nur die
+  Karte. Zwei Zusätze zum Vorschlag: der feste Name muss in die **Nutzlast**, weil der
+  Kopf-Wächter `og:image` bewusst nicht hält; und an der Ursache ansetzen hieße, die mtimes
+  vor dem Bau aus der Historie zurückzustellen, was volle Historie im `myst-build`-Job
+  bräuchte (`GIT_DEPTH: "0"` steht nur am `pages`-Job).
 - `_site/sidebar_footer.md` leer, `navbar_end.md` nur „Inhaltsverzeichnis“ – wie bei EiPy; lassen.
 - Logo: `logo/` enthält SVGs und Exporte; für Rocket.Chat `logo/eidl-logo-512.png`.
 
