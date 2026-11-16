@@ -363,7 +363,12 @@ Datierte Protokolle größerer Umbauten liegen daneben als `build-log-<datum>.md
   Artefakt liegen 34 HTML-Dateien, weil `pages` die Google-Verifikationsdatei dazukopiert,
   und „in allen Seiten oder in keiner" schlug an. Das Skript zählt jetzt wie die
   Geschwister über `index.html`; die Prüfkopie enthält seitdem auch diesen Schritt.
-  Ausgeliefert wurde dabei nichts Halbes — die Seite blieb auf dem vorigen Stand.
+  Ausgeliefert wurde dabei nichts Halbes — die Seite blieb auf dem vorigen Stand. Der
+  zweite Lauf (#185808) ist durch, und die ausgelieferte Seite ist auf drei Ebenen
+  nachgemessen: 33 von 33 Seiten binden genau drei Stylesheets ein und keines der toten,
+  der Wurzel-Chunk trägt nur noch `app-*.css`, die zwei vendorierten Pfade antworten 404,
+  und im Browser stehen Inline-Code (14 px / 18,3078 px) und Tastenabzeichen
+  (13 px / 17,0001 px) auf denselben Werten wie vorher.
 
   Drei Doku-Stellen waren dabei falsch und sind berichtigt: `thebe_gate.py` behauptete,
   `head_meta.py` entferne das Stylesheet in seinem „Abschnitt 5" (es tut es nicht, und den
