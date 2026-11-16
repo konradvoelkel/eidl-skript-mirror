@@ -346,7 +346,13 @@ Datierte Protokolle größerer Umbauten liegen daneben als `build-log-<datum>.md
   im PDF-Knopf steckte: der Hover-Zustand füllt mit `--brand`, und das ist im
   Dunkelmodus das helle Violett — weiße Schrift darauf sind 1,9:1. Jetzt dunkle Schrift,
   7,57:1. Gemessen: beide Knöpfe 5,74:1 hell und 7,57:1 dunkel, in Ruhe wie im Hover.
-  HTML ohne Warnungen, PDF 148 Seiten, 0 LaTeX-Fehler, 0 fehlende Glyphen.
+  HTML ohne Warnungen, PDF 148 Seiten, 0 LaTeX-Fehler, 0 fehlende Glyphen. **Nach dem
+  Deploy** (#185812, 18 s nach Jobstart) in sechs Kombinationen aus Gerät, Modus und Seite
+  nachgemessen: Outline-Kopf überall „AUF DIESER SEITE", Fußzeile auf dem Desktop
+  222 × 212 px und im Handy-Menü 257 × 212 px, ihre vier Ziele mit Schrägstrich, beide
+  Knöpfe leise und bei 5,74:1 bzw. 7,57:1. Offen notiert, nicht mitgemacht: Querverweise
+  im Text sind blau statt violett — die §9-Regel trifft `a.link`, Kapitelverweise tragen
+  `a.hover-link`.
 
 - [x] **Drei unbenutzte Stylesheets laden nicht mehr mit**, 2026-11-16, §7.3 des
   SEO-Audits. Das Theme legte in jede der 33 Seiten `thebe-core.css` (87 kB roh,
