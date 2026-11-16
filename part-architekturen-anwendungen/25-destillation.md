@@ -106,7 +106,7 @@ Vgl. Yan, Agarwal, Venkataraman: [*Decoding Speculative Decoding*](https://arxiv
 
 ### SDXL Turbo
 
-Sauer, Lorenz, Blattmann, Rombach: [*Adversarial Diffusion Distillation*](https://arxiv.org/abs/2311.17042) (2023). Aus einem vortrainierten tiefen Diffusionsmodell (SDXL) zum Generieren von Bildern aus Bildbeschreibungen in einem $k$-Schritte-Iterationsprozess des Entrauschens wird ein 1-Schritt-Modell destilliert – mit Distillation Loss (Schüler-Output soll dem Lehrer-Output nach $k$ Schritten ähneln) und Adversarial Loss (GAN-Training aus dem [Kapitel „GANs“](22-gans.md), damit die Bilder scharf bleiben). Bildgenerierung in Echtzeit.
+Sauer, Lorenz, Blattmann, Rombach: [*Adversarial Diffusion Distillation*](https://arxiv.org/abs/2311.17042) (2023). Aus einem vortrainierten tiefen Diffusionsmodell (SDXL) zum Generieren von Bildern aus Bildbeschreibungen in einem $k$-Schritte-Iterationsprozess des Entrauschens wird ein Modell destilliert, das mit einem bis vier Schritten auskommt (meist einem) – mit Distillation Loss (das Bild des Schülers wird neu verrauscht und vom Lehrer entrauscht; dem Ergebnis des Lehrers soll der Schüler nahekommen) und Adversarial Loss (GAN-Training aus dem [Kapitel „GANs“](22-gans.md), damit die Bilder scharf bleiben). Bildgenerierung in Echtzeit.
 
 ### Gemini Flash
 

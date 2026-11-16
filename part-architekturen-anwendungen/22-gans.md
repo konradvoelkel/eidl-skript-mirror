@@ -32,7 +32,7 @@ Generator und Diskriminator. Der Generator sieht nie echte Daten – nur den Gra
 
 ### Erinnerung: Samples generieren
 
-Der Generator generiert Samples aus einer Verteilung. Diese Verteilung ist, was im (Pre-)Training gelernt wird, indem die Samples aus dem Trainingsdatensatz als latente Vektoren repräsentiert werden. Generatives Modell = Verteilung lernen ([Kapitel „Was ist Deep Learning?“](../part-grundlagen/01-was-ist-deep-learning.md)). Beim VAE haben wir dafür den latenten Raum explizit auf eine Normalverteilung gezwungen; beim GAN sagt uns der Diskriminator, ob die generierte Verteilung schon von der echten zu unterscheiden ist.
+Der Generator generiert Samples aus einer Verteilung. Diese Verteilung ist, was im Training gelernt wird. Beim Autoencoder und beim VAE geschieht das, indem die Samples aus dem Trainingsdatensatz als latente Vektoren repräsentiert werden; ein GAN hat keinen Encoder, sein Generator lernt direkt eine Abbildung von Rauschen auf Samples. Generatives Modell = Verteilung lernen ([Kapitel „Was ist Deep Learning?“](../part-grundlagen/01-was-ist-deep-learning.md)). Beim VAE haben wir dafür den latenten Raum explizit auf eine Normalverteilung gezwungen; beim GAN sagt uns der Diskriminator, ob die generierte Verteilung schon von der echten zu unterscheiden ist.
 
 ### GAN-Training
 
@@ -106,7 +106,7 @@ Beispielbilder (Monet $\leftrightarrow$ Foto, Zebra $\leftrightarrow$ Pferd, Som
 
 ### StyleGAN
 
-Karras, Laine, Aila – NVIDIA (CVPR 2019), [*A Style-Based Generator Architecture for Generative Adversarial Networks*](https://hdl.handle.net/10.1109/CVPR.2019.00453) (frei: [arXiv:1812.04948](https://arxiv.org/abs/1812.04948)): eine alternative Generator-Architektur, die sich an der Style-Transfer-Literatur orientiert. Der latente Vektor $z$ wird zuerst durch ein MLP in einen Zwischenraum $w$ abgebildet und dann *auf jeder Auflösungsstufe* des Generators als „Stil“ eingespeist. Das führt zu einer automatisch gelernten, unsupervised Trennung von High-Level-Attributen (z.B. Pose und Identität bei Gesichtern) und stochastischer Variation (z.B. Sommersprossen, Haare), und erlaubt intuitive, skalenspezifische Kontrolle der Synthese. Dazu ein neuer Datensatz von Gesichtern (FFHQ). StyleGAN2 ist hinter [thispersondoesnotexist.com](https://thispersondoesnotexist.com).
+Karras, Laine, Aila – NVIDIA (CVPR 2019), [*A Style-Based Generator Architecture for Generative Adversarial Networks*](https://hdl.handle.net/10.1109/CVPR.2019.00453) (frei: [arXiv:1812.04948](https://arxiv.org/abs/1812.04948)): eine alternative Generator-Architektur, die sich an der Style-Transfer-Literatur orientiert. Der latente Vektor $z$ wird zuerst durch ein MLP in einen Zwischenraum $w$ abgebildet und dann *auf jeder Auflösungsstufe* des Generators als „Stil“ eingespeist; dazu bekommt jede Stufe eigenes Rauschen. Das führt zu einer automatisch gelernten, unsupervised Trennung von High-Level-Attributen (z.B. Pose und Identität bei Gesichtern, gesteuert über $w$) und stochastischer Variation (z.B. Sommersprossen, Haare, aus dem Rauschen), und erlaubt intuitive, skalenspezifische Kontrolle der Synthese. Dazu ein neuer Datensatz von Gesichtern (FFHQ). StyleGAN2 ist hinter [thispersondoesnotexist.com](https://thispersondoesnotexist.com).
 
 Beispielgesichter und das Video zur Interpolation im Stil-Raum: [github.com/NVlabs/stylegan](https://github.com/NVlabs/stylegan).
 
