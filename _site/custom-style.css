@@ -140,9 +140,25 @@
   --brand-tint: #efebff;      /* oklch(0.95 0.03 295) -- helle Flaeche */
   --brand-dark: #b39ef2;      /* oklch(0.75 0.12 295) -- Akzent im Dunkelmodus */
 }
-@media (prefers-color-scheme: dark) {
-  :root { --brand: var(--brand-dark); }
-}
+/* Die Markenfarbe haengt am Schalter, nicht am Betriebssystem. Das Theme setzt vor dem
+   ersten Rendern blockierend `light` oder `dark` an <html> (Inline-Skript im Kopf, liest
+   `localStorage["myst:theme"]`, sonst die OS-Vorliebe) und schaltet sein eigenes CSS
+   ueber `.dark` -- 104 solche Regeln auf einer Kapitelseite. Die Klasse ist also die
+   Wahrheit; eine reine Media-Query war hier bis zum 2026-11-16 die einzige
+   `prefers-color-scheme`-Regel der ganzen Seite und damit die einzige Stelle, die dem
+   Schalter nicht folgte. Gemessen: bei OS hell und Seite dunkel blieb `--brand` auf
+   `#6f59a6`, was 3,0:1 auf `#1c1917` ergibt -- 13 Textstellen unter AA (Inhaltslinks,
+   `em` im Literaturverzeichnis, Fusszeile).
+
+   Es bleibt **keine** Media-Query als Rueckfall, und das ist Absicht: ohne JavaScript
+   setzt niemand die Klasse, das Theme hat zu seinen 104 `.dark`-Regeln keine einzige
+   Media-Query, die Seite rendert also hell. Ein Rueckfall auf die OS-Vorliebe wuerde
+   dort den dunklen Akzent auf die helle Seite setzen -- dieselben 3,5:1, nur
+   andersherum. Am 2026-11-16 an einer Testseite durchgespielt, die genau dieses
+   Stylesheet laedt: sechs Kombinationen aus OS-Vorliebe und Klasse, und der Rueckfall
+   war der einzige Fall, der danebenlag. Die Marke folgt deshalb allein der Klasse,
+   genau wie das Theme. */
+.dark { --brand: var(--brand-dark); }
 
 /* 1. Typography Overrides */
 body {
@@ -195,6 +211,18 @@ p > code, li > code, td > code {
   color: color-mix(in oklab, var(--brand) 80%, black) !important;
   border-radius: 3px;
   padding: 0.1rem 0.3rem;
+}
+
+/* Dunkelvariante der Chips. Ohne sie bleibt die helle Flaeche `--brand-tint` (#efebff)
+   stehen: gemessen 14,99:1 gegen die dunkle Seite -- ein leuchtender Block -- und der
+   Text darauf nur 3,50:1, weil `color-mix(..., black)` aus dem hellen `--brand-dark`
+   einen mittleren Violettton macht. Mit 22 % Marke auf durchscheinendem Grund und der
+   Marke als Textfarbe: Chip `#3c3646`, Text `#b39ef2`, 5,03:1 (AA) und nur noch 1,51:1
+   gegen die Seite. Die Selektoren spiegeln die Regel darueber, `!important` ebenso,
+   weil das Theme seine Chips per Tailwind-Klasse faerbt. */
+.dark p > code, .dark li > code, .dark td > code {
+  background-color: color-mix(in oklab, var(--brand) 22%, transparent) !important;
+  color: var(--brand) !important;
 }
 
 /* 4. Minimalist Admonitions: Notiz/Info in der Markenfarbe, Signale in HHU-Farben */

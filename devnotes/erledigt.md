@@ -321,6 +321,22 @@ Datierte Protokolle größerer Umbauten liegen daneben als `build-log-<datum>.md
   samt Einladungslink, das Forum-Objekt ist gelöscht (der Block „Foren“ verschwand mit ihm).
 
 ### Infrastruktur
+- [x] **Dunkelmodus: die Markenfarbe folgt dem Schalter**, 2026-11-16, §9 des SEO-Audits.
+  `_site/custom-style.css` schaltete `--brand` nur über `@media (prefers-color-scheme:
+  dark)`. Das Theme schaltet aber über die Klasse `dark` an `<html>` (104 solche Regeln
+  auf einer Kapitelseite, **keine** Media-Query); unsere Zeile war die einzige
+  `prefers-color-scheme`-Regel der ganzen Seite. Folge: bei OS hell und Seite dunkel
+  blieb die Marke auf `#6f59a6` — 13 Textstellen unter AA (Inhaltslinks und `em` im
+  Literaturverzeichnis 3,04:1, Fußzeile 3,51:1). Dazu hatten die Inline-Code-Chips keine
+  Dunkelvariante: Fläche `#efebff` mit 14,99:1 gegen die dunkle Seite, Text darauf
+  3,50:1. Jetzt `.dark { --brand: var(--brand-dark) }` und eine Chip-Dunkelvariante mit
+  22 % Marke auf durchscheinendem Grund: Chip `#3c3646`, Text `#b39ef2`, 5,03:1 und
+  1,51:1 zur Seite. Die Media-Query ist **ganz** entfallen, nicht nur geschützt: ohne
+  JavaScript setzt niemand die Klasse und das Theme rendert hell, ein Rückfall auf die
+  OS-Vorliebe hätte den dunklen Akzent auf die helle Seite gesetzt. Nachgewiesen mit dem
+  echten Schalter — `localStorage["myst:theme"]` vor dem Laden setzen, das blockierende
+  Inline-Skript im Kopf hängt die Klasse an — und die Kaskade an einer Testseite über
+  sechs Kombinationen aus OS-Vorliebe und Klasse.
 
 - [x] **Stabiler Dateiname für die Vorschaukarte**, 2026-11-16, mit
   `tools/stable_card.py` im `pages`-Job (nach `llms_txt.py`, vor `image_dims.py`). MyST
