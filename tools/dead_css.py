@@ -178,7 +178,18 @@ MARKER = {
 
 
 def seiten(wurzel: pathlib.Path) -> list[pathlib.Path]:
-    return sorted(wurzel.rglob("*.html"))
+    """Die Seiten des Buchs: jede ist eine `index.html`, in der Wurzel oder im Slug-Ordner.
+
+    **Nicht `*.html`.** Im Artefakt des `pages`-Jobs liegt daneben die
+    Google-Verifikationsdatei (`google<token>.html`, eine Zeile Text ohne Kopf), und mit
+    ihr sind es 34 Dateien statt 33. Der erste Deploy dieses Schritts ist genau daran
+    gescheitert -- „thebe-core stand in 33 von 34 Seiten, erwartet in allen oder in
+    keiner" (Pipeline #185807). Das war die Nachbedingung, die richtig anschlug, und die
+    Lehre ist die Zaehlung: `head_meta.py`, `publish_urls.py`, `image_dims.py` und
+    `check_css_assets.py` zaehlen laengst ueber `index.html`, und hier war der Grund dafuer
+    lokal nicht sichtbar, weil die Testkopie die Verifikationsdatei nicht enthielt.
+    """
+    return sorted(wurzel.rglob("index.html"))
 
 
 def ziel_von(url: str) -> str | None:

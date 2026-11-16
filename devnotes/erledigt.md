@@ -359,6 +359,12 @@ Datierte Protokolle größerer Umbauten liegen daneben als `build-log-<datum>.md
   630 von 3,5 bis 10,6 Millionen Pixeln, ausschließlich im Rechteck
   (974,17)–(1054,47) — das Tastenabzeichen der Suchzeile.
 
+  **Der erste Deploy ist an der eigenen Nachbedingung gescheitert** (#185807): im
+  Artefakt liegen 34 HTML-Dateien, weil `pages` die Google-Verifikationsdatei dazukopiert,
+  und „in allen Seiten oder in keiner" schlug an. Das Skript zählt jetzt wie die
+  Geschwister über `index.html`; die Prüfkopie enthält seitdem auch diesen Schritt.
+  Ausgeliefert wurde dabei nichts Halbes — die Seite blieb auf dem vorigen Stand.
+
   Drei Doku-Stellen waren dabei falsch und sind berichtigt: `thebe_gate.py` behauptete,
   `head_meta.py` entferne das Stylesheet in seinem „Abschnitt 5" (es tut es nicht, und den
   Abschnitt gibt es nicht) und `computable` sei auf achtzehn Notebook-Seiten wahr (das kam
