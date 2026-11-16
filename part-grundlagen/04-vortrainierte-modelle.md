@@ -54,7 +54,7 @@ Wenn wir für eine Aufgabe ein vortrainiertes Modell verwenden wollen, müssen w
 * **Image Segmentation**: Auf einem Bild für jedes erkannte Objekt die Umrisse finden, das Bild also aufteilen. Beispiel: Nvidias *Segformer* (2021), auf ImageNet vortrainiert und auf ADE20k gefinetunt.
 * **Image-to-Image**: Ein Bild als Input, ein Bild als Output, z.B. historische Fotos einfärben. Beispiel: Renato Sortinos *ColorizeNet*, ein Finetune von ControlNet / Stable Diffusion 2.1 auf bearbeitetem COCO.
 * **Unconditional Image Generation**: Nur ein Bild als Output, z.B. ein Katzenbild (je nach Datenbasis). Beispiel: *DDPM* ([Ho et al., 2020](https://arxiv.org/abs/2006.11239)), Denoising Diffusion Probabilistic Models – auf dem Hub liegt der Checkpoint unter `google/`, das Verfahren kommt aus Berkeley.
-* **Zero-Shot Image Classification**: Von einem Bild sagen, was es ist – ohne dass für die Klassen gelabelte Daten vorlagen. Beispiel: OpenAIs *CLIP-ViT* (2021), Contrastive Language-Image Pretrained Vision Transformer, dem man die Kandidaten als Text gibt („a photo of a car“).
+* **Zero-Shot Image Classification**: Von einem Bild sagen, was es ist – ohne dass für die Klassen gelabelte Daten vorlagen. Beispiel: OpenAIs *CLIP-ViT* (2021), CLIP (Contrastive Language-Image Pre-training) mit einem Vision Transformer als Bild-Encoder, dem man die Kandidaten als Text gibt („a photo of a car“).
 
 Zur Einordnung des Vokabulars: **Zero-Shot** heißt ohne gelabelte Daten für die neue Aufgabe, **One-Shot** (oder Single-Shot) mit einem gelabelten Sample, **Few-Shot** mit einigen wenigen gelabelten Samples.
 
@@ -113,7 +113,7 @@ Alternativ kann die `accelerate`-Library von HF auch dynamisch Teile des Modells
 
 ### Was zuvor geschah: Installation
 
-`pip install 'transformers[torch]'` in der Shell (oder `!pip install ...` in einem Notebook) installiert `transformers` und PyTorch. Das allein installiert noch kein CUDA, d.h. alle Rechnungen finden auf der CPU mit dem Hauptspeicher statt – in PyTorch ist das schlicht das Gerät `cpu`, ohne Indexnummer. In den `pipeline`-Aufrufen von `transformers` schreibt man dafür `device=-1`; `device=0` meint dort die *erste GPU*.
+`pip install 'transformers[torch]'` in der Shell (oder `!pip install ...` in einem Notebook) installiert `transformers` und PyTorch. Unter Linux bringt das PyTorch-Paket von PyPI die CUDA-Laufzeit gleich mit, unter Windows und macOS nicht; den NVIDIA-Treiber installiert `pip` nie. Ohne GPU finden alle Rechnungen auf der CPU mit dem Hauptspeicher statt – in PyTorch ist das schlicht das Gerät `cpu`, ohne Indexnummer. In den `pipeline`-Aufrufen von `transformers` schreibt man dafür `device=-1`; `device=0` meint dort die *erste GPU*, und die nimmt `pipeline` ohne Angabe von selbst, sobald eine da ist. Ein mit `from_pretrained` geladenes Modell bleibt dagegen auf der CPU, bis man es wie oben mit `.to("cuda")` verschiebt.
 
 Für CUDA (Ubuntu Linux auf NVIDIA-Hardware) prüft man zuerst, was da ist:
 
@@ -122,7 +122,7 @@ lspci | grep -i nvidia
 nvidia-smi
 ```
 
-`nvidia-smi` zeigt die Treiberversion und die maximale CUDA-Version, die die GPU bzw. der Treiber unterstützt (z.B. 11.4); `nvcc --version` zeigt die installierte CUDA-Toolkit-Version (z.B. 10.1). Die installierte Version darf kleiner sein als die maximale – das passt dann. Anschließend PyTorch mit passendem CUDA-Build installieren:
+`nvidia-smi` zeigt die Treiberversion und die maximale CUDA-Version, die die GPU bzw. der Treiber unterstützt (z.B. 11.4); `nvcc --version` zeigt die installierte CUDA-Toolkit-Version (z.B. 10.1). Die installierte Version darf kleiner sein als die maximale – das passt dann. Dasselbe gilt für die CUDA-Laufzeit, die PyTorch mitbringt (`torch.version.cuda`). Ist sie neuer, als der Treiber erlaubt, oder kommt PyTorch ohne CUDA (Windows), installiert man PyTorch mit passendem CUDA-Build aus dem Index von PyTorch:
 
 ```bash
 pip install torch torchvision --index-url https://download.pytorch.org/whl/cu129

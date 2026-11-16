@@ -130,7 +130,7 @@ Finetuning ist auch sehr teuer, weil alle Parameter Gradienten und Optimizer-Zus
 
 ## Wie geht eigentlich … eine Anwendung?
 
-Konkret eine Anwendung wie z.B. der „Chatbot“ [hAInrich](https://www.heicad.hhu.de/lehre/masters-programme-ai-and-data-science/hainrich) am HeiCAD: Retrieval-Augmented Generation (RAG) – Dokumente werden mit Weg 2 in Vektoren verwandelt und in einer Vektordatenbank abgelegt, zur Anfrage werden die ähnlichsten Dokumente gesucht und mit Weg 4 als Kontext in den Prompt eines LLM gegeben. Mehr dazu im [Kapitel „Anwendungsbeispiele“](24-anwendungsbeispiele.md).
+Konkret eine Anwendung wie z.B. der „Chatbot“ [hAInrich](https://www.heicad.hhu.de/lehre/masters-programme-ai-and-data-science/hainrich) am HeiCAD: Die Fragen einer FAQ werden mit Weg 2 in Vektoren verwandelt, und zur Anfrage wird die ähnlichste gesucht und ihre Antwort angezeigt – eine semantische Suche, ohne dass ein LLM Text erzeugt. Geht man einen Schritt weiter, wird daraus Retrieval-Augmented Generation (RAG): Die gefundenen Dokumente kommen aus einer Vektordatenbank und werden mit Weg 4 als Kontext in den Prompt eines LLM gegeben. Mehr dazu im [Kapitel „Anwendungsbeispiele“](24-anwendungsbeispiele.md).
 
 ## Ausblick: Transfer Learning und Ensembles
 
