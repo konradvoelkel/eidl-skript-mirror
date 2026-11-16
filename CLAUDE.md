@@ -209,10 +209,26 @@ Hintergrundrauschen — insbesondere `Cross-reference target not found` bedeutet
 kaputten Link. Und **nach dem Push nachsehen, dass es auch veröffentlicht wurde**: „lokal
 grün“ und „veröffentlicht“ sind zwei verschiedene Aussagen.
 
-**Wie man das nachsieht, ohne Zugang zur Pipeline.** Das GitLab-Projekt ist öffentlich
-lesbar, die Pipeline-API aber nicht (`/api/v4/projects/voelkel%2Feidl-skript/pipelines`
-antwortet mit 403), und ein Token liegt hier nicht. Wer keinen Browser-Zugang hat, prüft
-deshalb das **Ergebnis** statt des Laufs:
+**Zuerst: `glab` ist angemeldet.** Die Pipeline-API ist zwar anonym gesperrt
+(`/api/v4/projects/voelkel%2Feidl-skript/pipelines` antwortet mit 403), aber ein Token
+*liegt* hier — `glab ci list -P 3` und
+`glab api "projects/:id/jobs/<id>/trace"` lesen Pipelines und Job-Protokolle. Nicht
+abschrecken lassen von `glab auth status`: das meldet „Invalid token provided", weil dem
+Token die Berechtigung `User: Read` fehlt und der Endpunkt `user` deshalb 403 gibt — für
+Pipelines und Traces genügt es (am 2026-11-16 nachgeprüft: anonym 403, mit `glab` 20
+Pipelines). Der direkte Weg ist also der Trace des `pages`-Jobs; die Prüfschritte der
+Kette stehen dort namentlich mit ihren Zahlen.
+
+**Zeitstempel statt Inhaltsmarker.** Verläßlich sagt nicht die Seite, ob der Deploy durch
+ist, sondern der Vergleich mit der Startzeit des Jobs: liegt `last-modified` davor, ist die
+Antwort alt. Nach einem grünen `pages`-Job antwortet die Seite nämlich noch eine Weile mit
+dem *vorigen* Deploy, und daran sind zwei Dinge schuld — die Zwischenspeicherung über die
+volle URL (`cache-control: max-age=600`, umgehbar mit `?x=$RANDOM`) und eine Verzögerung,
+bis die neue Auslieferung bereitsteht, gegen die der Zusatz **nicht** hilft. Am 2026-11-16
+beides gemessen, 40 s nach Jobende gab auch die umgangene Anfrage noch den Vorlauf. Der
+ETag taugt nicht als Ersatz: er wechselt von Deploy zu Deploy, auch bei bytegleicher Datei.
+
+**Ohne Zugang zur Pipeline** prüft man das **Ergebnis** statt des Laufs:
 
 ```sh
 U=https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de
