@@ -98,9 +98,10 @@ mehr durch den Abschnitt „Mehr Daten oder mehr Epochen?“ samt Abbildung im K
 „Universelle Approximation“ und am selben Tag drei weitere durch den Abschnitt „Autograd bei
 der Arbeit“ samt Abbildung im Kapitel „Autograd und Berechnungsgraph“ – jener Abschnitt in 13
 wurde dabei um 28 Zeilen kürzer, weil die Verteilung nun in 10 eingeführt wird; seit dem
-2026-11-17 zwei Seiten mehr: eine durch die Einleitungsabsätze in 20 Kapiteln und eine durch
-die Glossarzeile in jeder „Weiterlesen“-Box, beides Audit §6): HTML ohne
-Warnungen, PDF **150 Seiten A4** lokal, 0 LaTeX-Fehler,
+2026-11-17 fünf Seiten mehr: eine durch die Einleitungsabsätze in 20 Kapiteln, eine durch
+die Glossarzeile in jeder „Weiterlesen“-Box und drei durch die Herkunftszeile am Ende jedes
+Kapitels, alles aus den beiden SEO-Audits): HTML ohne
+Warnungen, PDF **153 Seiten A4** lokal, 0 LaTeX-Fehler,
 0 fehlende Glyphen, 5 überlange Zeilen. Das veröffentlichte PDF hat am 2026-11-14 **147**
 (auf dem Baum `7ccf9c9` gemessen, derselbe wie lokal; am 2026-11-12 waren es **143** gegen
 lokal 144, siehe unten). Die `--min-pages`-Untergrenze

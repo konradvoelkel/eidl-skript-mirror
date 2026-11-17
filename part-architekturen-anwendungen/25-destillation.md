@@ -153,3 +153,5 @@ Ein Lehrer-Modell gibt für drei Klassen die Logits $(3, 1, 0)$ aus.
 
 Die Begriffe dieses Kapitels in je ein bis drei Sätzen: [Glossar zur Klausurvorbereitung](../glossar.md).
 :::
+
+*Dieses Kapitel gehört zu [Einführung in Deep Learning](../index.md), dem Vorlesungsskript zur gleichnamigen Vorlesung im Bachelor Informatik an der Heinrich-Heine-Universität Düsseldorf, von Konrad Völkel; frei unter CC BY-SA 4.0. [Über dieses Skript, Zitiervorschlag und Quelltext](../README.md)*

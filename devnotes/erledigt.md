@@ -321,6 +321,28 @@ Datierte Protokolle größerer Umbauten liegen daneben als `build-log-<datum>.md
   samt Einladungslink, das Forum-Objekt ist gelöscht (der Block „Foren“ verschwand mit ihm).
 
 ### Infrastruktur
+- [x] **Herkunftszeile am Ende jedes Kapitels**, 2026-11-17, Punkt 1 des zweiten
+  SEO-Audits. Im extrahierten Haupttext der 29 Kapitel kam „Konrad Völkel" **null** mal
+  vor, „CC BY-SA" null mal, ein sichtbares Datum auf keiner der 33 Seiten — alles stand
+  auf `/readme/` und in Kästen, und 48 von 52 Verweisen dorthin lagen in einer Box. Jetzt
+  schließt jedes Kapitel mit einer kursiven Zeile **außerhalb jeder Box**: Werktitel mit
+  Link auf die Startseite, Gattung („Vorlesungsskript … im Bachelor Informatik an der
+  Heinrich-Heine-Universität Düsseldorf"), Autor, Lizenz im Klartext und ein Link auf
+  „Über dieses Skript, Zitiervorschlag und Quelltext".
+
+  Das schließt zugleich die zweite Lücke aus demselben Befund: Die Startseite hatte
+  **null** eingehende Fließtextlinks, jetzt 29.
+
+  Gegengeprüft mit trafilatura: Die Zeile überlebt die Extraktion auf **27 der 29**
+  Kapitelseiten. Die zwei Ausnahmen sind `hintergrundwissen-analysis` und
+  `hintergrundwissen-lineare-algebra` — genau die beiden Seiten, deren Text zu über 50 %
+  in Kästen steht und die der Extraktor ohnehin halbiert (§2 des Audits).
+
+  **Kein Datum in der Zeile**, und das ist Absicht: Ein Datum im Quelltext veraltet beim
+  ersten Commit, der es nicht mitzieht. Maschinenlesbar steht es richtig in
+  `article:modified_time` (aus `git log`, `tools/freshness.py`). Für den Menschen sichtbar
+  bleibt es offen. Kosten im PDF: **drei** Seiten, 150 auf 153.
+
 - [x] **Der Hover der Vor/Zurück-Karten trägt die Marke**, 2026-11-17, der letzte Punkt
   aus der Blau-Liste des Audits (§4). Eine Regel genügt für Text, Rahmen und Pfeil: Das
   Symbol zeichnet mit `stroke="currentColor"` und hat keine eigene Farbklasse, anders als
