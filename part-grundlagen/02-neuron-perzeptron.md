@@ -6,6 +6,14 @@ short_title: "Neuron und Perzeptron"
 
 # Neuron und Perzeptron
 
+Ein künstliches Neuron ist eine gewichtete Summe mit einer Schwelle: Es feuert, wenn die
+Summe seiner Eingaben groß genug ist. Aus diesem Modell von McCulloch und Pitts (1943)
+wird hier das Perzeptron – ein Neuron, das eine Gerade durch die Daten legt – und daraus
+die Antwort auf die Frage, was ein neuronales Netz eigentlich ist.
+
+*Setzt voraus: das Skalarprodukt und die Geradengleichung aus dem
+[Hintergrundwissen Lineare Algebra](hintergrundwissen-lineare-algebra.md).*
+
 [Vorlesungsaufzeichnung VL 2: Perzeptron](https://media.hhu.de/video/einfuehrung-in-deep-learning-202627-vl-2-perzeptron/51e599cac1fd865687fc6599e7879f4d)
 
 :::{anywidget} ../widgets/mediathek.mjs

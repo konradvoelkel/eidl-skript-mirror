@@ -6,6 +6,11 @@ short_title: "Representation Learning"
 
 # Representation Learning und Graphen
 
+Representation Learning heißt, die Features nicht von Hand zu bauen, sondern sie lernen
+zu lassen. Dieses Kapitel ordnet ein, was die vorigen dazu beigetragen haben, und
+überträgt die Idee auf Graphen: node2vec ist word2vec auf Zufallspfaden durch einen
+Graphen, und Graph Neural Networks rechnen direkt auf der Nachbarschaft.
+
 ## Representation Learning
 
 ### Worum geht's?

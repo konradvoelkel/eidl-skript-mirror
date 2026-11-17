@@ -10,8 +10,15 @@ Warum (2026-11-04)
 Seit die Decks im CI gebaut und als `/folien/vl01.pdf` … `/folien/vl15.pdf` veröffentlicht
 werden, kann das Skript sie verlinken — und zwar **seitengenau**: `#page=N` ist Teil der
 PDF Open Parameters und funktioniert in Chrome, Firefox und Edge (am 2026-11-04 am
-ausgelieferten PDF gemessen). Der Link steht dort, wo auch die Aufzeichnung steht, direkt
-unter der Kapitelüberschrift.
+ausgelieferten PDF gemessen). Der Link steht dort, wo auch die Aufzeichnung steht: im
+Vorspann des Kapitels, hinter dem Einleitungsabsatz und hinter dem Player, aber vor der
+ersten `##`-Überschrift.
+
+**Die Stelle hat sich am 2026-11-17 geändert** (Audit §6.1): Seit jedes Kapitel mit einem
+Einleitungsabsatz öffnet, steht der Medienblock nicht mehr direkt unter der `#`-Zeile.
+`eintragen()` hängt die Folienzeile deshalb ans **Ende des Vorspanns** statt an die
+Überschrift — das ist in beiden Fällen dieselbe Stelle, auch in einem Kapitel ohne
+Aufzeichnung. Die alte Fassung hätte die Zeile über den Einleitungsabsatz gesetzt.
 
 Woher die Seitenzahlen kommen
 -----------------------------
@@ -223,8 +230,8 @@ def entfernen(pfad):
 
 
 def eintragen(pfad, zeile):
-    """Die Zeile unter die `#`-Überschrift setzen -- hinter Aufzeichnung und Player,
-    wenn es sie gibt, sonst direkt darunter. Idempotent über die Marke."""
+    """Die Zeile ans Ende des Vorspanns setzen -- hinter Einleitung, Aufzeichnung und
+    Player, vor die erste `##`-Überschrift. Idempotent über die Marke."""
     p = WURZEL / pfad
     s = p.read_text(encoding="utf-8")
     if MARKE in s:
@@ -234,12 +241,12 @@ def eintragen(pfad, zeile):
     m = re.search(r"^# .+\n", s, re.M)
     if not m:
         return "keine Überschrift"
-    rest = s[m.end():]
-    # hinter dem Player-Block, falls vorhanden
-    pl = re.match(r"\n\[Vorlesungsaufzeichnung[^\n]*\n\n:::\{anywidget\}[^\n]*\n[^\n]*\n:::\n", rest)
-    stelle = m.end() + (pl.end() if pl else 0)
-    rest = s[stelle:].lstrip("\n")
-    s = s[:stelle] + "\n" + zeile + "\n\n" + rest
+    # Ende des Vorspanns: die erste `##`-Zeile nach der `#`-Zeile. Gibt es keine, haengt
+    # die Zeile hinten an -- ein Kapitel ohne Abschnitte ist kein Grund, nichts zu tun.
+    h2 = re.search(r"^## ", s[m.end():], re.M)
+    stelle = m.end() + (h2.start() if h2 else len(s[m.end():]))
+    vorne = s[:stelle].rstrip("\n")
+    s = vorne + "\n\n" + zeile + "\n\n" + s[stelle:].lstrip("\n")
     p.write_text(s, encoding="utf-8")
     return "eingefügt"
 

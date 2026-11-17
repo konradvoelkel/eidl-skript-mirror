@@ -6,6 +6,11 @@ short_title: "Tensoren"
 
 # Tensoren
 
+Ein Tensor ist in PyTorch zunächst nichts anderes als ein Array: Zahlen gleichen Typs,
+zusammengefasst zu einer Form. Hier geht es um Form, Datentyp und die Handgriffe, die im
+Rest des Skripts ständig vorkommen – und zum Schluss darum, was ein Tensor in der
+Mathematik ist, woher der Name also stammt.
+
 [Vorlesungsaufzeichnung VL 3: Tensoren (ab Minute 64)](https://media.hhu.de/video/einfuehrung-in-deep-learning-202627-vl-3-vortrainierte-modelle/d3e7f42de07bc308ea159007e607285e?t=3860)
 
 :::{anywidget} ../widgets/mediathek.mjs

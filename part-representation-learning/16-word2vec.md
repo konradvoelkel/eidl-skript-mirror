@@ -6,6 +6,11 @@ short_title: "word2vec"
 
 # Wortvektoren: word2vec
 
+word2vec lernt für jedes Wort einen Vektor, und zwar allein daraus, in welchem Kontext
+das Wort vorkommt: Wörter mit ähnlichen Nachbarn landen nah beieinander. Dieses Kapitel
+erklärt Skip-gram und CBOW, trainiert Vektoren mit gensim und kommt von einzelnen
+Wörtern zu ganzen Dokumenten.
+
 ## word2vec
 
 ### Von der Anwendung her gedacht

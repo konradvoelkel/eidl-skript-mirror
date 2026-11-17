@@ -6,6 +6,13 @@ short_title: "Universalität"
 
 # Universelle Approximation
 
+Das universelle Approximationstheorem sagt: Mit genügend Neuronen approximiert ein
+neuronales Netz jede vernünftige Funktion beliebig gut. Der Beweis steht hier in fünf
+Schritten, die Konstruktion dazu im Widget. Danach geht es um den Unterschied zwischen
+Approximieren und Generalisieren, und um Double Descent.
+
+*Setzt voraus: das [Kapitel „Netze von Hand bauen“](12-netze-von-hand.md).*
+
 ## Das Approximationstheorem
 
 ### Warum neuronale Netze funktionieren

@@ -6,6 +6,11 @@ short_title: "CNNs"
 
 # Faltung und Convolutional Neural Networks
 
+Eine Faltung ersetzt jeden Pixel durch einen gewichteten Mittelwert seiner Nachbarn;
+Weichzeichnen und Kantenfinden sind derselbe Handgriff mit anderen Gewichten. Ein
+Convolutional Neural Network lernt diese Gewichte, statt sie vorzugeben. Gerechnet wird
+die Faltung in einer und in zwei Dimensionen, dazu Pooling, Stride und Padding.
+
 ## Motivation zur Faltung
 
 ### Bildverarbeitung: it's a blur

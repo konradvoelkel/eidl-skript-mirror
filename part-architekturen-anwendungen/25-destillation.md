@@ -6,6 +6,11 @@ short_title: "Destillation"
 
 # Destillation
 
+Bei der Destillation lernt ein kleines Netz von einem großen statt von den Daten: Als
+Ziel bekommt es nicht das Label, sondern die ganze Ausgabeverteilung des großen Modells.
+Warum darin mehr Information steckt, heißt Dark Knowledge; drumherum steht, was Model
+Compression sonst noch kann.
+
 ## Was lernen wir beim Deep Learning eigentlich?
 
 ### Ansatz 1: Regression zu bekannter Funktion

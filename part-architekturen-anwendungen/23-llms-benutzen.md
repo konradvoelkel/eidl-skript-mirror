@@ -9,6 +9,13 @@ downloads:
 
 # LLMs benutzen
 
+Ein Large Language Model ist ein sehr großer, meist Decoder-only Transformer, der das
+nächste Token vorhersagt. Hier werden solche Modelle benutzt und nicht gebaut: über eine
+API oder lokal mit Llama und Ollama, mit einer Rechnung, wie viel Speicher die
+Parameterzahl verlangt, und mit dem Weg vom Modell zur Anwendung.
+
+*Setzt voraus: das [Kapitel „Transformer“](20-transformer.md).*
+
 ## Transformer-LLMs in der Praxis einsetzen
 
 Zur Erinnerung der Aufbau eines Transformers ([Kapitel „Transformer“](20-transformer.md), Fig. 1 in „Attention is all you need“): Encoder- und Decoder-Stapel aus Attention- und MLP-Blöcken. Ein *Large Language Model* ist ein sehr großer, meist Decoder-only Transformer, der das nächste Token vorhersagt.

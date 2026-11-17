@@ -6,6 +6,11 @@ short_title: "Autoencoder"
 
 # Autoencoder
 
+Ein Autoencoder lernt ohne Label: Er presst einen Datenpunkt durch einen Flaschenhals
+und soll ihn danach wieder herstellen. Was im Flaschenhals ankommt, ist eine gelernte
+Repräsentation der Daten. Hier entsteht einer für MNIST in PyTorch, dazu die Varianten,
+die man in der Praxis antrifft.
+
 ## Lernen ohne Label
 
 ### Im Kontrast zu unserem bisherigen Vorgehen

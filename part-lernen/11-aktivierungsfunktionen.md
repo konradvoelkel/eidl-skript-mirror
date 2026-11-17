@@ -6,6 +6,11 @@ short_title: "Aktivierungsfunktionen"
 
 # Aktivierungsfunktionen
 
+Ohne Aktivierungsfunktion wäre ein noch so tiefes Netz nur eine einzige lineare
+Abbildung. Dieses Kapitel stellt die gebräuchlichen Funktionen nebeneinander – Sigmoid,
+ReLU, ELU, GELU, Swish –, zeigt, in welche Polyeder ein ReLU-Netz den Eingaberaum
+zerlegt, und erklärt, woran Neuronen sterben.
+
 ## Aktivierungsfunktionen und weitere Layer
 
 Ein Neuron „forward“ ist $\tau(\langle w, x \rangle)$. Beim Perzeptron ist $\tau = \operatorname{sign}$, bei der logistischen Regression $\tau = \sigma$. Allgemein ist $\tau$ beliebig – aber ableitbar, sonst funktioniert Backpropagation nicht. *Überall* differenzierbar muss es dafür nicht sein: ReLU hat bei $0$ einen Knick und ist trotzdem die meistbenutzte Aktivierungsfunktion überhaupt. Wie das zusammengeht, klärt der nächste Abschnitt.

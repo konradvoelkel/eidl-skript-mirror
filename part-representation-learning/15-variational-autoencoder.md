@@ -6,6 +6,13 @@ short_title: "VAE"
 
 # Variational Autoencoder
 
+Der Variational Autoencoder macht aus dem Flaschenhals eine Verteilung: Der Encoder gibt
+nicht einen Punkt aus, sondern Mittelwert und Streuung, aus denen gesampelt wird. Damit
+lässt sich aus dem latenten Raum Neues erzeugen. Hergeleitet werden der
+Reparametrisierungstrick und der ELBO, der im Loss neben der Rekonstruktion steht.
+
+*Setzt voraus: das [Kapitel „Autoencoder“](14-autoencoder.md).*
+
 ## Vom Autoencoder zum VAE
 
 ### Motivation: probabilistische Modelle

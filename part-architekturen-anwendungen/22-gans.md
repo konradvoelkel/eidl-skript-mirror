@@ -6,6 +6,11 @@ short_title: "GANs"
 
 # Generative Adversarial Networks
 
+Ein GAN trainiert zwei Netze gegeneinander: Der Generator erzeugt Daten, der
+Diskriminator soll echte von erzeugten unterscheiden, und jeder wird am anderen besser.
+Dieses Kapitel liest das Training als Spiel, geht die Varianten durch – conditional,
+Wasserstein, CycleGAN, StyleGAN – und baut zum Schluss selbst eines.
+
 ## Historie
 
 ### NeurIPS 2014

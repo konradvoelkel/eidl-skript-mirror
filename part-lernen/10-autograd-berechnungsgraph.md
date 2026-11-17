@@ -8,6 +8,9 @@ short_title: "Autograd"
 
 Im [Kapitel „Backpropagation“](09-backpropagation.md) haben wir Gradienten von Hand rückwärts durch ein Netz gerechnet. PyTorch tut genau dasselbe – automatisch, für beliebige Architekturen, und mit demselben Muster: Zwischenergebnisse im Vorwärtsdurchlauf speichern, Kettenregel im Rückwärtsdurchlauf. Dieses Kapitel schaut hinter die Kulissen von `loss.backward()`.
 
+*Setzt voraus: die [Tensoren](../part-grundlagen/05-tensoren.md) und das
+[Kapitel „Backpropagation“](09-backpropagation.md).*
+
 ## Ein Beispiel im Kleinen
 
 Ein Blick darauf, wie PyTorch Backpropagation *tatsächlich* macht. Wir bauen ein sehr kleines „Netzwerk“:

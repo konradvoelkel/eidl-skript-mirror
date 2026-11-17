@@ -6,6 +6,11 @@ short_title: "Vortrainierte Modelle"
 
 # Vortrainierte Modelle verwenden
 
+Für die meisten Aufgaben gibt es ein fertiges Modell, und es zu benutzen kostet ein paar
+Zeilen. Dieses Kapitel zeigt, wie man auf Hugging Face das passende findet – sortiert
+nach Task, von Übersetzung bis Bilderkennung –, wie man es lädt und ausführt und was
+dabei auf der GPU oder in Google Colab passiert.
+
 [Vorlesungsaufzeichnung VL 3: Vortrainierte Modelle](https://media.hhu.de/video/einfuehrung-in-deep-learning-202627-vl-3-vortrainierte-modelle/d3e7f42de07bc308ea159007e607285e)
 
 :::{anywidget} ../widgets/mediathek.mjs

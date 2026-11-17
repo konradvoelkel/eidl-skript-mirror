@@ -6,6 +6,11 @@ short_title: "RNNs"
 
 # Recurrent Neural Networks
 
+Ein rekurrentes Netz liest eine Folge Schritt für Schritt und nimmt dabei einen
+verborgenen Zustand mit, der alles Bisherige zusammenfasst. Bei langen Folgen
+verschwinden dabei die Gradienten; dagegen stehen Skip Connections und die gated RNNs,
+also LSTM und GRU, die hier auch in PyTorch vorkommen.
+
 ## RNNs
 
 Input: ein linearer Strom von Daten, z.B. Text, Audio, Video oder andere Zeitreihen. Output: irgendeine vektorielle oder skalare Größe, z.B. die Vorhersage des nächsten Wortes. Idee: Zum Zeitpunkt $t$ nicht nur die neuen Daten $x_t$, sondern auch die Ergebnisse aus den Daten von $t - 1$ verwenden, um zum Ergebnis zu kommen. Ein rekurrentes Neuron hat einen **hidden state** $h_t$:

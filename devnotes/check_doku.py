@@ -206,6 +206,26 @@ def fehler_sammeln() -> list[str]:
         if len(player) > len(links):
             fehler.append(f"{p.name}: Player-Widget ohne Aufzeichnungszeile darüber")
 
+    # ── 5b2. Jedes Kapitel öffnet mit Prosa, nicht mit einem Abschnitt oder Video ──
+    # Am 2026-11-17 eingeführt (Audit §6.1/§4.1, CLAUDE.md „Der Vorspann eines Kapitels“).
+    # Vorher folgte auf 20 von 29 Überschriften unmittelbar ein `##` oder der
+    # Aufzeichnungsblock: Wer über eine Suchmaschine ankam, las als erstes
+    # „Historie: BLEU (2001)“. Geprüft wird die erste nicht-leere Zeile nach der `#`-Zeile;
+    # sie muss Fließtext sein. Die Voraussetzungszeile ist optional und deshalb kein Kriterium.
+    for p in kapitel:
+        zeilen = p.read_text(encoding="utf-8").split("\n")
+        i = next((n for n, z in enumerate(zeilen) if z.startswith("# ")), None)
+        if i is None:
+            fehler.append(f"{p.name}: keine `#`-Überschrift")
+            continue
+        erste = next((z.strip() for z in zeilen[i + 1:] if z.strip()), "")
+        if erste.startswith(("#", ":::", "[Vorlesungsaufzeichnung", "[Folien", "```", "|")):
+            fehler.append(
+                f"{p.name}: öffnet mit {erste[:40]!r} statt mit einem Einleitungsabsatz "
+                f"(CLAUDE.md „Der Vorspann eines Kapitels“)")
+        elif erste.startswith("*Setzt voraus"):
+            fehler.append(f"{p.name}: „Setzt voraus“ steht vor dem Einleitungsabsatz")
+
     # ── 5c. Jede Seite außer der Landingpage hat eine eigene Beschreibung ─────────
     # Bis zum 2026-11-03 trug keine einzige Seite ein `description:`; alle 32 erbten die
     # des Projekts aus myst.yml, als Meta-Description, og:description und im JSON-LD je

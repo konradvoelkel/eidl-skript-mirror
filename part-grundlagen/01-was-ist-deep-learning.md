@@ -6,6 +6,11 @@ short_title: "Was ist Deep Learning?"
 
 # Was ist Deep Learning?
 
+Deep Learning ist das Training künstlicher neuronaler Netze mit vielen Schichten – viel
+mehr steckt im Namen nicht. Dieses erste Kapitel klärt die Begriffe, mit denen das ganze
+Skript arbeitet, sagt, warum ausgerechnet Python die Sprache des Fachs ist, und erzählt
+in einer Kurzgeschichte, wie das Feld dahin gekommen ist, wo es heute steht.
+
 [Vorlesungsaufzeichnung VL 1: Überblick](https://media.hhu.de/video/einfuehrung-in-deep-learning-202627-vl-1-ueberblick/e72e1ac0b45ec094bba7beb17b6f3863)
 
 :::{anywidget} ../widgets/mediathek.mjs

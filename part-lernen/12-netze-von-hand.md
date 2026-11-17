@@ -6,6 +6,11 @@ short_title: "Netze von Hand"
 
 # Netze von Hand bauen
 
+Bevor ein Netz etwas lernt, lohnt es sich, eines von Hand zu bauen: die Gewichte selbst
+wählen und nachsehen, was herauskommt. Hier entstehen so OR, NOR und XOR aus
+Perzeptrons, dazu etwas Arithmetik – und an XOR zeigt sich, was zwei Schichten können
+und eine nicht.
+
 ## Das Geheimnis um Deep Learning lüften
 
 Warum – und wie genau – funktioniert Deep Learning so gut? Die Zutaten, die wir bisher haben:

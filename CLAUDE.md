@@ -96,8 +96,9 @@ Kettenregel-Abschnitt vom 2026-10-20 und diesen Zuwachs nicht; seit dem 2026-11-
 mehr durch den Abschnitt „Mehr Daten oder mehr Epochen?“ samt Abbildung im Kapitel
 „Universelle Approximation“ und am selben Tag drei weitere durch den Abschnitt „Autograd bei
 der Arbeit“ samt Abbildung im Kapitel „Autograd und Berechnungsgraph“ – jener Abschnitt in 13
-wurde dabei um 28 Zeilen kürzer, weil die Verteilung nun in 10 eingeführt wird): HTML ohne
-Warnungen, PDF **148 Seiten A4** lokal, 0 LaTeX-Fehler,
+wurde dabei um 28 Zeilen kürzer, weil die Verteilung nun in 10 eingeführt wird; seit dem
+2026-11-17 eine Seite mehr durch die Einleitungsabsätze in 20 Kapiteln, Audit §6.1): HTML ohne
+Warnungen, PDF **149 Seiten A4** lokal, 0 LaTeX-Fehler,
 0 fehlende Glyphen, 5 überlange Zeilen. Das veröffentlichte PDF hat am 2026-11-14 **147**
 (auf dem Baum `7ccf9c9` gemessen, derselbe wie lokal; am 2026-11-12 waren es **143** gegen
 lokal 144, siehe unten). Die `--min-pages`-Untergrenze
@@ -556,6 +557,36 @@ dieselbe Form haben: **Es sieht im HTML unauffällig aus und ist trotzdem falsch
   schreibt, bekommt den ganzen Import-Block ein zweites Mal in die `.tex` — elf „already
   defined“-Fehler, ein kaputtes PDF, kein Wort im HTML.
 
+## Der Vorspann eines Kapitels
+
+**Jedes Kapitel öffnet mit einem Einleitungsabsatz** (seit 2026-11-17, Audit §6.1/§4.1),
+und zwar vor allem anderen. Die Reihenfolge im Vorspann ist:
+
+1. `# Überschrift`
+2. **Einleitungsabsatz**, zwei bis vier Sätze: was die Sache *ist* (eine Definition, kein
+   Vorgeplänkel), dann was in diesem Kapitel damit geschieht.
+3. optional eine kursive Zeile **`*Setzt voraus: …*`** mit Links auf die ein bis drei
+   Kapitel, ohne die es nicht geht. Nur dort, wo es echte Voraussetzungen gibt — eine
+   leere Pflichtzeile in jedem Kapitel wäre Formular, kein Hinweis.
+4. Aufzeichnungszeile und Player, dann die Folienzeile (beides nur, wenn freigegeben).
+5. die erste `##`-Überschrift.
+
+Begründung aus dem Audit: Auf 20 von 29 Kapiteln folgte der Überschrift unmittelbar ein
+`##` oder der Aufzeichnungsblock. Wer über eine Suchmaschine mitten im Buch ankommt — der
+Normalfall für die Queries, die dieses Buch gewinnen kann —, las als erstes
+„Historie: BLEU (2001)“ oder „Tensoren in PyTorch“ und erfuhr nirgends, worin er steckt;
+bei „Autoencoder“ stand die Definition unter der Überschrift „Loss-Funktion“. Der Absatz
+ist zugleich die Passage, die eine Antwortmaschine zitieren kann, und er steht **über**
+dem Video, weil die ersten Wörter der Seite die Sache nennen sollen und nicht das Medium.
+
+**Keine Nummern im Vorspann**, auch nicht „Kapitel 9 von 29“ oder „Teil 2“: Dieselbe
+Regel wie bei Querverweisen (siehe unten) — die Nummern verschieben sich, zuletzt am
+2026-11-04 für sechs Kapitel. Wo das Kapitel in der Folge steht, sagen die Seitenleiste,
+das aufgeklappte Menü und, wo es sich anbietet, der erste Satz („Im letzten Kapitel …“).
+
+`devnotes/check_doku.py` prüft Punkt 2 und die Reihenfolge; `devnotes/folienlinks.py`
+hängt die Folienzeile ans Ende des Vorspanns.
+
 ## Querverweise
 
 Verwiesen wird mit einem **relativen Pfad auf die Datei**, in der Form
@@ -579,8 +610,10 @@ Durchgang zuerst: `README.md` (Abschnitt „Vorlesungsaufzeichnungen“) und
 `kurs-2026-27.md` nennen sie, dieselben Adressen stehen in `../ilias/runs/ws2026-27.yaml`
 unter `external:`.
 
-**Je Vorlesung eine Zeile im Kapitel**, direkt unter der `#`-Überschrift, nach dem Muster
-des Data-Science-Skripts (`~/Sciebo/hhu/ds2026/ds-skript`, dort `erwartungswert.md`):
+**Je Vorlesung eine Zeile im Kapitel**, im Vorspann unter dem Einleitungsabsatz (siehe
+„Der Vorspann eines Kapitels“ weiter unten; bis zum 2026-11-17 stand sie direkt unter der
+`#`-Überschrift), nach dem Muster des Data-Science-Skripts
+(`~/Sciebo/hhu/ds2026/ds-skript`, dort `erwartungswert.md`):
 
 ```markdown
 [Vorlesungsaufzeichnung VL 1: Überblick](https://media.hhu.de/video/einfuehrung-in-deep-learning-202627-vl-1-ueberblick/<hash>)

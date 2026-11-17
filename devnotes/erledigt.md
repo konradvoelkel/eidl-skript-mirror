@@ -321,6 +321,23 @@ Datierte Protokolle größerer Umbauten liegen daneben als `build-log-<datum>.md
   samt Einladungslink, das Forum-Objekt ist gelöscht (der Block „Foren“ verschwand mit ihm).
 
 ### Infrastruktur
+- [x] **Jedes Kapitel öffnet mit einem Einleitungsabsatz**, 2026-11-17, Audit §6.1 und §4.1
+  („eine Vorlage, zwei Zwecke"). Nachgezählt **20** von 29 Kapiteln begannen unmittelbar mit
+  `##` oder dem Aufzeichnungsblock — der Bericht nannte 18 und übersah 04 und 23. Jetzt
+  stehen dort zwei bis vier Sätze, die erst die Sache definieren und dann sagen, was im
+  Kapitel damit geschieht; zehn Kapitel tragen darunter `*Setzt voraus: …*` mit Links, die
+  sechs Rechenkapitel aus §4 alle. Bei 06, 07 und 08 ist der vorhandene Absatz nur über den
+  Medienblock gehoben worden.
+
+  **Die Prosa steht über der Aufzeichnung**, und das zieht zwei Dinge nach sich:
+  `folienlinks.py` hängt seine Zeile jetzt ans Ende des Vorspanns statt an die
+  `#`-Überschrift (sonst stünde sie künftig über dem Einleitungsabsatz; an Kopien zweier
+  Kapitel durchgespielt), und `check_doku.py` prüft die Regel — erste nicht-leere Zeile nach
+  der `#`-Zeile ist Fließtext, „Setzt voraus" nicht davor —, mit Negativtest an
+  `05-tensoren.md`. Die Form steht in `CLAUDE.md` unter „Der Vorspann eines Kapitels".
+
+  **Ohne Kapitelnummern**, anders als im Bericht vorgeschlagen: Nummern verschieben sich,
+  zuletzt am 2026-11-04 für sechs Kapitel. Kosten im PDF: eine Seite, 148 auf **149** lokal.
 - [x] **Die Kästen tragen die Hausfarben**, 2026-11-17, zweiter Nachtrag zu §4 des
   SEO-Audits. 57 Kästen in fünf Arten, und §4 des Stylesheets zeigte zur Hälfte ins Leere:
   `aside.` trifft keinen aufklappbaren Kasten (das ist ein `<details>`, und so sind zehn

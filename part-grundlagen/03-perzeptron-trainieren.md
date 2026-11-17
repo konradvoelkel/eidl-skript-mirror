@@ -6,6 +6,13 @@ short_title: "Perzeptron trainieren"
 
 # Das Perzeptron trainieren
 
+Ein Perzeptron lernt, indem es bei jedem Fehler seine Gewichte ein Stück in Richtung des
+falsch eingeordneten Punkts verschiebt. Diese Lernregel wird hier Schritt für Schritt
+durchgerechnet und im Widget zum Ausprobieren gezeigt; der Konvergenzsatz sagt, wann sie
+ankommt, und am Ende steht, warum ein einzelnes Perzeptron nicht reicht.
+
+*Setzt voraus: das [Kapitel „Neuron und Perzeptron“](02-neuron-perzeptron.md).*
+
 [Vorlesungsaufzeichnung VL 2: Perzeptron (ab Minute 55)](https://media.hhu.de/video/einfuehrung-in-deep-learning-202627-vl-2-perzeptron/51e599cac1fd865687fc6599e7879f4d?t=3300)
 
 :::{anywidget} ../widgets/mediathek.mjs

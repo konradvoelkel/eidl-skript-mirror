@@ -6,6 +6,15 @@ short_title: "Backpropagation"
 
 # Backpropagation
 
+Backpropagation ist die Rechnung, die den Gradienten der Loss-Funktion nach *allen*
+Gewichten eines tiefen Netzes liefert: Schicht für Schicht rückwärts, jede mit der
+Kettenregel aus der vorigen. Hier wird sie erst an kleinen Netzen von Hand
+durchgerechnet und dann als Induktion über die Schichten allgemein bewiesen.
+
+*Setzt voraus: [Loss-Funktionen und Maximum Likelihood](07-loss-funktionen-maximum-likelihood.md),
+den [Gradientenabstieg](08-gradientenabstieg.md) und die Kettenregel aus dem
+[Hintergrundwissen Analysis](../part-grundlagen/hintergrundwissen-analysis.md).*
+
 ## Ziel
 
 Verstehen können, was im [TensorFlow Playground](https://playground.tensorflow.org) geschieht.

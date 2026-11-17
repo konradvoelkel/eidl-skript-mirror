@@ -6,6 +6,13 @@ short_title: "Optimierer"
 
 # Optimierer: Momentum, Adam, Muon
 
+Der einfache Gradientenabstieg hat Schwächen: eine Lernrate für alle Parameter, und ein
+Gradient, der nur aus einem Mini-Batch stammt. Dieses Kapitel zeigt, was Momentum,
+RMSProp, Adam und Muon dagegen tun – und warum in PyTorch meist trotzdem einfach `Adam`
+dasteht.
+
+*Setzt voraus: den [Gradientenabstieg](../part-lernen/08-gradientenabstieg.md).*
+
 ## Adam oder was?
 
 Wir haben die Grundidee des stochastischen Mini-Batch-Gradientenabstiegs gelernt und dann gesagt: In PyTorch klappt Adam oft besser als SGD. Aber was steckt dahinter?

@@ -6,6 +6,11 @@ short_title: "Transformer"
 
 # Transformer
 
+Der Transformer kommt ohne Rekurrenz aus: Statt eine Folge Schritt für Schritt zu lesen,
+lässt er über Attention jedes Token direkt auf jedes andere schauen. Hier wird
+Self-Attention aus Query, Key und Value aufgebaut, dazu Multi-Head Attention und die
+Positionskodierung – und davor die Frage, wie man Übersetzungen überhaupt misst.
+
 ## Historie: BLEU (2001)
 
 Um Übersetzungsmodelle zu vergleichen, braucht man ein Maß. Papineni et al., [*BLEU: a Method for Automatic Evaluation of Machine Translation*](https://hdl.handle.net/10.3115/1073083.1073135) (2001 als IBM-Bericht, ACL 2002): „Human evaluations of machine translation are extensive but expensive. […] We propose a method of automatic machine translation evaluation that is quick, inexpensive, and language-independent, that correlates highly with human evaluation.“ Die Grundidee: „The closer a machine translation is to a professional human translation, the better it is.“
