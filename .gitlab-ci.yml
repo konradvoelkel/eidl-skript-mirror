@@ -119,6 +119,12 @@ myst-build:
     # wird die Form (1200x630) und, aus dem tEXt-Block der PNG, ob sie noch den Titel
     # aus myst.yml zeigt -- erzeugt wird sie nie in der CI. Nur Standardbibliothek.
     - python3 tools/social_card.py --verify
+    # Zu jeder verlinkten Abbildung liegt eine WebP-Fassung im Repository, und sie ist
+    # nicht aelter als ihre Quelle. Gebaut wird sie nie in der CI -- dafuer braeuchte das
+    # Image Pillow (Entscheidung 5). Wer eine Abbildung aendert, laesst
+    # `devnotes/make_webp.py` laufen; vergisst er es, scheitert der Bau hier und nicht
+    # still im Browser des Lesers. Nur Standardbibliothek.
+    - python3 devnotes/make_webp.py --check
   script:
     - node -v
     - myst --version
@@ -421,6 +427,16 @@ pages:
     #    mit einer Deploy-Fehlermeldung. Dass das Stylesheet da ist, prueft in diesem Job
     #    schon check_css_assets.py (Befund Konrad, 2026-11-04).
     - python3 tools/no_css_dialog.py public
+    # 8. Die Abbildungen als WebP ausliefern statt als PNG und JPG: 7,6 MB werden 2,4 MB,
+    #    auf /faltung-cnn/ 2,3 MB auf 0,5 MB. Die WebP-Fassungen liegen im Repository
+    #    (devnotes/make_webp.py), das Image kann sie nicht bauen -- es installiert kein
+    #    einziges Python-Paket, und das soll so bleiben. **Nach image_dims und head_meta**,
+    #    die die Masse aus der Bilddatei lesen und kein WebP kennen, und **vor
+    #    hydration.py**, das den Kopf samt <style id="bildmasse"> ausliest; dessen
+    #    Selektoren haengen am src und werden hier mit umgeschrieben. Kein <picture> mit
+    #    PNG-Rueckfall, weil die Hydration die Wurzel neu rendert und davon nichts
+    #    uebrigbliebe (am 2026-11-17 gemessen).
+    - python3 tools/webp.py public
     # **Letzter Schritt, der am Kopf schreibt, und das ist keine Vorliebe:** hydration.py
     # liest die Tags und Knoten, die alle Schritte davor in den Kopf geschrieben haben,
     # zurueck und baut daraus seinen Waechter. Laeuft noch einer danach, passt der
@@ -447,6 +463,9 @@ pages:
     - python3 tools/freshness.py --check public
     - python3 tools/trailing_slash.py --check public --base "$BASE_URL"
     - python3 tools/no_css_dialog.py public --check
+    # Jede austauschbare Abbildung liegt als WebP im Artefakt, und kein Verweis zeigt mehr
+    # auf ihr PNG oder JPG -- im Markup, im Stylesheet `bildmasse` und in der Nutzlast.
+    - python3 tools/webp.py public --check
     # Kein Verweis zeigt mehr auf einen gehashten Kartennamen. Was diese Pruefung nicht
     # kann, ist die Eigenschaft, um die es geht: dass der Name ueber zwei Laeufe hinweg
     # derselbe ist. Das zeigt erst der naechste Deploy.

@@ -163,6 +163,33 @@ def gif_masse(data: bytes) -> tuple[int, int]:
     return w, h
 
 
+def webp_masse(data: bytes) -> tuple[int, int]:
+    """WebP kennt drei Rahmen, und alle drei stehen im zweiten Chunk eines RIFF.
+
+    Gebraucht seit dem 2026-11-17, weil `tools/webp.py` die Abbildungen austauscht und
+    diese Pruefung danach laeuft (SEO-Audit §8). Die Masse stehen je nach Variante
+    anderswo:
+
+      VP8  (verlustbehaftet)  Breite und Hoehe als 14-Bit-Zahlen ab Byte 26,
+      VP8L (verlustfrei)      14 Bit, minus eins, gepackt ab Byte 21,
+      VP8X (erweitert)        je 24 Bit, minus eins, ab Byte 24.
+    """
+    if len(data) < 30 or data[:4] != b"RIFF" or data[8:12] != b"WEBP":
+        raise ValueError("kein WebP-RIFF")
+    art = data[12:16]
+    if art == b"VP8 ":
+        w, h = struct.unpack("<HH", data[26:30])
+        return w & 0x3FFF, h & 0x3FFF
+    if art == b"VP8L":
+        b = struct.unpack("<I", data[21:25])[0]
+        return (b & 0x3FFF) + 1, ((b >> 14) & 0x3FFF) + 1
+    if art == b"VP8X":
+        w = int.from_bytes(data[24:27], "little") + 1
+        h = int.from_bytes(data[27:30], "little") + 1
+        return w, h
+    raise ValueError(f"unbekannte WebP-Variante {art!r}")
+
+
 def jpeg_masse(data: bytes) -> tuple[int, int]:
     """Durch die Marker laufen, bis ein SOF-Segment kommt; dort stehen Hoehe und Breite.
 
@@ -228,6 +255,8 @@ def masse(pfad: pathlib.Path) -> tuple[int, int]:
         w, h = gif_masse(data)
     elif data[:2] == b"\xff\xd8":
         w, h = jpeg_masse(data)
+    elif data[:4] == b"RIFF" and data[8:12] == b"WEBP":
+        w, h = webp_masse(data)
     elif b"<svg" in data[:2048].lower():
         w, h = svg_masse(data.decode("utf-8", "replace"))
     else:

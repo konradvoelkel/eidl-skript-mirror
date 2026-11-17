@@ -321,6 +321,30 @@ Datierte Protokolle größerer Umbauten liegen daneben als `build-log-<datum>.md
   samt Einladungslink, das Forum-Objekt ist gelöscht (der Block „Foren“ verschwand mit ihm).
 
 ### Infrastruktur
+- [x] **Die Abbildungen werden als WebP ausgeliefert**, 2026-11-17, Audit §8.
+  7,64 MB in 61 verlinkten Dateien werden **2,44 MB**; `/faltung-cnn/` fällt von 2,20 MB
+  auf 0,51 MB, das Logo auf jeder Seite von 18 K auf 3 K. `devnotes/make_webp.py` baut je
+  Bild verlustfrei **oder** q90 — das Kleinere, gemessen statt geraten —, `tools/webp.py`
+  tauscht im `pages`-Job die Dateinamen aus. Das PNG bleibt liegen: Der PDF-Bau braucht
+  es, xelatex kennt kein WebP.
+
+  **Kein `<picture>` mit PNG-Rückfall**, und der Grund ist gemessen: Die Hydration rendert
+  die Wurzel neu, und was nur im ausgelieferten Markup steht, ist nach dem ersten Frame
+  weg — an der ausgelieferten Seite nachgesehen, tragen die Abbildungen vorher alle
+  `width`, `height` und `loading="lazy"` und nachher keine. Deshalb der harte Austausch,
+  im Markup, im Stylesheet `bildmasse` und in der Nutzlast; zugeordnet über den SHA-256
+  des Inhalts, weil mystmd den Dateinamen auf 20 Zeichen kürzt und drei Bildpaare dieses
+  Buchs darin übereinstimmen. WebP und nicht AVIF: ohne Rückfall zählt das ältere Format.
+
+  Dazu zwei Wächter in der CI (`make_webp.py --check` im Bau, `webp.py --check` im
+  `pages`-Job) und ein WebP-Leser in `image_dims.py`, der die Maße aus dem RIFF-Kopf holt
+  — gegen Pillow an allen 60 Dateien gegengeprüft, keine Abweichung.
+
+  **Zwei Berichtigungen am Befund**: `loading="lazy"` fehlte nicht (4 von 5 Abbildungen
+  auf der ausgelieferten Seite, die erste bewusst eager); gezählt worden war am lokalen
+  Artefakt, wo der Schritt noch nicht gelaufen ist. Und dass die Attribute die Hydration
+  nicht überleben, ist ein neuer Befund, der nur notiert ist.
+
 - [x] **„In Worten“ nach den definierenden Gleichungen**, 2026-11-17, Audit §6.2.
   25 Stellen durchgegangen, an denen die Formel die Definition ist; **14 hatten ihren Satz
   schon** (Kettenregel, δ-Rekursion, Softmax, Log-Likelihood, Autoencoder-Loss, Attention,

@@ -40,6 +40,7 @@ uv run --no-project devnotes/check_pdf_build.py --min-pages 100  # prüft das ge
 uv run --only-group dev devnotes/check_ci_yaml.py    # vor jedem Push, wenn .gitlab-ci.yml angefasst wurde
 uv run --no-project devnotes/check_doku.py           # prüft diese Datei und devnotes/ gegen das Repo
 uv run --only-group figures devnotes/make_figures.py # Abbildungen nach images/ (nie mit System-Python)
+uv run --only-group figures devnotes/make_webp.py    # WebP-Fassung je verlinkter Abbildung (nach jeder Bildänderung)
 uv run devnotes/make_formen_daten.py      # rechnet vor, was torch braucht: Formen-Verteilung (~11 min)
 python3 tools/social_card.py --verify                # Vorschaukarte: Maß und Titel (stdlib)
 uv run --only-group figures python tools/social_card.py  # Karte neu erzeugen (nur bei Titel-/Farbwechsel)
@@ -276,6 +277,7 @@ im `pages`-Job und brauchen **kein einziges Python-Paket**.
 | `tools/freshness.py` | `article:modified_time` je Seite und `<lastmod>` je Sitemap-Eintrag, aus `git log` der Quelldatei |
 | `tools/llms_txt.py` | Der Quelltext jeder Seite als Markdown (`/<slug>.md` und `/<slug>/index.md`, relative Kapitelverweise auf die Seitenadresse umgeschrieben), `<link rel="alternate" type="text/markdown">` im Kopf, `/llms.txt` und `/llms-full.txt`. Google ignoriert `llms.txt`; der Nutzen liegt bei den `.md`-Dateien |
 | `tools/image_dims.py`, `tools/outline_reserve.py` | Gegen den Layoutsprung: `width`/`height` an jeder Abbildung samt einem Stylesheet mit allen Bildmaßen, und Platz für die Gliederung, die das Theme erst nach dem Laden füllt |
+| `tools/webp.py` | Liefert die Abbildungen als WebP aus statt als PNG und JPG: 7,6 MB werden 2,4 MB. Die Fassungen liegen im Repo (`devnotes/make_webp.py`), das Image baut nichts. Ersetzt den Dateinamen im Markup, im Stylesheet `bildmasse` **und** in der Hydrations-Nutzlast — ein `<picture>` mit PNG-Rückfall überlebt die Hydration nicht. **Nach `image_dims.py`, vor `hydration.py`** |
 | `tools/trailing_slash.py` | Kapitellinks mit Schrägstrich (sonst 302), im Markup, in der Hydrations-Nutzlast und in den Seiten-JSON; die Seitenleiste bewusst nicht |
 | `tools/no_css_dialog.py` | Nimmt den Kasten „Site not loading correctly? … `BASE_URL`“ aus jeder Seite. Das Theme legt ihn als `<dialog id="myst-no-css">` an; sichtbar wird er nur ohne Stylesheet, **im Text der Seite steht er aber als erstes** und begrüßt jeden, der die Seite als Text liest, mit einer Deploy-Fehlermeldung. `--check` zählt nach; findet der Lauf gar keinen Kasten, scheitert er (mystmd könnte ihn umbenannt haben) |
 | `tools/stable_card.py` | Gibt der Vorschaukarte einen Namen, der nicht bei jedem CI-Lauf wechselt: `public/build/social-card-<hash>.png` → `public/build/social-card.png`, in allen `.html`, `.json`, `.txt` und `.xml` des Artefakts. MyST hasht nach Pfad + mtime + Größe, nicht nach Inhalt. **Nach `llms_txt.py`, vor `image_dims.py`**; im Unterordner und nicht in der Wurzel des Artefakts, damit `hydration.py` die Nutzlast weiter absolut macht |
