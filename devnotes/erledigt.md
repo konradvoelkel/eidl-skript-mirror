@@ -321,6 +321,28 @@ Datierte Protokolle größerer Umbauten liegen daneben als `build-log-<datum>.md
   samt Einladungslink, das Forum-Objekt ist gelöscht (der Block „Foren“ verschwand mit ihm).
 
 ### Infrastruktur
+- [x] **Die Foliensätze waren anderthalb Stunden von der Website verschwunden**, 2026-11-17.
+  `build-slides` scheiterte ab Pipeline #185892 (12:26 UTC) an `folienlinks.py --check`:
+  Die Zeilen in den Kapiteln 07 und 08 nannten S. 2–14 und S. 15–21, das frisch gebaute
+  Deck hat S. 2–20 und S. 21–34. Ursache war die Überblendungs-Änderung an VL 5 vom
+  2026-11-10 (`7a6254c`), die die Seitenzahl erhöht hat.
+
+  **Der Schaden war größer als der Fehler, und das ist die Lehre:** Der Job ist
+  `allow_failure`, die Pipeline blieb grün — aber `pages` kopiert die Decks aus seinem
+  Artefakt. Im Trace stand seitdem „Foliensaetze veroeffentlicht: 0", und jede Folienzeile
+  im Buch zeigte auf ein 404. Gemerkt hat das niemand, weil nichts rot wurde; gefunden
+  wurde es beim Nachsehen, ob die GitLab-Sperre den Spiegel-Job stört.
+
+  Berichtigt mit den Zahlen aus dem CI-Trace — lokal ist das nicht nachrechenbar, weil das
+  HHU-Beamer-Theme auf dieser Maschine fehlt und die hier liegenden PDFs die alte Fassung
+  sind. Danach: `build-slides` grün, „Foliensaetze veroeffentlicht: 5", `vl01` bis `vl05`
+  antworten mit 200 (2,67 MB bis 1,50 MB). **Die 404 beim ersten Nachsehen war der
+  Zwischenspeicher** (`max-age=600`), nicht die Auslieferung.
+
+  Wie die veralteten Zeilen ins Repository kamen: Sie lagen als nicht committete Änderung
+  im Arbeitsbaum, und mein `git add part-*/*.md` im Glossar-Commit (`918996e`) hat sie
+  mitgenommen. **Ein Jokerzeichen im `git add` committet fremde Arbeit mit.**
+
 - [x] **Die „In Worten“-Sätze stehen im Fließtext**, 2026-11-17, Punkt 2 des zweiten
   SEO-Audits. Sechs der zehn standen im Kasten (`prf:definition` bzw. Admonition) und
   fielen damit aus der Textextraktion — gemessen: vorher kamen **4** Seiten durch, jetzt
