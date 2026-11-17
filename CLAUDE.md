@@ -241,7 +241,7 @@ einmal eine andere Fassung geliefert als notiert.
 Bruch, und das Dateilayout ändert sich vollständig: zwei Serverbündel statt einem,
 Vite-`_assets`-Chunks statt der bisherigen `_shared`-Chunks, `thebe-core.css` in das Hauptstylesheet
 eingebacken. **Die Anker in `install_template.py` überleben allerdings** — am 2026-11-18
-gemessen: 35 der 37 greifen, sobald das Anführungszeichen im Muster offen bleibt, denn 2.x
+gemessen: alle 37 greifen, sobald das Anführungszeichen im Muster offen bleibt, denn 2.x
 schreibt Zeichenketten in Backticks. Die Arbeit liegt bei den Adressen im Artefakt —
 Abbildungen unter `/_public/…` statt `/build/…`, und fünf Skripte in `tools/` setzen die
 alte Adresse an 13 Stellen voraus — und bei `dead_css.py`, das ohne den `thebe-core`-`<link>` sein

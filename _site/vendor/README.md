@@ -29,7 +29,7 @@ kein `<link>` mehr, den `tools/dead_css.py` herausnehmen könnte), geänderte
 
 **Am 2026-11-18 ausgemessen, und milder als hier zunächst stand**: Die Anker überleben.
 Der Bündler schreibt Zeichenketten in Backticks statt in doppelte Anführungszeichen; läßt
-man das Anführungszeichen im Muster offen, greifen **35 der 37** Bedienungsmuster im
+man das Anführungszeichen im Muster offen, greifen **alle 37** Bedienungsmuster im
 `renderer/server`-Bündel, die `aside`-Ersetzung dreimal und der Kastenkopf einmal — genau
 wie in 1.4.1. Die Arbeit liegt woanders: Abbildungen stehen unter `/_public/…` statt
 `/build/…`, das Stylesheet unter `/_assets/…`, und fünf Skripte in `tools/` setzen

@@ -164,13 +164,18 @@ auch ein Backtick sein darf (`["'`]`):
 
 | | 1.4.1 (Kontrolle) | 2.1.1 `renderer/server` |
 |---|---|---|
-| BEDIENUNG, 37 Muster | 29 greifen | **35** greifen |
+| BEDIENUNG, 37 Muster | 37 greifen | **37** greifen, Server- und Browser-Bündel gleich oft |
 | STRUKTUR (`aside` zu `div`) | 3 | **3** |
 | KOPF (Kastenname aus dem `kind`) | 1 | **1** |
+| `thebe_gate.py`, `COMPONENT` | 1 | **1**, ohne jede Anpassung |
 
-Zwei Muster bleiben übrig: `"No results found."` und `"sr-only",children:"Downloads"}`.
-Die sind einzeln nachzusehen, nicht neu zu erfinden. Dass 2.1.1 **mehr** Treffer hat als
-die 1.4.1-Kontrolle, liegt daran, dass dort einige Muster nur im Browser-Bündel standen.
+**Berichtigung noch am selben Tag:** Hier stand zuerst „35 von 37", und das war ein Fehler
+der Messung und nicht des Themes. Zwei Einträge der Liste sind reguläre Ausdrücke
+(`"No results found\."` und die `sr-only`-Stelle); mein Messskript hatte sie als
+wörtliche Zeichenketten escaped, während `bedienung_eindeutschen()` **jeden** Eintrag als
+Regex compiliert. Richtig gemessen greifen alle 37 — und zwar gleich oft im Server- wie
+in den Browser-Bündeln, womit auch die Invariante des Skripts hält. Das Muster von
+`thebe_gate.py` greift sogar unverändert, es enthält keine Anführungszeichen.
 
 ## Was wirklich anders ist: die Adressen im Artefakt
 
@@ -200,8 +205,8 @@ bleiben.
 ## Was das für eine Übernahme heißt
 
 Kein Umbau, aber ein Tagwerk, und es liegt an zwei Stellen: `install_template.py` (ein
-tolerantes Anführungszeichen, das Auspacken ohne Wurzelebene, zwei Muster nachsehen) und
-die Adressannahme `build/` in den fünf Skripten. Dazu eine Entscheidung zu `thebe_gate.py`
+tolerantes Anführungszeichen, das Auspacken ohne Wurzelebene) und die alte Bildadresse in
+den fünf Skripten. Der ausgearbeitete Weg steht in `devnotes/plan-theme-2x.md`. Dazu eine Entscheidung zu `thebe_gate.py`
 und `dead_css.py`, die ohne den `thebe-core`-Link einen Teil ihres Zwecks verlieren.
 
 **Nicht gemessen**: ob die *gepatchte* 2.1.1 richtig rendert, die `pages`-Kette, die
