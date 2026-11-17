@@ -455,6 +455,44 @@ p > code, li > code, td > code {
   --kasten-schrift: color-mix(in oklab, var(--hhu-red) 70%, white);
 }
 
+/* --- Die {prf:…}-Kästen, seit Theme 1.4.1 (2026-11-17) -----------------------------
+   Bis 1.3.1 hatten Definition, Satz und Beispiel keine Kante und einen schwarzen Titel.
+   1.4.1 gibt ihnen beides: `border-l-4` gilt jetzt immer (vorher nur im Dunkelmodus), und
+   der Titel bekommt eine Farbe nach `kind` -- Definition blau `rgb(37,99,235)`, Beispiel
+   grün `rgb(22,163,74)`. Am gerenderten DOM nachgemessen, 47 Kästen in fünf Arten:
+   26 Definitionen, 15 Beispiele, 4 Sätze, je einer Proposition und Beweis.
+
+   Zwei Gründe, das nicht so zu lassen. Die Farben stehen nicht in der Palette dieses
+   Buchs, in dem die Kästen violett, HHU-grün, -orange und -rot sind. Und der Kontrast:
+   Das Grün hat auf Weiß **3,30:1** -- für Text, und ein Kastentitel ist Text, unter den
+   4,5:1 der Stufe AA. Schwarz auf Weiß hatte 17,93:1.
+
+   **Hier wird nichts überschrieben, sondern umdefiniert**, und das ist der eigentliche
+   Gewinn von Theme 1.4.0: Die Kästen hängen nicht mehr an Tailwind-Utilities mit festen
+   Farben, sondern an rund siebzig CSS-Variablen (`--myst-color-info` und Geschwister),
+   und `.border-myst-info` löst zu `var(--myst-color-info)` auf. Ein Wert an `.myst-proof`
+   genügt also -- kein `!important`, anders als in Abschnitt 4, der noch gegen die
+   Utilities von 1.3.1 anschreibt. Die Zuordnung: `info` ist die Definition, `theorem` der
+   Satz und die Proposition, `success` das Beispiel; `proof` bleibt grau, ein Beweis ist
+   kein Farbereignis. */
+.myst-proof {
+  --myst-color-info: var(--brand);
+  --myst-color-info-bg: color-mix(in oklab, var(--brand) 12%, transparent);
+  --myst-color-info-text: var(--brand);
+  --myst-color-theorem: var(--brand);
+  --myst-color-theorem-bg: color-mix(in oklab, var(--brand) 12%, transparent);
+  --myst-color-theorem-text: var(--brand);
+  --myst-color-success: var(--hhu-green);
+  --myst-color-success-bg: color-mix(in oklab, var(--hhu-green) 12%, transparent);
+  --myst-color-success-text: color-mix(in oklab, var(--hhu-green) 70%, black);
+}
+.dark .myst-proof {
+  --myst-color-info-bg: color-mix(in oklab, var(--brand) 15%, transparent);
+  --myst-color-theorem-bg: color-mix(in oklab, var(--brand) 15%, transparent);
+  --myst-color-success-bg: color-mix(in oklab, var(--hhu-green) 15%, transparent);
+  --myst-color-success-text: var(--hhu-green);
+}
+
 /* --- Nichts breiter als der Bildschirm (2026-11-03) --------------------------------
    Zwei Stellen, an denen das Theme Inhalt nicht schrumpfen lässt; beide machten die Seite
    auf dem Handy waagerecht scrollbar.

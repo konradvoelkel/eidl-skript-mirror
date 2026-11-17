@@ -191,14 +191,24 @@ muss auf *derselben* Platte liegen, sonst kann uv nicht mehr hardlinken und kopi
 kostet jede venv ihre volle Größe. `uv run` und `myst` merken davon nichts; wer die Platte
 nicht gemountet hat, hat kein Python.
 
-Das Site-Template ist **mitgeliefert** (`_site/vendor/book-theme.zip`) und wird von
+Das Site-Template ist **mitgeliefert** (`_site/vendor/book-theme.zip`, `@myst-theme/book`
+1.4.1 seit dem 2026-11-17, davor 1.3.1) und wird von
 `install_template.py` an die Stelle entpackt, an der MyST es zwischenspeichert. Ohne diesen
 Schritt lädt `myst build` es bei jedem Lauf von einem *wandernden Branch* bei GitHub — das
 macht das Aussehen der Seite zu einer unversionierten Abhängigkeit und den Build von einer
 Netzverbindung abhängig. Ein lokaler Pfad in `myst.yml` funktioniert für `site.template`
 **nicht**; für das tex-Template unter `templates/tex/eidl-skript` funktioniert er sehr wohl,
 und deshalb liegt das einfach im Repo. Begründung und Aktualisierungsweg:
-`_site/vendor/README.md`.
+`_site/vendor/README.md`; geholt wird seitdem das **Release-Asset** aus
+https://github.com/jupyter-book/myst-theme/releases und nicht mehr `main.zip` — ein wandernder Branch hatte schon
+einmal eine andere Fassung geliefert als notiert.
+
+**Auf 2.x geht dieses Repo nicht ohne Umbau.** Theme 2.0.0 (2026-11-10) ist ein erklärter
+Bruch, und das Dateilayout ändert sich vollständig: zwei Serverbündel statt einem,
+Vite-`_assets`-Chunks statt der bisherigen `_shared`-Chunks, `thebe-core.css` in das Hauptstylesheet
+eingebacken. Alle 38 Anker in `install_template.py` müßten neu gesetzt werden, und
+`dead_css.py` und `thebe_gate.py` bräuchten einen anderen Ansatz. Die Durchsicht der
+Upstream-Änderungen samt Messwerten steht in `devnotes/build-log-2026-11-17-theme.md`.
 
 `check_doku.py` vergleicht, was die Dokumentation behauptet, mit dem, was da ist: Pfade,
 Kapitel- und Übungszahlen, Seitenzahl, `--min-pages` hier und in der CI, die Vollständigkeit
