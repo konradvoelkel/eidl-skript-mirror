@@ -26,9 +26,24 @@ angeheftet. Eine andere Fassung kodiert anders, und dann ändern sich alle Datei
 einmal, ohne dass sich an einer einzigen etwas Inhaltliches geändert hätte. Dieselbe
 Lehre, dieselbe Vorsichtsmaßnahme.
 
+Zwei Größen je Abbildung (2026-11-17, Audit §3)
+-----------------------------------------------
+Lighthouse meldete drei Abbildungen, die größer ausgeliefert werden als dargestellt: Die
+Dateien sind rund 1300 px breit, das Satzfeld ist 644 px. Neben jede Fassung ab
+`HALB_AB_PX` Breite legt dieses Skript deshalb eine **halb so breite** (`…@1x.webp`,
+LANCZOS, q90) – 53 Dateien, und ohne Retina-Auflösung fallen die Bildbytes damit von
+2,37 MB auf 1,04 MB. Genau die halbe Breite und nicht irgendeine: Dann trägt der
+Deskriptor `1x`/`2x` die Wahrheit, und der Browser braucht kein `sizes`.
+
+Hier ist die Qualitätsstufe **immer** q90, anders als bei der großen Fassung, und das ist
+gemessen: Verlustfrei ist bei **keiner** der 53 halben Fassungen kleiner (zusammen 2289 K
+gegen 1069 K). Das Resampling bricht die großen einfarbigen Flächen auf, aus denen die
+verlustfreie Fassung bei den Matplotlib-Abbildungen ihren Vorteil zieht — der Vergleich
+lohnt deshalb nur oben.
+
 Ausgeliefert wird die WebP-Fassung von `tools/webp.py` im `pages`-Job, das im Artefakt
 die Verweise umschreibt – im Markup, im Stylesheet `bildmasse` und in der
-Hydrations-Nutzlast.
+Hydrations-Nutzlast – und die halbe Fassung als `srcset` anbietet.
 """
 
 from __future__ import annotations
@@ -71,13 +86,31 @@ def alle_quellen(namen: set[str]) -> list[pathlib.Path]:
                   + [p for p in EXTRA if p.exists()])
 
 
+# Die halbe Fassung fuer Bildschirme ohne Retina-Aufloesung. Der Name haengt am grossen
+# Bild, damit `tools/webp.py` ihn ohne Tabelle bilden kann: aus `x.webp` wird `x@1x.webp`.
+HALB = "@1x"
+# Darunter lohnt die zweite Datei nicht: Was schmaler als das Satzfeld ist, wird ohnehin
+# nicht herunterskaliert.
+HALB_AB_PX = 700
+
+
 def ziel(quelle: pathlib.Path) -> pathlib.Path:
     return quelle.with_suffix(".webp")
 
 
+def ziel_halb(quelle: pathlib.Path) -> pathlib.Path:
+    # Nicht `with_suffix`: `@1x.webp` ist fuer pathlib kein gueltiges Suffix.
+    return quelle.with_name(quelle.stem + HALB + ".webp")
+
+
 def veraltet(quelle: pathlib.Path) -> bool:
     z = ziel(quelle)
-    return not z.exists() or z.stat().st_mtime < quelle.stat().st_mtime
+    if not z.exists() or z.stat().st_mtime < quelle.stat().st_mtime:
+        return True
+    # Die halbe Fassung zaehlt mit: fehlt sie, ist der Satz unvollstaendig. Ob sie
+    # ueberhaupt faellig ist, weiss erst `bauen()` -- es kennt die Breite.
+    h = ziel_halb(quelle)
+    return h.exists() and h.stat().st_mtime < quelle.stat().st_mtime
 
 
 def bauen(quelle: pathlib.Path) -> tuple[int, int, str]:
@@ -95,6 +128,21 @@ def bauen(quelle: pathlib.Path) -> tuple[int, int, str]:
             fassungen[name] = puffer.getvalue()
     wahl = min(fassungen, key=lambda k: len(fassungen[k]))
     ziel(quelle).write_bytes(fassungen[wahl])
+
+    # Die halbe Fassung, fuer `srcset="… 1x, … 2x"`. Genau die halbe Breite und nicht
+    # irgendeine: Dann traegt der Deskriptor `1x`/`2x` die Wahrheit, und der Browser
+    # braucht kein `sizes`, um richtig zu waehlen.
+    with Image.open(quelle) as im:
+        im.load()
+        if im.width >= HALB_AB_PX:
+            if im.mode not in ("RGB", "RGBA"):
+                im = im.convert("RGBA" if "transparency" in im.info or im.mode in ("LA", "PA") else "RGB")
+            klein = im.resize((im.width // 2, im.height // 2), Image.LANCZOS)
+            puffer = io.BytesIO()
+            klein.save(puffer, "WEBP", quality=90, method=6)
+            ziel_halb(quelle).write_bytes(puffer.getvalue())
+        elif ziel_halb(quelle).exists():
+            ziel_halb(quelle).unlink()
     return quelle.stat().st_size, len(fassungen[wahl]), wahl
 
 
@@ -115,7 +163,7 @@ def main() -> int:
         fehlt = [p.name for p in quellen if veraltet(p)]
         # Eine WebP-Datei ohne Quelle ist ein Rest einer umbenannten Abbildung.
         verwaist = [w.name for w in BILDER.glob("*.webp")
-                    if not any(ziel(p) == w for p in quellen)]
+                    if not any(w in (ziel(p), ziel_halb(p)) for p in quellen)]
         for n in fehlt:
             print(f"✗ {n}: WebP fehlt oder ist älter als die Quelle")
         for n in verwaist:

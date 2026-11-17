@@ -484,6 +484,36 @@ Datierte Protokolle größerer Umbauten liegen daneben als `build-log-<datum>.md
   Artefakt, wo der Schritt noch nicht gelaufen ist. Und dass die Attribute die Hydration
   nicht überleben, ist ein neuer Befund, der nur notiert ist.
 
+- [x] **Jede größere Abbildung in zwei Fassungen, `srcset` mit `1x`/`2x`**, 2026-11-17,
+  Audit §3 (Punkt 14 der Liste). Lighthouse meldete drei Abbildungen, die größer
+  ausgeliefert werden als dargestellt — die Dateien sind rund 1300 px breit, das Satzfeld
+  ist 644 px. `devnotes/make_webp.py` legt deshalb neben jede Fassung ab 700 px eine halb
+  so breite (`…@1x.webp`, LANCZOS, q90): **53 Dateien**. Auf einem Bildschirm ohne
+  Retina-Auflösung fallen damit 2,37 MB auf 1,04 MB (**56 % weniger**), `/faltung-cnn/`
+  von 526 K auf 167 K, `/gradientenabstieg/` von 471 K auf 165 K. Mit Retina-Auflösung
+  bleibt alles, wie es war — `1x`/`2x` statt `w`-Deskriptoren, weil die kleine Datei
+  *genau* die halbe Breite ist und der Browser dann kein `sizes` braucht.
+
+  **Und diesmal geht `<picture>` doch**, weil es nicht am Markup hängt: Trägt ein
+  Bildknoten der Nutzlast das Feld `urlOptimized`, rendert das Theme selbst
+  `<picture><source srcSet=… type="image/webp">`. `tools/webp.py` schreibt deshalb
+  **beides** — das `<picture>` ins Markup, damit der erste Anlauf nicht die große Datei
+  holt, und `urlOptimized` in Nutzlast und Seiten-JSON, damit React nach der Hydration
+  dasselbe baut. Im Browser nachgemessen (`autoencoder`, `faltung-cnn`): nach der
+  Hydration stehen 7 von 8 bzw. 5 von 6 Abbildungen in einem `<picture>` mit `<source
+  srcset>` — die eine Ausnahme ist jeweils das Logo, das unter 700 px liegt und keine
+  halbe Fassung hat —, bei `device_scale_factor` 1 wird die halbe Fassung gewählt, bei 2
+  die große, und **keine Datei wird zweimal geholt**. Dass die erste Messung acht
+  Doppelabrufe zeigte, war der Messaufbau: ein `page.on("request")` je Schleifendurchlauf
+  auf demselben Page-Objekt zählt jede Anfrage noch einmal mit.
+
+  Kopiert wird die halbe Fassung nur für die **verwiesenen** Adressen. mystmd legt jede
+  Abbildung mehrfach unter verschiedenen Hashnamen in `build/` ab (526 Dateien für 61
+  Abbildungen), verwiesen wird aber nur auf eine davon; blind kopiert wären es 443 Dateien
+  und 10 MB Artefakt statt 53 Dateien und 1 MB. `webp.py --check` prüft seitdem jede
+  Adresse, die ein `srcset` nennt, gegen das Artefakt — ein `srcset` auf eine fehlende
+  Datei fällt im Browser still auf das `<img>` zurück.
+
 - [x] **„In Worten“ nach den definierenden Gleichungen**, 2026-11-17, Audit §6.2.
   25 Stellen durchgegangen, an denen die Formel die Definition ist; **14 hatten ihren Satz
   schon** (Kettenregel, δ-Rekursion, Softmax, Log-Likelihood, Autoencoder-Loss, Attention,
