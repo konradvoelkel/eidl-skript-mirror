@@ -323,6 +323,28 @@ def fehler_sammeln() -> list[str]:
                     "- gleicher Anker, der zweite Abschnitt ist nicht verlinkbar"
                 )
 
+    # --- Die Forumszeile am Kapitelende (seit 2026-11-18) -----------------------------
+    # Jedes Kapitel verlinkt seine eigene Seite im Forum, und die Kennung darin ist die
+    # Seitenadresse des Kapitels: aus `09-backpropagation.md` wird `backpropagation`.
+    # Geprueft wird genau das, denn ein Tippfehler faellt sonst nirgends auf -- die
+    # Adresse zeigt dann auf eine Forumsseite, die es nicht gibt, und weder der Bau noch
+    # der Browser sagt etwas. Umgekehrt bricht eine *Umbenennung* des Kapitels drueben
+    # den Bau des Forums (es prueft Kennung und Titel gegen den Korpus des Skripts) --
+    # diese Pruefung hier fuehrt also dazu, dass beide Seiten zugleich auffallen.
+    for datei in kapitel:
+        text = datei.read_text(encoding="utf-8")
+        kennung = re.sub(r"^\d+-", "", datei.stem)
+        soll = f"https://hai.konradvoelkel.com/eidl/f/kapitel/{kennung}/"
+        gefunden = re.findall(r"https://hai\.konradvoelkel\.com/eidl/f/kapitel/[\w-]*/", text)
+        if not gefunden:
+            fehler.append(f"{datei.name}: keine Forumszeile am Kapitelende")
+        elif len(gefunden) > 1:
+            fehler.append(f"{datei.name}: {len(gefunden)} Forumslinks, erwartet genau einen")
+        elif gefunden[0] != soll:
+            fehler.append(
+                f"{datei.name}: Forumslink nennt {gefunden[0]!r}, erwartet {soll!r}"
+            )
+
     return fehler
 
 

@@ -101,8 +101,9 @@ wurde dabei um 28 Zeilen kürzer, weil die Verteilung nun in 10 eingeführt wird
 2026-11-17 vier Seiten mehr: eine durch die Einleitungsabsätze in 20 Kapiteln, eine durch
 die Glossarzeile in jeder „Weiterlesen“-Box und drei durch die Herkunftszeile am Ende jedes
 Kapitels, abzüglich einer, die beim Nachziehen der Einleitungen und der Startseite am Abend
-wieder wegfiel – alles aus den beiden SEO-Audits): HTML ohne
-Warnungen, PDF **152 Seiten A4** lokal, 0 LaTeX-Fehler,
+wieder wegfiel – alles aus den beiden SEO-Audits; seit dem 2026-11-18 eine weitere durch
+die Forumszeile am Ende jedes Kapitels): HTML ohne
+Warnungen, PDF **153 Seiten A4** lokal, 0 LaTeX-Fehler,
 0 fehlende Glyphen, 5 überlange Zeilen. Das veröffentlichte PDF hat am 2026-11-14 **147**
 (auf dem Baum `7ccf9c9` gemessen, derselbe wie lokal; am 2026-11-12 waren es **143** gegen
 lokal 144, siehe unten). Die `--min-pages`-Untergrenze
@@ -662,6 +663,25 @@ das aufgeklappte Menü und, wo es sich anbietet, der erste Satz („Im letzten K
 
 `devnotes/check_doku.py` prüft Punkt 2 und die Reihenfolge; `devnotes/folienlinks.py`
 hängt die Folienzeile ans Ende des Vorspanns.
+
+## Das Ende eines Kapitels
+
+Nach dem letzten Abschnitt, in dieser Reihenfolge: der Übungsabschnitt (wo es einen gibt),
+die „Weiterlesen“-Box, dann zwei kursive Zeilen.
+
+1. **Die Forumszeile** (seit 2026-11-18): „Frage zu diesem Kapitel?“ mit einem Link auf
+   `https://hai.konradvoelkel.com/eidl/f/kapitel/<kennung>/`, dazu in einem Halbsatz, wer
+   fragen und wer mitlesen kann. Die Kennung ist die **Seitenadresse des Kapitels** — aus
+   `09-backpropagation.md` wird `backpropagation`. Das Forum ist hAInrich2
+   (`~/files/work/__drafts/hainrich2`); es kennt genau diese 29 Kennungen, und sein Bau
+   scheitert, wenn eine davon nicht mehr zum Skript passt. `check_doku.py` prüft hier die
+   Gegenrichtung: genau ein Forumslink je Kapitel, und die Kennung darin gleich der
+   Seitenadresse. Ein Tippfehler fiele sonst nirgends auf.
+2. **Die Herkunftszeile**: Werktitel, Gattung, Autor, Lizenz im Klartext und der Link auf
+   „Über dieses Skript“ (Punkt 1 des zweiten Audits).
+
+Die vier Seiten außerhalb der Kapitel — Startseite, Glossar, „Über dieses Skript“,
+Übungsblätter — bekommen **keine** Forumszeile; dafür gibt es drüben keine Seite.
 
 ## Querverweise
 
