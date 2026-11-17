@@ -92,7 +92,7 @@ Planzeilen:
 | VL 3 | Ab Folie 7 um eins verschoben (Plan zählt 19 Folien, Deck hat 18). |
 | VL 4 | Folie 5 (S-Form basteln) ist im Plan in „2–4“ subsumiert, „5–7“ meint 6–7; Rest stimmt. **Erledigt am 2026-11-04**: Zeile 1 nennt jetzt Folien 2–5, Zeile 2 Folien 6–7; die acht übrigen Zeilen waren schon richtig, Gegenprobe gegen die `frametitle`. |
 | VL 5 | Ab Folie 5 um eins verschoben (Plan 22, Deck 21). **Erledigt am 2026-11-04**: alle zehn Planzeilen auf die 21 Folien nachgezogen (Zeile 1 nennt jetzt nur Folie 2, die letzte Folien 19–21), Gegenprobe Zeile für Zeile gegen die `frametitle`. |
-| VL 6 | Ab Folie 15 um eins verschoben (Plan 18, Deck 17): „Das Muster“ ist 14, nicht 15. |
+| VL 6 | Ab Folie 15 um eins verschoben (Plan 18, Deck 17): „Das Muster“ ist 14, nicht 15. **Erledigt am 2026-11-17**, Tag vor der Sitzung: die vier betroffenen Planzeilen nachgezogen (Rückwärts differenzieren 11–13, Das Muster 14, PyTorch 15, Schluss 16–17, letzte Zeile heißt jetzt „Was das kostet, zur Übung“ statt „Aufwand, Take-Home, Übungsblatt“). Gegenprobe Zeile für Zeile gegen die 17 `frametitle`. Das PDF bleibt unberührt: `show notes` ist auskommentiert, der Ablaufplan steht nur im `\note`. |
 | VL 7 | Ab Folie 16 um eins verschoben, diesmal in die andere Richtung (Plan 20, Deck 21): `xy` ist 16, Universalität 17–19, Take-Home 20, Blatt 21. |
 | VL 10 | Ab Folie 6 um eins verschoben (Plan 18, Deck 17). |
 | VL 12 | Ab Folie 10 um eins bis zwei verschoben (Plan 17, Deck 15): VRAM ist 10, Ollama 11, Embeddings 12, Verteilung 13, JSON 14, Blatt 15. |
