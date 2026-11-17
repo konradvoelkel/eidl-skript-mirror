@@ -364,6 +364,13 @@ Textfassung von Seite und Objektbaum: `~/Sciebo/hhu/eidl-26/ilias/` (analog zu
 
 ## Infrastruktur
 
+- [ ] **Offene Punkte aus dem zweiten SEO-Audit** (`seo-audit-2026-11-17.md`, Arbeitsliste
+  in §11). Die drei schwersten: 14,9 % des Buchtextes stehen in `<aside>`-Kästen und
+  fallen aus der Textextraktion (94 von 97, samt aller Definitionen der beiden
+  Hintergrundkapitel und samt der neuen Glossarzeile); auf einer Kapitelseite steht
+  Autor, Lizenz und Datum nirgends im Haupttext; 940 kB JavaScript des Themes, mehr als
+  die Hälfte ungenutzt, ziehen den TBT auf jeder Seite über die Schwelle.
+
 - [ ] **Offene Befunde aus dem SEO-Audit vom 2026-11-03** (Bericht nicht im Repo; Auslieferung,
   Descriptions, Startseite, Suchknopf, doppelte Überschriften, `llms.txt`, Impressum, Autor-`sameAs` und
   Bing Webmaster Tools sind am selben Tag erledigt, siehe `erledigt.md`). Offen:
