@@ -188,4 +188,6 @@ Prince, [*UDL*](https://udlbook.github.io/udlbook/), Kap. 3 (Universal approxima
 * Aytekin: [*Neural Networks are Decision Trees*](https://arxiv.org/abs/2210.05189), 2022.
 * Belkin, Hsu, Ma, Mandal: [*Reconciling modern machine-learning practice and the classical bias–variance trade-off*](https://arxiv.org/abs/1812.11118), PNAS 2019.
 * Nakkiran, Kaplun, Bansal, Yang, Barak, Sutskever: [*Deep Double Descent: Where Bigger Models and More Data Hurt*](https://arxiv.org/abs/1912.02292), ICLR 2020.
+
+Die Begriffe dieses Kapitels in je ein bis drei Sätzen: [Glossar zur Klausurvorbereitung](../glossar.md).
 :::

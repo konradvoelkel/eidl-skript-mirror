@@ -286,6 +286,62 @@ def kapitel_graph(site: str, slug: str, position: int, datum: str, doc: str,
     return {"@context": "https://schema.org", "@graph": [kapitel, brotkrumen]}
 
 
+# --- Glossar ------------------------------------------------------------------------
+# Die 69 Begriffe des Glossars als `DefinedTermSet` (SEO-Audit §6.4). Es ist der einzige
+# Knotentyp dieses Buchs, den eine Antwortmaschine *begriffsweise* lesen kann; bis zum
+# 2026-11-17 war das Glossar für sie eine Seite Fließtext wie jede andere.
+#
+# **Ohne Anker je Begriff**, und das ist eine Entscheidung und kein Versäumnis: Explizite
+# Anker (`(name)=`) benutzt dieses Repository nicht (CLAUDE.md, „Querverweise"), und die
+# Begriffe zu Überschriften zu machen, hinge 69 Einträge in die Seitengliederung. Der
+# `url` jedes Begriffs ist deshalb die Glossarseite; zitierbar ist der Begriff über
+# seinen Namen im Set.
+GLOSSAR = Path(__file__).resolve().parent.parent / "glossar.md"
+FETT = re.compile(r"^\*\*(.+?)\*\*", re.S)
+MD_LINK = re.compile(r"\[([^\]]*)\]\([^)]*\)")
+
+
+def glossar_begriffe(pfad: Path = GLOSSAR) -> list[tuple[str, str]]:
+    """(Begriff, Erklärung) je fett eingeleitetem Absatz des Glossars."""
+    text = pfad.read_text(encoding="utf-8")
+    text = text.split("\n# ", 1)[-1]
+    begriffe: list[tuple[str, str]] = []
+    for absatz in text.split("\n\n"):
+        absatz = absatz.strip()
+        if not absatz.startswith("**"):
+            continue
+        m = FETT.match(absatz)
+        if not m:
+            continue
+        name = " ".join(m.group(1).split()).rstrip(".")
+        klartext = " ".join(MD_LINK.sub(r"\1", absatz).replace("**", "").replace("*", "").split())
+        # Die Kapitelverweise am Ende sind nach dem Entlinken nur noch Kapiteltitel; sie
+        # gehören nicht in die Erklärung.
+        for titel in re.findall(r"\[([^\]]*)\]\([^)]*\.md\)", absatz):
+            if klartext.endswith(titel):
+                klartext = klartext[: -len(titel)].rstrip(" ,;")
+        begriffe.append((name, klartext))
+    return begriffe
+
+
+def glossar_knoten(site: str, buch: dict) -> dict:
+    begriffe = glossar_begriffe()
+    gesetzt = f"{site}/glossar/#glossar"
+    return {
+        "@type": "DefinedTermSet",
+        "@id": gesetzt,
+        "url": f"{site}/glossar/",
+        "name": "Glossar zur Klausurvorbereitung",
+        "inLanguage": buch["inLanguage"],
+        "license": buch["license"],
+        "hasDefinedTerm": [
+            {"@type": "DefinedTerm", "name": name, "description": text,
+             "inDefinedTermSet": {"@id": gesetzt}}
+            for name, text in begriffe
+        ],
+    }
+
+
 def landing_graph(site: str, doc: str, buch: dict, datum: str) -> dict:
     karte = re.search(r'<meta property="og:image" content="([^"]+)"', doc)
     if not karte:
@@ -354,6 +410,16 @@ def pruefen(site: str, root: Path, seiten: list[tuple[str, str, str | None]],
         if not kapitel:
             print(f"✗ {ziel} hat keinen Chapter-Knoten")
             return 1
+        if slug == "glossar":
+            satz = knoten.get("DefinedTermSet")
+            soll = len(glossar_begriffe())
+            if not satz:
+                print(f"✗ {ziel} hat keinen DefinedTermSet-Knoten")
+                return 1
+            if len(satz.get("hasDefinedTerm", [])) != soll:
+                print(f"✗ {ziel} nennt {len(satz.get('hasDefinedTerm', []))} Begriffe, "
+                      f"glossar.md hat {soll}")
+                return 1
         if kapitel["isPartOf"]["@id"] != buch["@id"]:
             print(f"✗ {ziel} gehört zu {kapitel['isPartOf']['@id']}, nicht {buch['@id']}")
             return 1
@@ -449,6 +515,8 @@ def main() -> int:
                 return 1
             payload = kapitel_graph(site, slug, position, daten[slug], doc, buch,
                                     suffix)
+            if slug == "glossar":
+                payload["@graph"].append(glossar_knoten(site, buch))
 
         if "</head>" not in doc:
             print(f"✗ {ziel} hat kein </head>")

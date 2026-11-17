@@ -368,3 +368,8 @@ lieber mehr verschiedene Bilder sehen oder länger auf denselben üben sollte.
 *Antwortprobe: Bei (1) spart das Einfrieren Speicher, aber nicht jede Rechnung; bei (3)
 ist die Genauigkeit auf frischen Bildern das Einzige, was den Unterschied überhaupt
 zeigt.*
+
+:::{admonition} Weiterlesen
+:class: seealso
+Die Begriffe dieses Kapitels in je ein bis drei Sätzen: [Glossar zur Klausurvorbereitung](../glossar.md).
+:::

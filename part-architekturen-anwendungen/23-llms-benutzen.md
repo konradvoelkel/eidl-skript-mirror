@@ -142,3 +142,8 @@ Konkret eine Anwendung wie z.B. der „Chatbot“ [hAInrich](https://www.heicad.
 ## Ausblick: Transfer Learning und Ensembles
 
 Wir schauen rein, wenn dazu noch Zeit bleibt: das Kaggle-Notebook „PyTorch | Flowers | TransLearning + Ensemble | Test = 99.67 %“. Fragen, die wir klären wollen: Worum geht es da überhaupt? Was „ist“ Ensembling bzw. ein Ensemble-Modell? Was ist z.B. das Modell GoogLeNet von 2014, das da verwendet wird?
+
+:::{admonition} Weiterlesen
+:class: seealso
+Die Begriffe dieses Kapitels in je ein bis drei Sätzen: [Glossar zur Klausurvorbereitung](../glossar.md).
+:::

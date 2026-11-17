@@ -150,4 +150,6 @@ Ein Lehrer-Modell gibt für drei Klassen die Logits $(3, 1, 0)$ aus.
 * Yan, Agarwal, Venkataraman: [*Decoding Speculative Decoding*](https://arxiv.org/abs/2402.01528), 2024.
 * Sauer, Lorenz, Blattmann, Rombach: [*Adversarial Diffusion Distillation*](https://arxiv.org/abs/2311.17042), 2023.
 * Gemini Team: [*Gemini 1.5: Unlocking multimodal understanding across millions of tokens of context*](https://arxiv.org/abs/2403.05530), 2024.
+
+Die Begriffe dieses Kapitels in je ein bis drei Sätzen: [Glossar zur Klausurvorbereitung](../glossar.md).
 :::

@@ -131,4 +131,6 @@ und das vierte je vier; bei (3) sind es 15 Millionen.*
 **Zum Ansehen:**
 
 * StatQuest: [*Word Embedding and Word2Vec, Clearly Explained!!!*](https://www.youtube.com/watch?v=viZrOnJclY0), 16 Minuten, 2023 (englisch) – CBOW und Skip-gram am kleinen Beispiel durchgerechnet.
+
+Die Begriffe dieses Kapitels in je ein bis drei Sätzen: [Glossar zur Klausurvorbereitung](../glossar.md).
 :::

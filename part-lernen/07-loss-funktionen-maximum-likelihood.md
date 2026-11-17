@@ -16,6 +16,8 @@ Dieses Kapitel klärt, *was* beim Training minimiert wird und warum. Das nächst
 {url: 'https://media.hhu.de/video/einfuehrung-in-deep-learning-202627-vl-5-gradientenabstieg/c0b3a84b8c0c1de8ec1cd76d5be63075'}
 :::
 
+[Folien VL 5, S. 2–14](https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de/folien/vl05.pdf#page=2)
+
 ## Training eines einzelnen Neurons: Was bisher geschah
 
 Wir haben zwei Modelle für ein einzelnes Neuron gesehen, mit gleicher Struktur, aber sehr unterschiedlich beschriebenem Training:
@@ -168,4 +170,6 @@ ist die Kullback-Leibler-Divergenz (im [DS-Skript](https://voelkel.pages.cs.uni-
 :::{admonition} Weiterlesen
 :class: seealso
 Prince, [*UDL*](https://udlbook.github.io/udlbook/), Kap. 5 (Loss functions: Maximum Likelihood als Rezept für alle Loss-Funktionen); Deisenroth et al., [*MML*](https://mml-book.github.io/), Abschnitt 8.3 (Parameter estimation) und Kap. 9 (Linear regression). Beide Bücher sind frei verfügbar, siehe [Über dieses Skript](../README.md).
+
+Die Begriffe dieses Kapitels in je ein bis drei Sätzen: [Glossar zur Klausurvorbereitung](../glossar.md).
 :::

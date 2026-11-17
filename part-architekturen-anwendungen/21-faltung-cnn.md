@@ -258,4 +258,6 @@ Prince, [*UDL*](https://udlbook.github.io/udlbook/), Kap. 10 (Convolutional netw
 **Zum Ausprobieren:**
 
 * [CNN Explainer](https://poloclub.github.io/cnn-explainer/) (Polo Club, Georgia Tech) – Filter, Feature Maps und Pooling eines trainierten Netzes zum Durchklicken, bis hinunter auf die einzelne Faltung.
+
+Die Begriffe dieses Kapitels in je ein bis drei Sätzen: [Glossar zur Klausurvorbereitung](../glossar.md).
 :::

@@ -107,4 +107,6 @@ Gegeben Embeddings $\text{KÖNIG} = (4,2)$, $\text{MANN} = (3,0)$, $\text{FRAU} 
 
 * Bolukbasi et al.: [*Man is to Computer Programmer as Woman is to Homemaker? Debiasing Word Embeddings*](https://arxiv.org/abs/1607.06520), NeurIPS 2016.
 * Arvanitidis, Hansen, Hauberg: [*Latent Space Oddity: on the Curvature of Deep Generative Models*](https://arxiv.org/abs/1710.11379), ICLR 2018.
+
+Die Begriffe dieses Kapitels in je ein bis drei Sätzen: [Glossar zur Klausurvorbereitung](../glossar.md).
 :::

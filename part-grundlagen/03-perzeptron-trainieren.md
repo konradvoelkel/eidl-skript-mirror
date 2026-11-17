@@ -164,4 +164,6 @@ $[\,w \cdot x > 0\,]$ steht ein echtes Größerzeichen.*
 :::{admonition} Weiterlesen
 :class: seealso
 Prince, [*UDL*](https://udlbook.github.io/udlbook/), Kap. 3 (Shallow neural networks) und 4 (Deep neural networks) für das Stapeln von Schichten. Das Buch ist frei verfügbar, siehe [Über dieses Skript](../README.md).
+
+Die Begriffe dieses Kapitels in je ein bis drei Sätzen: [Glossar zur Klausurvorbereitung](../glossar.md).
 :::

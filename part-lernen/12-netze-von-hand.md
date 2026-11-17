@@ -155,3 +155,8 @@ Funktionen lassen sich mit neuronalen Netzen darstellen bzw. approximieren. Mit 
    *Tipp: Was macht das Vorzeichenwechseln von $w$ und $b$ mit der Entscheidungsgrenze?*
 
 *Antwortprobe: Bei (1) gibt es viele richtige Antworten; alle erfüllen dieselben vier Ungleichungen.*
+
+:::{admonition} Weiterlesen
+:class: seealso
+Die Begriffe dieses Kapitels in je ein bis drei Sätzen: [Glossar zur Klausurvorbereitung](../glossar.md).
+:::

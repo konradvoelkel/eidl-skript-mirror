@@ -67,3 +67,8 @@ welches Modell und woher, welcher Loss, womit messen wir Güte, was kann schiefg
 trainieren“, solange es ein vortrainiertes gibt.*
 
 *Antwortprobe: Beim Loss sollte etwas mit „Kreuzentropie“ dastehen, bei der Güte etwas anderes als „Accuracy“ – die Ressorts sind ungleich häufig.*
+
+:::{admonition} Weiterlesen
+:class: seealso
+Die Begriffe dieses Kapitels in je ein bis drei Sätzen: [Glossar zur Klausurvorbereitung](../glossar.md).
+:::

@@ -188,4 +188,6 @@ Prince, [*UDL*](https://udlbook.github.io/udlbook/), Kap. 1 (Introduction) und 2
 * Olazaran: [*A Sociological Study of the Official History of the Perceptrons Controversy*](https://hdl.handle.net/10.1177/030631296026003005), Social Studies of Science 1996.
 * Dhariwal, Nichol: [*Diffusion Models Beat GANs on Image Synthesis*](https://arxiv.org/abs/2105.05233), NeurIPS 2021.
 * [*How AMD May Get Across the CUDA Moat*](https://www.hpcwire.com/2023/10/05/how-amd-may-get-across-the-cuda-moat/), HPCwire 2023.
+
+Die Begriffe dieses Kapitels in je ein bis drei Sätzen: [Glossar zur Klausurvorbereitung](../glossar.md).
 :::

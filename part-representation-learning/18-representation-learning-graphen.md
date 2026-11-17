@@ -91,4 +91,6 @@ Prince, [*UDL*](https://udlbook.github.io/udlbook/), Kap. 13 (Graph neural netwo
 
 * Grover, Leskovec: [*node2vec: Scalable Feature Learning for Networks*](https://hdl.handle.net/10.1145/2939672.2939754), KDD 2016; frei: [arXiv:1607.00653](https://arxiv.org/abs/1607.00653).
 * Zhou, Niu, Chen: [*Efficient Graph Computation for Node2Vec*](https://arxiv.org/abs/1805.00280), 2018.
+
+Die Begriffe dieses Kapitels in je ein bis drei Sätzen: [Glossar zur Klausurvorbereitung](../glossar.md).
 :::

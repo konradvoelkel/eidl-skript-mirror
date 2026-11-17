@@ -168,4 +168,6 @@ Sei $w = \binom{3}{4}$ und $b = -5$, also das Perzeptron $x \mapsto [w \cdot x +
 :::{admonition} Weiterlesen
 :class: seealso
 Prince, [*UDL*](https://udlbook.github.io/udlbook/), Kap. 3 (Shallow neural networks); Deisenroth et al., [*MML*](https://mml-book.github.io/), Kap. 3 (Analytic geometry: Skalarprodukt, Winkel, Projektion). Beide Bücher sind frei verfügbar, siehe [Über dieses Skript](../README.md).
+
+Die Begriffe dieses Kapitels in je ein bis drei Sätzen: [Glossar zur Klausurvorbereitung](../glossar.md).
 :::

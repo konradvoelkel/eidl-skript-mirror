@@ -153,4 +153,6 @@ Wer nicht lokal installieren will oder keine GPU hat: [Google Colab](https://col
 **Im Kapitel zitiert:**
 
 * Ho, Jain, Abbeel: [*Denoising Diffusion Probabilistic Models*](https://arxiv.org/abs/2006.11239), NeurIPS 2020.
+
+Die Begriffe dieses Kapitels in je ein bis drei Sätzen: [Glossar zur Klausurvorbereitung](../glossar.md).
 :::

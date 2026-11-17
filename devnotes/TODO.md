@@ -22,7 +22,7 @@ uv run devnotes/check_pdf_build.py --min-pages 100
 uv run devnotes/check_doku.py           # stimmt die Doku noch mit dem Repo überein?
 ```
 
-Erwartung: **29 Kapitel plus Glossar, 149 Seiten A4 lokal** (veröffentlicht am 2026-11-14
+Erwartung: **29 Kapitel plus Glossar, 150 Seiten A4 lokal** (veröffentlicht am 2026-11-14
 **147**, auf demselben Baum `7ccf9c9` gemessen; die Ein-Seiten-Abweichung ist seit dem 2026-10-15
 erklärt, ihr Vorzeichen aber nicht verlässlich, siehe `../CLAUDE.md`), 0 LaTeX-Fehler, 0 fehlende Glyphen,
 5 überlange Zeilen, 23 Übungsabschnitte. Weicht etwas davon ab, ist das der erste Befund, nicht
@@ -130,6 +130,14 @@ Abgabe bis …“ in den TeX-Blättern.
   `options.preamble` in der `myst.yml` (PLAYBOOK §3.8i).
 
 ## Inhalt (Skript)
+
+- [ ] **Englische Zweitnamen im Glossar** (2026-11-17, aus dem SEO-Audit §6.4). Die 69
+  Begriffe stehen seit dem 2026-11-17 als `DefinedTermSet` im JSON-LD; was ihnen fehlt,
+  ist je ein englischer Zweitname (`alternateName`) — „Kettenregel" ohne *chain rule*,
+  „Entscheidungsgrenze" ohne *decision boundary*, „Kreuzentropie" ohne *cross-entropy*.
+  Das ist Schreibarbeit am Buch, nicht am Markup, und sie lohnt doppelt: Die Klausur gibt
+  es auch auf Englisch. Vorschlag: den englischen Begriff dort, wo er fehlt, kursiv in den
+  Eintrag selbst, dann liest `inject_jsonld.py` ihn als `alternateName`.
 
 - [ ] **Abbildungen**, verbleibende Wünsche (alle `<!-- TODO Abbildung -->`-Marker sind seit 2026-09-20 aufgelöst,
   entweder durch eigene Bilder, Bilder aus den Musterlösungen 2025 oder Links): Hubel & Wiesel und GRU/LSTM sind

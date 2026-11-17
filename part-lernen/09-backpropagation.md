@@ -278,4 +278,6 @@ Prince, [*UDL*](https://udlbook.github.io/udlbook/), Kap. 7 (Gradients and initi
 **Zum Ansehen:**
 
 * 3Blue1Brown: [*Backpropagation calculus*](https://www.youtube.com/watch?v=tIeHLnjs5U8), 10 Minuten, 2017 (englisch) – dieselbe Rechnung wie hier, Schicht für Schicht, aber animiert. Davor liegt [*Backpropagation, intuitively*](https://www.youtube.com/watch?v=Ilg3gGewQ5U), 13 Minuten, für die Anschauung ohne Formeln.
+
+Die Begriffe dieses Kapitels in je ein bis drei Sätzen: [Glossar zur Klausurvorbereitung](../glossar.md).
 :::

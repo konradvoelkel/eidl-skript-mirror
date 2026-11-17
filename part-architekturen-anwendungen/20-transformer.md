@@ -91,4 +91,6 @@ Prince, [*UDL*](https://udlbook.github.io/udlbook/), Kap. 12 (Transformers). Das
 **Zum Ausprobieren:**
 
 * [Transformer Explainer](https://poloclub.github.io/transformer-explainer/) (Polo Club, Georgia Tech) – ein echtes GPT-2 im Browser: Satz eintippen und Query, Key, Value und die Attention-Gewichte Schicht für Schicht ansehen. Läuft im Browser, nichts zu installieren.
+
+Die Begriffe dieses Kapitels in je ein bis drei Sätzen: [Glossar zur Klausurvorbereitung](../glossar.md).
 :::

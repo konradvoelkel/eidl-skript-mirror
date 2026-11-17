@@ -109,4 +109,6 @@ Prince, [*UDL*](https://udlbook.github.io/udlbook/), Abschnitte 6.3 und 6.4 (Mom
 * Jordan et al.: [*Muon: An optimizer for hidden layers in neural networks*](https://kellerjordan.github.io/posts/muon/), Blog 2024.
 * Amari: [*Natural Gradient Works Efficiently in Learning*](https://hdl.handle.net/10.1162/089976698300017746), Neural Computation 1998.
 * Zhou, Yano, Sugiyama: [*Dual Riemannian Newton Method on Statistical Manifolds*](https://arxiv.org/abs/2511.11318), 2025.
+
+Die Begriffe dieses Kapitels in je ein bis drei Sätzen: [Glossar zur Klausurvorbereitung](../glossar.md).
 :::

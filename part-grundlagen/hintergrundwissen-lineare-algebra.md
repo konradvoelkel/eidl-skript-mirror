@@ -376,4 +376,6 @@ beschreibt eines –, ist invariant unter solchen Transformationen.
 Deisenroth et al., [*MML*](https://mml-book.github.io/), Kap. 2 (Linear algebra) und Kap. 3 (Analytic geometry:
 Skalarprodukt, Winkel, Projektion). Frei verfügbar, siehe
 [Über dieses Skript](../README.md).
+
+Die Begriffe dieses Kapitels in je ein bis drei Sätzen: [Glossar zur Klausurvorbereitung](../glossar.md).
 :::

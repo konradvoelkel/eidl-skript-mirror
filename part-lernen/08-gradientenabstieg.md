@@ -17,6 +17,8 @@ und das Ableiten aus dem [Hintergrundwissen Analysis](../part-grundlagen/hinterg
 {url: 'https://media.hhu.de/video/einfuehrung-in-deep-learning-202627-vl-5-gradientenabstieg/c0b3a84b8c0c1de8ec1cd76d5be63075?t=1612'}
 :::
 
+[Folien VL 5, S. 15–21](https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de/folien/vl05.pdf#page=15)
+
 ## Kurze Erinnerung an die Kettenregel
 
 Für das Training werden wir Ableitungen von verketteten Funktionen brauchen, deshalb die Kettenregel in der Form, die wir benötigen: für Funktionen zwischen Vektorräumen.
@@ -290,4 +292,6 @@ Prince, [*UDL*](https://udlbook.github.io/udlbook/), Kap. 6 (Fitting models: Gra
 **Im Kapitel zitiert:**
 
 * Li, Xu, Taylor, Studer, Goldstein: [*Visualizing the Loss Landscape of Neural Nets*](https://arxiv.org/abs/1712.09913), NeurIPS 2018.
+
+Die Begriffe dieses Kapitels in je ein bis drei Sätzen: [Glossar zur Klausurvorbereitung](../glossar.md).
 :::

@@ -138,4 +138,6 @@ Prince, [*UDL*](https://udlbook.github.io/udlbook/), Kap. 15 (Generative adversa
 * Weng: [*From GAN to WGAN*](https://lilianweng.github.io/posts/2017-08-20-gan), Blog 2017.
 * Zhu, Park, Isola, Efros: [*Unpaired Image-to-Image Translation using Cycle-Consistent Adversarial Networks*](https://hdl.handle.net/10.1109/ICCV.2017.244), ICCV 2017; frei: [arXiv:1703.10593](https://arxiv.org/abs/1703.10593).
 * Karras, Laine, Aila: [*A Style-Based Generator Architecture for Generative Adversarial Networks*](https://hdl.handle.net/10.1109/CVPR.2019.00453), CVPR 2019; frei: [arXiv:1812.04948](https://arxiv.org/abs/1812.04948).
+
+Die Begriffe dieses Kapitels in je ein bis drei Sätzen: [Glossar zur Klausurvorbereitung](../glossar.md).
 :::

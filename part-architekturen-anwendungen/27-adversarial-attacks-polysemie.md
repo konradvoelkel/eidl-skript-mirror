@@ -77,4 +77,6 @@ $(0{,}03,\ -0{,}07,\ 0{,}01)$, und $\varepsilon = 0{,}02$.
 * Shamir, Melamed, BenShmuel: [*The Dimpled Manifold Model of Adversarial Examples in Machine Learning*](https://arxiv.org/abs/2106.10151), 2021.
 * Goodfellow, Shlens, Szegedy: [*Explaining and Harnessing Adversarial Examples*](https://arxiv.org/abs/1412.6572), ICLR 2015.
 * Sharif et al.: [*Accessorize to a Crime: Real and Stealthy Attacks on State-of-the-Art Face Recognition*](https://hdl.handle.net/10.1145/2976749.2978392), CCS 2016.
+
+Die Begriffe dieses Kapitels in je ein bis drei Sätzen: [Glossar zur Klausurvorbereitung](../glossar.md).
 :::

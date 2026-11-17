@@ -105,4 +105,6 @@ $\tfrac12\left(\mu^2 + \sigma^2 - \ln \sigma^2 - 1\right)$.
 :::{admonition} Weiterlesen
 :class: seealso
 Prince, [*UDL*](https://udlbook.github.io/udlbook/), Kap. 17 (Variational autoencoders) mit ELBO und Reparametrisierung; Deisenroth et al., [*MML*](https://mml-book.github.io/), Kap. 11 (Gaussian mixture models, EM) zum Vergleich. Beide Bücher sind frei verfügbar, siehe [Über dieses Skript](../README.md).
+
+Die Begriffe dieses Kapitels in je ein bis drei Sätzen: [Glossar zur Klausurvorbereitung](../glossar.md).
 :::

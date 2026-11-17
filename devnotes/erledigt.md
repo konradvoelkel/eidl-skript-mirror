@@ -321,6 +321,17 @@ Datierte Protokolle größerer Umbauten liegen daneben als `build-log-<datum>.md
   samt Einladungslink, das Forum-Objekt ist gelöscht (der Block „Foren“ verschwand mit ihm).
 
 ### Infrastruktur
+- [x] **Jedes Kapitel verlinkt das Glossar, und die 69 Begriffe sind strukturierte Daten**,
+  2026-11-17, Audit §6.4. `glossar.md` trug 75 Links in die Kapitel, zurück zeigte keiner;
+  jetzt steht in jeder „Weiterlesen"-Box eine Zeile auf das Glossar, und die vier Kapitel
+  ohne Box (10, 12, 23, 24) haben eine bekommen. Kostet eine PDF-Seite, 149 auf **150**.
+
+  Die 69 Begriffe erzeugt `tools/inject_jsonld.py` aus `glossar.md` als `DefinedTermSet`
+  im JSON-LD der Glossarseite (34 KiB); `--check` vergleicht die Zahl im Artefakt mit der
+  in der Quelle. **Ohne Anker je Begriff** — explizite Anker benutzt dieses Repo buchweit
+  nicht, und 69 Überschriften würden die Seitengliederung sprengen — und **ohne englische
+  Zweitnamen**, weil das 69 Einträge inhaltlich ergänzen hieße; als Punkt in `TODO.md`.
+
 - [x] **Die Markdown-Auslieferung zeigt auf Bilder, die es gibt**, 2026-11-17, Audit §6.3.
   Die `.md`-Dateien behielten die rohe Direktive samt Quellpfad (`../images/vl01-neuron.png`),
   aufgelöst ein 404; ausgeliefert wird unter `/build/<name>-<hash>.png`. Jetzt steht dort

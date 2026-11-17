@@ -375,4 +375,6 @@ Prince, [*UDL*](https://udlbook.github.io/udlbook/), Kap. 5 (Loss functions), do
 **Im Kapitel zitiert:**
 
 * Good: [*Probability and the Weighing of Evidence*](https://archive.org/details/probabilityweigh0000good), Griffin, London 1950 (Ausleihe im Internet Archive).
+
+Die Begriffe dieses Kapitels in je ein bis drei Sätzen: [Glossar zur Klausurvorbereitung](../glossar.md).
 :::

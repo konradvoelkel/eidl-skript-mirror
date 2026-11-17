@@ -140,4 +140,6 @@ Antwort: Wegen $\mathbb{R}^n \otimes \mathbb{R}^m \cong \mathbb{R}^{nm}$ hat $\m
 :::{admonition} Weiterlesen
 :class: seealso
 Deisenroth et al., [*MML*](https://mml-book.github.io/), Kap. 2 (Linear algebra) für Basen, darstellende Matrizen und Basiswechsel. Das Buch ist frei verfügbar, siehe [Über dieses Skript](../README.md).
+
+Die Begriffe dieses Kapitels in je ein bis drei Sätzen: [Glossar zur Klausurvorbereitung](../glossar.md).
 :::

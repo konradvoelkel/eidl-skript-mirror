@@ -118,4 +118,6 @@ Eingabefolge $x = (1, 0, 0)$.
 **Zum Ansehen:**
 
 * StatQuest: [*Long Short-Term Memory (LSTM), Clearly Explained*](https://www.youtube.com/watch?v=YCzL96nL7j0), 21 Minuten, 2022 (englisch) – die Gates, die oben nur benannt sind, einzeln durchgerechnet.
+
+Die Begriffe dieses Kapitels in je ein bis drei Sätzen: [Glossar zur Klausurvorbereitung](../glossar.md).
 :::

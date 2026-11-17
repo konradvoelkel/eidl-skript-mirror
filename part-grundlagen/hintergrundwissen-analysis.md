@@ -313,4 +313,6 @@ Aktivierungsfunktion stehen im
 Deisenroth et al., [*MML*](https://mml-book.github.io/), Kap. 5 (Vector calculus: partielle Ableitungen, Gradienten,
 Jacobi- und Hesse-Matrix). Frei verfügbar, siehe
 [Über dieses Skript](../README.md).
+
+Die Begriffe dieses Kapitels in je ein bis drei Sätzen: [Glossar zur Klausurvorbereitung](../glossar.md).
 :::
