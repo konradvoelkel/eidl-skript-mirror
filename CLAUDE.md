@@ -109,60 +109,66 @@ lokal 144, siehe unten). Die `--min-pages`-Untergrenze
 soll einen *abgebrochenen* Lauf fangen, nicht eine gewollte Kürzung — sie steht deshalb
 deutlich unter der tatsächlichen Seitenzahl, in der CI auf demselben Wert.
 
-**Lokal und CI weichen wieder um eine Seite ab, und diesmal in die andere Richtung**: Am
-2026-11-12 hatte das lokale PDF **144 Seiten**, das veröffentlichte **143** — beide auf
-demselben Baum (`2a8a3db`, Arbeitsbaum sauber), beide mit denselben zwei
-VL-5-Aufzeichnungszeilen, gemessen mit `pdfinfo`, nicht geschätzt. Am 2026-11-14 stand es
-auf `7ccf9c9` genauso: lokal **148**, veröffentlicht **147**. Am 2026-11-10 waren
-beide noch bei **141**, am 2026-10-19 lag das veröffentlichte mit 113 gegen lokal 112
-*darüber*. Die Abweichung ist also keine feste Größe und kein Vorzeichen, auf das man sich
-verlassen kann — sie ist der Satzunterschied unten, und wie er sich auswirkt, hängt davon
-ab, wo gerade eine Zeile umbricht. **Wer eine der beiden Zahlen nennt, sagt dazu, welche.**
+**Lokal und CI setzen seit dem 2026-11-17 gleich** — und das ist neu; bis dahin wichen die
+beiden PDFs um eine Seite voneinander ab. An dem Tag ist die lokale TeX-Installation von
+TeX Live 2024 auf **2026** gehoben worden, und damit lädt auch lokal `minted v3.8.0` statt
+`v2.9`. Gegenprobe auf demselben Baum: Das lokal gebaute PDF ist im extrahierten Text
+**byte-gleich** mit dem veröffentlichten; gegen die alte Installation unterschieden sich
+46 Zeilen, alle davon Umbrüche. Seitenzahl in beiden Fällen 152, überlange Zeilen 5,
+0 LaTeX-Fehler, 0 fehlende Glyphen.
 
-Die **142**, die hier und in `devnotes/TODO.md` bis zum 2026-11-12 stand, ist nie gemessen
-worden: Sie wurde am 2026-11-11 mit der word2vec-Korrektur eingetragen und war schon beim
-Eintragen nicht geprüft. Gefunden wurde das erst, als ein Wächter 17 Stunden lang auf einen
-Build wartete, der längst durch war — sein `pgrep`-Muster stand in seiner eigenen
-Kommandozeile und fand deshalb sich selbst. Also: **Die Seitenzahl wird aus dem fertigen
-PDF gelesen, nicht aus der Änderungsnotiz übernommen.**
+Für den Alltag heißt das: **Die lokal gemessene Seitenzahl gilt jetzt auch für die
+Veröffentlichung.** Trotzdem bleibt die Regel, die aus der Zeit davor stammt und die
+nichts mit der Toolchain zu tun hat: **Die Seitenzahl wird aus dem fertigen PDF gelesen,
+nicht aus der Änderungsnotiz übernommen.** Die **142**, die hier und in `devnotes/TODO.md`
+bis zum 2026-11-12 stand, ist nie gemessen worden — sie wurde am 2026-11-11 mit der
+word2vec-Korrektur eingetragen und war schon beim Eintragen nicht geprüft. Gefunden wurde
+das erst, als ein Wächter 17 Stunden lang auf einen Build wartete, der längst durch war:
+sein `pgrep`-Muster stand in seiner eigenen Kommandozeile und fand deshalb sich selbst.
 
-Die erste Abweichung steht auf Seite 28 in einem Codeblock,
-der eine Zeile anders bricht — es ist der *Satz*, nicht der Inhalt. Die Ursache ist am
-2026-10-15 gemessen worden, und sie ist nicht die, die hier vom 2026-09-29 bis dahin stand:
+### Wie es dazu kam, und was davon zu wissen bleibt
+
+Die Vorgeschichte steht hier, weil sie zweimal falsch erklärt worden ist und weil der
+nächste Toolchain-Sprung dieselben Fallen hat.
 
 * **Diese Maschine benutzt nicht das texlive ihrer Distribution** — und die Distribution
   ist **Ubuntu 24.04 LTS**, nicht Debian; bis zum 2026-11-17 stand hier „Debians
-  texlive“, und das war an beiden Stellen falsch. `xelatex` und `latexmk` sind Symlinks
-  vom 2024-06-08 auf eine eigene TeX-Live-2024-Installation unter
-  `/usr/share/texlive/2024`, die seitdem unangetastet ist; die `texlive-*`-Pakete stehen
-  in `dpkg` überwiegend auf `rc`. Sie wären auch keine Hilfe: Ubuntu 24.04 liefert
-  `texlive-base 2023.20240207`, also TeX Live **2023** und damit einen Jahrgang **älter**
-  als die manuelle Installation.
-* **minted v2 gegen minted v3.** Lokal lädt der Lauf `minted 2023/12/18 v2.9` (in
-  `minted.sty` nachgelesen, nicht erinnert), das CI-Image Debian trixies minted v3 samt
-  `latexminted`-Helfer (siehe Dockerfile). Die beiden brechen `breaklines` verschieden —
-  genau das sieht man auf Seite 28.
-* **Nachinstallieren geht nicht, und das sagt `tlmgr` selbst** (am 2026-11-17 gefragt):
-  „Local TeX Live (2024) is older than remote repository (2026). Cross release updates are
-  only supported with `update-tlmgr-latest --update`.“ Innerhalb eines Jahrgangs bewegt
-  sich nichts mehr, und ein einzelnes Paket über die Jahresgrenze zu ziehen ist nicht
-  vorgesehen. Wer lokal minted v3 will, hebt die ganze TeX-Live-Installation an — das
-  setzt den **ganzen** Satz neu, und danach ist eine veränderte Seitenzahl nicht mehr von
-  einer inhaltlichen Änderung zu unterscheiden. Also nicht während der Vorlesungszeit, und
-  nicht in demselben Commit wie Inhalt.
-* Die Abweichung **verschwindet daher nicht von selbst**. Der Eintrag vom 2026-10-14
-  („Debian ist nachgezogen, lokal jetzt ebenfalls 113“) ist am 2026-10-15 nicht
-  reproduzierbar gewesen: Derselbe Baum (`2c6984a`) baut mit demselben mystmd 1.10.1
-  wieder 112 Seiten, und an der lokalen TeX-Installation hat sich in der Zwischenzeit
-  nichts bewegt. Wer die Abweichung loswerden will, baut im Container (PLAYBOOK §3.2).
-* **Sie ist aber auch nicht immer da.** Am 2026-11-17 hatten lokales und veröffentlichtes
-  PDF beide **152 Seiten** (mystmd 1.13.0, Theme 1.4.1, derselbe Baum). Das widerspricht
-  der Erklärung nicht — ein Umbruch kostet mal eine Seite und mal keine —, aber es heißt,
-  dass aus „lokal 152“ nicht „veröffentlicht 151“ folgt. Beide Zahlen werden gelesen, nicht
-  gerechnet.
+  texlive“, und das war an beiden Stellen falsch. Ubuntus Pakete wären auch keine Hilfe:
+  `texlive-base 2023.20240207`, also TeX Live **2023**. Die `texlive-*`-Pakete stehen in
+  `dpkg` überwiegend auf `rc`; `kpsewhich` kommt trotzdem aus `/usr/bin`, weil das im PATH
+  **vor** `/usr/local/bin` steht. Für den Bau ist das ohne Belang — die Engines bringen
+  ihre eigene kpathsea mit —, für eine Handprüfung auf der Kommandozeile nicht.
+* **minted v2 gegen minted v3** war die Ursache der Abweichung. Bis zum 2026-11-17 lud der
+  lokale Lauf `minted 2023/12/18 v2.9`, das CI-Image minted v3; die beiden brechen
+  `breaklines` verschieden, und genau das sah man auf Seite 28.
+* **Innerhalb eines TeX-Live-Jahrgangs war das nicht zu beheben**, und das sagte `tlmgr`
+  selbst: „Local TeX Live (2024) is older than remote repository (2026). Cross release
+  updates are only supported with `update-tlmgr-latest --update`.“ Ein einzelnes Paket
+  über die Jahresgrenze zu ziehen ist nicht vorgesehen.
+* **Deshalb eine frische Installation daneben statt eines Upgrades in place**:
+  `/usr/local/texlive/2026`, `scheme-full` ohne Doku- und Quelldateien, 4,9 GB,
+  unbeaufsichtigt über ein `-profile`. Die 2024er Installation liegt unangetastet daneben
+  — wenn etwas schiefgeht, zeigen die Symlinks mit einem Befehl wieder dorthin.
+* **Umgehängt wird mit `tlmgr path add`, nicht mit einzelnen `ln -s`.** In
+  `/usr/local/bin` standen **493** Symlinks auf TeX Live 2024, nicht zwei — darunter
+  `lualatex`, und das brauchen die Foliensätze (`slides/build.sh` ruft `latexmk
+  -lualatex`). Jetzt zeigen 508 auf 2026; die vier, die auf 2024 bleiben, sind
+  ConTeXt- und MusiXTeX-Werkzeuge, die TeX Live 2026 nicht mehr mitbringt und die dieses
+  Projekt nicht benutzt.
+* **`latexminted` braucht lokal keinen Kniff.** TeX Lives eigener Wrapper läuft auf
+  Anhieb (`latexminted 0.7.0`, mit Pygments 2.19.2); der Shebang-Patch im Dockerfile gilt
+  Debians Paketlayout und nicht dieser Installation.
+* **Nachgemessen wurde vor dem Umhängen**, mit dem neuen `bin`-Verzeichnis vorn im PATH
+  für einen einzigen Lauf. So steht die alte Toolchain noch, falls das Ergebnis nicht
+  taugt. Danach beides gegengeprüft: Buch 152 Seiten, Deck VL 01 41 Seiten und 0 zu volle
+  Rahmen — dieselben Zahlen wie unter 2024.
 
-`check_doku.py` prüft die Zahl gegen das **lokale** PDF, deshalb steht hier 112. Wer die
-veröffentlichte Zahl braucht, holt sie mit dem `curl`-Rezept weiter unten.
+**Die anderen Bücher auf dieser Maschine bauen mit derselben Toolchain.** `ds-skript` und
+`eipy-skript` setzen ab jetzt ebenfalls mit TeX Live 2026; ihre lokal notierten
+Seitenzahlen stammen aus der Zeit davor und sind beim nächsten Anfassen neu zu messen.
+
+`check_doku.py` prüft die Zahl gegen das **lokale** PDF. Wer die veröffentlichte Zahl
+unabhängig davon braucht, holt sie mit dem `curl`-Rezept weiter unten.
 
 Beides ist unabhängig von mystmd: 1.10.1, 1.11.0 und 1.13.0 liefern auf demselben Baum
 dieselbe Seitenzahl (1.10.1 gegen 1.11.0 am 2026-10-15 gemessen,
