@@ -25,8 +25,18 @@ sich vollständig: zwei Serverbündel (`renderer/server/index.js` und
 `server/server/index.js`) statt `build/index.js`, Vite-`_assets`-Chunks statt
 `public/build/_shared`, `thebe-core.css` in das Hauptstylesheet eingebacken (237 kB, also
 kein `<link>` mehr, den `tools/dead_css.py` herausnehmen könnte), geänderte
-`build:`-Kommandos. Jeder der 38 Anker in `install_template.py` müsste neu gesetzt werden,
-und `tools/dead_css.py` und `tools/thebe_gate.py` bräuchten einen anderen Ansatz.
+`build:`-Kommandos.
+
+**Am 2026-11-18 ausgemessen, und milder als hier zunächst stand**: Die Anker überleben.
+Der Bündler schreibt Zeichenketten in Backticks statt in doppelte Anführungszeichen; läßt
+man das Anführungszeichen im Muster offen, greifen **35 der 37** Bedienungsmuster im
+`renderer/server`-Bündel, die `aside`-Ersetzung dreimal und der Kastenkopf einmal — genau
+wie in 1.4.1. Die Arbeit liegt woanders: Abbildungen stehen unter `/_public/…` statt
+`/build/…`, das Stylesheet unter `/_assets/…`, und fünf Skripte in `tools/` setzen
+`build/` an 13 Stellen voraus. Dazu verliert `tools/dead_css.py` sein größtes Ziel, weil
+`thebe-core.css` kein eingebundenes Stylesheet mehr ist, und das Archiv hat keine
+Wurzelebene mehr. Messwerte: `devnotes/build-log-2026-11-17-theme.md`, Nachtrag vom
+2026-11-18.
 
 ## Warum das hier liegt
 

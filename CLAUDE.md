@@ -240,9 +240,13 @@ einmal eine andere Fassung geliefert als notiert.
 **Auf 2.x geht dieses Repo nicht ohne Umbau.** Theme 2.0.0 (2026-11-10) ist ein erklärter
 Bruch, und das Dateilayout ändert sich vollständig: zwei Serverbündel statt einem,
 Vite-`_assets`-Chunks statt der bisherigen `_shared`-Chunks, `thebe-core.css` in das Hauptstylesheet
-eingebacken. Alle 38 Anker in `install_template.py` müßten neu gesetzt werden, und
-`dead_css.py` und `thebe_gate.py` bräuchten einen anderen Ansatz. Die Durchsicht der
-Upstream-Änderungen samt Messwerten steht in `devnotes/build-log-2026-11-17-theme.md`.
+eingebacken. **Die Anker in `install_template.py` überleben allerdings** — am 2026-11-18
+gemessen: 35 der 37 greifen, sobald das Anführungszeichen im Muster offen bleibt, denn 2.x
+schreibt Zeichenketten in Backticks. Die Arbeit liegt bei den Adressen im Artefakt —
+Abbildungen unter `/_public/…` statt `/build/…`, und fünf Skripte in `tools/` setzen die
+alte Adresse an 13 Stellen voraus — und bei `dead_css.py`, das ohne den `thebe-core`-`<link>` sein
+größtes Ziel verliert. Die Durchsicht der Upstream-Änderungen samt Messwerten steht in
+`devnotes/build-log-2026-11-17-theme.md`.
 
 `check_doku.py` vergleicht, was die Dokumentation behauptet, mit dem, was da ist: Pfade,
 Kapitel- und Übungszahlen, Seitenzahl, `--min-pages` hier und in der CI, die Vollständigkeit
