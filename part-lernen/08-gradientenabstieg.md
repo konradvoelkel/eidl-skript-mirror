@@ -17,7 +17,7 @@ und das Ableiten aus dem [Hintergrundwissen Analysis](../part-grundlagen/hinterg
 {url: 'https://media.hhu.de/video/einfuehrung-in-deep-learning-202627-vl-5-gradientenabstieg/c0b3a84b8c0c1de8ec1cd76d5be63075?t=1612'}
 :::
 
-[Folien VL 5, S. 15–21](https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de/folien/vl05.pdf#page=15)
+[Folien VL 5, S. 21–34](https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de/folien/vl05.pdf#page=21)
 
 ## Kurze Erinnerung an die Kettenregel
 

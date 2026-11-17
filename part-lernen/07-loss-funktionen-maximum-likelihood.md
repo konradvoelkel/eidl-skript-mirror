@@ -16,7 +16,7 @@ Dieses Kapitel klärt, *was* beim Training minimiert wird und warum. Das nächst
 {url: 'https://media.hhu.de/video/einfuehrung-in-deep-learning-202627-vl-5-gradientenabstieg/c0b3a84b8c0c1de8ec1cd76d5be63075'}
 :::
 
-[Folien VL 5, S. 2–14](https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de/folien/vl05.pdf#page=2)
+[Folien VL 5, S. 2–20](https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de/folien/vl05.pdf#page=2)
 
 ## Training eines einzelnen Neurons: Was bisher geschah
 
