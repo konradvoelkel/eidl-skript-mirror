@@ -141,3 +141,71 @@ Node ≥ 22 ist seit 1.12.0 Pflicht; das Image bringt Node 26 mit, lokal läuft 
 Foliendeck und elf Übungsblätter enthält — der Prüfer erwartet dort genau ein PDF. In der
 CI ist das Verzeichnis sauber. Die Zahlen oben sind deshalb von Hand aus `pdfinfo` und
 `pdftotext` gelesen.
+
+---
+
+# Nachtrag 2026-11-18: Theme 2.1.1 ausgemessen, nicht übernommen
+
+Gemessen, weil der Befund von gestern — „2.1.1 würde die Patch-Schicht entwerten" — aus
+einer Durchsicht der Quellen stammte und nicht aus einem Versuch. Er ist in seinem Kern
+**falsch**, und das ist die Nachricht dieses Nachtrags.
+
+## Die Anker überleben
+
+Der Bündler von 2.x schreibt Zeichenketten in **Backticks** statt in doppelte
+Anführungszeichen: aus `"Skip to article content"` wird `` `Skip to article content` ``.
+Die Attributnamen bleiben doppelt gequotet (`"aria-label":`), nur die Werte wechseln. Weil
+die 37 Muster in `install_template.py` das Anführungszeichen mitschreiben, greift keines —
+die **Zeichenketten selbst stehen aber alle noch da** (`Skip to article content` 1×,
+`Site not loading correctly` 1×, `Copy code to clipboard` 1×, `myst-admonition` 8×).
+
+Gegen eine **ungepatchte** 1.4.1 als Kontrolle gemessen, mit einem Anführungszeichen, das
+auch ein Backtick sein darf (`["'`]`):
+
+| | 1.4.1 (Kontrolle) | 2.1.1 `renderer/server` |
+|---|---|---|
+| BEDIENUNG, 37 Muster | 29 greifen | **35** greifen |
+| STRUKTUR (`aside` zu `div`) | 3 | **3** |
+| KOPF (Kastenname aus dem `kind`) | 1 | **1** |
+
+Zwei Muster bleiben übrig: `"No results found."` und `"sr-only",children:"Downloads"}`.
+Die sind einzeln nachzusehen, nicht neu zu erfinden. Dass 2.1.1 **mehr** Treffer hat als
+die 1.4.1-Kontrolle, liegt daran, dass dort einige Muster nur im Browser-Bündel standen.
+
+## Was wirklich anders ist: die Adressen im Artefakt
+
+Mit mystmd 1.13.0 **baut** 2.1.1 auf Anhieb — 33 Seiten, Rückgabewert 0, ohne jede
+Anpassung. Das Artefakt sieht aber anders aus:
+
+* Abbildungen liegen unter **`/_public/…`** statt unter `/build/…`.
+* Das Stylesheet heißt **`/_assets/root-XUxrsvCL.css`** statt `/build/_assets/app-*.css`.
+* Fünf Skripte in `tools/` setzen `build/` an 13 Stellen voraus: `head_meta.py` (7),
+  `webp.py` (3), `hydration.py`, `llms_txt.py`, `stable_card.py` (je 1).
+
+Dazu zwei Kleinigkeiten am Archiv: Es hat **keine Wurzelebene** (`renderer/`, `server/`,
+`public/`, `template.yml` liegen direkt darin), womit die Prüfung „genau ein
+Wurzelverzeichnis" in `install_template.py` scheitert; und es ist mit 23,5 MB fast doppelt
+so groß wie das von 1.4.1.
+
+## Die eine echte Einbuße
+
+`thebe-core.css` ist in 2.1.1 **kein eingebundenes Stylesheet mehr**. Die Datei liegt zwar
+noch im Baum, verwiesen wird aber nicht mehr darauf; ihre Regeln stecken im
+Hauptstylesheet, das dadurch von 155 kB auf 237 kB wächst. Der Schnitt, den
+`tools/dead_css.py` heute macht — 87 kB `<link>` weg, auf jeder der 33 Seiten —, ist so
+nicht mehr zu haben. Font Awesome, `mpl_widget` und KaTeX hängen dagegen unverändert als
+CDN-`<link>` in jeder Seite; diese drei Ziele von `dead_css.py` und `vendor_assets.py`
+bleiben.
+
+## Was das für eine Übernahme heißt
+
+Kein Umbau, aber ein Tagwerk, und es liegt an zwei Stellen: `install_template.py` (ein
+tolerantes Anführungszeichen, das Auspacken ohne Wurzelebene, zwei Muster nachsehen) und
+die Adressannahme `build/` in den fünf Skripten. Dazu eine Entscheidung zu `thebe_gate.py`
+und `dead_css.py`, die ohne den `thebe-core`-Link einen Teil ihres Zwecks verlieren.
+
+**Nicht gemessen**: ob die *gepatchte* 2.1.1 richtig rendert, die `pages`-Kette, die
+Hydration, das Aussehen. Das PDF ist nicht betroffen, es hängt am tex-Template.
+
+Übernommen wurde nichts; der Arbeitsbaum steht wieder auf 1.4.1 (nachgeprüft: Theme 1.4.1
+im Cache, 0 `<aside>`, Bildpfade unter `/build/`).
