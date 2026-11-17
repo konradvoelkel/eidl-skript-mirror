@@ -321,6 +321,17 @@ Datierte Protokolle größerer Umbauten liegen daneben als `build-log-<datum>.md
   samt Einladungslink, das Forum-Objekt ist gelöscht (der Block „Foren“ verschwand mit ihm).
 
 ### Infrastruktur
+- [x] **Der Hover der Vor/Zurück-Karten trägt die Marke**, 2026-11-17, der letzte Punkt
+  aus der Blau-Liste des Audits (§4). Eine Regel genügt für Text, Rahmen und Pfeil: Das
+  Symbol zeichnet mit `stroke="currentColor"` und hat keine eigene Farbklasse, anders als
+  das Symbol der Kästen. Gemessen 5,74:1 hell und 7,57:1 dunkel.
+
+  Dabei der letzte blaue Rechenwert der Seite: Die Kopfzeile der Kästen berechnete weiter
+  `text-blue-600`, obwohl sie damit nichts färbt — Titel und Symbol setzen ihre Farbe
+  selbst. Sie trägt jetzt die Farbe ihrer Familie; ein geerbter Wert, der falsch ist,
+  wartet nur auf das Kind, das ihn erbt. Gegenprobe über beide Modi und beide Seiten:
+  **kein Element trägt mehr eine Theme-Farbe.**
+
 - [x] **Jedes Kapitel verlinkt das Glossar, und die 69 Begriffe sind strukturierte Daten**,
   2026-11-17, Audit §6.4. `glossar.md` trug 75 Links in die Kapitel, zurück zeigte keiner;
   jetzt steht in jeder „Weiterlesen"-Box eine Zeile auf das Glossar, und die vier Kapitel

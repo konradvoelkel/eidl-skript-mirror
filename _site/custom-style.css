@@ -282,6 +282,21 @@ a.myst-toc-item.active {
   color: var(--brand) !important;
 }
 
+/* Die Vor/Zurueck-Karten am Seitenende. In Ruhe grau, beim Darueberfahren faerbt das
+   Theme sie blau (`hover:text-blue-600 dark:hover:text-blue-400`, dazu derselbe Ton am
+   Rahmen). Sie standen bis zum 2026-11-17 als letzter blauer Rest der Seite im Bericht --
+   `BRANDING.md` fuehrt sie nicht auf, deshalb waren sie zuerst liegen geblieben; jetzt
+   auf Konrads Entscheidung in der Marke.
+
+   Eine Regel genuegt fuer Text, Rahmen und Pfeil: Das Symbol zeichnet mit
+   `stroke="currentColor"` und traegt keine eigene Farbklasse, anders als das Symbol der
+   Admonitions. Gemessen auf der Kapitelseite: Text 5,74:1 hell und 7,57:1 dunkel, der
+   Rahmen ebenso (Schwelle 3:1 fuer Bedienelemente). */
+a.myst-footer-link:hover {
+  color: var(--brand) !important;
+  border-color: var(--brand) !important;
+}
+
 /* 3. Structural Elements & Code Blocks */
 div.myst-code {
   border-left-color: var(--brand) !important;
@@ -371,6 +386,11 @@ p > code, li > code, td > code {
 
 .myst-admonition > .myst-admonition-header {
   background-color: color-mix(in oklab, var(--kasten) 12%, transparent) !important;
+  /* Faerbt nichts, was man sieht -- Titel und Symbol setzen ihre Farbe selbst --, aber es
+     haelt den geerbten Wert richtig: Ohne diese Zeile steht an der Kopfzeile weiter
+     `text-blue-600` des Themes, und das erbt jedes Kind, das kuenftig dazukommt. Am
+     2026-11-17 war es der letzte blaue Rechenwert der Seite. */
+  color: var(--kasten-schrift, var(--kasten)) !important;
 }
 .dark .myst-admonition > .myst-admonition-header {
   background-color: color-mix(in oklab, var(--kasten) 15%, transparent) !important;
