@@ -121,7 +121,9 @@ Abgabe bis …“ in den TeX-Blättern.
 
 **Drei Dinge, die man nicht nebenbei ändert:**
 
-* **Das Repository ist öffentlich.** Keine Lösungen, keine Klausuraufgaben, keine Personendaten in
+* **Das Repository ist öffentlich** — seit dem 2026-11-17 nicht mehr auf GitLab (dort
+  „Only Project Members"), aber weiterhin als GitHub-Spiegel, den die CI pusht. Keine
+  Lösungen, keine Klausuraufgaben, keine Personendaten in
   Dateien, die committet werden. `uebungen-2025/` und `transcripts/` sind deshalb gitignored.
 * **Die Anheftungen** (Basis-Image per Digest, Debian-Pakete per Snapshot, mystmd per Version,
   kaniko per Tag). Wer eine anhebt, baut das Image und prüft das PDF im Container, bevor er

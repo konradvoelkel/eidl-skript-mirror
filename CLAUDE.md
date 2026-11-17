@@ -363,8 +363,16 @@ Wichtig zur Ordnerstruktur:
   `devnotes/README.md` sagt, welche Datei wofür da ist; `devnotes/TODO.md` ist die eine
   Liste offener Punkte.
 * `transcripts/` (Vorlesungsaufzeichnungen 2025/26) und `uebungen-2025/` (die zwölf
-  Übungsblätter samt Lösungsvorschlägen) sind gitignored und liegen nur in Sciebo. **Das
-  Repository ist öffentlich** — was hier landet, ist im Netz.
+  Übungsblätter samt Lösungsvorschlägen) sind gitignored und liegen nur in Sciebo. **Was
+  hier landet, ist im Netz** — der GitHub-Spiegel unter
+  https://github.com/konradvoelkel/eidl-skript-mirror, den der CI-Job `mirror-to-github`
+  pusht, ist öffentlich, und daran ändert sich nichts.
+  Auf GitLab selbst steht das Repository seit dem 2026-11-17 auf „Only Project Members":
+  Blob, Tree und Raw antworten anonym mit 404, anonymes Klonen mit 401, die Projektseite
+  und die Pages-Auslieferung bleiben öffentlich. Grund war nicht Geheimhaltung, sondern
+  die Suche: Die Quelldatei eines Kapitels stand für „Deep Learning Skript" vor dem
+  gesetzten Buch (SEO-Audit vom 2026-11-17, §8b). **Die Regel bleibt deshalb unverändert
+  streng** — der Spiegel ist öffentlich, also ist jede committete Datei öffentlich.
 
 ## Aufbau
 
