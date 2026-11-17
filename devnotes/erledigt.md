@@ -321,6 +321,77 @@ Datierte Protokolle größerer Umbauten liegen daneben als `build-log-<datum>.md
   samt Einladungslink, das Forum-Objekt ist gelöscht (der Block „Foren“ verschwand mit ihm).
 
 ### Infrastruktur
+- [x] **Die Kästen tragen die Hausfarben**, 2026-11-17, zweiter Nachtrag zu §4 des
+  SEO-Audits. 57 Kästen in fünf Arten, und §4 des Stylesheets zeigte zur Hälfte ins Leere:
+  `aside.` trifft keinen aufklappbaren Kasten (das ist ein `<details>`, und so sind zehn
+  Vertiefungen beim Theme-Blau geblieben), `> header` trifft keine Kopfzeile (die ist ein
+  `div.myst-admonition-header`, aufklappbar ein `summary`) — und selbst mit richtigem
+  Selektor hätte `color` dort **nichts** gefärbt: Titel (`text-neutral-900`) und Symbol
+  (`text-blue-600`) setzen ihre Farbe selbst, geerbt wird in dieser Kopfzeile nichts.
+  Gefärbt wird jetzt das Symbol; der Titel bleibt schwarz bzw. weiß.
+
+  Damit fällt auch eine Zahl aus dem Bericht vom Vortag: die dort als „unter AA" notierten
+  3,15:1 und 3,45:1 sind **keine Textkontraste**, sondern die des Symbols, und für ein
+  Symbol gilt 3:1. Falsch war die Farbe, nicht der Kontrast.
+
+  **`seealso` fehlte in den Familien ganz.** Unser `border`-Kurzzeichen hatte die grüne
+  Kante des Themes mit `#e5e7eb` überschrieben, ohne eine eigene nachzulegen — die 25
+  „Weiterlesen"-Kästen, die größte Gruppe im Buch, hatten eine graue Kante. Sie sind kein
+  Signal, sondern ein Verweis, und gehören damit zur Marke.
+
+  Je Art zwei Variablen: `--kasten` (Kante und Tönung) ist die Hausfarbe, `--kasten-schrift`
+  die als Symbol lesbare Fassung. Gemessen in zehn Stufen: HHU-Grün hat auf Weiß 2,5:1 und
+  reißt damit sogar die 3:1 für Symbole, mit 70 % Schwarz 5,94:1; Orange 2,74:1 auf 6,41:1;
+  Rot braucht hell keine Mischung, dunkel 70 % Weiß. Endstand Symbole 4,87–5,68:1 hell und
+  5,09–5,80:1 dunkel, Titel 13,4–16,2:1.
+
+  **Die Haarlinie des Rahmens hatte nur einen Wert für beide Modi**, und es war der helle:
+  `#e5e7eb` ist dunkel 14,13:1, also ein weißer Umriss um jeden Kasten; jetzt `#2f2f35` mit
+  1,31:1 gegen 1,24:1 hell. Die Tönung der Kopfzeile ist hell dieselbe wie bei Chips und
+  Navigation (12 %), dunkel 15 % statt 22 % — das Band läuft über die ganze Breite, ein
+  Chip nicht.
+- [x] **Eine Linkfarbe statt zwei**, 2026-11-17, Nachtrag zu §4 des SEO-Audits.
+  Das Theme setzt `.hover-link` und `.link` in einer Regel auf blue-700; unsere Regel traf
+  nur `.link`. MyST vergibt die Klassen aber so, dass `link` an **externen** Zielen hängt
+  und `hover-link` an Verweisen ins eigene Buch — im Artefakt 333 Außenlinks in der Marke
+  gegen 240 eigene Kapitelverweise in Theme-Blau, dazu 99 in der Seitenleisten-Fußzeile,
+  wo seit dem Vortag beide Farben nebeneinander standen. Die Regel heißt jetzt
+  `a:is(.link, .hover-link):not(.button)`; der gepunktete Unterstrich bleibt dem
+  Querverweis, er ist zusammen mit dem Pfeilsymbol der einzige Unterschied, der noch zu
+  sehen ist.
+
+  **Zwei Hover-Zustände lagen bei 3,68:1**, einer von uns und einer vom Theme. Unsere
+  Regel mischte in beiden Modi 25 % Schwarz dazu — im Dunkelmodus wird das helle
+  `--brand` damit zu einem mittleren Violett, und jeder Außenlink fiel beim Darüberfahren
+  unter AA (dieselbe Falle wie beim PDF-Knopf tags zuvor). Der Hover geht jetzt vom
+  Seitengrund weg: hell ins Dunkle, dunkel ins Helle. Das Blau des Themes für
+  `hover-link` ist blue-500 und war auf Weiß ebenfalls 3,68:1; es fällt mit weg.
+
+  **Dabei ein toter Selektor gefunden:** `nav.myst-toc a.active` traf nichts — eine Nav
+  mit dieser Klasse gibt es im Theme nicht, die Leisten heißen `myst-primary-sidebar-toc`
+  und `-topnav`. Die aktive Navigation, die `BRANDING.md` ausdrücklich zur Marke zählt,
+  war deshalb seit einer Theme-Umbenennung blau. Sie hängt jetzt an
+  `a.myst-toc-item.active` und gilt damit in der Desktop-Leiste wie im Handy-Menü; der
+  Titel des offenen Teils (`text-blue-800` / `text-blue-200`) ist mitgenommen. Die Tönung
+  der aktiven Zeile ist gemessen und nicht geraten: die blaue des Themes hebt sich 1,19:1
+  (hell) und 2,0:1 (dunkel) von der Seite ab, die Marke auf ihr wäre dunkel 3,79:1
+  gewesen. Neun Stufen durchgemessen, gewählt 12 % hell (1,18:1 Fläche, 4,87:1 Schrift)
+  und 22 % dunkel (1,51:1 und 5,03:1) — 18 % hell wären 4,47:1 und damit unter AA.
+
+  Nachgemessen am gebauten Stand, beide Modi, Kapitelseite und Landingpage: alle vier
+  Linkarten 5,74:1 hell und 7,57:1 dunkel in Ruhe, 9,89:1 bzw. 9,49:1 im Hover; Knöpfe
+  unverändert. Build ohne Warnung. **Was danach noch blau ist**, vollständig aufgezählt
+  (jedes Element nach Text-, Rahmen- und Grundfarbe befragt): die Kopfzeile der
+  Notiz/Info-Kästen samt dem Rahmen der zehn aufklappbaren, und der Hover der
+  Vor/Zurück-Karten. Das erste ist ein **zweiter toter Selektor** — unsere
+  Admonition-Regeln sprechen `> header` an, die Kopfzeile ist aber ein `div` (im
+  aufklappbaren Kasten ein `summary`), und ein `<details>` ist kein `<aside>`. Damit ist
+  die Kopffarbe aller fünf Familien nie angekommen, auch die HHU-Farben nicht: der Kopf
+  einer „Ausprobieren"-Box trägt das Grün des Themes, der Rahmen darunter das HHU-Grün.
+  Drei Kopfzeilen liegen unter AA (3,15:1 hell bei „Ausprobieren" und „Weiterlesen",
+  3,45:1 dunkel bei Notiz). Nicht mitgemacht, weil es jeden der 57 Kästen in vier
+  Farbfamilien ändert — notiert im Bericht, zu entscheiden.
+
 - [x] **Wegweisung für den kalt Ankommenden**, 2026-11-16, §4.2–4.5 des SEO-Audits.
   Vier Punkte, drei davon neu: (a) Der Kopf über der Seiten-Outline heißt nicht mehr
   „Inhalt", sondern **„Auf dieser Seite"** — mobil stand die Abschnittsliste eines

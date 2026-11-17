@@ -202,22 +202,84 @@ h1, h2, h3, h4, h5, h6 {
    Das Theme faerbt Inhaltslinks ueber die Klasse `link` (Tailwind blue-700); ein blosses
    `a { color: ... }` verliert dagegen an Spezifitaet und bleibt wirkungslos -- genau das
    war hier bis 2026-09-24 der Fall. Navigation und Kopfzeile bleiben absichtlich neutral,
-   sonst leuchtet die halbe Seite. */
-a.link, article a.link, .myst-content a.link {
+   sonst leuchtet die halbe Seite.
+
+   **Beide Linkklassen**, seit dem 2026-11-17. Das Theme setzt `.hover-link,.link` in
+   *einer* Regel auf blue-700 und unterscheidet sie nur im Unterstrich (`hover-link`
+   gepunktet); unsere Regel traf bis dahin allein `link`. Das Ergebnis war eine Seite mit
+   zwei Linkfarben, und zwar in der unguenstigen Aufteilung: `link` traegt MyST an
+   Aussenlinks, `hover-link` an Querverweise ins eigene Buch -- gezaehlt im Artefakt vom
+   2026-11-16 also 240 violette Aussenlinks gegen 333 blaue eigene Kapitelverweise, dazu
+   99 in der Seitenleisten-Fusszeile, wo „Zum Anfang des Skripts" (absolutes Ziel, `link`)
+   violett neben drei blauen Wegweisern stand. Gemessen vorher: Querverweis
+   `rgb(29,78,216)` hell und `rgb(96,165,250)` dunkel gegen die Marke `rgb(111,89,166)`
+   bzw. `rgb(179,158,242)`.
+
+   Der **gepunktete** Unterstrich bleibt dem Querverweis: er ist die Auszeichnung des
+   Themes fuer einen Link mit Vorschau, und nachdem die Farbe beide gleich macht, ist er
+   zusammen mit dem Pfeilsymbol an Aussenlinks der einzige Unterschied, der noch zu sehen
+   ist. Geaendert wird die Farbe, nicht die Form.
+
+   `:not(.button)` haelt die zwei Knoepfe der Startseite heraus; sie haben ihre eigene
+   Regel am Dateiende, und ihr Hover-Zustand faerbt die Flaeche statt der Schrift. */
+a:is(.link, .hover-link):not(.button) {
   color: var(--brand) !important;
   text-decoration-color: color-mix(in oklab, var(--brand) 30%, transparent);
   text-decoration-thickness: 1px;
   text-underline-offset: 2px;
 }
 
-a.link:hover, article a.link:hover {
+/* Der Hover-Zustand geht **vom Seitengrund weg**, nicht pauschal ins Dunkle. Die Regel
+   mischte bis zum 2026-11-17 in beiden Modi 25 % Schwarz dazu -- im Dunkelmodus macht das
+   aus dem hellen `--brand` (#b39ef2) einen mittleren Violettton: gemessen **3,68:1** gegen
+   die dunkle Seite, also unter AA, und das fuer jeden Aussenlink im Buch. Dieselbe Zahl
+   stand im Hellmodus auf der anderen Seite: der Hover des Themes fuer `hover-link` ist
+   blue-500, ebenfalls 3,68:1 auf Weiss. Beides faellt mit diesen zwei Regeln weg.
+   Dieselbe Falle wie beim PDF-Knopf am 2026-11-16: eine Mischung mit Schwarz ist im
+   Dunkelmodus keine Hervorhebung. */
+a:is(.link, .hover-link):not(.button):hover {
   color: color-mix(in oklab, var(--brand) 75%, black) !important;
 }
+.dark a:is(.link, .hover-link):not(.button):hover {
+  color: color-mix(in oklab, var(--brand) 75%, white) !important;
+}
 
-nav.myst-toc a.active {
+/* Aktive Navigation -- die zwei Stellen, an denen das Inhaltsverzeichnis zeigt, wo man
+   steht: der Eintrag der offenen Seite und der Titel ihres Teils. Beide gehoeren laut
+   BRANDING.md zur Marke („Links, aktive Navigation, Codeblock-Kante, Notiz/Info"), und
+   beide waren bis zum 2026-11-17 blau.
+
+   Die Regel hiess hier `nav.myst-toc a.active` und traf **nichts** -- lautlos, weil CSS
+   einen Selektor ohne Treffer nicht meldet. Eine Nav mit der Klasse `myst-toc` gibt es im
+   mitgelieferten Theme nicht: die Leisten heissen `myst-primary-sidebar-toc` (Desktop) und
+   `myst-primary-sidebar-topnav` (das aufgeklappte Menue auf dem Handy). Sie haengt jetzt an
+   den Klassen der Eintraege selbst, die das Theme unabhaengig von der Leiste setzt --
+   damit gilt sie in beiden Leisten und ueberlebt eine Umbenennung der Leiste.
+
+   Gemessen vorher, auf `/backpropagation/`: der offene Eintrag traegt `bg-blue-300/30`
+   (`rgba(147,197,253,0.3)`) und sonst die Textfarbe der Seite, der Titel des offenen Teils
+   `text-blue-800` hell und `text-blue-200` dunkel -- die Klasse steht in beiden Modi am
+   Element, eine Regel genuegt also fuer beide.
+
+   **Die Flaeche wird mitgetauscht, nicht nur die Schrift**, und die Staerke ist gemessen.
+   Die blaue Toenung des Themes hebt sich mit **1,19:1** (hell) und **2,0:1** (dunkel) von
+   der Seite ab; die Marke auf *ihr* waere im Dunkelmodus 3,79:1, also unter AA -- die
+   Flaeche musste also mit. Durchgemessen in neun Stufen von 0 bis 30 %: hell traegt 12 %
+   dieselbe Sichtbarkeit wie vorher (1,18:1) und laesst die Marke bei 4,87:1; 18 % waeren
+   4,47:1 gewesen und damit unter AA. Dunkel vertraegt mehr, erreicht aber die 2,0:1 des
+   Themes nicht, ohne die Schrift unter AA zu druecken (30 %: 1,82:1 bei 4,16:1) -- deshalb
+   22 % mit 1,51:1 und 5,03:1, dieselben 22 % wie bei den Code-Chips. Die Hervorhebung ist
+   dort also etwas leiser als vorher, dafuer lesbar; Farbe und Fettung tragen sie mit. */
+a.myst-toc-item.active {
   color: var(--brand) !important;
-  border-left-color: var(--brand) !important;
+  background-color: color-mix(in oklab, var(--brand) 12%, transparent) !important;
   font-weight: 600;
+}
+.dark a.myst-toc-item.active {
+  background-color: color-mix(in oklab, var(--brand) 22%, transparent) !important;
+}
+.myst-toc-item > div.text-blue-800 {
+  color: var(--brand) !important;
 }
 
 /* 3. Structural Elements & Code Blocks */
@@ -245,39 +307,105 @@ p > code, li > code, td > code {
   color: var(--brand) !important;
 }
 
-/* 4. Minimalist Admonitions: Notiz/Info in der Markenfarbe, Signale in HHU-Farben */
-aside.myst-admonition {
+/* 4. Minimalist Admonitions: Notiz/Info/Weiterlesen in der Markenfarbe, Signale in
+      HHU-Farben -- neu gefasst am 2026-11-17, weil die Regeln hier bis dahin zur Haelfte
+      ins Leere zeigten.
+
+   Drei Fehler, alle lautlos:
+
+   1. `aside.` statt der Klasse. Eine aufklappbare Box ist ein `<details>`, kein `<aside>`
+      -- die zehn Vertiefungen trugen deshalb weiter das Blau des Themes samt seiner
+      Schatten und Flaeche, waehrend die 47 festen Kaesten daneben unsere Fassung hatten.
+   2. `> header`. Ein `<header>` gibt es in keinem dieser Kaesten: die Kopfzeile ist ein
+      `<div class="myst-admonition-header">`, aufklappbar ein `<summary>` derselben Klasse.
+   3. Und selbst mit richtigem Selektor haette `color` an der Kopfzeile **nichts**
+      gefaerbt: Der Titel traegt `text-neutral-900 dark:text-white`, das Symbol
+      `text-blue-600` -- beide Kinder setzen ihre Farbe selbst, es gibt in der Kopfzeile
+      keinen Text, der erbt. Gefaerbt wird deshalb jetzt das Symbol, nicht die Kopfzeile;
+      der Titel bleibt bewusst schwarz bzw. weiss, das liest sich besser als eine farbige
+      Ueberschrift.
+
+   `seealso` fehlte in der Liste ganz, und das war die auffaelligste Folge: Die 25
+   „Weiterlesen"-Kaesten sind die groesste Gruppe im Buch, und unser `border`-Kuerzel
+   darueber hatte die gruene Kante des Themes mit `#e5e7eb` **ueberschrieben**, ohne eine
+   eigene Farbe nachzulegen -- gemessen am 2026-11-17: Rahmen `rgb(229,231,235)`, also
+   grau. Weiterlesen ist kein Signal, sondern ein Verweis, und gehoert damit zur Marke.
+
+   Die Farbe sitzt an **vier** Stellen, die zusammenpassen muessen: 4 px Kante links,
+   Symbol, Flaeche der Kopfzeile, und als Haarlinie der Rahmen. Je Kastenart werden
+   deshalb zwei Variablen gesetzt -- `--kasten` ist die Hausfarbe selbst (Kante und
+   Flaeche), `--kasten-schrift` die Fassung, die als Symbol auf der getoenten Flaeche
+   lesbar ist. Die Toenung der Kopfzeile ist hell dieselbe wie bei den Code-Chips und der
+   aktiven Navigation (12 %), dunkel dagegen **15 % statt der dortigen 22 %**: Chip und
+   Navigationszeile sind kleine Flaechen, das Band laeuft ueber die ganze Breite des
+   Kastens, und bei 22 % traegt es im Dunkelmodus mehr Farbe als der Text darauf. In vier
+   Staerken (12, 15, 18, 22) nebeneinander angesehen und danach entschieden; das Theme
+   selbst hatte dort `slate-900`, also 1,02:1 und damit praktisch kein Band.
+
+   **`--kasten-schrift` ist gemessen, nicht geschaetzt** (Durchlauf in zehn Stufen, hell
+   gegen Weiss, dunkel gegen `#1c1917`): HHU-Gruen `#8CB110` hat als Text auf Weiss
+   **2,5:1** und reisst damit auch die 3:1 fuer Symbole; mit 70 % Schwarz 5,94:1.
+   HHU-Orange `#EE7F00` ebenso: 2,74:1 pur, 6,41:1 mit 70 % Schwarz (80 % waeren 4,73:1,
+   zu knapp). HHU-Rot `#BE0A26` braucht hell **keine** Mischung (6,44:1) -- dunkel dagegen
+   liegt es bei 2,72:1 und braucht 70 % Weiss (5,2:1). Gruen und Orange brauchen dunkel
+   keine (7,0:1 und 6,39:1). Die Mischung geht also immer von der Seite weg, und nur dort,
+   wo die Hausfarbe es verlangt; die pure Farbe steht daneben an der Kante.
+
+   Die Haarlinie hatte nur einen Wert fuer beide Modi, und der war der helle: `#e5e7eb`
+   hebt sich hell mit 1,24:1 ab und dunkel mit **14,13:1** -- ein weisser Umriss um jeden
+   Kasten. Dunkel steht deshalb `#2f2f35` (1,31:1, gemessen gleich leise wie hell). Vor
+   dieser Fassung fiel das kaum auf, weil die Regel nur `aside` traf; mit `.myst-admonition`
+   haette sie zehn Kaesten mehr umrissen.
+
+   Die Listen unten nennen auch Arten, die im Buch (noch) nicht vorkommen -- `info`,
+   `attention`, `caution`, `important`, `danger`, `error`. Das ist der Grund: Ohne Eintrag
+   faellt `var(--kasten, #e5e7eb)` auf Grau zurueck, und genau das war oben der Fehler bei
+   `seealso`. Gezaehlt im Artefakt vom 2026-11-17: 25 `seealso`, 18 `note` (davon 10
+   aufklappbar), 5 `warning`, 5 `tip`, 4 `hint`. */
+.myst-admonition {
   background-color: transparent !important;
-  border: 1px solid #e5e7eb !important;
-  border-left-width: 4px !important;
+  border: 1px solid var(--kasten-linie, #e5e7eb) !important;
+  border-left: 4px solid var(--kasten, #e5e7eb) !important;
+}
+.dark .myst-admonition { --kasten-linie: #2f2f35; }
+
+.myst-admonition > .myst-admonition-header {
+  background-color: color-mix(in oklab, var(--kasten) 12%, transparent) !important;
+}
+.dark .myst-admonition > .myst-admonition-header {
+  background-color: color-mix(in oklab, var(--kasten) 15%, transparent) !important;
+}
+.myst-admonition > .myst-admonition-header .myst-admonition-header-icon {
+  color: var(--kasten-schrift, var(--kasten)) !important;
 }
 
-aside.myst-admonition-note, aside.myst-admonition-info {
-  border-left-color: var(--brand) !important;
-}
-aside.myst-admonition-note > header, aside.myst-admonition-info > header {
-  color: var(--brand) !important;
+.myst-admonition-note, .myst-admonition-info, .myst-admonition-seealso {
+  --kasten: var(--brand);
 }
 
-aside.myst-admonition-tip, aside.myst-admonition-hint {
-  border-left-color: var(--hhu-green) !important;
+.myst-admonition-tip, .myst-admonition-hint {
+  --kasten: var(--hhu-green);
+  --kasten-schrift: color-mix(in oklab, var(--hhu-green) 70%, black);
 }
-aside.myst-admonition-tip > header, aside.myst-admonition-hint > header {
-  color: var(--hhu-green) !important;
-}
-
-aside.myst-admonition-warning {
-  border-left-color: var(--hhu-orange) !important;
-}
-aside.myst-admonition-warning > header {
-  color: var(--hhu-orange) !important;
+.dark .myst-admonition-tip, .dark .myst-admonition-hint {
+  --kasten-schrift: var(--hhu-green);
 }
 
-aside.myst-admonition-danger, aside.myst-admonition-error {
-  border-left-color: var(--hhu-red) !important;
+.myst-admonition-warning, .myst-admonition-attention, .myst-admonition-caution,
+.myst-admonition-important {
+  --kasten: var(--hhu-orange);
+  --kasten-schrift: color-mix(in oklab, var(--hhu-orange) 70%, black);
 }
-aside.myst-admonition-danger > header {
-  color: var(--hhu-red) !important;
+.dark .myst-admonition-warning, .dark .myst-admonition-attention,
+.dark .myst-admonition-caution, .dark .myst-admonition-important {
+  --kasten-schrift: var(--hhu-orange);
+}
+
+.myst-admonition-danger, .myst-admonition-error {
+  --kasten: var(--hhu-red);
+}
+.dark .myst-admonition-danger, .dark .myst-admonition-error {
+  --kasten-schrift: color-mix(in oklab, var(--hhu-red) 70%, white);
 }
 
 /* --- Nichts breiter als der Bildschirm (2026-11-03) --------------------------------
