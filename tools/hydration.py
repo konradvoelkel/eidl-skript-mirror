@@ -37,6 +37,7 @@ gerendertes HTML, beide Seiten „Crawled successfully", Befund „No items dete
 | `<title>` der Landingpage                      | mit Zusatz| **ohne Zusatz** |
 | `og:image`                                     | absolut   | **wieder wurzelrelativ** |
 | `<meta name="description">`                    | da        | da (MyST setzt es selbst) |
+| `<dialog id="myst-no-css">`                    | **weg**   | **wieder da** (seit 2026-11-17 raeumt der Waechter ihn ab) |
 
 Was MyST selbst setzt, überlebt; was ein Schritt nachträgt, überlebt nicht.
 
@@ -322,6 +323,12 @@ def guard_script(path: str, tags: list[dict], keep: list[str], lang: str, title:
         "if(!x){x=document.createElement(t.n);h.appendChild(x)}"
         "for(var k in t.a){if(x.getAttribute(k)!==t.a[k])x.setAttribute(k,t.a[k])}}"
         "for(var j=0;j<K.length;j++){if(!K[j].isConnected)h.appendChild(K[j])}"
+        # Der Kasten "Site not loading correctly?" kommt mit der Hydration zurueck:
+        # `no_css_dialog.py` nimmt ihn aus dem Artefakt, React baut ihn aus der Nutzlast
+        # neu. Er ist `display:none` und fuer Menschen unsichtbar, steht aber als erster
+        # Knoten im Body -- wer die gerenderte Seite als Text liest, beginnt mit einer
+        # Deploy-Fehlermeldung (SEO-Audit 2026-11-17, §7).
+        'var c=document.getElementById("myst-no-css");if(c)c.remove();'
         "}finally{b=false}}f();"
         "new MutationObserver(f).observe(document,{childList:true,subtree:true,"
         'attributes:true,attributeFilter:["lang"]});})();'
@@ -527,6 +534,7 @@ def check_rendered(root: pathlib.Path, lang: str, seiten: int) -> int:
                     " ogurl: !!document.head.querySelector('meta[property=\"og:url\"]'),"
                     " ldjson: document.querySelectorAll"
                     "('script[type=\"application/ld+json\"]').length,"
+                    " nocss: !!document.getElementById('myst-no-css'),"
                     " title: document.title})"
                 )
                 soll_titel = titel(head_slice(f.read_text(encoding="utf-8"), f), f)
@@ -541,6 +549,8 @@ def check_rendered(root: pathlib.Path, lang: str, seiten: int) -> int:
                     fehler.append(f"{ist['ldjson']} ld+json")
                 if ist["title"] != soll_titel:
                     fehler.append(f"Titel {ist['title']!r} statt {soll_titel!r}")
+                if ist["nocss"]:
+                    fehler.append("myst-no-css nach der Hydration wieder da")
                 if fehler:
                     schlecht += 1
                     print(f"✗ /{pfad} nach der Hydration: {', '.join(fehler)}")
@@ -552,7 +562,7 @@ def check_rendered(root: pathlib.Path, lang: str, seiten: int) -> int:
         print(f"FEHLER: {schlecht} von {len(ziele)} Seiten verlieren Kopf-Angaben")
         return 1
     print(f"✓ {len(ziele)} Seiten halten nach der Hydration Sprache, Canonical, "
-          "og:url, ld+json und Titel")
+          "og:url, ld+json und Titel und tragen den myst-no-css-Kasten nicht mehr")
     return 0
 
 

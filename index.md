@@ -15,6 +15,21 @@ Wenn Sie Fehler finden oder etwas unklar ist, freue ich mich über eine Nachrich
 
 Dieses Skript steht unter [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) und ist frei nutzbar, auch für die eigene Lehre. Autor ist Dr. Konrad Völkel ([ORCID 0000-0002-4144-4199](https://orcid.org/0000-0002-4144-4199)), Institut für Informatik der HHU Düsseldorf; Lizenztext, Zitationsvorschlag und Quelltext stehen unter [Über dieses Skript](README.md).
 
+**Wie man es liest.** Die Kapitel stehen in Lesereihenfolge und bauen aufeinander auf.
+Wer quer einsteigt, findet am Anfang jedes Kapitels einen Absatz, der den Gegenstand
+benennt, und bei den rechnenden Kapiteln darunter eine Zeile mit den Voraussetzungen. Zu
+jeder aufgezeichneten Sitzung steht die Aufzeichnung unter der Kapitelüberschrift, zu
+jedem freigegebenen Foliensatz der Link auf die passende Seite im PDF. In vier Kapiteln
+steckt ein kleines Widget, in dem sich die Rechnung bewegen lässt – die Perzeptronregel,
+eine Drehung, der Gradientenabstieg und die Stufenfunktion aus dem Approximationsbeweis.
+
+**Was danach möglich ist.** Nach dem Durcharbeiten können Sie die Grundbegriffe
+neuronaler Netze erklären, die mathematischen Grundlagen darauf anwenden, einfache
+Modelle selbst implementieren, vortrainierte Modelle in eigene Systeme einbauen und
+beurteilen, welches der besprochenen Modelle für eine Anwendung in Frage kommt – die
+Lernziele des Moduls, ausführlich unter [Über dieses Skript](README.md). Die Begriffe,
+die in Klausuraufgaben vorkommen, stehen im [Glossar](glossar.md).
+
 ## Inhalt
 
 ### Grundlagen

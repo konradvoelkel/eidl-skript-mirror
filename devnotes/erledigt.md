@@ -321,6 +321,28 @@ Datierte Protokolle größerer Umbauten liegen daneben als `build-log-<datum>.md
   samt Einladungslink, das Forum-Objekt ist gelöscht (der Block „Foren“ verschwand mit ihm).
 
 ### Infrastruktur
+- [x] **Der Fehlerkasten bleibt auch nach der Hydration weg**, 2026-11-17, Punkt 6 des
+  zweiten Audits. `no_css_dialog.py` nimmt den Kasten „Site not loading correctly?" aus dem
+  Artefakt, React baute ihn aus der Nutzlast wieder auf: unsichtbar für Menschen
+  (`display:none`), aber erster Knoten im Body und damit erstes Wort für jeden Extraktor,
+  der den gerenderten Text liest. Der Wächter in `tools/hydration.py` räumt ihn jetzt bei
+  jedem Lauf ab, und `--check-rendered` prüft das mit. Gemessen, neu gegen live: lokal ist
+  der Kasten weg und der Text beginnt mit „Zum Artikelkopf springen", live beginnt er mit
+  „Sit…" — dem Anfang der Fehlermeldung.
+
+- [x] **„In Worten" auch in den zwei Formelkapiteln**, 2026-11-17, Punkt 8. `08` und `09`
+  haben je rund zwanzig Display-Blöcke und trugen keine einzige Marke. Jetzt drei: die
+  Kettenregel in der kompakten Form und der MSE in `08`, die schichtweise Vorwärtsrechnung
+  in `09`.
+
+- [x] **Die Startseite**, 2026-11-17, Punkt 12. Die `description` in `myst.yml` war mit
+  160 Zeichen die einzige über der selbstgesetzten Grenze von 155 — jetzt 144, ohne
+  „und Autoencoder". Dazu zwei Absätze: wie man das Skript liest (Lesereihenfolge,
+  Einleitungsabsätze, Aufzeichnungen, Folien, die vier Widgets) und was danach möglich ist
+  (die Lernziele des Moduls im Fließtext, mit Link auf „Über dieses Skript" und das
+  Glossar). Die Seite hatte 426 Prosawörter und war damit die einzige inhaltliche Seite
+  unter dem 500er-Richtwert.
+
 - [x] **Die Kästen fallen nicht mehr aus der Textextraktion**, 2026-11-17, Punkt 7 des
   zweiten Audits und der schwerste Posten darin. Das Theme rendert jeden Kasten als
   `<aside>`; `install_template.py` ersetzt das jetzt in beiden Bündeln durch `<div>`, nur

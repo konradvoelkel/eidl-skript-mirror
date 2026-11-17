@@ -134,6 +134,11 @@ E &= \tfrac12\, r^T r && \text{(squared error)}
 \end{aligned}
 $$
 
+*In Worten:* Jede Schicht nimmt die Ausgabe der vorigen, multipliziert sie mit ihrer
+Matrix, addiert ihren Bias und schickt das Ergebnis durch den Tangens hyperbolicus; die
+letzte Schicht lässt die Nichtlinearität weg. Was danach bleibt, ist der Abstand zum
+Label, und sein halbes Quadrat ist der Fehler.
+
 Der Faktor $\tfrac12$ ist reine Bequemlichkeit, er kürzt sich gleich gegen die $2$ aus der Ableitung des Quadrats.
 
 ### Rückwärts differenzieren

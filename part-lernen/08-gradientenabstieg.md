@@ -56,6 +56,9 @@ $$
 D(f \circ g) = \bigl((Df) \circ g\bigr) \cdot Dg .
 $$
 
+*In Worten:* Die Ableitung einer Verkettung ist das Produkt der beiden Ableitungen –
+die äußere ausgewertet an der Stelle, die die innere liefert.
+
 Die Ableitung einer Verkettung ist das Matrixprodukt der Ableitungen, ausgewertet an den richtigen Stellen. Das ist bereits die halbe Backpropagation.
 
 **Summe über alle Pfade.** Die Matrixform versteckt einen Fall, der beim Rechnen von Hand oft schiefgeht: Wenn eine Variable auf *mehreren Wegen* in das Ergebnis eingeht, addieren sich die Beiträge. Für $L = u \cdot v$ mit $u = g(w)$ und $v = h(w)$ ist
@@ -92,6 +95,9 @@ Betrachten wir den MSE für eine lineare Regression, mit der Notation $x^{(i)}_j
 $$
 L(w) = \frac1N \sum_{i=1}^N \bigl( y_i - \langle w, x^{(i)} \rangle \bigr)^2 .
 $$
+
+*In Worten:* Für jeden Datenpunkt der Abstand zwischen Label und Vorhersage, quadriert,
+gemittelt über alle Datenpunkte.
 
 Halte zunächst die Komponente $w_2$ fest und variiere $w_1$. Das gibt eine Funktion in einer Variablen, $w_1 \mapsto L(w_1, w_2)$, und ihre Ableitung gibt die Änderung von $L$ abhängig von $w_1$ an, also die Änderung in Richtung der ersten Koordinate der $w$-Ebene: „Wenn ich einen (infinitesimalen) Schritt nach Osten gehe, wie stark ändert sich $L$ dann?“ Danach $w_1$ festhalten und $w_2$ variieren: ein Schritt nach Norden.
 
