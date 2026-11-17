@@ -130,18 +130,36 @@ Die erste Abweichung steht auf Seite 28 in einem Codeblock,
 der eine Zeile anders bricht — es ist der *Satz*, nicht der Inhalt. Die Ursache ist am
 2026-10-15 gemessen worden, und sie ist nicht die, die hier vom 2026-09-29 bis dahin stand:
 
-* **Diese Maschine benutzt nicht Debians texlive.** `xelatex` kommt aus einer eigenen
-  TeX-Live-2024-Installation unter `/usr/share/texlive/2024`, und die ist seit dem
-  2024-06-08 unangetastet; `texlive-latex-extra` steht in `dpkg` auf `rc`. Der Satz
-  „diese Maschine hat, was Debian gerade liefert“ war hier nie richtig.
-* **minted v2 gegen minted v3.** Lokal lädt der Lauf `minted 2023/12/18 v2.9`, das
-  CI-Image Debian trixies minted v3 samt `latexminted`-Helfer (siehe Dockerfile). Die
-  beiden brechen `breaklines` verschieden — genau das sieht man auf Seite 28.
+* **Diese Maschine benutzt nicht das texlive ihrer Distribution** — und die Distribution
+  ist **Ubuntu 24.04 LTS**, nicht Debian; bis zum 2026-11-17 stand hier „Debians
+  texlive“, und das war an beiden Stellen falsch. `xelatex` und `latexmk` sind Symlinks
+  vom 2024-06-08 auf eine eigene TeX-Live-2024-Installation unter
+  `/usr/share/texlive/2024`, die seitdem unangetastet ist; die `texlive-*`-Pakete stehen
+  in `dpkg` überwiegend auf `rc`. Sie wären auch keine Hilfe: Ubuntu 24.04 liefert
+  `texlive-base 2023.20240207`, also TeX Live **2023** und damit einen Jahrgang **älter**
+  als die manuelle Installation.
+* **minted v2 gegen minted v3.** Lokal lädt der Lauf `minted 2023/12/18 v2.9` (in
+  `minted.sty` nachgelesen, nicht erinnert), das CI-Image Debian trixies minted v3 samt
+  `latexminted`-Helfer (siehe Dockerfile). Die beiden brechen `breaklines` verschieden —
+  genau das sieht man auf Seite 28.
+* **Nachinstallieren geht nicht, und das sagt `tlmgr` selbst** (am 2026-11-17 gefragt):
+  „Local TeX Live (2024) is older than remote repository (2026). Cross release updates are
+  only supported with `update-tlmgr-latest --update`.“ Innerhalb eines Jahrgangs bewegt
+  sich nichts mehr, und ein einzelnes Paket über die Jahresgrenze zu ziehen ist nicht
+  vorgesehen. Wer lokal minted v3 will, hebt die ganze TeX-Live-Installation an — das
+  setzt den **ganzen** Satz neu, und danach ist eine veränderte Seitenzahl nicht mehr von
+  einer inhaltlichen Änderung zu unterscheiden. Also nicht während der Vorlesungszeit, und
+  nicht in demselben Commit wie Inhalt.
 * Die Abweichung **verschwindet daher nicht von selbst**. Der Eintrag vom 2026-10-14
   („Debian ist nachgezogen, lokal jetzt ebenfalls 113“) ist am 2026-10-15 nicht
   reproduzierbar gewesen: Derselbe Baum (`2c6984a`) baut mit demselben mystmd 1.10.1
   wieder 112 Seiten, und an der lokalen TeX-Installation hat sich in der Zwischenzeit
   nichts bewegt. Wer die Abweichung loswerden will, baut im Container (PLAYBOOK §3.2).
+* **Sie ist aber auch nicht immer da.** Am 2026-11-17 hatten lokales und veröffentlichtes
+  PDF beide **152 Seiten** (mystmd 1.13.0, Theme 1.4.1, derselbe Baum). Das widerspricht
+  der Erklärung nicht — ein Umbruch kostet mal eine Seite und mal keine —, aber es heißt,
+  dass aus „lokal 152“ nicht „veröffentlicht 151“ folgt. Beide Zahlen werden gelesen, nicht
+  gerechnet.
 
 `check_doku.py` prüft die Zahl gegen das **lokale** PDF, deshalb steht hier 112. Wer die
 veröffentlichte Zahl braucht, holt sie mit dem `curl`-Rezept weiter unten.
