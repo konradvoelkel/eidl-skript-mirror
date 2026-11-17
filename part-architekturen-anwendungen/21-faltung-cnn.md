@@ -163,6 +163,7 @@ Ein $3 \times 3$-Filter hat 9 Gewichte, die an jeder Pixelposition dasselbe Skal
 
 :::{figure} ../images/vl10-faltungsmatrix.png
 :width: 100%
+:alt: Vier kleine Zahlentabellen nebeneinander, darunter jeweils dasselbe Graustufenfoto einer Katze nach der Filterung: unverändert, weichgezeichnet, geschärft, als Kantenbild.
 
 Vier $3 \times 3$-Faltungsmatrizen und ihr Ergebnis auf demselben Graustufenbild (`notebooks/pallino.jpg`): Identität, Weichzeichnen (Mittelwert), Schärfen, Kanten. Genau so funktioniert der Dialog *Faltungsmatrix* in GIMP.
 :::
@@ -219,6 +220,7 @@ Die Gewichte summieren sich zu $22 \cdot (-1) + 3 \cdot 7 = -1$: In gleichmäßi
 
 :::{figure} ../images/vl10-pallino-conv.png
 :width: 90%
+:alt: Oben ein Foto, darunter das Ergebnis der Filterung: ein Kantenbild, in dem nur noch die Umrisse hell erscheinen.
 
 `nn.Conv2d` mit dem handgesetzten $5 \times 5$-Filter oben: Aus einem Foto wird ein Kantenbild. Ein CNN lernt solche Filter selbst – in der ersten Schicht sehen sie meist genau so aus.
 :::

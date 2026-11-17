@@ -297,6 +297,33 @@ a.myst-footer-link:hover {
   border-color: var(--brand) !important;
 }
 
+/* Die Gliederung („Auf dieser Seite") am Handy deckeln.
+   
+   Unterhalb von `lg` steht der Kasten im Fluss, und das Theme laesst ihn so hoch werden,
+   wie die Liste lang ist. Am 2026-11-17 auf `/backpropagation/` bei 375x812 gemessen:
+   648 px Gliederung, der Einleitungsabsatz beginnt bei y=1000 -- **188 px unter der
+   Falz**. Auf `/faltung-cnn/` sind es 1056. Wer kalt auf dem Handy ankommt, sieht Titel,
+   Autorzeile und ein Inhaltsverzeichnis, aber keinen Satz darueber, worin er steckt --
+   genau der Befund, gegen den die Einleitungsabsaetze geschrieben wurden (SEO-Audit
+   2026-11-17, §4).
+
+   Mit 8rem und eigenem Scrollen: Gliederung 128 px, Absatz bei y=480, also oben. Die
+   Gliederung bleibt benutzbar, sie rollt in sich.
+
+   **`!important` ist hier noetig und nicht Bequemlichkeit:** Das Theme setzt dem `nav`
+   seine Hoehe *inline* (`max-height: calc(-100px + 100vh)`), und ein Inline-Stil schlaegt
+   jede Regel aus einem Stylesheet, die nicht `!important` traegt. Ohne das Schluesselwort
+   bindet die Regel, aendert aber nichts -- am 2026-11-17 erst so gemessen, dann erklaert.
+
+   Die zweite Haelfte steht in `tools/outline_reserve.py`: Der Platz, den der leere Kasten
+   freihaelt, wird auf dieselben 8rem gedeckelt. Beide Zahlen gehoeren zusammen; wer eine
+   aendert, aendert die andere mit. */
+@media (max-width: 1023.98px) {
+  nav.myst-outline {
+    max-height: 8rem !important;
+  }
+}
+
 /* 3. Structural Elements & Code Blocks */
 div.myst-code {
   border-left-color: var(--brand) !important;

@@ -45,6 +45,7 @@ Im Vergleich zur Dimensionsreduktion mit PCA: Ist der Autoencoder linear (keine 
 
 :::{figure} ../images/vl06-ae-vs-pca.png
 :width: 90%
+:alt: Drei Zeilen kleiner Ziffernbilder: oben die Originale, darunter zweimal die Rekonstruktionen, die zweite erkennbar schärfer.
 
 Rekonstruktion von 8×8-Ziffern aus scikit-learn durch PCA mit 4 Komponenten und durch einen kleinen Autoencoder mit $L = 4$ (erzeugt mit `sklearn.neural_network.MLPRegressor`).
 :::

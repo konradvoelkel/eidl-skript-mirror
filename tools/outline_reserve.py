@@ -118,6 +118,9 @@ MIN_EINTRAEGE = 2
 DECKEL = "calc(100vh - 72px)"
 # `lg` ist in diesem Theme 1024 px. Darunter steht der Kasten im Fluss, darueber im Rand.
 BREAKPOINT = "1023.98px"
+# 8rem, dieselben wie die `max-height` der Gliederung in `_site/custom-style.css`. Wer die
+# eine Zahl aendert, aendert die andere mit.
+HANDY_PX = 128
 
 
 def eintraege(doc: str, seite: pathlib.Path) -> dict[str, int]:
@@ -139,12 +142,26 @@ def eintraege(doc: str, seite: pathlib.Path) -> dict[str, int]:
 def platz(gezaehlt: dict[str, int]) -> int:
     """Die Hoehe, die die gefuellte Gliederung einnehmen wird, oder 0.
 
-    Ohne den Deckel: der steht als `min()` in der Regel, weil er den Viewport braucht.
+    Ohne den Viewport-Deckel: der steht als `min()` in der Regel, weil er den Viewport
+    braucht.
+
+    **Seit dem 2026-11-17 zusaetzlich auf `HANDY_PX` gedeckelt**, und das ist keine
+    Feinheit, sondern die Haelfte einer Entscheidung: `_site/custom-style.css` deckelt
+    unterhalb von `lg` die Gliederung selbst auf 8rem mit eigenem Scrollen, weil sie sonst
+    den Einleitungsabsatz unter die Falz schiebt (auf `/backpropagation/` 648 px
+    Gliederung, Absatz bei y=1000 statt y=480; SEO-Audit 2026-11-17, §4). Reserviert wird
+    dann genau so viel, wie der Kasten einnehmen *darf* -- mehr waere Leerraum, der
+    denselben Fehler zurueckholt.
+
+    Die gerechnete Hoehe bleibt trotzdem stehen und wird nur begrenzt: Faellt die
+    Deckelung im Stylesheet eines Tages weg, steht hier wieder die richtige Zahl, sobald
+    `HANDY_PX` entfernt wird.
     """
     n = sum(gezaehlt.values())
     if n < MIN_EINTRAEGE:
         return 0
-    return sum(EINTRAG_PX[lvl] * k for lvl, k in gezaehlt.items()) + RAHMEN_PX
+    gerechnet = sum(EINTRAG_PX[lvl] * k for lvl, k in gezaehlt.items()) + RAHMEN_PX
+    return min(gerechnet, HANDY_PX)
 
 
 def kasten_pruefen(doc: str, seite: pathlib.Path) -> None:

@@ -90,6 +90,7 @@ Gemessen wird der **Testfehler**: der mittlere quadratische Abstand der gelernte
 
 :::{figure} ../images/vl11-double-descent.png
 :width: 100%
+:alt: Links zwei Fehlerkurven über einer logarithmischen Achse mit U-Form, einer Spitze und einem zweiten Abstieg; rechts drei verschieden glatte Kurven durch dieselben Punkte.
 
 Links: Trainings- und Testfehler der polynomialen Regression über der Zahl der Merkmale, logarithmisch auf beiden Achsen. Bis $p = n$ die klassische U-Kurve, an der Interpolationsschwelle $p = n$ eine Spitze, dahinter ein zweiter Abstieg – wie tief, hängt von der Basis ab. Rechts: drei Lösungen für denselben Datensatz.
 :::

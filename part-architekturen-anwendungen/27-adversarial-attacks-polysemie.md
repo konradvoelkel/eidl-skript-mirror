@@ -6,7 +6,11 @@ short_title: "Adversarial Attacks"
 
 # Adversarial Attacks und Polysemie
 
-Zwei Themen zum Abschluss, die über die Vorlesung hinausgehen, aber mit dem Gelernten schon verständlich sind.
+Ein *Adversarial Example* ist eine Eingabe, die für Menschen unverändert aussieht und das
+Netz trotzdem die Klasse wechseln lässt; *Polysemie* heißt, dass ein Wort mehrere
+Bedeutungen hat, deren Vorkommen im Embedding-Raum auf verschiedenen Ästen liegen – und
+die damit der Mannigfaltigkeits-Hypothese widersprechen. Zwei Themen zum Abschluss, die
+über die Vorlesung hinausgehen, aber mit dem Gelernten schon verständlich sind.
 
 ## Adversarial Attacks
 

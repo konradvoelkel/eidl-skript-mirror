@@ -6,7 +6,11 @@ short_title: "Logistische Regression"
 
 # Logistische Regression
 
-Im ersten Abschnitt basteln wir eine S-förmige Kurve aus dem $\tanh$, haben aber keine Interpretation dafür. Danach bauen wir die S-Kurve von der Wahrscheinlichkeitsrechnung her auf, und dann fällt die Interpretation von selbst ab.
+Die logistische Regression ist ein einzelnes Neuron mit Sigmoid: Sie sagt für einen
+Datenpunkt nicht eine Klasse vorher, sondern die Wahrscheinlichkeit, mit der er zur Klasse
+$1$ gehört. Im ersten Abschnitt basteln wir die S-förmige Kurve aus dem $\tanh$ und haben
+keine Interpretation dafür; danach bauen wir sie von der Wahrscheinlichkeitsrechnung her
+auf, und dann fällt die Interpretation von selbst ab.
 
 [Vorlesungsaufzeichnung VL 4: Logistische Regression](https://media.hhu.de/video/einfuehrung-in-deep-learning-202627-vl-4-logistische-regression/9213b0d5e9c2fda01dda9fe1d9b2f7b2)
 
@@ -29,6 +33,7 @@ Schauen wir uns das Schritt für Schritt an, für einen eindimensionalen Regress
 
 :::{figure} ../images/vl03-linreg-classification-1d.png
 :width: 90%
+:alt: Punkte auf den Höhen null und eins, eine Regressionsgerade hindurch und die Schwelle, an der die harte Entscheidung kippt.
 
 Lineare Regression zur Klassifikation, eindimensionaler Regressor: Regressionsgerade durch die 0/1-Daten, harte Klassifikation mit Entscheidungsgrenze $x^*$, und die $\tanh$-Variante.
 :::
@@ -149,6 +154,7 @@ $M$ ist der Maximalwert (die obere Asymptote), $k$ die Steilheit, $\mu$ die Posi
 
 :::{figure} ../images/vl04-sigmoid.png
 :width: 90%
+:alt: Drei Kurven: eine flache S-Kurve zwischen null und eins, eine steilere zwischen minus eins und eins, und eine Glockenkurve als Ableitung.
 
 Das Standardsigmoid $\sigma$, der Tangens hyperbolicus als umskaliertes Sigmoid, und die Ableitung $\sigma' = \sigma(1-\sigma)$ mit Maximum $\tfrac14$ bei $0$.
 :::

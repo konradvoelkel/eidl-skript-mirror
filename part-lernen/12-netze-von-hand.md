@@ -57,6 +57,7 @@ $$
 
 :::{figure} ../images/vl07-or-nor-heatmap.png
 :width: 90%
+:alt: Zwei eingefärbte Quadrate für OR und NOR mit den vier Eckpunkten und einer schrägen Trennlinie.
 
 OR und NOR als Funktionen auf ganz $\mathbb{R}^2$: Die vier Booleschen Ecken sind markiert, die schwarze Linie ist die Nullstellenmenge.
 :::
@@ -125,6 +126,7 @@ In der Praxis könnte man PyTorch auch direkt bitten, $x^2$ oder $xy$ *exakt* zu
 
 :::{figure} ../images/vl07-square-interpolation.png
 :width: 90%
+:alt: Eine Parabel und ein Streckenzug, der sie an den ganzzahligen Stellen berührt.
 
 $x^2$ auf $[-3, 3]$ und die stückweise lineare Interpolation $Q(x)$ an ganzzahligen Stützstellen, ein Netz mit 6 ReLU-Neuronen.
 :::

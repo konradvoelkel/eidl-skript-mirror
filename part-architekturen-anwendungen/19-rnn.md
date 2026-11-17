@@ -26,6 +26,7 @@ In der „entfalteten Perspektive“ (unrolled) ist ein RNN über $T$ Zeitschrit
 
 :::{figure} ../images/vl09-rnn-unrolled.png
 :width: 90%
+:alt: Links ein rekurrentes Neuron mit einer Schleife auf sich selbst, rechts dieselbe Zelle über vier Zeitschritte zu einer Kette gleicher Blöcke aufgefaltet.
 
 Ein rekurrentes Neuron: gefaltet mit der Rückkopplung $U$ (links) und über vier Zeitschritte entfaltet (rechts) – ein tiefes Netz mit geteilten Gewichten.
 :::

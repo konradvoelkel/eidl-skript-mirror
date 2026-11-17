@@ -6,7 +6,10 @@ short_title: "Anwendungsbeispiele"
 
 # Anwendungsbeispiele
 
-Drei Beispiele, wie sich die Bausteine aus den vorigen Kapiteln zu Anwendungen zusammensetzen – und ein Blick darauf, wie man mit generiertem Code arbeitet.
+Drei Anwendungen, an denen sich zeigt, wie die Bausteine der vorigen Kapitel zusammengehen:
+ein Chatbot auf einem Sprachmodell, ein Klassifikator für eingehende E-Mails und ein
+Empfehlungssystem. Dazu ein Blick darauf, wie man mit generiertem Code arbeitet, und ein
+Rezept, wie man ein Anwendungskonzept aufschreibt.
 
 ## Drei Beispiele aus der Praxis
 

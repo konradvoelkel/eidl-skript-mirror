@@ -49,6 +49,7 @@ Die Wortvektoren sind die Spalten von $W$: $e(w) = W w$ ist für einen One-Hot-V
 
 :::{figure} ../images/vl08-cbow-skipgram.png
 :width: 90%
+:alt: Zwei Netzschemata nebeneinander: links laufen mehrere Eingaben auf eine Ausgabe zu, rechts eine Eingabe auf mehrere Ausgaben.
 
 CBOW und Skip-gram: dieselben zwei Matrizen $W$ (Encoder, $N \to K$) und $W'$ (Decoder, $K \to N$), einmal von mehreren Kontextwörtern auf ein Wort, einmal umgekehrt.
 :::

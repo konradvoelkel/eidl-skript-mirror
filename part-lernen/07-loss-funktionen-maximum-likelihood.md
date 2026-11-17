@@ -6,7 +6,10 @@ short_title: "Loss und Maximum Likelihood"
 
 # Loss-Funktionen und Maximum Likelihood
 
-Dieses Kapitel klärt, *was* beim Training minimiert wird und warum. Das nächste Kapitel klärt, *wie*.
+Eine *Loss-Funktion* misst mit einer einzigen Zahl, wie falsch ein Modell auf den
+Trainingsdaten liegt; trainieren heißt, diese Zahl kleiner zu machen. Dieses Kapitel klärt,
+*was* da minimiert wird und warum ausgerechnet das – die binäre Kreuzentropie fällt aus
+dem Prinzip der Maximum-Likelihood-Schätzung heraus. Das nächste Kapitel klärt, *wie*.
 
 *Setzt voraus: das [Kapitel „Logistische Regression“](06-logistische-regression.md).*
 

@@ -321,6 +321,40 @@ Datierte Protokolle größerer Umbauten liegen daneben als `build-log-<datum>.md
   samt Einladungslink, das Forum-Objekt ist gelöscht (der Block „Foren“ verschwand mit ihm).
 
 ### Infrastruktur
+- [x] **Die Kästen fallen nicht mehr aus der Textextraktion**, 2026-11-17, Punkt 7 des
+  zweiten Audits und der schwerste Posten darin. Das Theme rendert jeden Kasten als
+  `<aside>`; `install_template.py` ersetzt das jetzt in beiden Bündeln durch `<div>`, nur
+  im else-Zweig der drei Ternäre, deren if-Zweig `details` rendert. Gemessen mit
+  trafilatura, dieselben sieben Seiten vorher (live) und nachher (gebaut): **12.269 auf
+  15.257 Wörter, plus 24 %**; `hintergrundwissen-analysis` von 736 auf 1420,
+  `hintergrundwissen-lineare-algebra` von 992 auf 1915. „Partielle Ableitung“,
+  „Richtungsableitung“, „Kettenregel“, „Jacobi“ und „Hesse“ stehen jetzt im extrahierten
+  Text, ebenso die Glossarzeile und „Im Kapitel zitiert“. Null `<aside>` im gebauten HTML.
+
+  `div` und nicht `section`: Ein `section` ohne zugänglichen Namen ist kein Landmark,
+  behauptet aber Struktur, die ein Kasten nicht hat. Das Aussehen hängt an den Klassen und
+  ändert sich nicht.
+
+- [x] **Am Handy steht der Einleitungsabsatz über der Falz**, 2026-11-17, Punkt 5 des
+  zweiten Audits. Die Ursache war die eigene CLS-Reservierung: `outline_reserve.py` hielt
+  unterhalb von `lg` so viel Platz frei, wie die Gliederung einnehmen würde — auf
+  `/backpropagation/` 628 px, und der erste Absatz begann bei y=1000 statt 480. Jetzt
+  deckelt `_site/custom-style.css` die Gliederung auf 8rem mit eigenem Scrollen und
+  `outline_reserve.py` reserviert dieselben 128 px. Gemessen auf vier Seiten: Absatz bei
+  480 bis 560 statt 872 bis 1056, **CLS 0 bis 0,014**. Das `!important` ist nötig, weil das
+  Theme dem `nav` seine Höhe inline setzt.
+
+- [x] **20 Alt-Texte ohne rohes LaTeX**, 2026-11-17, Punkt 4. MyST bildet den Alt-Text aus
+  der Bildunterschrift; 27 Unterschriften enthalten Mathematik, 20 Alt-Texte trugen
+  deshalb `\cdot` und `\tilde` im Klartext. Jede dieser Abbildungen hat jetzt ein `:alt:`,
+  das *das Bild* beschreibt statt die Unterschrift zu wiederholen. Gegenprobe im gebauten
+  HTML: **0** Alt-Texte mit LaTeX-Resten.
+
+- [x] **Fünf Einleitungsabsätze nachgezogen**, 2026-11-17, Punkt 3. `27`, `06`, `07`, `08`
+  und `24` benannten den Gegenstand nicht — `27` nannte in sechzehn Wörtern keinen der
+  beiden Begriffe. Jetzt öffnet jeder mit der Sache selbst; bei `06`, `07` und `08` blieb
+  der vorhandene Satz als zweiter stehen.
+
 - [x] **Die Foliensätze waren anderthalb Stunden von der Website verschwunden**, 2026-11-17.
   `build-slides` scheiterte ab Pipeline #185892 (12:26 UTC) an `folienlinks.py --check`:
   Die Zeilen in den Kapiteln 07 und 08 nannten S. 2–14 und S. 15–21, das frisch gebaute

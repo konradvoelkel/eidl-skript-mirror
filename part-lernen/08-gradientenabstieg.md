@@ -6,7 +6,12 @@ short_title: "Gradientenabstieg"
 
 # Gradientenabstieg
 
-Im [letzten Kapitel](07-loss-funktionen-maximum-likelihood.md) blieb die Frage offen, in welche Richtung man von der bisher besten Schätzung $w$ aus gehen soll, damit die Loss-Funktion kleiner wird. Die Antwort ist der Gradient, und um ihn für verkettete Funktionen auszurechnen, brauchen wir zuerst die Kettenregel.
+Der Gradientenabstieg ist das Verfahren, mit dem so gut wie jedes neuronale Netz trainiert
+wird: kleine Schritte entgegen dem Gradienten der Loss-Funktion, denn der zeigt in die
+Richtung des steilsten Anstiegs. Im
+[letzten Kapitel](07-loss-funktionen-maximum-likelihood.md) blieb offen, in welche Richtung
+man von der bisher besten Schätzung $w$ aus gehen soll; um den Gradienten für verkettete
+Funktionen auszurechnen, brauchen wir zuerst die Kettenregel.
 
 *Setzt voraus: [Loss-Funktionen und Maximum Likelihood](07-loss-funktionen-maximum-likelihood.md)
 und das Ableiten aus dem [Hintergrundwissen Analysis](../part-grundlagen/hintergrundwissen-analysis.md).*
@@ -75,6 +80,7 @@ Wir stellen uns für den Moment vor, dass $w \in \mathbb{R}^2$ ist (also die Dat
 
 :::{figure} ../images/vl05-loss-landscape.png
 :width: 90%
+:alt: Eine Gebirgslandschaft über einer Ebene, darauf zwei Abstiegspfade von verschiedenen Startpunkten, die in verschiedenen Mulden enden.
 
 Ein (erfundenes) Loss-Gebirge über der $w$-Ebene mit zwei Gradientenabstiegspfaden von verschiedenen Startpunkten. Beide landen im selben Tal – das ist nicht immer so.
 :::
@@ -160,6 +166,7 @@ Im einfachsten Fall lässt sich das genau ausrechnen. Für $L(w) = \frac12 (\lam
 
 :::{figure} ../images/vl05-schlucht.png
 :width: 100%
+:alt: Drei Bilder mit denselben langgestreckten elliptischen Höhenlinien: ein kriechender Pfad bei kleiner Schrittweite, ein Zickzackpfad bei mittlerer, ein aus dem Bild laufender bei großer.
 
 Gradientenabstieg auf $L(w) = \frac12 (w_1^2 + 10\, w_2^2)$ ab $(-4{,}5;\ 2)$, höchstens 30 Schritte. Ein Schritt multipliziert $w_1$ mit $1 - \rho$ und $w_2$ mit $1 - 10\rho$.
 :::
@@ -237,6 +244,7 @@ Für ein einzelnes Sample mit $y = 1$, aufgetragen gegen den Wert der Entscheidu
 
 :::{figure} ../images/vl05-loss-curves.png
 :width: 90%
+:alt: Drei fallende Kurven über derselben Achse, unterschiedlich steil und unterschiedlich weit nach unten reichend.
 
 Drei Loss-Funktionen für ein Sample der Klasse $y = 1$ in Abhängigkeit vom Wert der Entscheidungsfunktion $f(x)$.
 :::

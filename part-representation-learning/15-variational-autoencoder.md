@@ -33,6 +33,7 @@ Das gesampelte $\varepsilon$ ist im Rückwärtsdurchlauf einfach eine Konstante.
 
 :::{figure} ../images/vl08-latent-3points.png
 :width: 90%
+:alt: Drei Punkte in der Ebene, dreimal gezeigt: als Punkte, mit gleich großen Streuwolken und mit verschieden großen.
 
 Drei Datenpunkte im latenten Raum – klassisch, mit gleichem Rauschen $+\varepsilon$, mit datenabhängigem Rauschen $+\sigma_x\varepsilon$.
 :::
@@ -82,6 +83,7 @@ Ein VAE ist ein Autoencoder, dessen Encoder statt eines Punkts eine Normalvertei
 
 :::{figure} ../images/vl08-vae-schema.png
 :width: 90%
+:alt: Ein Kastenschema: Eingabe, Encoder mit zwei Ausgängen, eine Rauschquelle, die dazwischen einspeist, dann Decoder und Ausgabe.
 
 Der Variational Autoencoder mit Reparametrisierungstrick: Der Encoder liefert $\mu_x$ und $\sigma_x$, das Rauschen $\varepsilon$ ist eine Konstante für die Backpropagation, der KL-Term zieht die Codes zum Prior.
 :::

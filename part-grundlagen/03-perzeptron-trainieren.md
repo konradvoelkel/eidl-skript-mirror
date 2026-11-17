@@ -81,6 +81,7 @@ Beweisidee: Bei jedem Fehler wächst $w \cdot w^*$ um mindestens $\rho\gamma$, n
 
 :::{figure} ../images/vl02-perceptron-updates.png
 :width: 90%
+:alt: Vier Bilder nebeneinander mit denselben Punkten: die trennende Gerade nach null, einer, zwei und drei Epochen, jedes Mal anders gedreht.
 
 Die Perzeptronregel bei der Arbeit: Trenngerade $w \cdot x + b = 0$ nach 0, 1, 2 und 3 Epochen über 60 Datenpunkte, Lernrate $\rho = 0{,}05$.
 :::

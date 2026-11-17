@@ -109,6 +109,7 @@ $$
 
 :::{figure} ../images/la-normalisierung.png
 :width: 60%
+:alt: Zwei Pfeile vom Ursprung und ihre auf den Einheitskreis verkürzten Fassungen, die in dieselben Richtungen zeigen.
 
 Normalisieren schiebt jeden Vektor auf den Einheitskreis: $\tilde{v}$ und $\tilde{w}$
 zeigen in dieselben Richtungen wie $v$ und $w$, der Winkel $\theta$ zwischen ihnen bleibt.
@@ -151,6 +152,7 @@ Einheitskreis; in der Ebene ist $\sin \theta = v_2$ die Länge der Gegenkathete.
 
 :::{figure} ../images/la-einheitskreis.png
 :width: 50%
+:alt: Ein Einheitsvektor im Einheitskreis, der Winkel zur waagerechten Achse und die Ankathete des rechtwinkligen Dreiecks sind eingezeichnet.
 
 Für einen Einheitsvektor $v$ hat die Hypotenuse die Länge $1$, und $\cos \theta = v \cdot e_1$
 ist die Länge der Ankathete: die erste Komponente von $v$, die Strecke, die $v$ auf die
@@ -174,6 +176,7 @@ Vektor selbst, ist die Ungleichung von Cauchy und Schwarz im Bild.
 
 :::{figure} ../images/la-projektion.png
 :width: 90%
+:alt: Zwei Skizzen nebeneinander: links ein spitzer Winkel zwischen zwei Pfeilen und ein Schatten in Pfeilrichtung, rechts ein stumpfer Winkel und ein Schatten dagegen.
 
 Das Skalarprodukt mit einem Einheitsvektor ist eine Schattenlänge mit Vorzeichen. Links
 ist $\theta$ spitz, rechts stumpf.
@@ -202,6 +205,7 @@ liegt.
 
 :::{figure} ../images/la-halbebenen.png
 :width: 50%
+:alt: Eine Gerade durch den Ursprung mit einem senkrecht darauf stehenden Pfeil; die Ebene ist in zwei verschieden gefärbte Hälften geteilt.
 
 Die Gerade $w \cdot x = 0$ steht senkrecht auf $w$ und teilt die Ebene in zwei Hälften.
 Auf der Seite, in die $w$ zeigt, ist $w \cdot x > 0$, auf der anderen negativ.
@@ -241,6 +245,7 @@ alles fest, $Ax = x_1 \, Ae_1 + \dots + x_n \, Ae_n$.
 
 :::{figure} ../images/la-lineare-abbildung.png
 :width: 90%
+:alt: Links ein regelmäßiges Gitter mit dem Einheitsquadrat, rechts das verzerrte Gitter, in dem aus dem Quadrat ein Parallelogramm geworden ist.
 
 Was eine $2 \times 2$-Matrix mit dem Gitter macht: Das Einheitsquadrat geht auf das
 Parallelogramm aus den Spalten $Ae_1$ und $Ae_2$. Eine Drehung (Mitte) erhält rechte
@@ -320,6 +325,7 @@ liegt.
 
 :::{figure} ../images/la-drehung.png
 :width: 80%
+:alt: Zwei Pfeile vor und nach einer Drehung, die einen von ihnen auf die waagerechte Achse legt; der Winkel zwischen beiden bleibt gleich.
 
 Eine Drehung $A$ bringt $v$ auf die positive $x$-Achse. Der Winkel $\theta$ zwischen den
 beiden Vektoren bleibt derselbe, und mit ihm das Skalarprodukt.
@@ -361,6 +367,7 @@ $\theta \approx 63{,}4^\circ$.
 
 :::{figure} ../images/la-ebene-r3.png
 :width: 100%
+:alt: Eine schräge Ebene im Raum, aufgespannt von zwei Pfeilen, mit einem dritten Pfeil senkrecht darauf.
 
 Das Beispiel im Bild: $v$ und $w$ spannen eine schräge Ebene auf, $n$ steht senkrecht auf
 ihr. $A$ dreht die Ebene in die $x$-$y$-Ebene und $n$ auf $e_3$; danach lässt sich alles

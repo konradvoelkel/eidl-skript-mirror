@@ -278,7 +278,7 @@ im `pages`-Job und brauchen **kein einziges Python-Paket**.
 | `tools/thebe_gate.py` | Lädt `thebe-core` (1,3 MB) nur auf Seiten mit ausführbarem Code, also hier auf keiner. Patcht einen Ausdruck im Client-Bündel und scheitert laut, wenn ein mystmd-Update ihn verschiebt |
 | `tools/freshness.py` | `article:modified_time` je Seite und `<lastmod>` je Sitemap-Eintrag, aus `git log` der Quelldatei |
 | `tools/llms_txt.py` | Der Quelltext jeder Seite als Markdown (`/<slug>.md` und `/<slug>/index.md`, relative Kapitelverweise auf die Seitenadresse umgeschrieben; jede `figure`-Direktive wird zu `![Unterschrift](…/build/…)` mit der Adresse, unter der das Bild wirklich liegt, `anywidget`-Blöcke fallen weg), `<link rel="alternate" type="text/markdown">` im Kopf, `/llms.txt` und `/llms-full.txt`. Google ignoriert `llms.txt`; der Nutzen liegt bei den `.md`-Dateien |
-| `tools/image_dims.py`, `tools/outline_reserve.py` | Gegen den Layoutsprung: `width`/`height` an jeder Abbildung samt einem Stylesheet mit allen Bildmaßen, und Platz für die Gliederung, die das Theme erst nach dem Laden füllt |
+| `tools/image_dims.py`, `tools/outline_reserve.py` | Gegen den Layoutsprung: `width`/`height` an jeder Abbildung samt einem Stylesheet mit allen Bildmaßen, und Platz für die Gliederung, die das Theme erst nach dem Laden füllt. **Unterhalb von `lg` sind es seit dem 2026-11-17 feste 128 px**, passend zu der Deckelung in `_site/custom-style.css` — vorher reservierte der Kasten bis zu 692 px und schob den Einleitungsabsatz unter die Falz |
 | `tools/webp.py` | Liefert die Abbildungen als WebP aus statt als PNG und JPG: 7,6 MB werden 2,4 MB. Die Fassungen liegen im Repo (`devnotes/make_webp.py`), das Image baut nichts. Ersetzt den Dateinamen im Markup, im Stylesheet `bildmasse` **und** in der Hydrations-Nutzlast — ein `<picture>` mit PNG-Rückfall überlebt die Hydration nicht. **Nach `image_dims.py`, vor `hydration.py`** |
 | `tools/trailing_slash.py` | Kapitellinks mit Schrägstrich (sonst 302), im Markup, in der Hydrations-Nutzlast und in den Seiten-JSON; die Seitenleiste bewusst nicht |
 | `tools/no_css_dialog.py` | Nimmt den Kasten „Site not loading correctly? … `BASE_URL`“ aus jeder Seite. Das Theme legt ihn als `<dialog id="myst-no-css">` an; sichtbar wird er nur ohne Stylesheet, **im Text der Seite steht er aber als erstes** und begrüßt jeden, der die Seite als Text liest, mit einer Deploy-Fehlermeldung. `--check` zählt nach; findet der Lauf gar keinen Kasten, scheitert er (mystmd könnte ihn umbenannt haben) |
@@ -518,6 +518,12 @@ dieselbe Form haben: **Es sieht im HTML unauffällig aus und ist trotzdem falsch
   daraus `\begin{minted}[breaklines]{}`, und minted bricht mit „Missing Pygments output“ ab.
   Jeder Codeblock bekommt eine Sprache (`python`, `bash`, notfalls `text`). Das ist Absicht:
   Der Fehler ist laut statt still.
+* **Eine Bildunterschrift mit Mathematik braucht ein `:alt:`.** MyST bildet den Alt-Text
+  aus der Unterschrift; steht dort `$w \cdot x + b = 0$`, liest ein Screenreader
+  „backslash cdot“. Am 2026-11-17 waren so 20 Alt-Texte im gebauten HTML. Jede `figure`,
+  deren Unterschrift Mathematik enthält, trägt deshalb ein `:alt:` mit einer
+  Klartextbeschreibung — und zwar eine, die *das Bild* beschreibt, nicht die Unterschrift
+  wiederholt; die steht ohnehin daneben.
 * **Kein `→` und keine anderen Unicode-Pfeile im Fließtext.** MyST übersetzt sie nach
   `\rightarrow`, einem Mathe-Modus-Befehl; in einer Tabellenzelle bricht der LaTeX-Lauf daran
   ab, und dann fehlt **alles danach** im PDF, ohne dass das HTML etwas meldet. Schreiben Sie
@@ -545,6 +551,15 @@ dieselbe Form haben: **Es sieht im HTML unauffällig aus und ist trotzdem falsch
   der Satz im PDF in Mathe-Kursive erscheint. Passiert beim Einfügen einer zweiten Geldsumme
   in ein Kapitel, das schon eine hat (2026-09-27 in `04-vortrainierte-modelle.md`).
   Abhilfe: „US-Dollar“ ausschreiben, wie in Kapitel 20.
+* **Die Kästen sind `<div>` und nicht `<aside>`, und das ist ein Patch am Theme.**
+  `_site/vendor/install_template.py` ersetzt seit dem 2026-11-17 in beiden Bündeln
+  `aside` durch `div` — aber nur im else-Zweig der drei Ternäre, die im if-Zweig
+  `details` rendern (Admonition und die zwei `prf`-Fassungen). Grund: `<aside>` heißt „am
+  Rande verwandt“, und gängige Textextraktoren werfen es weg; gemessen fielen damit 94 von
+  97 Kästen aus dem extrahierten Text, darunter sämtliche Definitionen der beiden
+  Hintergrundkapitel. Nach dem Umbau kommen sie an (`hintergrundwissen-analysis` 736 auf
+  1420 Wörter). Wer die Stelle sucht: Das Muster hängt an `"details"`, nicht an `"aside"` —
+  das Wort steht dutzendfach in Tag-Listen fremder Bibliotheken.
 * **`{prf:…}`-Kästen heißen auf Englisch.** mystmd und das Site-Template schreiben den
   Kastennamen aus dem `kind`: „Example 1“, „Theorem 2“, im HTML wie im PDF, ohne Rücksicht
   auf die Sprache. Repariert an zwei Stellen, beide als Patch, der laut scheitert, wenn sich

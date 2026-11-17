@@ -125,20 +125,49 @@ BEDIENUNG = [
 ]
 
 
-def bedienung_eindeutschen() -> int:
-    """Übersetzt die Bedientexte des Templates, in Server- und Browser-Bündeln gleich oft."""
+# Dasselbe Verfahren, aber keine Übersetzung: ein Eingriff in die Struktur.
+#
+# Das Theme rendert jeden Kasten als `<aside>` (und als `<details>`, wenn er aufklappbar
+# ist). `<aside>` heißt „am Rande verwandt", und gängige Boilerplate-Entferner werfen es
+# weg — gemessen am 2026-11-17 mit trafilatura: **94 von 97 Kästen** fielen aus der
+# Extraktion, 13.989 von 93.610 Wörtern des Buchs, darunter sämtliche Definitionen und
+# Sätze der beiden Hintergrundkapitel (SEO-Audit 2026-11-17, §2). In diesen Kästen stehen
+# Definitionen, Beweise und die Literatur, nicht Randbemerkungen.
+#
+# Ersetzt wird deshalb `aside` durch `div`, und zwar **nur** im else-Zweig der drei
+# Ternäre, die im if-Zweig `details` rendern (Admonition und die zwei prf-Fassungen). Das
+# Muster hängt an `"details"` und nicht an `"aside"` allein; die Bündel enthalten das Wort
+# `aside` dutzendfach in Tag-Listen fremder Bibliotheken, und die bleiben unberührt.
+#
+# `div` und nicht `section`: Ein `section` ohne zugänglichen Namen ist ohnehin kein
+# Landmark, behauptet aber Struktur, die der Kasten nicht hat. Das Aussehen hängt an den
+# Klassen und ändert sich nicht.
+STRUKTUR = [
+    (r'\?\(0,([\w$]+)\.jsx\)\("details",\{([^{}]*)\}\):\(0,([\w$]+)\.jsx\)\("aside",',
+     r'?(0,\1.jsx)("details",{\2}):(0,\3.jsx)("div"/*eidl:kasten-div*/,',
+     "/*eidl:kasten-div*/"),
+]
+
+
+def bedienung_eindeutschen(liste: list | None = None, was: str = "Bedienung") -> int:
+    """Wendet eine Ersetzungsliste an, in Server- und Browser-Bündeln gleich oft.
+
+    Mit der Vorgabe sind das die Bedientexte; `STRUKTUR` benutzt dieselbe Maschinerie für
+    den Umbau der Kästen.
+    """
+    liste = BEDIENUNG if liste is None else liste
     server = ZIEL / "build" / "index.js"
     browser = sorted((ZIEL / "public" / "build").rglob("*.js"))
     texte = {p: p.read_text(encoding="utf-8", errors="surrogateescape") for p in [server, *browser]}
     fehler = 0
-    for muster, ersatz, pruef in BEDIENUNG:
+    for muster, ersatz, pruef in liste:
         rx = re.compile(muster)
         n_server = len(rx.findall(texte[server]))
         n_browser = sum(len(rx.findall(texte[p])) for p in browser)
         if n_server == n_browser == 0:
             if pruef in texte[server] and any(pruef in texte[p] for p in browser):
                 continue  # schon übersetzt
-            print(f"FEHLER: Bedientext {muster!r} nicht gefunden — Template bewegt?", file=sys.stderr)
+            print(f"FEHLER: {was}: {muster!r} nicht gefunden — Template bewegt?", file=sys.stderr)
             fehler += 1
         elif n_server != n_browser:
             print(f"FEHLER: {muster!r} {n_server}x im Server-, {n_browser}x in den Browser-Bündeln",
@@ -152,7 +181,7 @@ def bedienung_eindeutschen() -> int:
     for p, t in texte.items():
         if t != p.read_text(encoding="utf-8", errors="surrogateescape"):
             p.write_text(t, encoding="utf-8", errors="surrogateescape")
-            print(f"Bedienung übersetzt: {p.relative_to(WURZEL)}")
+            print(f"{was} angepasst: {p.relative_to(WURZEL)}")
     return 0
 
 
@@ -191,7 +220,8 @@ def main() -> int:
 
     if (ZIEL / MARKER).is_file():
         print(f"Template liegt schon in {ZIEL.relative_to(WURZEL)}.")
-        return kastennamen_eindeutschen() or bedienung_eindeutschen()
+        return (kastennamen_eindeutschen() or bedienung_eindeutschen()
+                or bedienung_eindeutschen(STRUKTUR, "Kastenelement"))
 
     ZIEL.parent.mkdir(parents=True, exist_ok=True)
     if ZIEL.exists():
@@ -222,7 +252,8 @@ def main() -> int:
         return 1
 
     print(f"Template entpackt nach {ZIEL.relative_to(WURZEL)}")
-    return kastennamen_eindeutschen() or bedienung_eindeutschen()
+    return (kastennamen_eindeutschen() or bedienung_eindeutschen()
+            or bedienung_eindeutschen(STRUKTUR, "Kastenelement"))
 
 
 if __name__ == "__main__":

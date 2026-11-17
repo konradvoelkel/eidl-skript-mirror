@@ -45,6 +45,7 @@ In zwei Dimensionen sieht man, was „stückweise linear“ heißt. Ein ReLU-Net
 
 :::{figure} ../images/vl06-relu-polyeder.png
 :width: 90%
+:alt: Zwei Zeilen: links jeweils eine aus ebenen Stücken zusammengesetzte Fläche über einem Quadrat, rechts dieselbe Fläche von oben als buntes Mosaik aus Polygonen, oben 15 Stücke, unten 22.
 
 Zwei kleine ReLU-Netze $\mathbb{R}^2 \to \mathbb{R}$, oben mit einer versteckten Schicht, unten mit zweien. Links der Graph im $\mathbb{R}^3$, rechts die Draufsicht. Jede Farbe ist ein Bereich, in dem dieselben Neuronen an sind; dort ist das Netz linear. Rot die Knickgeraden der ersten Schicht, dunkelblau die geknickten Knicklinien der zweiten. Gezählt sind die Stücke im gezeigten Ausschnitt.
 :::
@@ -84,6 +85,7 @@ Ein Netz mit SiLU hat keine ebenen Stücke mehr. Es ist aber eine geglättete Fa
 
 :::{figure} ../images/vl06-silu-vs-relu.png
 :width: 80%
+:alt: Dieselbe Fläche zweimal: einmal mit weichen Übergängen, einmal mit scharfen Knicken.
 
 Das Netz mit einer versteckten Schicht aus der Polyeder-Abbildung, einmal mit SiLU und einmal mit ReLU. Die Farben sind die linearen Stücke des ReLU-Netzes, gestrichelt seine Knickgeraden. Aufgehellt ist, wo ein SiLU-Neuron im Übergang ist ($4\,\sigma(y)\,(1 - \sigma(y))$ nahe $1$). Bei diesen Gewichten ist das fast überall: Die SiLU-Fläche ist eine glatt gebügelte Fassung des Polyeders.
 :::

@@ -114,6 +114,7 @@ sodass für die Stichprobe $(x_i, y_i)$ der Fehler $\varepsilon$ möglichst klei
 
 :::{figure} ../images/vl01-blobs-linreg.png
 :width: 90%
+:alt: Links zwei getrennte Punktwolken in der Ebene, rechts dieselben Punkte auf den Höhen null und eins mit einer Regressionsgeraden hindurch.
 
 Zwei linear trennbare Klassen (links) und eine lineare Regression mit der Klasse als abhängiger Variable (rechts): Die Vorhersage ist eine reelle Zahl, die man bei $\tfrac12$ abschneiden kann.
 :::
