@@ -33,6 +33,7 @@ und der `pages`-Job läuft auf python:3.13-alpine ohne PyYAML.
 
 from __future__ import annotations
 
+import hashlib
 import json
 import re
 import sys
@@ -107,6 +108,58 @@ def geschwister() -> str:
 
 LINK = re.compile(r"\]\(([^)\s#:]+\.md)(#[^)\s]*)?\)")
 
+# `:::{figure} ../images/x.png` mit einer `:width:`-Zeile, Leerzeile, Bildunterschrift,
+# `:::`. Figuren schachteln in diesem Buch nicht, deshalb genügt das nicht-gierige `.*?`.
+FIGUR = re.compile(r"^:::\{figure\}[ \t]*(\S+)[ \t]*\n(?::[\w-]+:[^\n]*\n)*\n?(.*?)\n:::[ \t]*$",
+                   re.M | re.S)
+# Die interaktiven Teile gibt es im Markdown nicht: ein ES-Modul und ein `{url: …}` sind
+# für einen Leser dieser Datei nichts als Rauschen. Unter jedem steht ohnehin, was im PDF
+# an seiner Stelle steht -- eine Abbildung oder die Aufzeichnungszeile.
+WIDGET = re.compile(r"^:::\{anywidget\}[^\n]*\n(?:(?!:::)[^\n]*\n)*:::[ \t]*\n?", re.M)
+
+
+def bild_index(html: Path) -> dict[str, str]:
+    """SHA-256 der Bilddatei -> ihre Adresse im Artefakt.
+
+    Über den Inhalt und nicht über den Namen, weil mystmd den Dateinamen auf 20 Zeichen
+    kürzt und drei Bildpaare dieses Buchs darin übereinstimmen -- dieselbe Falle wie in
+    `tools/webp.py`.
+    """
+    index: dict[str, str] = {}
+    build = html / "build"
+    if not build.is_dir():
+        return index
+    for p in build.iterdir():
+        if p.suffix.lower() in (".png", ".jpg", ".jpeg", ".gif", ".svg", ".webp"):
+            index[hashlib.sha256(p.read_bytes()).hexdigest()] = f"/build/{p.name}"
+    return index
+
+
+def figuren_absolut(body: str, src: Path, index: dict[str, str], site: str) -> tuple[str, int]:
+    """Aus der rohen Direktive ein Markdown-Bild mit der Adresse machen, unter der das
+    Bild wirklich liegt.
+
+    Die `.md`-Auslieferung behielt bis zum 2026-11-17 die Direktive samt ihrem
+    Quellpfad (`../images/vl01-neuron.png`); aufgelöst ergab das `/images/vl01-neuron.png`
+    und damit **404** (SEO-Audit §6.3). Ausgeliefert wird unter `/build/<name>-<hash>.<ext>`.
+    """
+    offen = 0
+
+    def ersetze(m: re.Match) -> str:
+        nonlocal offen
+        pfad = (src.parent / m.group(1)).resolve()
+        unterschrift = " ".join(m.group(2).split())
+        if not pfad.exists():
+            offen += 1
+            return m.group(0)
+        adresse = index.get(hashlib.sha256(pfad.read_bytes()).hexdigest())
+        if adresse is None:
+            offen += 1
+            return m.group(0)
+        return f"![{unterschrift}]({site}{adresse})"
+
+    return FIGUR.sub(ersetze, body), offen
+
 
 def links_absolut(body: str, src: Path, seiten: dict[Path, str]) -> tuple[str, int]:
     """Relative Verweise auf Kapiteldateien (`../part-lernen/09-backpropagation.md`) zeigen
@@ -145,6 +198,8 @@ def main() -> int:
     seiten = {(ROOT / name).resolve(): f"{site}/" + ("" if n == 0 else f"{slugs[n - 1]}/")
               for n, name in enumerate(files)}
     index_lines, full_parts, unaufgeloest = [], [], 0
+    bilder = bild_index(html)
+    ohne_bild = 0
 
     for n, name in enumerate(files):
         src = ROOT / name
@@ -155,6 +210,9 @@ def main() -> int:
         title = fm.get("title") or src.stem
         body, offen = links_absolut(body, src, seiten)
         unaufgeloest += offen
+        body, ohne = figuren_absolut(body, src, bilder, site)
+        ohne_bild += ohne
+        body = WIDGET.sub("", body)
         # Ein Kapitel, das seinen Titel schon als `#` trägt, bekommt ihn nicht doppelt.
         md_text = (body if body.startswith(f"# {title}\n") else f"# {title}\n\n{body}").rstrip() + "\n"
 
@@ -191,12 +249,17 @@ def main() -> int:
     (html / "llms-full.txt").write_text(kopf + "\n".join(index_lines) + "\n\n" + "\n\n".join(full_parts),
                                         encoding="utf-8")
 
+    if ohne_bild:
+        print(f"✗ {ohne_bild} Abbildungen ohne Adresse im Artefakt; die .md-Auslieferung "
+              "zeigte dann wieder auf einen Pfad, der 404 gibt")
+        return 1
     if unaufgeloest:
         print(f"✗ {unaufgeloest} relative .md-Verweise ohne Kapitelseite; der HTML-Bau meldet sie als "
               "Cross-reference target not found")
         return 1
     size = (html / "llms-full.txt").stat().st_size
-    print(f"✓ {len(files)} Seiten als Markdown, llms.txt verzeichnet, llms-full.txt {size // 1024} KiB")
+    print(f"✓ {len(files)} Seiten als Markdown, llms.txt verzeichnet, llms-full.txt {size // 1024} KiB; "
+          f"{len(bilder)} Bildadressen bekannt")
     return 0
 
 

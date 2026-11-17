@@ -321,6 +321,15 @@ Datierte Protokolle größerer Umbauten liegen daneben als `build-log-<datum>.md
   samt Einladungslink, das Forum-Objekt ist gelöscht (der Block „Foren“ verschwand mit ihm).
 
 ### Infrastruktur
+- [x] **Die Markdown-Auslieferung zeigt auf Bilder, die es gibt**, 2026-11-17, Audit §6.3.
+  Die `.md`-Dateien behielten die rohe Direktive samt Quellpfad (`../images/vl01-neuron.png`),
+  aufgelöst ein 404; ausgeliefert wird unter `/build/<name>-<hash>.png`. Jetzt steht dort
+  `![Bildunterschrift](…)` mit der echten Adresse, über den SHA-256 des Inhalts zugeordnet
+  (der Name taugt nicht: mystmd kürzt auf 20 Zeichen, drei Bildpaare stimmen darin überein).
+  Die `anywidget`-Blöcke fallen weg — ein ES-Modul und ein `{url: …}` sind in einer
+  Textfassung nur Rauschen —, die Aufzeichnungszeile darüber bleibt. 60 Bilder in
+  `llms-full.txt`, alle mit Adresse; findet eines keine, scheitert der Schritt.
+
 - [x] **Die Abbildungen werden als WebP ausgeliefert**, 2026-11-17, Audit §8.
   7,64 MB in 61 verlinkten Dateien werden **2,44 MB**; `/faltung-cnn/` fällt von 2,20 MB
   auf 0,51 MB, das Logo auf jeder Seite von 18 K auf 3 K. `devnotes/make_webp.py` baut je
