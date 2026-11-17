@@ -139,6 +139,9 @@ Das *Standardsigmoid* ist
 $$
 \sigma(x) = S(x; M = 1, k = 1, \mu = 0) = \frac{1}{1 + e^{-x}} .
 $$
+
+*In Worten:* Das Sigmoid drückt jede reelle Zahl in das offene Intervall $(0, 1)$ –
+große Werte nahe an $1$, kleine nahe an $0$, die $0$ auf $\tfrac12$.
 :::
 
 $M$ ist der Maximalwert (die obere Asymptote), $k$ die Steilheit, $\mu$ die Position des Wendepunkts. Bei $\sigma(w \cdot x + b)$ übernimmt $\|w\|$ die Rolle von $k$, siehe [Kapitel „Neuron und Perzeptron“](../part-grundlagen/02-neuron-perzeptron.md): Die Länge von $w$ bestimmt, wie steil die Wahrscheinlichkeit mit dem Abstand zur Entscheidungsgrenze wächst. Das Standardsigmoid steigt monoton von $0$ (für $x \to -\infty$) nach $1$ (für $x \to +\infty$) und hat bei $x = 0$ den Wert $\sigma(0) = \tfrac12$.

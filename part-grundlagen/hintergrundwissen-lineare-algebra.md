@@ -52,6 +52,9 @@ Das Skalarprodukt von $v, w \in \mathbb{R}^d$ ist die Zahl
 $$
 v \cdot w := \sum_{i=1}^d (v \odot w)_i = \sum_{i=1}^d v_i w_i \;\in\; \mathbb{R}.
 $$
+
+*In Worten:* komponentenweise multiplizieren und alles aufsummieren – heraus kommt
+eine Zahl, kein Vektor.
 :::
 
 Wie im [Kapitel „Was ist Deep Learning?“](01-was-ist-deep-learning.md) festgelegt, sind

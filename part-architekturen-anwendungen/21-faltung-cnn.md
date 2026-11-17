@@ -49,6 +49,9 @@ $$
 $$
 
 wobei der Definitionsbereich von $g$ mit $0$ erweitert wird (*zero padding*).
+
+*In Worten:* Der Filter wird über das Signal geschoben; an jeder Stelle werden die
+übereinanderliegenden Werte paarweise multipliziert und aufsummiert.
 :::
 
 *Eine* Interpretation: $g$ ist das Signal, $f$ der sogenannte **Filter** (oder Kernel). Der Filter ist kurz ($2n + 1$ Werte), das Signal lang.

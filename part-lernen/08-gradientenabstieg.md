@@ -150,7 +150,7 @@ Damit haben wir die sehr clevere Variante der approximativen Minimierung:
 3. Größer? Pech gehabt, weitermachen (ggf. mit kleinerem $\rho$). Kleiner? Besseres $w$ gefunden!
 4. Jetzt ggf. aufhören, wenn $w$ gut genug ist.
 
-Das ist der **Gradientenabstieg**, und $\rho$ ist die **Lernrate** – dieselbe, die wir beim Perzeptron schon hatten. Zu klein, und man braucht ewig; zu groß, und man springt über das Tal hinweg.
+Das ist der **Gradientenabstieg**: vom bisherigen $w$ aus ein Schritt entgegen dem Gradienten, denn der zeigt in die Richtung des steilsten Anstiegs. $\rho$ ist die **Lernrate** – dieselbe, die wir beim Perzeptron schon hatten. Zu klein, und man braucht ewig; zu groß, und man springt über das Tal hinweg.
 
 Wie groß „zu groß“ ist, hängt von den Daten ab, und zwar von jedem Feature einzeln. Für den MSE ist $\frac{\partial L}{\partial w_j} = \frac1N \sum_i 2\,(y_i - \langle w, x^{(i)} \rangle)\,(-x^{(i)}_j)$, also proportional zu den Werten von Feature $j$. Hat Feature 1 Werte um $1$ und Feature 2 Werte um $1000$ (Körpergröße in Metern, Einkommen in Euro), so ist die zweite Gradientenkomponente etwa tausendmal größer als die erste, und die Krümmung des Loss-Gebirges in $w_2$-Richtung ist eine Million mal größer: Das Tal ist eine lange, schmale Schlucht. Eine Lernrate, die in $w_1$-Richtung vernünftig vorankommt, springt in $w_2$-Richtung über die Schlucht hinaus; eine, die dort stabil ist, kriecht in $w_1$-Richtung.
 

@@ -321,6 +321,15 @@ Datierte Protokolle größerer Umbauten liegen daneben als `build-log-<datum>.md
   samt Einladungslink, das Forum-Objekt ist gelöscht (der Block „Foren“ verschwand mit ihm).
 
 ### Infrastruktur
+- [x] **„In Worten“ nach den definierenden Gleichungen**, 2026-11-17, Audit §6.2.
+  25 Stellen durchgegangen, an denen die Formel die Definition ist; **14 hatten ihren Satz
+  schon** (Kettenregel, δ-Rekursion, Softmax, Log-Likelihood, Autoencoder-Loss, Attention,
+  Minimax, FGSM, Adam, Distillation Loss, Message Passing, Perzeptron, Perzeptronregel,
+  Neuron). Die übrigen 11 haben einen bekommen: neun als eigener Absatz `*In Worten:* …`
+  hinter der Formel (Skalarprodukt, Gradient, Sigmoid, BCE, ReLU, Approximationstheorem,
+  CBOW, RNN-Zustand, Faltung), zwei im vorhandenen Satz (Update-Regel, VAE-Loss), weil ein
+  eingeschobener Absatz dort den Satzbau zerrissen hätte. Keine zusätzliche PDF-Seite.
+
 - [x] **Jedes Kapitel öffnet mit einem Einleitungsabsatz**, 2026-11-17, Audit §6.1 und §4.1
   („eine Vorlage, zwei Zwecke"). Nachgezählt **20** von 29 Kapiteln begannen unmittelbar mit
   `##` oder dem Aufzeichnungsblock — der Bericht nannte 18 und übersah 04 und 23. Jetzt

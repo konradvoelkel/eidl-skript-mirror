@@ -19,6 +19,9 @@ $$
 h_t = \tau\bigl( W x_t + U h_{t-1} + b \bigr), \qquad y_t = V h_t .
 $$
 
+*In Worten:* Der neue Zustand entsteht aus der neuen Eingabe und dem alten Zustand, die
+Ausgabe allein aus dem Zustand.
+
 In der „entfalteten Perspektive“ (unrolled) ist ein RNN über $T$ Zeitschritte ein tiefes Netz mit $T$ Schichten, die sich alle dieselben Gewichte $W, U, V$ teilen. Backpropagation funktioniert dann ganz normal (*backpropagation through time*) – mit dem Problem, dass Gradienten über viele Zeitschritte hinweg exponentiell verschwinden oder explodieren, weil immer wieder mit $U$ multipliziert wird. Die Lösung dafür sind LSTMs.
 
 :::{figure} ../images/vl09-rnn-unrolled.png

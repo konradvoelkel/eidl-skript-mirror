@@ -70,6 +70,9 @@ $$
 \nabla f(a) := \left( \frac{\partial f}{\partial x_1}(a), \dots,
 \frac{\partial f}{\partial x_n}(a) \right)^\top \in \mathbb{R}^n .
 $$
+
+*In Worten:* Der Gradient sammelt die Steigungen entlang der einzelnen
+Koordinatenachsen zu einem Vektor.
 :::
 
 Beide Begriffe hängen zusammen: Ist $f$ differenzierbar, so gilt

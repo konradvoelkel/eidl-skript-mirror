@@ -26,6 +26,8 @@ $$
 \operatorname{ReLU}(y) := \max(0, y).
 $$
 
+*In Worten:* Negative Eingaben werden auf null gesetzt, positive bleiben, wie sie sind.
+
 Ein Neuron mit $\tau = \operatorname{ReLU}$ heißt ReLU-Neuron.
 :::
 

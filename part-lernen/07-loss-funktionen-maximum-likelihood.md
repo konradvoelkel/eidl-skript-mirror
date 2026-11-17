@@ -38,6 +38,10 @@ L_{\text{BCE}}(x, y; w) = -\frac1N \sum_{i=1}^N \Bigl( y_i \log p_i + (1 - y_i) 
 p_i = P(x_i \text{ in Klasse } 1) = \sigma(\langle w, x_i \rangle) = \frac{e^{\langle w, x_i \rangle}}{1 + e^{\langle w, x_i \rangle}} .
 $$
 
+*In Worten:* Für jeden Datenpunkt wird der Logarithmus der Wahrscheinlichkeit genommen,
+die das Modell der *richtigen* Klasse gibt; der Loss ist der negative Mittelwert davon.
+Wer sicher richtig liegt, zahlt fast nichts; wer sicher falsch liegt, zahlt beliebig viel.
+
 Mit $\log$ ist hier wie im ganzen Buch der natürliche Logarithmus $\ln$ gemeint, wie bei `torch.log` und `np.log`.
 
 Für das Perzeptron (mit Labels $y_i \in \{-1, +1\}$ statt $\{0, 1\}$, das macht die Formeln kürzer) ist ein erster Kandidat der **„harte“ Perceptron Loss**

@@ -39,6 +39,10 @@ $$
 P(w_{\text{mitte}} \mid \text{Kontext}) = \operatorname{sm}\Bigl( W' \cdot \frac{1}{2S} \sum_{j \in \text{Kontext}} W w_j \Bigr).
 $$
 
+*In Worten:* Die Vektoren der Kontextwörter werden gemittelt, einmal linear abgebildet
+und per Softmax in eine Verteilung über das Vokabular verwandelt; trainiert wird darauf,
+dass das tatsächliche mittlere Wort dort viel Wahrscheinlichkeit bekommt.
+
 Die Wortvektoren sind die Spalten von $W$: $e(w) = W w$ ist für einen One-Hot-Vektor $w$ einfach die entsprechende Spalte.
 
 **Skip-gram**, die Alternative zu CBOW: Gegeben ein Token, sage den Kontext vorher. Eingabe: das mittlere Token als One-Hot-Vektor für eine Abfolge von $2S + 1$ Token. Ausgabe: eine Wahrscheinlichkeitsverteilung auf allen $N$ Token. Loss-Funktion: NLL, d.h. Vergleich der ausgegebenen Verteilung mit der Summe der One-Hot-Vektoren für alle $2S$ Kontexttoken. Architektur: 1 Hidden Linear Layer mit $K$ Neuronen (der „Encoder“), danach ein Layer „Decoder“ mit $N$ Neuronen gefolgt von Softmax. Skip-gram ist langsamer als CBOW, lernt dafür seltene Wörter besser – und ist damit die Wahl für *kleinere* Korpora, während CBOW auf sehr großen praktikabel bleibt. Mikolov schreibt es in der Anleitung zu word2vec knapp so: „architecture: skip-gram (slower, better for infrequent words) vs CBOW (fast)“ ([word2vec-Projektseite](https://web.archive.org/web/20161211192011/https://code.google.com/p/word2vec/) – die Seite bei Google Code gibt es nicht mehr, der Link führt auf den Schnappschuss im Internet Archive).
