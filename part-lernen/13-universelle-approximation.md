@@ -58,10 +58,11 @@ $$
 \sup_{x \in E} \| n(x) - f(x) \| < \varepsilon .
 $$
 
+:::
+
 *In Worten:* Zu jeder stetigen Funktion und jeder noch so kleinen Fehlerschranke gibt es
 ein Netz, das auf ganz $E$ um weniger als $\varepsilon$ danebenliegt – und seine Schichten
 dürfen dabei schmal bleiben, höchstens $d + D + 2$ Neuronen breit.
-:::
 
 Also: schmale, aber tiefe Netze reichen. Und noch präziser, mit Aussage über die *Größe*:
 

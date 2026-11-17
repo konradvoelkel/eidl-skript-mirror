@@ -321,6 +321,14 @@ Datierte Protokolle größerer Umbauten liegen daneben als `build-log-<datum>.md
   samt Einladungslink, das Forum-Objekt ist gelöscht (der Block „Foren“ verschwand mit ihm).
 
 ### Infrastruktur
+- [x] **Die „In Worten“-Sätze stehen im Fließtext**, 2026-11-17, Punkt 2 des zweiten
+  SEO-Audits. Sechs der zehn standen im Kasten (`prf:definition` bzw. Admonition) und
+  fielen damit aus der Textextraktion — gemessen: vorher kamen **4** Seiten durch, jetzt
+  **10**. Verschoben, nicht umgeschrieben: Der Satz steht jetzt unmittelbar hinter dem
+  schließenden `:::`, also weiter direkt hinter seiner Formel. Betroffen waren
+  Skalarprodukt, Gradient, Sigmoid, ReLU, Approximationstheorem und Faltung. PDF
+  unverändert 153 Seiten.
+
 - [x] **Herkunftszeile am Ende jedes Kapitels**, 2026-11-17, Punkt 1 des zweiten
   SEO-Audits. Im extrahierten Haupttext der 29 Kapitel kam „Konrad Völkel" **null** mal
   vor, „CC BY-SA" null mal, ein sichtbares Datum auf keiner der 33 Seiten — alles stand

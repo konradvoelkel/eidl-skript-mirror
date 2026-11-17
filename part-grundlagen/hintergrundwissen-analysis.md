@@ -71,9 +71,10 @@ $$
 \frac{\partial f}{\partial x_n}(a) \right)^\top \in \mathbb{R}^n .
 $$
 
+:::
+
 *In Worten:* Der Gradient sammelt die Steigungen entlang der einzelnen
 Koordinatenachsen zu einem Vektor.
-:::
 
 Beide Begriffe hängen zusammen: Ist $f$ differenzierbar, so gilt
 $D_u f(a) = \nabla f(a) \cdot u$ – bewiesen unten im Abschnitt „Die Kettenregel“, sobald

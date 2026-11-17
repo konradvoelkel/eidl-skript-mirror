@@ -26,10 +26,10 @@ $$
 \operatorname{ReLU}(y) := \max(0, y).
 $$
 
-*In Worten:* Negative Eingaben werden auf null gesetzt, positive bleiben, wie sie sind.
-
 Ein Neuron mit $\tau = \operatorname{ReLU}$ heißt ReLU-Neuron.
 :::
+
+*In Worten:* Negative Eingaben werden auf null gesetzt, positive bleiben, wie sie sind.
 
 **Ableitung** von $\max(0, y)$ nach $y$: Für $y > 0$ ist $\max(0, y) = y$, also ist die Ableitung $1$. Für $y < 0$ ist $\max(0, y) = 0$, also ist die Ableitung $0$. Für $y = 0$ ist die Ableitung nicht definiert – wir *definieren* sie als $0$, das spart Rechnungen. (Dass das erlaubt ist, steckt im Begriff der *schwachen Ableitung*: Sie darf an einzelnen Punkten beliebig sein.)
 
