@@ -77,3 +77,67 @@ eigener Vorgang, hier nicht angefasst.
 
 Das PDF. Es hängt am tex-Template und nicht am Site-Template; gebaut wurde es in diesem
 Durchgang nicht.
+
+---
+
+# Nachtrag am selben Tag: mystmd 1.11.0 auf 1.13.0
+
+Aus derselben Durchsicht. 1.12.0 erschien am 2026-10-26, 1.13.0 am 2026-11-12; zwischen
+1.11.0 und heute wurden 35 PRs gemergt.
+
+## Was es bringt, und was es kostet
+
+Der Ertrag ist bescheiden und löst kein Problem, das dieses Buch hat: drei Behebungen
+quadratischen Speicherwachstums bei großen Site-Builds (33 Seiten sind nicht groß),
+`error_rules` mit Schlüsseln, ein Fix für Groß-/Kleinschreibung bei Querverweisen,
+`multiple` für Template-Optionen. Gemacht wurde es trotzdem, weil die Anheftung sonst
+stillschweigend veraltet und der Sprung später teurer wird.
+
+Die Fassung steht an zwei Stellen: `pyproject.toml`/`uv.lock` für die Arbeit am Buch und
+`Dockerfile` für die CI, wo mystmd global installiert und anschließend gepatcht wird.
+Beide sind gehoben. Ein Push auf den Default-Branch baut das Image **automatisch** neu:
+`build-image` hat eine `changes`-Regel auf `Dockerfile` und `devnotes/patch_myst_tex.py`,
+beide sind in diesem Commit, und die Stufe `image` läuft vor `build`.
+
+## Der eine echte Fund: ein minifizierter Name wandert
+
+`patch_myst_tex.py` scheiterte gegen 1.13.0 — acht der neun Ersetzungen griffen, die für
+die Bindestriche in Codeblöcken nicht:
+
+    FEHLER [Bindestriche in Codeblöcken]: 'state.text(node3.value, true)' steht 0x im
+    Fenster hinter dem Anker, erwartet genau 1x
+
+Im Bündel von 1.13.0 steht an derselben Stelle `state.text(node4.value, true)`. Der Fehler
+ist also **nicht** behoben, der Minifizierer hat nur die Variable umbenannt — was zu dem
+Befund passt, dass `myst-to-tex` seit dem 2025-12-05 funktional unangetastet ist. Dieser
+Patch sucht deshalb jetzt als einziger mit einem regulären Ausdruck; Anker, Fenster und
+die Forderung nach genau einem Treffer bleiben, er scheitert also weiterhin laut, wenn
+mystmd die Stelle wirklich bewegt. Gegen 1.11.0 wie gegen 1.13.0 geprüft, in beiden
+Richtungen idempotent.
+
+## Gemessen
+
+* `myst build --html`: **0 Warnungen**.
+* `myst build --pdf`: **152 Seiten** lokal — dieselbe Zahl wie unter 1.11.0, und damit die
+  dritte Fassung in Folge ohne Satzunterschied. 0 LaTeX-Fehler, 0 fehlende Glyphen.
+* Die Gegenproben im PDF: 0 zerrissene Langoptionen (`- -`), 0 `nvidia -smi`, dafür
+  `--index-url` und `nvidia-smi` korrekt; 0 Ligaturen `¿`/`¡`; 0 englische Kastennamen.
+* Suchindex und Querverweise **gleich**: 718 Einträge, 358 Adressen, 33 Seiten im `xref`,
+  vorher wie nachher.
+* Die lokale `pages`-Kette samt aller `--check` grün; `hydration.py --check-rendered` hält.
+
+## Der Bruch, der keiner war
+
+1.13.0 führt `searchable` an TOC-Einträgen ein: Versteckte Seiten sind nicht mehr
+standardmäßig durchsuchbar. Verdächtig war `kurs-2026-27.md`, das bewusst außerhalb des
+TOC steht — es wird aber gar nicht gebaut und stand auch unter 1.11.0 nicht im Suchindex.
+Für dieses Buch ändert sich dadurch nichts.
+
+Node ≥ 22 ist seit 1.12.0 Pflicht; das Image bringt Node 26 mit, lokal läuft 22.22.3.
+
+## Nebenbefund
+
+`check_pdf_build.py` läuft lokal nicht durch, weil `exports/` außer dem Buch noch ein
+Foliendeck und elf Übungsblätter enthält — der Prüfer erwartet dort genau ein PDF. In der
+CI ist das Verzeichnis sauber. Die Zahlen oben sind deshalb von Hand aus `pdfinfo` und
+`pdftotext` gelesen.

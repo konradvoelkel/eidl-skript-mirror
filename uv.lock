@@ -468,7 +468,7 @@ requires-dist = [
 
 [package.metadata.requires-dev]
 dev = [
-    { name = "mystmd", specifier = ">=1.11,<2" },
+    { name = "mystmd", specifier = ">=1.13,<2" },
     { name = "pyyaml", specifier = ">=6.0.3" },
     { name = "ruff" },
 ]
@@ -1164,15 +1164,15 @@ wheels = [
 
 [[package]]
 name = "mystmd"
-version = "1.11.0"
+version = "1.13.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "nodeenv" },
     { name = "platformdirs" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/00/e0/05c4acc244e317a83cf8da27c2f29b62f86c8ee00d42c3668bf316461b1d/mystmd-1.11.0.tar.gz", hash = "sha256:afc8ca35bcf34cd694b2d5f275dba5baa2e78cf72b4a770369f9a2b6183d7d59", size = 2750170, upload-time = "2026-09-21T16:32:28.084Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/95/7f/49a14de2a922c68bde6c6023e98cb52c6b831d8218673edafa1d6be7fc63/mystmd-1.13.0.tar.gz", hash = "sha256:8dfa76bdf286811483d3a9ce1a7a68b4467c3c48c75864bd5e49da9e3be31fbb", size = 2878759, upload-time = "2026-11-12T11:41:58.314Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/a2/5e/4566006965545a6461d4b250faafd57a3ff04a193ed664790fbbfe7ba91d/mystmd-1.11.0-py3-none-any.whl", hash = "sha256:52ece5bff807e24e979ca86a806153a3c00247df32321547adc533b8720edab6", size = 2780949, upload-time = "2026-09-21T16:32:26.306Z" },
+    { url = "https://files.pythonhosted.org/packages/87/42/1be42450362eaa695bf9858963abed16548ad53d64c449b33efbcb67dc79/mystmd-1.13.0-py3-none-any.whl", hash = "sha256:af8eb053e4141dedfdabca2cc310cf8ae79a7014b9f1a529901eac0a9dafbb8d", size = 2910961, upload-time = "2026-11-12T11:41:55.903Z" },
 ]
 
 [[package]]

@@ -165,7 +165,7 @@ RUN sed -i '1s|.*|#!/usr/bin/python3|' \
 
 # mystmd global installieren -- **mit angehefteter Version**, passend zur dev-Gruppe in
 # pyproject.toml. Die beiden werden gemeinsam angehoben.
-RUN npm install -g mystmd@1.11.0
+RUN npm install -g mystmd@1.13.0
 
 # mystmd hat im LaTeX-Export einen Fehler: Es schreibt Codeblock-Inhalte mit
 # `mathMode = true` und setzt dabei vor **jeden Bindestrich ein Leerzeichen**. Aus

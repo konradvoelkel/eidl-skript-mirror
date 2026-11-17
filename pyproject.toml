@@ -39,7 +39,7 @@ dependencies = [
 
 [dependency-groups]
 dev = [
- "mystmd>=1.11,<2",
+ "mystmd>=1.13,<2",
  "pyyaml>=6.0.3",
  "ruff",
 ]

@@ -146,8 +146,10 @@ der eine Zeile anders bricht — es ist der *Satz*, nicht der Inhalt. Die Ursach
 `check_doku.py` prüft die Zahl gegen das **lokale** PDF, deshalb steht hier 112. Wer die
 veröffentlichte Zahl braucht, holt sie mit dem `curl`-Rezept weiter unten.
 
-Beides ist unabhängig von mystmd: 1.10.1 und 1.11.0 liefern auf demselben Baum dieselbe
-Seitenzahl (gemessen am 2026-10-15 beim Upgrade, `devnotes/build-log-2026-10-15.md`).
+Beides ist unabhängig von mystmd: 1.10.1, 1.11.0 und 1.13.0 liefern auf demselben Baum
+dieselbe Seitenzahl (1.10.1 gegen 1.11.0 am 2026-10-15 gemessen,
+`devnotes/build-log-2026-10-15.md`; 1.13.0 am 2026-11-17, wieder 152 Seiten lokal,
+`devnotes/build-log-2026-11-17-theme.md`).
 
 **Die 141 Seiten enthalten zwei Seiten Teilegliederung** (2026-11-04). Vor dem Umbau auf
 sechs Teile baute derselbe Baum 138 Seiten, gemessen in einem Worktree auf `4d3434e` mit
@@ -173,6 +175,14 @@ dort als Mathematik escaped, wodurch **vor jedem Bindestrich ein Leerzeichen** l
 das nicht, nur im PDF, und es traf 49 Stellen in 18 Kapiteln. Im CI-Image geschieht der
 Patch automatisch (Dockerfile), in einer frisch synchronisierten `.venv` nicht. Das Skript
 ist idempotent und scheitert laut, wenn mystmd sich bewegt hat.
+
+**Einer der drei Patches sucht mit einem regulären Ausdruck, und das ist Absicht.** Die
+Stelle für die Bindestriche steht im minifizierten Bündel als `state.text(nodeN.value,
+true)`, und `nodeN` wandert: 1.10.1 und 1.11.0 schrieben `node3`, 1.13.0 schreibt `node4`,
+ohne dass sich inhaltlich etwas geändert hätte. Mit einer festen Zeichenkette scheiterte
+der Patch beim Fassungssprung, obwohl der Fehler unverändert da war — gefunden am
+2026-11-17 beim Upgrade. Anker, Fenster und die Forderung nach genau einem Treffer
+bleiben, der Patch scheitert also weiterhin laut, wenn mystmd die Stelle wirklich bewegt.
 
 **Der Patch trifft über den Hardlink den uv-Cache mit — und das verfälscht seine eigene
 Meldung.** uv verlinkt Paketdateien aus dem Cache in die `.venv`; `patch_myst_tex.py`
