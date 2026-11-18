@@ -370,14 +370,7 @@ Textfassung von Seite und Objektbaum: `~/Sciebo/hhu/eidl-26/ilias/` (analog zu
   in §18). Kein Critical, kein High; was vom zweiten Audit schwer war, ist erledigt (die
   Kästen kommen in der Extraktion an, die Herkunftszeile steht in allen 29 Kapiteln,
   Googles Renderer sieht das JSON-LD). Offen, nach Wirkung je Aufwand:
-  1. **Indexierung beantragen** für die sieben nie gecrawlten Seiten
-     (`gradientenabstieg`, `latente-raeume-geometrisch`, `neuron-perzeptron`, `optimierer`,
-     `representation-learning-graphen`, `uebungsblaetter`, `was-ist-deep-learning`), die
-     zwei Dubletten (`vortrainierte-modelle` zuletzt am 26.09. gecrawlt,
-     `perzeptron-trainieren` wählt weiter die Variante ohne Schrägstrich) und die
-     Startseite (seit dem 20.10. nicht besucht). **Nur Konrad.** Wirkt messbar: sechs von
-     zehn Anträgen vom 17.11. sind binnen eines Tages im Index, 14 auf 20 von 33.
-  2. **Der Stand in der Herkunftszeile hängt an Boilerplate-Commits** (sichtbar geworden
+  1. **Der Stand in der Herkunftszeile hängt an Boilerplate-Commits** (sichtbar geworden
      am 2026-11-18, als `zitierzeile.py` ihn auf die Seite brachte). `freshness.py` liest
      das Datum aus `git log -1` der Quelldatei, und der letzte Commit war bei allen 31
      Seiten die Herkunfts- bzw. Forumszeile — deshalb sagt heute jede Seite „Stand
@@ -387,6 +380,16 @@ Textfassung von Seite und Objektbaum: `~/Sciebo/hhu/eidl-26/ilias/` (analog zu
      Datum Commits überspringen, die nur Fußzeilen anfassen (etwa über eine Liste von
      Mustern, oder `git log` mit `-S` auf den Prosateil)? Das ist eine Entscheidung und
      kein Defekt — aber jetzt eine, die der Leser sieht.
+  2. **Die Weiterleitung ohne Schrägstrich ist eine `302`, keine `301`** (gemessen am
+     2026-11-18 beim Stellen der Indexierungsanträge). Das passt zu der einen Dublette,
+     die sich nicht aus einem alten Crawl erklärt: `perzeptron-trainieren` gibt den
+     Canonical **mit** Schrägstrich an, Google wählt die Variante **ohne**. Eine
+     temporäre Weiterleitung behauptet, die Quelle bleibe die eigentliche Adresse, und
+     das ist das Gegenteil dessen, was der Canonical sagt. Unbelegt und zu prüfen: ob
+     GitLab Pages seine eingebaute Verzeichnis-Weiterleitung auf `301` bringen lässt
+     (eine `_redirects`-Datei im Artefakt kennt Statuscodes; ob ihre Regeln **vor** der
+     eingebauten greifen, ist offen) — und ob sich die Dublette nach dem Antrag vom
+     18.11. nicht ohnehin von selbst auflöst. Erst messen, dann bauen.
   3. In sieben `{prf:…}`-Kästen den Begriff in den ersten Satz ziehen: boilerplate-
      entfernende Extraktoren verlieren den Kastenkopf, und dort steht der definierte
      Begriff.
