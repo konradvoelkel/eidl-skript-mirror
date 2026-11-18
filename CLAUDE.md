@@ -322,7 +322,7 @@ im `pages`-Job und brauchen **kein einziges Python-Paket**.
 | `tools/social_card.py` | Erzeugt und prüft `images/social-card.png` (1200×630). Die Karte ist eingecheckt und steht als `thumbnail:` in `myst.yml` |
 | `tools/publish_urls.py` | Echte Adresse in Sitemap und `robots.txt`, jede `<loc>` mit Schrägstrich, `og:image` absolut, ein Canonical je Seite; `--check` prüft das am Artefakt nach |
 | `tools/head_meta.py` | `og:url`, `og:site_name`, `og:type`, `og:locale`, `twitter:card`; den `<title>` **der Landingpage** um „ — Vorlesungsskript, HHU Düsseldorf“ (ohne Jahreszahl, das Skript ist semesterunabhängig; `h1` und `og:title` bleiben der Werktitel); `lang="de"` samt Wächter gegen die Hydration; zu kleine Abbildungen als Vorschaukarte ersetzen; Abbildungen unter der Falz verzögert laden |
-| `tools/inject_jsonld.py` | JSON-LD: ein Buchknoten samt den zwei anderen Skripten desselben Autors auf der Landingpage, je ein Kapitelknoten mit Brotkrume auf den 29 übrigen Seiten. Daten in `tools/structured-data.json` und `tools/sibling-works.json` |
+| `tools/inject_jsonld.py` | JSON-LD: ein Buchknoten samt den zwei anderen Skripten desselben Autors auf der Landingpage, je ein Kapitelknoten mit Brotkrume auf den 29 übrigen Seiten, und auf der Glossarseite ein `DefinedTermSet` mit den 69 Begriffen — je Begriff die Adresse **seines Kapitels** als `url` (das zuerst genannte) und die Erklärung mit Mathematik im Klartext, `MATHE_ERSATZ` scheitert laut an unbekannten Befehlen. Daten in `tools/structured-data.json` und `tools/sibling-works.json` |
 | `tools/dead_css.py` | Nimmt die drei Stylesheets heraus, die das Theme in jede Seite legt und die dieses Buch nicht benutzen kann: `thebe-core.css` (87 kB), `font-awesome.css`, `mpl_widget.css` — alle drei für Jupyter-Ausgaben, und keine der 33 Seiten hat eine. Im Markup **und** im `links()`-Array des Wurzel-Chunks. **Vor `vendor_assets.py`.** Scheitert, sobald eine Seite ausführbar wird |
 | `tools/vendor_assets.py`, `tools/check_css_assets.py` | Das KaTeX-Stylesheet des Themes aus `_site/vendor/` statt vom CDN, in HTML **und** JS, samt seinen zwanzig Schriftdateien; die Schriften aus `_site/fonts/` statt von Google. Der Prüfer löst jeden `url()` der eingebundenen Stylesheets auf. Font Awesome und jupyter-matplotlib lagen hier bis zum 2026-11-16, siehe `dead_css.py` |
 | `tools/thebe_gate.py` | Lädt `thebe-core` (1,3 MB) nur auf Seiten mit ausführbarem Code, also hier auf keiner. Patcht einen Ausdruck im Client-Bündel und scheitert laut, wenn ein mystmd-Update ihn verschiebt |
@@ -682,6 +682,13 @@ die „Weiterlesen“-Box, dann zwei kursive Zeilen.
 
 Die vier Seiten außerhalb der Kapitel — Startseite, Glossar, „Über dieses Skript“,
 Übungsblätter — bekommen **keine** Forumszeile; dafür gibt es drüben keine Seite.
+**Die Herkunftszeile tragen `glossar.md` und `uebungsblaetter.md` dagegen seit dem
+2026-11-18** (dritter Audit, §4): Dort stand die Lizenz nirgends im Text, und das Glossar
+ist mit gut 2.100 extrahierten Wörtern und seinem `DefinedTermSet` die Seite, die eine
+Antwortmaschine am ehesten begriffsweise zitiert. Die Links sind dort wurzelrelativ
+(`index.md`, `README.md`) und nicht `../`, und die Zeile beginnt mit „Dieses Glossar“ bzw.
+„Diese Seite“ statt „Dieses Kapitel“. Startseite und „Über dieses Skript“ brauchen sie
+nicht — die eine *ist* das Werk, die andere erklärt es.
 
 ## Querverweise
 

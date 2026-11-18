@@ -169,3 +169,5 @@ Die Begriffe, die in Klausuraufgaben vorkommen, je in ein bis drei Sätzen, mit 
 **Anwendungskonzept.** Was haben wir, was soll rauskommen, welches Modell und woher, welcher Loss, womit messen wir Güte, was kann schiefgehen. [Anwendungsbeispiele](part-architekturen-anwendungen/24-anwendungsbeispiele.md)
 
 **Adversarial Example.** Eine für Menschen unsichtbare Änderung der Eingabe, die die Klassifikation kippt; gefunden per Gradientenabstieg im Eingaberaum. [Adversarial Attacks und Polysemie](part-architekturen-anwendungen/27-adversarial-attacks-polysemie.md)
+
+*Dieses Glossar gehört zu [Einführung in Deep Learning](index.md), dem Vorlesungsskript zur gleichnamigen Vorlesung im Bachelor Informatik an der Heinrich-Heine-Universität Düsseldorf, von Konrad Völkel; frei unter CC BY-SA 4.0. [Über dieses Skript, Zitiervorschlag und Quelltext](README.md)*

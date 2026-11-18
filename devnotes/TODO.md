@@ -377,37 +377,31 @@ Textfassung von Seite und Objektbaum: `~/Sciebo/hhu/eidl-26/ilias/` (analog zu
      `perzeptron-trainieren` wählt weiter die Variante ohne Schrägstrich) und die
      Startseite (seit dem 20.10. nicht besucht). **Nur Konrad.** Wirkt messbar: sechs von
      zehn Anträgen vom 17.11. sind binnen eines Tages im Index, 14 auf 20 von 33.
-  2. Herkunftszeile an `glossar.md` und `uebungsblaetter.md` — die zitierfähigste Seite des
-     Buchs trägt als einzige keine.
-  3. Ein Handgriff in `glossar_begriffe()`: Titel so lange abschneiden, bis keiner mehr
-     passt (vier Erklärungen enden auf einem Kapiteltitel), die Titel dabei als `url` des
-     Begriffs behalten statt wegzuwerfen, Backticks streifen; dazu 17 LaTeX-Reste in den
-     Erklärungen.
-  4. `role="note"` im Theme-Patch: der `aside`-zu-`div`-Patch hat den Kästen ihre Rolle im
+  2. `role="note"` im Theme-Patch: der `aside`-zu-`div`-Patch hat den Kästen ihre Rolle im
      Barrierefreiheitsbaum genommen. Danach die Extraktionsmessung wiederholen.
-  5. Sechs `*Setzt voraus:*`-Zeilen, beginnend mit `17-latente-raeume-geometrisch`; am
+  3. Sechs `*Setzt voraus:*`-Zeilen, beginnend mit `17-latente-raeume-geometrisch`; am
      Handy ist diese Zeile der einzige Weiterweg aus dem ersten Bildschirm.
-  6. Jahr und kanonische Adresse in die Herkunftszeile (Zitierangabe fehlt auf der
+  4. Jahr und kanonische Adresse in die Herkunftszeile (Zitierangabe fehlt auf der
      Kapitelseite, und kein sichtbares Datum auf einer der 33 Seiten).
-  7. In sieben `{prf:…}`-Kästen den Begriff in den ersten Satz ziehen: boilerplate-
+  5. In sieben `{prf:…}`-Kästen den Begriff in den ersten Satz ziehen: boilerplate-
      entfernende Extraktoren verlieren den Kastenkopf, und dort steht der definierte
      Begriff.
-  8. **Den 2.1.1-Bau mit PSI vermessen** und die JS-Größen in `plan-theme-2x.md` nachtragen.
+  6. **Den 2.1.1-Bau mit PSI vermessen** und die JS-Größen in `plan-theme-2x.md` nachtragen.
      Drei Chunks machen 697 von 859 kB, einer davon ist zu 98,3 % ungenutzt, und 2,13 MB
      des Rohbestands sind ein browserifiziertes Krypto-Polyfill. Ein Schnitt in `tools/`
      reicht nicht, weil die Chunks statisch importiert werden.
-  9. **Offene Frage, billig zu klären**: Wird der Kopf überhaupt noch ersetzt? React #423
+  7. **Offene Frage, billig zu klären**: Wird der Kopf überhaupt noch ersetzt? React #423
      trat in 15 Läufen nicht mehr auf, nur #418, und drei Stylesheets stehen nach der
      Hydration doppelt im Kopf — das deutet darauf, dass der Kopf seit Theme 1.4.1
      überlebt. Versuch: `hydration.py --check-rendered` lokal, einmal ohne den Wächter.
      Nicht um ihn zu entfernen, sondern damit `CLAUDE.md` keine Mechanik beschreibt, die
      nicht mehr stattfindet.
-  10. DOI über Zenodo, dann ORCID, dann OERSI/ORCA.nrw und Wikidata (`P800` am Item
+  8. DOI über Zenodo, dann ORCID, dann OERSI/ORCA.nrw und Wikidata (`P800` am Item
       Q102659059). Neues Argument dafür: die Zufallskennung `131e30` im Hostnamen ist
       nicht stabil.
-  11. Lehrstuhlseite — die im zweiten Audit genannte Adresse liefert 404, die richtige ist
+  9. Lehrstuhlseite — die im zweiten Audit genannte Adresse liefert 404, die richtige ist
       unbekannt und muss zuerst gefunden werden.
-  12. Kleinkram: das Fragment in `trailing_slash.py` (ein Link über 302, und die Begründung
+  10. Kleinkram: das Fragment in `trailing_slash.py` (ein Link über 302, und die Begründung
       in der Tabelle ist falsch), `og:image:alt` samt Maßangaben, LaTeX-Reste in
       `myst.search.json`, zehn Titel über 60 Zeichen, Suchknopf mobil 42 × 40 px,
       CLS 0,103 auf der Destillations-Seite (Quelle jetzt bekannt).

@@ -148,7 +148,7 @@ import json
 import re
 import subprocess
 import sys
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 
 WURZEL = Path(__file__).resolve().parent.parent
 VORLAGE = Path(__file__).resolve().parent / "structured-data.json"
@@ -293,19 +293,91 @@ def kapitel_graph(site: str, slug: str, position: int, datum: str, doc: str,
 #
 # **Ohne Anker je Begriff**, und das ist eine Entscheidung und kein Versäumnis: Explizite
 # Anker (`(name)=`) benutzt dieses Repository nicht (CLAUDE.md, „Querverweise"), und die
-# Begriffe zu Überschriften zu machen, hinge 69 Einträge in die Seitengliederung. Der
-# `url` jedes Begriffs ist deshalb die Glossarseite; zitierbar ist der Begriff über
-# seinen Namen im Set.
+# Begriffe zu Überschriften zu machen, hinge 69 Einträge in die Seitengliederung.
+#
+# **Der `url` jedes Begriffs ist deshalb die Seite des Kapitels, das ihn erklärt** -- nicht
+# die Glossarseite, die schon als `inDefinedTermSet` dasteht und als `url` nichts
+# hinzufügte. Die Adresse liegt ohnehin vor: Jeder Eintrag endet mit einem Link auf sein
+# Kapitel, und `glossar_begriffe()` hat diese Links bis zum 2026-11-18 gelesen und
+# weggeworfen (SEO-Audit vom 2026-11-18, §5). Hat ein Eintrag mehrere Kapitel, gilt das
+# **zuerst genannte** -- also das, auf das auch ein Leser als erstes klickt. Das ist eine
+# redaktionelle Reihenfolge und nicht die Kapitelnummer: „Multimodal" nennt 20 vor 04,
+# „Over- und Underfitting" 14 vor 13. Wer ein anderes Ziel will, stellt den Link im
+# Glossar nach vorn -- dann ändert sich beides zugleich, die Adresse hier und der erste
+# Klick dort.
 GLOSSAR = Path(__file__).resolve().parent.parent / "glossar.md"
 FETT = re.compile(r"^\*\*(.+?)\*\*", re.S)
 MD_LINK = re.compile(r"\[([^\]]*)\]\([^)]*\)")
+KAPITEL_LINK = re.compile(r"\[([^\]]*)\]\(([^)]*\.md)\)")
+MATHE = re.compile(r"\$([^$]+)\$")
+
+# Mathematik im Klartext, für die `description` eines `DefinedTerm`. Im Glossar steht sie
+# als LaTeX und wird im HTML von KaTeX gesetzt; in den strukturierten Daten las eine
+# Antwortmaschine bis zum 2026-11-18 `$\sigma(z) = 1/(1+e^{-z})$` (SEO-Audit §5). Dieselbe
+# Fehlerklasse wie die 20 Alt-Texte vom 2026-11-17, eine Ebene tiefer.
+#
+# Die Liste deckt genau die Konstrukte ab, die im Glossar vorkommen, und die Reihenfolge
+# zählt (längere Muster zuerst). Was sie nicht kennt, lässt `mathe_klartext()` **laut
+# scheitern** -- lieber ein roter Bau als eine Formel, die als Zeichensalat in den
+# strukturierten Daten landet.
+MATHE_ERSATZ = [
+    (re.compile(r"\\operatorname\{([^}]*)\}"), r"\1"),
+    (re.compile(r"\\text\{([^}]*)\}"), r"\1"),
+    (re.compile(r"\\mathcal\{N\}"), "N"),
+    (re.compile(r"\\tfrac\{([^}]*)\}\{([^}]*)\}"), r"(\1/\2)"),
+    (re.compile(r"\\tfrac(\d)(\d)"), r"\1/\2"),
+    (re.compile(r"\\frac\{([^}]*)\}\{([^}]*)\}"), r"(\1/\2)"),
+    (re.compile(r"\\frac(\d)(\d)"), r"\1/\2"),
+    (re.compile(r"\\lfloor"), "\u230a"),
+    (re.compile(r"\\rfloor"), "\u230b"),
+    (re.compile(r"\\sum_"), "\u03a3_"),
+    (re.compile(r"\\varepsilon"), "\u03b5"),
+    (re.compile(r"\\sigma"), "\u03c3"),
+    (re.compile(r"\\lambda"), "\u03bb"),
+    (re.compile(r"\\tau"), "\u03c4"),
+    (re.compile(r"\\rho"), "\u03c1"),
+    (re.compile(r"\\mu"), "\u03bc"),
+    (re.compile(r"\\cdot"), "\u00b7"),
+    (re.compile(r"\\sim"), "~"),
+    (re.compile(r"\\ll"), "\u226a"),
+    (re.compile(r"\\\|"), "\u2016"),
+    (re.compile(r"\\ln"), "ln"),
+    (re.compile(r"\\max"), "max"),
+    (re.compile(r"\\min"), "min"),
+    (re.compile(r"\{:\}"), ":"),
+    (re.compile(r"\\[,;:! ]"), " "),
+]
 
 
-def glossar_begriffe(pfad: Path = GLOSSAR) -> list[tuple[str, str]]:
-    """(Begriff, Erklärung) je fett eingeleitetem Absatz des Glossars."""
+def mathe_klartext(formel: str) -> str:
+    """`$...$` in lesbaren Klartext. Scheitert laut an unbekannten Befehlen."""
+    s = formel
+    for muster, ersatz in MATHE_ERSATZ:
+        s = muster.sub(ersatz, s)
+    s = s.replace("{", "").replace("}", "")
+    if "\\" in s:
+        rest = sorted(set(re.findall(r"\\[a-zA-Z]+|\\.", s)))
+        raise SystemExit(
+            f"✗ glossar.md: unbekannte Mathematik in ${formel}$ -- "
+            f"MATHE_ERSATZ in tools/inject_jsonld.py kennt {', '.join(rest)} nicht"
+        )
+    return " ".join(s.split())
+
+
+def glossar_slug(ziel: str) -> str:
+    """Die Seitenadresse eines Kapitels aus dem relativen Pfad im Glossar.
+
+    MyST bildet den Slug aus dem Dateinamen ohne Nummer und ohne Ordner (CLAUDE.md,
+    „Die Nummern im Dateinamen folgen der Buchreihenfolge").
+    """
+    return re.sub(r"^\d+-", "", PurePosixPath(ziel).stem)
+
+
+def glossar_begriffe(pfad: Path = GLOSSAR) -> list[tuple[str, str, str | None]]:
+    """(Begriff, Erklärung, Kapitelslug) je fett eingeleitetem Absatz des Glossars."""
     text = pfad.read_text(encoding="utf-8")
     text = text.split("\n# ", 1)[-1]
-    begriffe: list[tuple[str, str]] = []
+    begriffe: list[tuple[str, str, str | None]] = []
     for absatz in text.split("\n\n"):
         absatz = absatz.strip()
         if not absatz.startswith("**"):
@@ -313,20 +385,39 @@ def glossar_begriffe(pfad: Path = GLOSSAR) -> list[tuple[str, str]]:
         m = FETT.match(absatz)
         if not m:
             continue
-        name = " ".join(m.group(1).split()).rstrip(".")
-        klartext = " ".join(MD_LINK.sub(r"\1", absatz).replace("**", "").replace("*", "").split())
+        name = " ".join(m.group(1).split()).rstrip(".").replace("`", "")
+        klartext = MATHE.sub(lambda t: mathe_klartext(t.group(1)), absatz)
+        klartext = " ".join(
+            MD_LINK.sub(r"\1", klartext).replace("**", "").replace("*", "")
+            .replace("`", "").split()
+        )
         # Die Kapitelverweise am Ende sind nach dem Entlinken nur noch Kapiteltitel; sie
-        # gehören nicht in die Erklärung.
-        for titel in re.findall(r"\[([^\]]*)\]\([^)]*\.md\)", absatz):
-            if klartext.endswith(titel):
-                klartext = klartext[: -len(titel)].rstrip(" ,;")
-        begriffe.append((name, klartext))
+        # gehören nicht in die Erklärung. **So lange streifen, bis keiner mehr passt**:
+        # Die Schleife lief bis zum 2026-11-18 einmal je Titel in Fundreihenfolge, und
+        # bei den vier Einträgen mit mehr als einem Kapitellink blieben deshalb die
+        # vorderen Titel am Text kleben (SEO-Audit vom 2026-11-18, §5).
+        titel = [t for t, _ in KAPITEL_LINK.findall(absatz)]
+        geaendert = True
+        while geaendert:
+            geaendert = False
+            for t in titel:
+                if t and klartext.endswith(t):
+                    klartext = klartext[: -len(t)].rstrip(" ,;")
+                    geaendert = True
+        ziele = [z for _, z in KAPITEL_LINK.findall(absatz)]
+        begriffe.append((name, klartext, glossar_slug(ziele[0]) if ziele else None))
     return begriffe
 
 
-def glossar_knoten(site: str, buch: dict) -> dict:
+def glossar_knoten(site: str, buch: dict, slugs: set[str]) -> dict:
     begriffe = glossar_begriffe()
     gesetzt = f"{site}/glossar/#glossar"
+    unbekannt = sorted({s for _, _, s in begriffe if s and s not in slugs})
+    if unbekannt:
+        raise SystemExit(
+            f"✗ glossar.md verweist auf {', '.join(unbekannt)}; "
+            f"das sind keine Seiten dieses Buchs -- Kapitel umbenannt?"
+        )
     return {
         "@type": "DefinedTermSet",
         "@id": gesetzt,
@@ -334,10 +425,12 @@ def glossar_knoten(site: str, buch: dict) -> dict:
         "name": "Glossar zur Klausurvorbereitung",
         "inLanguage": buch["inLanguage"],
         "license": buch["license"],
+        "isPartOf": {"@id": buch["@id"]},
         "hasDefinedTerm": [
             {"@type": "DefinedTerm", "name": name, "description": text,
              "inDefinedTermSet": {"@id": gesetzt}}
-            for name, text in begriffe
+            | ({"url": f"{site}/{slug}/"} if slug else {})
+            for name, text, slug in begriffe
         ],
     }
 
@@ -516,7 +609,9 @@ def main() -> int:
             payload = kapitel_graph(site, slug, position, daten[slug], doc, buch,
                                     suffix)
             if slug == "glossar":
-                payload["@graph"].append(glossar_knoten(site, buch))
+                payload["@graph"].append(
+                    glossar_knoten(site, buch, {s for s, _, _ in seiten if s})
+                )
 
         if "</head>" not in doc:
             print(f"✗ {ziel} hat kein </head>")

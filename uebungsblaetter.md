@@ -22,3 +22,5 @@ Ein Blatt kommt dazu, sobald es ausgegeben ist, nicht vorher.
 Die Aufgaben zum Mitdenken beim Lesen stehen woanders: Fast jedes Kapitel endet mit einem
 kurzen Abschnitt „Übung“ samt Antwortprobe. Die Blätter hier sind die bewerteten Aufgaben
 der Vorlesung.
+
+*Diese Seite gehört zu [Einführung in Deep Learning](index.md), dem Vorlesungsskript zur gleichnamigen Vorlesung im Bachelor Informatik an der Heinrich-Heine-Universität Düsseldorf, von Konrad Völkel; frei unter CC BY-SA 4.0. [Über dieses Skript, Zitiervorschlag und Quelltext](README.md)*
