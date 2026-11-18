@@ -377,15 +377,20 @@ Textfassung von Seite und Objektbaum: `~/Sciebo/hhu/eidl-26/ilias/` (analog zu
      `perzeptron-trainieren` wählt weiter die Variante ohne Schrägstrich) und die
      Startseite (seit dem 20.10. nicht besucht). **Nur Konrad.** Wirkt messbar: sechs von
      zehn Anträgen vom 17.11. sind binnen eines Tages im Index, 14 auf 20 von 33.
-  2. `role="note"` im Theme-Patch: der `aside`-zu-`div`-Patch hat den Kästen ihre Rolle im
-     Barrierefreiheitsbaum genommen. Danach die Extraktionsmessung wiederholen.
-  3. Sechs `*Setzt voraus:*`-Zeilen, beginnend mit `17-latente-raeume-geometrisch`; am
+  2. Sechs `*Setzt voraus:*`-Zeilen, beginnend mit `17-latente-raeume-geometrisch`; am
      Handy ist diese Zeile der einzige Weiterweg aus dem ersten Bildschirm.
-  4. Jahr und kanonische Adresse in die Herkunftszeile (Zitierangabe fehlt auf der
+  3. Jahr und kanonische Adresse in die Herkunftszeile (Zitierangabe fehlt auf der
      Kapitelseite, und kein sichtbares Datum auf einer der 33 Seiten).
-  5. In sieben `{prf:…}`-Kästen den Begriff in den ersten Satz ziehen: boilerplate-
+  4. In sieben `{prf:…}`-Kästen den Begriff in den ersten Satz ziehen: boilerplate-
      entfernende Extraktoren verlieren den Kastenkopf, und dort steht der definierte
      Begriff.
+  5. **Die 47 `prf`-Kästen im Barrierefreiheitsbaum** (offen geblieben beim `role="note"`
+     am 2026-11-18): `note` heißt in ARIA „ancillary to the main content", und eine
+     Definition oder ein Satz ist in einem Lehrbuch der Hauptinhalt — die Rolle wäre dort
+     falsch. Richtig wäre `role="group"` mit `aria-labelledby` auf die Kopfzeile; das
+     verlangt eine `id` am Titel, die das Theme nicht vergibt, also einen größeren Eingriff
+     in `install_template.py` als die bisherigen. Lohnt sich vermutlich erst zusammen mit
+     dem Umstieg auf Theme 2.x, weil dort dieselben Anker ohnehin anzufassen sind.
   6. **Den 2.1.1-Bau mit PSI vermessen** und die JS-Größen in `plan-theme-2x.md` nachtragen.
      Drei Chunks machen 697 von 859 kB, einer davon ist zu 98,3 % ungenutzt, und 2,13 MB
      des Rohbestands sind ein browserifiziertes Krypto-Polyfill. Ein Schnitt in `tools/`

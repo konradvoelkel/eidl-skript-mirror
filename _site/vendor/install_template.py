@@ -142,9 +142,35 @@ BEDIENUNG = [
 # `div` und nicht `section`: Ein `section` ohne zugänglichen Namen ist ohnehin kein
 # Landmark, behauptet aber Struktur, die der Kasten nicht hat. Das Aussehen hängt an den
 # Klassen und ändert sich nicht.
+#
+# **Seit dem 2026-11-18 trägt die Admonition dazu `role="note"`** (SEO-Audit vom
+# 2026-11-18, §3). Der Preis des Umbaus war nämlich, dass die Kästen im
+# Barrierefreiheitsbaum als `generic ''` erscheinen: Der Text kommt an, aber Art, Anfang,
+# Ende und Titelbezug sind nicht mehr erkennbar. `<aside>` trug die implizite Rolle
+# `complementary` — eine **Landmarke**, und 97 Landmarken in einem Buch sind für einen
+# Screenreader ebenfalls schlecht. `role="note"` ist die Rolle eines Merkkastens und keine
+# Landmarke; der Umbau geht damit nicht von „falsch, aber vorhanden" auf „nicht vorhanden",
+# sondern auf richtig.
+#
+# **Die beiden prf-Fassungen bekommen sie ausdrücklich nicht**, und das ist eine
+# Entscheidung und kein Versäumnis: `role="note"` heißt in ARIA „a section whose content is
+# parenthetic or ancillary to the main content". Eine Definition oder ein Satz in einem
+# Lehrbuch ist der Hauptinhalt und nicht beiläufig; die Rolle wäre dort schlicht falsch, und
+# zwar für 47 der 108 Kästen. Was dort richtig wäre, ist `role="group"` mit einem Namen aus
+# der Kopfzeile — das verlangt eine `id` am Titel, die das Theme nicht vergibt, also einen
+# größeren Eingriff. Bis dahin bleibt die Kopfzeile als erster Textknoten des Kastens das,
+# was ein Screenreader vorliest.
+#
+# Unterschieden werden die drei an der Form ihres Props-Objekts, und das ist in beiden
+# Bündeln gleich: die Admonition hat `{className:…}`, die zwei prf-Fassungen haben
+# `{id:…}` (Kästen mit Querverweisziel). Gezählt am 2026-11-18: 1 und 2, im Server- wie in
+# den Browser-Bündeln.
 STRUKTUR = [
-    (r'\?\(0,([\w$]+)\.jsx\)\("details",\{([^{}]*)\}\):\(0,([\w$]+)\.jsx\)\("aside",',
-     r'?(0,\1.jsx)("details",{\2}):(0,\3.jsx)("div"/*eidl:kasten-div*/,',
+    (r'\?\(0,([\w$]+)\.jsx\)\("details",\{([^{}]*)\}\):\(0,([\w$]+)\.jsx\)\("aside",\{className:',
+     r'?(0,\1.jsx)("details",{\2}):(0,\3.jsx)("div"/*eidl:kasten-div-note*/,{role:"note",className:',
+     "/*eidl:kasten-div-note*/"),
+    (r'\?\(0,([\w$]+)\.jsx\)\("details",\{([^{}]*)\}\):\(0,([\w$]+)\.jsx\)\("aside",\{id:',
+     r'?(0,\1.jsx)("details",{\2}):(0,\3.jsx)("div"/*eidl:kasten-div*/,{id:',
      "/*eidl:kasten-div*/"),
 ]
 

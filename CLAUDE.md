@@ -610,6 +610,22 @@ dieselbe Form haben: **Es sieht im HTML unauffällig aus und ist trotzdem falsch
   Hintergrundkapitel. Nach dem Umbau kommen sie an (`hintergrundwissen-analysis` 736 auf
   1420 Wörter). Wer die Stelle sucht: Das Muster hängt an `"details"`, nicht an `"aside"` —
   das Wort steht dutzendfach in Tag-Listen fremder Bibliotheken.
+
+  **Seit dem 2026-11-18 trägt die Admonition dazu `role="note"`** (dritter Audit, §3): Der
+  Umbau hatte den Kästen ihre Rolle im Barrierefreiheitsbaum genommen, sie erschienen als
+  `generic ''`. `<aside>` trug `complementary` — eine Landmarke, und 97 Landmarken in einem
+  Buch sind ebenfalls schlecht; `role="note"` ist die Rolle eines Merkkastens und keine
+  Landmarke. Gezählt im Artefakt: **51 `role="note"` plus 10 `<details>` gleich 61
+  Admonition-Kästen.** Die Extraktion ändert sich dadurch nicht, an sieben Seiten
+  gegengeprüft (buchweit 52.012 Wörter, Differenz zur Messung ohne Rolle: null).
+
+  **Die beiden `prf`-Fassungen bekommen die Rolle ausdrücklich nicht.** `role="note"` heißt
+  in ARIA „parenthetic or ancillary to the main content"; eine Definition oder ein Satz ist
+  in einem Lehrbuch der Hauptinhalt, die Rolle wäre dort falsch — und zwar für 47 der 108
+  Kästen. Richtig wäre `role="group"` mit einem Namen aus der Kopfzeile, das verlangt aber
+  eine `id` am Titel, die das Theme nicht vergibt. Unterschieden werden die drei Ternäre an
+  der Form ihres Props-Objekts: Admonition `{className:…}`, `prf` `{id:…}`, in beiden
+  Bündeln 1 und 2.
 * **`{prf:…}`-Kästen heißen auf Englisch.** mystmd und das Site-Template schreiben den
   Kastennamen aus dem `kind`: „Example 1“, „Theorem 2“, im HTML wie im PDF, ohne Rücksicht
   auf die Sprache. Repariert an zwei Stellen, beide als Patch, der laut scheitert, wenn sich
