@@ -97,3 +97,9 @@ FSMT  # FairSeq Machine Translation, die Modellklasse des WMT19-Beispiels in VL 
 uv  # das Paketwerkzeug; Zwischenüberschriften "Ohne uv"/"Mit uv" auf Folie 11 in VL 03
 PIL  # Pillow/PIL in der Notiz zur Kanalachse, VL 03 Folie 17
 matplotlib  # dito, VL 03 Folie 17
+vektorwertiges  # Folie 5 in VL 06, Hinweis zur Jacobi-Matrix
+Forwardpropagation  # Notiz zur neuen Folie 17 in VL 06, Gegenbegriff zu Backpropagation
+Pushforward  # dito, Vertiefung aus dem Autograd-Kapitel
+Tanh  # Beschriftung des Playground-Schalters, Folie 19 in VL 06
+affinen  # „affine Abbildung“, Notiz zu Folie 19 in VL 06
+Glattheit  # Notiz zu Folie 19 in VL 07, Yarotsky

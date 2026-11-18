@@ -28,8 +28,15 @@
       40--62 & Folien 11--13 & \textbf{Rückwärts differenzieren}\\
       62--72 & Folie 14      & Das Muster: Fehlersignal $\delta_k$\\
       72--80 & Folie 15      & Was PyTorch daraus macht\\
-      80--90 & Folien 16--17 & Was das kostet, zur Übung\\
+      80--85 & Folie 16      & Was das kostet\\
+      85--88 & Folie 17      & Vorwärts oder rückwärts differenzieren\\
+      88--90 & Folie 18      & Zur Übung\\
+      Reserve & Folie 19      & Playground, nur wenn Zeit bleibt\\
     \end{tabular}\\[4pt]
+    Die Fußzeile zählt \emph{Folien}, nicht PDF-Seiten: 19 Folien auf 23 Seiten, die
+    Differenz sind die Zwischenschritte auf Folie 5 (vier) und Folie 17 (zwei).
+    \textbf{Wenn die Zeit knapp wird, fällt Folie 17} -- Forward- und Reverse-Mode stehen
+    im Skript und kommen in VL 12 wieder.\\[4pt]
     2025 ging es an zwei Stellen zu schnell (Ableitung des Skalarprodukts, Reihenfolge
     beim Transponieren). Beides ist hier eine eigene Folie -- lieber die Beispielsetups
     straffen als hier hetzen.}
@@ -39,15 +46,22 @@
   \frametitle{Das Ziel für heute}
 
   \begin{center}
-    \Huge playground.tensorflow.org
+    \Large \href{https://playground.tensorflow.org/}{playground.tensorflow.org}
   \end{center}
 
-  \bigskip
+  \begin{center}
+    \includegraphics[width=0.70\textwidth]{vl06-playground.png}
+  \end{center}
+
   \begin{center}
     \normalsize Verstehen können, was da passiert.
   \end{center}
 
-  \note{Wer die Spielaufgabe von letzter Woche gemacht hat, weiß: Die sechs Gewichte für
+  \note{\emph{Zum Bild:} Ausschnitt von playground.tensorflow.org, XOR mit zwei verborgenen
+    Schichten (4 und 2 Neuronen), tanh, nach 1087 Epochen -- Testverlust 0,001. Die Seite
+    stellt sich selbst unter ihre Apache-Lizenz („You're free to use it in any way that
+    follows our Apache License``). Der Link auf der Folie ist anklickbar.\\[2pt]
+    Wer die Spielaufgabe von letzter Woche gemacht hat, weiß: Die sechs Gewichte für
     XOR von Hand zu setzen, geht -- aber es ist mühsam.
     Genau das Mühsame soll der Gradientenabstieg übernehmen. Dafür brauchen wir den
     Gradienten nach \emph{allen} Gewichten \emph{aller} Schichten. Das ist die Aufgabe
@@ -97,13 +111,19 @@
   \begin{center}
     \Large
     $\dfrac{d}{dw}\,\sigma(f(w)) = \sigma'(f(w))\,f'(w)$\\[16pt]
-    $\dfrac{d}{dw}\,\langle w, x\rangle = x$, \qquad
-    $\dfrac{d}{dw}\,\langle v, f(w)\rangle = \langle v, f'(w)\rangle$
+    \pause % Transition 2026-11-18: die Kettenregel aus dem Hörsaal abfragen, dann erst das Skalarprodukt
+    $\dfrac{d}{dw}\,\langle w, x\rangle = x$\\[16pt]
+    \pause % Transition 2026-11-18: 2025 kam genau diese Zeile zu kurz -- einzeln stehen lassen
+    $\dfrac{d}{dw}\,\langle v, f(w)\rangle = \langle v, f'(w)\rangle$\\[14pt]
+    \pause
+    \normalsize Hier ist $w$ ein Skalar; für vektorwertiges $w$ steht dort eine
+    Jacobi-Matrix.
   \end{center}
 
   \note{\textbf{Hier nicht hetzen} -- 2025 kam die Skalarproduktableitung zu kurz, der
     Dozent hat es selbst eingeräumt und empfohlen, sie in $\mathbb{R}^3$ selbst
-    nachzurechnen. Das kann man hier auch gemeinsam tun.
+    nachzurechnen. Das kann man hier auch gemeinsam tun -- dann aber komponentenweise
+    nach $w_i$, denn genau dort wird aus der dritten Zeile eine Jacobi-Matrix.
     Die Kettenregel oben aus dem Hörsaal abfragen, nicht vorsagen.}
 \end{frame}
 
@@ -117,14 +137,9 @@
       = \bigl\langle w_2,\, \sigma'(\langle w_1, x\rangle)\,x \bigr\rangle$
   \end{center}
 
-  \bigskip
-  \begin{center}
-    \normalsize Funktioniert -- aber unübersichtlich.
-  \end{center}
-
   \note{In die Gradientenabstiegsregel eingesetzt, stehen da zwei lange Formeln. Die muss
     man nicht auswendig können; wichtig ist die Beobachtung:
-    \emph{Teilausdrücke kommen mehrfach vor} -- das Residuum $y_i - y_{\text{pred},i}$ und
+    \emph{Teilausdrücke kommen mehrfach vor} -- das Residuum $y_{\text{pred},i} - y_i$ und
     die Aktivierung der ersten Schicht. Das ist der Keim der ganzen Idee: einmal rechnen,
     mehrfach benutzen.}
 \end{frame}
@@ -148,7 +163,8 @@
   \frametitle{Eine Schicht}
 
   \begin{center}
-    \Huge $z_{k+1} = \sigma(b_k + W_k z_k)$
+    \Huge $z_{k+1} = \sigma(b_k + W_k z_k)$\\[22pt]
+    \large $z_1 = x$ \;(Input), \qquad $f(x) = z_d$ \;(Output nach $d$ Schichten)
   \end{center}
 
   \note{Ab jetzt in Matrixschreibweise. Grundphilosophie, die man einmal sagen sollte:
@@ -196,6 +212,8 @@
   \frametitle{Rückwärts: die Ausgabeschicht}
 
   \begin{center}
+    \normalsize von der Vorwärtsrechnung: \;$y_{\text{pred}} = b_3 + W_3 z_3$, \quad
+    $r = y_{\text{pred}} - y$, \quad $E = \tfrac12 r^T r$\\[16pt]
     \Large
     $dE = r^T\,dy_{\text{pred}}$\\[16pt]
     $\nabla_{b_3} E = r$, \qquad $\nabla_{W_3} E = r\,z_3^T$
@@ -233,6 +251,7 @@
   \frametitle{Eine Schicht weiter zurück}
 
   \begin{center}
+    \normalsize von der Vorwärtsrechnung: \;$z_3 = \tanh(b_2 + W_2 z_2)$\\[16pt]
     \Large
     $dz_3 = (1 - z_3^2) \odot (db_2 + dW_2 z_2 + W_2\,dz_2)$
   \end{center}
@@ -257,7 +276,12 @@
     $\delta_3 = r$\\[10pt]
     $\delta_2 = (1 - z_3^2) \odot W_3^T \delta_3$\\[10pt]
     $\delta_1 = (1 - z_2^2) \odot W_2^T \delta_2$\\[14pt]
-    $\nabla_{W_k} E = \delta_k\,z_k^T$
+    $\nabla_{W_k} E = \delta_k\,z_k^T$, \qquad $\nabla_{b_k} E = \delta_k$
+  \end{center}
+
+  \bigskip
+  \begin{center}
+    \normalsize $\delta_3 = r$ gilt, weil die Ausgabeschicht hier linear ist.
   \end{center}
 
   \note{\textbf{Das ist die Folie, die hängen bleiben soll.} Das Fehlersignal wird
@@ -265,7 +289,16 @@
     mit der Ableitung der Aktivierungsfunktion gewichtet.
     Man kann den Graphen an jeder Stelle durchschneiden -- was davor liegt, interessiert
     den Rückwärtsschritt nicht.
-    Beobachtung, die 2025 gut ankam: Rückwärts trifft man zuerst das \emph{letzte} Gewicht.}
+    Beobachtung, die 2025 gut ankam: Rückwärts trifft man zuerst das \emph{letzte} Gewicht.\\[2pt]
+    \textbf{Den Satz unter den Formeln ausdrücklich betonen -- er ist die Brücke zum
+    Übungsblatt.} Dort sitzt auf der Ausgabe ein ReLU, also steht in $\delta$ an der
+    Ausgabe ein Faktor mehr: $\delta^z_i = (z_i - t_i)\,[(Wy)_i > 0]$. Wer diese Folie
+    wörtlich abschreibt, verliert genau diesen Indikator.
+    Dazu der Handgriff, der die Aufgabe leicht macht: Bei ReLU darf man den Indikator am
+    \emph{Ausgang} ablesen, $[z_i > 0]$ statt $[(Wy)_i > 0]$ -- beides ist dasselbe, und
+    $z$ hat man schon.
+    Und $\nabla_{b_k}E = \delta_k$ ist der Bias-Trick: nulltes Gewicht mit Eingabe 1,
+    also Fehlersignal mal 1.}
 \end{frame}
 
 \begin{frame}
@@ -290,16 +323,57 @@
   \begin{center}
     \Large
     ein Vorwärtsdurchlauf\\[8pt] ein Rückwärtsdurchlauf\\[14pt]
-    \normalsize $\approx$ das Doppelte einer Inferenz --\\
-    unabhängig von der Zahl der Parameter.
+    \normalsize Der Rückwärtsschritt kostet etwa doppelt so viel wie der Vorwärtsschritt,\\
+    ein Trainingsschritt also etwa das Dreifache einer Inferenz.\\[6pt]
+    Dieser Faktor hängt nicht an der Zahl der Parameter.
   \end{center}
 
-  \note{Das ist der Grund, warum Deep Learning überhaupt praktikabel ist. Naiv, mit
+  \note{Woher der Faktor zwei beim Rückwärtsschritt kommt, falls gefragt wird: Je Schicht
+    sind es dort \emph{zwei} Matrixprodukte -- eines nach der Eingabe ($W^T\delta$, damit
+    es weiter rückwärts geht) und eines nach den Gewichten ($\delta z^T$). Vorwärts ist
+    es eines.
+    Das ist der Grund, warum Deep Learning überhaupt praktikabel ist. Naiv, mit
     finiten Differenzen, bräuchte man eine Auswertung \emph{pro Parameter} -- bei
     Milliarden Parametern undenkbar.
     Take-Home: Backpropagation ist keine neue Mathematik, sondern Kettenregel plus
     Buchführung. In diese Rechnung fließt null Kreativität -- das kann der Computer,
     sobald man ihm für jede Operation die Ableitung nennt.}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Vorwärts oder rückwärts?}
+
+  \begin{center}
+    \Large $f \colon \mathbb{R}^n \to \mathbb{R}^m$
+  \end{center}
+
+  \medskip
+  \begin{center}
+    \normalsize
+    \begin{tabular}{@{}ll@{}}
+      vorwärts & alle Ausgaben nach \emph{einer} Eingabe -- eine Spalte der Jacobi-Matrix\\[6pt]
+      rückwärts & \emph{eine} Ausgabe nach allen Eingaben -- eine Zeile\\
+    \end{tabular}
+  \end{center}
+
+  \medskip
+  \pause % Transition 2026-11-18: erst die zwei Richtungen, dann die Konsequenz
+  \begin{center}
+    \Large $n$ Durchläufe vorwärts oder $m$ rückwärts.\\[12pt]
+    \normalsize Beim Training ist $n$ die Zahl der Parameter und $m = 1$.
+  \end{center}
+
+  \note{Beide Richtungen kosten je Durchlauf ungefähr eine Funktionsauswertung -- welche
+    billiger ist, hängt also nur am Verhältnis von $n$ und $m$.
+    Deshalb heißt es hier Backpropagation und nicht Forwardpropagation: Der Loss ist eine
+    einzige Zahl, ein Rückwärtsdurchlauf liefert alle Gradienten.
+    Die Gegenrichtung gibt es auch, und sie ist dann die richtige: $m \gg n$, etwa die
+    Sensitivitätsanalyse einer Kurve $\gamma \colon \mathbb{R} \to \mathbb{R}^m$ -- ein
+    Parameter hinein, viele Werte heraus.
+    Im Skript steht das im Kapitel „Autograd und Berechnungsgraph``, Abschnitt
+    „Warum rückwärts?``, samt der Vertiefung zu Pushforward und Pullback: Die beiden
+    Richtungen sind nicht dasselbe Objekt in zwei Laufrichtungen, sondern Tangentialvektoren
+    vorwärts und Kovektoren rückwärts.}
 \end{frame}
 
 \begin{frame}
@@ -320,6 +394,39 @@
     „verstanden“ und „zugehört“. In der Klausur kommt sie mit kleinen Zahlen.
     Wer noch Zeit hat: XOR im Playground von Hand lösen bleibt offen -- nächste Woche
     machen wir genau das systematisch.}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Wenn noch Zeit ist: zurück zum Playground}
+
+  \begin{center}
+    \Large \href{https://playground.tensorflow.org/}{playground.tensorflow.org}
+  \end{center}
+
+  \medskip
+  \begin{itemize}\setlength{\itemsep}{8pt}
+  \item \emph{Activation} umstellen: Tanh, ReLU, Sigmoid -- und einmal \emph{Linear}
+  \item Neuronen und Schichten wegnehmen: Wie klein geht XOR noch?
+  \item Den Spiral-Datensatz anklicken: Woran scheitert es dort?
+  \end{itemize}
+
+  \bigskip
+  \begin{center}
+    \normalsize Nächste Woche beantworten wir das.
+  \end{center}
+
+  \note{Reservefolie, nur wenn Zeit bleibt -- und zugleich die Brücke in VL 7
+    (Aktivierungsfunktionen, Netze von Hand bauen, universelle Approximation).\\[2pt]
+    \emph{Linear} ist der Punkt, auf den es ankommt: Ohne Nichtlinearität fällt das ganze
+    Netz zu einer einzigen affinen Abbildung zusammen, und XOR bleibt ungelöst, egal wie
+    viele Schichten man stapelt. Das ist genau die Frage, mit der VL 7 anfängt.
+    Beim Verkleinern landet man bei einer verborgenen Schicht mit zwei Neuronen -- die
+    sechs Gewichte aus der Spielaufgabe. Dass das Training dort oft in einem schlechten
+    Minimum hängen bleibt, ist kein Fehler der Studierenden, sondern der Normalfall:
+    einmal \emph{Regenerate} drücken und neu starten.
+    Den Spiral-Datensatz nicht lösen wollen, sondern scheitern lassen -- mit den zwei
+    Rohmerkmalen $x_1, x_2$ braucht er mehr Schichten, und die Frage „wie viel Netz
+    braucht welche Funktion`` ist der Stoff der kommenden Woche.}
 \end{frame}
 
 \end{document}

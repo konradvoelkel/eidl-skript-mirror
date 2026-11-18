@@ -26,9 +26,9 @@
       16--26 & Folien 6--7   & Sterbende Neuronen, ELU/Swish/GELU\\
       26--40 & Folien 8--10  & Boolesche Netze: NOT, OR, NOR\\
       40--52 & Folien 11--12 & XOR als Schnitt, Playground-Lösungen\\
-      52--68 & Folien 13--15 & \textbf{$x^2$ aus ReLUs bauen}, dann $xy$\\
-      68--82 & Folien 16--18 & Universelle Approximation\\
-      82--90 & Folien 19--20 & Take-Home, Übungsblatt\\
+      52--68 & Folien 13--16 & \textbf{$x^2$ aus ReLUs bauen}, dann $xy$\\
+      68--82 & Folien 17--19 & Universelle Approximation\\
+      82--90 & Folien 20--21 & Take-Home, Übungsblatt\\
     \end{tabular}\\[4pt]
     \textbf{Diese Sitzung lebt vom Hörsaaldialog} -- die Booleschen Netze und $x^2$
     gemeinsam bauen, nicht vortragen. 2025 war „geometrisch programmieren“ die Formel,
@@ -42,7 +42,7 @@
     \begin{column}{0.48\textwidth}
       \textbf{Haben:}
       \begin{itemize}
-      \item Neuron = Skalarprodukt + $\tau$
+      \item Neuron = Skalarprodukt, dann $\tau$
       \item Gradientenabstieg
       \item Backpropagation
       \end{itemize}
@@ -89,7 +89,8 @@
 
   \bigskip
   \begin{center}
-    \normalsize Ableitung: 1 für $y > 0$, 0 für $y < 0$, \emph{definiert} als 0 bei $y = 0$.
+    \normalsize Schwache Ableitung: $[y > 0]$, d.h.\ 1 für $y > 0$ und 0 sonst --\\
+    bei $y = 0$ ist sie \emph{festgelegt}, nicht ausgerechnet.
   \end{center}
 
   \note{Dass man die Ableitung an einer Stelle einfach festlegen darf, ist genau der
@@ -184,13 +185,20 @@
 
   \begin{center}
     \Large
-    Ansatz $x + y$? \quad Nein: $f(1,1) = 2$.\\[14pt]
-    $[x + y > 0]$ \quad oder besser\\[10pt]
+    Ansatz $x + y$? \quad Nein: $f(1,1) = 2$.\\[12pt]
+    \normalsize Ausweg: die Interpretation ändern --\\
+    $x \le 0$ heißt FALSE, $x > 0$ heißt TRUE.\\[12pt]
+    \Large Jetzt geht $[x + y > 0]$, und $x + y$ selbst auch. \quad Besser noch:\\[10pt]
     \Huge $\operatorname{ReLU}(x) + \operatorname{ReLU}(y)$
   \end{center}
 
   \note{Den ersten Ansatz bewusst scheitern lassen -- der Hörsaal findet den Fehler
     sofort, und das ist der beste Einstieg.
+    \textbf{Dann aber den Interpretationswechsel ausdrücklich machen}, sonst widerspricht
+    sich die Folie: Mit „$x \ge 1$ heißt TRUE`` von der NOT-Folie wäre auch
+    $\operatorname{ReLU}(1) + \operatorname{ReLU}(1) = 2$ keine saubere 1. Erst „alles über
+    null heißt TRUE`` macht die 2 unschädlich -- und damit den ersten Ansatz wieder
+    brauchbar. So steht es auch im Skript.
     ReLU schneidet Negatives sauber ab, deshalb die letzte Variante.
     Frage: Was macht diese Funktion bei $(-1, 2)$? Das ist Extrapolation, und wir
     entscheiden sie mit der Wahl der Bausteine.}
@@ -288,7 +296,11 @@
   \frametitle{Die Interpolation}
 
   \begin{center}
-    \includegraphics[width=0.56\textwidth]{vl07-square-interpolation.png}
+    \includegraphics[width=0.50\textwidth]{vl07-square-interpolation.png}
+  \end{center}
+
+  \begin{center}
+    \small $\textstyle Q(x) = 9 - 5\operatorname{ReLU}(x+3) + \sum_{k=-2}^{2} 2\operatorname{ReLU}(x-k)$
   \end{center}
 
   \note{Symmetrie nutzen: $|x| = \operatorname{ReLU}(x) + \operatorname{ReLU}(-x)$ ist
@@ -324,7 +336,8 @@
   \begin{center}
     \Large
     Mit genug Neuronen und Schichten lässt sich\\
-    \emph{jede} Funktion beliebig gut approximieren.
+    \emph{jede stetige} Funktion auf einem beschränkten Bereich\\
+    beliebig gut approximieren.
   \end{center}
 
   \bigskip
@@ -360,9 +373,30 @@
     Yarotsky (2017): $c\log(1/\varepsilon)$ Schichten, $c\,\varepsilon^{-d/k}$ Gewichte
   \end{center}
 
-  \note{Die Zahl der Gewichte wächst exponentiell in der Eingabedimension -- der Fluch
+  \smallskip
+  \begin{center}
+    \small $f \colon E \to \mathbb{R}^D$ auf kompaktem $E \subseteq \mathbb{R}^d$: \;
+    $d$ Eingabe-, $D$ Ausgabedimension, \;
+    $k$ Glattheit ($k$-fach stetig differenzierbar), \; $\varepsilon$ Genauigkeit
+  \end{center}
+
+  \medskip
+  \begin{center}
+    \normalsize Genauigkeit kostet \emph{Tiefe} nur logarithmisch,\\
+    \emph{Gewichte} aber exponentiell in der Eingabedimension.
+  \end{center}
+
+  \note{\textbf{Die Botschaft von Yarotsky in einem Satz:} Tiefe ist billig, Gewichte sind
+    teuer -- und Glattheit macht sie billiger.
+    Im Einzelnen: Die Zahl der Gewichte wächst exponentiell in der Eingabedimension -- der Fluch
     der Dimensionalität. Aber: glattere Funktionen (größeres $k$) brauchen weniger, und
-    die \emph{Tiefe} wächst nur logarithmisch in der Genauigkeit.
+    die \emph{Tiefe} wächst nur logarithmisch in der Genauigkeit. Das ist das Argument für
+    \emph{tiefe} Netze: Die Genauigkeit holt man sich über Schichten, nicht über Breite.\\[2pt]
+    \textbf{Und die Grenze des Satzes, die man dazusagen sollte:} Er sagt, dass die Gewichte
+    \emph{existieren} -- genau wie alles andere heute. Er sagt nicht, dass ein Optimierer sie
+    findet, und er sagt nichts darüber, ob das Netz aus endlich vielen Datenpunkten
+    generalisiert. Das ist der Abschnitt „Approximieren heißt nicht generalisieren`` im
+    Skript und die Überleitung zum Rest des Semesters.
     Am Rande, wenn Zeit ist: Jedes ReLU-Netz lässt sich auch als Entscheidungsbaum
     schreiben (Aytekin 2022) -- der Baum ist allerdings exponentiell groß.}
 \end{frame}
