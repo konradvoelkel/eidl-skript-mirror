@@ -8,6 +8,8 @@ short_title: "Latente Räume"
 
 Autoencoder, VAE, word2vec, GANs – alle diese Modelle haben einen *latenten Raum*, in dem die gelernten Repräsentationen leben. In diesem Kapitel geht es um die Geometrie dieser Räume: Was bedeuten Richtungen und Abstände, was passiert zwischen zwei Codes, und was unterscheidet den diskreten latenten Raum eines Sprachmodells vom kontinuierlichen eines Bild-Autoencoders?
 
+*Setzt voraus: die [Autoencoder](14-autoencoder.md), den [Variational Autoencoder](15-variational-autoencoder.md) und die [Wortvektoren](16-word2vec.md).*
+
 ## Wortvektoren geometrisch verstehen
 
 ### Arithmetik im Latent Space

@@ -11,6 +11,9 @@ zu lassen. Dieses Kapitel ordnet ein, was die vorigen dazu beigetragen haben, un
 überträgt die Idee auf Graphen: node2vec ist word2vec auf Zufallspfaden durch einen
 Graphen, und Graph Neural Networks rechnen direkt auf der Nachbarschaft.
 
+*Setzt voraus: die [Wortvektoren](16-word2vec.md) und die
+[Autoencoder](14-autoencoder.md).*
+
 ## Representation Learning
 
 ### Worum geht's?

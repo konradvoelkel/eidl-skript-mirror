@@ -11,6 +11,10 @@ und soll ihn danach wieder herstellen. Was im Flaschenhals ankommt, ist eine gel
 Repräsentation der Daten. Hier entsteht einer für MNIST in PyTorch, dazu die Varianten,
 die man in der Praxis antrifft.
 
+*Setzt voraus: [Loss-Funktionen und Maximum Likelihood](../part-lernen/07-loss-funktionen-maximum-likelihood.md)
+und das Bauen eines Netzes in PyTorch aus dem
+[Kapitel „Netze von Hand bauen“](../part-lernen/12-netze-von-hand.md).*
+
 ## Lernen ohne Label
 
 ### Im Kontrast zu unserem bisherigen Vorgehen

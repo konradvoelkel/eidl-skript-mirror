@@ -11,6 +11,9 @@ Weichzeichnen und Kantenfinden sind derselbe Handgriff mit anderen Gewichten. Ei
 Convolutional Neural Network lernt diese Gewichte, statt sie vorzugeben. Gerechnet wird
 die Faltung in einer und in zwei Dimensionen, dazu Pooling, Stride und Padding.
 
+*Setzt voraus: die [Tensoren](../part-grundlagen/05-tensoren.md) und das
+[Kapitel „Netze von Hand bauen“](../part-lernen/12-netze-von-hand.md).*
+
 ## Motivation zur Faltung
 
 ### Bildverarbeitung: it's a blur

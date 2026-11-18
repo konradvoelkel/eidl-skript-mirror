@@ -11,6 +11,10 @@ ein Chatbot auf einem Sprachmodell, ein Klassifikator für eingehende E-Mails un
 Empfehlungssystem. Dazu ein Blick darauf, wie man mit generiertem Code arbeitet, und ein
 Rezept, wie man ein Anwendungskonzept aufschreibt.
 
+*Setzt voraus: [LLMs benutzen](23-llms-benutzen.md), die
+[Logistische Regression](../part-lernen/06-logistische-regression.md) und die
+[latenten Räume](../part-representation-learning/17-latente-raeume-geometrisch.md) – eines je Beispiel.*
+
 ## Drei Beispiele aus der Praxis
 
 ### Beispiel: hAInrich-Chatbot

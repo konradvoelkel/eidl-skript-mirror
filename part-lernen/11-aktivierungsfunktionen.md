@@ -11,6 +11,10 @@ Abbildung. Dieses Kapitel stellt die gebräuchlichen Funktionen nebeneinander �
 ReLU, ELU, GELU, Swish –, zeigt, in welche Polyeder ein ReLU-Netz den Eingaberaum
 zerlegt, und erklärt, woran Neuronen sterben.
 
+*Setzt voraus: das [Kapitel „Neuron und Perzeptron“](../part-grundlagen/02-neuron-perzeptron.md),
+die [Logistische Regression](06-logistische-regression.md) und die
+[Backpropagation](09-backpropagation.md).*
+
 ## Aktivierungsfunktionen und weitere Layer
 
 Ein Neuron „forward“ ist $\tau(\langle w, x \rangle)$. Beim Perzeptron ist $\tau = \operatorname{sign}$, bei der logistischen Regression $\tau = \sigma$. Allgemein ist $\tau$ beliebig – aber ableitbar, sonst funktioniert Backpropagation nicht. *Überall* differenzierbar muss es dafür nicht sein: ReLU hat bei $0$ einen Knick und ist trotzdem die meistbenutzte Aktivierungsfunktion überhaupt. Wie das zusammengeht, klärt der nächste Abschnitt.

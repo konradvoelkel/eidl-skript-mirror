@@ -660,7 +660,14 @@ und zwar vor allem anderen. Die Reihenfolge im Vorspann ist:
    Vorgeplänkel), dann was in diesem Kapitel damit geschieht.
 3. optional eine kursive Zeile **`*Setzt voraus: …*`** mit Links auf die ein bis drei
    Kapitel, ohne die es nicht geht. Nur dort, wo es echte Voraussetzungen gibt — eine
-   leere Pflichtzeile in jedem Kapitel wäre Formular, kein Hinweis.
+   leere Pflichtzeile in jedem Kapitel wäre Formular, kein Hinweis. **16 der 29 Kapitel
+   tragen eine** (seit dem 2026-11-18; vorher zehn, die sechs neuen aus §7 des dritten
+   Audits). Verlinkt wird nur nach *hinten*: Ein Kapitel, das später im Buch steht, ist
+   keine Voraussetzung, auch wenn die Einleitung es nennt — Kapitel 17 nennt GANs, und das
+   ist Kapitel 22. Wo die Sache schärfer ist als das Kapitel, wird sie genannt („das
+   Skalarprodukt und die Geradengleichung aus dem …"). Am Handy ist diese Zeile zudem der
+   **einzige** Weiterweg aus dem ersten Bildschirm: Das Backprop-Kapitel hat dort 25 Links,
+   davon drei auf andere Kapitel — genau die drei aus dieser Zeile.
 4. Aufzeichnungszeile und Player, dann die Folienzeile (beides nur, wenn freigegeben).
 5. die erste `##`-Überschrift.
 
