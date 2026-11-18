@@ -22,17 +22,25 @@
     waren (Aktivierungen im Backprop-Termin, Netze von Hand danach):\\[2pt]
     \begin{tabular}{@{}rll@{}}
       0--4   & Folie 2       & Rückblick: was noch fehlt\\
-      4--16  & Folien 3--5   & ReLU, warum sie passt\\
-      16--26 & Folien 6--7   & Sterbende Neuronen, ELU/Swish/GELU\\
-      26--40 & Folien 8--10  & Boolesche Netze: NOT, OR, NOR\\
-      40--52 & Folien 11--12 & XOR als Schnitt, Playground-Lösungen\\
-      52--68 & Folien 13--16 & \textbf{$x^2$ aus ReLUs bauen}, dann $xy$\\
-      68--82 & Folien 17--19 & Universelle Approximation\\
-      82--90 & Folien 20--21 & Take-Home, Übungsblatt\\
+      4--8   & Folien 3--4   & ReLU -- kurz, Definition und Name kamen in VL 6\\
+      8--22  & Folien 5--10  & \textbf{Vier Identitäten nachrechnen}, dann die Knickregel\\
+      22--26 & Folie 11      & Warum ReLU passt (Zusammenfassung des Blocks)\\
+      26--34 & Folien 12--13 & Sterbende Neuronen, ELU/Swish/GELU\\
+      34--46 & Folien 14--16 & Boolesche Netze: NOT, OR, NOR\\
+      46--58 & Folien 17--18 & XOR als Schnitt, Playground \emph{live}\\
+      58--76 & Folien 19--22 & \textbf{$x^2$ aus ReLUs}: fragen, 5 Min.\ rechnen, auflösen\\
+      76--80 & Folie 23      & von $x^2$ zu $xy$\\
+      80--86 & Folien 24--26 & Universelle Approximation (26 nur, wenn Zeit)\\
+      86--90 & Folien 27--29 & Take-Home, Autoencoder-Vorgriff, Blatt 7\\
     \end{tabular}\\[4pt]
     \textbf{Diese Sitzung lebt vom Hörsaaldialog} -- die Booleschen Netze und $x^2$
     gemeinsam bauen, nicht vortragen. 2025 war „geometrisch programmieren“ die Formel,
-    die gezündet hat. Drei Viertelstunden dafür einplanen.}
+    die gezündet hat. Drei Viertelstunden dafür einplanen.\\[4pt]
+    \textbf{Die geplanten Bremsen} (2026-11-18): der Rechenblock auf den Folien 5--10, der
+    Playground auf Folie 18 \emph{live} statt als Screenshot, und die fünf Minuten
+    Stillarbeit auf Folie 20. Grund: VL 6 war im Folienteil mehr als doppelt so schnell wie
+    geplant (35 statt 80 Minuten), während der Playground allein 42 der 90 Minuten
+    getragen hat. Folien, die ihre Antwort schon zeigen, kann man nur vorlesen.}
 \end{frame}
 
 \begin{frame}
@@ -97,6 +105,188 @@
     Inhalt einer Übungsaufgabe: schwache Ableitungen dürfen an einzelnen Punkten beliebig sein.
     Die Wahl 0 statt 1 spart Rechnungen.
     Name: \emph{Rectified} Linear Unit -- Gleichrichter, wie in der Elektrotechnik.}
+\end{frame}
+
+% ------------------------------------------- Rechenblock: vier Identitäten (2026-11-18)
+\begin{frame}
+  \frametitle{Nachrechnen I: die Identität}
+
+  \begin{center}
+    \LARGE $\operatorname{ReLU}(x) - \operatorname{ReLU}(-x)$
+  \end{center}
+
+  \medskip
+  \begin{center}
+    \Large
+    \pause % Transition 2026-11-18: Fall für Fall mitrechnen lassen, nicht vorlesen
+    $x > 0$:\quad $x - 0 = x$\\[6pt]
+    \pause % Transition 2026-11-18
+    $x < 0$:\quad $0 - (-x) = x$\\[6pt]
+    \pause % Transition 2026-11-18
+    $x = 0$:\quad $0 - 0 = 0$
+  \end{center}
+
+  \medskip
+  \pause % Transition 2026-11-18: das Ergebnis erst, wenn alle drei Fälle stehen
+  \begin{center}
+    \LARGE $=\; x$
+  \end{center}
+
+  \note{Erste von vier Rechnungen, alle in derselben Form: Fallunterscheidung an der
+    Knickstelle. Nach der zweiten kann der Hörsaal es allein -- das ist der Zweck der
+    Wiederholung.
+    \textbf{Die Pointe:} Zwei ReLU-Neuronen geben die Identität zurück. Ein ReLU-Netz kann
+    seine Eingabe also \emph{durchreichen}, ohne Ausdrucksstärke zu verlieren. Das ist der
+    Grund, warum man später Schichten überspringen darf (Residualverbindungen).
+    Wer fragt, warum das nicht trivial ist: Die Identität ist linear, ReLU nicht. Die
+    Linearität entsteht erst in der Kombination.}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Nachrechnen II: der Betrag}
+
+  \begin{center}
+    \LARGE $\operatorname{ReLU}(x) + \operatorname{ReLU}(-x)$
+  \end{center}
+
+  \medskip
+  \begin{center}
+    \Large
+    \pause % Transition 2026-11-18
+    $x > 0$:\quad $x + 0 = x$\\[6pt]
+    \pause % Transition 2026-11-18
+    $x < 0$:\quad $0 + (-x) = -x$\\[6pt]
+    \pause % Transition 2026-11-18
+    $x = 0$:\quad $0 + 0 = 0$
+  \end{center}
+
+  \medskip
+  \pause % Transition 2026-11-18
+  \begin{center}
+    \LARGE $=\; |x|$
+
+    \medskip
+    \small An der Tafel war letzte Woche der Fall $x > 0$ untergegangen.
+  \end{center}
+
+  \note{\textbf{Richtigstellung.} In VL 6 ist diese Rechnung an der Tafel mit „also auch
+    0`` geendet (Aufzeichnung ab 1:26); nachgesehen wurde nur der zweite Summand. Jetzt hat
+    der Hörsaal es selbst gerechnet, also reicht ein Satz dazu.
+    Dieselben zwei Bausteine wie eben, ein Vorzeichen anders -- einmal kommt etwas Lineares
+    heraus, einmal nicht. Der Knick entsteht in der \emph{Kombination}, nicht im einzelnen
+    ReLU.
+    Addiert und subtrahiert man I und II, bekommt man die Umkehrung:
+    $\operatorname{ReLU}(x) = (x + |x|)/2$. Das Paar $(x, |x|)$ trägt dieselbe Information
+    wie die beiden Neuronen.
+    $|x|$ ist das kleine Netz, mit dem wir später die Hälfte der Neuronen für $x^2$ sparen.}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Nachrechnen III: Skalieren bringt nichts}
+
+  \begin{center}
+    \LARGE $\operatorname{ReLU}(2x) - \operatorname{ReLU}(x)$
+  \end{center}
+
+  \medskip
+  \begin{center}
+    \Large
+    \pause % Transition 2026-11-18
+    $x > 0$:\quad $2x - x = x$\\[6pt]
+    \pause % Transition 2026-11-18
+    $x \le 0$:\quad $0 - 0 = 0$
+  \end{center}
+
+  \medskip
+  \pause % Transition 2026-11-18: erst die Fälle, dann die Verallgemeinerung
+  \begin{center}
+    \LARGE $=\; \operatorname{ReLU}(x)$
+
+    \medskip
+    \normalsize allgemein $\operatorname{ReLU}(ax) = a\operatorname{ReLU}(x)$ für $a > 0$,\\[6pt]
+    also auch $\operatorname{ReLU}(x) + \operatorname{ReLU}(2x) = 3\operatorname{ReLU}(x)$.
+  \end{center}
+
+  \note{Das ist die Rechnung, die am Ende von VL 6 für heute versprochen wurde -- hier
+    einlösen und das auch sagen.
+    \textbf{Merksatz:} Die Eingabe zu strecken verschiebt den Knick nicht und erzeugt keinen
+    neuen. Skalieren ist umsonst. Damit ist die Frage offen, was denn dann einen zweiten
+    Knick bringt -- Antwort auf der nächsten Folie.}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Nachrechnen IV: verschieben}
+
+  \begin{center}
+    \LARGE $\operatorname{ReLU}(x) + \operatorname{ReLU}(x-2)$
+  \end{center}
+
+  \medskip
+  \begin{center}
+    \Large
+    \pause % Transition 2026-11-18
+    $x < 0$:\quad $0 + 0 = 0$\\[6pt]
+    \pause % Transition 2026-11-18
+    $0 \le x < 2$:\quad $x + 0 = x$\\[6pt]
+    \pause % Transition 2026-11-18
+    $x \ge 2$:\quad $x + (x-2) = 2x - 2$
+  \end{center}
+
+  \medskip
+  \pause % Transition 2026-11-18: die Gegenfrage treibt auf die nächste Folie
+  \begin{center}
+    \normalsize Drei Stücke, Steigungen $0$, $1$, $2$ -- und kein Name dafür.\\[6pt]
+    Und mit $-\operatorname{ReLU}(x-2)$?
+  \end{center}
+
+  \note{Jetzt ist zum ersten Mal etwas entstanden, das sich nur \emph{stückweise}
+    hinschreiben lässt. Genau so bauen wir gleich $x^2$.
+    Wo sitzt der zweite Knick? Dort, wo das Argument null wird, also bei $x = 2$. Das ist
+    die Beobachtung, aus der die Regel wird.
+    Die Gegenfrage am Schluss nicht selbst beantworten -- die nächste Folie zeigt beides.}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Einmal steiler, einmal wieder flach}
+
+  \begin{center}
+    \includegraphics[width=0.81\textwidth]{vl07-knick-regel.png}
+  \end{center}
+
+  \pause % Transition 2026-11-18: erst die Bilder lesen lassen
+  \begin{center}
+    \small Ein negatives Gewicht nimmt Steigung wieder weg.
+  \end{center}
+
+  \note{Links addiert, rechts subtrahiert -- die Knicke sitzen in beiden Bildern an
+    derselben Stelle, nur die Sprunghöhe hat ein anderes Vorzeichen.
+    Die rechte Funktion hat einen Namen und einen Einsatz: mit Deckel bei 6 statt 2 heißt
+    sie ReLU6, und damit rechnet MobileNet auf dem Telefon -- flach, billig, und in
+    8-Bit-Arithmetik gutmütig.}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Die Regel}
+
+  \begin{center}
+    \Large
+    $w \cdot \operatorname{ReLU}(x - k)$\\[12pt]
+    fügt an der Stelle $k$ einen Steigungssprung der Höhe $w$ hinzu\\[8pt]
+    -- und sonst nichts.
+  \end{center}
+
+  \medskip
+  \pause % Transition 2026-11-18
+  \begin{center}
+    \normalsize Skalieren trägt nichts bei (III), verschieben trägt alles (IV).\\[8pt]
+    \textbf{Jeder Knick kostet ein Neuron.}
+  \end{center}
+
+  \note{Der Satz, der den Rest der Sitzung trägt. Ab hier ist $x^2$ nur noch Buchhaltung
+    über Steigungssprünge, und bei der universellen Approximation kommt dieselbe Idee mit
+    glatten Bausteinen wieder: zwei Sigmoide mit Ausgabegewichten $+h$ und $-h$.
+    Rückwärts gelesen beantwortet die Regel auch, warum ein einzelnes ReLU-Neuron so wenig
+    kann -- es hat genau einen Knick zu vergeben.}
 \end{frame}
 
 \begin{frame}
@@ -255,7 +445,12 @@
     Gradientenabstieg im Playground gefunden hat.
     Take-Home: Der Optimierer findet meist \emph{krumme} Gewichte, die trotzdem
     funktionieren, nimmt Abkürzungen und verschwendet Platz (überflüssige Neuronen).
-    Wer die Spielaufgabe gemacht hat, kann berichten.}
+    Wer die Spielaufgabe gemacht hat, kann berichten.\\[4pt]
+    \textbf{Als Station, nicht als Bild} (2026-11-18): NOT, OR und NAND vom Hörsaal
+    diktieren lassen und im Playground eintippen, dann den Optimierer darüber laufen lassen
+    und mit den eigenen Gewichten vergleichen. Die beiden Screenshots sind der Rückfall,
+    wenn das Netz klemmt. In VL 6 hat der Playground allein 42 der 90 Minuten getragen --
+    hier ist das gewollt, aber auf die Uhr sehen: Folie 19 soll bei Minute 58 stehen.}
 \end{frame}
 
 % ------------------------------------------------------------------ Arithmetik
@@ -265,11 +460,34 @@
   \begin{center}
     \Large
     Wie berechnet ein Netz $x^3 + xy^2 - 3y$?\\[16pt]
+    \pause % Transition 2026-11-18: die Zerlegung soll aus dem Hörsaal kommen
     \normalsize Zuerst das einfachere Problem: $x^2$.
   \end{center}
 
   \note{Der Hörsaal soll die Zerlegung vorschlagen: Wenn ich $x^2$ und $xy$ kann und
     addieren kann, habe ich alle Polynome.}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Sechs Knicke -- welche Gewichte?}
+
+  \begin{center}
+    \includegraphics[width=0.50\textwidth]{vl07-square-interpolation.png}
+  \end{center}
+
+  \pause % Transition 2026-11-18: erst das Bild lesen lassen, dann die Aufgabe
+  \begin{center}
+    \small \textbf{Fünf Minuten:} Steigungen ablesen, Gewichte bestimmen, $Q(0)$ zur Probe.
+  \end{center}
+
+  \note{\textbf{Stillarbeit, Zeit ansagen und einhalten} -- die einzige Stelle der Sitzung,
+    an der der Hörsaal allein rechnet.
+    Was herauskommen soll: Stützstellen $(k, k^2)$, auf $[k, k+1]$ hat die Sekante die
+    Steigung $2k+1$, von Stück zu Stück also immer $+2$. Links von $-3$ ist die Funktion
+    konstant $9$, der erste Sprung ist $-5$. Mit der Regel von vorhin ist damit jedes
+    Gewicht bestimmt.
+    Für die Schnellen: Was passiert rechts von $3$? Die Steigung bleibt bei $5$ -- das ist
+    die Extrapolation, die im Take-Home wiederkommt.}
 \end{frame}
 
 \begin{frame}
@@ -417,13 +635,48 @@
 \end{frame}
 
 \begin{frame}
+  \frametitle{Vorgriff: ein Netz, das nichts tut}
+
+  \begin{center}
+    \Large
+    Heute haben wir Gewichte hingeschrieben --\\
+    für eine Funktion, die wir uns ausgesucht haben.
+  \end{center}
+
+  \bigskip
+  \pause % Transition 2026-11-18
+  \begin{center}
+    \Large Nachrechnen I: $\operatorname{ReLU}(x) - \operatorname{ReLU}(-x) = x$.\\[6pt]
+    \normalsize Ein Netz kann seine Eingabe einfach durchreichen.
+  \end{center}
+
+  \bigskip
+  \pause % Transition 2026-11-18: die Frage offen lassen, VL 8 beantwortet sie
+  \begin{center}
+    \Large Was lernt ein Netz, das genau das soll --\\ Eingabe rein, dieselbe Eingabe raus?
+  \end{center}
+
+  \note{Die Frage hier \emph{stehen lassen}. Die Antwort ist nächste Woche und heißt
+    Autoencoder: nichts Interessantes -- außer man nimmt dem Netz den Platz dafür weg. In
+    VL 8 heißt die Folie „Die Einschränkung macht es interessant``.
+    \textbf{Und die Ansage, die dazugehört:} Blatt 7 läuft ab morgen und ist bis zum
+    02.12.\ abzugeben, also bis zur nächsten Vorlesung. Es verlangt, einen
+    Autoencoder-Quelltext zu lesen und Fragen dazu zu formulieren, \emph{bevor} die
+    Vorlesung ihn erklärt -- das ist Absicht, und ausdrücklich ohne generative KI. Die
+    Bausteine stehen im Kapitel „Autoencoder`` im Skript; auf den Link auf dem Blatt
+    hinweisen.}
+\end{frame}
+
+\begin{frame}
   \frametitle{Bis nächste Woche}
 
   \begin{center}
     \Large Nächste Woche: Autoencoder.
   \end{center}
 
-  \note{Die Backpropagation-Rechnung aus der letzten Woche ist Übungsaufgabe; wer sie noch nicht
+  \note{Blatt 7 (Autoencoder-Quelltext lesen) läuft bis zum 02.12., also bis zur nächsten
+    Vorlesung -- siehe die Folie davor.
+    Die Backpropagation-Rechnung aus der letzten Woche ist Übungsaufgabe; wer sie noch nicht
     angefangen hat, sollte das jetzt tun.
     Spielaufgabe, die bleibt: XOR im Playground mit möglichst wenigen Neuronen.}
 \end{frame}

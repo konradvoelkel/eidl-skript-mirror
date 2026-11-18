@@ -885,6 +885,35 @@ def vl07_square_interpolation():
     save(fig, "vl07-square-interpolation")
 
 
+def vl07_knick_regel():
+    """Verschieben bringt einen Knick, Skalieren nicht -- die beiden Bilder zu R4 im Deck 7
+    (2026-11-18). Links addiert, rechts subtrahiert: dieselben zwei Bausteine, einmal
+    steiler, einmal wieder flach."""
+    xs = np.linspace(-1.2, 4.2, 600)
+    a, b = relu(xs), relu(xs - 2)
+    fig, axs = plt.subplots(1, 2, figsize=(8.0, 2.45))
+    for ax, summe, zeichen, steigungen in [
+        (axs[0], a + b, "+", ("0", "1", "2")),
+        (axs[1], a - b, "-", ("0", "1", "0")),
+    ]:
+        ax.axhline(0, color=GREY, lw=0.6)
+        ax.axvline(0, color=GREY, lw=0.6)
+        ax.plot(xs, a, lw=1, ls="--", color=HHU_ORANGE, label=r"$\mathrm{ReLU}(x)$")
+        ax.plot(xs, (1 if zeichen == "+" else -1) * b, lw=1, ls=":", color=HHU_GREEN,
+                label=rf"${zeichen}\,\mathrm{{ReLU}}(x-2)$")
+        ax.plot(xs, summe, lw=2.5, color=HHU_DARK, label="Summe")
+        for x, s_ in zip((-0.75, 1.0, 3.2), steigungen):
+            ax.text(x, np.interp(x, xs, summe) + 0.45, s_, ha="center", color=HHU_RED,
+                    fontweight="bold", fontsize=15)
+        ax.plot([0, 2], [0, 2], "o", color=HHU_RED, ms=5)
+        ax.set_ylim(-2.5, 5.9)
+        ax.set_xlabel("$x$")
+        ax.set_title(rf"$\mathrm{{ReLU}}(x) {zeichen} \mathrm{{ReLU}}(x-2)$"
+                     f"\nSteigungen {', '.join(steigungen)}", fontsize=10)
+        ax.legend(fontsize=8, loc="upper left")
+    save(fig, "vl07-knick-regel")
+
+
 def vl07_label_autoencoder():
     fig, ax = plt.subplots(figsize=(8, 3.6))
     ax.set_xlim(0, 12)
