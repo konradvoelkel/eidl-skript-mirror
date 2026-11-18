@@ -33,6 +33,11 @@ Woher die Seitenzahlen kommen
    gegengeprüft. Diese vier Zeilen sind die einzige Handarbeit; ändert sich ein Deck
    wesentlich, meldet `--check`, dass der Titel an der Grenze nicht mehr passt.
 
+**Gelesen wird das lokal gebaute PDF.** Vor `--schreiben` also `cd slides && ./build.sh`,
+sonst zaehlt ein alter Stand: Das CI baut aus der Quelle, der lokale Ordner kann Wochen
+zurueckliegen, und falsche Bereiche landen still in allen freigegebenen Kapiteln (am
+2026-11-18 an VL 5 passiert, lokales Deck vom 04.11. ohne die Reveals).
+
 **Verlinkt wird nur, was freigegeben ist.** `../slides/freigegeben.txt` sagt, welche Decks
 veroeffentlicht werden duerfen; dieselbe Datei liest der `pages`-Job. Ein Deck, das dort
 fehlt, wird gebaut (ein Fehler soll laut sein), aber nicht ausgeliefert -- und bekommt

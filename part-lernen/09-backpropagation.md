@@ -15,6 +15,14 @@ durchgerechnet und dann als Induktion über die Schichten allgemein bewiesen.
 den [Gradientenabstieg](08-gradientenabstieg.md) und die Kettenregel aus dem
 [Hintergrundwissen Analysis](../part-grundlagen/hintergrundwissen-analysis.md).*
 
+[Vorlesungsaufzeichnung VL 6: Backpropagation](https://media.hhu.de/video/einfuehrung-in-deep-learning-202627-vl-6-backpropagation/d7b28d562fd1d9a1b8a05e49ce604c14)
+
+:::{anywidget} ../widgets/mediathek.mjs
+{url: 'https://media.hhu.de/video/einfuehrung-in-deep-learning-202627-vl-6-backpropagation/d7b28d562fd1d9a1b8a05e49ce604c14'}
+:::
+
+[Folien VL 6, S. 2–23](https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de/folien/vl06.pdf#page=2)
+
 ## Ziel
 
 Verstehen können, was im [TensorFlow Playground](https://playground.tensorflow.org) geschieht.

@@ -770,6 +770,12 @@ unter `external:`.
   --schreiben` laufen lassen, dann steht die Folienzeile im Kapitel und das PDF
   unter der Adresse `vlNN.pdf` im Ordner `folien` der Website. Vorher ist beides absichtlich nicht da – ein Deck wird veröffentlicht, wenn
   es durchgesehen ist, nicht wenn es gebaut ist.
+  **Vorher die Decks neu bauen** (`cd slides && ./build.sh`): `folienlinks.py` zählt die
+  Seiten im **lokal gebauten** PDF, der `pages`-Job im CI baut aber aus der Quelle. Ein altes
+  lokales PDF schreibt deshalb still falsche Bereiche in *alle* freigegebenen Kapitel — am
+  2026-11-18 wurde VL 5 so von „S. 2–20 / 21–34" auf „2–14 / 15–21" gesetzt, weil das lokale
+  Deck noch der Stand vom 04.11. ohne die Reveals war. `--check` im CI hätte es gemeldet,
+  der lokale Lauf nicht.
 * **Und das ausgegebene Übungsblatt**: `blattNN.pdf` aus `../exercises/` nach `blaetter/`
   kopieren und die Zeile in `uebungsblaetter.md` ergänzen, sobald das Blatt in ILIAS
   ausgegeben ist. Gebaut wird es dort mit `./build.sh blattNN`; **nie** die
