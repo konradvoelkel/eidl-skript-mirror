@@ -377,32 +377,42 @@ Textfassung von Seite und Objektbaum: `~/Sciebo/hhu/eidl-26/ilias/` (analog zu
      `perzeptron-trainieren` wählt weiter die Variante ohne Schrägstrich) und die
      Startseite (seit dem 20.10. nicht besucht). **Nur Konrad.** Wirkt messbar: sechs von
      zehn Anträgen vom 17.11. sind binnen eines Tages im Index, 14 auf 20 von 33.
-  2. In sieben `{prf:…}`-Kästen den Begriff in den ersten Satz ziehen: boilerplate-
+  2. **Der Stand in der Herkunftszeile hängt an Boilerplate-Commits** (sichtbar geworden
+     am 2026-11-18, als `zitierzeile.py` ihn auf die Seite brachte). `freshness.py` liest
+     das Datum aus `git log -1` der Quelldatei, und der letzte Commit war bei allen 31
+     Seiten die Herkunfts- bzw. Forumszeile — deshalb sagt heute jede Seite „Stand
+     18. November 2026", auch wo der Inhalt älter ist. Formal wahr, aber ohne
+     Unterscheidungskraft, und als *sichtbare* Angabe wiegt das schwerer als im
+     `<lastmod>` des Sitemaps, wo derselbe Befund schon steht. Zu entscheiden: Soll das
+     Datum Commits überspringen, die nur Fußzeilen anfassen (etwa über eine Liste von
+     Mustern, oder `git log` mit `-S` auf den Prosateil)? Das ist eine Entscheidung und
+     kein Defekt — aber jetzt eine, die der Leser sieht.
+  3. In sieben `{prf:…}`-Kästen den Begriff in den ersten Satz ziehen: boilerplate-
      entfernende Extraktoren verlieren den Kastenkopf, und dort steht der definierte
      Begriff.
-  3. **Die 47 `prf`-Kästen im Barrierefreiheitsbaum** (offen geblieben beim `role="note"`
+  4. **Die 47 `prf`-Kästen im Barrierefreiheitsbaum** (offen geblieben beim `role="note"`
      am 2026-11-18): `note` heißt in ARIA „ancillary to the main content", und eine
      Definition oder ein Satz ist in einem Lehrbuch der Hauptinhalt — die Rolle wäre dort
      falsch. Richtig wäre `role="group"` mit `aria-labelledby` auf die Kopfzeile; das
      verlangt eine `id` am Titel, die das Theme nicht vergibt, also einen größeren Eingriff
      in `install_template.py` als die bisherigen. Lohnt sich vermutlich erst zusammen mit
      dem Umstieg auf Theme 2.x, weil dort dieselben Anker ohnehin anzufassen sind.
-  4. **Den 2.1.1-Bau mit PSI vermessen** und die JS-Größen in `plan-theme-2x.md` nachtragen.
+  5. **Den 2.1.1-Bau mit PSI vermessen** und die JS-Größen in `plan-theme-2x.md` nachtragen.
      Drei Chunks machen 697 von 859 kB, einer davon ist zu 98,3 % ungenutzt, und 2,13 MB
      des Rohbestands sind ein browserifiziertes Krypto-Polyfill. Ein Schnitt in `tools/`
      reicht nicht, weil die Chunks statisch importiert werden.
-  5. **Offene Frage, billig zu klären**: Wird der Kopf überhaupt noch ersetzt? React #423
+  6. **Offene Frage, billig zu klären**: Wird der Kopf überhaupt noch ersetzt? React #423
      trat in 15 Läufen nicht mehr auf, nur #418, und drei Stylesheets stehen nach der
      Hydration doppelt im Kopf — das deutet darauf, dass der Kopf seit Theme 1.4.1
      überlebt. Versuch: `hydration.py --check-rendered` lokal, einmal ohne den Wächter.
      Nicht um ihn zu entfernen, sondern damit `CLAUDE.md` keine Mechanik beschreibt, die
      nicht mehr stattfindet.
-  6. DOI über Zenodo, dann ORCID, dann OERSI/ORCA.nrw und Wikidata (`P800` am Item
+  7. DOI über Zenodo, dann ORCID, dann OERSI/ORCA.nrw und Wikidata (`P800` am Item
       Q102659059). Neues Argument dafür: die Zufallskennung `131e30` im Hostnamen ist
       nicht stabil.
-  7. Lehrstuhlseite — die im zweiten Audit genannte Adresse liefert 404, die richtige ist
+  8. Lehrstuhlseite — die im zweiten Audit genannte Adresse liefert 404, die richtige ist
       unbekannt und muss zuerst gefunden werden.
-  8. Kleinkram: das Fragment in `trailing_slash.py` (ein Link über 302, und die Begründung
+  9. Kleinkram: das Fragment in `trailing_slash.py` (ein Link über 302, und die Begründung
       in der Tabelle ist falsch), `og:image:alt` samt Maßangaben, LaTeX-Reste in
       `myst.search.json`, zehn Titel über 60 Zeichen, Suchknopf mobil 42 × 40 px,
       CLS 0,103 auf der Destillations-Seite (Quelle jetzt bekannt).
