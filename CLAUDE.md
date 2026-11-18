@@ -332,6 +332,7 @@ im `pages`-Job und brauchen **kein einziges Python-Paket**.
 | `tools/webp.py` | Liefert die Abbildungen als WebP aus statt als PNG und JPG: 7,6 MB werden 2,4 MB. Die Fassungen liegen im Repo (`devnotes/make_webp.py`), das Image baut nichts. Ersetzt den Dateinamen im Markup, im Stylesheet `bildmasse` **und** in der Hydrations-Nutzlast — ein `<picture>` mit PNG-Rückfall überlebt die Hydration nicht. Dazu seit dem 2026-11-17 `srcset="… 1x, … 2x"` für die 53 Abbildungen ab 700 px, die eine halb so breite Fassung daneben haben: ohne Retina-Auflösung 1,04 MB statt 2,37 MB Bildbytes. Das geht als `<picture>`, weil das Theme es aus dem Nutzlastfeld `urlOptimized` selbst rendert — geschrieben wird deshalb Markup **und** Nutzlast, sonst holt der Browser die große Datei nach der Hydration ein zweites Mal. **Nach `image_dims.py`, vor `hydration.py`** |
 | `tools/trailing_slash.py` | Kapitellinks mit Schrägstrich (sonst 302), im Markup, in der Hydrations-Nutzlast und in den Seiten-JSON; die Seitenleiste bewusst nicht |
 | `tools/no_css_dialog.py` | Nimmt den Kasten „Site not loading correctly? … `BASE_URL`“ aus jeder Seite. Das Theme legt ihn als `<dialog id="myst-no-css">` an; sichtbar wird er nur ohne Stylesheet, **im Text der Seite steht er aber als erstes** und begrüßt jeden, der die Seite als Text liest, mit einer Deploy-Fehlermeldung. `--check` zählt nach; findet der Lauf gar keinen Kasten, scheitert er (mystmd könnte ihn umbenannt haben) |
+| `tools/zitierzeile.py` | Stand und zitierfähige Adresse in die Herkunftszeile der 31 Seiten, die eine haben: aus „frei unter CC BY-SA 4.0." wird „frei unter CC BY-SA 4.0, Stand 18. November 2026. Zitierbar als https://…/backpropagation/." Das Datum kommt aus derselben Funktion wie bei `freshness.py`, also aus `git log` der Quelldatei, und nicht aus einer zweiten Rechnung. Geschrieben wird in Markup **und** Hydrations-Nutzlast (die Zeile ist Fließtext, und den rendert das Theme neu), dazu in die Seiten-JSON, in beide `.md`-Fassungen und abschnittsweise in `llms-full.txt`. **Nach `llms_txt.py`**, sonst fehlt die Angabe in der Markdown-Auslieferung. Nicht angefasst: Startseite und die Seite „Über dieses Skript“ (tragen die Zeile nicht), `myst.search.json` (sonst steht es in jedem Suchausschnitt) und die gehashten Quelltext-Kopien, die MyST unter `_build/html/build` ablegt. Im PDF steht die Zeile ohne Datum und Adresse — dort läuft kein Veröffentlichungsschritt, Konrads Entscheidung vom 2026-11-18 |
 | `tools/stable_card.py` | Gibt der Vorschaukarte einen Namen, der nicht bei jedem CI-Lauf wechselt: `public/build/social-card-<hash>.png` → `public/build/social-card.png`, in allen `.html`, `.json`, `.txt` und `.xml` des Artefakts. MyST hasht nach Pfad + mtime + Größe, nicht nach Inhalt. **Nach `llms_txt.py`, vor `image_dims.py`**; im Unterordner und nicht in der Wurzel des Artefakts, damit `hydration.py` die Nutzlast weiter absolut macht |
 | `tools/hydration.py` | Hält nach der Hydration zurück, was React ausräumt: Canonical, `og:*`, `twitter:card`, Markdown-`alternate`, `lang`, Titelzusatz, `ld+json` und die zwei Stylesheets; `og:image` dagegen über die Nutzlast, weil das Theme dafür ein Feld rendert. **Letzter Schritt am Kopf.** `--check-rendered` mißt im Browser statt am Artefakt |
 | `tools/precompress.py` | `.br` und `.gz` neben jede Textdatei, **als letzter Schritt** des Jobs; `--check` packt jede Kopie aus und vergleicht byteweise |
@@ -348,8 +349,9 @@ eines, sonst meldet sich `check_doku.py`.
 Blatt auch eingebunden ist), `vendor_assets.py` vor `thebe_gate.py` (beide ändern dieselben Bündel), `publish_urls.py`
 vor `head_meta.py` (og:url bekommt dieselbe URL wie der Canonical), `head_meta.py` vor
 `inject_jsonld.py` (liest Karten-URL und Kapiteltitel aus der Seite zurück) und vor
-`image_dims.py` (lazy und Maße zusammen), die Prüfläufe danach, und `precompress.py`
-**zuletzt** — jede Änderung nach ihm liefert allen Lesern die alte `.br` aus.
+`image_dims.py` (lazy und Maße zusammen), `zitierzeile.py` **nach** `llms_txt.py`
+(sonst fehlt die Zitierangabe in der Markdown-Auslieferung), die Prüfläufe danach,
+und `precompress.py` **zuletzt** — jede Änderung nach ihm liefert allen Lesern die alte `.br` aus.
 Lokal prüfen heißt: `myst build --html`, die Schriften wie im `myst-build`-Job in das
 gebaute HTML kopieren, dann die Skriptzeilen des `pages`-Jobs gegen eine **Kopie**
 von `_build/html` — sie schreiben in das Verzeichnis hinein.
@@ -701,7 +703,11 @@ die „Weiterlesen“-Box, dann zwei kursive Zeilen.
    Gegenrichtung: genau ein Forumslink je Kapitel, und die Kennung darin gleich der
    Seitenadresse. Ein Tippfehler fiele sonst nirgends auf.
 2. **Die Herkunftszeile**: Werktitel, Gattung, Autor, Lizenz im Klartext und der Link auf
-   „Über dieses Skript“ (Punkt 1 des zweiten Audits).
+   „Über dieses Skript“ (Punkt 1 des zweiten Audits). **Stand und zitierfähige Adresse
+   trägt `tools/zitierzeile.py` beim Veröffentlichen nach** (seit 2026-11-18), nicht die
+   Quelle: Die Adresse darf dort nicht stehen (keine absoluten URLs auf die eigene
+   Domain), und das Datum soll sich nicht von Hand pflegen lassen müssen. Im PDF fehlt
+   beides deshalb.
 
 Die vier Seiten außerhalb der Kapitel — Startseite, Glossar, „Über dieses Skript“,
 Übungsblätter — bekommen **keine** Forumszeile; dafür gibt es drüben keine Seite.

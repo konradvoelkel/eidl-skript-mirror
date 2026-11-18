@@ -394,6 +394,13 @@ pages:
     # <link rel="alternate" type="text/markdown">. Port aus ds-skript; Google ignoriert
     # llms.txt erklaertermassen, der Nutzen liegt bei den .md-Dateien. Vor precompress.
     - python3 tools/llms_txt.py "$SITE_ORIGIN$BASE_URL" public
+    # Stand und zitierfaehige Adresse in die Herkunftszeile jeder Seite, die eine hat (31
+    # von 33; die Startseite *ist* das Werk, /readme/ erklaert es). Das dritte SEO-Audit
+    # fand §8: kein Jahr, keine zitierfaehige Adresse, auf keiner Seite ein sichtbares
+    # Datum. **Nach** llms_txt: Die .md-Dateien und llms-full.txt muessen schon da sein,
+    # damit die Angabe auch dort steht -- das ist die Flaeche, die Antwortmaschinen lesen.
+    # Datum aus derselben Funktion wie freshness.py, nicht aus einer zweiten Rechnung.
+    - python3 tools/zitierzeile.py "$SITE_ORIGIN$BASE_URL" public
     # Die Vorschaukarte unter einen Namen, der nicht bei jedem Lauf wechselt. MyST hasht
     # kopierte Dateien nach Pfad + mtime + Groesse statt nach Inhalt, und der Checkout
     # stempelt die Datei bei den meisten Laeufen neu -- die URL des vorigen Laufs
@@ -461,6 +468,7 @@ pages:
     - python3 tools/image_dims.py public --base "$BASE_URL" --check
     - python3 tools/outline_reserve.py --check public
     - python3 tools/freshness.py --check public
+    - python3 tools/zitierzeile.py "$SITE_ORIGIN$BASE_URL" --check public
     - python3 tools/trailing_slash.py --check public --base "$BASE_URL"
     - python3 tools/no_css_dialog.py public --check
     # Jede austauschbare Abbildung liegt als WebP im Artefakt, und kein Verweis zeigt mehr
