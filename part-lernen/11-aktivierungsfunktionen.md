@@ -37,13 +37,54 @@ Ein Neuron mit $\tau = \operatorname{ReLU}$ heißt ReLU-Neuron.
 
 **Ableitung** von $\max(0, y)$ nach $y$: Für $y > 0$ ist $\max(0, y) = y$, also ist die Ableitung $1$. Für $y < 0$ ist $\max(0, y) = 0$, also ist die Ableitung $0$. Für $y = 0$ ist die Ableitung nicht definiert – wir *definieren* sie als $0$, das spart Rechnungen. (Dass das erlaubt ist, steckt im Begriff der *schwachen Ableitung*: Sie darf an einzelnen Punkten beliebig sein.)
 
-**Wieso ist ReLU geeignet?** Lineare Abbildung + ReLU ist die Projektion auf einen Halbraum, denn ReLU ist genau die Projektion von $\mathbb{R}$ auf $[0, \infty)$, und ein Halbraum ist eine Seite einer Hyperebene. Ein ReLU-Neuron $\max(0, \langle w, x \rangle + b)$ ist also null auf der einen Seite der Hyperebene $\langle w, x \rangle + b = 0$ und linear ansteigend auf der anderen. Summiert man mehrere solche „Knickfunktionen“ mit Gewichten, bekommt man stückweise lineare Funktionen, deren Knickstellen auf den Hyperebenen liegen – und mit genug Neuronen kann man damit jede stetige Funktion beliebig gut approximieren. Beispiel an der Tafel; im [Kapitel „Netze von Hand bauen“](12-netze-von-hand.md) bauen wir so $x^2$.
+**Wieso ist ReLU geeignet?** Lineare Abbildung + ReLU ist die Projektion auf einen Halbraum, denn ReLU ist genau die Projektion von $\mathbb{R}$ auf $[0, \infty)$, und ein Halbraum ist eine Seite einer Hyperebene. Ein ReLU-Neuron $\max(0, \langle w, x \rangle + b)$ ist also null auf der einen Seite der Hyperebene $\langle w, x \rangle + b = 0$ und linear ansteigend auf der anderen. Summiert man mehrere solche „Knickfunktionen“ mit Gewichten, bekommt man stückweise lineare Funktionen, deren Knickstellen auf den Hyperebenen liegen – und mit genug Neuronen kann man damit jede stetige Funktion beliebig gut approximieren. Wie das im Einzelnen geht, rechnet der übernächste Abschnitt nach.
 
 :::{figure} ../images/vl06-relu-sum.png
 :width: 90%
 
 Links die ReLU, rechts eine gewichtete Summe von drei verschobenen ReLUs: eine stückweise lineare Funktion mit Knicken an den Verschiebungen.
 :::
+
+### Vier Rechnungen mit zwei ReLUs
+
+Bevor wir damit etwas bauen, lohnt sich etwas Algebra. Alle vier Rechnungen gehen gleich: Fallunterscheidung an der Knickstelle.
+
+**Die Identität.** Für $x > 0$ ist $\operatorname{ReLU}(x) - \operatorname{ReLU}(-x) = x - 0 = x$, für $x < 0$ ist es $0 - (-x) = x$, und für $x = 0$ steht da $0 - 0 = 0$. Also
+
+$$
+\operatorname{ReLU}(x) - \operatorname{ReLU}(-x) = x .
+$$
+
+Zwei ReLU-Neuronen geben die Identität zurück. Ein ReLU-Netz kann seine Eingabe also unverändert durchreichen, und eine zusätzliche Schicht kostet es keine Ausdrucksstärke – das ist der Grund, warum sich Schichten überspringen lassen (Skip Connections, siehe den Abschnitt zu den verschwindenden Gradienten).
+
+**Der Betrag.** Dieselben zwei Bausteine, ein Vorzeichen anders: für $x > 0$ steht da $x + 0 = x$, für $x < 0$ steht da $0 + (-x) = -x$, für $x = 0$ wieder $0$. Also
+
+$$
+\operatorname{ReLU}(x) + \operatorname{ReLU}(-x) = |x| .
+$$
+
+Einmal kommt etwas Lineares heraus und einmal nicht: Der Knick entsteht in der *Kombination*, nicht im einzelnen Baustein. Die beiden Rechnungen lassen sich auch umdrehen, $\operatorname{ReLU}(x) = \tfrac12\bigl(x + |x|\bigr)$ – das Paar $(x, |x|)$ trägt dieselbe Information wie die beiden Neuronen.
+
+**Skalieren bringt nichts Neues.** ReLU ist positiv homogen, $\operatorname{ReLU}(ax) = a \operatorname{ReLU}(x)$ für $a > 0$; auch das sieht man an den beiden Fällen. Damit ist $\operatorname{ReLU}(2x) - \operatorname{ReLU}(x) = \operatorname{ReLU}(x)$ und ebenso $\operatorname{ReLU}(x) + \operatorname{ReLU}(2x) = 3\operatorname{ReLU}(x)$. Die Eingabe zu strecken verschiebt den Knick nicht und erzeugt auch keinen zweiten.
+
+**Verschieben schon.** Für $x < 0$ ist $\operatorname{ReLU}(x) + \operatorname{ReLU}(x - 2) = 0$, für $0 \le x < 2$ ist es $x$, und für $x \ge 2$ ist es $x + (x - 2) = 2x - 2$. Diese Funktion hat drei Stücke mit den Steigungen $0$, $1$ und $2$ und Knicke bei $0$ und bei $2$; einen Namen hat sie nicht. Mit einem negativen Gewicht wird sie nach dem zweiten Knick wieder flach: $\operatorname{ReLU}(x) - \operatorname{ReLU}(x - 2)$ steigt von $0$ auf $2$ und bleibt dort. Mit Deckel bei $6$ statt bei $2$ heißt sie ReLU6 und steht so in MobileNet.
+
+:::{figure} ../images/vl07-knick-regel.png
+:width: 90%
+:alt: Zwei Diagramme nebeneinander, in beiden eine Summe aus zwei ReLUs mit den Steigungen der einzelnen Stücke beschriftet. Links steigt die Funktion nach dem zweiten Knick steiler, rechts verläuft sie waagerecht weiter.
+
+Zwei verschobene ReLUs, links addiert und rechts subtrahiert. Die Knicke sitzen in beiden Fällen an denselben Stellen; nur das Vorzeichen des zweiten Gewichts entscheidet, ob die Funktion danach steiler wird oder flach.
+:::
+
+Die vier Rechnungen zusammen ergeben eine Regel, mit der sich stückweise lineare Funktionen hinschreiben lassen, ohne jedes Mal neu zu probieren.
+
+:::{prf:proposition} Knickregel
+Der Summand $w\,\operatorname{ReLU}(x - k)$ ist links von $k$ gleich null und rechts von $k$ gleich $w\,(x - k)$. Er fügt der Funktion an der Stelle $k$ einen Steigungssprung der Höhe $w$ hinzu und ändert sie sonst nicht.
+:::
+
+Eine stückweise lineare Funktion mit Knicken an den Stellen $k_1 < \dots < k_n$ lässt sich damit direkt angeben: Man liest die Steigung jedes Stücks ab, bildet die Differenz aufeinanderfolgender Steigungen – das sind die Gewichte – und addiert den konstanten Wert links vom ersten Knick. Genau so entsteht im [Kapitel „Netze von Hand bauen“](12-netze-von-hand.md) die Parabel $x^2$.
+
+### Stückweise linear in zwei Dimensionen
 
 In zwei Dimensionen sieht man, was „stückweise linear“ heißt. Ein ReLU-Netz $f \colon \mathbb{R}^2 \to \mathbb{R}$ ist auf jedem Bereich, in dem dieselben Neuronen an sind, eine affine Funktion. Sein Graph im $\mathbb{R}^3$ ist also eine Fläche aus ebenen Polygonen, ein *Polyeder*. Bei einer versteckten Schicht liegen die Kanten über den Geraden $\langle w_j, x \rangle + b_j = 0$, und die Stücke sind die Zellen dieser Geradenanordnung: $n$ Geraden zerlegen die Ebene in höchstens $1 + n + \binom{n}{2}$ Zellen. Ab der zweiten Schicht ist jedes Neuron selbst schon stückweise linear in $x$. Seine Knicklinie ist deshalb ein Streckenzug, der genau dort abknickt, wo er eine Gerade der ersten Schicht kreuzt, und so entstehen mit wenigen Neuronen viele Stücke.
 

@@ -21,6 +21,17 @@ den [Gradientenabstieg](08-gradientenabstieg.md) und die Kettenregel aus dem
 {url: 'https://media.hhu.de/video/einfuehrung-in-deep-learning-202627-vl-6-backpropagation/d7b28d562fd1d9a1b8a05e49ce604c14'}
 :::
 
+:::{admonition} Richtigstellung zum Ende der Aufzeichnung
+:class: warning
+Ab etwa 1:26 wird an der Tafel $\operatorname{ReLU}(x) + \operatorname{ReLU}(-x)$ durchgerechnet, und das Ergebnis wird mit „also auch null“ angegeben. Das ist falsch: Nachgesehen wurde nur der Fall $x < 0$. Für $x > 0$ ist $\operatorname{ReLU}(x) = x$ und $\operatorname{ReLU}(-x) = 0$, die Summe also $x$. Richtig ist
+
+$$
+\operatorname{ReLU}(x) + \operatorname{ReLU}(-x) = |x| ,
+$$
+
+und darauf kommt es später an: Mit diesem kleinen Netz spart die Konstruktion von $x^2$ im [Kapitel „Netze von Hand bauen“](12-netze-von-hand.md) die Hälfte der Neuronen. Die Rechnung steht samt drei verwandten im [Kapitel „Aktivierungsfunktionen“](11-aktivierungsfunktionen.md).
+:::
+
 [Folien VL 6, S. 2–23](https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de/folien/vl06.pdf#page=2)
 
 ## Ziel
