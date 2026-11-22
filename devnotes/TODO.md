@@ -384,11 +384,23 @@ Textfassung von Seite und Objektbaum: `~/Sciebo/hhu/eidl-26/ilias/` (analog zu
      die sich nicht aus einem alten Crawl erklärt: `perzeptron-trainieren` gibt den
      Canonical **mit** Schrägstrich an, Google wählt die Variante **ohne**. Eine
      temporäre Weiterleitung behauptet, die Quelle bleibe die eigentliche Adresse, und
-     das ist das Gegenteil dessen, was der Canonical sagt. Unbelegt und zu prüfen: ob
-     GitLab Pages seine eingebaute Verzeichnis-Weiterleitung auf `301` bringen lässt
-     (eine `_redirects`-Datei im Artefakt kennt Statuscodes; ob ihre Regeln **vor** der
-     eingebauten greifen, ist offen) — und ob sich die Dublette nach dem Antrag vom
-     18.11. nicht ohnehin von selbst auflöst. Erst messen, dann bauen.
+     das ist das Gegenteil dessen, was der Canonical sagt.
+     **Nachgelesen am 2026-11-22, und die Aussicht auf eine `301` ist schlecht.** Die
+     `302` ist dokumentiertes Verhalten und kein Defekt dieser Seite: GitLabs eigene
+     Dokumentation zeigt unter „Resolving ambiguous URLs" für `/data` genau
+     „302 Found: redirecting to /data/", nennt nirgends eine `301` und nennt keinen
+     Schalter dafür. Eine `_redirects`-Datei kennt `301` sehr wohl (und nimmt sie sogar
+     als Vorgabe, wenn kein Code dasteht; 64 kB und 1.000 Regeln sind die Grenzen) —
+     aber dort steht auch: „Files take priority over redirects. If a file exists on
+     disk, GitLab Pages serves the file instead of your redirect", und Netlifys
+     Erzwingen (`301!`) unterstützt GitLab ausdrücklich nicht. Genau darum geht das
+     offene Issue gitlab-org/gitlab#565802, das ein solches Erzwingen fordert, und
+     gitlab-pages#418 meldet die `302` seit Jahren als SEO-Problem.
+     Offen bleibt damit nur zweierlei, und beides braucht den Server: ob eine Regel für
+     **eine** Kapitel-Adresse im Artefakt doch vor der eingebauten greift (die
+     Dokumentation sagt zur Reihenfolge nichts, ein Deploy mit einer Testregel würde es
+     zeigen) — und ob sich die Dublette nach dem Antrag vom 18.11. ohnehin von selbst
+     auflöst. Erst messen, dann bauen.
   2. **Die 47 `prf`-Kästen im Barrierefreiheitsbaum** (offen geblieben beim `role="note"`
      am 2026-11-18): `note` heißt in ARIA „ancillary to the main content", und eine
      Definition oder ein Satz ist in einem Lehrbuch der Hauptinhalt — die Rolle wäre dort
