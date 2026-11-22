@@ -321,6 +321,42 @@ def titel_erweitern(doc: str, zusatz: str) -> tuple[str, bool]:
     return doc[: m.start()] + neu + doc[m.end():], True
 
 
+# Ab wann ein <title> zu lang ist. Google schneidet die Überschrift im Suchergebnis nach
+# etwa 600 px ab, was bei dieser Schrift ungefähr 60 Zeichen sind -- eine Faustzahl und
+# keine Spezifikation, deshalb hier als Konstante und nicht verstreut.
+TITEL_GRENZE = 60
+
+
+def titel_kuerzen(doc: str, werktitel: str) -> tuple[str, bool]:
+    """Den angehängten Werktitel aus einem zu langen <title> nehmen.
+
+    Konrads Entscheidung vom 2026-11-22 (dritter Audit, §13: zehn Titel über 60 Zeichen,
+    61 bis 71). MyST hängt an jeden Kapiteltitel „ - <Werktitel>" an, 30 Zeichen hier, und
+    genau dieser Teil fällt in der Trefferliste ohnehin dem Abschneiden zum Opfer. Von den
+    drei Wegen -- Zusatz auf langen Seiten weglassen, Zusatz buchweit kürzen, Kapiteltitel
+    kürzen -- ist dieser der einzige, der nichts im Buch ändert.
+
+    Die Landingpage ist ausgenommen: Ihr Zusatz ist nicht der wiederholte Werktitel,
+    sondern „ — Vorlesungsskript, HHU Düsseldorf" (siehe `titel_erweitern()`), und der ist
+    dort die Aussage und nicht die Wiederholung.
+
+    `og:title` bleibt, wie MyST es schreibt, also mit Zusatz: Dort schneidet keine
+    Plattform bei 60 Zeichen ab, und eine zweite Regel wäre eine zweite Stelle, an der
+    etwas auseinanderlaufen kann.
+    """
+    m = re.search(r"<title[^>]*>(.*?)</title>", doc, re.DOTALL | re.IGNORECASE)
+    if not m:
+        sys.exit("FEHLER: eine Seite hat keinen <title>; MyST schreibt immer einen")
+    roh = m.group(1).strip()
+    zusatz = f" - {werktitel}"
+    if len(html.unescape(roh)) <= TITEL_GRENZE or not roh.endswith(zusatz):
+        return doc, False
+    kurz = roh[: -len(zusatz)].strip()
+    if not kurz:
+        return doc, False
+    return doc[: m.start()] + f"<title>{kurz}</title>" + doc[m.end():], True
+
+
 def set_html_lang(doc: str, lang: str) -> tuple[str, bool]:
     """Die Sprache am <html> setzen. Gibt das Dokument und zurück, ob sie schon stand."""
     m = re.search(r"<html\b[^>]*>", doc, re.I)
@@ -652,7 +688,7 @@ def main() -> None:
     karte = social_card(root, index.read_text(encoding="utf-8"))
     seiten = sorted(root.rglob("index.html"))
     n_lazy = n_preload = n_head = n_lang = n_guard = n_karten = n_titel = 0
-    n_bildtags = n_katex = 0
+    n_bildtags = n_katex = n_kurz = 0
 
     for f in seiten:
         rel = f.parent.relative_to(root)
@@ -674,6 +710,9 @@ def main() -> None:
         if str(rel) == ".":
             doc, ergaenzt = titel_erweitern(doc, TITEL_ZUSATZ)
             n_titel += ergaenzt
+        else:
+            doc, gekuerzt = titel_kuerzen(doc, name)
+            n_kurz += gekuerzt
 
         doc, hatte_lang = set_html_lang(doc, args.lang)
         n_lang += not hatte_lang
@@ -706,6 +745,12 @@ def main() -> None:
                            ("og:image:height", "property")):
             if f'{kind}="{prop}"' not in doc:
                 sys.exit(f"FEHLER: {f} hat weiterhin kein {prop}")
+        if f.parent != root:
+            m_t = re.search(r"<title[^>]*>(.*?)</title>", doc, re.DOTALL | re.IGNORECASE)
+            titel = html.unescape(m_t.group(1).strip()) if m_t else ""
+            if len(titel) > TITEL_GRENZE and titel.endswith(f" - {name}"):
+                sys.exit(f"FEHLER: {f} hat weiterhin einen Titel über {TITEL_GRENZE}"
+                         f" Zeichen samt angehängtem Werktitel: {titel!r}")
         m_html = re.search(r"<html\b[^>]*>", doc, re.I)
         if not m_html or not re.search(rf'\blang="{re.escape(args.lang)}"',
                                        m_html.group(0), re.I):
@@ -743,7 +788,7 @@ def main() -> None:
 
     print(f"head_meta: {len(seiten)} Seiten, fünf Karten-Tags auf allen "
           f"({n_head} ergänzt), {n_bildtags} Bild-Tags (Maße und Alt-Text) ergänzt, "
-          f"{n_katex} KaTeX-Schriften vorgeladen, "
+          f"{n_katex} KaTeX-Schriften vorgeladen, {n_kurz} zu lange Titel gekürzt, "
           f"lang=\"{args.lang}\" auf allen ({n_lang} gesetzt, "
           f"{n_guard} Wächter), {n_karten} zu kleine Abbildungen durch {karte} ersetzt, "
           f"{n_lazy} Abbildungen lazy, {n_preload} Bild-Preloads entfernt, "

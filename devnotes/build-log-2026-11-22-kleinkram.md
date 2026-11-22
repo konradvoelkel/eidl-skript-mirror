@@ -133,7 +133,7 @@ Eigenschaft der Drosselung und des 859-kB-Bündels, keine Aussage über die ausg
 Site; das LCP-Element ist der Einleitungsabsatz (§10 des Audits) und hängt an Inter, nicht
 an den Formelschriften.
 
-## Offen geblieben
+## Die zehn langen Titel, am selben Tag entschieden
 
 **Die zehn Titel über 60 Zeichen** (§18 Punkt 16). Gemessen am Artefakt vom 2026-11-22,
 Spanne 61 bis 71 Zeichen:
@@ -152,9 +152,24 @@ Spanne 61 bis 71 Zeichen:
 | 61 | `/gans/` | Generative Adversarial Networks - … |
 
 Die Ursache ist in allen Fällen der Zusatz „ - Einführung in Deep Learning“, 30 Zeichen,
-den das Theme an jeden Kapiteltitel hängt. Das ist eine Entscheidung und kein Defekt, und
-es gibt drei Wege: den Zusatz auf langen Seiten weglassen (abgeschnitten wird er in der
-Trefferliste ohnehin), ihn buchweit kürzen (kostet Wiedererkennung), oder die Kapiteltitel
-kürzen — was zugleich die Suchwortlücken schließen würde, die §13 nennt (`/gans/` ohne
-„GAN“, `/faltung-cnn/` ohne „CNN“), aber die Überschriften im Buch ändert. Deshalb liegt
-das bei Konrad.
+den MyST an jeden Kapiteltitel hängt. Drei Wege standen zur Wahl: den Zusatz auf langen
+Seiten weglassen (abgeschnitten wird er in der Trefferliste ohnehin), ihn buchweit kürzen
+(kostet Wiedererkennung), oder die Kapiteltitel kürzen — was zugleich die Suchwortlücken
+schließen würde, die §13 nennt (`/gans/` ohne „GAN“, `/faltung-cnn/` ohne „CNN“), aber
+Überschriften im Buch ändert.
+
+**Konrads Entscheidung: den Zusatz weglassen.** `titel_kuerzen()` in `tools/head_meta.py`
+nimmt ihn aus dem `<title>`, wo der Titel über 60 Zeichen käme — neun Seiten, danach 41 bis
+59 Zeichen; `/faltung-cnn/` 71 auf 41, `/gans/` 61 auf 31. Wer unter der Grenze bleibt,
+behält ihn (`/backpropagation/` 45). Ausgenommen ist die Landingpage: Ihre 62 Zeichen sind
+nicht der wiederholte Werktitel, sondern „ — Vorlesungsskript, HHU Düsseldorf“, und das ist
+dort die Aussage. `og:title` bleibt, wie MyST es schreibt — dort schneidet keine Plattform
+bei 60 ab, und eine zweite Regel wäre eine zweite Stelle, an der etwas auseinanderläuft.
+
+Im Browser nachgesehen, weil das Theme den `<title>` selbst rendert: Auf `/faltung-cnn/`
+und `/gans/` steht nach der Hydration der gekürzte Titel, nicht der lange — der Wächter
+aus `hydration.py` hält ihn, weil `head_meta.py` vor ihm läuft.
+
+**Offen bleiben die Suchwortlücken** (§13): `GAN`, `CNN` und `LSTM` stehen in den
+Kapitelüberschriften nicht. Das ändert Überschriften im Buch, und die ausgeschriebenen
+Fachnamen sind an der Stelle richtig — eine inhaltliche Frage, keine SEO-Maßnahme.

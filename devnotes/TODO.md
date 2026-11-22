@@ -415,15 +415,6 @@ Textfassung von Seite und Objektbaum: `~/Sciebo/hhu/eidl-26/ilias/` (analog zu
       nicht stabil.
   6. Lehrstuhlseite — die im zweiten Audit genannte Adresse liefert 404, die richtige ist
       unbekannt und muss zuerst gefunden werden.
-  7. **[Entscheidung] Die zehn Titel über 60 Zeichen**, 61 bis 71 (gemessen am 2026-11-22;
-     der übrige Kleinkram aus §13 ist erledigt, Protokoll in
-     `build-log-2026-11-22-kleinkram.md`). Ursache ist überall der 30 Zeichen lange Zusatz
-     „ - Einführung in Deep Learning“, den das Theme an jeden Kapiteltitel hängt. Drei Wege:
-     den Zusatz auf langen Seiten weglassen (in der Trefferliste wird er ohnehin
-     abgeschnitten), ihn buchweit kürzen (kostet Wiedererkennung), oder die Kapiteltitel
-     kürzen — das schlösse zugleich die Suchwortlücken, die §13 nennt (`gans` ohne „GAN“,
-     `faltung-cnn` ohne „CNN“), ändert aber Überschriften im Buch.
-
 - [ ] **Offene Befunde aus dem SEO-Audit vom 2026-11-03** (Bericht nicht im Repo; Auslieferung,
   Descriptions, Startseite, Suchknopf, doppelte Überschriften, `llms.txt`, Impressum, Autor-`sameAs` und
   Bing Webmaster Tools sind am selben Tag erledigt, siehe `erledigt.md`). Offen:
