@@ -141,6 +141,14 @@ Abgabe bis …“ in den TeX-Blättern.
   es auch auf Englisch. Vorschlag: den englischen Begriff dort, wo er fehlt, kursiv in den
   Eintrag selbst, dann liest `inject_jsonld.py` ihn als `alternateName`.
 
+- [ ] **[Entscheidung] Gehört die Knickregel ins Glossar?** Seit dem 2026-11-19 ist sie ein
+  benannter Satz in Kapitel 11 („Vier Rechnungen mit zwei ReLUs") und Folie 10 im Deck VL 7:
+  $w\,\operatorname{ReLU}(x-k)$ fügt an der Stelle $k$ einen Steigungssprung der Höhe $w$ hinzu und
+  ändert die Funktion sonst nicht. Sie trägt den ganzen Block „Netze von Hand bauen", und
+  Kapitel 12 hat bewusst keinen Glossareintrag, weil es Konstruktion ist und kein Begriff. Das
+  Glossar sammelt Klausurbegriffe — also eine Lehrentscheidung, kein Redaktionsschritt. Wäre der
+  vierte Eintrag zu Kapitel 11.
+
 - [ ] **Abbildungen**, verbleibende Wünsche (alle `<!-- TODO Abbildung -->`-Marker sind seit 2026-09-20 aufgelöst,
   entweder durch eigene Bilder, Bilder aus den Musterlösungen 2025 oder Links): Hubel & Wiesel und GRU/LSTM sind
   nur verlinkt (Wikipedia, CC-BY-SA); wer sie einbetten will, lädt die Dateien nach `images/` und ergänzt den
