@@ -45,7 +45,7 @@ Abgesehen von CNNs ist die Faltung das zentrale Instrument in der Signalverarbei
 ## Eindimensionale Faltung
 
 :::{prf:definition} Diskrete Faltung
-Wenn $f \colon [-n, n] \to \mathbb{R}$ und $g \colon [0, N] \to \mathbb{R}$ (auf den ganzen Zahlen), dann ist $f \ast g \colon [0, N] \to \mathbb{R}$ definiert durch
+Die diskrete Faltung von $f \colon [-n, n] \to \mathbb{R}$ und $g \colon [0, N] \to \mathbb{R}$ (auf den ganzen Zahlen) ist die Funktion $f \ast g \colon [0, N] \to \mathbb{R}$ mit
 
 $$
 (f \ast g)(x) = \sum_{y = -n}^{n} f(y)\, g(x - y),

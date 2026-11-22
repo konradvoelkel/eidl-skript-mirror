@@ -224,7 +224,8 @@ Die Angabe $m \times n$ heißt im Code *Shape*. Sie mitzuführen ist die halbe M
 meisten Fehler beim Rechnen mit Netzen sind Shape-Fehler.
 
 :::{prf:definition} Matrix mal Vektor
-Für $A \in \mathbb{R}^{m \times n}$ und $x \in \mathbb{R}^n$ ist $Ax \in \mathbb{R}^m$ mit
+Das Produkt Matrix mal Vektor ist für $A \in \mathbb{R}^{m \times n}$ und
+$x \in \mathbb{R}^n$ der Vektor $Ax \in \mathbb{R}^m$ mit
 $(Ax)_i = \sum_{j=1}^n a_{ij} x_j$: Die $i$-te Komponente ist das Skalarprodukt der
 $i$-ten *Zeile* von $A$ mit $x$.
 :::
@@ -253,8 +254,9 @@ Winkel und Flächen, eine allgemeine Matrix (rechts) nicht.
 :::
 
 :::{prf:definition} Matrix mal Matrix
-Für $A \in \mathbb{R}^{m \times n}$ und $B \in \mathbb{R}^{n \times k}$ ist
-$AB \in \mathbb{R}^{m \times k}$ mit $(AB)_{i\ell} = \sum_{j=1}^n a_{ij} b_{j\ell}$.
+Das Produkt Matrix mal Matrix ist für $A \in \mathbb{R}^{m \times n}$ und
+$B \in \mathbb{R}^{n \times k}$ die Matrix $AB \in \mathbb{R}^{m \times k}$ mit
+$(AB)_{i\ell} = \sum_{j=1}^n a_{ij} b_{j\ell}$.
 :::
 
 Die Shape-Regel steht in der Definition: $(m \times n) \cdot (n \times k)$ ergibt

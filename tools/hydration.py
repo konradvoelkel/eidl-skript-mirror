@@ -79,6 +79,20 @@ sind wieder da, der Titelzusatz steht, der Rückschreiber lief neunmal.
 bis dahin tut er seine Arbeit, und das Attribut im Markup ist ohnehin das, was jeder
 Leser ohne JavaScript sieht. Dieses Skript übernimmt nur den Teil danach.
 
+Nachtrag 2026-11-22: Der Abbruch findet nicht mehr statt
+--------------------------------------------------------
+
+Unter mystmd 1.13.0 und Theme 1.4.1 meldet die Konsole **keinen React-Fehler mehr**, und
+ohne diesen Wächter überleben `lang="de"`, der `ld+json`-Block samt Typen und die zwei
+Stylesheets `bildmasse` und `gliederungsplatz`. `documentElement` wird also nicht mehr
+ersetzt. Verloren gehen nur die `<meta>`- und `<link>`-Tags, die React im Kopf selbst
+verwaltet: Canonical, die vier `og:*`, `twitter:card`, der Markdown-`alternate`,
+`article:modified_time` und der Titelzusatz der Startseite, dazu `og:image` zurück auf die
+wurzelrelative Adresse und der `myst-no-css`-Kasten wieder da -- auf sechs von sechs
+gemessenen Seiten. Der Wächter bleibt deshalb nötig; daß er an `document` hängt und Kopf
+und Wurzel frisch nachschlägt, ist jetzt Vorsorge statt Notwendigkeit. Zahlen und Methode:
+`devnotes/build-log-2026-11-22-hydration.md`.
+
 
 Welcher Weg für welches Tag -- das ist keine Geschmacksfrage
 ------------------------------------------------------------

@@ -378,6 +378,20 @@ weil genau dieser Knoten ersetzt wird. Eine Sonde zur Parse-Zeit meldet `headSam
 Kopf und Wurzelelement bei jedem Lauf frisch nach. Daran war auch der `lang`-Wächter in
 `head_meta.py` gestorben: `langFired: 0`, der Knoten wurde getauscht und nicht mutiert.
 
+**Seit dem 2026-11-22 stimmt diese Mechanik nicht mehr — der Wächter bleibt aber nötig.**
+Nachgemessen mit der Pipeline des `pages`-Jobs gegen zwei Kopien des Artefakts, einmal ohne
+`hydration.py`, beides im Browser gelesen: Auf sechs von sechs Seiten meldet die Konsole
+**keinen React-Fehler mehr**, und ohne Wächter überleben `lang="de"`, der `ld+json`-Block
+samt Typen und die zwei Stylesheets `bildmasse` und `gliederungsplatz`. Der Kopf wird also
+nicht mehr ersetzt. Verloren gehen nur die `<meta>`- und `<link>`-Tags, die React im Kopf
+selbst verwaltet: Canonical, die vier `og:*`, `twitter:card`, der Markdown-`alternate`,
+`article:modified_time` und der Titelzusatz der Startseite; `og:image` fällt auf die
+wurzelrelative Adresse zurück, und den `myst-no-css`-Kasten legt das Theme neu an. Daß der
+Wächter an `document` hängt und Kopf und Wurzel frisch nachschlägt, ist damit Vorsorge statt
+Notwendigkeit; welche der beiden Bewegungen vom 2026-11-17 (Theme 1.4.1, mystmd 1.13.0) den
+Abbruch behoben hat, ist nicht gemessen. Messwerte und Methode:
+`devnotes/build-log-2026-11-22-hydration.md`.
+
 **Wer das Theme oder mystmd anhebt, mißt das neu — am gerenderten DOM, nicht am
 Artefakt**: `tools/hydration.py --check-rendered _build/html` (braucht Playwright und
 läuft deshalb nicht in der CI). Daß alle Schritte bisher nur das Artefakt prüften, ist der
