@@ -577,3 +577,18 @@ main a.button:hover, main a.button:focus-visible {
 .dark main a.button:hover, .dark main a.button:focus-visible {
   color: #1c1917 !important;
 }
+
+/* Der Suchknopf im Kopf ist mobil 42 x 40 px gross -- unter den 44 x 44, die die WCAG als
+ * Zielgroesse nennt (2.5.5, AAA; die AA-Schwelle 2.5.8 mit 24 x 24 ist erfuellt). Befund
+ * aus dem SEO-Audit vom 2026-11-15, nachgemessen am 2026-11-22 bei 390 px Breite im
+ * Browser. Ab `sm` (640 px) wird aus dem Knopf die breite Suchleiste (`sm:w-64`), dort
+ * stellt sich die Frage nicht -- deshalb die Schranke und kein `min-height` fuer alle.
+ *
+ * Nicht mitgehoben, weil nicht beanstandet und von Konrad zu entscheiden: der Menueknopf
+ * (40 x 40), der Hell-Dunkel-Knopf (32 x 32) und der Gliederungsschalter (24 x 24). */
+@media (max-width: 639.98px) {
+  .myst-search-bar {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}

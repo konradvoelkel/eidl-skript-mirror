@@ -444,18 +444,32 @@ pages:
     #    PNG-Rueckfall, weil die Hydration die Wurzel neu rendert und davon nichts
     #    uebrigbliebe (am 2026-11-17 gemessen).
     - python3 tools/webp.py public
+    # Den LaTeX-Quelltext aus den Suchausschnitten nehmen. MyST legt in myst.search.json
+    # den Text jeder Ueberschrift samt ihrem Abschnitt ab -- Mathematik darin aber **ohne**
+    # die $-Zeichen, die sie als Mathematik auswiesen; im Suchtreffer stand deshalb roher
+    # LaTeX (drittes Audit §13: 180 von 722 Eintraegen). Uebersetzt wird, was die Tabelle
+    # kennt, der Rest wird abgestreift -- ein lauter Abbruch wie beim Glossar waere hier ein
+    # Deploy-Stopper, 98 verschiedene unbekannte Befehle. Fasst nur die JSON an, haengt also
+    # an keinem Kopf-Schritt; vor precompress.py wie alles, was Dateien aendert.
+    - python3 tools/suchindex.py public
     # **Letzter Schritt, der am Kopf schreibt, und das ist keine Vorliebe:** hydration.py
     # liest die Tags und Knoten, die alle Schritte davor in den Kopf geschrieben haben,
     # zurueck und baut daraus seinen Waechter. Laeuft noch einer danach, passt der
     # Waechter nicht mehr zu seinem Kopf -- sein eigener --check faellt dann durch.
     #
-    # Warum es ihn braucht: Der <head> gehoert zum React-Baum, Remix hydriert das ganze
-    # Dokument, und React ersetzt dabei `documentElement` mitsamt `<head>` (#418 und
-    # #423 in der Konsole jeder Seite). Alles Nachgetragene ist nach dem ersten Frame
-    # weg -- am 2026-11-15 im Browser und an Googles eigenem Renderer nachgemessen:
-    # `lang="en"` statt `de`, null ld+json, kein Canonical, keine og:*, kein
-    # Titelzusatz. Die Annahme vom 2026-11-03, die Hydration lasse den Kopf stehen, war
-    # falsch. Begruendung und Messwerte im Docstring des Skripts und in
+    # Warum es ihn braucht: Der <head> gehoert zum React-Baum, und Remix hydriert das
+    # ganze Dokument -- alles Nachgetragene ist nach dem ersten Frame weg. Am 2026-11-15
+    # im Browser und an Googles eigenem Renderer gemessen: `lang="en"` statt `de`, null
+    # ld+json, kein Canonical, keine og:*, kein Titelzusatz; die Annahme vom 2026-11-03,
+    # die Hydration lasse den Kopf stehen, war falsch.
+    #
+    # **Seit dem 2026-11-22 ist die Mechanik eine andere, der Waechter bleibt aber
+    # noetig.** Unter Theme 1.4.1 und mystmd 1.13.0 meldet die Konsole keinen
+    # React-Fehler mehr (#418 und #423 sind weg), und `documentElement` wird nicht mehr
+    # ersetzt: `lang`, das ld+json und die zwei Stylesheets ueberleben auch ohne
+    # Waechter. Weg sind nur die <meta>- und <link>-Tags, die React im Kopf selbst
+    # verwaltet -- auf sechs von sechs gemessenen Seiten. Messwerte in
+    # devnotes/build-log-2026-11-22-hydration.md, Vorgeschichte in
     # devnotes/seo-audit-2026-11-15.md.
     - python3 tools/hydration.py "$SITE_ORIGIN$BASE_URL" public --base "$BASE_URL" --lang de
     # Und danach am fertigen Artefakt nachzaehlen statt dem Protokoll zu glauben: kein
@@ -471,6 +485,9 @@ pages:
     - python3 tools/zitierzeile.py "$SITE_ORIGIN$BASE_URL" --check public
     - python3 tools/trailing_slash.py --check public --base "$BASE_URL"
     - python3 tools/no_css_dialog.py public --check
+    # Kein Backslash mehr im Suchindex. Was diese Pruefung nicht kann, ist die Guete der
+    # Uebersetzung -- die sieht nur, wer einen Treffer liest.
+    - python3 tools/suchindex.py --check public
     # Jede austauschbare Abbildung liegt als WebP im Artefakt, und kein Verweis zeigt mehr
     # auf ihr PNG oder JPG -- im Markup, im Stylesheet `bildmasse` und in der Nutzlast.
     - python3 tools/webp.py public --check

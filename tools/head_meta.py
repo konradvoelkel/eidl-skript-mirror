@@ -28,6 +28,12 @@ MyST schreibt og:title, og:description und og:image und hört dann auf. Vier feh
   Angabe ist „website", also das, was eine Shop-Startseite wäre.
 - **og:locale = de_DE.** Ohne Alternate: Dieses Buch gibt es nur auf Deutsch (anders als
   das Data-Science-Skript, das ein englisches Gegenstück hat).
+- **og:image:alt, og:image:width, og:image:height, twitter:image:alt** (seit 2026-11-22,
+  dritter Audit §13): Die zwei Maße ersparen der Plattform das Nachladen, bevor sie Platz
+  reservieren kann, und der Alt-Text ist die einzige Beschreibung der Karte, die ein
+  Screenreader auf einer fremden Zeitleiste zu lesen bekommt. **Die Maße werden aus der
+  Datei gelesen**, nicht geschrieben: `vet_card()` darf eine Abbildung stehen lassen, die
+  groß genug ist, und dann wären 1200x630 falsch.
 
 **Der Name wird aus der Landingpage gelesen, nie hart geschrieben.** Deren <title> ist
 der Projekttitel allein; ein Umbenennen in myst.yml trägt sich also von selbst durch und
@@ -175,6 +181,66 @@ CARD_MAX_BYTES = 500 * 1024
 # Die selbst ausgelieferten Schriften (`_site/fonts/`, vom myst-build-Job nach /fonts/).
 FONTS = ("inter-latin.woff2", "jetbrains-mono-latin.woff2")
 
+# Die KaTeX-Schriften je Seite vorladen -- und zwar genau die, die ihre Formeln brauchen.
+#
+# Warum überhaupt: Sie werden erst entdeckt, wenn das KaTeX-Stylesheet geholt, geparst und
+# eine Glyphe gebraucht ist. Auf der Destillations-Seite am 2026-11-22 nach 326 ms, und die
+# Absätze mit Inline-Mathematik ruckten dabei. Mit blockierten Abrufen gemessen, vier Läufe
+# je Fall: ohne die KaTeX-Schriften CLS 0,0000, mit ihnen 0,0760; mit den zwei häufigsten
+# vorgeladen 0,0219, mit allen fünf, die diese Seite holt, 0,0000.
+#
+# Warum je Seite und nicht pauschal: Welche der zwanzig Dateien eine Seite braucht, hängt
+# an den Befehlen in ihren Formeln -- gemessen holt `/tensoren/` vier, `/backpropagation/`
+# sieben, `/anwendungsbeispiele/` keine. Ein Preload auf Verdacht wäre je Datei 11 bis 27 kB
+# für nichts.
+#
+# Die Zuordnung Klasse zu Datei steht in `_site/vendor/katex/katex.min.css` (die Regeln
+# `.katex .mathbb{font-family:KaTeX_AMS}` und so weiter) und ist hier abgeschrieben, nicht
+# geraten. **Gegen den Browser geprüft** an fünf Seiten: viermal genau die Dateien, die
+# Chromium wirklich holt, einmal (`/tensoren/`) eine mehr -- die Formel dazu steckt in einem
+# eingeklappten `dropdown`, wird also erst beim Aufklappen gebraucht. Die Vorhersage ist
+# damit eine Obermenge und nie zu klein; zu klein wäre der Fehler, der das Ruckeln
+# zurückbrächte.
+#
+# Die Größen-Schriften hängen an **zwei** Klassen am selben Knoten: `size1` allein ist
+# KaTeX' Skalierungsklasse und steht auf jeder zweiten Formel, `delimsizing size1` ist die
+# große Klammer. Wer das verwechselt, lädt auf fast jeder Seite drei Dateien zu viel.
+KATEX_EINZELN = {
+    "mathnormal": "Math-Italic", "boldsymbol": "Math-BoldItalic",
+    "mathit": "Main-Italic", "textit": "Main-Italic",
+    "mathbf": "Main-Bold", "textbf": "Main-Bold",
+    "amsrm": "AMS-Regular", "mathbb": "AMS-Regular", "textbb": "AMS-Regular",
+    "mathcal": "Caligraphic-Regular",
+    "mathfrak": "Fraktur-Regular", "textfrak": "Fraktur-Regular",
+    "mathtt": "Typewriter-Regular", "texttt": "Typewriter-Regular",
+    "mathscr": "Script-Regular", "textscr": "Script-Regular",
+    "mathsf": "SansSerif-Regular", "textsf": "SansSerif-Regular",
+    "mathboldsf": "SansSerif-Bold", "textboldsf": "SansSerif-Bold",
+    "mathitsf": "SansSerif-Italic", "textitsf": "SansSerif-Italic",
+    "delim-size1": "Size1-Regular", "delim-size4": "Size4-Regular",
+}
+KATEX_PAARE = (
+    ({"delimsizing", "size1"}, "Size1-Regular"),
+    ({"delimsizing", "size2"}, "Size2-Regular"),
+    ({"delimsizing", "size3"}, "Size3-Regular"),
+    ({"delimsizing", "size4"}, "Size4-Regular"),
+    ({"op-symbol", "small-op"}, "Size1-Regular"),
+    ({"op-symbol", "large-op"}, "Size2-Regular"),
+)
+KLASSE_RE = re.compile(r'class="([^"]*)"')
+
+
+def katex_fonts(doc: str) -> list[str]:
+    """Die KaTeX-Dateien, die diese Seite braucht -- Obermenge, siehe Tabelle oben."""
+    if 'class="katex' not in doc:
+        return []
+    treffer = {"Main-Regular"}
+    for m in KLASSE_RE.finditer(doc):
+        klassen = set(m.group(1).split())
+        treffer |= {KATEX_EINZELN[k] for k in klassen & KATEX_EINZELN.keys()}
+        treffer |= {datei for paar, datei in KATEX_PAARE if paar <= klassen}
+    return [f"KaTeX_{n}.woff2" for n in sorted(treffer)]
+
 
 def page_url(site: str, rel: pathlib.PurePath) -> str:
     """Die URL, die 200 liefert: mit Schrägstrich, so wie der Canonical sie hat."""
@@ -191,7 +257,8 @@ def project_title(index_html: str) -> str:
     return title
 
 
-def head_tags(url: str, site_name: str, lang: str, is_landing: bool) -> list[tuple[str, str]]:
+def head_tags(url: str, site_name: str, lang: str, is_landing: bool,
+              katex: tuple[str, ...] = ()) -> list[tuple[str, str]]:
     """Die Tags als (Merkmal, Tag); das Merkmal sagt, ob die Seite das Tag schon hat."""
     # de -> de_DE: OpenGraph will den Unterstrich-Code, nicht das Sprachkürzel.
     locale = {"de": "de_DE", "en": "en_US"}.get(lang, lang)
@@ -215,10 +282,24 @@ def head_tags(url: str, site_name: str, lang: str, is_landing: bool) -> list[tup
         (f'href="/fonts/{f}"',
          f'<link rel="preload" href="/fonts/{f}" as="font" type="font/woff2" crossorigin/>')
         for f in FONTS
+    ] + [
+        # Dasselbe für die KaTeX-Schriften, die **diese** Seite braucht; siehe
+        # `katex_fonts()`.
+        (f'href="/vendor/katex/fonts/{f}"',
+         f'<link rel="preload" href="/vendor/katex/fonts/{f}" as="font"'
+         + ' type="font/woff2" crossorigin/>')
+        for f in katex
     ]
 
 
 TITEL_ZUSATZ = " — Vorlesungsskript, HHU Düsseldorf"
+
+# Der Alt-Text der Vorschaukarte. Er beschreibt das Bild und wiederholt den Titel nicht --
+# der steht als og:title unmittelbar daneben, und dieselbe Regel gilt im Buch für jede
+# Abbildung. Die Texte, die die Karte zeigt, stehen in tools/social_card.py.
+KARTE_ALT = ("Vorschaukarte des Vorlesungsskripts: Titel und Untertitel in weißer Schrift"
+             " auf violettem Grund, darunter die Stichworte Perzeptron, Backpropagation"
+             " und Transformer sowie Autorname und Adresse.")
 
 
 def titel_erweitern(doc: str, zusatz: str) -> tuple[str, bool]:
@@ -383,6 +464,50 @@ def card_file(root: pathlib.Path, url: str) -> pathlib.Path:
     return root / "build" / url.rsplit("/build/", 1)[1]
 
 
+def bild_alt(doc: str, url: str) -> str:
+    """Der Alt-Text, den das Markup derselben Bilddatei gibt -- oder "" .
+
+    Für den Fall, daß `vet_card()` eine Abbildung als Karte stehen läßt: Dann ist ihr
+    Alt-Text im Buch die richtige Beschreibung, und ein erfundener wäre schlechter als
+    keiner.
+    """
+    name = re.escape(url.rsplit("/", 1)[-1])
+    m = re.search(rf'<img[^>]+src="[^"]*{name}"[^>]*>', doc)
+    if not m:
+        return ""
+    m_alt = re.search(r'\balt="([^"]*)"', m.group(0))
+    return html.unescape(m_alt.group(1)) if m_alt else ""
+
+
+def karten_tags(doc: str, root: pathlib.Path, karte: str) -> list[tuple[str, str]]:
+    """Maße und Alt-Text zu dem og:image, das **diese** Seite trägt.
+
+    Nach `vet_card()` aufzurufen, sonst beschreiben die Tags ein Bild, das gleich ersetzt
+    wird.
+    """
+    m = re.search(r'<meta property="og:image" content="([^"]+)"', doc)
+    if not m:
+        sys.exit("FEHLER: eine Seite hat kein og:image; MyST schreibt immer eines")
+    url = m.group(1)
+    width, height = image_size(card_file(root, url))
+    tags = [
+        ('property="og:image:width"',
+         f'<meta property="og:image:width" content="{width}"/>'),
+        ('property="og:image:height"',
+         f'<meta property="og:image:height" content="{height}"/>'),
+    ]
+    alt = KARTE_ALT if url.rsplit("/", 1)[-1] == karte else bild_alt(doc, url)
+    if alt:
+        esc = html.escape(alt, quote=True)
+        tags += [
+            ('property="og:image:alt"',
+             f'<meta property="og:image:alt" content="{esc}"/>'),
+            ('name="twitter:image:alt"',
+             f'<meta name="twitter:image:alt" content="{esc}"/>'),
+        ]
+    return tags
+
+
 def social_card(root: pathlib.Path, index_html: str) -> str:
     """Der Dateiname der allgemeinen Karte, aus dem og:image der Landingpage gelesen.
 
@@ -527,14 +652,17 @@ def main() -> None:
     karte = social_card(root, index.read_text(encoding="utf-8"))
     seiten = sorted(root.rglob("index.html"))
     n_lazy = n_preload = n_head = n_lang = n_guard = n_karten = n_titel = 0
+    n_bildtags = n_katex = 0
 
     for f in seiten:
         rel = f.parent.relative_to(root)
         doc = f.read_text(encoding="utf-8")
 
+        katex = tuple(katex_fonts(doc))
+        n_katex += len(katex)
         fehlend = [
             tag for marker, tag in head_tags(
-                page_url(site, rel), name, args.lang, str(rel) == "."
+                page_url(site, rel), name, args.lang, str(rel) == ".", katex
             ) if marker not in doc
         ]
         if fehlend:
@@ -557,6 +685,11 @@ def main() -> None:
             n_karten += 1
             doc, _ = set_payload_card(doc, karte)
 
+        fehlend = [tag for marker, tag in karten_tags(doc, root, karte) if marker not in doc]
+        if fehlend:
+            doc = doc.replace("</head>", "".join(fehlend) + "</head>", 1)
+            n_bildtags += len(fehlend)
+
         doc, lazied = lazy_load_figures(doc)
         doc, entfernt = drop_image_preloads(doc, lazied)
         n_lazy += len(lazied)
@@ -569,7 +702,8 @@ def main() -> None:
         doc = f.read_text(encoding="utf-8")
         for prop, kind in (("og:url", "property"), ("og:site_name", "property"),
                            ("og:type", "property"), ("og:locale", "property"),
-                           ("twitter:card", "name")):
+                           ("twitter:card", "name"), ("og:image:width", "property"),
+                           ("og:image:height", "property")):
             if f'{kind}="{prop}"' not in doc:
                 sys.exit(f"FEHLER: {f} hat weiterhin kein {prop}")
         m_html = re.search(r"<html\b[^>]*>", doc, re.I)
@@ -608,7 +742,9 @@ def main() -> None:
                 sys.exit(f"FEHLER: {f} lädt ein lazy-Bild weiterhin vor: {href.group(1)}")
 
     print(f"head_meta: {len(seiten)} Seiten, fünf Karten-Tags auf allen "
-          f"({n_head} ergänzt), lang=\"{args.lang}\" auf allen ({n_lang} gesetzt, "
+          f"({n_head} ergänzt), {n_bildtags} Bild-Tags (Maße und Alt-Text) ergänzt, "
+          f"{n_katex} KaTeX-Schriften vorgeladen, "
+          f"lang=\"{args.lang}\" auf allen ({n_lang} gesetzt, "
           f"{n_guard} Wächter), {n_karten} zu kleine Abbildungen durch {karte} ersetzt, "
           f"{n_lazy} Abbildungen lazy, {n_preload} Bild-Preloads entfernt, "
           f"Titelzusatz auf der Landingpage {'gesetzt' if n_titel else 'schon da'}")

@@ -93,11 +93,19 @@ Artefakt durchgespielt, alle sechs bleiben, wie sie sind:
 | Probe | warum |
 |---|---|
 | `/ds-skript/nichtsda` | kein Kapitel -- ein Schraegstrich waere eine neue 302 |
-| `/ds-skript/kmeans#abschnitt` | Fragment, die Seite liefert schon 200 |
-| `/ds-skript/kmeans?x=1` | Query, dito |
 | `/ds-skript/kmeans.md` | Datei, keine Seite |
 | `https://.../ds-skript/kmeans` | absolut; davon gibt es im Artefakt null, gezaehlt |
 | `/ds-skript/Kmeans` | Grossbuchstabe, also kein Slug |
+
+**Fragment und Query gehoeren dagegen mitgenommen** -- und das stand hier bis zum
+2026-11-22 falsch: `/kmeans#abschnitt` liefere schon 200. Tut es nicht. Der Browser
+schneidet das Fragment ab, der Server sieht `/kmeans` und antwortet mit 302; fuer die Query
+gilt dasselbe. Getrennt wird deshalb am ersten `#` oder `?`, geprueft wird der Pfadteil, und
+der Schraegstrich kommt **vor** den Rest: aus `/kmeans#abschnitt` wird `/kmeans/#abschnitt`.
+Gefunden im dritten SEO-Audit (§13) an dem einen solchen Link im ganzen Buch --
+`/gradientenabstieg/` verlinkt
+`/hintergrundwissen-analysis#zweite-ableitungen-die-hesse-matrix`, je einmal im Markup und
+in der Nutzlast, Quelle `part-lernen/08-gradientenabstieg.md`.
 """
 
 from __future__ import annotations
@@ -163,13 +171,21 @@ def js_literal(obj) -> str:
     return out.replace("<", "\\u003c").replace("\u2028", "\\u2028").replace("\u2029", "\\u2029")
 
 
-def fehlt_schraegstrich(wert, slugs: set[str]) -> bool:
-    """Ist das ein Kapitelpfad ohne Schraegstrich am Ende?
+def mit_schraegstrich(wert, slugs: set[str]) -> str | None:
+    """Die Form mit Schraegstrich -- oder None, wenn an dem Wert nichts zu tun ist.
 
-    Nur genau `/<slug>`: nichts mit Punkt (`.md`, `.json`, `.pdf`), nichts mit `?` oder
-    `#`, nichts Absolutes, und nichts, was nicht in der Kapitelliste steht.
+    Genommen wird `/<slug>` aus der Kapitelliste, auch mit Fragment oder Query dahinter:
+    Der Schraegstrich kommt vor den Rest, aus `/kmeans#abschnitt` wird
+    `/kmeans/#abschnitt`. Nicht angefasst wird, was einen Punkt im Pfad hat (`.md`,
+    `.json`, `.pdf`), was absolut ist und was nicht in der Kapitelliste steht.
     """
-    return isinstance(wert, str) and wert.startswith("/") and wert[1:] in slugs
+    if not isinstance(wert, str) or not wert.startswith("/"):
+        return None
+    schnitt = min((i for i in (wert.find("#"), wert.find("?")) if i != -1), default=len(wert))
+    pfad, rest = wert[:schnitt], wert[schnitt:]
+    if pfad[1:] not in slugs:
+        return None
+    return pfad + "/" + rest
 
 
 def markup(doc: str, base: str, slugs: set[str]) -> tuple[str, int]:
@@ -181,10 +197,11 @@ def markup(doc: str, base: str, slugs: set[str]) -> tuple[str, int]:
         ziel = m.group(2)
         if not ziel.startswith(base + "/"):
             return m.group(0)
-        if not fehlt_schraegstrich(ziel[len(base) :], slugs):
+        neu_ziel = mit_schraegstrich(ziel[len(base) :], slugs)
+        if neu_ziel is None:
             return m.group(0)
         n += 1
-        return m.group(1) + ziel + "/" + m.group(3)
+        return m.group(1) + base + neu_ziel + m.group(3)
 
     return HREF.sub(auf, doc), n
 
@@ -200,16 +217,20 @@ def felder(obj, slugs: set[str]) -> tuple[int, int]:
     def lauf(o) -> None:
         nonlocal n_link, n_fuss
         if isinstance(o, dict):
-            if o.get("type") == "link" and o.get("internal") and fehlt_schraegstrich(o.get("url"), slugs):
-                o["url"] += "/"
-                n_link += 1
+            if o.get("type") == "link" and o.get("internal"):
+                neu_url = mit_schraegstrich(o.get("url"), slugs)
+                if neu_url is not None:
+                    o["url"] = neu_url
+                    n_link += 1
             nav = o.get("navigation")
             if isinstance(nav, dict):
                 for k in ("prev", "next"):
                     eintrag = nav.get(k)
-                    if isinstance(eintrag, dict) and fehlt_schraegstrich(eintrag.get("url"), slugs):
-                        eintrag["url"] += "/"
-                        n_fuss += 1
+                    if isinstance(eintrag, dict):
+                        neu_url = mit_schraegstrich(eintrag.get("url"), slugs)
+                        if neu_url is not None:
+                            eintrag["url"] = neu_url
+                            n_fuss += 1
             for v in o.values():
                 lauf(v)
         elif isinstance(o, list):
@@ -272,7 +293,7 @@ def pruefen(root: pathlib.Path, base: str, slugs: set[str]) -> None:
         doc = f.read_text(encoding="utf-8")
         for m in HREF.finditer(doc):
             ziel = m.group(2)
-            if ziel.startswith(base + "/") and fehlt_schraegstrich(ziel[len(base) :], slugs):
+            if ziel.startswith(base + "/") and mit_schraegstrich(ziel[len(base) :], slugs):
                 sys.exit(
                     f"FEHLER: {f} verlinkt {ziel} ohne Schraegstrich -- darauf antwortet"
                     " GitLab Pages mit 302"
