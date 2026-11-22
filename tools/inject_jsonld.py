@@ -150,6 +150,10 @@ import subprocess
 import sys
 from pathlib import Path, PurePosixPath
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+import freshness  # dieselbe Datumsquelle wie die sichtbare Zeile, siehe git_datum()
+
 WURZEL = Path(__file__).resolve().parent.parent
 VORLAGE = Path(__file__).resolve().parent / "structured-data.json"
 GESCHWISTER = Path(__file__).resolve().parent / "sibling-works.json"
@@ -173,16 +177,15 @@ def flachen_klon_abweisen() -> None:
 
 
 def git_datum(datei: str) -> str:
-    res = _git(["log", "-1", "--format=%cI", "--", datei])
-    if res.returncode != 0:
-        raise SystemExit(f"✗ git scheiterte an {datei}: {res.stderr.strip()}")
-    stamp = res.stdout.strip()
-    if not stamp:
-        raise SystemExit(
-            f"✗ git kennt keinen Commit für {datei}. Ist die Datei neu und noch nicht\n"
-            "  eingecheckt? Geraten wird hier nicht."
-        )
-    return stamp
+    """Dasselbe Datum, das `freshness.py` sichtbar auf die Seite schreibt.
+
+    Seit dem 2026-11-22 überspringt `freshness.git_date()` Commits, die nur die Fuß-
+    zeilen angefaßt haben (Konrads Entscheidung, dritter Audit). Dieses `dateModified`
+    kommt deshalb von dort und nicht mehr aus einem eigenen `git log -1` -- zwei
+    Rechnungen hätten auf derselben Seite zwei Daten ergeben, eines im JSON-LD und eines
+    im Fließtext. Dieselbe Begründung wie bei `zitierzeile.py`.
+    """
+    return freshness.git_date(datei)
 
 
 def meta(doc: str, kind: str, name: str) -> str | None:

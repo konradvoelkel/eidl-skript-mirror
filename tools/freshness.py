@@ -121,8 +121,57 @@ def refuse_shallow() -> None:
         )
 
 
+# Zeilen, deren Änderung für den Leser keine Änderung des Kapitels ist: die zwei kursiven
+# Zeilen am Ende jeder Seite (Forums- und Herkunftszeile, siehe `../CLAUDE.md`, „Das Ende
+# eines Kapitels"). Sie sind am 2026-11-18 in alle 31 Seiten auf einmal eingetragen worden,
+# und seitdem sagte jede Seite „Stand 18. November 2026" -- formal wahr, ohne
+# Unterscheidungskraft, und seit `zitierzeile.py` sichtbar unter jedem Kapitel. Konrads
+# Entscheidung vom 2026-11-22: solche Commits überspringen.
+#
+# **Nicht** in dieser Liste stehen Folienzeile und Aufzeichnungszeile. Sie stehen im
+# Vorspann, nicht in der Fußzeile, und wenn sie erscheinen, ist auf der Seite wirklich
+# etwas Neues: ein freigegebenes Deck, eine Aufzeichnung.
+FUSSZEILEN = (
+    re.compile(r"^\*Frage zu diesem Kapitel\?"),
+    re.compile(r"^\*Dieses (?:Kapitel|Glossar) gehört zu "),
+    re.compile(r"^\*Diese Seite gehört zu "),
+)
+
+
+def nur_fusszeilen(patch: str) -> bool:
+    """Ändert dieser Patch an der Datei ausschließlich Fuß- und Leerzeilen?
+
+    Gelesen wird der Patch mit `--unified=0`, es gibt also keine Kontextzeilen; `+++`/`---`
+    sind die Dateiköpfe und zählen nicht mit. Ein Patch **ohne** eine einzige geänderte
+    Zeile (ein Merge, eine reine Umbenennung) gilt ebenfalls als nicht inhaltlich -- dort
+    hat niemand am Text gearbeitet.
+    """
+    for zeile in patch.splitlines():
+        if zeile[:3] in ("+++", "---") or zeile[:1] not in ("+", "-"):
+            continue
+        text = zeile[1:].strip()
+        if not text:
+            continue
+        if not any(m.match(text) for m in FUSSZEILEN):
+            return False
+    return True
+
+
 def git_date(name: str) -> str:
-    """ISO-8601-Datum des letzten Commits, der diese Datei angefasst hat."""
+    """ISO-8601-Datum des letzten Commits, der an dieser Datei mehr als die Fußzeilen tat.
+
+    Der Normalfall ist der jüngste Commit; übersprungen werden die, die nur die Forums-
+    oder die Herkunftszeile angefaßt haben (siehe `FUSSZEILEN`). Findet sich keiner --
+    denkbar nur, wenn eine Datei allein aus diesen Zeilen bestünde --, bleibt es beim
+    jüngsten: erfunden wird auch hier nichts.
+    """
+    res = _git(["log", "--format=%H %cI", "--", name])
+    if res.returncode == 0 and res.stdout.strip():
+        for zeile in res.stdout.strip().splitlines():
+            sha, _, datum = zeile.partition(" ")
+            patch = _git(["show", "--format=", "--unified=0", sha, "--", name])
+            if patch.returncode == 0 and not nur_fusszeilen(patch.stdout):
+                return datum.strip()
     res = _git(["log", "-1", "--format=%cI", "--", name])
     if res.returncode != 0:
         # Ein Fehler von git ist etwas anderes als "git kennt diese Datei nicht", und die

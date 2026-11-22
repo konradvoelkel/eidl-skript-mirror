@@ -379,17 +379,7 @@ Textfassung von Seite und Objektbaum: `~/Sciebo/hhu/eidl-26/ilias/` (analog zu
   in §18). Kein Critical, kein High; was vom zweiten Audit schwer war, ist erledigt (die
   Kästen kommen in der Extraktion an, die Herkunftszeile steht in allen 29 Kapiteln,
   Googles Renderer sieht das JSON-LD). Offen, nach Wirkung je Aufwand:
-  1. **Der Stand in der Herkunftszeile hängt an Boilerplate-Commits** (sichtbar geworden
-     am 2026-11-18, als `zitierzeile.py` ihn auf die Seite brachte). `freshness.py` liest
-     das Datum aus `git log -1` der Quelldatei, und der letzte Commit war bei allen 31
-     Seiten die Herkunfts- bzw. Forumszeile — deshalb sagt heute jede Seite „Stand
-     18. November 2026", auch wo der Inhalt älter ist. Formal wahr, aber ohne
-     Unterscheidungskraft, und als *sichtbare* Angabe wiegt das schwerer als im
-     `<lastmod>` des Sitemaps, wo derselbe Befund schon steht. Zu entscheiden: Soll das
-     Datum Commits überspringen, die nur Fußzeilen anfassen (etwa über eine Liste von
-     Mustern, oder `git log` mit `-S` auf den Prosateil)? Das ist eine Entscheidung und
-     kein Defekt — aber jetzt eine, die der Leser sieht.
-  2. **Die Weiterleitung ohne Schrägstrich ist eine `302`, keine `301`** (gemessen am
+  1. **Die Weiterleitung ohne Schrägstrich ist eine `302`, keine `301`** (gemessen am
      2026-11-18 beim Stellen der Indexierungsanträge). Das passt zu der einen Dublette,
      die sich nicht aus einem alten Crawl erklärt: `perzeptron-trainieren` gibt den
      Canonical **mit** Schrägstrich an, Google wählt die Variante **ohne**. Eine
@@ -399,21 +389,21 @@ Textfassung von Seite und Objektbaum: `~/Sciebo/hhu/eidl-26/ilias/` (analog zu
      (eine `_redirects`-Datei im Artefakt kennt Statuscodes; ob ihre Regeln **vor** der
      eingebauten greifen, ist offen) — und ob sich die Dublette nach dem Antrag vom
      18.11. nicht ohnehin von selbst auflöst. Erst messen, dann bauen.
-  3. **Die 47 `prf`-Kästen im Barrierefreiheitsbaum** (offen geblieben beim `role="note"`
+  2. **Die 47 `prf`-Kästen im Barrierefreiheitsbaum** (offen geblieben beim `role="note"`
      am 2026-11-18): `note` heißt in ARIA „ancillary to the main content", und eine
      Definition oder ein Satz ist in einem Lehrbuch der Hauptinhalt — die Rolle wäre dort
      falsch. Richtig wäre `role="group"` mit `aria-labelledby` auf die Kopfzeile; das
      verlangt eine `id` am Titel, die das Theme nicht vergibt, also einen größeren Eingriff
      in `install_template.py` als die bisherigen. Lohnt sich vermutlich erst zusammen mit
      dem Umstieg auf Theme 2.x, weil dort dieselben Anker ohnehin anzufassen sind.
-  4. **Den 2.1.1-Bau mit PSI vermessen** und die JS-Größen in `plan-theme-2x.md` nachtragen.
+  3. **Den 2.1.1-Bau mit PSI vermessen** und die JS-Größen in `plan-theme-2x.md` nachtragen.
      Drei Chunks machen 697 von 859 kB, einer davon ist zu 98,3 % ungenutzt, und 2,13 MB
      des Rohbestands sind ein browserifiziertes Krypto-Polyfill. Ein Schnitt in `tools/`
      reicht nicht, weil die Chunks statisch importiert werden.
-  5. DOI über Zenodo, dann ORCID, dann OERSI/ORCA.nrw und Wikidata (`P800` am Item
+  4. DOI über Zenodo, dann ORCID, dann OERSI/ORCA.nrw und Wikidata (`P800` am Item
       Q102659059). Neues Argument dafür: die Zufallskennung `131e30` im Hostnamen ist
       nicht stabil.
-  6. Lehrstuhlseite — die im zweiten Audit genannte Adresse liefert 404, die richtige ist
+  5. Lehrstuhlseite — die im zweiten Audit genannte Adresse liefert 404, die richtige ist
       unbekannt und muss zuerst gefunden werden.
 - [ ] **Offene Befunde aus dem SEO-Audit vom 2026-11-03** (Bericht nicht im Repo; Auslieferung,
   Descriptions, Startseite, Suchknopf, doppelte Überschriften, `llms.txt`, Impressum, Autor-`sameAs` und
