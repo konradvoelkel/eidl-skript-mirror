@@ -31,7 +31,7 @@
       58--76 & Folien 19--22 & \textbf{$x^2$ aus ReLUs}: fragen, 5 Min.\ rechnen, auflösen\\
       76--80 & Folie 23      & von $x^2$ zu $xy$\\
       80--86 & Folien 24--26 & Universelle Approximation (26 nur, wenn Zeit)\\
-      86--90 & Folien 27--29 & Take-Home, Autoencoder-Vorgriff, Blatt 7\\
+      86--90 & Folien 27--30 & Take-Home, Vorgriff, Blatt 7, Schema des Autoencoders\\
     \end{tabular}\\[4pt]
     \textbf{Diese Sitzung lebt vom Hörsaaldialog} -- die Booleschen Netze und $x^2$
     gemeinsam bauen, nicht vortragen. 2025 war „geometrisch programmieren“ die Formel,
@@ -679,6 +679,31 @@
     Die Backpropagation-Rechnung aus der letzten Woche ist Übungsaufgabe; wer sie noch nicht
     angefangen hat, sollte das jetzt tun.
     Spielaufgabe, die bleibt: XOR im Playground mit möglichst wenigen Neuronen.}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Nächstes Mal: Autoencoder}
+
+  \begin{center}
+    \large Encoder $f$, Decoder $g$, Ziel: $g(f(x)) \approx x$
+  \end{center}
+
+  \bigskip
+
+  \begin{center}
+    \Large $L(x; f,g) = \frac1N \sum_i \| x_i - g(f(x_i))\|^2$
+  \end{center}
+
+  \begin{center}
+    \includegraphics[height=0.42\textheight]{vl06-autoencoder-schema.png}
+  \end{center}
+
+  \note{Das ist Folie 5 aus VL 8, eine Woche früher gezeigt -- und zugleich das Material
+    für die \textbf{Anwesenheitsaufgabe} auf Blatt 7: mit dem Decoder $g$ neue Datenpunkte
+    erzeugen, gemeinsam erarbeitet in der Übung am 03.12.
+    Hier nur die drei Zeilen benennen -- $f$ hinein, $g$ heraus, der MSE zwischen Ein- und
+    Ausgabe -- und das Schaubild zeigen. Warum das nicht trivial ist (nimm $f = g =
+    \operatorname{id}$) und was der Flaschenhals $k \ll n$ damit zu tun hat, kommt in VL 8.}
 \end{frame}
 
 \end{document}

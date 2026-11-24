@@ -82,6 +82,12 @@
   \frametitle{Loss und Schema}
 
   \begin{center}
+    \large Encoder $f$, Decoder $g$, Ziel: $g(f(x)) \approx x$
+  \end{center}
+
+  \bigskip
+
+  \begin{center}
     \Large $L(x; f,g) = \frac1N \sum_i \| x_i - g(f(x_i))\|^2$
   \end{center}
 
