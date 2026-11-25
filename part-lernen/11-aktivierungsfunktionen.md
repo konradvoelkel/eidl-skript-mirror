@@ -15,6 +15,14 @@ zerlegt, und erklärt, woran Neuronen sterben.
 die [Logistische Regression](06-logistische-regression.md) und die
 [Backpropagation](09-backpropagation.md).*
 
+[Vorlesungsaufzeichnung VL 7: Aktivierungsfunktionen](https://media.hhu.de/video/einfuehrung-in-deep-learning-202627-vl-7-aktivierungsfunktionen-neuronale-netze-von-hand/3df20859a7f3189ac467d59f3008d6ec)
+
+:::{anywidget} ../widgets/mediathek.mjs
+{url: 'https://media.hhu.de/video/einfuehrung-in-deep-learning-202627-vl-7-aktivierungsfunktionen-neuronale-netze-von-hand/3df20859a7f3189ac467d59f3008d6ec'}
+:::
+
+[Folien VL 7, S. 2–35](https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de/folien/vl07.pdf#page=2)
+
 ## Aktivierungsfunktionen und weitere Layer
 
 Ein Neuron „forward“ ist $\tau(\langle w, x \rangle)$. Beim Perzeptron ist $\tau = \operatorname{sign}$, bei der logistischen Regression $\tau = \sigma$. Allgemein ist $\tau$ beliebig – aber ableitbar, sonst funktioniert Backpropagation nicht. *Überall* differenzierbar muss es dafür nicht sein: ReLU hat bei $0$ einen Knick und ist trotzdem die meistbenutzte Aktivierungsfunktion überhaupt. Wie das zusammengeht, klärt der nächste Abschnitt.

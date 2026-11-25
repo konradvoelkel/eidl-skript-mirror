@@ -13,6 +13,14 @@ Approximieren und Generalisieren, und um Double Descent.
 
 *Setzt voraus: das [Kapitel „Netze von Hand bauen“](12-netze-von-hand.md).*
 
+[Vorlesungsaufzeichnung VL 7: Universelle Approximation](https://media.hhu.de/video/einfuehrung-in-deep-learning-202627-vl-7-aktivierungsfunktionen-neuronale-netze-von-hand/3df20859a7f3189ac467d59f3008d6ec?t=5264)
+
+:::{anywidget} ../widgets/mediathek.mjs
+{url: 'https://media.hhu.de/video/einfuehrung-in-deep-learning-202627-vl-7-aktivierungsfunktionen-neuronale-netze-von-hand/3df20859a7f3189ac467d59f3008d6ec?t=5264'}
+:::
+
+[Folien VL 7, S. 43–51](https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de/folien/vl07.pdf#page=43)
+
 ## Das Approximationstheorem
 
 ### Warum neuronale Netze funktionieren

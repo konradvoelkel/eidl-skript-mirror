@@ -11,6 +11,14 @@ wählen und nachsehen, was herauskommt. Hier entstehen so OR, NOR und XOR aus
 Perzeptrons, dazu etwas Arithmetik – und an XOR zeigt sich, was zwei Schichten können
 und eine nicht.
 
+[Vorlesungsaufzeichnung VL 7: Netze von Hand bauen](https://media.hhu.de/video/einfuehrung-in-deep-learning-202627-vl-7-aktivierungsfunktionen-neuronale-netze-von-hand/3df20859a7f3189ac467d59f3008d6ec?t=3700)
+
+:::{anywidget} ../widgets/mediathek.mjs
+{url: 'https://media.hhu.de/video/einfuehrung-in-deep-learning-202627-vl-7-aktivierungsfunktionen-neuronale-netze-von-hand/3df20859a7f3189ac467d59f3008d6ec?t=3700'}
+:::
+
+[Folien VL 7, S. 36–42](https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de/folien/vl07.pdf#page=36)
+
 ## Das Geheimnis um Deep Learning lüften
 
 Warum – und wie genau – funktioniert Deep Learning so gut? Die Zutaten, die wir bisher haben:
