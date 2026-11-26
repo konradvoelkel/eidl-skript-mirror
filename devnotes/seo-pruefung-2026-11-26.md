@@ -40,19 +40,23 @@ ohne Schrägstrich: beide `302`, Ziel jeweils die Adresse mit Schrägstrich. Der
 `seo-audit-2026-11-18.md` §18.1 gilt also weiter, einschließlich der am 2026-11-22
 nachgelesenen Aussicht.
 
-*Ein Versuch am 2026-11-27.* Die eine Frage, die ohne Server nicht zu beantworten war,
-lautete: Greift eine eigene Regel vor der eingebauten Weiterleitung? `tools/redirects.py`
-schreibt jetzt ein `_redirects` mit 32 Zeilen der Form `/autoencoder /autoencoder/ 301`.
-Das kann nichts kaputt machen, denn das Ziel jeder Regel ist genau die Adresse, auf die die
-`302` ohnehin zeigt. **Die Antwort steht noch aus** und ist nach dem nächsten Deploy eine
-einzige Messung:
+*Ausprobiert am 2026-11-27, und damit beantwortet: nein.* Die eine Frage, die ohne Server
+nicht zu klären war, lautete: Greift eine eigene Regel vor der eingebauten Weiterleitung?
+Ein `tools/redirects.py` hat dafür ein `_redirects` mit 32 Zeilen der Form
+`/autoencoder /autoencoder/ 301` ins Artefakt gelegt. Nach dem Deploy:
 
-```
-curl -sS -o /dev/null -w '%{http_code}\n' https://…/autoencoder
-```
+| gemessen | Ergebnis |
+|---|---|
+| `/_redirects` | `200` — und zwar nicht die Datei, sondern GitLabs eigener Prüfbericht: „32 rules / rule 1: valid / rule 2: valid …“ |
+| `/autoencoder`, `/perzeptron-trainieren`, `/faltung-cnn` | weiterhin `302` |
 
-`301` heißt, es hat geklappt. Bleibt es bei `302`, gehört das Skript wieder heraus — dann
-ist die Frage endgültig beantwortet, und die Antwort lautet nein.
+Das ist mehr als ein stummes Scheitern: GitLab **liest** die Datei und hält jede der 32
+Regeln für gültig — und leitet trotzdem temporär weiter. Die eingebaute Auflösung
+mehrdeutiger Adressen geht also vor, und `_redirects` kann daran nichts ändern. Damit ist
+an dieser Stelle nichts mehr zu machen, solange gitlab-org/gitlab#565802 offen ist; das
+Skript ist wieder draußen, der CI-Schritt und die Zeile in der Werkzeugtabelle ebenfalls.
+Was bleibt, ist `trailing_slash.py`, das dafür sorgt, daß wenigstens kein interner Link in
+die Weiterleitung läuft.
 
 **Die `prf`-Kästen haben weiterhin keine Rolle.** Auf der Seite zur linearen Algebra, der
 mit den meisten davon, stehen 18 `div.myst-proof-body`, 18 `myst-proof-header` — und null
@@ -73,6 +77,12 @@ und `children` und reicht jetzt unbekannte Props durch; die Renderstelle kennt `
 `enumerator` und setzt damit Rolle, Beschriftung und die `id` der Kopfzeile. Beide Regeln
 greifen im Server- wie in den Browser-Bündeln gleich oft, die gepatchten Bündel bestehen
 `node --check`, und ein zweiter Lauf des Skripts ändert nichts mehr.
+
+*Nachgemessen nach Pipeline #186611, im Browser und nach der Hydration:* 18 Elemente mit
+`role="group"` auf der Seite zur linearen Algebra, 18 `aria-labelledby`, **kein einziger
+toter Verweis**. Die Namen, die ein Screenreader daraus vorliest, sind „Definition 1
+(Vektor)“, „Definition 2 (Hadamard-Produkt)“, „Beispiel 1 (Skalarprodukt)“ — also genau die
+Kopfzeile. Auf der Analysis-Seite sind es 13, bei der logistischen Regression 4.
 
 Nebenbei fiel auf, daß der Kommentar im Skript die beiden `{id:…}`-Kästen falsch benannte:
 Es sind nicht „die zwei prf-Fassungen", sondern der prf-Kasten und der Exercise-Kasten. Die

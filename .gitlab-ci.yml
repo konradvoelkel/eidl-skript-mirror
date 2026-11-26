@@ -377,13 +377,6 @@ pages:
     #    30-mal "http://localhost:3000" und die Vorschaukarte bleibt in jedem geteilten
     #    Link leer. Begruendung im Docstring des Skripts.
     - python3 tools/publish_urls.py "$SITE_ORIGIN$BASE_URL" public --base "$BASE_URL"
-    # 1b. `_redirects`: der Versuch, aus der eingebauten 302 ohne Schraegstrich eine 301
-    #    zu machen. Ob eine Regel vor der eingebauten Weiterleitung greift, sagt GitLabs
-    #    Dokumentation nicht -- gemessen wird nach dem Deploy, Begruendung im Docstring.
-    #    Das Ziel jeder Regel ist die Adresse, auf die die 302 ohnehin zeigt; greift die
-    #    Regel nicht, liegt eine Datei im Artefakt, die niemand liest. **Nach**
-    #    publish_urls: die Liste kommt aus der fertigen sitemap.xml.
-    - python3 tools/redirects.py public
     # 2. og:url, og:site_name, og:type, og:locale, twitter:card; lang="de" samt Waechter
     #    gegen die Hydration; zu kleine Abbildungen als Vorschaukarte durch die echte
     #    Karte ersetzen; Abbildungen unter der Falz verzoegert laden. **Nach** Schritt 1:

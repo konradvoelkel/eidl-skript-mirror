@@ -396,12 +396,13 @@ Textfassung von Seite und Objektbaum: `~/Sciebo/hhu/eidl-26/ilias/` (analog zu
      Erzwingen (`301!`) unterstützt GitLab ausdrücklich nicht. Genau darum geht das
      offene Issue gitlab-org/gitlab#565802, das ein solches Erzwingen fordert, und
      gitlab-pages#418 meldet die `302` seit Jahren als SEO-Problem.
-     **Der Versuch läuft seit dem 2026-11-27**: `tools/redirects.py` legt ein `_redirects`
-     mit 32 Regeln ins Artefakt. Nach dem nächsten Deploy zu messen —
-     `curl -o /dev/null -w '%{http_code}' …/autoencoder`: `301` heißt, eine eigene Regel
-     greift vor der eingebauten; bleibt es bei `302`, gehört das Skript wieder heraus und
-     die Frage ist beantwortet. Offen bleibt daneben, ob sich die Dublette nach dem Antrag
-     vom 18.11. ohnehin von selbst auflöst.
+     **Am 2026-11-27 ausprobiert und beantwortet: nein.** Ein `_redirects` mit 32 Regeln
+     lag im Artefakt, GitLab hat es gelesen und für gültig befunden (`/_redirects` liefert
+     „32 rules / rule 1: valid …“) — die kurzen Adressen antworteten trotzdem weiter mit
+     `302`. Die eingebaute Weiterleitung geht vor, und damit ist an dieser Seite nichts
+     mehr zu machen; das Skript ist wieder draußen
+     (`seo-pruefung-2026-11-26.md` §2). Offen bleibt allein, ob sich die Dublette nach dem
+     Antrag vom 18.11. von selbst auflöst — das ist eine Frage an den Index, nicht an uns.
   2. **Den 2.1.1-Bau mit PSI vermessen** und die JS-Größen in `plan-theme-2x.md` nachtragen.
      Drei Chunks machen 697 von 859 kB, einer davon ist zu 98,3 % ungenutzt, und 2,13 MB
      des Rohbestands sind ein browserifiziertes Krypto-Polyfill. Ein Schnitt in `tools/`
