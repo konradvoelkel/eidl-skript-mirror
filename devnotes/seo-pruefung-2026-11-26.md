@@ -116,3 +116,9 @@ unabhängig ergeben hat.
 **Woran man merkt, daß es nicht gewirkt hat:** Im Netzwerkprotokoll einer Kapitelseite
 stehen nach dem Deploy immer noch zwei Anfragen auf denselben Bildnamen, eine mit und eine
 ohne `@1x`. Im `pages`-Job schlägt `webp.py --check` dann schon vorher an.
+
+**Nachgemessen am 2026-11-27, nach Pipeline #186609.** Alle 32 Seiten der Sitemap noch
+einmal geholt: 19 Bild-Preloads tragen jetzt `imagesrcset`, keiner zeigt mehr ohne auf eine
+Datei, die daneben als 2x angeboten wird. Im Browser, frischer Tab, Pixelverhältnis 1, auf
+der Seite zur Faltung — der vorher schlimmsten mit 92,6 kB: **zwei** WebP-Anfragen, das
+Logo und `vl10-blur-edges-…@1x.webp`. Die 2x-Datei wird nicht mehr geholt.
