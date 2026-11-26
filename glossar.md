@@ -46,7 +46,7 @@ Die Begriffe, die in Klausuraufgaben vorkommen, je in ein bis drei Sätzen, mit 
 
 **Softmax.** $\operatorname{sm}_j(v) = e^{v_j} / \sum_k e^{v_k}$, ohne Minus im Exponenten; summiert zu $1$, verallgemeinert $\sigma$ auf $K$ Klassen, nur Differenzen der Logits zählen. Für sich nicht ausschließende Klassen (Tags) stattdessen ein Sigmoid pro Klasse. [Logistische Regression](part-lernen/06-logistische-regression.md)
 
-**Kreuzentropie, NLL, KL-Divergenz.** Die Kreuzentropie ist die negative Log-Likelihood des Modells und unterscheidet sich von der KL-Divergenz nur um die Entropie der wahren Verteilung, die nicht von den Gewichten abhängt. [Loss-Funktionen und Maximum Likelihood](part-lernen/07-loss-funktionen-maximum-likelihood.md)
+**Kreuzentropie, NLL, KL-Divergenz.** Bei harten Labels ist die Kreuzentropie dieselbe Zahl wie die negative Log-Likelihood des Modells. Die Kreuzentropie misst die Unähnlichkeit zweier Verteilungen und ist auch für weiche Labels definiert, die NLL ist ein Schätzprinzip für beobachtete Werte. Von der KL-Divergenz unterscheidet sich die Kreuzentropie nur um die Entropie der wahren Verteilung, die nicht von den Gewichten abhängt. [Loss-Funktionen und Maximum Likelihood](part-lernen/07-loss-funktionen-maximum-likelihood.md)
 
 **Maximum Likelihood.** Wähle die Gewichte, unter denen die Daten am wahrscheinlichsten sind. Liefert BCE für die logistische und MSE für die lineare Regression mit Gauß-Rauschen. [Loss-Funktionen und Maximum Likelihood](part-lernen/07-loss-funktionen-maximum-likelihood.md)
 

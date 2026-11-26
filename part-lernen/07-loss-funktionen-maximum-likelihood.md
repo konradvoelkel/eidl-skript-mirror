@@ -90,6 +90,27 @@ $$
 Das ist der Anteil der Köpfe, und zugleich der Wert, an dem die binäre Kreuzentropie dieser drei Datenpunkte (mit konstanter Vorhersage $p$) minimal ist. Im DS-Skript steht dieselbe Rechnung ohne Logarithmus ([Welches $p$ passt am besten zu den Daten?](https://voelkel.pages.cs.uni-duesseldorf.de/ds-skript/wichtigste-diskrete-verteilungen#welches-p-passt-am-besten-zu-den-daten)); vergleichen Sie, welche Variante angenehmer ist.
 :::
 
+### Kreuzentropie oder negative Log-Likelihood?
+
+Bei harten Labels $y \in \{0, 1\}$ liefern beide Begriffe dieselbe Zahl, gemeint sind aber zwei verschiedene Dinge.
+
+Die **Kreuzentropie** misst, wie gut eine Verteilung $p$ eine Zielverteilung $q$ trifft,
+$\text{CE}(q, p) = -\sum_c q(c) \log p(c)$ (Definition und Zusammenhang mit Entropie und KL-Divergenz im [DS-Skript](https://voelkel.pages.cs.uni-duesseldorf.de/ds-skript/relative-entropie)). Das Label eines Datenpunkts ist die Zielverteilung $q = (1 - y,\, y)$, die Vorhersage des Modells ist $p = (1 - p(x),\, p(x))$, mit $p(1) = p(x)$ aus dem vorigen Abschnitt. Von den beiden Summanden bleibt je nach Label nur einer stehen:
+
+$$
+\text{BCE}(q, p) = -(1 - y)\log\bigl(1 - p(x)\bigr) - y \log p(x)
+= \begin{cases} -\log\bigl(1 - p(x)\bigr) & y = 0, \\ -\log p(x) & y = 1. \end{cases}
+$$
+
+Das ist ein Summand von $L_{\text{BCE}}$. Die Kreuzentropie ist auch für Zielverteilungen definiert, die keine Ecke sind, etwa $q = (0{,}1,\, 0{,}9)$. Solche weichen Labels liefert ein Lehrernetz in der [Destillation](../part-architekturen-anwendungen/25-destillation.md), und beim *Label Smoothing* ersetzt man die Labels $0$ und $1$ durch $\varepsilon$ und $1 - \varepsilon$.
+
+Die **negative Log-Likelihood** dagegen ist kein Abstandsmaß, sondern das Ergebnis eines Schätzprinzips. Man nimmt ein Modell der Daten an – hier $Y \sim \text{Bernoulli}\bigl(p(x)\bigr)$ – und wählt die Gewichte, unter denen die *beobachteten* Labels am wahrscheinlichsten sind. Das setzt Beobachtungen $y \in \{0, 1\}$ voraus und keine Wahrscheinlichkeiten als Labels.
+
+:::{admonition} Obacht: die Namen in PyTorch
+:class: warning
+`nn.BCELoss` erwartet Wahrscheinlichkeiten der Klasse $1$. `nn.NLLLoss` erwartet schon die *Logarithmen* der Wahrscheinlichkeiten aller Klassen, es wählt nur den Eintrag der wahren Klasse und setzt ein Minus davor, den Logarithmus bildet es nicht selbst. `nn.CrossEntropyLoss` ist `LogSoftmax` und `NLLLoss` in einem Schritt, erwartet Logits und nimmt auch Zielverteilungen statt Klassennummern.
+:::
+
 ## Optimieren mit Fehlerterm
 
 Wenn $L(x, y; w) \in \mathbb{R}$ den Fehler eines Modells mit Gewichtsvektor $w$ angibt, dann suchen wir $w$, sodass $L(w) := L(x, y; w)$ minimal wird. Die Daten $x, y$ sind dabei fest, variabel ist $w$.
