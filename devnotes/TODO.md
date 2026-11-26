@@ -375,6 +375,11 @@ Textfassung von Seite und Objektbaum: `~/Sciebo/hhu/eidl-26/ilias/` (analog zu
 
 ## Infrastruktur
 
+- [ ] **Gegenprobe zum Bild-Preload nach dem nächsten Deploy** (Befund und Abhilfe:
+  `seo-pruefung-2026-11-26.md` §3, `tools/webp.py` → `preload_srcset`). Eine Kapitelseite
+  mit Abbildung laden und das Netzwerkprotokoll ansehen: Derselbe Bildname darf nicht mehr
+  zweimal auftauchen, einmal mit und einmal ohne `@1x`. `webp.py --check` schlägt im
+  `pages`-Job von sich aus an, wenn der Fehler zurückkommt.
 - [ ] **Offene Punkte aus dem dritten SEO-Audit** (`seo-audit-2026-11-18.md`, Arbeitsliste
   in §18). Kein Critical, kein High; was vom zweiten Audit schwer war, ist erledigt (die
   Kästen kommen in der Extraktion an, die Herkunftszeile steht in allen 29 Kapiteln,

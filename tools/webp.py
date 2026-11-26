@@ -49,6 +49,16 @@ Anlauf die große Datei) und `urlOptimized` in die Nutzlast (sonst baut React na
 Hydration wieder ein nacktes `<img>` -- und der Browser holt die große Datei ein zweites
 Mal). Zusammen ist das, was vor und nach der Hydration dasselbe Bild lädt.
 
+Und das Preload dazu (2026-11-26, `devnotes/seo-pruefung-2026-11-26.md` §3)
+---------------------------------------------------------------------------
+Das `<picture>` allein reichte nicht. `head_meta.py` läßt für die erste Abbildung ein
+`<link rel="preload" as="image">` stehen, weil sie das LCP-Element ist — und das nennt
+weiter die große Datei. Auf einem Bildschirm ohne Retina-Auflösung holt der Vorab-Scanner
+deshalb die 2x-Fassung und der Browser danach die 1x des `<picture>` dazu: 19 der 33
+Seiten luden ihr erstes Bild zweimal, zusammen 563 kB umsonst. `preload_srcset` gibt dem
+Preload dasselbe `srcset` als `imagesrcset` mit; `--check` schlägt an, wenn ein
+Bild-Preload ohne `imagesrcset` auf eine Datei zeigt, die daneben als 2x angeboten wird.
+
 Zugeordnet wird über den **Inhalt**, nicht über den Namen: mystmd hängt an jeden Dateinamen
 einen Hash und kürzt den Namen dabei auf 20 Zeichen, und drei Bildpaare dieses Buchs
 stimmen in den ersten 20 Zeichen überein (`vl03-linreg-classifi…`). Die gebaute Datei ist
@@ -145,7 +155,42 @@ def markup_picture(text: str, srcset: dict[str, str]) -> tuple[str, int, set[str
     return IMG.sub(ein, text), n, benutzt
 
 
-def zwei_groessen(html: pathlib.Path, srcset: dict[str, str]) -> tuple[int, int, set[str]]:
+PRELOAD = re.compile(r'<link\b[^>]*?\brel="preload"[^>]*?/?>', re.I)
+
+
+def preload_srcset(text: str, srcset: dict[str, str]) -> tuple[str, int]:
+    """Dem Bild-Preload dasselbe `srcset` geben wie dem `<source>` daneben.
+
+    `head_meta.py` behält genau ein `<link rel="preload" as="image">`, nämlich das der
+    ersten Abbildung, weil sie das LCP-Element ist. Bekommt dieselbe Abbildung hier ein
+    `<picture>` mit zwei Größen, zeigen die beiden auf verschiedene Dateien: Der
+    Vorab-Scanner holt wegen des Preloads die 2x-Fassung, und nach dem Layout wertet der
+    Browser das `<picture>` aus und holt die 1x dazu. Am 2026-11-26 an der ausgelieferten
+    Seite nachgemessen (`devnotes/seo-pruefung-2026-11-26.md` §3): 19 der 33 Seiten luden
+    ihr erstes Bild zweimal, zusammen 563 kB, die niemand anzeigt -- und das ausgerechnet
+    an der Stelle, die das LCP bestimmt.
+
+    `imagesrcset` bekommt denselben Wert wie das `<source>`; `href` bleibt als Rückfall für
+    Browser ohne `imagesrcset` (vor Safari 17.2 und Firefox 115). Ein `imagesizes` braucht
+    es nicht: Die Deskriptoren sind `1x`/`2x`, nicht `w`.
+    """
+    n = 0
+
+    def ein(m: re.Match[str]) -> str:
+        nonlocal n
+        tag = m.group(0)
+        if 'as="image"' not in tag or "imagesrcset=" in tag:
+            return tag
+        q = re.search(r'\shref="([^"]+)"', tag)
+        if q is None or q.group(1) not in srcset:
+            return tag
+        n += 1
+        return tag[:q.start()] + f' imagesrcset="{srcset[q.group(1)]}"' + tag[q.start():]
+
+    return PRELOAD.sub(ein, text), n
+
+
+def zwei_groessen(html: pathlib.Path, srcset: dict[str, str]) -> tuple[int, int, int, set[str]]:
     """`urlOptimized` in die Nutzlast, `<picture>` ins Markup -- beides, siehe Kopf.
 
     Gibt zusätzlich zurück, welche Adressen wirklich vorkommen: mystmd legt jede Abbildung
@@ -153,7 +198,7 @@ def zwei_groessen(html: pathlib.Path, srcset: dict[str, str]) -> tuple[int, int,
     verwiesen wird aber nur auf eine davon. Kopiert wird die halbe Fassung deshalb nur für
     die verwiesenen -- sonst lägen 390 Dateien im Artefakt, die niemand abruft.
     """
-    n_bild = n_markup = 0
+    n_bild = n_markup = n_preload = 0
     benutzt: set[str] = set()
     for muster in TEXTDATEIEN:
         for p in html.rglob(muster):
@@ -170,9 +215,11 @@ def zwei_groessen(html: pathlib.Path, srcset: dict[str, str]) -> tuple[int, int,
                 neu, k, k_url = markup_picture(neu, srcset)
                 n_markup += k
                 benutzt |= k_url
+                neu, k = preload_srcset(neu, srcset)
+                n_preload += k
             if neu != text:
                 p.write_text(neu, encoding="utf-8")
-    return n_bild, n_markup, benutzt
+    return n_bild, n_markup, n_preload, benutzt
 
 
 def ersetzen(html: pathlib.Path, karte: dict[str, str]) -> tuple[int, int]:
@@ -236,6 +283,20 @@ def main() -> int:
             opt += text.count('"urlOptimized"')
             pic += text.count('type="image/webp"')
             genannt |= set(re.findall(r"/build/([\w.@-]+@1x\.webp)", text))
+            # Ein Preload ohne `imagesrcset` auf eine Datei, die daneben in einem
+            # `srcset` als 2x steht, laedt die zweite Fassung dazu -- Befund 2026-11-26.
+            zwei_x = {t.strip().split()[0]
+                      for satz in re.findall(r'\ssrcset="([^"]+)"', text)
+                      for t in satz.split(",")
+                      if t.strip().endswith(" 2x")}
+            for tag in PRELOAD.findall(text):
+                if 'as="image"' not in tag or "imagesrcset=" in tag:
+                    continue
+                q = re.search(r'\shref="([^"]+)"', tag)
+                if q is not None and q.group(1) in zwei_x:
+                    print(f"✗ {f.relative_to(args.html)}: Preload auf {q.group(1)} ohne "
+                          f"imagesrcset, daneben steht ein <source> mit zwei Größen")
+                    fehler += 1
         for name in sorted(genannt):
             if not (args.html / "build" / name).is_file():
                 print(f"✗ {name}: srcset nennt eine Datei, die nicht im Artefakt liegt")
@@ -262,7 +323,7 @@ def main() -> int:
             srcset[gross_url] = f"{klein_url} 1x, {gross_url} 2x"
             quelle_halb[gross_url] = (klein, halb(p.with_suffix(".webp")))
     dateien, treffer = ersetzen(args.html, karte)
-    n_bild, n_markup, benutzt = zwei_groessen(args.html, srcset)
+    n_bild, n_markup, n_preload, benutzt = zwei_groessen(args.html, srcset)
     for url in sorted(benutzt):
         klein, ziel = quelle_halb[url]
         shutil.copy2(klein, ziel)
@@ -270,7 +331,7 @@ def main() -> int:
     print(f"✓ {len(gefunden)} Abbildungen als WebP daneben gelegt, {treffer} Verweise in "
           f"{dateien} Dateien umgeschrieben, {gespart / 1024 / 1024:.2f} MB weniger; "
           f"{len(benutzt)} davon in zwei Größen ({n_bild} Knoten der Nutzlast, "
-          f"{n_markup} <picture> im Markup)")
+          f"{n_markup} <picture> im Markup, {n_preload} Preloads mit imagesrcset)")
     return 0
 
 
