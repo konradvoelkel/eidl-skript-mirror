@@ -345,6 +345,29 @@ def fehler_sammeln() -> list[str]:
                 f"{datei.name}: Forumslink nennt {gefunden[0]!r}, erwartet {soll!r}"
             )
 
+
+    # --- Die Assessment-Zeile am Kapitelende (seit 2026-11-26) -------------------------
+    # Jedes Kapitel mit Fragen verlinkt seine Seite im Assessment-Center
+    # (assess.konradvoelkel.com), die Kennung ist wieder die Seitenadresse. Die
+    # Reservekapitel haben dort keine Seite. Die Gegenrichtung (jede Seite dort hat genau
+    # ein Kapitel hier) prueft `tools/skriptlinks.mjs --pruefen` im Repo assess.
+    ohne_assess = {"optimierer", "adversarial-attacks-polysemie"}
+    for datei in kapitel:
+        text = datei.read_text(encoding="utf-8")
+        kennung = re.sub(r"^\d+-", "", datei.stem)
+        gefunden = re.findall(r"https://assess\.konradvoelkel\.com/eidl/[\w-]*/", text)
+        if kennung in ohne_assess:
+            if gefunden:
+                fehler.append(f"{datei.name}: assess-Link, aber das Reservekapitel hat dort keine Seite")
+            continue
+        soll = f"https://assess.konradvoelkel.com/eidl/{kennung}/"
+        if not gefunden:
+            fehler.append(f"{datei.name}: keine Assessment-Zeile am Kapitelende")
+        elif len(gefunden) > 1:
+            fehler.append(f"{datei.name}: {len(gefunden)} assess-Links, erwartet genau einen")
+        elif gefunden[0] != soll:
+            fehler.append(f"{datei.name}: assess-Link nennt {gefunden[0]!r}, erwartet {soll!r}")
+
     return fehler
 
 

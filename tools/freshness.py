@@ -121,17 +121,19 @@ def refuse_shallow() -> None:
         )
 
 
-# Zeilen, deren Änderung für den Leser keine Änderung des Kapitels ist: die zwei kursiven
+# Zeilen, deren Änderung für den Leser keine Änderung des Kapitels ist: die kursiven
 # Zeilen am Ende jeder Seite (Forums- und Herkunftszeile, siehe `../CLAUDE.md`, „Das Ende
 # eines Kapitels"). Sie sind am 2026-11-18 in alle 31 Seiten auf einmal eingetragen worden,
 # und seitdem sagte jede Seite „Stand 18. November 2026" -- formal wahr, ohne
 # Unterscheidungskraft, und seit `zitierzeile.py` sichtbar unter jedem Kapitel. Konrads
-# Entscheidung vom 2026-11-22: solche Commits überspringen.
+# Entscheidung vom 2026-11-22: solche Commits überspringen. Aus demselben Grund seit dem
+# 2026-11-26 auch die Assessment-Zeile darüber, die in 27 Kapitel auf einmal kam.
 #
 # **Nicht** in dieser Liste stehen Folienzeile und Aufzeichnungszeile. Sie stehen im
 # Vorspann, nicht in der Fußzeile, und wenn sie erscheinen, ist auf der Seite wirklich
 # etwas Neues: ein freigegebenes Deck, eine Aufzeichnung.
 FUSSZEILEN = (
+    re.compile(r"^\*Sitzt dieses Kapitel\? \[Prüfen Sie sich im Assessment-Center\]"),
     re.compile(r"^\*Frage zu diesem Kapitel\?"),
     re.compile(r"^\*Dieses (?:Kapitel|Glossar) gehört zu "),
     re.compile(r"^\*Diese Seite gehört zu "),

@@ -709,7 +709,21 @@ hängt die Folienzeile ans Ende des Vorspanns.
 ## Das Ende eines Kapitels
 
 Nach dem letzten Abschnitt, in dieser Reihenfolge: der Übungsabschnitt (wo es einen gibt),
-die „Weiterlesen“-Box, dann zwei kursive Zeilen.
+die „Weiterlesen“-Box, dann drei kursive Zeilen (die erste nur in Kapiteln mit Seite im
+Assessment-Center).
+
+0. **Die Assessment-Zeile** (seit 2026-11-26, nach dem Launch von assess am 2026-11-25):
+   „Sitzt dieses Kapitel? [Prüfen Sie sich im Assessment-Center](…): Multiple-Choice-Fragen
+   mit Rückmeldung, Ihre Antworten bleiben im Browser.“ mit einem Link auf
+   `https://assess.konradvoelkel.com/eidl/<kennung>/`, die Kennung wieder die
+   Seitenadresse. Eine Seite gibt es für jedes Kapitel mit Fragen: die beiden
+   Hintergrundkapitel und Kap. 1–25, nicht die Reservekapitel 26 und 27. Das Repo
+   `~/files/work/__drafts/assess` setzt die Zeilen mit `tools/skriptlinks.mjs --einfuegen`
+   und prüft mit `--pruefen` beide Richtungen (Wortlaut und Ablauf in
+   `~/files/work/__drafts/assess/docs/SKRIPT_LINKS.md`); `check_doku.py` prüft hier: genau ein assess-Link je Kapitel
+   mit Seite, die Kennung gleich der Seitenadresse, keiner in den Reservekapiteln.
+   Bekommt ein Kapitel dort eine Seite oder verliert es eine, ändert sich die Liste in
+   `check_doku.py` mit.
 
 1. **Die Forumszeile** (seit 2026-11-18): „Frage zu diesem Kapitel?“ mit einem Link auf
    `https://hai.konradvoelkel.com/eidl/f/kapitel/<kennung>/`, dazu in einem Halbsatz, wer
@@ -727,7 +741,8 @@ die „Weiterlesen“-Box, dann zwei kursive Zeilen.
    beides deshalb.
 
 Die vier Seiten außerhalb der Kapitel — Startseite, Glossar, „Über dieses Skript“,
-Übungsblätter — bekommen **keine** Forumszeile; dafür gibt es drüben keine Seite.
+Übungsblätter — bekommen **keine** Forums- und keine Assessment-Zeile; dafür gibt es
+drüben keine Seite.
 **Die Herkunftszeile tragen `glossar.md` und `uebungsblaetter.md` dagegen seit dem
 2026-11-18** (dritter Audit, §4): Dort stand die Lizenz nirgends im Text, und das Glossar
 ist mit gut 2.100 extrahierten Wörtern und seinem `DefinedTermSet` die Seite, die eine
