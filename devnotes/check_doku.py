@@ -351,22 +351,33 @@ def fehler_sammeln() -> list[str]:
     # (assess.konradvoelkel.com), die Kennung ist wieder die Seitenadresse. Die
     # Reservekapitel haben dort keine Seite. Die Gegenrichtung (jede Seite dort hat genau
     # ein Kapitel hier) prueft `tools/skriptlinks.mjs --pruefen` im Repo assess.
+    #
+    # Seit dem 2026-11-26 darf ein Kapitel *zusaetzlich* auf eine Seite des
+    # Assessment-Centers zeigen, die hier kein Kapitel ist -- "Was ist Deep Learning"
+    # verweist im Abschnitt "Was Sie mitbringen sollten" auf `mathe-grundlagen`, den
+    # Anfang der Karte. Was weiter verboten bleibt: auf die Quizseite eines *anderen*
+    # Kapitels zeigen. Dafuer gibt es den Querverweis im Text, und ein zweiter Weg dorthin
+    # waere nur eine zweite Fassung derselben Beziehung, die veraltet.
     ohne_assess = {"optimierer", "adversarial-attacks-polysemie"}
+    kapitelkennungen = {re.sub(r"^\d+-", "", d.stem) for d in kapitel}
     for datei in kapitel:
         text = datei.read_text(encoding="utf-8")
         kennung = re.sub(r"^\d+-", "", datei.stem)
-        gefunden = re.findall(r"https://assess\.konradvoelkel\.com/eidl/[\w-]*/", text)
+        gefunden = re.findall(r"https://assess\.konradvoelkel\.com/eidl/([\w-]*)/", text)
         if kennung in ohne_assess:
             if gefunden:
                 fehler.append(f"{datei.name}: assess-Link, aber das Reservekapitel hat dort keine Seite")
             continue
-        soll = f"https://assess.konradvoelkel.com/eidl/{kennung}/"
-        if not gefunden:
+        eigene = [g for g in gefunden if g == kennung]
+        fremde = [g for g in gefunden if g != kennung]
+        if not eigene:
             fehler.append(f"{datei.name}: keine Assessment-Zeile am Kapitelende")
-        elif len(gefunden) > 1:
-            fehler.append(f"{datei.name}: {len(gefunden)} assess-Links, erwartet genau einen")
-        elif gefunden[0] != soll:
-            fehler.append(f"{datei.name}: assess-Link nennt {gefunden[0]!r}, erwartet {soll!r}")
+        elif len(eigene) > 1:
+            fehler.append(f"{datei.name}: {len(eigene)} Assessment-Zeilen auf die eigene Seite, erwartet eine")
+        for g in fremde:
+            if g in kapitelkennungen:
+                fehler.append(f"{datei.name}: assess-Link auf {g!r} -- das ist die Quizseite "
+                              f"eines anderen Kapitels, dafuer ist der Querverweis im Text da")
 
     return fehler
 

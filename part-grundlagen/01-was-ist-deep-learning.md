@@ -27,6 +27,8 @@ Der Name ist erfreulich ehrlich: *Deep* heißt „viele Ebenen (Layer)“, *Lear
 
 Wir setzen voraus, dass Sie die folgenden Begriffe schon einmal gesehen haben und keine Angst vor ihnen haben: Vektorraum und Vektor, Matrix, Ableitung, Zufallsvariable, und eine grobe Idee davon, was lineare Regression ist. Dazu Grundlagen in Python, idealerweise mit NumPy. Am besten hat man vorher das Modul „Data Science“ bestanden; die Module „Machine Learning“ oder „Data Science 2“ sind *nicht* erforderlich.
 
+Ob das reicht, können Sie nachsehen, bevor es ernst wird: Am Anfang der Karte im Assessment-Center steht das Kapitel [Mathematische Grundlagen](https://assess.konradvoelkel.com/eidl/mathe-grundlagen/) – Definitionen einsetzen, Bild und Urbild, Summen und Indexverschiebung, mit Matrizen als Ganzem rechnen, Quantoren und ihre Negation. Bis zu zwanzig Fragen, nach jeder sehen Sie, ob sie stimmt und warum; Ihre Antworten bleiben im Browser.
+
 ### Was wir zusammen lernen
 
 Begriffe wie Gradientenabstieg, Loss-Funktion, Matrizen- und Tensorkalkül, latenter Raum, logistische Regression. Die Grundlagen von PyTorch. Was ein neuronales Netz ist, wie man fertige Modelle benutzt, wie man fertige Modelle verändert, und was die Besonderheiten bei Text und bei Bildern sind.

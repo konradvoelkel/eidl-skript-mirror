@@ -721,10 +721,16 @@ Assessment-Center).
    Hintergrundkapitel und Kap. 1–25, nicht die Reservekapitel 26 und 27. Das Repo
    `~/files/work/__drafts/assess` setzt die Zeilen mit `tools/skriptlinks.mjs --einfuegen`
    und prüft mit `--pruefen` beide Richtungen (Wortlaut und Ablauf in
-   `~/files/work/__drafts/assess/docs/SKRIPT_LINKS.md`); `check_doku.py` prüft hier: genau ein assess-Link je Kapitel
-   mit Seite, die Kennung gleich der Seitenadresse, keiner in den Reservekapiteln.
-   Bekommt ein Kapitel dort eine Seite oder verliert es eine, ändert sich die Liste in
-   `check_doku.py` mit.
+   `~/files/work/__drafts/assess/docs/SKRIPT_LINKS.md`); `check_doku.py` prüft hier: genau eine
+   Assessment-Zeile je Kapitel mit Seite, die Kennung gleich der Seitenadresse, keine in den
+   Reservekapiteln. Bekommt ein Kapitel dort eine Seite oder verliert es eine, ändert sich die
+   Liste in `check_doku.py` mit.
+   **Ein zweiter Link dorthin ist erlaubt, wenn er auf eine Seite zeigt, die hier kein Kapitel
+   ist** (2026-11-26): „Was ist Deep Learning“ verweist unter „Was Sie mitbringen sollten“ auf
+   `mathe-grundlagen`, den Anfang der Karte — das ist die Voraussetzungsprüfung vor dem ersten
+   Kapitel, nicht die Kontrolle danach. Verboten bleibt ein Link auf die Quizseite eines
+   *anderen* Kapitels: Dafür gibt es den Querverweis im Text, und ein zweiter Weg dorthin wäre
+   nur eine zweite Fassung derselben Beziehung, die veraltet. `check_doku.py` prüft beides.
 
 1. **Die Forumszeile** (seit 2026-11-18): „Frage zu diesem Kapitel?“ mit einem Link auf
    `https://hai.konradvoelkel.com/eidl/f/kapitel/<kennung>/`, dazu in einem Halbsatz, wer
