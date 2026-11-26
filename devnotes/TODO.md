@@ -396,26 +396,20 @@ Textfassung von Seite und Objektbaum: `~/Sciebo/hhu/eidl-26/ilias/` (analog zu
      Erzwingen (`301!`) unterstützt GitLab ausdrücklich nicht. Genau darum geht das
      offene Issue gitlab-org/gitlab#565802, das ein solches Erzwingen fordert, und
      gitlab-pages#418 meldet die `302` seit Jahren als SEO-Problem.
-     Offen bleibt damit nur zweierlei, und beides braucht den Server: ob eine Regel für
-     **eine** Kapitel-Adresse im Artefakt doch vor der eingebauten greift (die
-     Dokumentation sagt zur Reihenfolge nichts, ein Deploy mit einer Testregel würde es
-     zeigen) — und ob sich die Dublette nach dem Antrag vom 18.11. ohnehin von selbst
-     auflöst. Erst messen, dann bauen.
-  2. **Die 47 `prf`-Kästen im Barrierefreiheitsbaum** (offen geblieben beim `role="note"`
-     am 2026-11-18): `note` heißt in ARIA „ancillary to the main content", und eine
-     Definition oder ein Satz ist in einem Lehrbuch der Hauptinhalt — die Rolle wäre dort
-     falsch. Richtig wäre `role="group"` mit `aria-labelledby` auf die Kopfzeile; das
-     verlangt eine `id` am Titel, die das Theme nicht vergibt, also einen größeren Eingriff
-     in `install_template.py` als die bisherigen. Lohnt sich vermutlich erst zusammen mit
-     dem Umstieg auf Theme 2.x, weil dort dieselben Anker ohnehin anzufassen sind.
-  3. **Den 2.1.1-Bau mit PSI vermessen** und die JS-Größen in `plan-theme-2x.md` nachtragen.
+     **Der Versuch läuft seit dem 2026-11-27**: `tools/redirects.py` legt ein `_redirects`
+     mit 32 Regeln ins Artefakt. Nach dem nächsten Deploy zu messen —
+     `curl -o /dev/null -w '%{http_code}' …/autoencoder`: `301` heißt, eine eigene Regel
+     greift vor der eingebauten; bleibt es bei `302`, gehört das Skript wieder heraus und
+     die Frage ist beantwortet. Offen bleibt daneben, ob sich die Dublette nach dem Antrag
+     vom 18.11. ohnehin von selbst auflöst.
+  2. **Den 2.1.1-Bau mit PSI vermessen** und die JS-Größen in `plan-theme-2x.md` nachtragen.
      Drei Chunks machen 697 von 859 kB, einer davon ist zu 98,3 % ungenutzt, und 2,13 MB
      des Rohbestands sind ein browserifiziertes Krypto-Polyfill. Ein Schnitt in `tools/`
      reicht nicht, weil die Chunks statisch importiert werden.
-  4. DOI über Zenodo, dann ORCID, dann OERSI/ORCA.nrw und Wikidata (`P800` am Item
+  3. DOI über Zenodo, dann ORCID, dann OERSI/ORCA.nrw und Wikidata (`P800` am Item
       Q102659059). Neues Argument dafür: die Zufallskennung `131e30` im Hostnamen ist
       nicht stabil.
-  5. Lehrstuhlseite — die im zweiten Audit genannte Adresse liefert 404, die richtige ist
+  4. Lehrstuhlseite — die im zweiten Audit genannte Adresse liefert 404, die richtige ist
       unbekannt und muss zuerst gefunden werden.
 - [ ] **Offene Befunde aus dem SEO-Audit vom 2026-11-03** (Bericht nicht im Repo; Auslieferung,
   Descriptions, Startseite, Suchknopf, doppelte Überschriften, `llms.txt`, Impressum, Autor-`sameAs` und

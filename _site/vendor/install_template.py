@@ -152,26 +152,54 @@ BEDIENUNG = [
 # Landmarke; der Umbau geht damit nicht von „falsch, aber vorhanden" auf „nicht vorhanden",
 # sondern auf richtig.
 #
-# **Die beiden prf-Fassungen bekommen sie ausdrücklich nicht**, und das ist eine
-# Entscheidung und kein Versäumnis: `role="note"` heißt in ARIA „a section whose content is
-# parenthetic or ancillary to the main content". Eine Definition oder ein Satz in einem
-# Lehrbuch ist der Hauptinhalt und nicht beiläufig; die Rolle wäre dort schlicht falsch, und
-# zwar für 47 der 108 Kästen. Was dort richtig wäre, ist `role="group"` mit einem Namen aus
-# der Kopfzeile — das verlangt eine `id` am Titel, die das Theme nicht vergibt, also einen
-# größeren Eingriff. Bis dahin bleibt die Kopfzeile als erster Textknoten des Kastens das,
-# was ein Screenreader vorliest.
+# **Die prf-Kästen bekommen `role="group"`** (seit 2026-11-27), und zwar nicht `role="note"`:
+# Das heißt in ARIA „a section whose content is parenthetic or ancillary to the main
+# content". Eine Definition oder ein Satz in einem Lehrbuch ist der Hauptinhalt und nicht
+# beiläufig; die Rolle wäre dort falsch, und zwar für 48 Kästen. `group` ist die Rolle für
+# „diese Elemente gehören zusammen" und braucht einen Namen — den liefert die Kopfzeile über
+# `aria-labelledby`.
 #
-# Unterschieden werden die drei an der Form ihres Props-Objekts, und das ist in beiden
-# Bündeln gleich: die Admonition hat `{className:…}`, die zwei prf-Fassungen haben
-# `{id:…}` (Kästen mit Querverweisziel). Gezählt am 2026-11-18: 1 und 2, im Server- wie in
-# den Browser-Bündeln.
+# Das war der Grund, warum es bis hierher offen blieb: Die Kopfzeile hat keine `id`, und die
+# `identifier` des Kastens ist bei **allen 48** leer (nachgezählt am 2026-11-27 an der
+# ausgelieferten Seite: null `myst-proof`-Kästen mit `id`). Der Name muss also aus etwas
+# gebaut werden, das da ist. Da sind `kind` und `enumerator` — „Definition 1", „Satz 2" —,
+# und `prf-<kind>-<enumerator>-titel` ist je Seite eindeutig: 48 Köpfe im ganzen Buch, jeder
+# mit Nummer, kein Kopf zweimal auf derselben Seite.
+#
+# Dafür sind zwei Eingriffe nötig, weil die beiden Stellen verschiedene Variablen sehen. Der
+# **Container** (`A`) kennt nur `id`, `className` und `children`; er reicht deshalb jetzt
+# unbekannte Props an das `div` durch (`...EIDLX`). Die **Renderstelle** (`B`) kennt `kind`
+# und `enumerator` und setzt damit `role`, `aria-labelledby` und die `id` der Kopfzeile. So
+# bekommt die Rolle nur, wer sie bekommen soll: `A` greift auch für den Exercise-Kasten
+# (dieselbe Komponente, zweite Kopie im Bündel), aber ohne Props von der Renderstelle ändert
+# sich dort nichts.
+#
+# Unterschieden werden die Kästen an der Form ihres Props-Objekts, und das ist in beiden
+# Bündeln gleich: die Admonition hat `{className:…}`, prf und Exercise haben `{id:…}`.
+# Gezählt: 1 und 2, im Server- wie in den Browser-Bündeln; die Renderstelle der prf-Kästen
+# gibt es genau einmal.
 STRUKTUR = [
     (r'\?\(0,([\w$]+)\.jsx\)\("details",\{([^{}]*)\}\):\(0,([\w$]+)\.jsx\)\("aside",\{className:',
      r'?(0,\1.jsx)("details",{\2}):(0,\3.jsx)("div"/*eidl:kasten-div-note*/,{role:"note",className:',
      "/*eidl:kasten-div-note*/"),
-    (r'\?\(0,([\w$]+)\.jsx\)\("details",\{([^{}]*)\}\):\(0,([\w$]+)\.jsx\)\("aside",\{id:',
-     r'?(0,\1.jsx)("details",{\2}):(0,\3.jsx)("div"/*eidl:kasten-div*/,{id:',
-     "/*eidl:kasten-div*/"),
+    # A: der Kasten-Container reicht unbekannte Props an das div durch (prf und Exercise)
+    (r'\(\{id:([\w$]+),dropdown:([\w$]+),className:([\w$]+),children:([\w$]+)\}\)=>\2\?'
+     r'\(0,([\w$]+)\.jsx\)\("details",\{id:\1,className:\3,children:\4\}\):'
+     r'\(0,\5\.jsx\)\("aside",\{id:\1,className:\3,children:\4\}\)',
+     r'({id:\1,dropdown:\2,className:\3,children:\4,...EIDLX})=>\2?'
+     r'(0,\5.jsx)("details",{id:\1,className:\3,children:\4}):'
+     r'(0,\5.jsx)("div"/*eidl:kasten-div-props*/,{id:\1,...EIDLX,className:\3,children:\4})',
+     "/*eidl:kasten-div-props*/"),
+    # B: die prf-Renderstelle vergibt Rolle, Beschriftung und die id der Kopfzeile
+    (r'\(\{title:([\w$]+),kind:([\w$]+),colorScheme:([\w$]+)="proof",dropdown:([\w$]+),'
+     r'children:([\w$]+),identifier:([\w$]+),enumerator:([\w$]+),className:([\w$]+)\}\)\{'
+     r'([\s\S]{0,200}?)\{id:\6,dropdown:\4,className:(\(0,[\w$]+\.default\)\("myst-proof my-5)'
+     r'([\s\S]{0,600}?)\("div",\{className:(\(0,[\w$]+\.default\)\("myst-proof-title)',
+     r'({title:\1,kind:\2,colorScheme:\3="proof",dropdown:\4,'
+     r'children:\5,identifier:\6,enumerator:\7,className:\8}){'
+     r'\9{id:\6,role:"group","aria-labelledby":("prf-"+\2+"-"+\7+"-titel"),dropdown:\4,className:\10'
+     r'\11("div",{id:("prf-"+\2+"-"+\7+"-titel"),/*eidl:kasten-titel-id*/className:\12',
+     "/*eidl:kasten-titel-id*/"),
 ]
 
 

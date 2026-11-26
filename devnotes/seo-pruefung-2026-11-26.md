@@ -33,18 +33,50 @@ Hydration samt `srcset` mit `1x`/`2x`.
 zeigen auf die PNG-Fassungen, nicht auf die WebP — für einen Abnehmer, der die Datei ohne
 Browser liest, ist das die robustere Wahl.
 
-## 2. Was unverändert offen ist
+## 2. Was offen war — und was am 2026-11-27 daraus wurde
 
 **Die `302` ist eine `302`.** Nachgemessen an `/perzeptron-trainieren` und `/autoencoder`
 ohne Schrägstrich: beide `302`, Ziel jeweils die Adresse mit Schrägstrich. Der Stand aus
 `seo-audit-2026-11-18.md` §18.1 gilt also weiter, einschließlich der am 2026-11-22
 nachgelesenen Aussicht.
 
-**Die `prf`-Kästen haben weiterhin keine Rolle.** Auf
-`/hintergrundwissen-lineare-algebra/`, der Seite mit den meisten davon, stehen 18
-`div.myst-proof-body`, 18 `myst-proof-header` — und null `role`, null `aria-labelledby`. Die
-vier `role="note"` der Seite gehören zu den gewöhnlichen Hinweiskästen. Der Befund aus dem
-dritten Audit ist unverändert.
+*Ein Versuch am 2026-11-27.* Die eine Frage, die ohne Server nicht zu beantworten war,
+lautete: Greift eine eigene Regel vor der eingebauten Weiterleitung? `tools/redirects.py`
+schreibt jetzt ein `_redirects` mit 32 Zeilen der Form `/autoencoder /autoencoder/ 301`.
+Das kann nichts kaputt machen, denn das Ziel jeder Regel ist genau die Adresse, auf die die
+`302` ohnehin zeigt. **Die Antwort steht noch aus** und ist nach dem nächsten Deploy eine
+einzige Messung:
+
+```
+curl -sS -o /dev/null -w '%{http_code}\n' https://…/autoencoder
+```
+
+`301` heißt, es hat geklappt. Bleibt es bei `302`, gehört das Skript wieder heraus — dann
+ist die Frage endgültig beantwortet, und die Antwort lautet nein.
+
+**Die `prf`-Kästen haben weiterhin keine Rolle.** Auf der Seite zur linearen Algebra, der
+mit den meisten davon, stehen 18 `div.myst-proof-body`, 18 `myst-proof-header` — und null
+`role`, null `aria-labelledby`. Die vier `role="note"` der Seite gehören zu den gewöhnlichen
+Hinweiskästen.
+
+*Erledigt am 2026-11-27.* Sie bekommen jetzt `role="group"` mit `aria-labelledby` auf die
+Kopfzeile. Warum das bis hierher liegengeblieben ist, stellte sich beim Hinsehen heraus: Die
+Kopfzeile hat keine `id` — und der `identifier` des Kastens, aus dem man eine bauen würde,
+ist bei **allen 48** leer (nachgezählt: null `myst-proof`-Kästen mit `id` im ganzen Buch).
+Der Name muss also aus etwas kommen, das wirklich da ist, und das sind `kind` und
+`enumerator`: `prf-<kind>-<enumerator>-titel`, je Seite eindeutig, weil alle 48 Köpfe eine
+Nummer tragen und kein Kopf zweimal auf derselben Seite steht.
+
+Dafür waren zwei Eingriffe in `_site/vendor/install_template.py` nötig, weil die beiden
+Stellen im Bündel verschiedene Variablen sehen: Der Container kennt nur `id`, `className`
+und `children` und reicht jetzt unbekannte Props durch; die Renderstelle kennt `kind` und
+`enumerator` und setzt damit Rolle, Beschriftung und die `id` der Kopfzeile. Beide Regeln
+greifen im Server- wie in den Browser-Bündeln gleich oft, die gepatchten Bündel bestehen
+`node --check`, und ein zweiter Lauf des Skripts ändert nichts mehr.
+
+Nebenbei fiel auf, daß der Kommentar im Skript die beiden `{id:…}`-Kästen falsch benannte:
+Es sind nicht „die zwei prf-Fassungen", sondern der prf-Kasten und der Exercise-Kasten. Die
+Rolle bekommt nur der prf-Kasten, weil nur dessen Renderstelle die Props mitgibt.
 
 ## 3. Neu gefunden: Preload und `srcset` widersprechen sich
 
