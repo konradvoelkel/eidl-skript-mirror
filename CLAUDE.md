@@ -104,8 +104,9 @@ Kapitels, abzüglich einer, die beim Nachziehen der Einleitungen und der Startse
 wieder wegfiel – alles aus den beiden SEO-Audits; seit dem 2026-11-18 eine weitere durch
 die Forumszeile am Ende jedes Kapitels; seit dem 2026-11-19 zwei weitere durch den
 Abschnitt „Vier Rechnungen mit zwei ReLUs“ in Kapitel 11 und den Richtigstellungskasten
-in Kapitel 9): HTML ohne
-Warnungen, PDF **155 Seiten A4** lokal, 0 LaTeX-Fehler,
+in Kapitel 9; seit dem 2026-11-26 eine weitere durch die Zeile zum Assessment-Center am
+Ende der Kapitel mit Fragen): HTML ohne
+Warnungen, PDF **156 Seiten A4** lokal, 0 LaTeX-Fehler,
 0 fehlende Glyphen, 5 überlange Zeilen. Das veröffentlichte PDF hat am 2026-11-14 **147**
 (auf dem Baum `7ccf9c9` gemessen, derselbe wie lokal; am 2026-11-12 waren es **143** gegen
 lokal 144, siehe unten). Die `--min-pages`-Untergrenze
