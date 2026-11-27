@@ -57,7 +57,7 @@ Kapitellinks gelernt. Gepatcht wird deshalb:
 * die Startseite und `/readme/` -- die eine *ist* das Werk, die andere erklärt es; beide
   tragen die Herkunftszeile gar nicht.
 * `myst.search.json`, der Suchindex: Datum und Adresse in jedem Suchausschnitt wären Lärm.
-* die gehashten Markdown-Kopien unter `build/` -- das ist der Quelltext zum Herunterladen,
+* die gehashten Markdown-Kopien im Dateiordner -- das ist der Quelltext zum Herunterladen,
   und der trägt die Adresse aus demselben Grund nicht wie die Quelle selbst.
 """
 from __future__ import annotations

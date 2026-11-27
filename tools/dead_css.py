@@ -1,15 +1,23 @@
 #!/usr/bin/env python3
-"""Die drei Stylesheets, die dieses Buch nicht benutzen kann, nicht einbinden.
+"""Die Stylesheets, die dieses Buch nicht benutzen kann, nicht einbinden.
 
     python3 tools/dead_css.py <html-verzeichnis>
     python3 tools/dead_css.py <html-verzeichnis> --check
 
-Das Theme bindet in **jede** Seite sechs Stylesheets ein, drei davon rendernd und für
-Jupyter-Ausgaben gedacht, die es hier nicht gibt:
+Das Theme bindet in **jede** Seite mehrere Stylesheets ein, davon zwei rendernde für
+Jupyter-Ausgaben, die es hier nicht gibt:
 
-    /build/_assets/thebe-core-<hash>.css   87 kB  Jupyter-Notebook-Oberfläche
     .../font-awesome/css/font-awesome.css  37 kB  Icons der ipywidgets-Views
     .../jupyter-matplotlib/mpl_widget.css 911 B   ipympl-Widget
+
+**Seit dem Umstieg auf Theme 2.1.1 (2026-11-27) sind es zwei und nicht mehr drei.**
+`thebe-core.css` (87 kB) war das größte Ziel und ist in 2.x **kein eingebundenes
+Stylesheet mehr**: Die Datei liegt noch im Baum, verwiesen wird nicht mehr darauf, und
+ihre Regeln stecken im Hauptstylesheet, das dadurch von 155 auf 237 kB wächst (brotli
+16.684 auf 28.219 B). Dieser Schnitt ist also nicht mehr zu haben -- die eine Regel
+daraus, an der in diesem Buch wirklich etwas hing (Schriftgröße und Zeilenhöhe der
+Codeblöcke), steht seit dem 2026-11-16 ohnehin in `_site/custom-style.css` und ist
+davon unberührt. Messung: `devnotes/build-log-2026-11-27-js.md`.
 
 Dieses Buch hat **keine ausgeführte Zelle**: kein `vnd.jupyter.widget-view`, kein
 `jupyter-output`, keine `myst-jp`-Klasse, kein `ipympl` in den 33 gebauten Seiten
@@ -132,10 +140,6 @@ import sys
 # Damit ist dieser Schritt gegen die Reihenfolge robust, auch wenn er vor vendor_assets
 # gehoert.
 ZIELE = {
-    # Das Theme buendelt es selbst, der Name traegt einen Fingerabdruck.
-    "thebe-core": re.compile(
-        r"[\w./-]*/build/_assets/thebe-core-[A-Za-z0-9_-]+\.css"
-    ),
     # Vom CDN, oder schon von vendor_assets.py auf den eigenen Pfad umgeschrieben --
     # mit beliebigem BASE_URL davor.
     "font-awesome": re.compile(
@@ -155,13 +159,26 @@ HREF = re.compile(r'\bhref="([^"]*)"', re.I)
 # Der links()-Export des Wurzel-Routenmoduls: ein Pfeilausdruck, der ein Array aus
 # {rel:"stylesheet",href:...} liefert. Auf die Form verankert, nicht auf Namen -- die sind
 # minifiziert und wechseln mit jeder Theme-Fassung.
+# `Q` statt eines festen Anfuehrungszeichens: Der Buendler von Theme 1.4.x schreibt
+# Zeichenketten doppelt gequotet, der von 2.x in Backticks (gemessen 2026-11-27:
+# ``()=>[{rel:`stylesheet`,href:`https://...mpl_widget.css`},...]``).
+Q = r"[\"'`]"
 ARRAY = re.compile(
-    r"\(\)=>\[(\{rel:\"stylesheet\",href:[^}]+\}"
-    r"(?:,\{rel:\"stylesheet\",href:[^}]+\})*)\]"
+    r"\(\)=>\[(\{rel:" + Q + r"stylesheet" + Q + r",href:[^}]+\}"
+    r"(?:,\{rel:" + Q + r"stylesheet" + Q + r",href:[^}]+\})*)\]"
 )
-EINTRAG = re.compile(r"\{rel:\"stylesheet\",href:(?P<href>\"[^\"]*\"|[A-Za-z0-9_$]+)\}")
+EINTRAG = re.compile(
+    r"\{rel:" + Q + r"stylesheet" + Q + r",href:"
+    r"(?P<href>\"[^\"]*\"|`[^`]*`|[A-Za-z0-9_$]+)\}"
+)
 
-# Marker dafuer, dass das Buch doch etwas Ausfuehrbares enthaelt. Dann sind die drei
+# In Theme 2.x fuehrt das Array **nur** die zwei Ziele; nach dem Raeumen ist es leer, und
+# ein leeres `()=>[]` ist als Muster nicht brauchbar -- jedes zweite Buendel enthaelt so
+# einen Pfeilausdruck. Das geraeumte Array traegt deshalb diesen Marker, damit `--check`
+# und ein zweiter Lauf dieselbe Datei wiederfinden.
+GERAEUMT = "/*eidl:dead_css*/"
+
+# Marker dafuer, dass das Buch doch etwas Ausfuehrbares enthaelt. Dann sind diese
 # Blaetter nicht tot, und dieser Schritt darf nicht laufen.
 MARKER = {
     "vnd.jupyter.widget-view": "eine ipywidgets-Ausgabe",
@@ -190,6 +207,19 @@ def seiten(wurzel: pathlib.Path) -> list[pathlib.Path]:
     lokal nicht sichtbar, weil die Testkopie die Verifikationsdatei nicht enthielt.
     """
     return sorted(wurzel.rglob("index.html"))
+
+
+def stylesheet_hrefs(seite: pathlib.Path) -> list[str]:
+    """Die href jedes `<link rel="stylesheet">` einer Seite, in Reihenfolge."""
+    if not seite.is_file():
+        return []
+    text = seite.read_text(encoding="utf-8", errors="replace")
+    out = []
+    for tag in LINK.findall(text):
+        m = HREF.search(tag)
+        if m:
+            out.append(m.group(1))
+    return out
 
 
 def ziel_von(url: str) -> str | None:
@@ -254,27 +284,29 @@ def raeume_markup(dateien: list[pathlib.Path]) -> tuple[dict[str, int], list[str
 
 def aufloesen(js: str, href: str) -> str:
     """Den href eines Array-Eintrags zu einer URL machen: Zeichenkette oder Variable."""
-    if href.startswith('"'):
-        return href.strip('"')
+    if href[:1] in ('"', "`"):
+        return href[1:-1]
     m = re.search(
-        r"(?:var|let|const)\s+" + re.escape(href) + r'\s*=\s*"([^"]*)"', js
+        r"(?:var|let|const)\s+" + re.escape(href) + r"\s*=\s*" + Q + r"([^\"'`]*)" + Q,
+        js,
     )
     return m.group(1) if m else ""
 
 
 def chunk_mit_array(wurzel: pathlib.Path) -> pathlib.Path:
     """Den einen Client-Chunk finden, der das links()-Array traegt."""
-    kandidaten = [
-        f for f in sorted(wurzel.rglob("*.js"))
-        if ARRAY.search(f.read_text(encoding="utf-8", errors="replace"))
-    ]
+    kandidaten = []
+    for f in sorted(wurzel.rglob("*.js")):
+        text = f.read_text(encoding="utf-8", errors="replace")
+        if ARRAY.search(text) or GERAEUMT in text:
+            kandidaten.append(f)
     if len(kandidaten) != 1:
         sys.exit(
             f"::error::dead_css: {len(kandidaten)} Chunks mit einem "
             f"links()-Stylesheet-Array gefunden, erwartet genau einen "
             f"{[str(f) for f in kandidaten]}\n"
             "  Das Theme hat seine Kopf-Links umgebaut. Docstring lesen: dieser Schritt "
-            "muss scheitern, statt drei rendernde Blaetter still weiterzuliefern."
+            "muss scheitern, statt rendernde Blaetter still weiterzuliefern."
         )
     return kandidaten[0]
 
@@ -284,6 +316,8 @@ def ziele_im_bundle(ziel: pathlib.Path) -> dict[str, int]:
     js = ziel.read_text(encoding="utf-8", errors="replace")
     m = ARRAY.search(js)
     if m is None:
+        # Entweder geraeumt (Marker) oder gar nicht da; beides heisst: keines der Ziele
+        # steht noch im Array. Ob die Datei die richtige ist, hat chunk_mit_array geklaert.
         return {name: 0 for name in ZIELE}
     zahl = {name: 0 for name in ZIELE}
     for e in EINTRAG.finditer(m.group(1)):
@@ -296,6 +330,9 @@ def raeume_bundle(wurzel: pathlib.Path) -> tuple[pathlib.Path, dict[str, int], l
     """Die Eintraege der Ziele aus dem links()-Array des Wurzel-Chunks nehmen."""
     ziel = chunk_mit_array(wurzel)
     js = ziel.read_text(encoding="utf-8")
+    if ARRAY.search(js) is None and GERAEUMT in js:
+        return ziel, {name: 0 for name in ZIELE}, []
+
     treffer = list(ARRAY.finditer(js))
     if len(treffer) != 1:
         sys.exit(
@@ -323,13 +360,22 @@ def raeume_bundle(wurzel: pathlib.Path) -> tuple[pathlib.Path, dict[str, int], l
             bleibt.append((e.group(0), url))
 
     if not bleibt:
-        sys.exit(
-            f"::error::dead_css: {ziel.name}: nach dem Raeumen bliebe kein einziges "
-            "Stylesheet uebrig. So war das nicht gemeint -- app-*.css traegt das "
-            "gesamte Theme."
-        )
+        # In Theme 1.4.x stand das Hauptstylesheet selbst in diesem Array, ein leeres
+        # Array waere dort also ein Unfall gewesen. In 2.x fuehrt das Array nur die zwei
+        # CDN-Blaetter, und das Hauptstylesheet haengt im Markup -- leer ist dann richtig.
+        # Gepruefte Bedingung ist deshalb nicht mehr "ein Eintrag bleibt", sondern: die
+        # Seite bindet weiterhin ein Stylesheet ein, das keines der Ziele ist.
+        fremd = [u for u in stylesheet_hrefs(wurzel / "index.html")
+                 if ziel_von(u) is None]
+        if not fremd:
+            sys.exit(
+                f"::error::dead_css: {ziel.name}: nach dem Raeumen bliebe weder im Array "
+                "noch im Markup der Startseite ein Stylesheet uebrig. So war das nicht "
+                "gemeint -- das Hauptstylesheet traegt das gesamte Theme."
+            )
 
-    neues_array = "()=>[" + ",".join(t for t, _ in bleibt) + "]"
+    neues_array = ("()=>[" + ",".join(t for t, _ in bleibt) + "]" if bleibt
+                   else "()=>[" + GERAEUMT + "]")
     neu = js[: m.start()] + neues_array + js[m.end():]
     entfernt = len(js) - len(neu)
     erwartet = len(m.group(0)) - len(neues_array)
@@ -347,7 +393,7 @@ def main() -> int:
     p = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     p.add_argument("verzeichnis")
     p.add_argument("--check", action="store_true",
-                   help="nur pruefen, dass keines der drei Blaetter eingebunden ist")
+                   help="nur pruefen, dass keines dieser Blaetter eingebunden ist")
     args = p.parse_args()
 
     wurzel = pathlib.Path(args.verzeichnis)
@@ -375,7 +421,7 @@ def main() -> int:
 
     funde = pruefe_marker(dateien, wurzel)
     if funde:
-        print("::error::dead_css: dieses Buch hat jetzt Ausfuehrbares -- die drei "
+        print("::error::dead_css: dieses Buch hat jetzt Ausfuehrbares -- diese "
               "Blaetter sind nicht mehr totes Gewicht:")
         for f in funde[:10]:
             print(f"  {f}")

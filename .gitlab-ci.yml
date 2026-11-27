@@ -129,6 +129,13 @@ myst-build:
     - node -v
     - myst --version
     - myst build --html
+    # Die Site-Konfiguration ins Artefakt. Theme 1.4.x legte `config.json` selbst nach
+    # `_build/html`; Theme 2.x tut das nicht mehr (gemessen 2026-11-27 am 2.1.1-Bau:
+    # die Datei liegt nur noch unter `_build/site/`). `tools/inject_jsonld.py` liest
+    # daraus das `toc` und die Slugs, um je Kapitel die Quelldatei zu kennen -- ohne sie
+    # bricht der pages-Job ab. Im Artefakt ist sie oeffentlich, war sie vorher auch.
+    - cp _build/site/config.json _build/html/config.json
+    - '[ -s _build/html/config.json ] || { echo "FEHLER: config.json fehlt im Artefakt"; exit 1; }'
     # Die beiden Schriften mitnehmen. Seit dem 2026-11-03 holt `_site/custom-style.css`
     # sie nicht mehr von Google, sondern von hier (Begruendung im Kopf jener Datei und in
     # `_site/fonts/PROVENANCE.txt`, Port aus eipy). **MyST kopiert aus `_site/` nur das

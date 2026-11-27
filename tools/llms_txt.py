@@ -37,6 +37,7 @@ import hashlib
 import json
 import re
 import sys
+import artefakt
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -126,12 +127,12 @@ def bild_index(html: Path) -> dict[str, str]:
     `tools/webp.py`.
     """
     index: dict[str, str] = {}
-    build = html / "build"
-    if not build.is_dir():
+    ordner = html / artefakt.ordner(html)
+    if not ordner.is_dir():
         return index
-    for p in build.iterdir():
+    for p in ordner.iterdir():
         if p.suffix.lower() in (".png", ".jpg", ".jpeg", ".gif", ".svg", ".webp"):
-            index[hashlib.sha256(p.read_bytes()).hexdigest()] = f"/build/{p.name}"
+            index[hashlib.sha256(p.read_bytes()).hexdigest()] = f"/{ordner.name}/{p.name}"
     return index
 
 
@@ -141,7 +142,8 @@ def figuren_absolut(body: str, src: Path, index: dict[str, str], site: str) -> t
 
     Die `.md`-Auslieferung behielt bis zum 2026-11-17 die Direktive samt ihrem
     Quellpfad (`../images/vl01-neuron.png`); aufgelöst ergab das `/images/vl01-neuron.png`
-    und damit **404** (SEO-Audit §6.3). Ausgeliefert wird unter `/build/<name>-<hash>.<ext>`.
+    und damit **404** (SEO-Audit §6.3). Ausgeliefert wird unter
+    `/<dateiordner>/<name>-<hash>.<ext>`, siehe `tools/artefakt.py`.
     """
     offen = 0
 

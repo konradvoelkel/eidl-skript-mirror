@@ -105,7 +105,8 @@ Genau ein Fall hat ein Feld: `og:image`. Das Theme baut es aus
 `page.frontmatter.thumbnailOptimized || thumbnail` (Kapitel) bzw. aus demselben Paar unter
 `project` (Landingpage) neu. `head_meta.py` setzt dort schon die Karte ein, aber
 **wurzelrelativ** -- am 2026-11-15 in der Nutzlast nachgemessen:
-`'/build/social-card-3fd4fb7a....png'`. OpenGraph verlangt eine absolute URL, und genau
+`'/_public/social-card.png'` (mit Theme 1.4.x `/build/…`). OpenGraph verlangt eine
+absolute URL, und genau
 deshalb stand in Googles Rendering ein relatives `og:image`. `absolute_card()` macht die
 vier Felder absolut; der Wächter führt `og:image` deshalb **nicht**.
 
@@ -201,6 +202,8 @@ import json
 import pathlib
 import re
 import sys
+import artefakt
+import turbostream
 
 # Erkennungszeichen des Kopf-Wächters. Ein zweiter Lauf ersetzt ihn daran.
 MARKER = "/*kopf-waechter*/"
@@ -394,13 +397,14 @@ def edit_payload(doc: str, mutate) -> tuple[str, bool]:
 def absolute_card(doc: str, site: str, base: str) -> tuple[str, bool]:
     """Die Vorschaukarte in der Nutzlast absolut machen.
 
-    Umgeschrieben wird nur, was wurzelrelativ unter dem Basispfad auf `/build/` zeigt --
+    Umgeschrieben wird nur, was wurzelrelativ unter dem Basispfad in den Dateiordner
+    des Artefakts zeigt (`/build/` oder `/_public/`, siehe `tools/artefakt.py`) --
     damit ein zweiter Lauf Leerlauf bleibt und eine fremde URL unberührt. Die vier
     Felder sind die, aus denen das Theme `og:image` baut; `project.pages[]` und
     `config.projects[0].pages[]` tragen ebenfalls je ein `thumbnail`, das sind aber keine
     Kartenangaben, sondern die kleine Vorschau beim Überfahren eines internen Links.
     """
-    prefix = f"{base}/build/"
+    prefixe = tuple(f"{base}/{o}/" for o in artefakt.ORDNER)
 
     def mutate(payload: dict) -> bool:
         changed = False
@@ -412,12 +416,41 @@ def absolute_card(doc: str, site: str, base: str) -> tuple[str, bool]:
                     continue
                 for key in ("thumbnail", "thumbnailOptimized"):
                     url = node.get(key)
-                    if isinstance(url, str) and url.startswith(prefix):
+                    if isinstance(url, str) and url.startswith(prefixe):
                         node[key] = site + url[len(base) :]
                         changed = True
         return changed
 
-    return edit_payload(doc, mutate)
+    doc, n_turbo = absolute_card_turbo(doc, site, base)
+    doc, geaendert = edit_payload(doc, mutate)
+    return doc, (geaendert or n_turbo > 0)
+
+
+def absolute_card_turbo(doc: str, site: str, base: str) -> tuple[str, int]:
+    """Dasselbe für die Turbo-Stream-Nutzlast von Theme 2.x (`tools/turbostream.py`).
+
+    Dieselben zwei Felder, dieselbe Bedingung: umgeschrieben wird nur, was wurzelrelativ
+    unter dem Basispfad in den Dateiordner zeigt. Ein zweiter Lauf bleibt damit Leerlauf
+    und eine fremde URL unberührt.
+    """
+    prefixe = tuple(f"{base}/{o}/" for o in artefakt.ORDNER)
+
+    def tragen(daten: list) -> int:
+        cache: dict[str, int] = {}
+        n = 0
+        for knoten in turbostream.kartenknoten(daten):
+            for key in ("thumbnail", "thumbnailOptimized"):
+                gefunden = turbostream.hole(daten, knoten, key)
+                if gefunden is None or not isinstance(gefunden[1], str):
+                    continue
+                url = gefunden[1]
+                if not url.startswith(prefixe):
+                    continue
+                turbostream.setze(daten, knoten, key, site + url[len(base):], cache)
+                n += 1
+        return n
+
+    return turbostream.bearbeiten(doc, tragen)
 
 
 def whole(doc: str, f: pathlib.Path) -> None:
@@ -426,6 +459,8 @@ def whole(doc: str, f: pathlib.Path) -> None:
         sys.exit(f"FEHLER: {f} endet nicht auf </html> -- der Schnitt war zu weit")
     if "window.__remixContext" in doc and read_payload(doc) is None:
         sys.exit(f"FEHLER: {f} hat keine lesbare Hydrations-Nutzlast mehr")
+    if turbostream.vorhanden(doc) and turbostream.lesen(doc) is None:
+        sys.exit(f"FEHLER: {f} hat keine lesbare Turbo-Stream-Nutzlast mehr")
 
 
 def titel(head: str, f: pathlib.Path) -> str:
@@ -480,22 +515,36 @@ def check(root: pathlib.Path, base: str, lang: str) -> int:
             sys.exit(f"FEHLER: {f} hat kein ld+json, das der Wächter bewahren könnte")
         n_tags += len(tags)
         n_keep += len(keep)
+        # Zwei Formen der Nutzlast: JSON (Theme 1.4.x) oder Turbo-Stream (2.x). Geprüft
+        # wird dieselbe Bedingung an beiden -- kein wurzelrelatives thumbnail.
+        prefixe = tuple(f"{base}/{o}/" for o in artefakt.ORDNER)
+
+        def relativ(key: str, url) -> None:
+            if isinstance(url, str) and url.startswith(prefixe):
+                sys.exit(
+                    f"FEHLER: {f}: {key} in der Nutzlast ist weiterhin relativ"
+                    f" ({url}) -- og:image wäre nach der Hydration wieder relativ"
+                )
+
         found = read_payload(doc)
-        if not found:
+        daten = turbostream.lesen(doc)
+        if not found and daten is None:
             sys.exit(f"FEHLER: {f} hat keine Hydrations-Nutzlast")
-        for route in routes(found[0]):
-            page = route.get("page")
-            front = page.get("frontmatter") if isinstance(page, dict) else None
-            for node in (front, route.get("project")):
-                if not isinstance(node, dict):
-                    continue
+        if found:
+            for route in routes(found[0]):
+                page = route.get("page")
+                front = page.get("frontmatter") if isinstance(page, dict) else None
+                for node in (front, route.get("project")):
+                    if not isinstance(node, dict):
+                        continue
+                    for key in ("thumbnail", "thumbnailOptimized"):
+                        relativ(key, node.get(key))
+        if daten is not None:
+            for knoten in turbostream.kartenknoten(daten):
                 for key in ("thumbnail", "thumbnailOptimized"):
-                    url = node.get(key)
-                    if isinstance(url, str) and url.startswith(f"{base}/build/"):
-                        sys.exit(
-                            f"FEHLER: {f}: {key} in der Nutzlast ist weiterhin relativ"
-                            f" ({url}) -- og:image wäre nach der Hydration wieder relativ"
-                        )
+                    gefunden = turbostream.hole(daten, knoten, key)
+                    if gefunden is not None:
+                        relativ(key, gefunden[1])
     print(
         f"✓ {len(pages)} Seiten: Dokument ganz, Nutzlast lesbar, Karte absolut; "
         f"{n_tags} Tags und {n_keep} bewahrte Knoten in den Wächtern, "

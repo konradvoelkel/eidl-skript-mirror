@@ -403,10 +403,15 @@ Textfassung von Seite und Objektbaum: `~/Sciebo/hhu/eidl-26/ilias/` (analog zu
      mehr zu machen; das Skript ist wieder draußen
      (`seo-pruefung-2026-11-26.md` §2). Offen bleibt allein, ob sich die Dublette nach dem
      Antrag vom 18.11. von selbst auflöst — das ist eine Frage an den Index, nicht an uns.
-  2. **Den 2.1.1-Bau mit PSI vermessen** und die JS-Größen in `plan-theme-2x.md` nachtragen.
-     Drei Chunks machen 697 von 859 kB, einer davon ist zu 98,3 % ungenutzt, und 2,13 MB
-     des Rohbestands sind ein browserifiziertes Krypto-Polyfill. Ein Schnitt in `tools/`
-     reicht nicht, weil die Chunks statisch importiert werden.
+  2. **Theme 2.1.1 liegt fertig auf dem Zweig `theme-2x` und ist nicht zusammengeführt.**
+     Kette und Prüfungen grün, Hydration und Aussehen gegen die ausgelieferte 1.4.1
+     gemessen (`build-log-2026-11-27-theme2x.md`). Zusammenführen heißt veröffentlichen:
+     der `pages`-Job baut aus `main`. Zu entscheiden ist also nur noch der Zeitpunkt —
+     in der Vorlesungszeit ist eine Woche ohne inhaltliche Änderung die Bedingung, sonst
+     ist später nicht zu trennen, was der Umstieg verursacht hat.
+     Danach offen: **zehn PSI-Läufe je Seite** an der ausgelieferten Seite. Ob die um
+     38 % kleinere Lieferung auch gewonnene Zeit ist, ist bis heute nicht belegt — sechs
+     Läufe lokal gaben überlappende Spannen.
   3. DOI über Zenodo, dann ORCID, dann OERSI/ORCA.nrw und Wikidata (`P800` am Item
       Q102659059). Neues Argument dafür: die Zufallskennung `131e30` im Hostnamen ist
       nicht stabil.

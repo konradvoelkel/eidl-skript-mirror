@@ -61,12 +61,13 @@ Landingpage allein uebersehen:
 Ein `twitter:image` gibt es nicht und soll es nicht geben: X faellt auf `og:image`
 zurueck, und `head_meta.py` setzt von den Karten-Tags nur `twitter:card`.
 
-Die stabile Datei liegt **unter `build/`** und nicht in der Wurzel, und das ist der
+Die stabile Datei liegt **im Dateiordner des Artefakts** (`build/` mit Theme 1.4.x,
+`_public/` mit 2.x, siehe `tools/artefakt.py`) und nicht in der Wurzel, und das ist der
 Grund, warum `hydration.py` nicht angefasst werden muss: dessen `absolute_card()`
-schreibt nur um, was wurzelrelativ unter `<base>/build/` zeigt. Ein Name in der Wurzel
+schreibt nur um, was wurzelrelativ in diesen Ordner zeigt. Ein Name in der Wurzel
 faellt aus diesem Muster, und dann waere das nachgebaute `og:image` wurzelrelativ --
 OpenGraph verlangt aber absolut. Ein Zusatz in der Wurzel haette also eine Aenderung an
-zwei weiteren Werkzeugen gekostet; `build/social-card.png` kostet keine.
+zwei weiteren Werkzeugen gekostet; `<dateiordner>/social-card.png` kostet keine.
 
 Die gehashte Datei bleibt liegen. Sie kostet 42 kB, auf sie zeigt danach nichts mehr,
 und solange sie da ist, antwortet auch die URL *dieses* Laufs weiter mit 200.
@@ -93,6 +94,7 @@ import pathlib
 import re
 import shutil
 import sys
+import artefakt
 
 STABIL = "social-card.png"
 GEHASHT = re.compile(r"social-card-[0-9a-f]{32}\.png")
@@ -158,14 +160,14 @@ def dateien(root: pathlib.Path) -> list[pathlib.Path]:
 
 def umschreiben(root: pathlib.Path, gehasht: str) -> tuple[int, int]:
     """Jedes Vorkommen des gehashten Namens durch den stabilen ersetzen."""
-    quelle = root / "build" / gehasht
+    quelle = artefakt.pfad(root) / gehasht
     if not quelle.is_file():
         sys.exit(f"FEHLER: {quelle} fehlt, obwohl die Landingpage darauf zeigt")
     masse = png_masse(quelle)
     if masse != SOLL:
         sys.exit(f"FEHLER: {quelle} ist {masse[0]}x{masse[1]}, die Kartenregel verlangt "
                  f"{SOLL[0]}x{SOLL[1]}")
-    ziel = root / "build" / STABIL
+    ziel = artefakt.pfad(root) / STABIL
     shutil.copyfile(quelle, ziel)
 
     treffer = 0
@@ -181,7 +183,7 @@ def umschreiben(root: pathlib.Path, gehasht: str) -> tuple[int, int]:
 
 
 def pruefen(root: pathlib.Path) -> int:
-    ziel = root / "build" / STABIL
+    ziel = artefakt.pfad(root) / STABIL
     if not ziel.is_file():
         print(f"✗ {ziel} fehlt -- lief stable_card.py?")
         return 1
@@ -213,7 +215,7 @@ def pruefen(root: pathlib.Path) -> int:
     if not url.startswith("http"):
         print(f"✗ das og:image der Landingpage ist relativ: {url}")
         return 1
-    if not url.endswith(f"/build/{STABIL}"):
+    if not url.endswith(f"{artefakt.praefix(root)}{STABIL}"):
         print(f"✗ das og:image der Landingpage zeigt nicht auf den stabilen Namen: {url}")
         return 1
 

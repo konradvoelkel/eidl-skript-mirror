@@ -2,11 +2,11 @@
 
 | | |
 |---|---|
-| Datei | `book-theme.zip`, 12,7 MB |
-| Herkunft | <https://github.com/jupyter-book/myst-theme/releases/download/myst-to-react%401.4.1/book-theme.zip> |
-| Abgerufen | 2026-11-17 |
-| Paketversion | `@myst-theme/book` 1.4.1 |
-| SHA-256 | `f6b6c7822821539e80dde120f6632ad77e7b6c20f5e773b5ca5d818ea529bd78` |
+| Datei | `book-theme.zip`, 23,5 MB |
+| Herkunft | <https://github.com/jupyter-book/myst-theme/releases/download/myst-to-react%402.1.1/book-theme.zip> |
+| Abgerufen | 2026-11-27 |
+| Paketversion | 2.1.1 (das `package.json` des Archivs nennt keine Fassung, die Release-Marke schon) |
+| SHA-256 | `9104dd5eb5f94726cdc46e750dfcaab8332cfe55d40e91ce9db65e25d010128a` |
 
 **Die Quelle ist seit dem 2026-11-17 das Release-Asset, nicht mehr `main.zip`.** An jedem
 Release von `jupyter-book/myst-theme` hängt ein fertig gebautes `book-theme.zip`; der
@@ -16,27 +16,30 @@ lag, trug v1.3.1, obwohl am Tag des Abrufs (2026-09-25) seit vier Tagen v1.4.1 a
 stand — vermutlich der Archiv-Cache von codeload, belegen lässt es sich nicht. Eine
 versionsfeste Adresse kann das nicht passieren.
 
-Das Archiv trägt eine Wurzelebene (`dist-book/` statt wie früher `book-theme-main/`);
-`install_template.py` benennt die eine Ebene um und ist von dem Namen unabhängig.
+Das Archiv von 2.x trägt **keine Wurzelebene**: `renderer/`, `server/`, `public/`,
+`template.yml` und `package.json` liegen unmittelbar darin. `install_template.py` kennt
+beide Formen und unterscheidet sie an `template.yml` — liegt es im Archiv ganz oben, wird
+das Entpackte selbst zum Ziel, sonst die eine Ebene darunter (`dist-book/` in 1.4.x).
 
-**Nicht auf 2.x gehen, ohne die Patch-Schicht neu zu bauen.** Theme 2.0.0 (2026-11-10) ist
-ein erklärter Bruch — React Router 8, eigener Pre-Renderer —, und das Dateilayout ändert
-sich vollständig: zwei Serverbündel (`renderer/server/index.js` und
-`server/server/index.js`) statt `build/index.js`, Vite-`_assets`-Chunks statt
-`public/build/_shared`, `thebe-core.css` in das Hauptstylesheet eingebacken (237 kB, also
-kein `<link>` mehr, den `tools/dead_css.py` herausnehmen könnte), geänderte
-`build:`-Kommandos.
+**Seit dem 2026-11-27 liegt hier 2.1.1**, und die Patch-Schicht ist dafür gebaut. Was
+sich gegenüber 1.4.x geändert hat und wie die Skripte darauf antworten:
 
-**Am 2026-11-18 ausgemessen, und milder als hier zunächst stand**: Die Anker überleben.
-Der Bündler schreibt Zeichenketten in Backticks statt in doppelte Anführungszeichen; läßt
-man das Anführungszeichen im Muster offen, greifen **alle 37** Bedienungsmuster im
-`renderer/server`-Bündel, die `aside`-Ersetzung dreimal und der Kastenkopf einmal — genau
-wie in 1.4.1. Die Arbeit liegt woanders: Abbildungen stehen unter `/_public/…` statt
-`/build/…`, das Stylesheet unter `/_assets/…`, und fünf Skripte in `tools/` setzen
-`build/` an 13 Stellen voraus. Dazu verliert `tools/dead_css.py` sein größtes Ziel, weil
-`thebe-core.css` kein eingebundenes Stylesheet mehr ist, und das Archiv hat keine
-Wurzelebene mehr. Messwerte: `devnotes/build-log-2026-11-17-theme.md`, Nachtrag vom
-2026-11-18.
+| | 1.4.x | 2.x |
+|---|---|---|
+| Server-Bündel | `build/index.js` | `renderer/server/index.js` |
+| Browser-Bündel | `public/build/**/*.js` | `renderer/client/**/*.js` |
+| Zeichenketten im Bündel | `"…"` | `` `…` `` — `install_template.tolerant()` läßt beides zu |
+| Abbildungen, Karte, PDF | `/build/…` | `/_public/…` — erkannt von `tools/artefakt.py` |
+| Stylesheet | `build/_assets/app-*.css` (155 kB) | `_assets/root-*.css` (237 kB, `thebe-core.css` eingebacken) |
+| Hydrations-Nutzlast | JSON in `window.__remixContext` | Turbo-Stream — `tools/turbostream.py` |
+| Platzhalter-Origin | `http://localhost:3000` | `http://pre.render` — beide in `tools/publish_urls.py` |
+| `config.json` im Artefakt | legt das Theme ab | kopiert der `myst-build`-Job dorthin |
+| über dem Seitentitel | das `kind` | Brotkrumen (`aria-label="Pfad"`, eingedeutscht) |
+
+`server/server/index.js` von 2.x bleibt unangetastet: Das ist der Express-Teil für
+`myst start`, keines unserer Muster kommt darin vor, und `myst build --html` benutzt ihn
+nicht. Messwerte, Verlauf und was dabei auffiel: `devnotes/build-log-2026-11-27-theme2x.md`,
+die JS-Größen in `devnotes/build-log-2026-11-27-js.md`.
 
 ## Warum das hier liegt
 
@@ -69,7 +72,7 @@ Die Jobs `myst-build` und `build-pdf` in `.gitlab-ci.yml` rufen das Skript im
 
 ```sh
 # Die Fassung aus https://github.com/jupyter-book/myst-theme/releases heraussuchen
-V=1.4.1
+V=2.1.1
 curl -L -o _site/vendor/book-theme.zip \
   "https://github.com/jupyter-book/myst-theme/releases/download/myst-to-react%40$V/book-theme.zip"
 sha256sum _site/vendor/book-theme.zip        # in die Tabelle oben eintragen

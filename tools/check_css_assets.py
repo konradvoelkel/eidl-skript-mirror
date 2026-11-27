@@ -14,7 +14,7 @@ Die Ursache: `custom-style.css` deklarierte `src: url('../fonts/inter-latin.woff
 MyST legt dieses Stylesheet **zweimal** ab,
 
     /myst-theme.css                        <- das bindet das HTML ein
-    /build/custom-style-<hash>.css         <- fingerprinted, wird nie geladen
+    <dateiordner>/custom-style-<hash>.css  <- fingerprinted, wird nie geladen
 
 und von der Kopie im Wurzelpfad zeigte `../fonts/` eine Ebene *ueber* `/ds-skript/`,
 also auf den Server-Root. Antwort: 302, keine Schrift, stiller Rueckfall auf die

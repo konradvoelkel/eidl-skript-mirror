@@ -76,6 +76,8 @@ import pathlib
 import re
 import shutil
 import sys
+import artefakt
+import turbostream
 
 WURZEL = pathlib.Path(__file__).resolve().parent.parent
 BILDER = WURZEL / "images"
@@ -110,11 +112,11 @@ def halb(p: pathlib.Path) -> pathlib.Path:
 
 def paare(html: pathlib.Path, index: dict[str, pathlib.Path]) -> list[tuple[pathlib.Path, pathlib.Path]]:
     """(Bilddatei im Artefakt, WebP-Quelle) für alles, was ausgetauscht werden kann."""
-    build = html / "build"
-    if not build.is_dir():
-        sys.exit(f"FEHLER: {build} gibt es nicht -- nach dem HTML-Bau laufen lassen")
+    dateien = artefakt.pfad(html)
+    if not dateien.is_dir():
+        sys.exit(f"FEHLER: {dateien} gibt es nicht -- nach dem HTML-Bau laufen lassen")
     out = []
-    for p in sorted(build.iterdir()):
+    for p in sorted(dateien.iterdir()):
         if p.suffix.lower() not in ENDUNGEN:
             continue
         webp = index.get(sha(p))
@@ -190,11 +192,39 @@ def preload_srcset(text: str, srcset: dict[str, str]) -> tuple[str, int]:
     return PRELOAD.sub(ein, text), n
 
 
+# Theme 2.x liefert die Nutzlast nicht als JSON-Objekt in `window.__remixContext`, sondern
+# als Turbo-Stream (Aufbau und Werkzeug: `tools/turbostream.py`). Die Textersetzung unten
+# greift darin nicht -- `"url"` und die Adresse stehen als zwei getrennte Einträge --, und
+# ohne `urlOptimized` baut React nach der Hydration ein nacktes `<img>` auf die **große**
+# Fassung. Gemessen am 2026-11-27 an `/faltung-cnn/`: zwei von fünf Abbildungen wurden
+# dadurch zweimal geladen, klein und groß. Dieselbe Verschwendung wie der Preload-Befund
+# vom 2026-11-26, nur von der anderen Seite.
+
+
+def nutzlast_turbostream(text: str, srcset: dict[str, str]) -> tuple[str, int]:
+    """`urlOptimized` in die Turbo-Stream-Nutzlast eintragen, je Bildknoten."""
+
+    def tragen(daten: list) -> int:
+        cache: dict[str, int] = {}
+        n = 0
+        for knoten, url in turbostream.bildknoten(daten):
+            if url not in srcset:
+                continue
+            if turbostream.hole(daten, knoten, "urlOptimized") is not None:
+                continue
+            turbostream.setze(daten, knoten, "urlOptimized", srcset[url], cache)
+            n += 1
+        return n
+
+    return turbostream.bearbeiten(text, tragen)
+
+
 def zwei_groessen(html: pathlib.Path, srcset: dict[str, str]) -> tuple[int, int, int, set[str]]:
     """`urlOptimized` in die Nutzlast, `<picture>` ins Markup -- beides, siehe Kopf.
 
     Gibt zusätzlich zurück, welche Adressen wirklich vorkommen: mystmd legt jede Abbildung
-    mehrfach unter verschiedenen Hashnamen in `build/` ab (526 Dateien für 61 Abbildungen),
+    mehrfach unter verschiedenen Hashnamen im Dateiordner ab (527 Dateien für 61
+    Abbildungen),
     verwiesen wird aber nur auf eine davon. Kopiert wird die halbe Fassung deshalb nur für
     die verwiesenen -- sonst lägen 390 Dateien im Artefakt, die niemand abruft.
     """
@@ -212,6 +242,8 @@ def zwei_groessen(html: pathlib.Path, srcset: dict[str, str]) -> tuple[int, int,
                 if k:
                     benutzt.add(url)
             if p.suffix == ".html":
+                neu, k = nutzlast_turbostream(neu, srcset)
+                n_bild += k
                 neu, k, k_url = markup_picture(neu, srcset)
                 n_markup += k
                 benutzt |= k_url
@@ -280,9 +312,12 @@ def main() -> int:
         genannt: set[str] = set()
         for f in args.html.rglob("*.html"):
             text = f.read_text(encoding="utf-8")
-            opt += text.count('"urlOptimized"')
+            # In der Turbo-Stream-Nutzlast steht der Schlüssel escapet
+            # (`\"urlOptimized\"`), in den Seiten-JSON wörtlich.
+            opt += text.count('"urlOptimized"') + text.count('\\"urlOptimized\\"')
             pic += text.count('type="image/webp"')
-            genannt |= set(re.findall(r"/build/([\w.@-]+@1x\.webp)", text))
+            genannt |= set(re.findall(rf"{artefakt.praefix(args.html)}"
+                                      r"([\w.@-]+@1x\.webp)", text))
             # Ein Preload ohne `imagesrcset` auf eine Datei, die daneben in einem
             # `srcset` als 2x steht, laedt die zweite Fassung dazu -- Befund 2026-11-26.
             zwei_x = {t.strip().split()[0]
@@ -298,7 +333,7 @@ def main() -> int:
                           f"imagesrcset, daneben steht ein <source> mit zwei Größen")
                     fehler += 1
         for name in sorted(genannt):
-            if not (args.html / "build" / name).is_file():
+            if not (artefakt.pfad(args.html) / name).is_file():
                 print(f"✗ {name}: srcset nennt eine Datei, die nicht im Artefakt liegt")
                 fehler += 1
         if any(halb(webp).is_file() for _, webp in gefunden) and not (opt and pic and genannt):
@@ -318,8 +353,9 @@ def main() -> int:
         shutil.copy2(webp, p.with_suffix(".webp"))
         klein = halb(webp)
         if klein.is_file():
-            gross_url = "/build/" + p.with_suffix(".webp").name
-            klein_url = "/build/" + halb(p.with_suffix(".webp")).name
+            vor = artefakt.praefix(args.html)
+            gross_url = vor + p.with_suffix(".webp").name
+            klein_url = vor + halb(p.with_suffix(".webp")).name
             srcset[gross_url] = f"{klein_url} 1x, {gross_url} 2x"
             quelle_halb[gross_url] = (klein, halb(p.with_suffix(".webp")))
     dateien, treffer = ersetzen(args.html, karte)

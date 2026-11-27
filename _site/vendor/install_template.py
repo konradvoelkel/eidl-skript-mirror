@@ -14,6 +14,14 @@ Template zwischenspeichert — dann laedt es nichts nachher.
 
 Genau das tut dieses Skript. Es ist idempotent und braucht kein Netz.
 
+Es kennt **zwei Archivformen**: eine einzelne Wurzelebene (`dist-book/`, Theme 1.4.x) und
+die Dateien unmittelbar im Archiv (Theme 2.x). Erkannt wird das an `template.yml`. Ebenso
+kennt es **zwei Bündellayouts**: `build/index.js` mit `public/build/**/*.js` (1.4.x) und
+`renderer/server/index.js` mit `renderer/client/**/*.js` (2.x). `server/server/index.js`
+von 2.x bleibt unangetastet — das ist der Express-Teil für `myst start`, keines unserer
+Muster kommt darin vor (gemessen am 2026-11-18: 0 Treffer), und `myst build --html`
+benutzt ihn nicht.
+
 Danach setzt es **deutsche Kastennamen** ein (seit 2026-11-02): Das Template schreibt in
 den Kopf jedes `{prf:…}`-Kastens das `kind` mit großem Anfangsbuchstaben, also „Example 1“,
 „Theorem 2“. Dieselbe Stelle steht zweimal im Template, im Bündel fürs Server-Rendering
@@ -59,8 +67,26 @@ KASTENNAMEN = {
     "proposition": "Proposition", "axiom": "Axiom", "conjecture": "Vermutung",
     "observation": "Beobachtung", "algorithm": "Algorithmus", "exercise": "Aufgabe",
 }
-KOPF = re.compile(r'kind:(\w+)\((\w)\),children:\[\1\(\2\)," ",(\w)\]')
+# Das Leerzeichen zwischen Name und Nummer steht in 1.4.x in doppelten
+# Anführungszeichen, in 2.x in Backticks; welches es ist, merkt sich Gruppe 3, damit die
+# Ersetzung es wieder genauso schreibt.
+KOPF = re.compile(r'kind:(\w+)\((\w)\),children:\[\1\(\2\),(["\'`]) \3,(\w)\]')
 GEPATCHT = "/*eidl:kastennamen*/"
+
+def tolerant(muster: str) -> str:
+    """Läßt offen, welches Anführungszeichen gemeint ist.
+
+    Der Bündler von Theme 2.x schreibt Zeichenketten in **Backticks**, der von 1.4.x in
+    doppelten Anführungszeichen; Attributnamen bleiben in beiden doppelt gequotet
+    (`"aria-label":` ` `Table of Contents` `). Jedes `"` im Muster darf deshalb auch
+    `` ` `` oder `'` sein — gemessen am 2026-11-18: damit greifen in 2.1.1 alle 37
+    Bedienungsmuster, und zwar gleich oft im Server- wie in den Browser-Bündeln.
+
+    **Nicht auf die Prüftexte anwenden.** Die suchen den deutschen Text so, wie dieses
+    Skript ihn geschrieben hat, und das ist immer mit doppelten Anführungszeichen.
+    """
+    return muster.replace('"', '["\'`]')
+
 
 # (Muster, Ersatz, Prüftext): Prüftext steht nach dem Ersetzen im Bündel und zeigt einen
 # früheren Lauf an. Die Muster sind reguläre Ausdrücke; Gruppen werden mitgenommen.
@@ -87,6 +113,11 @@ BEDIENUNG = [
     (r'children:\["Visit URL ",', 'children:["Öffnen: ",', 'children:["Öffnen: ",'),
     (r'"Open Menu"', '"Menü öffnen"', '"Menü öffnen"'),
     (r'"aria-label":"Table of Contents"', '"aria-label":"Inhaltsverzeichnis"', '"aria-label":"Inhaltsverzeichnis"'),
+    # Neu in Theme 2.x: die Brotkrumen über dem Seitentitel. Sie bleiben sichtbar --
+    # abschalten ließe sich das mit `hide_breadcrumbs: true` in der Template-Option --,
+    # und ihr Name wird deutsch. „Pfad" statt einer Übersetzung von „breadcrumb": Der
+    # Screenreader sagt dann „Pfad, Navigation", und das beschreibt, was dasteht.
+    (r'"aria-label":"Breadcrumb"', '"aria-label":"Pfad"', '"aria-label":"Pfad"'),
     (r'"Open Folder"', '"Ordner öffnen"', '"Ordner öffnen"'),
     (r'"Toggle theme between light and dark mode"', '"Zwischen hellem und dunklem Design wechseln"',
      "Zwischen hellem und dunklem Design wechseln"),
@@ -203,6 +234,24 @@ STRUKTUR = [
 ]
 
 
+def server_buendel() -> Path:
+    """Das Bündel fürs Server-Rendering, in beiden Layouts."""
+    for rel in ("build/index.js", "renderer/server/index.js"):
+        pfad = ZIEL / rel
+        if pfad.is_file():
+            return pfad
+    sys.exit(f"FEHLER: kein Server-Bündel in {ZIEL.relative_to(WURZEL)} — Layout bewegt?")
+
+
+def browser_buendel() -> list[Path]:
+    """Die Bündel fürs Hydrieren im Browser, in beiden Layouts."""
+    for rel in ("public/build", "renderer/client"):
+        ordner = ZIEL / rel
+        if ordner.is_dir():
+            return sorted(ordner.rglob("*.js"))
+    sys.exit(f"FEHLER: keine Browser-Bündel in {ZIEL.relative_to(WURZEL)} — Layout bewegt?")
+
+
 def bedienung_eindeutschen(liste: list | None = None, was: str = "Bedienung") -> int:
     """Wendet eine Ersetzungsliste an, in Server- und Browser-Bündeln gleich oft.
 
@@ -210,12 +259,12 @@ def bedienung_eindeutschen(liste: list | None = None, was: str = "Bedienung") ->
     den Umbau der Kästen.
     """
     liste = BEDIENUNG if liste is None else liste
-    server = ZIEL / "build" / "index.js"
-    browser = sorted((ZIEL / "public" / "build").rglob("*.js"))
+    server = server_buendel()
+    browser = browser_buendel()
     texte = {p: p.read_text(encoding="utf-8", errors="surrogateescape") for p in [server, *browser]}
     fehler = 0
     for muster, ersatz, pruef in liste:
-        rx = re.compile(muster)
+        rx = re.compile(tolerant(muster))
         n_server = len(rx.findall(texte[server]))
         n_browser = sum(len(rx.findall(texte[p])) for p in browser)
         if n_server == n_browser == 0:
@@ -242,7 +291,7 @@ def bedienung_eindeutschen(liste: list | None = None, was: str = "Bedienung") ->
 def kastennamen_eindeutschen() -> int:
     """Ersetzt im Kopf der prf-Kästen `Gross(kind)` durch den deutschen Namen."""
     tabelle = "{" + ",".join(f'{k}:"{v}"' for k, v in KASTENNAMEN.items()) + "}"
-    buendel = [ZIEL / "build" / "index.js", *sorted((ZIEL / "public" / "build" / "_shared").glob("*.js"))]
+    buendel = [server_buendel(), *browser_buendel()]
     gefunden = 0
     for pfad in buendel:
         text = pfad.read_text(encoding="utf-8", errors="surrogateescape")
@@ -255,9 +304,10 @@ def kastennamen_eindeutschen() -> int:
         if len(treffer) != 1:
             print(f"FEHLER: {len(treffer)} Kastenköpfe in {pfad.name}, erwartet 1", file=sys.stderr)
             return 1
-        gross, k, nr = treffer[0]
-        alt = f'kind:{gross}({k}),children:[{gross}({k})," ",{nr}]'
-        neu = f'kind:{gross}({k}),children:[{GEPATCHT}({tabelle}[{k}]||{gross}({k}))," ",{nr}]'
+        gross, k, q, nr = treffer[0]
+        alt = f'kind:{gross}({k}),children:[{gross}({k}),{q} {q},{nr}]'
+        neu = (f'kind:{gross}({k}),children:'
+               f'[{GEPATCHT}({tabelle}[{k}]||{gross}({k})),{q} {q},{nr}]')
         pfad.write_text(text.replace(alt, neu), encoding="utf-8", errors="surrogateescape")
         print(f"Kastennamen eingedeutscht: {pfad.relative_to(WURZEL)}")
         gefunden += 1
@@ -289,17 +339,22 @@ def main() -> int:
     with zipfile.ZipFile(ARCHIV) as archiv:
         archiv.extractall(roh)
 
-    inhalt = [p for p in roh.iterdir() if p.is_dir()]
-    if len(inhalt) != 1:
-        print(
-            f"FEHLER: erwartet genau ein Wurzelverzeichnis im Archiv, "
-            f"gefunden: {[p.name for p in inhalt]}",
-            file=sys.stderr,
-        )
-        return 1
-
-    inhalt[0].rename(ZIEL)
-    shutil.rmtree(roh)
+    # Zwei Formen: `template.yml` liegt im Archiv ganz oben (Theme 2.x) -- dann wird das
+    # Entpackte selbst zum Ziel --, oder es liegt eine Ebene tiefer in genau einem
+    # Wurzelverzeichnis (`dist-book/`, Theme 1.4.x) -- dann diese Ebene.
+    if (roh / MARKER).is_file():
+        roh.rename(ZIEL)
+    else:
+        inhalt = [p for p in roh.iterdir() if p.is_dir()]
+        if len(inhalt) != 1:
+            print(
+                f"FEHLER: {MARKER} liegt nicht im Archiv und es gibt nicht genau ein "
+                f"Wurzelverzeichnis darin, gefunden: {[p.name for p in inhalt]}",
+                file=sys.stderr,
+            )
+            return 1
+        inhalt[0].rename(ZIEL)
+        shutil.rmtree(roh)
 
     if not (ZIEL / MARKER).is_file():
         print(f"FEHLER: {MARKER} fehlt nach dem Entpacken", file=sys.stderr)

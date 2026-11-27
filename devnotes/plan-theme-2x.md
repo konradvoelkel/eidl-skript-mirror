@@ -1,13 +1,15 @@
 # Umstieg auf das Site-Template 2.x — Arbeitsplan
 
-Stand 2026-11-18. Gemessen an **2.1.1** (`myst-templates/book-theme@main`, Commit
+Stand 2026-11-18, die JS-Größen in 8b nachgetragen am 2026-11-27. Gemessen an **2.1.1**
+(`myst-templates/book-theme@main`, Commit
 `4c368fe4` vom 2026-11-17) gegen das hier benutzte **1.4.1**. Alles unten ist an den
 Bündeln und an einem wirklichen Bau nachgemessen; wo etwas offen ist, steht es als offen
 da.
 
-**Dieser Plan ist nicht beschlossen.** Er beschreibt, was zu tun wäre, und in welcher
-Reihenfolge. Es gibt keinen Zwang: Das Template liegt als ZIP im Repo, mystmd lädt nichts
-nach, und 1.4.1 läuft.
+> **Umgesetzt am 2026-11-27** auf dem Zweig `theme-2x`. Was dabei herauskam, wo der Plan
+> recht hatte und welche drei Dinge er nicht gesehen hat, steht in
+> `build-log-2026-11-27-theme2x.md`. Dieser Plan bleibt als das stehen, was er war: die
+> Vorarbeit und die Messungen, auf die die Entscheidung sich stützte.
 
 ## 0. Was schon erfüllt ist
 
@@ -213,6 +215,46 @@ Dieselbe Methode wie beim Sprung auf 1.4.1, sie hat dort funktioniert:
 * **`hide_breadcrumbs`**, **`outline_maxdepth`**, **`hide_search`** — neue Schalter.
 * **`style`** — ein lokales CSS über die Template-Option statt über unseren eigenen Weg;
   nur ansehen, nicht umstellen.
+
+## 8b. Das JavaScript, gemessen am 2026-11-27
+
+**Diese Zahlen fehlten hier, und das Audit vom 18.11. nennt die Lücke als das, was vor
+jeder Entscheidung über 2.x zu schließen ist** (§11, Punkt 8 der Arbeitsliste). Gemessen
+sind beide Themes am selben Baum (mystmd 1.13.0, Inhaltsstand `310d0f5`), über einen
+lokalen Server, mit der Abdeckungsregel von Lighthouse und brotli Stufe 11 wie im
+`pages`-Job. `thebe-core.min.js` ist überall herausgerechnet, weil `tools/thebe_gate.py`
+es im CI entfernt. Das Instrument trifft die PSI-Zahlen des Audits auf das Kilobyte
+(859 kB dort, 859.481 B hier). Alles im einzelnen in
+`build-log-2026-11-27-js.md`.
+
+| Seite | brotli 1.4.1 → 2.1.1 | roh | Dateien |
+|---|---|---|---|
+| Startseite | 859.481 → 530.270 B (**−38 %**) | 4.983.005 → 2.258.590 B (−55 %) | 20 → 14 |
+| `/glossar/` | 859.145 → 530.111 B | 4.982.545 → 2.258.232 B | 20 → 14 |
+| `/rnn/` | 869.396 → 539.773 B | 5.010.575 → 2.285.593 B | 22 → 16 |
+| `/transformer/` | 859.145 → 530.111 B | 4.982.545 → 2.258.232 B | 20 → 14 |
+
+Vier Befunde dazu, in der Reihenfolge ihres Gewichts:
+
+1. **Das Krypto-Polyfill ist weg.** Die 2,13 MB browserifiziertes `crypto-browserify`, die
+   §11 des Audits „durch nichts gerechtfertigt" nennt und für die es dort nur einen Weg
+   gab — das Theme gabeln —, kommen in 2.1.1 nicht mehr vor (`createHmac`, `pbkdf2`,
+   `diffie-hellman`, `browserify-sign`, `readable-stream`: je 0 über alle 429 JS-Dateien).
+2. **Der Jupyter-Stapel steckt jetzt in einem Chunk statt in zwei** und schrumpft dabei:
+   `dist-L0z2u8h2.js`, 358.194 B brotli, gegen 507.602 B für `7FWBVTMU` und `LS4ALTVG`
+   zusammen. Er ist zu 89,1 % ungenutzt.
+3. **Er hängt weiter statisch drin.** `root-BM0TnMvp.js` importiert ihn mit
+   `import{…}from"./dist-L0z2u8h2.js"`, und die Seite lädt ihn als `modulepreload` vor.
+   Ein Tor nach dem Muster von `tools/thebe_gate.py` bleibt damit auch in 2.x unmöglich;
+   2.x verschiebt diese Frage, statt sie zu beantworten.
+4. **Die Gegenrechnung.** Stylesheet +11.535 B brotli (das eingebackene `thebe-core.css`,
+   siehe 4), HTML +5.168 B, Nutzlast unverändert. Netto bleiben **−312.508 B je Seite**.
+
+**Und was das nicht sagt:** Die Zeit auf dem Hauptthread. Sechs Läufe je Theme mit
+geviertelter CPU geben Mediane, die zugunsten von 2.1.1 ausfallen (auf `/rnn/` 21 %
+weniger Skriptzeit), bei vollständig überlappenden Spannen — ein Hinweis, kein Beleg. Ob
+die halbierte Lieferung auch gewonnene Zeit ist, bleibt offen; dafür wären zehn Läufe je
+Seite nötig, und die gehören in denselben Durchgang wie 6 und 7.
 
 ## 9. Rückweg
 

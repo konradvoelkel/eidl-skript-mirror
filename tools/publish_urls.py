@@ -43,7 +43,8 @@ dieselbe Form, die der Canonical unten bekommt.
 3. `og:image` absolut
 ----------------------
 
-MyST schreibt es wurzelrelativ (`/build/social-card-<hash>.png`). OpenGraph verlangt
+MyST schreibt es wurzelrelativ (`/build/social-card-<hash>.png`, mit Theme 2.x
+`/_public/…`). OpenGraph verlangt
 eine absolute URL: Slack, LinkedIn, Mastodon und WhatsApp können eine wurzelrelative
 nicht auflösen, die Vorschaukarte bleibt leer. `name="image"` wird mitgenommen, es trägt
 denselben Wert.
@@ -87,9 +88,16 @@ from __future__ import annotations
 import argparse
 import re
 import sys
+import artefakt
 from pathlib import Path
 
 LOCALHOST = "http://localhost:3000"
+# Theme 2.x prerendert **nicht** gegen localhost, sondern gegen `http://pre.render`
+# (gemessen 2026-11-27 am 2.1.1-Bau: 34-mal in sitemap.xml, dazu robots.txt, jede
+# index.html und jede <slug>.json). Beide Platzhalter werden ersetzt und beide geprüft:
+# Ein Rückschritt auf 1.4.x soll nichts kosten, und eine Sitemap, die auf einen
+# Platzhalter zeigt, ist schlimmer als keine.
+PLATZHALTER = (LOCALHOST, "http://pre.render")
 
 
 def seiten(root: Path) -> list[Path]:
@@ -103,7 +111,7 @@ def seiten_url(site: str, root: Path, f: Path) -> str:
 
 
 def origin_eintragen(root: Path, site: str) -> tuple[int, int]:
-    """`localhost:3000` durch die echte Adresse ersetzen -- in jeder Datei, die sie trägt.
+    """Den Platzhalter-Origin durch die echte Adresse ersetzen -- in jeder Datei.
 
     sitemap.xml und robots.txt sind die bekannten zwei; `"domain"` in jeder index.html
     und jeder <slug>.json sind die anderen sechzig (siehe Abschnitt 1).
@@ -116,11 +124,14 @@ def origin_eintragen(root: Path, site: str) -> tuple[int, int]:
     n = getroffen = 0
     for f in dateien:
         text = f.read_text(encoding="utf-8")
-        if LOCALHOST not in text:
+        neu = text
+        for platzhalter in PLATZHALTER:
+            n += neu.count(platzhalter)
+            neu = neu.replace(platzhalter, site)
+        if neu == text:
             continue
-        n += text.count(LOCALHOST)
         getroffen += 1
-        f.write_text(text.replace(LOCALHOST, site), encoding="utf-8")
+        f.write_text(neu, encoding="utf-8")
     return n, getroffen
 
 
@@ -140,10 +151,18 @@ def loc_schraegstrich(root: Path, site: str) -> int:
 
 
 def bilder_absolut(doc: str, site: str, base: str) -> tuple[str, int]:
-    """`og:image` und `name="image"` auf eine absolute URL bringen."""
-    praefix = f'content="{base}/build/'
-    n = doc.count(praefix)
-    return doc.replace(praefix, f'content="{site}/build/'), n
+    """`og:image` und `name="image"` auf eine absolute URL bringen.
+
+    Der Dateiordner heißt je nach Theme `build` oder `_public`
+    (`tools/artefakt.py`); beide werden behandelt, erkannt wird keiner -- hier liegt
+    nur eine Zeichenkette vor, kein Verzeichnis.
+    """
+    n = 0
+    for ordner in artefakt.ORDNER:
+        praefix = f'content="{base}/{ordner}/'
+        n += doc.count(praefix)
+        doc = doc.replace(praefix, f'content="{site}/{ordner}/')
+    return doc, n
 
 
 def canonical(doc: str, url: str) -> tuple[str, bool]:
@@ -162,8 +181,11 @@ def pruefen(site: str, root: Path) -> int:
     # Im ganzen Verzeichnis, nicht nur in den zwei Dateien, an die man zuerst denkt.
     for f in sorted([*root.rglob("*.html"), *root.rglob("*.json"),
                      root / "sitemap.xml", root / "robots.txt"]):
-        if "localhost:3000" in f.read_text(encoding="utf-8"):
-            fehler.append(f"{f.relative_to(root)}: enthält weiterhin eine localhost-URL")
+        text = f.read_text(encoding="utf-8")
+        for platzhalter in PLATZHALTER:
+            if platzhalter in text:
+                fehler.append(f"{f.relative_to(root)}: enthält weiterhin "
+                              f"{platzhalter}")
 
     locs = set(re.findall(r"<loc>([^<]*)</loc>", sitemap))
     for u in sorted(locs):
@@ -204,7 +226,7 @@ def pruefen(site: str, root: Path) -> int:
         return 1
     print(f"✓ {len(seiten(root))} Seiten, je ein Canonical, "
           f"{len(locs)} Sitemap-Einträge (dieselbe Menge), alle Bild-URLs absolut, "
-          f"kein localhost")
+          f"kein Platzhalter-Origin")
     return 0
 
 
@@ -235,7 +257,7 @@ def main() -> int:
         n_canonical += gesetzt
         f.write_text(doc, encoding="utf-8")
 
-    print(f"publish_urls: {n_origin}x localhost in {n_dateien} Dateien ersetzt, "
+    print(f"publish_urls: {n_origin}x Platzhalter-Origin in {n_dateien} Dateien ersetzt, "
           f"{n_slash} <loc> mit "
           f"Schrägstrich ergänzt, {n_bilder} Bild-URLs absolut gemacht, "
           f"{n_canonical} Canonicals gesetzt")

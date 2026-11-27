@@ -168,6 +168,8 @@ import pathlib
 import re
 import struct
 import sys
+import artefakt
+import turbostream
 
 # Erkennungszeichen des Sprach-Wächters, damit ein zweiter Lauf Leerlauf bleibt.
 MARKER_LANG = "/*lang-waechter*/"
@@ -495,9 +497,11 @@ def card_ok(path: pathlib.Path) -> tuple[bool, str]:
 
 def card_file(root: pathlib.Path, url: str) -> pathlib.Path:
     """Die gebaute Datei, auf die ein og:image zeigt -- absolute URL oder nicht."""
-    if "/build/" not in url:
+    teile = artefakt.spalte(url)
+    if teile is None:
         sys.exit(f"FEHLER: og:image {url} ist kein gebautes Asset; Maß nicht prüfbar")
-    return root / "build" / url.rsplit("/build/", 1)[1]
+    _, ordner, rest = teile
+    return root / ordner / rest
 
 
 def bild_alt(doc: str, url: str) -> str:
@@ -634,12 +638,44 @@ def set_payload_card(doc: str, card: str) -> tuple[str, bool]:
                 continue
             for key in ("thumbnail", "thumbnailOptimized"):
                 url = front.get(key)
-                if isinstance(url, str) and "/build/" in url and not url.endswith(card):
-                    front[key] = f"{url.rsplit('/build/', 1)[0]}/build/{card}"
+                teile = artefakt.spalte(url) if isinstance(url, str) else None
+                if teile is not None and not url.endswith(card):
+                    davor, ordner, _ = teile
+                    front[key] = f"{davor}/{ordner}/{card}"
                     geaendert = True
         return geaendert
 
-    return edit_payload(doc, mutate)
+    doc, geaendert_turbo = turbo_card(doc, card)
+    doc, geaendert_json = edit_payload(doc, mutate)
+    return doc, (geaendert_json or geaendert_turbo > 0)
+
+
+def turbo_card(doc: str, card: str) -> tuple[str, int]:
+    """Dasselbe für die Turbo-Stream-Nutzlast von Theme 2.x.
+
+    Ohne diesen Schritt zeigt `og:image` nach der Hydration wieder die abgelehnte
+    Abbildung -- gemessen am 2026-11-27 an `/faltung-cnn/`: aus der Karte wurde
+    `/_public/vl10-blur-edges-….webp`, und zwar wurzelrelativ. Aufbau der Nutzlast:
+    `tools/turbostream.py`.
+    """
+    def tragen(daten: list) -> int:
+        cache: dict[str, int] = {}
+        n = 0
+        for knoten in turbostream.kartenknoten(daten):
+            for key in ("thumbnail", "thumbnailOptimized"):
+                gefunden = turbostream.hole(daten, knoten, key)
+                if gefunden is None or not isinstance(gefunden[1], str):
+                    continue
+                teile = artefakt.spalte(gefunden[1])
+                if teile is None or gefunden[1].endswith(card):
+                    continue
+                davor, ordner, _ = teile
+                turbostream.setze(daten, knoten, key,
+                                  f"{davor}/{ordner}/{card}", cache)
+                n += 1
+        return n
+
+    return turbostream.bearbeiten(doc, tragen)
 
 
 def vet_card(doc: str, root: pathlib.Path, card: str) -> tuple[str, str]:
@@ -660,10 +696,11 @@ def vet_card(doc: str, root: pathlib.Path, card: str) -> tuple[str, str]:
         return doc, f"Abbildung behalten ({warum})"
 
     def swap(m: re.Match) -> str:
-        if "/build/" not in m.group(2):
+        teile = artefakt.spalte(m.group(2))
+        if teile is None:
             sys.exit(f"FEHLER: {m.group(0)} ist kein gebautes Asset")
-        return (m.group(1) + m.group(2).rsplit("/build/", 1)[0]
-                + f"/build/{card}" + m.group(3))
+        davor, ordner, _ = teile
+        return m.group(1) + davor + f"/{ordner}/{card}" + m.group(3)
 
     for kind, name in (("property", "og:image"), ("name", "image")):
         doc = re.sub(rf'(<meta {kind}="{name}" content=")([^"]*)(")', swap, doc)

@@ -47,6 +47,24 @@ DOKU = ("CLAUDE.md", "devnotes/TODO.md", "devnotes/README.md")
 # Pfade, die absichtlich nicht existieren: Artefakte der CI, historische Namen in
 # „Erledigt"-Einträgen, Platzhalter, Pfade in anderen Repos.
 PFAD_AUSNAHMEN = {
+    # Wege **im Theme-Archiv** und **im gebauten Artefakt**, nicht im Repo: Welche davon
+    # es gibt, hängt an der Fassung des Site-Templates (1.4.x gegen 2.x), und beide
+    # Formen stehen in der Doku nebeneinander.
+    "build/",
+    "build/index.js",
+    "build/_assets/app-*.css",
+    "public/build/**/*.js",
+    "_public/",
+    "_assets/root-*.css",
+    "renderer/server/index.js",
+    "renderer/client/**/*.js",
+    "server/server/index.js",
+    "_build/html/build",
+    # Adressen der ausgelieferten Seite, keine Dateipfade -- sie beginnen mit einem
+    # Schrägstrich und sähen sonst wie absolute Pfade aus.
+    "/build/",
+    "/_public/",
+    "/faltung-cnn/",
     "public/",
     "public/eidl-skript.pdf",
     "public/build/social-card.png",

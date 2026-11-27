@@ -229,8 +229,8 @@ muss auf *derselben* Platte liegen, sonst kann uv nicht mehr hardlinken und kopi
 kostet jede venv ihre volle Größe. `uv run` und `myst` merken davon nichts; wer die Platte
 nicht gemountet hat, hat kein Python.
 
-Das Site-Template ist **mitgeliefert** (`_site/vendor/book-theme.zip`, `@myst-theme/book`
-1.4.1 seit dem 2026-11-17, davor 1.3.1) und wird von
+Das Site-Template ist **mitgeliefert** (`_site/vendor/book-theme.zip`, **2.1.1 seit dem
+2026-11-27**, davor 1.4.1 und 1.3.1) und wird von
 `install_template.py` an die Stelle entpackt, an der MyST es zwischenspeichert. Ohne diesen
 Schritt lädt `myst build` es bei jedem Lauf von einem *wandernden Branch* bei GitHub — das
 macht das Aussehen der Seite zu einer unversionierten Abhängigkeit und den Build von einer
@@ -241,16 +241,44 @@ und deshalb liegt das einfach im Repo. Begründung und Aktualisierungsweg:
 https://github.com/jupyter-book/myst-theme/releases und nicht mehr `main.zip` — ein wandernder Branch hatte schon
 einmal eine andere Fassung geliefert als notiert.
 
-**Auf 2.x geht dieses Repo nicht ohne Umbau.** Theme 2.0.0 (2026-11-10) ist ein erklärter
-Bruch, und das Dateilayout ändert sich vollständig: zwei Serverbündel statt einem,
-Vite-`_assets`-Chunks statt der bisherigen `_shared`-Chunks, `thebe-core.css` in das Hauptstylesheet
-eingebacken. **Die Anker in `install_template.py` überleben allerdings** — am 2026-11-18
-gemessen: alle 37 greifen, sobald das Anführungszeichen im Muster offen bleibt, denn 2.x
-schreibt Zeichenketten in Backticks. Die Arbeit liegt bei den Adressen im Artefakt —
-Abbildungen unter `/_public/…` statt `/build/…`, und fünf Skripte in `tools/` setzen die
-alte Adresse an 13 Stellen voraus — und bei `dead_css.py`, das ohne den `thebe-core`-`<link>` sein
-größtes Ziel verliert. Die Durchsicht der Upstream-Änderungen samt Messwerten steht in
-`devnotes/build-log-2026-11-17-theme.md`.
+**Der Sprung auf 2.x ist am 2026-11-27 gemacht**, auf dem Zweig `theme-2x`. Er brachte
+38 % weniger JavaScript je Seite (brotli 859.481 auf 530.270 B, das 2,13-MB-Krypto-Polyfill
+ist weg; `devnotes/build-log-2026-11-27-js.md`) und kostete sechs Anpassungen, von denen
+drei vorher niemand auf der Rechnung hatte:
+
+* **Die Anker überleben.** Alle 37 Bedienungsmuster, die drei Struktureingriffe und der
+  Kastenkopf greifen weiter, sobald im Muster offenbleibt, welches Anführungszeichen
+  gemeint ist — 2.x schreibt Zeichenketten in Backticks. Das macht
+  `install_template.tolerant()`.
+* **Die Bündel liegen woanders** (`renderer/server/index.js` und `renderer/client/**`
+  statt `build/index.js` und `public/build/**`), und das Archiv hat keine Wurzelebene
+  mehr. Beide Formen kennt `install_template.py`.
+* **Die Dateien liegen unter `/_public/` statt `/build/`.** Statt dreizehn geratener
+  Pfade gibt es jetzt `tools/artefakt.py`, das den Ordner **am Artefakt erkennt** — ein
+  Rückschritt auf 1.4.x kostet damit keine Zeile.
+* **Die Hydrations-Nutzlast ist kein JSON mehr**, sondern ein Turbo-Stream (React Router
+  8): ein flaches Array, in dem Objekte ihre Schlüssel und Werte über Indizes nennen.
+  Drei Schritte schreiben in die Nutzlast und hätten still nichts mehr getan;
+  `tools/turbostream.py` liest und schreibt sie. **Gemessen, was ohne das passiert:** Die
+  `<picture>`-Elemente überlebten die Hydration nicht, und zwei von fünf Abbildungen auf
+  `/faltung-cnn/` wurden zweimal geladen; `og:image` fiel von der Karte auf die erste
+  Abbildung der Seite zurück, wurzelrelativ.
+* **Der Platzhalter-Origin heißt `http://pre.render`** statt `http://localhost:3000`.
+  `tools/publish_urls.py` ersetzt und prüft beide — sonst zeigte die Sitemap auf einen
+  Platzhalter.
+* **`config.json` legt das Theme nicht mehr ins Artefakt.** Der `myst-build`-Job kopiert
+  es dorthin, weil `tools/inject_jsonld.py` daraus das `toc` und die Slugs liest.
+
+Verloren geht eines: `thebe-core.css` ist kein eingebundenes Stylesheet mehr, sondern im
+Hauptstylesheet eingebacken (155 auf 237 kB). `tools/dead_css.py` hat deshalb **zwei**
+Ziele statt dreier; die eine Regel daraus, an der hier wirklich etwas hing (Schriftgröße
+und Zeilenhöhe der Codeblöcke), steht seit dem 2026-11-16 ohnehin in
+`_site/custom-style.css`. Neu ist eine **Brotkrumenzeile** über dem Seitentitel
+(`aria-label="Pfad"`, eingedeutscht; `hide_breadcrumbs: true` wäre die Alternative).
+Sonst ist das Aussehen unverändert: die gerechneten Farben und Maße der Kästen, des
+Fließtexts und der Codeblöcke sind auf vier Seiten in hell und dunkel identisch mit der
+ausgelieferten 1.4.1. Verlauf, Messungen und was nicht gemessen ist:
+`devnotes/build-log-2026-11-27-theme2x.md`.
 
 `check_doku.py` vergleicht, was die Dokumentation behauptet, mit dem, was da ist: Pfade,
 Kapitel- und Übungszahlen, Seitenzahl, `--min-pages` hier und in der CI, die Vollständigkeit
@@ -323,22 +351,24 @@ im `pages`-Job und brauchen **kein einziges Python-Paket**.
 | Skript | Was |
 |---|---|
 | `tools/social_card.py` | Erzeugt und prüft `images/social-card.png` (1200×630). Die Karte ist eingecheckt und steht als `thumbnail:` in `myst.yml` |
-| `tools/publish_urls.py` | Echte Adresse in Sitemap und `robots.txt`, jede `<loc>` mit Schrägstrich, `og:image` absolut, ein Canonical je Seite; `--check` prüft das am Artefakt nach |
+| `tools/publish_urls.py` | Echte Adresse in Sitemap und `robots.txt`, jede `<loc>` mit Schrägstrich, `og:image` absolut, ein Canonical je Seite; `--check` prüft das am Artefakt nach ; der Platzhalter-Origin heißt in Theme 1.4.x `http://localhost:3000` und in 2.x `http://pre.render`, beide werden ersetzt und beide geprüft |
 | `tools/head_meta.py` | `og:url`, `og:site_name`, `og:type`, `og:locale`, `twitter:card`; aus dem `<title>` **der Kapitel** den angehängten Werktitel nehmen, wo er über 60 Zeichen hinausführt (seit dem 2026-11-22, Konrads Entscheidung: neun Seiten, `og:title` bleibt wie MyST es schreibt); den `<title>` **der Landingpage** um „ — Vorlesungsskript, HHU Düsseldorf“ (ohne Jahreszahl, das Skript ist semesterunabhängig; `h1` und `og:title` bleiben der Werktitel); `lang="de"` samt Wächter gegen die Hydration; zu kleine Abbildungen als Vorschaukarte ersetzen; Abbildungen unter der Falz verzögert laden; dazu seit dem 2026-11-22 `og:image:alt`, `twitter:image:alt` und die zwei Maßangaben — **das Maß aus der Bilddatei gelesen**, weil eine große Abbildung als Karte stehen bleiben darf und 1200×630 dann falsch wären; die zwei Hausschriften und — auf den 29 Seiten mit Formeln — die zwei KaTeX-Schriften vorladen (`KaTeX_Math-Italic`, `KaTeX_Main-Regular`): sie werden sonst erst nach dem Stylesheet entdeckt und ruckten die Absätze mit Inline-Mathematik, CLS auf der Destillations-Seite 0,076 statt 0,022 |
 | `tools/inject_jsonld.py` | JSON-LD: ein Buchknoten samt den zwei anderen Skripten desselben Autors auf der Landingpage, je ein Kapitelknoten mit Brotkrume auf den 29 übrigen Seiten, und auf der Glossarseite ein `DefinedTermSet` mit den 69 Begriffen — je Begriff die Adresse **seines Kapitels** als `url` (das zuerst genannte) und die Erklärung mit Mathematik im Klartext, `MATHE_ERSATZ` scheitert laut an unbekannten Befehlen. Daten in `tools/structured-data.json` und `tools/sibling-works.json` |
-| `tools/dead_css.py` | Nimmt die drei Stylesheets heraus, die das Theme in jede Seite legt und die dieses Buch nicht benutzen kann: `thebe-core.css` (87 kB), `font-awesome.css`, `mpl_widget.css` — alle drei für Jupyter-Ausgaben, und keine der 33 Seiten hat eine. Im Markup **und** im `links()`-Array des Wurzel-Chunks. **Vor `vendor_assets.py`.** Scheitert, sobald eine Seite ausführbar wird |
+| `tools/dead_css.py` | Nimmt die zwei Stylesheets heraus, die das Theme in jede Seite legt und die dieses Buch nicht benutzen kann: `font-awesome.css` (37 kB) und `mpl_widget.css` — für ipywidgets und ipympl, und keine der 33 Seiten hat eine ausgeführte Zelle. Gemessen wurde das per Ablation im Browser, nicht am Markup (Docstring). Aus Markup **und** aus dem `links()`-Array des Wurzel-Chunks, sonst holt die Hydration sie zurück; das geräumte Array trägt einen Marker, weil es in 2.x danach leer ist. **Drittes Ziel bis zum 2026-11-27:** `thebe-core.css` (87 kB), in Theme 2.x ins Hauptstylesheet eingebacken und damit nicht mehr zu schneiden | **Vor `vendor_assets.py`** |
 | `tools/vendor_assets.py`, `tools/check_css_assets.py` | Das KaTeX-Stylesheet des Themes aus `_site/vendor/` statt vom CDN, in HTML **und** JS, samt seinen zwanzig Schriftdateien; die Schriften aus `_site/fonts/` statt von Google. Der Prüfer löst jeden `url()` der eingebundenen Stylesheets auf. Font Awesome und jupyter-matplotlib lagen hier bis zum 2026-11-16, siehe `dead_css.py` |
 | `tools/thebe_gate.py` | Lädt `thebe-core` (1,3 MB) nur auf Seiten mit ausführbarem Code, also hier auf keiner. Patcht einen Ausdruck im Client-Bündel und scheitert laut, wenn ein mystmd-Update ihn verschiebt |
 | `tools/freshness.py` | `article:modified_time` je Seite und `<lastmod>` je Sitemap-Eintrag, aus `git log` der Quelldatei — **seit dem 2026-11-22 ohne die Commits, die nur die Forums- oder die Herkunftszeile angefaßt haben** (Konrads Entscheidung; vorher sagten 30 von 33 Seiten dasselbe Datum, weil diese Zeilen in einem Zug eingetragen wurden). Dieselbe Funktion versorgt `zitierzeile.py` und `inject_jsonld.py`, sonst stünden auf einer Seite zwei Daten |
 | `tools/llms_txt.py` | Der Quelltext jeder Seite als Markdown (`/<slug>.md` und `/<slug>/index.md`, relative Kapitelverweise auf die Seitenadresse umgeschrieben; jede `figure`-Direktive wird zu `![Unterschrift](…/build/…)` mit der Adresse, unter der das Bild wirklich liegt, `anywidget`-Blöcke fallen weg), `<link rel="alternate" type="text/markdown">` im Kopf, `/llms.txt` und `/llms-full.txt`. Google ignoriert `llms.txt`; der Nutzen liegt bei den `.md`-Dateien |
 | `tools/image_dims.py`, `tools/outline_reserve.py` | Gegen den Layoutsprung: `width`/`height` an jeder Abbildung samt einem Stylesheet mit allen Bildmaßen, und Platz für die Gliederung, die das Theme erst nach dem Laden füllt. **Unterhalb von `lg` sind es seit dem 2026-11-17 feste 128 px**, passend zu der Deckelung in `_site/custom-style.css` — vorher reservierte der Kasten bis zu 692 px und schob den Einleitungsabsatz unter die Falz |
-| `tools/webp.py` | Liefert die Abbildungen als WebP aus statt als PNG und JPG: 7,6 MB werden 2,4 MB. Die Fassungen liegen im Repo (`devnotes/make_webp.py`), das Image baut nichts. Ersetzt den Dateinamen im Markup, im Stylesheet `bildmasse` **und** in der Hydrations-Nutzlast — ein `<picture>` mit PNG-Rückfall überlebt die Hydration nicht. Dazu seit dem 2026-11-17 `srcset="… 1x, … 2x"` für die 53 Abbildungen ab 700 px, die eine halb so breite Fassung daneben haben: ohne Retina-Auflösung 1,04 MB statt 2,37 MB Bildbytes. Das geht als `<picture>`, weil das Theme es aus dem Nutzlastfeld `urlOptimized` selbst rendert — geschrieben wird deshalb Markup **und** Nutzlast, sonst holt der Browser die große Datei nach der Hydration ein zweites Mal. **Nach `image_dims.py`, vor `hydration.py`** |
+| `tools/webp.py` | Liefert die Abbildungen als WebP aus statt als PNG und JPG: 7,6 MB werden 2,4 MB. Die Fassungen liegen im Repo (`devnotes/make_webp.py`), das Image baut nichts. Ersetzt den Dateinamen im Markup, im Stylesheet `bildmasse` **und** in der Hydrations-Nutzlast — ein `<picture>` mit PNG-Rückfall überlebt die Hydration nicht. Dazu seit dem 2026-11-17 `srcset="… 1x, … 2x"` für die 53 Abbildungen ab 700 px, die eine halb so breite Fassung daneben haben: ohne Retina-Auflösung 1,04 MB statt 2,37 MB Bildbytes. Das geht als `<picture>`, weil das Theme es aus dem Nutzlastfeld `urlOptimized` selbst rendert — geschrieben wird deshalb Markup **und** Nutzlast, sonst holt der Browser die große Datei nach der Hydration ein zweites Mal (am 2026-11-27 unter Theme 2.1.1 wieder gemessen: zwei von fünf Abbildungen auf `/faltung-cnn/`). Die Nutzlast ist seitdem ein Turbo-Stream, geschrieben über `tools/turbostream.py`. **Nach `image_dims.py`, vor `hydration.py`** |
 | `tools/trailing_slash.py` | Kapitellinks mit Schrägstrich (sonst 302), im Markup, in der Hydrations-Nutzlast und in den Seiten-JSON; die Seitenleiste bewusst nicht. Seit dem 2026-11-22 auch mit Fragment oder Query dahinter: Der Schrägstrich kommt **vor** den Rest, aus `/kapitel#abschnitt` wird `/kapitel/#abschnitt` |
 | `tools/suchindex.py` | Nimmt den rohen LaTeX-Quelltext aus `myst.search.json`, also aus den Suchausschnitten: MyST legt dort den Text jeder Überschrift samt Abschnitt ab, Mathematik aber **ohne** die `$`-Zeichen. Übersetzt wird mit der Tabelle aus `inject_jsonld.py` plus einer eigenen, der Rest wird abgestreift — ein lauter Abbruch wie beim Glossar wäre hier ein Deploy-Stopper (98 unbekannte Befehle im ganzen Buch). Angefasst wird nur ein Feld mit Backslash, sonst wäre der zweite Lauf nicht wirkungslos. `--check`: kein Backslash mehr im Index |
 | `tools/no_css_dialog.py` | Nimmt den Kasten „Site not loading correctly? … `BASE_URL`“ aus jeder Seite. Das Theme legt ihn als `<dialog id="myst-no-css">` an; sichtbar wird er nur ohne Stylesheet, **im Text der Seite steht er aber als erstes** und begrüßt jeden, der die Seite als Text liest, mit einer Deploy-Fehlermeldung. `--check` zählt nach; findet der Lauf gar keinen Kasten, scheitert er (mystmd könnte ihn umbenannt haben) |
 | `tools/zitierzeile.py` | Stand und zitierfähige Adresse in die Herkunftszeile der 31 Seiten, die eine haben: aus „frei unter CC BY-SA 4.0." wird „frei unter CC BY-SA 4.0, Stand 18. November 2026. Zitierbar als https://…/backpropagation/." Das Datum kommt aus derselben Funktion wie bei `freshness.py`, also aus `git log` der Quelldatei, und nicht aus einer zweiten Rechnung. Geschrieben wird in Markup **und** Hydrations-Nutzlast (die Zeile ist Fließtext, und den rendert das Theme neu), dazu in die Seiten-JSON, in beide `.md`-Fassungen und abschnittsweise in `llms-full.txt`. **Nach `llms_txt.py`**, sonst fehlt die Angabe in der Markdown-Auslieferung. Nicht angefasst: Startseite und die Seite „Über dieses Skript“ (tragen die Zeile nicht), `myst.search.json` (sonst steht es in jedem Suchausschnitt) und die gehashten Quelltext-Kopien, die MyST unter `_build/html/build` ablegt. Im PDF steht die Zeile ohne Datum und Adresse — dort läuft kein Veröffentlichungsschritt, Konrads Entscheidung vom 2026-11-18 |
-| `tools/stable_card.py` | Gibt der Vorschaukarte einen Namen, der nicht bei jedem CI-Lauf wechselt: `public/build/social-card-<hash>.png` → `public/build/social-card.png`, in allen `.html`, `.json`, `.txt` und `.xml` des Artefakts. MyST hasht nach Pfad + mtime + Größe, nicht nach Inhalt. **Nach `llms_txt.py`, vor `image_dims.py`**; im Unterordner und nicht in der Wurzel des Artefakts, damit `hydration.py` die Nutzlast weiter absolut macht |
-| `tools/hydration.py` | Hält nach der Hydration zurück, was React ausräumt: Canonical, `og:*`, `twitter:card`, Markdown-`alternate`, `lang`, Titelzusatz, `ld+json` und die zwei Stylesheets; `og:image` dagegen über die Nutzlast, weil das Theme dafür ein Feld rendert. **Letzter Schritt am Kopf.** `--check-rendered` mißt im Browser statt am Artefakt |
+| `tools/stable_card.py` | Gibt der Vorschaukarte einen Namen, der nicht bei jedem CI-Lauf wechselt: `<dateiordner>/social-card-<hash>.png` → `<dateiordner>/social-card.png`, in allen `.html`, `.json`, `.txt` und `.xml` des Artefakts. MyST hasht nach Pfad + mtime + Größe, nicht nach Inhalt. **Nach `llms_txt.py`, vor `image_dims.py`**; im Unterordner und nicht in der Wurzel des Artefakts, damit `hydration.py` die Nutzlast weiter absolut macht |
+| `tools/hydration.py` | Hält nach der Hydration zurück, was React ausräumt: Canonical, `og:*`, `twitter:card`, Markdown-`alternate`, `lang`, Titelzusatz, `ld+json` und die zwei Stylesheets; `og:image` dagegen über die Nutzlast, weil das Theme dafür ein Feld rendert — in beiden Formen, JSON (1.4.x) und Turbo-Stream (2.x). **Letzter Schritt am Kopf.** `--check-rendered` mißt im Browser statt am Artefakt |
+| `tools/artefakt.py` | Kein Schritt der Kette, sondern die eine Stelle, an der steht, wie das Artefakt aufgebaut ist: Theme 1.4.x legt Abbildungen, Karte und PDF unter `build/` ab, Theme 2.x unter `_public/`. **Erkannt am Verzeichnis, nicht konfiguriert** — sechs Skripte fragen hier, statt den Pfad dreizehnmal zu raten |
+| `tools/turbostream.py` | Liest und schreibt die Hydrations-Nutzlast von Theme 2.x: ein flaches Array, in dem Objekte ihre Schlüssel und Werte über Indizes in dasselbe Array nennen. Angehängt wird immer am Ende, damit vorhandene Indizes gültig bleiben. Benutzt von `webp.py` (`urlOptimized`), `head_meta.py` und `hydration.py` (die Karte) |
 | `tools/precompress.py` | `.br` und `.gz` neben jede Textdatei, **als letzter Schritt** des Jobs; `--check` packt jede Kopie aus und vergleicht byteweise |
 
 **Jede Seite außer der Landingpage hat ein eigenes `description:` im Frontmatter**
@@ -393,6 +423,15 @@ Wächter an `document` hängt und Kopf und Wurzel frisch nachschlägt, ist damit
 Notwendigkeit; welche der beiden Bewegungen vom 2026-11-17 (Theme 1.4.1, mystmd 1.13.0) den
 Abbruch behoben hat, ist nicht gemessen. Messwerte und Methode:
 `devnotes/build-log-2026-11-22-hydration.md`.
+
+**Unter Theme 2.1.1 am 2026-11-27 neu gemessen, und es bleibt dabei:** `documentElement`
+und `<head>` werden nicht ersetzt, React #418 tritt weiter auf, und verloren gehen
+dieselben vier von React verwalteten `<meta>`-Tags wie unter 1.4.1 (19 auf 15, an der
+ausgelieferten Seite gegengeprüft) sowie die `<link rel=preload>`, die zu dem Zeitpunkt
+ihre Arbeit getan haben. Ohne Wächter fallen zusätzlich Canonical und der
+`myst-no-css`-Kasten; der Wächter bleibt also nötig. Die drei Stylesheets stehen danach
+doppelt im Kopf — dieselben drei, keine fremde Herkunft kommt zurück (null Anfragen nach
+außen).
 
 **Wer das Theme oder mystmd anhebt, mißt das neu — am gerenderten DOM, nicht am
 Artefakt**: `tools/hydration.py --check-rendered _build/html` (braucht Playwright und
