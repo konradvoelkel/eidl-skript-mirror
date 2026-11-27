@@ -19,6 +19,7 @@ Ein Blatt kommt dazu, sobald es ausgegeben ist, nicht vorher.
 * [Blatt 4](https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de/blaetter/blatt04.pdf) – Dasselbe noch einmal, diesmal mit PyTorch.
 * [Blatt 5](https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de/blaetter/blatt05.pdf) – Sigmoid und Softmax, Kreuzentropie als Loss-Funktion, dazu Gradient, Jacobimatrix und Richtungsableitung.
 * [Blatt 6](https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de/blaetter/blatt06.pdf) – Backpropagation von Hand durch zwei ReLU-Schichten, dazu ein selbst gebauter Linear Layer in PyTorch.
+* [Blatt 7](https://eidl-skript-131e30.pages.cs.uni-duesseldorf.de/blaetter/blatt07.pdf) – Ein fertiges Autoencoder-Programm auf dem Iris-Datensatz lesen: beobachten, was zwischen zwei Läufen verschieden ist, eigene Fragen an den Quelltext stellen und eine davon beantworten.
 
 Die Aufgaben zum Mitdenken beim Lesen stehen woanders: Fast jedes Kapitel endet mit einem
 kurzen Abschnitt „Übung“ samt Antwortprobe. Die Blätter hier sind die bewerteten Aufgaben
