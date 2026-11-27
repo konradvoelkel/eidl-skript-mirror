@@ -170,4 +170,29 @@ Vier Seiten, hell und dunkel, Desktop und Handy, lokal gegen die ausgelieferte 1
 * **Das PDF.** Hängt am tex-Template, nicht angefaßt.
 * **Die Möglichkeit 1 aus `plan-theme-2x.md` §4** — die thebe-Regeln aus dem
   Hauptstylesheet schneiden. Eigener Vorgang, wenn überhaupt.
-* **Der Deploy selbst.** Der Zweig ist nicht zusammengeführt; nichts davon ist live.
+## Zusammengeführt und ausgeliefert, am selben Tag
+
+Konrad hat entschieden, nicht auf die vorlesungsfreie Zeit zu warten. `theme-2x` ist als
+Fast-forward nach `main` gegangen (`310d0f5..73f9d36`), Pipeline **#186670** grün in allen
+Jobs — darunter `pages` in 99 s, und das war der erste CI-Lauf der ganzen Kette gegen 2.1.1.
+
+An der ausgelieferten Seite nachgemessen, mit umgangenem Zwischenspeicher (`max-age=600`,
+die erste Abfrage zeigte noch die alte Seite):
+
+| | |
+|---|---|
+| JavaScript je Seite | **541.235 B** auf `/faltung-cnn/`, 531.573 B auf der Algebra-Seite (vorher 859.481) |
+| `<picture>` nach der Hydration | 5 von 5 bzw. 4 von 4 |
+| Abbildungen zweimal geladen | 0 |
+| `og:image`, Canonical, `lang`, `ld+json` | stehen, vor und nach der Hydration |
+| `role="group"` auf der Algebra-Seite | 18, mit Namen — der Umbau vom Vortag hält |
+| fremde Anfragen | 0 |
+| Sitemap | 33 Einträge, kein Platzhalter-Origin |
+| `llms.txt`, `llms-full.txt`, `/<slug>.md`, PDF | 200 |
+
+**Eine Adresse hat sich geändert:** Die Vorschaukarte liegt unter
+`/_public/social-card.png`, `/build/social-card.png` antwortet 404. Bis Google und die
+Vorschau-Zwischenspeicher der sozialen Netze neu laden, zeigt ein alter Link keine Karte.
+
+* **Der Deploy ist damit gemacht; nicht gemessen bleibt die Zeit** — zehn PSI-Läufe je
+  Seite, ein paar Tage später, damit nicht der Deploy-Tag selbst gemessen wird.

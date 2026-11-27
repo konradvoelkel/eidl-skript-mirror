@@ -63,8 +63,11 @@ PFAD_AUSNAHMEN = {
     # Adressen der ausgelieferten Seite, keine Dateipfade -- sie beginnen mit einem
     # Schrägstrich und sähen sonst wie absolute Pfade aus.
     "/build/",
+    "/build/social-card.png",
     "/_public/",
+    "/_public/social-card.png",
     "/faltung-cnn/",
+    "/glossar/",
     "public/",
     "public/eidl-skript.pdf",
     "public/build/social-card.png",
